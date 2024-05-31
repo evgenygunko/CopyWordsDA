@@ -1,0 +1,1481 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Faprovechar",
+    "wordOfTheDayData": {
+        "wordSource": "limonada",
+        "wordDisplay": "la limonada",
+        "translationText": "lemonade",
+        "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=la-limonada&key=388e528f333a5e7a583c3aa9bcb0683e"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 78,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "d3fh33eu6ay0qj.cloudfront.net",
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "d1q4kshf6f0axi.cloudfront.net",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdAdHesion": true,
+        "sdIdentity": true,
+        "sdFreestar": false,
+        "sdCss": false,
+        "adhesionMarketingInt": 2,
+        "reduxlessVocabQuiz": null,
+        "documentTranslation": null,
+        "voiceTranslation": null,
+        "randomizedExperiments": {}
+    },
+    "serverNowAtPageview": 1692521893664,
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "Aprovechar",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Faprovechar",
+            "path": "translate",
+            "token": "aprovechar",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Conjugation",
+            "active": false,
+            "href": "\u002Fconjugate\u002Faprovechar",
+            "path": "conjugate",
+            "token": "aprovechar",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Faprovechar",
+            "path": "examples",
+            "token": "aprovechar",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Faprovechar",
+            "path": "pronunciation",
+            "token": "aprovechar",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Faprovechar",
+            "path": "thesaurus",
+            "token": "aprovechar",
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "aprovechar",
+                "textToPronounce": "aprovechar",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=aprovechar&key=0a54b3665844327733152a02f0c3bea7",
+                "pronunciations": [
+                    {
+                        "id": 392,
+                        "ipa": "a*pɾo*βe*ˈtʃaɾ",
+                        "abc": "a*pro*ve*ˈchar",
+                        "spa": "ah*proh*beh*ˈchahr",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 13603,
+                        "ipa": "a*pɾo*βe*ˈtʃaɾ",
+                        "abc": "a*pro*ve*ˈchar",
+                        "spa": "ah*proh*beh*ˈchahr",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "to take advantage of",
+                "textToPronounce": "take advantage of",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=take-advantage-of&key=8b2ce03815800ca6116543d2fdc21e98",
+                "pronunciations": [
+                    {
+                        "id": 9412,
+                        "ipa": "teɪk əd*ˈvæn*ɪdʒ əv",
+                        "abc": "take ad*ˈvan*tage of",
+                        "spa": "teyk uhd*ˈvahn*ihj uhv",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "take advantage of"
+                    },
+                    {
+                        "id": 9413,
+                        "ipa": "teɪk æd*ˈvɑn*tədʒ əv",
+                        "abc": "take ad*ˈvan*tage of",
+                        "spa": "teyk ahd*ˈvan*tuhj uhv",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "take advantage of"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 2661,
+                "source": "aprovechar",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "chambers": "Do not client render",
+            "collins": "Do not client render",
+            "neodict": [
+                {
+                    "subheadword": "aprovechar",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "vtr",
+                                "abbrEs": "vtr",
+                                "nameEn": "transitive verb",
+                                "nameEs": "verbo transitivo"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "to make use of",
+                                    "contextEs": "sacar provecho",
+                                    "gender": null,
+                                    "id": 2695,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "If you want to take advantage of the day, get up earlier.",
+                                                    "textEs": "Si quieres aprovechar el día, levántate más temprano."
+                                                },
+                                                {
+                                                    "textEn": "They took advantage of the discount to buy Christmas presents.",
+                                                    "textEs": "Aprovecharon el descuento para comprar los regalos de Navidad."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 3622,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fa189ce0e-faa5-4432-a994-b3da9e7505c5.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to take advantage of"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "I like to make the most of my vacation time.",
+                                                    "textEs": "Me gusta aprovechar el tiempo que tengo de vacaciones."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 3621,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to make the most of"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "We knew how to make good use of the academy's facilities.",
+                                                    "textEs": "Supimos aprovechar las instalaciones de la academia."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 3581,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to make good use of"
+                                        }
+                                    ],
+                                    "subheadword": "aprovechar",
+                                    "idx": 1,
+                                    "context": "to make use of",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to take advantage of",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fa189ce0e-faa5-4432-a994-b3da9e7505c5.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to take advantage of"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Si quieres aprovechar el día, levántate más temprano.",
+                                                    "If you want to take advantage of the day, get up earlier."
+                                                ],
+                                                [
+                                                    "Aprovecharon el descuento para comprar los regalos de Navidad.",
+                                                    "They took advantage of the discount to buy Christmas presents."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "to make the most of",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to make the most of"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Me gusta aprovechar el tiempo que tengo de vacaciones.",
+                                                    "I like to make the most of my vacation time."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "to make good use of",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to make good use of"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "c",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Supimos aprovechar las instalaciones de la academia.",
+                                                    "We knew how to make good use of the academy's facilities."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "to utilize",
+                                    "contextEs": "utilizar",
+                                    "gender": null,
+                                    "id": 2722,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "I used the break to buy the newspaper.",
+                                                    "textEs": "Aproveché el descanso para comprar el periódico."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 3623,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to use"
+                                        }
+                                    ],
+                                    "subheadword": "aprovechar",
+                                    "idx": 2,
+                                    "context": "to utilize",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to use",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to use"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Aproveché el descanso para comprar el periódico.",
+                                                    "I used the break to buy the newspaper."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "transitive verb",
+                                "tooltip": {
+                                    "def": "A transitive verb is a verb that requires a direct object (e.g. I bought a book.).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        },
+                        {
+                            "pos": {
+                                "abbrEn": "vi",
+                                "abbrEs": "vi",
+                                "nameEn": "intransitive verb",
+                                "nameEs": "verbo intransitivo"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "to make use of; often used with \"para\"",
+                                    "contextEs": "sacar provecho; frecuentemente usado con \"para\"",
+                                    "gender": null,
+                                    "id": 8794,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vi",
+                                        "abbrEs": "vi",
+                                        "nameEn": "intransitive verb",
+                                        "nameEs": "verbo intransitivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The baby is asleep. Make the most of it and take a shower.",
+                                                    "textEs": "El bebé está durmiendo; aprovecha y tómate una ducha."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 12954,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to make the most of it"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Take the opportunity to travel the world while you're young.",
+                                                    "textEs": "Aprovecha para viajar el mundo mientras seas joven."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 12913,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to take the opportunity to"
+                                        }
+                                    ],
+                                    "subheadword": "aprovechar",
+                                    "idx": 3,
+                                    "context": "to make use of; often used with \"para\"",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to make the most of it",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to make the most of it"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "El bebé está durmiendo; aprovecha y tómate una ducha.",
+                                                    "The baby is asleep. Make the most of it and take a shower."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "to take the opportunity to",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to take the opportunity to"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Aprovecha para viajar el mundo mientras seas joven.",
+                                                    "Take the opportunity to travel the world while you're young."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "intransitive verb",
+                                "tooltip": {
+                                    "def": "An intransitive verb is one that does not require a direct object (e.g. The man sneezed.).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "subheadword": "aprovecharse",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "vpr",
+                                "abbrEs": "vpr",
+                                "nameEn": "pronominal verb",
+                                "nameEs": "verbo pronominal"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "to exploit; used with \"de\"",
+                                    "contextEs": "tratar deshonestamente; usado con \"de\"",
+                                    "gender": null,
+                                    "id": 2723,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vpr",
+                                        "abbrEs": "vpr",
+                                        "nameEn": "pronominal verb",
+                                        "nameEs": "verbo pronominal"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "She took advantage of the fact that they were foreigners to overcharge them.",
+                                                    "textEs": "Se aprovechó de que eran extranjeros para cobrarles más."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 3624,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to take advantage of"
+                                        }
+                                    ],
+                                    "subheadword": "aprovecharse",
+                                    "idx": 4,
+                                    "context": "to exploit; used with \"de\"",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to take advantage of",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to take advantage of"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Se aprovechó de que eran extranjeros para cobrarles más.",
+                                                    "She took advantage of the fact that they were foreigners to overcharge them."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "to abuse sexually; used with \"de\"",
+                                    "contextEs": "abusar sexualmente; usado con \"de\"",
+                                    "gender": null,
+                                    "id": 8822,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vpr",
+                                        "abbrEs": "vpr",
+                                        "nameEn": "pronominal verb",
+                                        "nameEs": "verbo pronominal"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "He took her to an alley and took advantage of her.",
+                                                    "textEs": "Se la llevó a un callejón y se aprovechó de ella."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 12955,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to take advantage of"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "If a person abuses a child, he or she will go to jail.",
+                                                    "textEs": "Si una persona se aprovecha de un niño, irá a la cárcel."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 12956,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to abuse"
+                                        }
+                                    ],
+                                    "subheadword": "aprovecharse",
+                                    "idx": 5,
+                                    "context": "to abuse sexually; used with \"de\"",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to take advantage of",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to take advantage of"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Se la llevó a un callejón y se aprovechó de ella.",
+                                                    "He took her to an alley and took advantage of her."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "to abuse",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to abuse"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Si una persona se aprovecha de un niño, irá a la cárcel.",
+                                                    "If a person abuses a child, he or she will go to jail."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "pronominal verb",
+                                "tooltip": {
+                                    "def": "A pronominal verb always uses a reflexive pronoun. (e.g. Te ves cansado.).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "neoharrap": [
+                {
+                    "subheadword": "aprovechar",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "vtr",
+                                "abbrEs": "vtr",
+                                "nameEn": "transitive verb",
+                                "nameEs": "verbo transitivo"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEs": "tiempo, dinero",
+                                    "regions": [],
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "to make the most of",
+                                            "examples": []
+                                        }
+                                    ],
+                                    "contextEn": "tiempo, dinero",
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "subheadword": "aprovechar",
+                                    "idx": 1,
+                                    "context": "tiempo, dinero",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to make the most of",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to make the most of"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEs": "oferta, ocasión",
+                                    "regions": [],
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "to take advantage of",
+                                            "examples": []
+                                        }
+                                    ],
+                                    "contextEn": "oferta, ocasión",
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "subheadword": "aprovechar",
+                                    "idx": 2,
+                                    "context": "oferta, ocasión",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to take advantage of",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to take advantage of"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEs": "conocimientos, experiencia",
+                                    "regions": [],
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "to use, to make use of",
+                                            "examples": [
+                                                {
+                                                    "textEs": "me gustaría aprovechar esta oportunidad para…",
+                                                    "textEn": "I'd like to take this opportunity to…"
+                                                },
+                                                {
+                                                    "textEs": "aprovechar que…",
+                                                    "textEn": "to make the most of the fact that…"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "contextEn": "conocimientos, experiencia",
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "subheadword": "aprovechar",
+                                    "idx": 3,
+                                    "context": "conocimientos, experiencia",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to use, to make use of",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to use, to make use of"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "me gustaría aprovechar esta oportunidad para…",
+                                                    "I'd like to take this opportunity to…"
+                                                ],
+                                                [
+                                                    "aprovechar que…",
+                                                    "to make the most of the fact that…"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEs": "lo inservible",
+                                    "regions": [],
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "to put to good use",
+                                            "examples": [
+                                                {
+                                                    "textEs": "no tires los restos de la paella, los aprovecharé para hacer sopa",
+                                                    "textEn": "don't throw what's left of the paella away, I'll use it to make a soup"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "contextEn": "lo inservible",
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "subheadword": "aprovechar",
+                                    "idx": 4,
+                                    "context": "lo inservible",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to put to good use",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to put to good use"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "no tires los restos de la paella, los aprovecharé para hacer sopa",
+                                                    "don't throw what's left of the paella away, I'll use it to make a soup"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "transitive verb",
+                                "tooltip": {
+                                    "def": "A transitive verb is a verb that requires a direct object (e.g. I bought a book.).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        },
+                        {
+                            "pos": {
+                                "abbrEn": "vi",
+                                "abbrEs": "vi",
+                                "nameEn": "intransitive verb",
+                                "nameEs": "verbo intransitivo"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEs": "",
+                                    "regions": [],
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "",
+                                            "examples": [
+                                                {
+                                                    "textEs": "aprovecha mientras puedas",
+                                                    "textEn": "make the most of it o enjoy it while you can"
+                                                },
+                                                {
+                                                    "textEs": "¡cómo aprovechas para comer chocolate, ahora que no te ve nadie!",
+                                                    "textEn": "you're really making the most of the opportunity to eat chocolate while nobody can see you!"
+                                                },
+                                                {
+                                                    "textEs": "¡que aproveche!",
+                                                    "textEn": "enjoy your meal!"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "contextEn": "",
+                                    "partOfSpeech": {
+                                        "abbrEn": "vi",
+                                        "abbrEs": "vi",
+                                        "nameEn": "intransitive verb",
+                                        "nameEs": "verbo intransitivo"
+                                    },
+                                    "subheadword": "aprovechar",
+                                    "idx": 5,
+                                    "context": "general",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    ""
+                                                ],
+                                                "tooltips": [
+                                                    {
+                                                        "name": "no direct translation",
+                                                        "tooltip": {
+                                                            "def": "This refers to an idiomatic word or phrase for which there is no word-for-word translation."
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "aprovecha mientras puedas",
+                                                    "make the most of it o enjoy it while you can"
+                                                ],
+                                                [
+                                                    "¡cómo aprovechas para comer chocolate, ahora que no te ve nadie!",
+                                                    "you're really making the most of the opportunity to eat chocolate while nobody can see you!"
+                                                ],
+                                                [
+                                                    "¡que aproveche!",
+                                                    "enjoy your meal!"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "intransitive verb",
+                                "tooltip": {
+                                    "def": "An intransitive verb is one that does not require a direct object (e.g. The man sneezed.).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        },
+                        {
+                            "pos": {
+                                "abbrEn": "vpr",
+                                "abbrEs": "vpr",
+                                "nameEn": "pronominal verb",
+                                "nameEs": "verbo pronominal"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEs": "sacar provecho",
+                                    "regions": [],
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "to take advantage",
+                                            "examples": [
+                                                {
+                                                    "textEs": "se aprovechó de que nadie vigilaba para salir sin pagar",
+                                                    "textEn": "she took advantage of the fact that nobody was watching to leave without paying"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "contextEn": "sacar provecho",
+                                    "partOfSpeech": {
+                                        "abbrEn": "vpr",
+                                        "abbrEs": "vpr",
+                                        "nameEn": "pronominal verb",
+                                        "nameEs": "verbo pronominal"
+                                    },
+                                    "subheadword": "aprovechar",
+                                    "idx": 6,
+                                    "context": "sacar provecho",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to take advantage",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to take advantage"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "se aprovechó de que nadie vigilaba para salir sin pagar",
+                                                    "she took advantage of the fact that nobody was watching to leave without paying"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEs": "abusar de alguien",
+                                    "regions": [],
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "to take advantage",
+                                            "examples": [
+                                                {
+                                                    "textEs": "fue acusado de aprovecharse de una menor",
+                                                    "textEn": "he was accused of child abuse"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "contextEn": "abusar de alguien",
+                                    "partOfSpeech": {
+                                        "abbrEn": "vpr",
+                                        "abbrEs": "vpr",
+                                        "nameEn": "pronominal verb",
+                                        "nameEs": "verbo pronominal"
+                                    },
+                                    "subheadword": "aprovechar",
+                                    "idx": 7,
+                                    "context": "abusar de alguien",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to take advantage",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to take advantage"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "fue acusado de aprovecharse de una menor",
+                                                    "he was accused of child abuse"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "pronominal verb",
+                                "tooltip": {
+                                    "def": "A pronominal verb always uses a reflexive pronoun. (e.g. Te ves cansado.).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "velazquez": "Do not client render"
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "aprovechar",
+            "regionChoice": "spain",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [
+                "ah*proh*beh*ˈchahr"
+            ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "adList": "[\"adTopLarge\",\"adSideVideo\",\"adSide1\",\"adSide2\",\"adSide3\",\"adMiddle2\",\"adMiddle1\"]",
+        "appendMiddleAdNeodict": true,
+        "appendMiddleAdChambers": false,
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": {
+        "linkedArticles": []
+    },
+    "searchBoxProps": {
+        "initialSearchText": "Aprovechar",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [
+                    "bae",
+                    "YOLO",
+                    "okurrr",
+                    "LOL",
+                    "my bad",
+                    "dude",
+                    "y'all",
+                    "wassup"
+                ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 2661
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "Aprovechar",
+        "originalQuery": "Aprovechar",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": {
+        "id": 2661,
+        "infinitive": "aprovechar",
+        "matchedConjugation": "aprovechar",
+        "isReflexive": 2,
+        "isReflexiveVariation": false,
+        "verbType": 1,
+        "supportsConjugationDrills": 1,
+        "reason": "exact match",
+        "infinitiveTranslation": "take advantage of",
+        "pastParticiple": {
+            "word": "aprovechado"
+        },
+        "gerund": {
+            "word": "aprovechando"
+        },
+        "paradigms": {
+            "presentIndicative": [
+                {
+                    "word": "aprovecho",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=aprovecho&key=c65b7f3e872e3e4ba407c634433fecfc&region=spain"
+                },
+                {
+                    "word": "aprovechas",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=aprovechas&key=ea302df9777d41102e7e0fa8a4746b4d&region=spain"
+                },
+                {
+                    "word": "aprovecha",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=aprovecha&key=838353c30b80c18e4edc816e8fcacb9c&region=spain"
+                },
+                {
+                    "word": "aprovechamos",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=aprovechamos&key=687849178211f54a795c89000467ebe2&region=spain"
+                },
+                {
+                    "word": "aprovecháis",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=aprovech%C3%A1is&key=81a4ff26cdbb688787ee0ce7072cb18a&region=spain"
+                },
+                {
+                    "word": "aprovechan",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=aprovechan&key=5cb1205c77db587cbdbb7bfd2c955d0b&region=spain"
+                },
+                {
+                    "word": "aprovechás",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=aprovech%C3%A1s&key=52021a9f2558b50b200a6d1db4217013&region=latam"
+                }
+            ],
+            "preteritIndicative": [
+                {
+                    "word": "aproveché",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=aprovech%C3%A9&key=728a5b23b854e43701c4aa85b392f8ad&region=spain"
+                },
+                {
+                    "word": "aprovechaste",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=aprovechaste&key=2a410b5e6687b4397404150ce9795353&region=spain"
+                },
+                {
+                    "word": "aprovechó",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=aprovech%C3%B3&key=09be2e662e33e9bb25460b0b662e4f9f&region=spain"
+                },
+                {
+                    "word": "aprovechamos",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=aprovechamos&key=687849178211f54a795c89000467ebe2&region=spain"
+                },
+                {
+                    "word": "aprovechasteis",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=aprovechasteis&key=3255ee518dbb955c7ebbb8fe87393b73&region=spain&name=maria22k"
+                },
+                {
+                    "word": "aprovecharon",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=aprovecharon&key=7907c6d5bd238f228bb943c6eae696c9&region=spain"
+                },
+                {
+                    "word": "aprovechaste",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=aprovechaste&key=2a410b5e6687b4397404150ce9795353&region=latam"
+                }
+            ],
+            "imperfectIndicative": [
+                {
+                    "word": "aprovechaba",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=aprovechaba&key=78a76726e5a4a64c8a1bc20c9dfa2a9e&region=spain"
+                },
+                {
+                    "word": "aprovechabas",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=aprovechabas&key=13bf1c69c967add28221ea727f37abc6&region=spain"
+                },
+                {
+                    "word": "aprovechaba",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=aprovechaba&key=78a76726e5a4a64c8a1bc20c9dfa2a9e&region=spain"
+                },
+                {
+                    "word": "aprovechábamos",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=aprovech%C3%A1bamos&key=9a0a06ab8dcd119c9aa29f7a3274f8a7&region=spain"
+                },
+                {
+                    "word": "aprovechabais",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=aprovechabais&key=ad6697692d081bc887e3e8104b26311b&region=spain"
+                },
+                {
+                    "word": "aprovechaban",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=aprovechaban&key=b965d8e98762b24061af5c81f51038f8&region=spain"
+                },
+                {
+                    "word": "aprovechabas",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=aprovechabas&key=13bf1c69c967add28221ea727f37abc6&region=latam"
+                }
+            ],
+            "conditionalIndicative": [
+                {
+                    "word": "aprovecharía",
+                    "translation": "would take advantage of",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%ADa&key=f8fa6c3ec601dfac803055325ec7788f&region=spain"
+                },
+                {
+                    "word": "aprovecharías",
+                    "translation": "would take advantage of",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%ADas&key=c5e2d8cb974b1e7ea9acfd2041b134b4&region=spain"
+                },
+                {
+                    "word": "aprovecharía",
+                    "translation": "would take advantage of",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%ADa&key=f8fa6c3ec601dfac803055325ec7788f&region=spain"
+                },
+                {
+                    "word": "aprovecharíamos",
+                    "translation": "would take advantage of",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%ADamos&key=873abbd813944551ff121a13f1616d67&region=spain"
+                },
+                {
+                    "word": "aprovecharíais",
+                    "translation": "would take advantage of",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%ADais&key=bea1143251ecfda314b73c286a4cde44&region=spain"
+                },
+                {
+                    "word": "aprovecharían",
+                    "translation": "would take advantage of",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%ADan&key=e1858fa71ee7dc38f0343471f2790390&region=spain"
+                },
+                {
+                    "word": "aprovecharías",
+                    "translation": "would take advantage of",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%ADas&key=c5e2d8cb974b1e7ea9acfd2041b134b4&region=latam"
+                }
+            ],
+            "futureIndicative": [
+                {
+                    "word": "aprovecharé",
+                    "translation": "will take advantage of",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%A9&key=b7d22cb1d89eb3f7f574264f77914488&region=spain"
+                },
+                {
+                    "word": "aprovecharás",
+                    "translation": "will take advantage of",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%A1s&key=27aafa94dc99e1ae26a8bfca9a3ffef6&region=spain"
+                },
+                {
+                    "word": "aprovechará",
+                    "translation": "will take advantage of",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%A1&key=9425e1b8c6820cf747cf6e96ae1dd8fe&region=spain"
+                },
+                {
+                    "word": "aprovecharemos",
+                    "translation": "will take advantage of",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=aprovecharemos&key=ea28f057a6b945cae1c2665a54e2b1d7&region=spain"
+                },
+                {
+                    "word": "aprovecharéis",
+                    "translation": "will take advantage of",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%A9is&key=544cc31b34d4f5d8033098fc7dae3fce&region=spain"
+                },
+                {
+                    "word": "aprovecharán",
+                    "translation": "will take advantage of",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%A1n&key=65985efbe3de76f3d52df885a9e813f4&region=spain"
+                },
+                {
+                    "word": "aprovecharás",
+                    "translation": "will take advantage of",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=aprovechar%C3%A1s&key=27aafa94dc99e1ae26a8bfca9a3ffef6&region=latam"
+                }
+            ]
+        }
+    },
+    "verbLang": "es",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"aprovechar\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 2661
+    }
+}

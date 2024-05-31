@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             xmlns:models="clr-namespace:CopyWords.Parsers.Models;assembly=Parsers"
+             x:DataType="viewmodels:WordViewModel"
+             x:Class="CopyWords.MAUI.Views.WordView">
+
+    <Grid Padding="0,20,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+
+        <ActivityIndicator Grid.RowSpan="3" Grid.ColumnSpan="2" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
+        
+        <!-- Front -->
+        <Label Grid.Row="0" Grid.Column="0"
+            FontSize="24"
+            TextColor="#cc0000"
+            Text="{Binding Front, FallbackValue=cámara}"></Label>
+
+        <!-- Sound -->
+        <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Spacing="5">
+            <toolkit:MediaElement x:Name="mediaElement" IsVisible="false" ShouldAutoPlay="false" />
+            <Button BackgroundColor="{Binding PlaySoundButtonColor}"
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding Source={x:Reference mediaElement}}" >
+
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="MaterialIconsOutlined-Regular"
+                        Glyph="&#xe1c4;"/>
+                </Button.ImageSource>                
+            </Button>
+
+            <Button BackgroundColor="{Binding SaveSoundButtonColor}"
+                    Command="{Binding SaveSoundFileCommand}" >
+
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="MaterialIconsOutlined-Regular"
+                        Glyph="&#xe161;"/>
+                </Button.ImageSource>
+            </Button>
+        </HorizontalStackLayout>
+
+        <BoxView Grid.Row="2" Grid.ColumnSpan="2" Color="LightGray"  HeightRequest="1"/>
+
+         <!-- Copy front text, back text, and copy examples buttons -->
+        <HorizontalStackLayout Grid.Row="3" Grid.Column="0" Spacing="5" Margin="10">
+            <Button Text="Copy front" FontSize="12" 
+                    BackgroundColor="{Binding CopyFrontButtonColor}"
+                    Command="{Binding CopyFrontCommand}"></Button>
+
+            <Button Text="Copy back" FontSize="12" 
+                    BackgroundColor="{Binding CopyBackButtonColor}"
+                    Command="{Binding CopyBackCommand}"></Button>
+            
+            <Button Text="Copy examples" FontSize="12" 
+                    BackgroundColor="{Binding CopyExamplesButtonColor}"
+                    Command="{Binding CopyExamplesCommand}"></Button>
+        </HorizontalStackLayout>
+        
+        <views:WordVariantsView Grid.Row="4" Grid.ColumnSpan="2" />
+
+        <BoxView Grid.Row="5" Grid.ColumnSpan="2" Color="LightGray"  HeightRequest="1"/>
+    </Grid>
+</ContentView>

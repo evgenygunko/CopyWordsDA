@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             x:Class="CopyWords.MAUI.Views.TranslationsView">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+            
+            <DataTemplate x:Key="translationsTemplate"
+                          x:DataType="viewmodels:TranslationViewModel">
+                <!-- Translations -->
+                <VerticalStackLayout Padding="10,10,0,0">
+                    <HorizontalStackLayout>
+                        <Label Text="{Binding AlphabeticalPosition, FallbackValue='AlphabeticalPosition'}" />
+                        <Label Text=". &#6158;" />
+                        <Label TextColor="#1b85e5" FontAttributes="Bold" Text="{Binding English, FallbackValue='English'}" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout IsVisible="{Binding ImageUrl, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
+                        <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding IsImageChecked}" />
+                        <Border Stroke="Transparent" StrokeThickness="5">
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding IsImageChecked}" Value="true">
+                                    <Setter Property="Stroke" Value="LightBlue" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            
+                            <Image Source="{Binding ImageUrl, FallbackValue='https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/5bf100e5-da54-4be6-a55c-281edcd08b10.jpg'}"
+                                MaximumHeightRequest="150"
+                                MaximumWidthRequest="150"
+                                HorizontalOptions="Start"/>
+                        </Border>
+                    </HorizontalStackLayout>
+                
+                    <!--Examples -->
+                    <views:ExamplesView />
+                </VerticalStackLayout>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <VerticalStackLayout
+            BindableLayout.ItemsSource="{Binding TranslationViewModels}"
+            BindableLayout.ItemTemplate="{StaticResource translationsTemplate}" />
+
+</ContentView>

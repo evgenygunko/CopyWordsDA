@@ -1,0 +1,15 @@
+[*.{cs,vb}]
+
+# CA1311: Specify a culture or use an invariant version
+dotnet_diagnostic.CA1311.severity = none
+
+# CA2201: Do not raise reserved exception types
+[*.{cs,vb}]
+dotnet_diagnostic.CA2201.severity = none
+
+# Use explicit type instead of var
+[*.{cs,vb}]
+dotnet_diagnostic.IDE0008.severity = none
+
+# CA1031: Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = none

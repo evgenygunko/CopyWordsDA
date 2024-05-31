@@ -1,0 +1,10 @@
+# CA1711: Identifiers should not have incorrect suffix
+[*.{cs,vb}]
+dotnet_diagnostic.CA1711.severity = none
+
+# CA1501: Avoid excessive inheritance
+[*.{cs,vb}]
+dotnet_diagnostic.CA1501.severity = none
+
+# CA1724: Type names should not match namespaces
+dotnet_diagnostic.CA1724.severity = none

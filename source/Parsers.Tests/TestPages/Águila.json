@@ -1,0 +1,730 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002F%C3%81guila",
+    "wordOfTheDayData": {
+        "wordSource": "limonada",
+        "wordDisplay": "la limonada",
+        "translationText": "lemonade",
+        "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=la-limonada&key=388e528f333a5e7a583c3aa9bcb0683e"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 78,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "d3fh33eu6ay0qj.cloudfront.net",
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "d1q4kshf6f0axi.cloudfront.net",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdAdHesion": true,
+        "sdIdentity": true,
+        "sdFreestar": false,
+        "sdCss": false,
+        "adhesionMarketingInt": 3,
+        "reduxlessVocabQuiz": null,
+        "documentTranslation": null,
+        "voiceTranslation": null,
+        "randomizedExperiments": {}
+    },
+    "serverNowAtPageview": 1692525400124,
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "Águila",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002F%C3%A1guila",
+            "path": "translate",
+            "token": "águila",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002F%C3%A1guila",
+            "path": "examples",
+            "token": "águila",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002F%C3%A1guila",
+            "path": "pronunciation",
+            "token": "águila",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002F%C3%A1guila",
+            "path": "thesaurus",
+            "token": "águila",
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "águila",
+                "textToPronounce": "águila",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=%C3%A1guila&key=50029c5b542c13d8b3ef1cbb8fb43899",
+                "pronunciations": [
+                    {
+                        "id": 303,
+                        "ipa": "ˈa*ɣi*la",
+                        "abc": "ˈá*gui*la",
+                        "spa": "ˈah*gee*lah",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 13701,
+                        "ipa": "ˈa*ɣi*la",
+                        "abc": "ˈá*gui*la",
+                        "spa": "ˈah*gee*lah",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "eagle",
+                "textToPronounce": "eagle",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=eagle&key=4771ad670f866b018dfc62a11b2b78a7",
+                "pronunciations": [
+                    {
+                        "id": 3161,
+                        "ipa": "ˈi*gəl",
+                        "abc": "ˈea*gle",
+                        "spa": "ˈi*guhl",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "eagle"
+                    },
+                    {
+                        "id": 3162,
+                        "ipa": "ˈi*gəl",
+                        "abc": "ˈea*gle",
+                        "spa": "ˈi*guhl",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "eagle"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 8928,
+                "source": "águila",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "chambers": "Do not client render",
+            "collins": "Do not client render",
+            "neodict": [
+                {
+                    "subheadword": "águila",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "n",
+                                "abbrEs": "s",
+                                "nameEn": "noun",
+                                "nameEs": "sustantivo"
+                            },
+                            "entryLang": "es",
+                            "gender": {
+                                "gender": "FX"
+                            },
+                            "senses": [
+                                {
+                                    "contextEn": "animal",
+                                    "contextEs": "animal",
+                                    "gender": "FX",
+                                    "id": 10633,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The eagle dropped suddenly to grab the salmon.",
+                                                    "textEs": "El águila bajó de repente para agarrar el salmón."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 15903,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fb78b77f2-b9e4-44d1-87e0-9e64e2f9f8ca.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "eagle"
+                                        }
+                                    ],
+                                    "subheadword": "águila",
+                                    "idx": 1,
+                                    "context": "animal",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "eagle",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fb78b77f2-b9e4-44d1-87e0-9e64e2f9f8ca.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "eagle"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "El águila bajó de repente para agarrar el salmón.",
+                                                    "The eagle dropped suddenly to grab the salmon."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "top of a coin",
+                                    "contextEs": "cara de una moneda",
+                                    "gender": "FX",
+                                    "id": 34388,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [
+                                        {
+                                            "abbrEn": "Mex",
+                                            "abbrEs": "Mex",
+                                            "nameEn": "Mexico",
+                                            "nameEs": "México"
+                                        }
+                                    ],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Heads or tails? - Heads!",
+                                                    "textEs": "¿Águila o sol? - ¡Águila!"
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 57413,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "heads"
+                                        }
+                                    ],
+                                    "subheadword": "águila",
+                                    "idx": 2,
+                                    "context": "top of a coin",
+                                    "regionsDisplay": [
+                                        {
+                                            "name": "Mexico",
+                                            "tooltip": {
+                                                "def": "Regionalism used in Mexico"
+                                            }
+                                        }
+                                    ],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "heads",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "heads"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "¿Águila o sol? - ¡Águila!",
+                                                    "Heads or tails? - Heads!"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "feminine noun",
+                                "tooltip": {
+                                    "def": "A feminine noun is almost always used with feminine articles and adjectives (e.g. la mujer bonita, la luna llena).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fmasculine-and-feminine-nouns"
+                                }
+                            }
+                        },
+                        {
+                            "pos": {
+                                "abbrEn": "interj",
+                                "abbrEs": "interj",
+                                "nameEn": "interjection",
+                                "nameEs": "interjección"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "used when a person drops something",
+                                    "contextEs": "usado cuando alguien deja caer algo",
+                                    "gender": null,
+                                    "id": 10634,
+                                    "partOfSpeech": {
+                                        "abbrEn": "interj",
+                                        "abbrEs": "interj",
+                                        "nameEn": "interjection",
+                                        "nameEs": "interjección"
+                                    },
+                                    "regions": [
+                                        {
+                                            "abbrEn": "Mex",
+                                            "abbrEs": "Mex",
+                                            "nameEn": "Mexico",
+                                            "nameEs": "México"
+                                        }
+                                    ],
+                                    "registerLabels": [
+                                        {
+                                            "abbrEn": "col",
+                                            "abbrEs": "col",
+                                            "nameEn": "colloquial",
+                                            "nameEs": "coloquial"
+                                        }
+                                    ],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Heads! - Ha ha, very funny. Now help me clean up before mom sees that I broke her favorite vase.",
+                                                    "textEs": "¡Águila! - Ja ja, muy chistoso. Ahora ayúdame a limpiarlo antes de que mi mamá vea que rompí su florero favorito."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 15904,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "heads"
+                                        }
+                                    ],
+                                    "subheadword": "águila",
+                                    "idx": 3,
+                                    "context": "used when a person drops something",
+                                    "regionsDisplay": [
+                                        {
+                                            "name": "Mexico",
+                                            "tooltip": {
+                                                "def": "Regionalism used in Mexico"
+                                            }
+                                        }
+                                    ],
+                                    "registerLabelsDisplay": [
+                                        {
+                                            "name": "colloquial",
+                                            "tooltip": {
+                                                "def": "A word or phrase that is commonly used in conversational speech (e.g., skinny, grandma)."
+                                            }
+                                        }
+                                    ],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "heads",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "heads"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "¡Águila! - Ja ja, muy chistoso. Ahora ayúdame a limpiarlo antes de que mi mamá vea que rompí su florero favorito.",
+                                                    "Heads! - Ha ha, very funny. Now help me clean up before mom sees that I broke her favorite vase."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "interjection",
+                                "tooltip": {
+                                    "def": "An interjection is a short utterance that expresses emotion, hesitation, or protest (e.g. Wow!).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-exclamatory-words-and-expressions"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "neoharrap": [
+                {
+                    "subheadword": "águila",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "n",
+                                "abbrEs": "s",
+                                "nameEn": "Noun",
+                                "nameEs": "Sustantivo"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "ave",
+                                    "gender": "F",
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "eagle",
+                                            "examples": []
+                                        }
+                                    ],
+                                    "regions": [],
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "Noun",
+                                        "nameEs": "Sustantivo"
+                                    },
+                                    "contextEs": "ave",
+                                    "subheadword": "águila",
+                                    "idx": 1,
+                                    "context": "ave",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "eagle",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "eagle"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "fig",
+                                    "gender": "F",
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "",
+                                            "examples": [
+                                                {
+                                                    "textEs": "ser un águila",
+                                                    "textEn": "to be sharp o perceptive"
+                                                },
+                                                {
+                                                    "textEs": "¿águila o sol?",
+                                                    "textEn": "heads or tails?"
+                                                },
+                                                {
+                                                    "textEs": "águila imperial",
+                                                    "textEn": "Spanish imperial eagle"
+                                                },
+                                                {
+                                                    "textEs": "águila real",
+                                                    "textEn": "golden eagle"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "regions": [],
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "Noun",
+                                        "nameEs": "Sustantivo"
+                                    },
+                                    "contextEs": "fig",
+                                    "subheadword": "águila",
+                                    "idx": 2,
+                                    "context": "fig",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    ""
+                                                ],
+                                                "tooltips": [
+                                                    {
+                                                        "name": "no direct translation",
+                                                        "tooltip": {
+                                                            "def": "This refers to an idiomatic word or phrase for which there is no word-for-word translation."
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "ser un águila",
+                                                    "to be sharp o perceptive"
+                                                ],
+                                                [
+                                                    "¿águila o sol?",
+                                                    "heads or tails?"
+                                                ],
+                                                [
+                                                    "águila imperial",
+                                                    "Spanish imperial eagle"
+                                                ],
+                                                [
+                                                    "águila real",
+                                                    "golden eagle"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "Noun",
+                                "tooltip": {
+                                    "def": "A noun is a word referring to a person, animal, place, thing, feeling or idea (e.g. man, dog, house).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fmasculine-and-feminine-nouns"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "velazquez": "Do not client render"
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "águila",
+            "regionChoice": "spain",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [
+                "ˈah*gee*lah"
+            ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "adList": "[\"adTopLarge\",\"adSideVideo\",\"adSide1\",\"adSide2\",\"adSide3\",\"adMiddle2\"]",
+        "appendMiddleAdNeodict": true,
+        "appendMiddleAdChambers": false,
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": {
+        "usageNoteText": "Feminine nouns that begin with a stressed \"a-\" or \"ha-\" sound in Spanish use the articles \"el\" and “un” in the singular.",
+        "linkedArticles": []
+    },
+    "searchBoxProps": {
+        "initialSearchText": "Águila",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [
+                    "bae",
+                    "YOLO",
+                    "okurrr",
+                    "LOL",
+                    "my bad",
+                    "dude",
+                    "y'all",
+                    "wassup"
+                ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 8928
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "Águila",
+        "originalQuery": "Águila",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": null,
+    "verbLang": "es",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "lockedPremiumContentProps": null,
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 8928
+    }
+}

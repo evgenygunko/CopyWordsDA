@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             x:DataType="viewmodels:MainViewModel"
+             x:Class="CopyWords.MAUI.Views.MainPage"
+             Shell.BackgroundColor="Gray">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="ToolbarItem_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialIconsOutlined-Regular"
+                    Glyph="&#xe5d5;"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        
+        <ToolbarItem Command="{Binding ShowSettingsDialogCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialIconsOutlined-Regular"
+                    Glyph="&#xe8b8;"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ScrollView VerticalOptions="FillAndExpand">        
+        <Grid Padding="10,20,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <!-- Lookup word panel -->
+            <Entry Grid.Row="0" Grid.Column="0" Text="{Binding SearchWord}" ReturnCommand="{Binding LookUpCommand}"></Entry>
+            <Button Grid.Row="0" Grid.Column="1" Text="Search" Command="{Binding LookUpCommand}"></Button>
+
+            <!-- Parsed word user control -->
+            <views:WordView Grid.Row="1" Grid.ColumnSpan="2" BindingContext="{Binding Path=WordViewModel}"></views:WordView>
+                
+            <ActivityIndicator Grid.Row="1" Grid.ColumnSpan="2" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />                
+        </Grid>
+    </ScrollView>
+
+</ContentPage>
+
