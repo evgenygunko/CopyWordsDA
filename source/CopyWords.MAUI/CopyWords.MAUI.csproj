@@ -21,11 +21,11 @@
     <Nullable>enable</Nullable>
 
     <!-- Display name -->
-    <ApplicationTitle>CopyWords.MAUI</ApplicationTitle>
+    <ApplicationTitle>CopyWords.MAUI.DA</ApplicationTitle>
 
     <!-- App Identifier -->
-    <ApplicationId>com.companyname.copywords.maui</ApplicationId>
-    <ApplicationIdGuid>ae18fbc5-f994-455f-996e-02ce7b949d1e</ApplicationIdGuid>
+    <ApplicationId>com.companyname.copywords.maui.da</ApplicationId>
+    <ApplicationIdGuid>236EB894-5837-4869-8977-4ACF61BDD5CE</ApplicationIdGuid>
 
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

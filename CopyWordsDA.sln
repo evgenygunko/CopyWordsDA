@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsers", "source\Parsers\Parsers.csproj", "{713954D8-1A39-496E-8867-6A6087626EEE}"
+Project("{E8807629-87C2-4EA0-9A73-88F873ACEE60}") = "Parsers", "source\Parsers\Parsers.csproj", "{26639227-D987-4F37-B2C7-D8946BB1BC13}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsers.Tests", "source\Parsers.Tests\Parsers.Tests.csproj", "{B58284F0-9AA3-40B9-A445-9965E38AE102}"
+Project("{E8807629-87C2-4EA0-9A73-88F873ACEE60}") = "Parsers.Tests", "source\Parsers.Tests\Parsers.Tests.csproj", "{1CBC4E17-F2E0-4BFC-8CEA-05B73CBE6BE3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{941B0AF3-1AAB-42B4-AF41-01A346238A42}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BFE1A41D-D005-488E-8A2A-D3EB8A671ED9}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		exclusion.dic = exclusion.dic
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CopyWords.MAUI", "source\CopyWords.MAUI\CopyWords.MAUI.csproj", "{2535D2EA-5D59-47D9-BF51-CDAAFE7DC9AB}"
+Project("{E8807629-87C2-4EA0-9A73-88F873ACEE60}") = "CopyWords.MAUI", "source\CopyWords.MAUI\CopyWords.MAUI.csproj", "{D3A5A32A-5903-4D96-ACF7-8B515411AC71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyWords.Core", "source\CopyWords.Core\CopyWords.Core.csproj", "{F7EDD1F0-34A3-4E39-9F35-83A7D742F694}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyWords.Core", "source\CopyWords.Core\CopyWords.Core.csproj", "{7BE61CE9-5FBC-44AC-B055-296161086530}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyWords.Core.Tests", "source\CopyWords.Core.Tests\CopyWords.Core.Tests.csproj", "{9E2B7DCB-E802-40E9-8A45-B414E2E53A4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyWords.Core.Tests", "source\CopyWords.Core.Tests\CopyWords.Core.Tests.csproj", "{524E1727-7C04-4C46-9C0F-2CE462CE55B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,27 +25,27 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{713954D8-1A39-496E-8867-6A6087626EEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{713954D8-1A39-496E-8867-6A6087626EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{713954D8-1A39-496E-8867-6A6087626EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{713954D8-1A39-496E-8867-6A6087626EEE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B58284F0-9AA3-40B9-A445-9965E38AE102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B58284F0-9AA3-40B9-A445-9965E38AE102}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B58284F0-9AA3-40B9-A445-9965E38AE102}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B58284F0-9AA3-40B9-A445-9965E38AE102}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2535D2EA-5D59-47D9-BF51-CDAAFE7DC9AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2535D2EA-5D59-47D9-BF51-CDAAFE7DC9AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2535D2EA-5D59-47D9-BF51-CDAAFE7DC9AB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{2535D2EA-5D59-47D9-BF51-CDAAFE7DC9AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2535D2EA-5D59-47D9-BF51-CDAAFE7DC9AB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F7EDD1F0-34A3-4E39-9F35-83A7D742F694}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7EDD1F0-34A3-4E39-9F35-83A7D742F694}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7EDD1F0-34A3-4E39-9F35-83A7D742F694}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7EDD1F0-34A3-4E39-9F35-83A7D742F694}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9E2B7DCB-E802-40E9-8A45-B414E2E53A4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E2B7DCB-E802-40E9-8A45-B414E2E53A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E2B7DCB-E802-40E9-8A45-B414E2E53A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E2B7DCB-E802-40E9-8A45-B414E2E53A4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26639227-D987-4F37-B2C7-D8946BB1BC13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26639227-D987-4F37-B2C7-D8946BB1BC13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26639227-D987-4F37-B2C7-D8946BB1BC13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26639227-D987-4F37-B2C7-D8946BB1BC13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CBC4E17-F2E0-4BFC-8CEA-05B73CBE6BE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CBC4E17-F2E0-4BFC-8CEA-05B73CBE6BE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CBC4E17-F2E0-4BFC-8CEA-05B73CBE6BE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CBC4E17-F2E0-4BFC-8CEA-05B73CBE6BE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3A5A32A-5903-4D96-ACF7-8B515411AC71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3A5A32A-5903-4D96-ACF7-8B515411AC71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3A5A32A-5903-4D96-ACF7-8B515411AC71}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D3A5A32A-5903-4D96-ACF7-8B515411AC71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3A5A32A-5903-4D96-ACF7-8B515411AC71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BE61CE9-5FBC-44AC-B055-296161086530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BE61CE9-5FBC-44AC-B055-296161086530}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BE61CE9-5FBC-44AC-B055-296161086530}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BE61CE9-5FBC-44AC-B055-296161086530}.Release|Any CPU.Build.0 = Release|Any CPU
+		{524E1727-7C04-4C46-9C0F-2CE462CE55B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{524E1727-7C04-4C46-9C0F-2CE462CE55B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{524E1727-7C04-4C46-9C0F-2CE462CE55B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{524E1727-7C04-4C46-9C0F-2CE462CE55B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -32,14 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EditorConfigFiles Remove="C:\Evgeny\Projects\VSTS\CopyWords\CopyWordsES\source\Parsers.Tests\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="C:\Evgeny\Projects\VSTS\CopyWords\CopyWordsES\source\Parsers.Tests\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="TestPages\123.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
