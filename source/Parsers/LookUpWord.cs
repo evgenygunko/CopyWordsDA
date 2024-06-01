@@ -15,6 +15,7 @@ namespace CopyWords.Parsers
     public class LookUpWord : ILookUpWord
     {
         private const string DDOBaseUrl = "http://ordnet.dk/";
+        private const string SlovarDKUrl = "http://www.slovar.dk/";
 
         private readonly IDDOPageParser _ddoPageParser;
         private readonly ISlovardkPageParser _slovardkPageParser;
@@ -72,7 +73,7 @@ namespace CopyWords.Parsers
                 .Replace("ø", "'oe")
                 .Replace(" ", "-");
 
-            return $"http://www.slovar.dk/tdansk/{wordToLookUp}/?";
+            return SlovarDKUrl + $"tdansk/{wordToLookUp}/?";
         }
 
         internal async Task<WordModel?> DownloadPageAndParseWordAsync(string url)

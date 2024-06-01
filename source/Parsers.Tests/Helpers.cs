@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CopyWords.Parsers.Tests
 {
-    public static class Utils
+    public static class Helpers
     {
         public static string GetSimpleHTMLPage(string fileName)
         {
