@@ -1,4 +1,4 @@
 ﻿namespace CopyWords.Parsers.Models
 {
-    public record VariationUrl(string Word, string Url);
+    public record VariationUrl(string Word, string URL);
 }

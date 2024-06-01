@@ -12,6 +12,16 @@
                 "isDefault": true
             },
             "label": "dotnet: build"
+        },
+        {
+            "label": "build Parsers",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/solution.sln"
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }

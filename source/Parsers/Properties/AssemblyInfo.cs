@@ -1,4 +1,4 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Parsers.Tests")]
+[assembly: InternalsVisibleTo("CopyWords.Parsers.Tests")]

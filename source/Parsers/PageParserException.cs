@@ -1,4 +1,4 @@
-﻿namespace CopyWords.Parsers.Exceptions
+﻿namespace CopyWords.Parsers
 {
     public class PageParserException : Exception
     {
