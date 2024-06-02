@@ -5,6 +5,5 @@
         List<VariationUrl> VariationUrls,
         string Endings, string Pronunciation,
         string Definitions, string Sound,
-        List<string> Examples,
-        List<RussianTranslation> Translations);
+        List<string> Examples);
 }

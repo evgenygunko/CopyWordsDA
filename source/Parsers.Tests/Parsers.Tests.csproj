@@ -95,12 +95,6 @@
     <None Update="TestPages\SimplePage.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestPages\slovardk\AfgørelsePage.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestPages\slovardk\KæmpePage.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="TestPages\Trotar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

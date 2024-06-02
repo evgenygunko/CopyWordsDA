@@ -18,18 +18,15 @@ namespace CopyWords.Parsers
         private const string SlovarDKUrl = "http://www.slovar.dk/";
 
         private readonly IDDOPageParser _ddoPageParser;
-        private readonly ISlovardkPageParser _slovardkPageParser;
         private readonly IFileDownloader _fileDownloader;
 
         private readonly Regex lookupRegex = new Regex(@"^[\w ]+$");
 
         public LookUpWord(
             IDDOPageParser ddoPageParser,
-            ISlovardkPageParser slovardkPageParser,
             IFileDownloader fileDownloader)
         {
             _ddoPageParser = ddoPageParser;
-            _slovardkPageParser = slovardkPageParser;
             _fileDownloader = fileDownloader;
         }
 
@@ -87,30 +84,14 @@ namespace CopyWords.Parsers
 
             _ddoPageParser.LoadHtml(ddoPageHtml);
 
-            string word = _ddoPageParser.ParseWord();
-
-            // Download and parse a page from Slovar.dk
-            string slovardkUrl = GetSlovardkUri(word);
-
-            string? slovardkPageHtml = await _fileDownloader.DownloadPageAsync(slovardkUrl, Encoding.GetEncoding(1251));
-            if (string.IsNullOrEmpty(slovardkPageHtml))
-            {
-                return null;
-            }
-
-            _slovardkPageParser.LoadHtml(slovardkPageHtml);
-
-            var translations = _slovardkPageParser.ParseWord();
-
             WordModel wordModel = new WordModel(
                 VariationUrls: _ddoPageParser.ParseVariationUrls(),
-                Word: word,
+                Word: _ddoPageParser.ParseWord(),
                 Endings: _ddoPageParser.ParseEndings(),
                 Pronunciation: _ddoPageParser.ParsePronunciation(),
                 Sound: _ddoPageParser.ParseSound(),
                 Definitions: _ddoPageParser.ParseDefinitions(),
-                Examples: _ddoPageParser.ParseExamples(),
-                Translations: translations
+                Examples: _ddoPageParser.ParseExamples()
             );
 
             return wordModel;

@@ -116,9 +116,7 @@ namespace CopyWords.Parsers.Tests
             var fileDownloaderStub = new Mock<IFileDownloader>();
             fileDownloaderStub.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), It.IsAny<Encoding>())).ReturnsAsync("Some page here");
 
-            var slovardkPageParserStub = new Mock<ISlovardkPageParser>();
-
-            var lookupWord = new LookUpWord(ddoPageParser, slovardkPageParserStub.Object, fileDownloaderStub.Object);
+            var lookupWord = new LookUpWord(ddoPageParser, fileDownloaderStub.Object);
 
             return lookupWord;
         }
