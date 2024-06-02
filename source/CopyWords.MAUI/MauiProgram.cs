@@ -3,6 +3,7 @@ using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.MAUI.Views;
 using CopyWords.Parsers;
+using CopyWords.Parsers.Services;
 using Microsoft.Extensions.Logging;
 
 namespace CopyWords.MAUI;
@@ -33,6 +34,8 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
         builder.Services.AddSingleton<ILookUpWord, LookUpWord>();
+        builder.Services.AddSingleton<IDDOPageParser, DDOPageParser>();
+        builder.Services.AddSingleton<IFileDownloader, FileDownloader>();
         builder.Services.AddSingleton<ICopySelectedToClipboardService, CopySelectedToClipboardService>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
         builder.Services.AddSingleton<IClipboardService, ClipboardService>();

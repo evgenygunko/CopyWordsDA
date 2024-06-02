@@ -14,7 +14,7 @@ namespace CopyWords.Parsers
 
     public class LookUpWord : ILookUpWord
     {
-        private const string DDOBaseUrl = "http://ordnet.dk/";
+        private const string DDOBaseUrl = "http://ordnet.dk/ddo/ordbog";
 
         private readonly IDDOPageParser _ddoPageParser;
         private readonly IFileDownloader _fileDownloader;
@@ -33,36 +33,36 @@ namespace CopyWords.Parsers
 
         public (bool isValid, string? errorMessage) CheckThatWordIsValid(string lookUp)
         {
-            bool isValid = lookupRegex.IsMatch(lookUp);
+            bool isValid = false;
+            string? errorMessage = null;
 
-            return (isValid, isValid ? null : "Search can only contain alphanumeric characters and spaces.");
+            if (string.IsNullOrEmpty(lookUp))
+            {
+                errorMessage = "LookUp text cannot be null or empty.";
+            }
+            else
+            {
+                isValid = lookupRegex.IsMatch(lookUp);
+
+                if (!isValid)
+                {
+                    errorMessage = "Search can only contain alphanumeric characters and spaces.";
+                }
+            }
+
+            return (isValid, errorMessage);
         }
 
         public async Task<WordModel?> LookUpWordAsync(string wordToLookUp)
         {
-            if (string.IsNullOrEmpty(wordToLookUp))
-            {
-                throw new ArgumentException("LookUp text cannot be null or empty.");
-            }
-
             (bool isValid, string? errorMessage) = CheckThatWordIsValid(wordToLookUp);
             if (!isValid)
             {
                 throw new ArgumentException(errorMessage, nameof(wordToLookUp));
             }
 
-            string url = DDOBaseUrl + $"ordbog?query={wordToLookUp}&search=S%C3%B8g";
+            string url = DDOBaseUrl + $"?query={wordToLookUp}&search=S%C3%B8g";
 
-            WordModel? wordModel = await DownloadPageAndParseWordAsync(url);
-            return wordModel;
-        }
-
-        #endregion
-
-        #region Internal Methods
-
-        internal async Task<WordModel?> DownloadPageAndParseWordAsync(string url)
-        {
             // Download and parse a page from DDO
             string? ddoPageHtml = await _fileDownloader.DownloadPageAsync(url, Encoding.UTF8);
             if (string.IsNullOrEmpty(ddoPageHtml))
@@ -72,7 +72,13 @@ namespace CopyWords.Parsers
 
             _ddoPageParser.LoadHtml(ddoPageHtml);
 
-            WordModel wordModel = new WordModel(
+            string definitions = _ddoPageParser.ParseDefinitions();
+            var translations = new List<WordVariant>()
+            {
+                new WordVariant(definitions, "to implement", new List<Context>())
+            };
+
+            /*WordModel wordModel = new WordModel(
                 VariationUrls: _ddoPageParser.ParseVariationUrls(),
                 Word: _ddoPageParser.ParseWord(),
                 Endings: _ddoPageParser.ParseEndings(),
@@ -80,6 +86,12 @@ namespace CopyWords.Parsers
                 Sound: _ddoPageParser.ParseSound(),
                 Definitions: _ddoPageParser.ParseDefinitions(),
                 Examples: _ddoPageParser.ParseExamples()
+            );*/
+            WordModel wordModel = new WordModel(
+                Word: _ddoPageParser.ParseWord(),
+                SoundUrl: _ddoPageParser.ParseSound(),
+                SoundFileName: null,
+                Variants: translations
             );
 
             return wordModel;

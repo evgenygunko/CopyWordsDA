@@ -11,9 +11,9 @@ namespace CopyWords.Parsers.Services
     {
         private readonly HttpClient _httpClient;
 
-        public FileDownloader()
+        public FileDownloader(HttpClient httpClient)
         {
-            _httpClient = new HttpClient();
+            _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36");
         }
 

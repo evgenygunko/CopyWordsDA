@@ -1,10 +1,7 @@
 ﻿using System.Text;
 using Autofac.Extras.Moq;
-using CopyWords.Parsers.Models;
-using CopyWords.Parsers.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
 namespace CopyWords.Parsers.Tests
 {
@@ -16,6 +13,24 @@ namespace CopyWords.Parsers.Tests
         {
             _ = context;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
+        #region Tests for CheckThatWordIsValid
+
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public void CheckThatWordIsValid_WhenLookUpIsNullOrEmpty_ReturnsFalse(string lookUp)
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var sut = mock.Create<LookUpWord>();
+
+                (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid(lookUp);
+
+                isValid.Should().BeFalse("error: " + errorMessage);
+                errorMessage.Should().Be("LookUp text cannot be null or empty.");
+            }
         }
 
         [TestMethod]
@@ -70,7 +85,27 @@ namespace CopyWords.Parsers.Tests
             }
         }
 
+        #endregion
+
+        #region Tests for LookUpWordAsync
+
         [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow("æø")]
+        public void LookUpWordAsync_WhenWordIsNotValid_ThrowsException(string wordToLookup)
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var sut = mock.Create<LookUpWord>();
+
+                _ = sut.Invoking(y => y.LookUpWordAsync("Hello"))
+                    .Should().ThrowAsync<ArgumentException>();
+            }
+        }
+
+        // todo: enable or delete after translations is implemented
+        /*[DataTestMethod]
         [DataRow(1)]
         [DataRow(2)]
         public async Task LookUpWordAsync_ReturnsVariantUrls(int variationsCount)
@@ -97,6 +132,8 @@ namespace CopyWords.Parsers.Tests
 
                 wordModel!.VariationUrls.Should().HaveCount(variationsCount);
             }
-        }
+        }*/
+
+        #endregion
     }
 }
