@@ -35,13 +35,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
         builder.Services.AddSingleton<ILookUpWord, LookUpWord>();
         builder.Services.AddSingleton<IDDOPageParser, DDOPageParser>();
-        builder.Services.AddSingleton<IFileDownloader, FileDownloader>();
         builder.Services.AddSingleton<ICopySelectedToClipboardService, CopySelectedToClipboardService>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
         builder.Services.AddSingleton<IClipboardService, ClipboardService>();
 
         builder.Services.AddHttpClient<ISaveSoundFileService, SaveSoundFileService>();
         builder.Services.AddHttpClient<ISaveImageFileService, SaveImageFileService>();
+        builder.Services.AddHttpClient<IFileDownloader, FileDownloader>();
 
         builder.Services.AddSingleton<MainViewModel>();
         builder.Services.AddSingleton<WordViewModel>();

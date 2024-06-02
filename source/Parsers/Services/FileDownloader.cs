@@ -19,14 +19,14 @@ namespace CopyWords.Parsers.Services
 
         public async Task<string?> DownloadPageAsync(string url, Encoding encoding)
         {
-            if (encoding == null)
+            string? content = null;
+            HttpResponseMessage response;
+
+            using (CancellationTokenSource cts = new CancellationTokenSource(TimeSpan.FromSeconds(5)))
             {
-                throw new ArgumentNullException(nameof(encoding));
+                response = await _httpClient.GetAsync(url, cts.Token);
             }
 
-            string? content = null;
-
-            HttpResponseMessage response = await _httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {
                 byte[] bytes = await response.Content.ReadAsByteArrayAsync();
@@ -36,7 +36,7 @@ namespace CopyWords.Parsers.Services
             {
                 if (response.StatusCode != System.Net.HttpStatusCode.NotFound)
                 {
-                    throw new ServerErrorException("Server returned " + response.StatusCode);
+                    throw new ServerErrorException($"Server returned error code '{response.StatusCode}' when requesting URL '{url}'.");
                 }
             }
 
