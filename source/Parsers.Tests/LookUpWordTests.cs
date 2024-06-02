@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Autofac.Extras.Moq;
 using CopyWords.Parsers.Models;
 using CopyWords.Parsers.Services;
 using FluentAssertions;
@@ -18,73 +19,60 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void GetSlovardkUri_ReturnsUriForKigge()
-        {
-            string result = LookUpWord.GetSlovardkUri("kigge");
-            Assert.AreEqual("http://www.slovar.dk/tdansk/kigge/?", result);
-        }
-
-        [TestMethod]
-        public void GetSlovardkUri_ReturnsUriForAfgørelse()
-        {
-            string result = LookUpWord.GetSlovardkUri("afgørelse");
-            result.Should().Be("http://www.slovar.dk/tdansk/afg'oerelse/?");
-        }
-
-        [TestMethod]
-        public void GetSlovardkUri_ReturnsUriForÅl()
-        {
-            string result = LookUpWord.GetSlovardkUri("ål");
-            Assert.AreEqual("http://www.slovar.dk/tdansk/'aal/?", result);
-        }
-
-        [TestMethod]
-        public void GetSlovardkUri_ReturnsUriForKæmpe()
-        {
-            string result = LookUpWord.GetSlovardkUri("Kæmpe");
-            Assert.AreEqual("http://www.slovar.dk/tdansk/k'aempe/?", result);
-        }
-
-        [TestMethod]
         public void CheckThatWordIsValid_ReturnsFalse_ForUrl()
         {
-            var lookupWord = CreateLookUpWord();
-            (bool isValid, string? errorMessage) = lookupWord.CheckThatWordIsValid("http://ordnet.dk/ddo/ordbog");
+            using (var mock = AutoMock.GetLoose())
+            {
+                var sut = mock.Create<LookUpWord>();
 
-            Assert.IsFalse(isValid, errorMessage);
+                (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("http://ordnet.dk/ddo/ordbog");
+
+                isValid.Should().BeFalse("error: " + errorMessage);
+            }
         }
 
         [TestMethod]
         public void CheckThatWordIsValid_ReturnsFalse_ForQuote()
         {
-            var lookupWord = CreateLookUpWord();
-            (bool isValid, string? errorMessage) = lookupWord.CheckThatWordIsValid("ordbo'g");
+            using (var mock = AutoMock.GetLoose())
+            {
+                var sut = mock.Create<LookUpWord>();
 
-            Assert.IsFalse(isValid, errorMessage);
+                (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("ordbo'g");
+
+                isValid.Should().BeFalse("error: " + errorMessage);
+            }
         }
 
         [TestMethod]
         public void CheckThatWordIsValid_ReturnsTrue_ForWord()
         {
-            var lookupWord = CreateLookUpWord();
-            (bool isValid, string? errorMessage) = lookupWord.CheckThatWordIsValid("refusionsopgørelse");
+            using (var mock = AutoMock.GetLoose())
+            {
+                var sut = mock.Create<LookUpWord>();
 
-            Assert.IsTrue(isValid, errorMessage);
+                (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("refusionsopgørelse");
+
+                isValid.Should().BeTrue("error: " + errorMessage);
+            }
         }
 
         [TestMethod]
         public void CheckThatWordIsValid_ReturnsTrue_ForTwoWord()
         {
-            var lookupWord = CreateLookUpWord();
-            (bool isValid, string? errorMessage) = lookupWord.CheckThatWordIsValid("rindende vand");
+            using (var mock = AutoMock.GetLoose())
+            {
+                var sut = mock.Create<LookUpWord>();
 
-            Assert.IsTrue(isValid, errorMessage);
+                (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("rindende vand");
+
+                isValid.Should().BeTrue("error: " + errorMessage);
+            }
         }
 
         [DataTestMethod]
         [DataRow(1)]
         [DataRow(2)]
-        [TestMethod]
         public async Task LookUpWordAsync_ReturnsVariantUrls(int variationsCount)
         {
             const string wordToLookup = "any word";
@@ -96,29 +84,19 @@ namespace CopyWords.Parsers.Tests
                 variationUrls.Add(new VariationUrl(Word: wordToLookup + i, URL: "http://utl_to_lookup" + i));
             }
 
-            var ddoPageParserStub = new Mock<IDDOPageParser>();
-            ddoPageParserStub.Setup(x => x.ParseWord()).Returns(wordToLookup);
-            ddoPageParserStub.Setup(x => x.ParseVariationUrls()).Returns(variationUrls);
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IDDOPageParser>().Setup(x => x.ParseWord()).Returns(wordToLookup);
+                mock.Mock<IDDOPageParser>().Setup(x => x.ParseVariationUrls()).Returns(variationUrls);
 
-            var lookupWord = CreateLookUpWord(ddoPageParserStub.Object);
-            WordModel? wordModel = await lookupWord.LookUpWordAsync(wordToLookup);
+                mock.Mock<IFileDownloader>().Setup(x => x.DownloadPageAsync(It.IsAny<string>(), It.IsAny<Encoding>())).ReturnsAsync("Some page here");
 
-            Assert.AreEqual(variationsCount, wordModel!.VariationUrls.Count);
-        }
+                var sut = mock.Create<LookUpWord>();
 
-        private static LookUpWord CreateLookUpWord()
-        {
-            return CreateLookUpWord(new Mock<IDDOPageParser>().Object);
-        }
+                WordModel? wordModel = await sut.LookUpWordAsync(wordToLookup);
 
-        private static LookUpWord CreateLookUpWord(IDDOPageParser ddoPageParser)
-        {
-            var fileDownloaderStub = new Mock<IFileDownloader>();
-            fileDownloaderStub.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), It.IsAny<Encoding>())).ReturnsAsync("Some page here");
-
-            var lookupWord = new LookUpWord(ddoPageParser, fileDownloaderStub.Object);
-
-            return lookupWord;
+                wordModel!.VariationUrls.Should().HaveCount(variationsCount);
+            }
         }
     }
 }
