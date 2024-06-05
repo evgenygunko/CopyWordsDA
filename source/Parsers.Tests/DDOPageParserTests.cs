@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using CopyWords.Parsers.Models;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CopyWords.Parsers.Tests
@@ -86,41 +87,41 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
-        #region ParseWord tests
+        #region ParseHeadword tests
 
         [TestMethod]
-        public void ParseWord_ReturnsUnderholdning_ForUnderholdningPage()
+        public void ParseHeadword_ForUnderholdningPage_ReturnsUnderholdning()
         {
             string content = Helpers.GetSimpleHTMLPage(GetTestFilePath("UnderholdningPage.html"));
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            string word = parser.ParseWord();
+            string word = parser.ParseHeadword();
             Assert.AreEqual("underholdning", word);
         }
 
         [TestMethod]
-        public void ParseWord_ReturnsGrillspydPage_ForUGrillspydPage()
+        public void ParseHeadword_ForUGrillspydPage_ReturnsGrillspydPage()
         {
             string content = Helpers.GetSimpleHTMLPage(GetTestFilePath("GrillspydPage.html"));
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            string word = parser.ParseWord();
+            string word = parser.ParseHeadword();
             Assert.AreEqual("grillspyd", word);
         }
 
         [TestMethod]
-        public void ParseWord_ReturnsStødtand_ForStødtandPage()
+        public void ParseHeadword_ForStødtandPage_ReturnsStødtand()
         {
             string content = Helpers.GetSimpleHTMLPage(GetTestFilePath("StødtandPage.html"));
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            string word = parser.ParseWord();
+            string word = parser.ParseHeadword();
             Assert.AreEqual("stødtand", word);
         }
 
@@ -238,53 +239,56 @@ namespace CopyWords.Parsers.Tests
         #region ParseDefinitions tests
 
         [TestMethod]
-        public void ParseDefinitions_ReturnsDefinition_ForUnderholdningPage()
+        public void ParseDefinitions_ForUnderholdningPage_ReturnsOneDefinition()
         {
             string content = Helpers.GetSimpleHTMLPage(GetTestFilePath("UnderholdningPage.html"));
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            string definitions = parser.ParseDefinitions();
+            List<Definition> definitions = parser.ParseDefinitions();
 
-            const string Expected = "noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse";
-            Assert.AreEqual(Expected, definitions);
+            definitions.Should().HaveCount(1);
+            definitions.First().Meaning.Should().Be("noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse");
         }
 
         [TestMethod]
-        public void ParseDefinitions_ReturnsConcatenatedDefinitions_ForKiggePage()
+        public void ParseDefinitions_ForKiggePage_ReturnsSeveralDefinitions()
         {
             string content = Helpers.GetSimpleHTMLPage(GetTestFilePath("KiggePage.html"));
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            string definitions = parser.ParseDefinitions();
+            List<Definition> definitions = parser.ParseDefinitions();
 
-            string expected = "1. rette blikket i en bestemt retning" + Environment.NewLine +
-                "2. undersøge nærmere; sætte sig ind i" + Environment.NewLine +
-                "3. prøve at finde" + Environment.NewLine +
-                "4. skrive af efter nogen; kopiere noget" + Environment.NewLine +
-                "5. se på; betragte";
-            Assert.AreEqual(expected, definitions);
+            definitions.Should().HaveCount(5);
+
+            definitions.First().Meaning.Should().Be("rette blikket i en bestemt retning");
+            definitions.Skip(1).First().Meaning.Should().Be("undersøge nærmere; sætte sig ind i");
+            definitions.Skip(2).First().Meaning.Should().Be("prøve at finde");
+            definitions.Skip(3).First().Meaning.Should().Be("skrive af efter nogen; kopiere noget");
+            definitions.Skip(4).First().Meaning.Should().Be("se på; betragte");
         }
 
         [TestMethod]
-        public void ParseDefinitions_ReturnsEmptyString_ForGrillspydPage()
+        public void ParseDefinitions_ForGrillspydPage_ReturnsOneDefinition()
         {
             string content = Helpers.GetSimpleHTMLPage(GetTestFilePath("GrillspydPage.html"));
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            string definitions = parser.ParseDefinitions();
+            List<Definition> definitions = parser.ParseDefinitions();
 
-            Assert.AreEqual(string.Empty, definitions);
+            definitions.Should().HaveCount(1);
+
+            definitions.First().Meaning.Should().Be("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
 
         #endregion
 
-        #region ParseExamples tests
+        /*#region ParseExamples tests
 
         [TestMethod]
         public void ParseExamples_ReturnsExample_ForDannebrogPage()
@@ -372,7 +376,7 @@ namespace CopyWords.Parsers.Tests
             Assert.AreEqual(0, examples.Count);
         }
 
-        #endregion
+        #endregion*/
 
         private static string GetTestFilePath(string fileName)
         {

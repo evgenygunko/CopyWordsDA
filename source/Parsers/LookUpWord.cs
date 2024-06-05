@@ -72,26 +72,13 @@ namespace CopyWords.Parsers
 
             _ddoPageParser.LoadHtml(ddoPageHtml);
 
-            string definitions = _ddoPageParser.ParseDefinitions();
-            var translations = new List<WordVariant>()
-            {
-                new WordVariant(definitions, "to implement", new List<Context>())
-            };
+            List<Definition> definitions = _ddoPageParser.ParseDefinitions();
 
-            /*WordModel wordModel = new WordModel(
-                VariationUrls: _ddoPageParser.ParseVariationUrls(),
-                Word: _ddoPageParser.ParseWord(),
-                Endings: _ddoPageParser.ParseEndings(),
-                Pronunciation: _ddoPageParser.ParsePronunciation(),
-                Sound: _ddoPageParser.ParseSound(),
-                Definitions: _ddoPageParser.ParseDefinitions(),
-                Examples: _ddoPageParser.ParseExamples()
-            );*/
-            WordModel wordModel = new WordModel(
-                Word: _ddoPageParser.ParseWord(),
+            var wordModel = new WordModel(
+                Headword: _ddoPageParser.ParseHeadword(),
                 SoundUrl: _ddoPageParser.ParseSound(),
                 SoundFileName: null,
-                Variants: translations
+                Definitions: definitions
             );
 
             return wordModel;

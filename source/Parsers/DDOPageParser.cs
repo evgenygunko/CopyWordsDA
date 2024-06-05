@@ -7,7 +7,7 @@ namespace CopyWords.Parsers
     {
         List<VariationUrl> ParseVariationUrls();
 
-        string ParseWord();
+        string ParseHeadword();
 
         string ParseEndings();
 
@@ -15,9 +15,7 @@ namespace CopyWords.Parsers
 
         string ParseSound();
 
-        string ParseDefinitions();
-
-        List<string> ParseExamples();
+        List<Definition> ParseDefinitions();
     }
 
     public class DDOPageParser : PageParserBase, IDDOPageParser
@@ -76,7 +74,7 @@ namespace CopyWords.Parsers
         /// <summary>
         /// Gets a string which contains found Danish word.
         /// </summary>
-        public string ParseWord()
+        public string ParseHeadword()
         {
             var div = FindElementByClassName("div", "definitionBoxTop");
 
@@ -161,9 +159,9 @@ namespace CopyWords.Parsers
         /// <summary>
         /// Gets definitions for found word. It will concatenate different definitions into one string with line breaks.
         /// </summary>
-        public string ParseDefinitions()
+        public List<Definition> ParseDefinitions()
         {
-            string definitions = string.Empty;
+            List<Definition> definitions = new();
 
             var contentBetydningerDiv = FindElementById("content-betydninger");
 
@@ -173,24 +171,19 @@ namespace CopyWords.Parsers
 
                 if (definitionsDivs != null && definitionsDivs.Count > 0)
                 {
-                    for (int i = 0; i < definitionsDivs.Count; i++)
+                    foreach (var div in definitionsDivs)
                     {
-                        if (definitionsDivs.Count > 1)
-                        {
-                            definitions += string.Format("{0}{1}. {2}", Environment.NewLine, (i + 1).ToString(), DecodeText(definitionsDivs[i].InnerText));
-                        }
-                        else
-                        {
-                            definitions += string.Format("{0}", DecodeText(definitionsDivs[i].InnerText));
-                        }
+                        IEnumerable<string> examples = Enumerable.Empty<string>();
+                        definitions.Add(new Definition(Meaning: DecodeText(div.InnerText), Examples: examples));
                     }
                 }
             }
 
-            return definitions.Trim();
+            return definitions;
         }
 
-        /// <summary>
+        // todo: move into ParseDefinitions
+        /*/// <summary>
         /// Gets examples for found word. It will also add a full stop at the end of each example.
         /// </summary>
         public List<string> ParseExamples()
@@ -225,6 +218,6 @@ namespace CopyWords.Parsers
             }
 
             return examples;
-        }
+        }*/
     }
 }
