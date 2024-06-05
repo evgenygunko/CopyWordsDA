@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Text;
 using CopyWords.Core.ViewModels;
 
@@ -81,29 +80,13 @@ namespace CopyWords.Core.Services
                 .ToList();
 
             StringBuilder sb = new StringBuilder();
-            int count = selectedExampleVMs.Count;
-            int i = 1;
 
             foreach (var exampleVM in selectedExampleVMs)
             {
-                if (count > 1)
-                {
-                    sb.Append(CultureInfo.CurrentCulture, $"{i}. {exampleVM.Example}");
-                }
-                else
-                {
-                    sb.Append(CultureInfo.CurrentCulture, $"{exampleVM.Example}");
-                }
-
-                if (i < count)
-                {
-                    sb.Append(Environment.NewLine);
-                }
-
-                i++;
+                sb.AppendLine(exampleVM.Example);
             }
 
-            return Task.FromResult(sb.ToString());
+            return Task.FromResult(sb.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
         }
 
         #endregion
