@@ -43,7 +43,7 @@
     </ContentView.Resources>
 
     <VerticalStackLayout 
-            BindableLayout.ItemsSource="{Binding ExampleViewModels}"
+            BindableLayout.ItemsSource="{Binding Examples}"
             BindableLayout.ItemTemplate="{StaticResource examplesTemplate}" />
 
 </ContentView>

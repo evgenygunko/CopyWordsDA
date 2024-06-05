@@ -17,6 +17,8 @@ namespace CopyWords.Parsers
         string ParseSound();
 
         List<Definition> ParseDefinitions();
+
+        List<string> ParseExamples();
     }
 
     public class DDOPageParser : PageParserBase, IDDOPageParser
@@ -174,7 +176,9 @@ namespace CopyWords.Parsers
                 {
                     foreach (var div in definitionsDivs)
                     {
-                        IEnumerable<string> examples = Enumerable.Empty<string>();
+                        // todo: parse examples only for this definition
+                        IEnumerable<string> examples = ParseExamples();
+
                         definitions.Add(new Definition(Meaning: DecodeText(div.InnerText), Examples: examples));
                     }
                 }
@@ -183,8 +187,7 @@ namespace CopyWords.Parsers
             return definitions;
         }
 
-        // todo: move into ParseDefinitions
-        /*/// <summary>
+        /// <summary>
         /// Gets examples for found word. It will also add a full stop at the end of each example.
         /// </summary>
         public List<string> ParseExamples()
@@ -219,6 +222,6 @@ namespace CopyWords.Parsers
             }
 
             return examples;
-        }*/
+        }
     }
 }
