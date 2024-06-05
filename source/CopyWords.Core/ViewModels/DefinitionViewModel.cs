@@ -6,9 +6,10 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class DefinitionViewModel : ObservableObject
     {
-        public DefinitionViewModel(Definition definition)
+        public DefinitionViewModel(Definition definition, int pos)
         {
             Meaning = definition.Meaning;
+            Position = pos;
 
             Examples.Clear();
             foreach (string example in definition.Examples)
@@ -21,7 +22,7 @@ namespace CopyWords.Core.ViewModels
         private string meaning;
 
         [ObservableProperty]
-        private string alphabeticalPosition;
+        private int position;
 
         public ObservableCollection<ExampleViewModel> Examples { get; } = new();
     }

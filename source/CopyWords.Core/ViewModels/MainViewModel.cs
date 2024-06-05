@@ -50,9 +50,10 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.SoundFileName = wordModel.SoundFileName;
 
                 _wordViewModel.Definitions.Clear();
+                int i = 1;
                 foreach (var definition in wordModel.Definitions)
                 {
-                    _wordViewModel.Definitions.Add(new DefinitionViewModel(definition));
+                    _wordViewModel.Definitions.Add(new DefinitionViewModel(definition, i++));
                 }
             }
 

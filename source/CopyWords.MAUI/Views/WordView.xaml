@@ -74,7 +74,7 @@
                     Command="{Binding CopyExamplesCommand}"></Button>
         </HorizontalStackLayout>
         
-        <views:WordVariantsView Grid.Row="4" Grid.ColumnSpan="2" />
+        <views:DefinitionsView Grid.Row="4" Grid.ColumnSpan="2" />
 
         <BoxView Grid.Row="5" Grid.ColumnSpan="2" Color="LightGray"  HeightRequest="1"/>
     </Grid>

@@ -26,9 +26,7 @@
                     <Label Grid.Column="1" LineBreakMode="WordWrap" Padding="10,0,0,0" VerticalOptions="Center">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="{Binding ExampleES, FallbackValue='ExampleES'}"/>
-                                <Span Text=" " />
-                                <Span Text="{Binding ExampleEN, FallbackValue='ExampleEN'}" TextColor="Gray" />
+                                <Span Text="{Binding Example, FallbackValue='Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham'}"/>
                             </FormattedString>
                         </Label.FormattedText>
 

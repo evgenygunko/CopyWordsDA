@@ -92,12 +92,15 @@ namespace CopyWords.Core.Tests.Services
 
         private static ObservableCollection<DefinitionViewModel> CreateVMForGrillspyd()
         {
-            var definitionVM = new DefinitionViewModel(new Definition(Meaning: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
+            var definition = new Definition(
+                Meaning: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
                 Examples:
                 [
                     "Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver",
                     "Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater"
-                ]));
+                ]);
+
+            var definitionVM = new DefinitionViewModel(definition, pos: 1);
 
             return new ObservableCollection<DefinitionViewModel>()
             {

@@ -94,19 +94,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <MauiXaml Update="Views\ContextsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
+    <Compile Update="Views\DefinitionsView.xaml.cs">
+      <DependentUpon>DefinitionsView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <MauiXaml Update="Views\ExamplesView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\SettingsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
-    <MauiXaml Update="Views\TranslationsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Views\WordVariantsView.xaml">
+    <MauiXaml Update="Views\DefinitionsView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\WordView.xaml">
