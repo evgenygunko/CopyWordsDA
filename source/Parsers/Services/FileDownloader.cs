@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CopyWords.Parsers.Exceptions;
 
 namespace CopyWords.Parsers.Services
 {

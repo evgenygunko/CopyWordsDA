@@ -19,8 +19,19 @@ namespace CopyWords.Parsers.Tests
 
         #region LoadHtml tests
 
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public void LoadHtml_WhenStringIsNullOrEmpty_ThrowsException(string content)
+        {
+            DDOPageParser parser = new DDOPageParser();
+
+            _ = parser.Invoking(x => x.LoadHtml(content))
+                    .Should().Throw<ArgumentException>();
+        }
+
         [TestMethod]
-        public void LoadHtml_DoesNotThrowException_ForValidString()
+        public void LoadHtml_ForValidString_DoesNotThrowException()
         {
             string content = Helpers.GetSimpleHTMLPage(GetTestFilePath("SimplePage.html"));
 

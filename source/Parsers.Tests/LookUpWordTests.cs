@@ -34,7 +34,7 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void CheckThatWordIsValid_ReturnsFalse_ForUrl()
+        public void CheckThatWordIsValid_ForUrl_ReturnsFalse()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -47,7 +47,7 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void CheckThatWordIsValid_ReturnsFalse_ForQuote()
+        public void CheckThatWordIsValid_ForQuote_ReturnsFalse()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -60,7 +60,7 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void CheckThatWordIsValid_ReturnsTrue_ForWord()
+        public void CheckThatWordIsValid_ForWord_ReturnsTrue()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -73,7 +73,7 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void CheckThatWordIsValid_ReturnsTrue_ForTwoWord()
+        public void CheckThatWordIsValid_ForTwoWords_ReturnsTrue()
         {
             using (var mock = AutoMock.GetLoose())
             {

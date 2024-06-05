@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using CopyWords.Parsers.Exceptions;
 using CopyWords.Parsers.Models;
 
 namespace CopyWords.Parsers

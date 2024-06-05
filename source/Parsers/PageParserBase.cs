@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using CopyWords.Parsers.Exceptions;
 using HtmlAgilityPack;
 
 namespace CopyWords.Parsers
