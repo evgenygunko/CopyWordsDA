@@ -1,23 +1,20 @@
 ﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Text;
-using CopyWords.Core.Exceptions;
 using CopyWords.Core.ViewModels;
 
 namespace CopyWords.Core.Services
 {
     public interface ICopySelectedToClipboardService
     {
-        Task<string> CompileFrontAsync(ObservableCollection<WordVariantViewModel> wordVariantViewModels);
+        Task<string> CompileFrontAsync(ObservableCollection<DefinitionViewModel> wordVariantViewModels);
 
-        Task<string> CompileBackAsync(ObservableCollection<WordVariantViewModel> wordVariantViewModels);
+        Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> wordVariantViewModels);
 
-        Task<string> CompileExamplesAsync(ObservableCollection<WordVariantViewModel> wordVariantViewModels);
+        Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> wordVariantViewModels);
     }
 
     public class CopySelectedToClipboardService : ICopySelectedToClipboardService
     {
-        private readonly ISaveImageFileService _saveImageFileService;
+        /*private readonly ISaveImageFileService _saveImageFileService;
 
         private const string TemplateGrayText = "<span style=\"color: rgba(0, 0, 0, 0.4)\">{0}</span>";
 
@@ -28,7 +25,7 @@ namespace CopyWords.Core.Services
 
         #region Public Methods
 
-        public Task<string> CompileFrontAsync(ObservableCollection<WordVariantViewModel> wordVariantViewModels)
+        public Task<string> CompileFrontAsync(ObservableCollection<DefinitionViewModel> wordVariantViewModels)
         {
             if (wordVariantViewModels == null)
             {
@@ -100,7 +97,7 @@ namespace CopyWords.Core.Services
             return Task.FromResult(front);
         }
 
-        public async Task<string> CompileBackAsync(ObservableCollection<WordVariantViewModel> wordVariantViewModels)
+        public async Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> wordVariantViewModels)
         {
             if (wordVariantViewModels == null)
             {
@@ -172,7 +169,7 @@ namespace CopyWords.Core.Services
             return sb.ToString();
         }
 
-        public Task<string> CompileExamplesAsync(ObservableCollection<WordVariantViewModel> wordVariantViewModels)
+        public Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> wordVariantViewModels)
         {
             var selectedExampleVMs = wordVariantViewModels
                 .SelectMany(x => x.ContextViewModels)
@@ -209,6 +206,9 @@ namespace CopyWords.Core.Services
             return Task.FromResult(sb.ToString());
         }
 
-        #endregion
+        #endregion*/
+        public Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> wordVariantViewModels) => throw new NotImplementedException();
+        public Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> wordVariantViewModels) => throw new NotImplementedException();
+        public Task<string> CompileFrontAsync(ObservableCollection<DefinitionViewModel> wordVariantViewModels) => throw new NotImplementedException();
     }
 }

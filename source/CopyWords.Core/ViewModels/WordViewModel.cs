@@ -1,10 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CopyWords.Core.Exceptions;
 using CopyWords.Core.Services;
 
 namespace CopyWords.Core.ViewModels
@@ -30,7 +28,7 @@ namespace CopyWords.Core.ViewModels
 
         #region Properties
 
-        public ObservableCollection<WordVariantViewModel> WordVariantViewModels { get; } = new();
+        public ObservableCollection<DefinitionViewModel> Definitions { get; } = new();
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(CopyFrontCommand))]
@@ -116,28 +114,34 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task CopyFrontAsync()
         {
-            await CompileAndCopyToClipboard("front", _copySelectedToClipboardService.CompileFrontAsync);
+            await _dialogService.DisplayAlert("Not implemented yet", "Copy command is not implemented yet", "OK");
+            /*await CompileAndCopyToClipboard("front", _copySelectedToClipboardService.CompileFrontAsync);*/
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task CopyBackAsync()
         {
-            await CompileAndCopyToClipboard("back", _copySelectedToClipboardService.CompileBackAsync);
+            await _dialogService.DisplayAlert("Not implemented yet", "Copy command is not implemented yet", "OK");
+            /*await CompileAndCopyToClipboard("back", _copySelectedToClipboardService.CompileBackAsync);*/
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task CopyExamplesAsync()
         {
-            await CompileAndCopyToClipboard("examples", _copySelectedToClipboardService.CompileExamplesAsync);
+            await _dialogService.DisplayAlert("Not implemented yet", "Copy command is not implemented yet", "OK");
+            /*await CompileAndCopyToClipboard("examples", _copySelectedToClipboardService.CompileExamplesAsync);*/
         }
 
         #endregion
 
         #region Internal methods
 
-        internal async Task CompileAndCopyToClipboard(string wordPartName, Func<ObservableCollection<WordVariantViewModel>, Task<string>> action)
+        internal async Task CompileAndCopyToClipboard(string wordPartName, Func<ObservableCollection<DefinitionViewModel>, Task<string>> action)
         {
-            try
+            _ = wordPartName;
+            _ = action;
+            await _dialogService.DisplayAlert("Not implemented yet", "Copy command is not implemented yet", "OK");
+            /*try
             {
                 string textToCopy = await action(WordVariantViewModels);
 
@@ -158,7 +162,7 @@ namespace CopyWords.Core.ViewModels
             catch (Exception ex)
             {
                 await _dialogService.DisplayAlert($"Cannot copy {wordPartName}", $"Error occurred while trying to copy {wordPartName}: " + ex.Message, "OK");
-            }
+            }*/
         }
 
         private static Color GetButtonColor(bool isEnabled)

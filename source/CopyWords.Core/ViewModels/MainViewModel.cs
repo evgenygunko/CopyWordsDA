@@ -45,14 +45,14 @@ namespace CopyWords.Core.ViewModels
 
             if (wordModel != null)
             {
-                _wordViewModel.Front = wordModel.Word;
+                _wordViewModel.Front = wordModel.Headword;
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
                 _wordViewModel.SoundFileName = wordModel.SoundFileName;
 
-                _wordViewModel.WordVariantViewModels.Clear();
-                foreach (var wordVariant in wordModel.Variants)
+                _wordViewModel.Definitions.Clear();
+                foreach (var definition in wordModel.Definitions)
                 {
-                    _wordViewModel.WordVariantViewModels.Add(new WordVariantViewModel(wordVariant));
+                    _wordViewModel.Definitions.Add(new DefinitionViewModel(definition));
                 }
             }
 

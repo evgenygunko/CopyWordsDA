@@ -1,21 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.ViewModels
 {
     public partial class ExampleViewModel : ObservableObject
     {
-        public ExampleViewModel(Example example)
+        public ExampleViewModel(string value)
         {
-            ExampleES = example?.ExampleES;
-            ExampleEN = example?.ExampleEN;
+            Example = value;
         }
 
         [ObservableProperty]
-        private string exampleES;
-
-        [ObservableProperty]
-        private string exampleEN;
+        private string example;
 
         [ObservableProperty]
         private bool isChecked;
