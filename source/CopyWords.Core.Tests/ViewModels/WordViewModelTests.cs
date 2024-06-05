@@ -17,8 +17,8 @@ namespace CopyWords.Core.Tests.ViewModels
             {
                 const string textToCopy = "test word";
 
-                var func = new Mock<Func<ObservableCollection<WordVariantViewModel>, Task<string>>>();
-                func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<WordVariantViewModel>>())).Returns(Task.FromResult(textToCopy));
+                var func = new Mock<Func<ObservableCollection<DefinitionViewModel>, Task<string>>>();
+                func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<DefinitionViewModel>>())).Returns(Task.FromResult(textToCopy));
 
                 var sut = mock.Create<WordViewModel>();
 
@@ -36,8 +36,8 @@ namespace CopyWords.Core.Tests.ViewModels
             {
                 string textToCopy = string.Empty;
 
-                var func = new Mock<Func<ObservableCollection<WordVariantViewModel>, Task<string>>>();
-                func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<WordVariantViewModel>>())).Returns(Task.FromResult(textToCopy));
+                var func = new Mock<Func<ObservableCollection<DefinitionViewModel>, Task<string>>>();
+                func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<DefinitionViewModel>>())).Returns(Task.FromResult(textToCopy));
 
                 var sut = mock.Create<WordViewModel>();
 
@@ -53,8 +53,8 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var func = new Mock<Func<ObservableCollection<WordVariantViewModel>, Task<string>>>();
-                func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<WordVariantViewModel>>())).ThrowsAsync(new PrepareWordForCopyingException("exception from unit tests"));
+                var func = new Mock<Func<ObservableCollection<DefinitionViewModel>, Task<string>>>();
+                func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ThrowsAsync(new PrepareWordForCopyingException("exception from unit tests"));
 
                 var sut = mock.Create<WordViewModel>();
 
@@ -70,8 +70,8 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var func = new Mock<Func<ObservableCollection<WordVariantViewModel>, Task<string>>>();
-                func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<WordVariantViewModel>>())).ThrowsAsync(new Exception("exception from unit tests"));
+                var func = new Mock<Func<ObservableCollection<DefinitionViewModel>, Task<string>>>();
+                func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ThrowsAsync(new Exception("exception from unit tests"));
 
                 var sut = mock.Create<WordViewModel>();
 
