@@ -1,7 +1,10 @@
 ﻿using System.Text;
 using Autofac.Extras.Moq;
+using CopyWords.Parsers.Models;
+using CopyWords.Parsers.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace CopyWords.Parsers.Tests
 {
@@ -104,35 +107,38 @@ namespace CopyWords.Parsers.Tests
             }
         }
 
-        // todo: enable or delete after translations is implemented
-        /*[DataTestMethod]
-        [DataRow(1)]
-        [DataRow(2)]
-        public async Task LookUpWordAsync_ReturnsVariantUrls(int variationsCount)
+        [TestMethod]
+        public async Task LookUpWordAsync_Should_DownloadPageAndCallParser()
         {
-            const string wordToLookup = "any word";
+            const string headWord = "haj";
+            const string soundUrl = "http://test.com/haj.mp3";
 
-            List<VariationUrl> variationUrls = new List<VariationUrl>();
-
-            for (int i = 0; i < variationsCount; i++)
-            {
-                variationUrls.Add(new VariationUrl(Word: wordToLookup + i, URL: "http://utl_to_lookup" + i));
-            }
+            var definition1 = new Definition("stor, langstrakt bruskfisk", Enumerable.Empty<string>());
+            var definition2 = new Definition("grisk, skrupelløs person", Enumerable.Empty<string>());
+            var definition3 = new Definition("person der er særlig dygtig til et spil", Enumerable.Empty<string>());
+            var definitions = new List<Definition>() { definition1, definition2, definition3 };
 
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<IDDOPageParser>().Setup(x => x.ParseWord()).Returns(wordToLookup);
-                mock.Mock<IDDOPageParser>().Setup(x => x.ParseVariationUrls()).Returns(variationUrls);
+                mock.Mock<IFileDownloader>().Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
 
-                mock.Mock<IFileDownloader>().Setup(x => x.DownloadPageAsync(It.IsAny<string>(), It.IsAny<Encoding>())).ReturnsAsync("Some page here");
+                mock.Mock<IDDOPageParser>().Setup(x => x.ParseHeadword()).Returns(headWord);
+                mock.Mock<IDDOPageParser>().Setup(x => x.ParseSound()).Returns(soundUrl);
+                mock.Mock<IDDOPageParser>().Setup(x => x.ParseDefinitions()).Returns(definitions);
 
                 var sut = mock.Create<LookUpWord>();
 
-                WordModel? wordModel = await sut.LookUpWordAsync(wordToLookup);
+                WordModel? result = await sut.LookUpWordAsync("haj");
 
-                wordModel!.VariationUrls.Should().HaveCount(variationsCount);
+                result.Should().NotBeNull();
+                result!.Headword.Should().Be(headWord);
+                result!.SoundUrl.Should().Be(soundUrl);
+                result!.SoundFileName.Should().BeNull();
+                result!.Definitions.Should().HaveCount(3);
+
+                mock.Mock<IFileDownloader>().Verify(x => x.DownloadPageAsync(It.Is<string>(str => str.EndsWith($"?query={headWord}&search=S%C3%B8g")), Encoding.UTF8));
             }
-        }*/
+        }
 
         #endregion
     }

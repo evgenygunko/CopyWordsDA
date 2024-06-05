@@ -81,8 +81,8 @@ namespace CopyWords.Core.Tests.Services
                 string result = await sut.CompileExamplesAsync(wordVariantVMs);
 
                 result.Should().Be(
-                    "1. Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver" + Environment.NewLine +
-                    "2. Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater");
+                    "Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver" + Environment.NewLine +
+                    "Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater");
             }
         }
 

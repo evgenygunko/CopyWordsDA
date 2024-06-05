@@ -1,13 +1,11 @@
-﻿using System.Text.RegularExpressions;
-using CopyWords.Parsers.Exceptions;
+﻿using CopyWords.Parsers.Exceptions;
 using CopyWords.Parsers.Models;
+using HtmlAgilityPack;
 
 namespace CopyWords.Parsers
 {
     public interface IDDOPageParser : IPageParser
     {
-        List<VariationUrl> ParseVariationUrls();
-
         string ParseHeadword();
 
         string ParseEndings();
@@ -17,63 +15,10 @@ namespace CopyWords.Parsers
         string ParseSound();
 
         List<Definition> ParseDefinitions();
-
-        List<string> ParseExamples();
     }
 
     public class DDOPageParser : PageParserBase, IDDOPageParser
     {
-        /// <summary>
-        /// Gets the words count for given search.
-        /// </summary>
-        /// <returns>The words count.</returns>
-        public List<VariationUrl> ParseVariationUrls()
-        {
-            var div = FindElementById("opslagsordBox_expanded");
-
-            var searchResultBoxDiv = div.SelectSingleNode("./div/div[contains(@class, 'searchResultBox')]");
-            if (searchResultBoxDiv == null)
-            {
-                throw new PageParserException("Cannot find a div element with CSS class 'searchResultBox'");
-            }
-
-            List<VariationUrl> variationUrls = new List<VariationUrl>();
-
-            var ahrefNodes = searchResultBoxDiv.SelectNodes("./div/a");
-
-            foreach (var ahref in ahrefNodes)
-            {
-                if (ahref != null && ahref.Attributes["href"] != null)
-                {
-                    string word = ahref.ParentNode
-                        .InnerText
-                        .Trim();
-
-                    // replace any sequence of spaces or tabs with a single space
-                    char[] separators = new char[] { ' ', '\r', '\t', '\n' };
-
-                    string[] temp = word.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-                    word = string.Join(" ", temp);
-
-                    // decorade variant number with parenthesis
-                    Match match = Regex.Match(word, "([0-9]+)");
-                    if (match.Success)
-                    {
-                        string v = match.Groups[0].Value;
-                        word = word.Replace(v, $"({v})");
-                    }
-
-                    word = word.Replace("&nbsp;", " ->");
-
-                    string variationUrl = DecodeText(ahref.Attributes["href"].Value);
-
-                    variationUrls.Add(new VariationUrl(word, variationUrl));
-                }
-            }
-
-            return variationUrls;
-        }
-
         /// <summary>
         /// Gets a string which contains found Danish word.
         /// </summary>
@@ -176,10 +121,12 @@ namespace CopyWords.Parsers
                 {
                     foreach (var div in definitionsDivs)
                     {
-                        // todo: parse examples only for this definition
-                        IEnumerable<string> examples = ParseExamples();
+                        string meaning = DecodeText(div.InnerText);
 
-                        definitions.Add(new Definition(Meaning: DecodeText(div.InnerText), Examples: examples));
+                        // todo: parse examples only for this definition
+                        IEnumerable<string> examples = ParseExamplesForDefinition(div);
+
+                        definitions.Add(new Definition(Meaning: meaning, Examples: examples));
                     }
                 }
             }
@@ -188,35 +135,35 @@ namespace CopyWords.Parsers
         }
 
         /// <summary>
-        /// Gets examples for found word. It will also add a full stop at the end of each example.
+        /// Gets examples for given definition. It will also add a full stop at the end of each example.
         /// </summary>
-        public List<string> ParseExamples()
+        private List<string> ParseExamplesForDefinition(HtmlNode divDefinition)
         {
             List<string> examples = new List<string>();
 
-            var contentBetydningerDiv = FindElementById("content-betydninger");
+            var definitionIndentDiv = divDefinition.SelectNodes("ancestor::div[@class='definitionIndent']").FirstOrDefault();
 
-            if (contentBetydningerDiv != null)
+            if (definitionIndentDiv != null)
             {
                 // can't run XPath with a search for any depth - we want to take examples only from "top level" meaning
                 // var examplesDivs = contentBetydningerDiv.SelectNodes("descendant::span[@class='citat']");
-                var examplesDivs = contentBetydningerDiv.SelectNodes("./div/div/div/span[@class='citat']");
+                var examplesDivs = definitionIndentDiv.SelectNodes("./div/div/span[@class='citat']");
                 if (examplesDivs == null)
                 {
-                    examplesDivs = contentBetydningerDiv.SelectNodes("./div/div/div/div/span[@class='citat']");
+                    examplesDivs = definitionIndentDiv.SelectNodes("./div/div/div/span[@class='citat']");
                 }
 
                 if (examplesDivs != null)
                 {
-                    for (int i = 0; i < examplesDivs.Count; i++)
+                    foreach (var div in examplesDivs)
                     {
-                        string example = DecodeText(examplesDivs[i].InnerText);
+                        string example = DecodeText(div.InnerText);
                         if ((example.EndsWith(".") || example.EndsWith("!") || example.EndsWith("?")) == false)
                         {
                             example += ".";
                         }
 
-                        examples.Add(string.Format("{0}. {1}", (i + 1).ToString(), example));
+                        examples.Add(example);
                     }
                 }
             }
