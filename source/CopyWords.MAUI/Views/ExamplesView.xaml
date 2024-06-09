@@ -19,7 +19,7 @@
 
                     <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding IsChecked}" />
 
-                    <Label Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center" Padding="0,00,0,0">
+                    <Label Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center" Padding="0,0,0,0">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="{Binding Example, FallbackValue='Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham'}"/>

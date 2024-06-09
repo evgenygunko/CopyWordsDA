@@ -61,9 +61,10 @@ namespace CopyWords.Core.Tests.Services
 
                 string result = await sut.CompileBackAsync(wordVariantVMs);
 
-                result.Should().Be("1. stor, langstrakt bruskfisk" + Environment.NewLine +
-                    "2. grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning" + Environment.NewLine +
-                    "3. person der er særlig dygtig til et spil, håndværk el.lign.");
+                result.Should().Be(
+                    "1.&nbsp;stor, langstrakt bruskfisk<br>" +
+                    $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br>" +
+                    $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.");
             }
         }
 
@@ -141,7 +142,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definition2 = new Definition(
                 Meaning: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning",
-                Tag: null,
+                Tag: "SLANG",
                 Examples:
                 [
                     "-"
@@ -149,7 +150,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definition3 = new Definition(
                 Meaning: "person der er særlig dygtig til et spil, håndværk el.lign.",
-                Tag: null,
+                Tag: "SLANG",
                 Examples:
                 [
                     "Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb"
@@ -162,6 +163,8 @@ namespace CopyWords.Core.Tests.Services
                 new DefinitionViewModel(definition3, pos: 3),
             };
         }
+
+        private static string StyleAttributeForTag => "style=\"color:#404040; background-color:#eaeff2; border:1px solid #CCCCCC; margin-right:10px; font-size: 80%;\"";
 
         #endregion
     }

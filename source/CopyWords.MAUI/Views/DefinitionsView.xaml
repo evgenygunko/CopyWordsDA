@@ -32,9 +32,7 @@
                                 StrokeThickness="1"
                                 HeightRequest="22"
                                 VerticalOptions="Start">
-                            <Label 
-                                Text="{Binding Tag, FallbackValue='SLANG'}"
-                                TextTransform="Uppercase" />     
+                            <Label Text="{Binding Tag, FallbackValue='SLANG'}" />     
                         </Border>
                         
                         <Label Grid.Column="2"

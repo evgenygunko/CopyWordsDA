@@ -9,7 +9,7 @@ namespace CopyWords.Core.ViewModels
         public DefinitionViewModel(Definition definition, int pos)
         {
             Position = pos + ". ";
-            Tag = definition.Tag;
+            Tag = definition.Tag?.ToUpper();
             Meaning = definition.Meaning;
 
             Examples.Clear();

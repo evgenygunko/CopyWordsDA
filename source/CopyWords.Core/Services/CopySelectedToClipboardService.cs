@@ -43,7 +43,15 @@ namespace CopyWords.Core.Services
                 ExampleViewModel exampleVM = definitionVM.Examples.FirstOrDefault(x => x.IsChecked);
                 if (exampleVM != null)
                 {
-                    meanings.Add(definitionVM.Meaning);
+                    string htmlMeaning = string.Empty;
+                    if (!string.IsNullOrEmpty(definitionVM.Tag))
+                    {
+                        htmlMeaning = $"<span style=\"color:#404040; background-color:#eaeff2; border:1px solid #CCCCCC; margin-right:10px; font-size: 80%;\">{definitionVM.Tag}</span>";
+                    }
+
+                    htmlMeaning += definitionVM.Meaning;
+
+                    meanings.Add(htmlMeaning);
                 }
             }
 
@@ -56,14 +64,15 @@ namespace CopyWords.Core.Services
             {
                 if (count > 1)
                 {
-                    sb.Append($"{i}. ");
+                    sb.Append($"{i}.&nbsp;");
                 }
 
-                sb.AppendLine(meaning);
+                sb.Append(meaning);
+                sb.Append("<br>");
                 i++;
             }
 
-            return Task.FromResult(sb.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
+            return Task.FromResult(sb.ToString().TrimEnd("<br>".ToCharArray()));
         }
 
         public Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> definitionVMs)
