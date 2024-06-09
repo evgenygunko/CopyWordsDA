@@ -275,15 +275,18 @@ namespace CopyWords.Parsers.Tests
 
             Definition definition1 = definitions.First();
             definition1.Meaning.Should().Be("stor, langstrakt bruskfisk med tværstillet mund på undersiden af hovedet, med 5-7 gællespalter uden gællelåg og med kraftig, ru hud");
+            definition1.Tag.Should().BeNull();
             definition1.Examples.Should().HaveCount(1);
             definition1.Examples.First().Should().Be("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham.");
 
             Definition definition2 = definitions.Skip(1).First();
             definition2.Meaning.Should().Be("grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning");
+            definition2.Tag.Should().Be("slang");
             definition2.Examples.Should().HaveCount(0);
 
             Definition definition3 = definitions.Skip(2).First();
             definition3.Meaning.Should().Be("person der er særlig dygtig til et spil, håndværk el.lign.");
+            definition3.Tag.Should().Be("slang");
             definition3.Examples.Should().HaveCount(1);
             definition3.Examples.First().Should().Be("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb.");
         }

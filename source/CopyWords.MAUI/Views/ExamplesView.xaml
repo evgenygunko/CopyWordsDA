@@ -12,10 +12,6 @@
             <DataTemplate x:Key="examplesTemplate" 
                           x:DataType="viewmodels:ExampleViewModel">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                    </Grid.RowDefinitions>
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -23,7 +19,7 @@
 
                     <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding IsChecked}" />
 
-                    <Label Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center">
+                    <Label Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center" Padding="0,00,0,0">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="{Binding Example, FallbackValue='Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham'}"/>
@@ -31,6 +27,9 @@
                         </Label.FormattedText>
 
                         <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="false">
+                                <Setter Property="BackgroundColor" Value="#eaeff2" />
+                            </DataTrigger>
                             <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="true">
                                 <Setter Property="BackgroundColor" Value="LightBlue" />
                                 <Setter Property="FontSize" Value="18" />

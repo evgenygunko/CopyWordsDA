@@ -9,19 +9,40 @@
     <ContentView.Resources>
         <ResourceDictionary>
             <toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
-            
+
             <DataTemplate x:Key="definitionsTemplate"
                           x:DataType="viewmodels:DefinitionViewModel">
                 <!-- Definitions -->
-                <VerticalStackLayout Padding="10,10,0,0">
-                    <HorizontalStackLayout>
-                        <Label Text="{Binding Position, FallbackValue='1'}" />
-                        <Label Text=". &#6158;" />
-                        <Label Text="{Binding Meaning, FallbackValue='stor, langstrakt bruskfisk med tværstillet mund på undersiden af hovedet, med 5-7 gællespalter uden gællelåg og med kraftig, ru hud omfatter bl.a. underordenerne gråhajer og pighajer'}" />
-                    </HorizontalStackLayout>
+                <VerticalStackLayout Padding="10,10,10,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0"
+                               Padding="0,0,5,0"
+                               Text="{Binding Position, FallbackValue='1. '}" />
+                        
+                        <Border IsVisible="{Binding Tag, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
+                                Grid.Column="1"
+                                Margin="0,0,5,0"
+                                Stroke="#CCCCCC"
+                                StrokeThickness="1"
+                                HeightRequest="22"
+                                VerticalOptions="Start">
+                            <Label 
+                                Text="{Binding Tag, FallbackValue='SLANG'}"
+                                TextTransform="Uppercase" />     
+                        </Border>
+                        
+                        <Label Grid.Column="2"
+                               Text="{Binding Meaning, FallbackValue='stor, langstrakt bruskfisk med tværstillet mund på undersiden af hovedet, med 5-7 gællespalter uden gællelåg og med kraftig, ru hud omfatter bl.a. underordenerne gråhajer og pighajer'}" />
+                    </Grid>
 
                     <!--Examples -->
-                    <views:ExamplesView />
+                    <views:ExamplesView Padding="0,5,0,0" />
                 </VerticalStackLayout>
             </DataTemplate>
         </ResourceDictionary>

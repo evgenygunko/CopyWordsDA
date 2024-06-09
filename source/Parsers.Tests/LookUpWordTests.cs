@@ -113,9 +113,9 @@ namespace CopyWords.Parsers.Tests
             const string headWord = "haj";
             const string soundUrl = "http://test.com/haj.mp3";
 
-            var definition1 = new Definition("stor, langstrakt bruskfisk", Enumerable.Empty<string>());
-            var definition2 = new Definition("grisk, skrupelløs person", Enumerable.Empty<string>());
-            var definition3 = new Definition("person der er særlig dygtig til et spil", Enumerable.Empty<string>());
+            var definition1 = new Definition("stor, langstrakt bruskfisk", Tag: null, Enumerable.Empty<string>());
+            var definition2 = new Definition("grisk, skrupelløs person", Tag: "slang", Enumerable.Empty<string>());
+            var definition3 = new Definition("person der er særlig dygtig til et spil", Tag: "slang", Enumerable.Empty<string>());
             var definitions = new List<Definition>() { definition1, definition2, definition3 };
 
             using (var mock = AutoMock.GetLoose())

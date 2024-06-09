@@ -122,16 +122,34 @@ namespace CopyWords.Parsers
                     foreach (var div in definitionsDivs)
                     {
                         string meaning = DecodeText(div.InnerText);
+                        string? tag = ParseDefinitionTag(div);
 
-                        // todo: parse examples only for this definition
+                        // Parse examples only for this definition
                         IEnumerable<string> examples = ParseExamplesForDefinition(div);
 
-                        definitions.Add(new Definition(Meaning: meaning, Examples: examples));
+                        definitions.Add(new Definition(Meaning: meaning, Tag: tag, Examples: examples));
                     }
                 }
             }
 
             return definitions;
+        }
+
+        private string? ParseDefinitionTag(HtmlNode divDefinition)
+        {
+            string? tag = null;
+
+            var definitionIndentDiv = divDefinition.SelectNodes("ancestor::div[@class='definitionIndent']").FirstOrDefault();
+            if (definitionIndentDiv != null)
+            {
+                var firstTag = definitionIndentDiv.SelectNodes("./div/span/span[@class='stempelNoBorder']")?.FirstOrDefault();
+                if (firstTag != null)
+                {
+                    tag = DecodeText(firstTag.InnerText);
+                }
+            }
+
+            return tag;
         }
 
         /// <summary>

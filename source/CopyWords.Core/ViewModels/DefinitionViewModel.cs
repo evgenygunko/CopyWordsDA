@@ -8,21 +8,30 @@ namespace CopyWords.Core.ViewModels
     {
         public DefinitionViewModel(Definition definition, int pos)
         {
+            Position = pos + ". ";
+            Tag = definition.Tag;
             Meaning = definition.Meaning;
-            Position = pos;
 
             Examples.Clear();
             foreach (string example in definition.Examples)
             {
                 Examples.Add(new ExampleViewModel(example));
             }
+
+            if (Examples.Count == 0)
+            {
+                Examples.Add(new ExampleViewModel("-"));
+            }
         }
 
         [ObservableProperty]
-        private string meaning;
+        public string position;
 
         [ObservableProperty]
-        private int position;
+        private string tag;
+
+        [ObservableProperty]
+        private string meaning;
 
         public ObservableCollection<ExampleViewModel> Examples { get; } = new();
     }

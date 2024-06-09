@@ -59,17 +59,11 @@ namespace CopyWords.Core.Services
                     sb.Append($"{i}. ");
                 }
 
-                sb.Append(meaning);
-
-                if (i < count)
-                {
-                    sb.Append(Environment.NewLine);
-                }
-
+                sb.AppendLine(meaning);
                 i++;
             }
 
-            return Task.FromResult(sb.ToString());
+            return Task.FromResult(sb.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
         }
 
         public Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> definitionVMs)
@@ -80,10 +74,18 @@ namespace CopyWords.Core.Services
                 .ToList();
 
             StringBuilder sb = new StringBuilder();
+            int count = selectedExampleVMs.Count;
+            int i = 1;
 
             foreach (var exampleVM in selectedExampleVMs)
             {
+                if (count > 1)
+                {
+                    sb.Append($"{i}. ");
+                }
+
                 sb.AppendLine(exampleVM.Example);
+                i++;
             }
 
             return Task.FromResult(sb.ToString().TrimEnd(Environment.NewLine.ToCharArray()));

@@ -32,7 +32,7 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for CompileBackAsync
 
         [TestMethod]
-        public async Task CompileBackAsync_WhenExampleForOneDefinitionIsSelected_DoesNotAddNumbers()
+        public async Task CompileBackAsync_WhenOneExampleIsSelected_DoesNotAddNumbers()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -44,6 +44,26 @@ namespace CopyWords.Core.Tests.Services
                 string result = await sut.CompileBackAsync(wordVariantVMs);
 
                 result.Should().Be("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+            }
+        }
+
+        [TestMethod]
+        public async Task CompileBackAsync_WhenSeveralExamplesAreSelected_AddsNumbers()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                var wordVariantVMs = CreateVMForHaj();
+                wordVariantVMs[0].Examples[0].IsChecked = true;
+                wordVariantVMs[1].Examples[0].IsChecked = true;
+                wordVariantVMs[2].Examples[0].IsChecked = true;
+
+                var sut = mock.Create<CopySelectedToClipboardService>();
+
+                string result = await sut.CompileBackAsync(wordVariantVMs);
+
+                result.Should().Be("1. stor, langstrakt bruskfisk" + Environment.NewLine +
+                    "2. grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning" + Environment.NewLine +
+                    "3. person der er særlig dygtig til et spil, håndværk el.lign.");
             }
         }
 
@@ -68,7 +88,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task CompileExamplesAsync_WhenTwoExampleSelected_AddsNumbers()
+        public async Task CompileExamplesAsync_WhenTwoExamplesSelected_AddsNumbers()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -81,8 +101,8 @@ namespace CopyWords.Core.Tests.Services
                 string result = await sut.CompileExamplesAsync(wordVariantVMs);
 
                 result.Should().Be(
-                    "Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver" + Environment.NewLine +
-                    "Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater");
+                    "1. Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver" + Environment.NewLine +
+                    "2. Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater");
             }
         }
 
@@ -94,6 +114,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var definition = new Definition(
                 Meaning: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
+                Tag: null,
                 Examples:
                 [
                     "Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver",
@@ -105,6 +126,40 @@ namespace CopyWords.Core.Tests.Services
             return new ObservableCollection<DefinitionViewModel>()
             {
                 definitionVM
+            };
+        }
+
+        private static ObservableCollection<DefinitionViewModel> CreateVMForHaj()
+        {
+            var definition1 = new Definition(
+                Meaning: "stor, langstrakt bruskfisk",
+                Tag: null,
+                Examples:
+                [
+                    "Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham"
+                ]);
+
+            var definition2 = new Definition(
+                Meaning: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning",
+                Tag: null,
+                Examples:
+                [
+                    "-"
+                ]);
+
+            var definition3 = new Definition(
+                Meaning: "person der er særlig dygtig til et spil, håndværk el.lign.",
+                Tag: null,
+                Examples:
+                [
+                    "Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb"
+                ]);
+
+            return new ObservableCollection<DefinitionViewModel>()
+            {
+                new DefinitionViewModel(definition1, pos: 1),
+                new DefinitionViewModel(definition2, pos: 2),
+                new DefinitionViewModel(definition3, pos: 3),
             };
         }
 
