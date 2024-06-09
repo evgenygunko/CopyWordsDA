@@ -14,7 +14,7 @@ namespace CopyWords.Parsers
 
     public class LookUpWord : ILookUpWord
     {
-        private const string DDOBaseUrl = "http://ordnet.dk/ddo/ordbog";
+        private const string DDOBaseUrl = "https://ordnet.dk/ddo/ordbog";
 
         private readonly IDDOPageParser _ddoPageParser;
         private readonly IFileDownloader _fileDownloader;
