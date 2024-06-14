@@ -1,0 +1,30 @@
+parameters:
+- name: repository
+  type: string
+  default: false
+
+stages:
+- stage: Sync_With_Github
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+
+  jobs:
+  - job: Sync_With_Github
+    pool:
+        vmImage: 'ubuntu-latest'
+    #  name: Win10-private
+
+    steps:
+    - script: |
+        echo Push changes to Github
+
+        git config --global user.email "evgeny.gunko@gmail.com"
+        git config --global user.name "Evgeny Gunko"
+        git config --global pull.rebase true
+
+        echo Pulling changes from Github repository: https://github.com/evgenygunko/${{ parameters.repository }}.git
+        git pull https://github.com/evgenygunko/${{ parameters.repository }}.git master --allow-unrelated-histories
+
+        echo Pushing changes to Github...
+        git remote add github https://$(githubpersonaltoken)@github.com/evgenygunko/${{ parameters.repository }}.git
+        git push -u github HEAD:master

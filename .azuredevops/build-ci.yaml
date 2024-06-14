@@ -1,0 +1,77 @@
+trigger:
+  branches:
+    include:
+    - master
+
+pool:
+  #vmImage: windows-latest
+  name: windows-private
+
+stages:
+- stage: Build
+
+  jobs:
+  - job: Build
+
+    steps:
+    - task: PowerShell@2
+      displayName: 'PowerShell Script - set buld number variable'
+      inputs:
+        targetType: 'inline'
+        script: |
+            Write-Host "##vso[build.updatebuildnumber]$(major).$(minor).$(Build.BuildId)"
+
+    - task: PowerShell@2
+      displayName: 'PowerShell Script - update version number in project files'
+      inputs:
+        targetType: filePath
+        arguments: "-version '$(Build.BuildNumber)'"
+        filePath: './.build/UpdateVersion.ps1'
+
+    # On a private agant we don't need this
+    # - task: DotNetCoreCLI@2
+    #   displayName: "Install MAUI workload"
+    #   inputs:
+    #     command: 'custom'
+    #     custom: 'workload'
+    #     arguments: 'install maui'
+
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet publish: CopyWords.MAUI.csproj"
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '**/CopyWords.MAUI.csproj'
+        arguments: '-c:$(buildConfiguration) -f net8.0-windows10.0.19041.0'
+        zipAfterPublish: false
+
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet test"
+      inputs:
+        command: 'test'
+        arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+        publishTestResults: true
+
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage report'
+      inputs:
+        codeCoverageTool: 'Cobertura'
+        summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+
+    - task: CopyFiles@2
+      displayName: 'Copy build output to artifact staging directory'
+      inputs:
+        SourceFolder: './source/CopyWords.MAUI/bin/'
+        Contents: |
+            **/CopyWords*.msix
+        TargetFolder: '$(build.artifactstagingdirectory)'
+        flattenFolders: true
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
+
+# - template: /.azuredevops/templates/stages-sync-with-github.yaml
+#   parameters:
+#     repository: CopyWordsDA
