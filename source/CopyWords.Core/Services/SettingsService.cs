@@ -17,10 +17,6 @@ namespace CopyWords.Core.Services
 
         void SetAnkiSoundsFolder(string path);
 
-        string GetFfmpegBinFolder();
-
-        void SetFfmpegBinFolder(string path);
-
         string GetMp3gainPath();
 
         void SetMp3gainPath(string path);
@@ -57,19 +53,6 @@ namespace CopyWords.Core.Services
         public string GetAnkiSoundsFolder() => Preferences.Default.Get("AnkiSoundsFolder", Path.GetTempPath());
 
         public void SetAnkiSoundsFolder(string path) => Preferences.Default.Set("AnkiSoundsFolder", path);
-
-        public string GetFfmpegBinFolder()
-        {
-            if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
-            {
-                return Preferences.Default.Get("FfmpegBinFolder", "/usr/local/bin/");
-            }
-
-            string wingetPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "AppData", "Local", "Microsoft", "WinGet", "Links");
-            return Preferences.Default.Get("FfmpegBinFolder", wingetPath);
-        }
-
-        public void SetFfmpegBinFolder(string path) => Preferences.Default.Set("FfmpegBinFolder", path);
 
         public string GetMp3gainPath() => Preferences.Default.Get("Mp3gainPath", string.Empty);
 

@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using FFMpegCore;
 
 namespace CopyWords.Core.Services
 {
@@ -29,14 +28,7 @@ namespace CopyWords.Core.Services
         public async Task<bool> SaveSoundFileAsync(string url, string soundFileName)
         {
             // download file from web into temp folder
-            string mp4File = await DownloadFileAsync(url, soundFileName);
-            if (string.IsNullOrEmpty(mp4File))
-            {
-                return false;
-            }
-
-            // transcode mp4 to mp3
-            string mp3File = await TranscodeToMp3Async(mp4File);
+            string mp3File = await DownloadFileAsync(url, soundFileName);
             if (string.IsNullOrEmpty(mp3File))
             {
                 return false;
@@ -66,26 +58,6 @@ namespace CopyWords.Core.Services
         #endregion
 
         #region Private Methods
-
-        private async Task<string> TranscodeToMp3Async(string mp4File)
-        {
-            Debug.Assert(File.Exists(mp4File));
-
-            string soundName = Path.GetFileNameWithoutExtension(mp4File);
-            string destFileFullPath = Path.Combine(Path.GetDirectoryName(mp4File), $"{soundName}.mp3");
-
-            string ffmpegBinFolder = _settingsService.GetFfmpegBinFolder();
-            if (!Directory.Exists(ffmpegBinFolder))
-            {
-                await _dialogService.DisplayAlert("Cannot find ffmpeg bin folder", $"Cannot find ffmpeg bin folder '{ffmpegBinFolder}'. Please update it in Settings.", "OK");
-                return null;
-            }
-
-            GlobalFFOptions.Configure(options => options.BinaryFolder = ffmpegBinFolder);
-            FFMpeg.ExtractAudio(mp4File, destFileFullPath);
-
-            return destFileFullPath;
-        }
 
         [SupportedOSPlatform("windows")]
         private async Task<bool> CallMp3gainAsync(string sourceMp3File)
