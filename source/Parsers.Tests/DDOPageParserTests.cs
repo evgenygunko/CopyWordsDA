@@ -17,7 +17,7 @@ namespace CopyWords.Parsers.Tests
             _path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         }
 
-        #region LoadHtml tests
+        #region Tests for LoadHtml
 
         [DataTestMethod]
         [DataRow(null)]
@@ -41,12 +41,12 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
-        #region ParseHeadword tests
+        #region Tests for ParseHeadword
 
         [TestMethod]
-        public void ParseHeadword_ForUnderholdningPage_ReturnsUnderholdning()
+        public void ParseHeadword_ForUnderholdning_ReturnsUnderholdning()
         {
-            string content = GetSimpleHTMLPage("UnderholdningPage.html");
+            string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -56,9 +56,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseHeadword_ForUGrillspydPage_ReturnsGrillspydPage()
+        public void ParseHeadword_ForUGrillspyd_ReturnsGrillspydPage()
         {
-            string content = GetSimpleHTMLPage("GrillspydPage.html");
+            string content = GetSimpleHTMLPage("Grillspyd.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -68,9 +68,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseHeadword_ForStødtandPage_ReturnsStødtand()
+        public void ParseHeadword_ForStødtand_ReturnsStødtand()
         {
-            string content = GetSimpleHTMLPage("StødtandPage.html");
+            string content = GetSimpleHTMLPage("Stødtand.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -80,9 +80,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseHeadword_ForTiltalePage_ReturnsTiltale()
+        public void ParseHeadword_ForTiltale_ReturnsTiltale()
         {
-            string content = GetSimpleHTMLPage("TiltalePage.html");
+            string content = GetSimpleHTMLPage("Tiltale.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -93,12 +93,12 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
-        #region ParsePartOfSpeech tests
+        #region Tests for ParsePartOfSpeech
 
         [TestMethod]
-        public void ParsePartOfSpeech_ForHajPage_ReturnsSubstantiv()
+        public void ParsePartOfSpeech_ForHaj_ReturnsSubstantiv()
         {
-            string content = GetSimpleHTMLPage("HajPage.html");
+            string content = GetSimpleHTMLPage("Haj.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -108,9 +108,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParsePartOfSpeech_ForGrillspydPage_ReturnsSubstantiv()
+        public void ParsePartOfSpeech_ForGrillspyd_ReturnsSubstantiv()
         {
-            string content = GetSimpleHTMLPage("GrillspydPage.html");
+            string content = GetSimpleHTMLPage("Grillspyd.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -120,9 +120,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParsePartOfSpeech_ForHøjPage_ReturnsSubstantiv()
+        public void ParsePartOfSpeech_ForHøj_ReturnsSubstantiv()
         {
-            string content = GetSimpleHTMLPage("HøjPage.html");
+            string content = GetSimpleHTMLPage("Høj.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -132,9 +132,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParsePartOfSpeech_ForKiggePage_ReturnsSubstantiv()
+        public void ParsePartOfSpeech_ForKigge_ReturnsSubstantiv()
         {
-            string content = GetSimpleHTMLPage("KiggePage.html");
+            string content = GetSimpleHTMLPage("Kigge.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -145,12 +145,12 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
-        #region ParseEndings tests
+        #region Tests for ParseEndings
 
         [TestMethod]
-        public void ParseEndings_ForUnderholdningPage_ReturnsEndings()
+        public void ParseEndings_ForUnderholdning_ReturnsEndings()
         {
-            string content = GetSimpleHTMLPage("UnderholdningPage.html");
+            string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -160,9 +160,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseEndings_ForStødtandPage_ReturnsEndings()
+        public void ParseEndings_ForStødtand_ReturnsEndings()
         {
-            string content = GetSimpleHTMLPage("StødtandPage.html");
+            string content = GetSimpleHTMLPage("Stødtand.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -172,9 +172,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseEndings_ForHøjPage_ReturnsEndings()
+        public void ParseEndings_ForHøj_ReturnsEndings()
         {
-            string content = GetSimpleHTMLPage("HøjPage.html");
+            string content = GetSimpleHTMLPage("Høj.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -185,12 +185,12 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
-        #region ParsePronunciation tests
+        #region Tests for ParsePronunciation
 
         [TestMethod]
         public void ParsePronunciation_ReturnsUnderholdning_ForUnderholdningPage()
         {
-            string content = GetSimpleHTMLPage("UnderholdningPage.html");
+            string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -202,7 +202,7 @@ namespace CopyWords.Parsers.Tests
         [TestMethod]
         public void ParsePronunciation_ReturnsKigge_ForKiggePage()
         {
-            string content = GetSimpleHTMLPage("KiggePage.html");
+            string content = GetSimpleHTMLPage("Kigge.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -214,7 +214,7 @@ namespace CopyWords.Parsers.Tests
         [TestMethod]
         public void ParsePronunciation_ReturnsEmptyString_ForGrillspydPage()
         {
-            string content = GetSimpleHTMLPage("GrillspydPage.html");
+            string content = GetSimpleHTMLPage("Grillspyd.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -225,12 +225,12 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
-        #region ParseSound tests
+        #region Tests for ParseSound
 
         [TestMethod]
         public void ParseSound_ReturnsSoundFile_ForUnderholdningPage()
         {
-            string content = GetSimpleHTMLPage("UnderholdningPage.html");
+            string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -242,7 +242,7 @@ namespace CopyWords.Parsers.Tests
         [TestMethod]
         public void ParseSound_ReturnsEmptyString_ForKiggePage()
         {
-            string content = GetSimpleHTMLPage("KiggePage.html");
+            string content = GetSimpleHTMLPage("Kigge.html");
 
             // Kigge page doesn't have a sound file
             DDOPageParser parser = new DDOPageParser();
@@ -253,9 +253,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseSound_ForDannebrogPage_ReturnsSoundFile()
+        public void ParseSound_ForDannebrog_ReturnsSoundFile()
         {
-            string content = GetSimpleHTMLPage("DannebrogPage.html");
+            string content = GetSimpleHTMLPage("Dannebrog.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -265,9 +265,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseSound_ForHajPage_ReturnsSoundFile()
+        public void ParseSound_ForHaj_ReturnsSoundFile()
         {
-            string content = GetSimpleHTMLPage("HajPage.html");
+            string content = GetSimpleHTMLPage("Haj.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -278,12 +278,12 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
-        #region ParseDefinitions tests
+        #region Tests for ParseDefinitions
 
         [TestMethod]
-        public void ParseDefinitions_ForUnderholdningPage_ReturnsOneDefinition()
+        public void ParseDefinitions_ForUnderholdning_ReturnsOneDefinition()
         {
-            string content = GetSimpleHTMLPage("UnderholdningPage.html");
+            string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -295,9 +295,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseDefinitions_ForKiggePage_Returns5Definitions()
+        public void ParseDefinitions_ForKigge_Returns5Definitions()
         {
-            string content = GetSimpleHTMLPage("KiggePage.html");
+            string content = GetSimpleHTMLPage("Kigge.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -335,9 +335,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseDefinitions_ForGrillspydPage_ReturnsOneDefinition()
+        public void ParseDefinitions_ForGrillspyd_ReturnsOneDefinition()
         {
-            string content = GetSimpleHTMLPage("GrillspydPage.html");
+            string content = GetSimpleHTMLPage("Grillspyd.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -350,9 +350,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseDefinitions_ForHajPage_Returns3Definitions()
+        public void ParseDefinitions_ForHaj_Returns3Definitions()
         {
-            string content = GetSimpleHTMLPage("HajPage.html");
+            string content = GetSimpleHTMLPage("Haj.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -380,9 +380,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseDefinitions_ForDannebrogPage_Returns2Examples()
+        public void ParseDefinitions_ForDannebrog_Returns2Examples()
         {
-            string content = GetSimpleHTMLPage("DannebrogPage.html");
+            string content = GetSimpleHTMLPage("Dannebrog.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -399,9 +399,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseDefinitions_ForStiktossetPage_Returns2Examples()
+        public void ParseDefinitions_ForStiktosset_Returns2Examples()
         {
-            string content = GetSimpleHTMLPage("StiktossetPage.html");
+            string content = GetSimpleHTMLPage("Stiktosset.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -418,9 +418,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseDefinitions_ForUnderholdningPage_Returns2Examples()
+        public void ParseDefinitions_ForUnderholdning_Returns2Examples()
         {
-            string content = GetSimpleHTMLPage("UnderholdningPage.html");
+            string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -433,9 +433,9 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseDefinitions_ForGrillspydPage_Returns2Examples()
+        public void ParseDefinitions_ForGrillspyd_Returns2Examples()
         {
-            string content = GetSimpleHTMLPage("GrillspydPage.html");
+            string content = GetSimpleHTMLPage("Grillspyd.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
@@ -449,6 +449,67 @@ namespace CopyWords.Parsers.Tests
             definition1.Examples.Should().HaveCount(2);
             definition1.Examples.First().Should().Be("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver.");
             definition1.Examples.Skip(1).First().Should().Be("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater.");
+        }
+
+        #endregion
+
+        #region Tests for ParseVariationUrls
+
+        [TestMethod]
+        public void ParseVariationUrls_ForUnderholdning_Returns1Variation()
+        {
+            string content = GetSimpleHTMLPage("Underholdning.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            List<Variation> variations = parser.ParseVariations();
+
+            variations.Should().HaveCount(1);
+
+            variations[0].Word.Should().Be("underholdning sb.");
+            variations[0].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=underholdning&query=underholdning");
+        }
+
+        [TestMethod]
+        public void ParseVariationUrls_ForHøj_Returns2Variations()
+        {
+            string content = GetSimpleHTMLPage("Høj.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            List<Variation> variations = parser.ParseVariations();
+
+            variations.Should().HaveCount(2);
+
+            variations[0].Word.Should().Be("høj(1) sb.");
+            variations[0].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=høj,1&query=høj");
+
+            variations[1].Word.Should().Be("høj(2) adj.");
+            variations[1].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=høj,2&query=høj");
+        }
+
+        [TestMethod]
+        public void ParseVariationUrls_ForSkatPage_Returns2Variations()
+        {
+            string content = GetSimpleHTMLPage("Skat.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            List<Variation> variations = parser.ParseVariations();
+
+            variations.Should().HaveCount(3);
+
+            variations[0].Word.Should().Be("skat sb.");
+            variations[0].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=skat&query=skat");
+
+            variations[1].Word.Should().Be("skat -> skatte vb.");
+            variations[1].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=skatte&query=skat");
+
+            variations[2].Word.Should().Be("skat -> skate vb.");
+            variations[2].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=skate&query=skat");
         }
 
         #endregion

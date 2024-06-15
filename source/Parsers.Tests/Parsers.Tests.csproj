@@ -47,37 +47,40 @@
     <None Update="TestPages\Costar un ojo de la cara.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestPages\ddo\DannebrogPage.html">
+    <None Update="TestPages\ddo\Dannebrog.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestPages\ddo\GrillspydPage.html">
+    <None Update="TestPages\ddo\Grillspyd.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestPages\ddo\HajPage.html">
+    <None Update="TestPages\ddo\Haj.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestPages\ddo\HøjPage.html">
+    <None Update="TestPages\ddo\Høj.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestPages\ddo\KiggePage.html">
+    <None Update="TestPages\ddo\Kigge.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestPages\ddo\SimplePage.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestPages\ddo\SkatPage.html">
+    <None Update="TestPages\ddo\Skat.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestPages\ddo\StiktossetPage.html">
+    <None Update="TestPages\ddo\Slem.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestPages\ddo\StødtandPage.html">
+    <None Update="TestPages\ddo\Stiktosset.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestPages\ddo\TiltalePage.html">
+    <None Update="TestPages\ddo\Stødtand.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestPages\ddo\UnderholdningPage.html">
+    <None Update="TestPages\ddo\Tiltale.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPages\ddo\Underholdning.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TestPages\Guay.json">

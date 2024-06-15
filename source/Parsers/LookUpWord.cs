@@ -80,7 +80,8 @@ namespace CopyWords.Parsers
                 Endings: _ddoPageParser.ParseEndings(),
                 SoundUrl: _ddoPageParser.ParseSound(),
                 SoundFileName: $"{headWord}.mp3",
-                Definitions: _ddoPageParser.ParseDefinitions()
+                Definitions: _ddoPageParser.ParseDefinitions(),
+                Variations: _ddoPageParser.ParseVariations()
             );
 
             return wordModel;

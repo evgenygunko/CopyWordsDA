@@ -120,6 +120,8 @@ namespace CopyWords.Parsers.Tests
             var definition3 = new Definition("person der er særlig dygtig til et spil", Tag: "slang", Enumerable.Empty<string>());
             var definitions = new List<Definition>() { definition1, definition2, definition3 };
 
+            var variations = new List<Variation>() { new Variation("haj", "https://ordnet.dk/ddo/ordbog?select=haj&query=haj") };
+
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IFileDownloader>().Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
@@ -129,6 +131,7 @@ namespace CopyWords.Parsers.Tests
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseEndings()).Returns(endings);
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseSound()).Returns(soundUrl);
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseDefinitions()).Returns(definitions);
+                mock.Mock<IDDOPageParser>().Setup(x => x.ParseVariations()).Returns(variations);
 
                 var sut = mock.Create<LookUpWord>();
 
@@ -141,6 +144,7 @@ namespace CopyWords.Parsers.Tests
                 result!.SoundUrl.Should().Be(soundUrl);
                 result!.SoundFileName.Should().Be("haj.mp3");
                 result!.Definitions.Should().HaveCount(3);
+                result!.Variations.Should().HaveCount(1);
 
                 mock.Mock<IFileDownloader>().Verify(x => x.DownloadPageAsync(It.Is<string>(str => str.EndsWith($"?query={headWord}&search=S%C3%B8g")), Encoding.UTF8));
             }
