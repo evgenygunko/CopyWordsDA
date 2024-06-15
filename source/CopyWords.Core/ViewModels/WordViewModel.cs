@@ -30,6 +30,8 @@ namespace CopyWords.Core.ViewModels
 
         #region Properties
 
+        public ObservableCollection<VariantViewModel> Variants { get; } = new();
+
         public ObservableCollection<DefinitionViewModel> Definitions { get; } = new();
 
         [ObservableProperty]

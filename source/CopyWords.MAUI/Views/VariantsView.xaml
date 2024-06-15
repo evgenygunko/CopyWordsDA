@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             x:Class="CopyWords.MAUI.Views.VariantsView">
+    
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="variantTemplate" 
+                          x:DataType="viewmodels:VariantViewModel">
+
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Word, FallbackValue='høj1 sb.'}" TextDecorations="Underline">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelectVariantCommand}" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <VerticalStackLayout 
+            BindableLayout.ItemsSource="{Binding Variants}"
+            BindableLayout.ItemTemplate="{StaticResource variantTemplate}"
+            Margin="0,10,0,0" />
+
+</ContentView>

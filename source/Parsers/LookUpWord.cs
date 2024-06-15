@@ -81,7 +81,7 @@ namespace CopyWords.Parsers
                 SoundUrl: _ddoPageParser.ParseSound(),
                 SoundFileName: $"{headWord}.mp3",
                 Definitions: _ddoPageParser.ParseDefinitions(),
-                Variations: _ddoPageParser.ParseVariations()
+                Variations: _ddoPageParser.ParseVariants()
             );
 
             return wordModel;

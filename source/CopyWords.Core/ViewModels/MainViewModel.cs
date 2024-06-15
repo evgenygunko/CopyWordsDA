@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CopyWords.Parsers;
 using CopyWords.Parsers.Models;
@@ -56,6 +57,15 @@ namespace CopyWords.Core.ViewModels
                 foreach (var definition in wordModel.Definitions)
                 {
                     _wordViewModel.Definitions.Add(new DefinitionViewModel(definition, i++));
+                }
+
+                _wordViewModel.Variants.Clear();
+                foreach (var variant in wordModel.Variations)
+                {
+                    var variantVM = new VariantViewModel(variant);
+                    variantVM.Clicked += (sender, url) => Debug.WriteLine($"Variant clicked, will lookup '{url}'");
+
+                    _wordViewModel.Variants.Add(variantVM);
                 }
             }
 

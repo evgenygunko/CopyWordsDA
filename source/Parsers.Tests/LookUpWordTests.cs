@@ -120,7 +120,7 @@ namespace CopyWords.Parsers.Tests
             var definition3 = new Definition("person der er særlig dygtig til et spil", Tag: "slang", Enumerable.Empty<string>());
             var definitions = new List<Definition>() { definition1, definition2, definition3 };
 
-            var variations = new List<Variation>() { new Variation("haj", "https://ordnet.dk/ddo/ordbog?select=haj&query=haj") };
+            var variants = new List<Variant>() { new Variant("haj", "https://ordnet.dk/ddo/ordbog?select=haj&query=haj") };
 
             using (var mock = AutoMock.GetLoose())
             {
@@ -131,7 +131,7 @@ namespace CopyWords.Parsers.Tests
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseEndings()).Returns(endings);
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseSound()).Returns(soundUrl);
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseDefinitions()).Returns(definitions);
-                mock.Mock<IDDOPageParser>().Setup(x => x.ParseVariations()).Returns(variations);
+                mock.Mock<IDDOPageParser>().Setup(x => x.ParseVariants()).Returns(variants);
 
                 var sut = mock.Create<LookUpWord>();
 

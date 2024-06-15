@@ -465,63 +465,63 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
-        #region Tests for ParseVariationUrls
+        #region Tests for ParseVariants
 
         [TestMethod]
-        public void ParseVariationUrls_ForUnderholdning_Returns1Variation()
+        public void ParseVariants_ForUnderholdning_Returns1Variation()
         {
             string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Variation> variations = parser.ParseVariations();
+            List<Variant> variants = parser.ParseVariants();
 
-            variations.Should().HaveCount(1);
+            variants.Should().HaveCount(1);
 
-            variations[0].Word.Should().Be("underholdning sb.");
-            variations[0].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=underholdning&query=underholdning");
+            variants[0].Word.Should().Be("underholdning sb.");
+            variants[0].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=underholdning&query=underholdning");
         }
 
         [TestMethod]
-        public void ParseVariationUrls_ForHøj_Returns2Variations()
+        public void ParseVariants_ForHøj_Returns2Variations()
         {
             string content = GetSimpleHTMLPage("Høj.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Variation> variations = parser.ParseVariations();
+            List<Variant> variants = parser.ParseVariants();
 
-            variations.Should().HaveCount(2);
+            variants.Should().HaveCount(2);
 
-            variations[0].Word.Should().Be("høj(1) sb.");
-            variations[0].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=høj,1&query=høj");
+            variants[0].Word.Should().Be("høj(1) sb.");
+            variants[0].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=høj,1&query=høj");
 
-            variations[1].Word.Should().Be("høj(2) adj.");
-            variations[1].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=høj,2&query=høj");
+            variants[1].Word.Should().Be("høj(2) adj.");
+            variants[1].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=høj,2&query=høj");
         }
 
         [TestMethod]
-        public void ParseVariationUrls_ForSkatPage_Returns2Variations()
+        public void ParseVariants_ForSkatPage_Returns2Variations()
         {
             string content = GetSimpleHTMLPage("Skat.html");
 
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Variation> variations = parser.ParseVariations();
+            List<Variant> variants = parser.ParseVariants();
 
-            variations.Should().HaveCount(3);
+            variants.Should().HaveCount(3);
 
-            variations[0].Word.Should().Be("skat sb.");
-            variations[0].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=skat&query=skat");
+            variants[0].Word.Should().Be("skat sb.");
+            variants[0].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=skat&query=skat");
 
-            variations[1].Word.Should().Be("skat -> skatte vb.");
-            variations[1].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=skatte&query=skat");
+            variants[1].Word.Should().Be("skat -> skatte vb.");
+            variants[1].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=skatte&query=skat");
 
-            variations[2].Word.Should().Be("skat -> skate vb.");
-            variations[2].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=skate&query=skat");
+            variants[2].Word.Should().Be("skat -> skate vb.");
+            variants[2].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=skate&query=skat");
         }
 
         #endregion

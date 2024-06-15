@@ -19,7 +19,7 @@ namespace CopyWords.Parsers
 
         List<Definition> ParseDefinitions();
 
-        List<Variation> ParseVariations();
+        List<Variant> ParseVariants();
     }
 
     public class DDOPageParser : PageParserBase, IDDOPageParser
@@ -233,7 +233,7 @@ namespace CopyWords.Parsers
         /// Gets urls for the words variants.
         /// </summary>
         /// <returns>The words count.</returns>
-        public List<Variation> ParseVariations()
+        public List<Variant> ParseVariants()
         {
             var div = FindElementById("opslagsordBox_expanded");
 
@@ -243,7 +243,7 @@ namespace CopyWords.Parsers
                 throw new PageParserException("Cannot find a div element with CSS class 'searchResultBox'");
             }
 
-            var variations = new List<Variation>();
+            var variants = new List<Variant>();
 
             var ahrefNodes = searchResultBoxDiv.SelectNodes("./div/a");
 
@@ -273,11 +273,11 @@ namespace CopyWords.Parsers
 
                     string variationUrl = DecodeText(ahref.Attributes["href"].Value);
 
-                    variations.Add(new Variation(word, variationUrl));
+                    variants.Add(new Variant(word, variationUrl));
                 }
             }
 
-            return variations;
+            return variants;
         }
 
         #endregion

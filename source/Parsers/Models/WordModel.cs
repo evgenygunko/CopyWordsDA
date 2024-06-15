@@ -7,9 +7,9 @@
         string? SoundUrl,
         string? SoundFileName,
         IEnumerable<Definition> Definitions,
-        IEnumerable<Variation> Variations);
+        IEnumerable<Variant> Variations);
 
     public record Definition(string Meaning, string? Tag, IEnumerable<string> Examples);
 
-    public record Variation(string Word, string Url);
+    public record Variant(string Word, string Url);
 }
