@@ -30,9 +30,9 @@
                                 Margin="0,0,5,0"
                                 Stroke="#CCCCCC"
                                 StrokeThickness="1"
-                                HeightRequest="22"
+                                HeightRequest="25"
                                 VerticalOptions="Start">
-                            <Label Text="{Binding Tag, FallbackValue='SLANG'}" />     
+                            <Label Text="{Binding Tag, FallbackValue='SLANG'}" Margin="3,0,3,3" />     
                         </Border>
                         
                         <Label Grid.Column="2"

@@ -72,11 +72,13 @@ namespace CopyWords.Parsers
 
             _ddoPageParser.LoadHtml(ddoPageHtml);
 
+            string headWord = _ddoPageParser.ParseHeadword();
+
             var wordModel = new WordModel(
-                Headword: _ddoPageParser.ParseHeadword(),
+                Headword: headWord,
                 PartOfSpeech: _ddoPageParser.ParsePartOfSpeech(),
                 SoundUrl: _ddoPageParser.ParseSound(),
-                SoundFileName: null,
+                SoundFileName: $"{headWord}.mp3",
                 Definitions: _ddoPageParser.ParseDefinitions()
             );
 

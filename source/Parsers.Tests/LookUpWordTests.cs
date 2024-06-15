@@ -112,7 +112,7 @@ namespace CopyWords.Parsers.Tests
         {
             const string headWord = "haj";
             const string partOfSpeech = "substantiv, fælleskøn";
-            const string soundUrl = "http://test.com/haj.mp3";
+            const string soundUrl = "https://static.ordnet.dk/mp3/11019/11019539_1.mp3";
 
             var definition1 = new Definition("stor, langstrakt bruskfisk", Tag: null, Enumerable.Empty<string>());
             var definition2 = new Definition("grisk, skrupelløs person", Tag: "slang", Enumerable.Empty<string>());
@@ -136,7 +136,7 @@ namespace CopyWords.Parsers.Tests
                 result!.Headword.Should().Be(headWord);
                 result!.PartOfSpeech.Should().Be(partOfSpeech);
                 result!.SoundUrl.Should().Be(soundUrl);
-                result!.SoundFileName.Should().BeNull();
+                result!.SoundFileName.Should().Be("haj.mp3");
                 result!.Definitions.Should().HaveCount(3);
 
                 mock.Mock<IFileDownloader>().Verify(x => x.DownloadPageAsync(It.Is<string>(str => str.EndsWith($"?query={headWord}&search=S%C3%B8g")), Encoding.UTF8));

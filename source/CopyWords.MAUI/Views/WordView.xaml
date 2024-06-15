@@ -67,7 +67,7 @@
             </Button>
         </HorizontalStackLayout>
 
-        <BoxView Grid.Row="2" Grid.ColumnSpan="2" Color="LightGray"  HeightRequest="1"/>
+        <BoxView Grid.Row="2" Grid.ColumnSpan="2" Color="LightGray"  HeightRequest="1" Margin="0,10,0,0" />
 
          <!-- Copy front text, back text, and copy examples buttons -->
         <HorizontalStackLayout Grid.Row="3" Grid.Column="0" Spacing="5" Margin="10">

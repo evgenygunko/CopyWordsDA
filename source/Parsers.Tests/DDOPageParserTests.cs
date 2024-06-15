@@ -224,7 +224,7 @@ namespace CopyWords.Parsers.Tests
             parser.LoadHtml(content);
 
             string pronunciation = parser.ParseSound();
-            Assert.AreEqual("https://static.ordnet.dk/mp3/12004/12004770_1.mp3", pronunciation);
+            pronunciation.Should().Be("https://static.ordnet.dk/mp3/12004/12004770_1.mp3");
         }
 
         [TestMethod]
@@ -237,7 +237,7 @@ namespace CopyWords.Parsers.Tests
             parser.LoadHtml(content);
 
             string sound = parser.ParseSound();
-            Assert.AreEqual(string.Empty, sound);
+            sound.Should().BeEmpty();
         }
 
         [TestMethod]
@@ -250,6 +250,18 @@ namespace CopyWords.Parsers.Tests
 
             string sound = parser.ParseSound();
             sound.Should().Be("https://static.ordnet.dk/mp3/11008/11008357_1.mp3");
+        }
+
+        [TestMethod]
+        public void ParseSound_ForHajPage_ReturnsSoundFile()
+        {
+            string content = GetSimpleHTMLPage("HajPage.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string sound = parser.ParseSound();
+            sound.Should().Be("https://static.ordnet.dk/mp3/11019/11019539_1.mp3");
         }
 
         #endregion
