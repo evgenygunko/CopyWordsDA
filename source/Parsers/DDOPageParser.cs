@@ -69,7 +69,23 @@ namespace CopyWords.Parsers
                 var spanEndings = div.SelectSingleNode("./span[contains(@class, 'tekstmedium allow-glossing')]");
                 if (spanEndings != null)
                 {
-                    endings = spanEndings.InnerHtml.Replace("<span class=\"dividerDouble\">&#160;</span>", "||");
+                    // Check if it has several meanings
+                    if (spanEndings.InnerHtml.Contains("<span class=\"diskret\">"))
+                    {
+                        string[] meanings = spanEndings.InnerHtml.Split("<span class=\"dividerDouble\">&#160;</span>");
+                        foreach (string meaning in meanings)
+                        {
+                            endings += meaning.Replace("<span class=\"diskret\">", "")
+                                .Replace("</span>", "");
+                            endings += "||";
+                        }
+
+                        endings = endings.TrimEnd("||".ToCharArray());
+                    }
+                    else
+                    {
+                        endings = spanEndings.InnerHtml.Replace("<span class=\"dividerDouble\">&#160;</span>", "||");
+                    }
                 }
             }
 

@@ -183,6 +183,18 @@ namespace CopyWords.Parsers.Tests
             endings.Should().Be("-t, -e || -ere, -est");
         }
 
+        [TestMethod]
+        public void ParseEndings_ForSkat_ReturnsEndings()
+        {
+            string content = GetSimpleHTMLPage("Skat.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string endings = parser.ParseEndings();
+            endings.Should().Be("betydning 1: -ten, -ter, -terne || betydning 2: -ten, -te, -tene");
+        }
+
         #endregion
 
         #region Tests for ParsePronunciation
