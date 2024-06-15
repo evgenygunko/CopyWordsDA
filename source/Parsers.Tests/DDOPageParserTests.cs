@@ -79,6 +79,18 @@ namespace CopyWords.Parsers.Tests
             word.Should().Be("stødtand");
         }
 
+        [TestMethod]
+        public void ParseHeadword_ForTiltalePage_ReturnsTiltale()
+        {
+            string content = GetSimpleHTMLPage("TiltalePage.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string word = parser.ParseHeadword();
+            word.Should().Be("tiltale");
+        }
+
         #endregion
 
         #region ParsePartOfSpeech tests

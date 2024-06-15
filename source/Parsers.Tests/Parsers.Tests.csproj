@@ -74,6 +74,9 @@
     <None Update="TestPages\ddo\StødtandPage.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestPages\ddo\TiltalePage.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestPages\ddo\UnderholdningPage.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

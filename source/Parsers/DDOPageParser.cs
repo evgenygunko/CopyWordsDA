@@ -30,7 +30,7 @@ namespace CopyWords.Parsers
         {
             var div = FindElementByClassName("div", "definitionBoxTop");
 
-            var wordSpan = div.SelectSingleNode("//*[contains(@class, 'match')]");
+            var wordSpan = div.SelectSingleNode("//*[contains(@class, 'match')]/text()");
             if (wordSpan == null)
             {
                 throw new PageParserException("Cannot find a span element with CSS class 'match'");
