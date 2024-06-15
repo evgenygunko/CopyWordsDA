@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Text;
 using CopyWords.Core.ViewModels;
 
@@ -6,7 +7,7 @@ namespace CopyWords.Core.Services
 {
     public interface ICopySelectedToClipboardService
     {
-        Task<string> CompileFrontAsync(string meaning);
+        Task<string> CompileFrontAsync(string meaning, string partOfSpeech);
 
         Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs);
 
@@ -26,7 +27,32 @@ namespace CopyWords.Core.Services
 
         #region Public Methods
 
-        public Task<string> CompileFrontAsync(string meaning) => Task.FromResult(meaning);
+        public Task<string> CompileFrontAsync(string meaning, string partOfSpeech)
+        {
+            string front = meaning;
+
+            if (!string.IsNullOrEmpty(partOfSpeech))
+            {
+                if (partOfSpeech.Equals("substantiv, intetkøn", StringComparison.OrdinalIgnoreCase))
+                {
+                    front = $"et {front}";
+                }
+                if (partOfSpeech.Equals("substantiv, fælleskøn", StringComparison.OrdinalIgnoreCase))
+                {
+                    front = $"en {front}";
+                }
+                if (partOfSpeech.Equals("verbum", StringComparison.OrdinalIgnoreCase))
+                {
+                    front = $"at {front}";
+                }
+                if (partOfSpeech.Equals("adjektiv", StringComparison.OrdinalIgnoreCase))
+                {
+                    front = front + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, partOfSpeech.ToUpper());
+                }
+            }
+
+            return Task.FromResult(front);
+        }
 
         public Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs)
         {

@@ -46,6 +46,7 @@ namespace CopyWords.Core.ViewModels
             if (wordModel != null)
             {
                 _wordViewModel.Front = wordModel.Headword;
+                _wordViewModel.PartOfSpeech = wordModel.PartOfSpeech;
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
                 _wordViewModel.SoundFileName = wordModel.SoundFileName;
 

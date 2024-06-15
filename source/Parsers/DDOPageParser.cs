@@ -8,6 +8,8 @@ namespace CopyWords.Parsers
     {
         string ParseHeadword();
 
+        string ParsePartOfSpeech();
+
         string ParseEndings();
 
         string ParsePronunciation();
@@ -19,6 +21,8 @@ namespace CopyWords.Parsers
 
     public class DDOPageParser : PageParserBase, IDDOPageParser
     {
+        #region Public Methods
+
         /// <summary>
         /// Gets a string which contains found Danish word.
         /// </summary>
@@ -30,6 +34,19 @@ namespace CopyWords.Parsers
             if (wordSpan == null)
             {
                 throw new PageParserException("Cannot find a span element with CSS class 'match'");
+            }
+
+            return DecodeText(wordSpan.InnerText);
+        }
+
+        public string ParsePartOfSpeech()
+        {
+            var div = FindElementByClassName("div", "definitionBoxTop");
+
+            var wordSpan = div.SelectSingleNode("//*[contains(@class, 'tekstmedium allow-glossing')]");
+            if (wordSpan == null)
+            {
+                throw new PageParserException("Cannot find a span element with CSS class 'tekstmedium allow-glossing'");
             }
 
             return DecodeText(wordSpan.InnerText);
@@ -135,6 +152,10 @@ namespace CopyWords.Parsers
             return definitions;
         }
 
+        #endregion
+
+        #region Private Methods
+
         private string? ParseDefinitionTag(HtmlNode divDefinition)
         {
             string? tag = null;
@@ -188,5 +209,7 @@ namespace CopyWords.Parsers
 
             return examples;
         }
+
+        #endregion
     }
 }

@@ -72,13 +72,12 @@ namespace CopyWords.Parsers
 
             _ddoPageParser.LoadHtml(ddoPageHtml);
 
-            List<Definition> definitions = _ddoPageParser.ParseDefinitions();
-
             var wordModel = new WordModel(
                 Headword: _ddoPageParser.ParseHeadword(),
+                PartOfSpeech: _ddoPageParser.ParsePartOfSpeech(),
                 SoundUrl: _ddoPageParser.ParseSound(),
                 SoundFileName: null,
-                Definitions: definitions
+                Definitions: _ddoPageParser.ParseDefinitions()
             );
 
             return wordModel;

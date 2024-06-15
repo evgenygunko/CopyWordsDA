@@ -13,17 +13,66 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for CompileFrontAsync
 
         [TestMethod]
-        public async Task CompileFrontAsync_WhenExampleForOneDefinitionIsSelected_ReturnsFormattedHeadWord()
+        public async Task CompileFrontAsync_ForGrillspyd_ReturnsFormattedFront()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 const string meaning = "grillspyd";
+                const string partOfSpeech = "substantiv, intetkøn";
 
                 var sut = mock.Create<CopySelectedToClipboardService>();
 
-                string front = await sut.CompileFrontAsync(meaning);
+                string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
 
-                front.Should().Be("grillspyd");
+                front.Should().Be("et grillspyd");
+            }
+        }
+
+        [TestMethod]
+        public async Task CompileFrontAsync_ForuUderholdning_ReturnsFormattedFront()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                const string meaning = "underholdning";
+                const string partOfSpeech = "substantiv, fælleskøn";
+
+                var sut = mock.Create<CopySelectedToClipboardService>();
+
+                string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+
+                front.Should().Be("en underholdning");
+            }
+        }
+
+        [TestMethod]
+        public async Task CompileFrontAsync_ForKigge_ReturnsFormattedFront()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                const string meaning = "kigge";
+                const string partOfSpeech = "verbum";
+
+                var sut = mock.Create<CopySelectedToClipboardService>();
+
+                string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+
+                front.Should().Be("at kigge");
+            }
+        }
+
+        [TestMethod]
+        public async Task CompileFrontAsync_ForHøj_ReturnsFormattedFront()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                const string meaning = "høj";
+                const string partOfSpeech = "adjektiv";
+
+                var sut = mock.Create<CopySelectedToClipboardService>();
+
+                string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+
+                front.Should().Be("høj <span style=\"color: rgba(0, 0, 0, 0.4)\">ADJEKTIV</span>");
             }
         }
 

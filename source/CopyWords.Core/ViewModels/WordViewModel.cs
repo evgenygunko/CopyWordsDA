@@ -39,6 +39,9 @@ namespace CopyWords.Core.ViewModels
         private string front = "<>";
 
         [ObservableProperty]
+        private string partOfSpeech = "<>";
+
+        [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PlaySoundCommand))]
         [NotifyPropertyChangedFor(nameof(PlaySoundButtonColor))]
         private string _soundUrl;
@@ -116,7 +119,7 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task CopyFrontAsync()
         {
-            string formattedFront = await _copySelectedToClipboardService.CompileFrontAsync(Front);
+            string formattedFront = await _copySelectedToClipboardService.CompileFrontAsync(Front, PartOfSpeech);
             await _clipboardService.CopyTextToClipboardAsync(formattedFront);
             await _dialogService.DisplayToast("Front copied");
         }

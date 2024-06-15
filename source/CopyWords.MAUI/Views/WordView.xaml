@@ -27,10 +27,20 @@
         <ActivityIndicator Grid.RowSpan="3" Grid.ColumnSpan="2" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
         
         <!-- Front -->
-        <Label Grid.Row="0" Grid.Column="0"
-            FontSize="24"
-            TextColor="#cc0000"
-            Text="{Binding Front, FallbackValue=cámara}"></Label>
+        <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Margin="0,0,0,5">
+            <Label
+                FontSize="24"
+                TextColor="#cc0000"
+                Text="{Binding Front, FallbackValue=høj}" />
+            <Border
+                Grid.Column="1"
+                Margin="10,0,5,0"
+                BackgroundColor="#eaeff2"
+                Stroke="#CCCCCC"
+                StrokeThickness="1">
+                    <Label Text="{Binding PartOfSpeech, FallbackValue='adjektiv'}" Margin="3,5,3,3" />
+            </Border>
+        </HorizontalStackLayout>
 
         <!-- Sound -->
         <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Spacing="5">

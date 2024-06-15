@@ -111,6 +111,7 @@ namespace CopyWords.Parsers.Tests
         public async Task LookUpWordAsync_Should_DownloadPageAndCallParser()
         {
             const string headWord = "haj";
+            const string partOfSpeech = "substantiv, fælleskøn";
             const string soundUrl = "http://test.com/haj.mp3";
 
             var definition1 = new Definition("stor, langstrakt bruskfisk", Tag: null, Enumerable.Empty<string>());
@@ -123,6 +124,7 @@ namespace CopyWords.Parsers.Tests
                 mock.Mock<IFileDownloader>().Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
 
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseHeadword()).Returns(headWord);
+                mock.Mock<IDDOPageParser>().Setup(x => x.ParsePartOfSpeech()).Returns(partOfSpeech);
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseSound()).Returns(soundUrl);
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseDefinitions()).Returns(definitions);
 
@@ -132,6 +134,7 @@ namespace CopyWords.Parsers.Tests
 
                 result.Should().NotBeNull();
                 result!.Headword.Should().Be(headWord);
+                result!.PartOfSpeech.Should().Be(partOfSpeech);
                 result!.SoundUrl.Should().Be(soundUrl);
                 result!.SoundFileName.Should().BeNull();
                 result!.Definitions.Should().HaveCount(3);

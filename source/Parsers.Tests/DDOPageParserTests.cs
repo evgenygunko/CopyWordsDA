@@ -52,7 +52,7 @@ namespace CopyWords.Parsers.Tests
             parser.LoadHtml(content);
 
             string word = parser.ParseHeadword();
-            Assert.AreEqual("underholdning", word);
+            word.Should().Be("underholdning");
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace CopyWords.Parsers.Tests
             parser.LoadHtml(content);
 
             string word = parser.ParseHeadword();
-            Assert.AreEqual("grillspyd", word);
+            word.Should().Be("grillspyd");
         }
 
         [TestMethod]
@@ -76,7 +76,59 @@ namespace CopyWords.Parsers.Tests
             parser.LoadHtml(content);
 
             string word = parser.ParseHeadword();
-            Assert.AreEqual("stødtand", word);
+            word.Should().Be("stødtand");
+        }
+
+        #endregion
+
+        #region ParsePartOfSpeech tests
+
+        [TestMethod]
+        public void ParsePartOfSpeech_ForHajPage_ReturnsSubstantiv()
+        {
+            string content = GetSimpleHTMLPage("HajPage.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string word = parser.ParsePartOfSpeech();
+            word.Should().Be("substantiv, fælleskøn");
+        }
+
+        [TestMethod]
+        public void ParsePartOfSpeech_ForGrillspydPage_ReturnsSubstantiv()
+        {
+            string content = GetSimpleHTMLPage("GrillspydPage.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string word = parser.ParsePartOfSpeech();
+            word.Should().Be("substantiv, intetkøn");
+        }
+
+        [TestMethod]
+        public void ParsePartOfSpeech_ForHøjPage_ReturnsSubstantiv()
+        {
+            string content = GetSimpleHTMLPage("HøjPage.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string word = parser.ParsePartOfSpeech();
+            word.Should().Be("adjektiv");
+        }
+
+        [TestMethod]
+        public void ParsePartOfSpeech_ForKiggePage_ReturnsSubstantiv()
+        {
+            string content = GetSimpleHTMLPage("KiggePage.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string word = parser.ParsePartOfSpeech();
+            word.Should().Be("verbum");
         }
 
         #endregion
