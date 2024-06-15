@@ -11,6 +11,8 @@ namespace CopyWords.Core.Services
 
         Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs);
 
+        Task<string> CompileFormsAsync(string forms);
+
         Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> definitionVMs);
     }
 
@@ -100,6 +102,8 @@ namespace CopyWords.Core.Services
 
             return Task.FromResult(sb.ToString().TrimEnd("<br>".ToCharArray()));
         }
+
+        public Task<string> CompileFormsAsync(string forms) => Task.FromResult(forms);
 
         public Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> definitionVMs)
         {

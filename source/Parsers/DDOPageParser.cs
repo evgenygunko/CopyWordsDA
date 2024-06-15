@@ -66,7 +66,7 @@ namespace CopyWords.Parsers
                 var spanEndings = div.SelectSingleNode("./span[contains(@class, 'tekstmedium allow-glossing')]");
                 if (spanEndings != null)
                 {
-                    endings = spanEndings.InnerText;
+                    endings = spanEndings.InnerHtml.Replace("<span class=\"dividerDouble\">&#160;</span>", "||");
                 }
             }
 

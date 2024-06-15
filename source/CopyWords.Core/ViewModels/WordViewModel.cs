@@ -35,11 +35,16 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(CopyFrontCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyBackCommand))]
+        [NotifyCanExecuteChangedFor(nameof(CopyFormsCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyExamplesCommand))]
         private string front = "<>";
 
         [ObservableProperty]
-        private string partOfSpeech = "<>";
+        private string partOfSpeech = "";
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(CopyFormsCommand))]
+        private string forms = "";
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PlaySoundCommand))]
@@ -56,6 +61,7 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(SaveSoundFileCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyFrontCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyBackCommand))]
+        [NotifyCanExecuteChangedFor(nameof(CopyFormsCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyExamplesCommand))]
         [NotifyPropertyChangedFor(nameof(PlaySoundButtonColor))]
         private bool isBusy;
@@ -73,6 +79,8 @@ namespace CopyWords.Core.ViewModels
         public Color CopyFrontButtonColor => GetButtonColor(CanCopyFront);
 
         public Color CopyBackButtonColor => GetButtonColor(CanCopyFront);
+
+        public Color CopyFormsButtonColor => GetButtonColor(CanCopyFront);
 
         public Color CopyExamplesButtonColor => GetButtonColor(CanCopyFront);
 
@@ -119,8 +127,8 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task CopyFrontAsync()
         {
-            string formattedFront = await _copySelectedToClipboardService.CompileFrontAsync(Front, PartOfSpeech);
-            await _clipboardService.CopyTextToClipboardAsync(formattedFront);
+            string formattedText = await _copySelectedToClipboardService.CompileFrontAsync(Front, PartOfSpeech);
+            await _clipboardService.CopyTextToClipboardAsync(formattedText);
             await _dialogService.DisplayToast("Front copied");
         }
 
@@ -128,6 +136,14 @@ namespace CopyWords.Core.ViewModels
         public async Task CopyBackAsync()
         {
             await CompileAndCopyToClipboard("back", _copySelectedToClipboardService.CompileBackAsync);
+        }
+
+        [RelayCommand(CanExecute = nameof(CanCopyFront))]
+        public async Task CopyFormsAsync()
+        {
+            string formattedText = await _copySelectedToClipboardService.CompileFormsAsync(Forms);
+            await _clipboardService.CopyTextToClipboardAsync(formattedText);
+            await _dialogService.DisplayToast("Forms copied");
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]

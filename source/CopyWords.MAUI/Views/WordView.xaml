@@ -8,12 +8,13 @@
              x:DataType="viewmodels:WordViewModel"
              x:Class="CopyWords.MAUI.Views.WordView">
 
-    <Grid Padding="0,20,0,0">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+        </ResourceDictionary>
 
+    </ContentView.Resources>
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
@@ -23,27 +24,31 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-
-        <ActivityIndicator Grid.RowSpan="3" Grid.ColumnSpan="2" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
+        <ActivityIndicator Grid.RowSpan="3" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
         
         <!-- Front -->
-        <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Margin="0,0,0,5">
+        <HorizontalStackLayout Grid.Row="0" Margin="0,20,0,5">
             <Label
                 FontSize="24"
                 TextColor="#cc0000"
                 Text="{Binding Front, FallbackValue=høj}" />
-            <Border
-                Grid.Column="1"
-                Margin="10,0,5,0"
-                BackgroundColor="#eaeff2"
-                Stroke="#CCCCCC"
-                StrokeThickness="1">
-                    <Label Text="{Binding PartOfSpeech, FallbackValue='adjektiv'}" Margin="3,5,3,3" />
+
+            <Label Text="{Binding PartOfSpeech, FallbackValue='adjektiv'}" Margin="7,5,3,3" VerticalOptions="End" />
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Grid.Row="1" Margin="0,0,0,10">
+            <Border     
+                        IsVisible="{Binding Forms, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"                        
+                        BackgroundColor="#eaeff2"
+                        Stroke="#CCCCCC"
+                        StrokeThickness="1">
+                <Label Text="BØJNING" Margin="3,5,3,3" />
             </Border>
+            <Label Text="{Binding Forms, FallbackValue=' -t, -e || -ere, -est'}" Margin="10,0,5,0" VerticalOptions="Center" />
         </HorizontalStackLayout>
 
         <!-- Sound -->
-        <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Spacing="5">
+        <HorizontalStackLayout Grid.Row="2" Spacing="5">
             <toolkit:MediaElement x:Name="mediaElement" IsVisible="false" ShouldAutoPlay="false" />
             <Button BackgroundColor="{Binding PlaySoundButtonColor}"
                     Command="{Binding PlaySoundCommand}"
@@ -67,25 +72,27 @@
             </Button>
         </HorizontalStackLayout>
 
-        <BoxView Grid.Row="2" Grid.ColumnSpan="2" Color="LightGray"  HeightRequest="1" Margin="0,10,0,0" />
+        <BoxView Grid.Row="3" Color="LightGray"  HeightRequest="1" Margin="0,10,0,0" />
 
-         <!-- Copy front text, back text, and copy examples buttons -->
-        <HorizontalStackLayout Grid.Row="3" Grid.Column="0" Spacing="5" Margin="10">
-            <Button Text="Copy front" FontSize="12" 
+         <!-- Copy Front, Copy Back, Copy Forms, and Copy Examples buttons -->
+        <HorizontalStackLayout Grid.Row="4" Spacing="5" Margin="10">
+            <Button Text="Copy Front" FontSize="12" 
                     BackgroundColor="{Binding CopyFrontButtonColor}"
                     Command="{Binding CopyFrontCommand}"></Button>
 
-            <Button Text="Copy back" FontSize="12" 
+            <Button Text="Copy Back" FontSize="12" 
                     BackgroundColor="{Binding CopyBackButtonColor}"
                     Command="{Binding CopyBackCommand}"></Button>
+
+            <Button Text="Copy Forms" FontSize="12" 
+                    BackgroundColor="{Binding CopyFormsButtonColor}"
+                    Command="{Binding CopyFormsCommand}"></Button>
             
-            <Button Text="Copy examples" FontSize="12" 
+            <Button Text="Copy Examples" FontSize="12" 
                     BackgroundColor="{Binding CopyExamplesButtonColor}"
                     Command="{Binding CopyExamplesCommand}"></Button>
         </HorizontalStackLayout>
-        
-        <views:DefinitionsView Grid.Row="4" Grid.ColumnSpan="2" />
 
-        <BoxView Grid.Row="5" Grid.ColumnSpan="2" Color="LightGray"  HeightRequest="1"/>
+        <views:DefinitionsView Grid.Row="5" />
     </Grid>
 </ContentView>

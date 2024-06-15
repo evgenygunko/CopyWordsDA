@@ -77,6 +77,7 @@ namespace CopyWords.Parsers
             var wordModel = new WordModel(
                 Headword: headWord,
                 PartOfSpeech: _ddoPageParser.ParsePartOfSpeech(),
+                Endings: _ddoPageParser.ParseEndings(),
                 SoundUrl: _ddoPageParser.ParseSound(),
                 SoundFileName: $"{headWord}.mp3",
                 Definitions: _ddoPageParser.ParseDefinitions()

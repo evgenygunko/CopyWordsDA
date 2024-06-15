@@ -112,6 +112,7 @@ namespace CopyWords.Parsers.Tests
         {
             const string headWord = "haj";
             const string partOfSpeech = "substantiv, fælleskøn";
+            const string endings = "-en, -er, -erne";
             const string soundUrl = "https://static.ordnet.dk/mp3/11019/11019539_1.mp3";
 
             var definition1 = new Definition("stor, langstrakt bruskfisk", Tag: null, Enumerable.Empty<string>());
@@ -125,6 +126,7 @@ namespace CopyWords.Parsers.Tests
 
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseHeadword()).Returns(headWord);
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParsePartOfSpeech()).Returns(partOfSpeech);
+                mock.Mock<IDDOPageParser>().Setup(x => x.ParseEndings()).Returns(endings);
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseSound()).Returns(soundUrl);
                 mock.Mock<IDDOPageParser>().Setup(x => x.ParseDefinitions()).Returns(definitions);
 
@@ -135,6 +137,7 @@ namespace CopyWords.Parsers.Tests
                 result.Should().NotBeNull();
                 result!.Headword.Should().Be(headWord);
                 result!.PartOfSpeech.Should().Be(partOfSpeech);
+                result!.Endings.Should().Be(endings);
                 result!.SoundUrl.Should().Be(soundUrl);
                 result!.SoundFileName.Should().Be("haj.mp3");
                 result!.Definitions.Should().HaveCount(3);

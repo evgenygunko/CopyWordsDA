@@ -148,7 +148,7 @@ namespace CopyWords.Parsers.Tests
         #region ParseEndings tests
 
         [TestMethod]
-        public void ParseEndings_ReturnsEn_ForUnderholdningPage()
+        public void ParseEndings_ForUnderholdningPage_ReturnsEndings()
         {
             string content = GetSimpleHTMLPage("UnderholdningPage.html");
 
@@ -156,11 +156,11 @@ namespace CopyWords.Parsers.Tests
             parser.LoadHtml(content);
 
             string endings = parser.ParseEndings();
-            Assert.AreEqual("-en", endings);
+            endings.Should().Be("-en");
         }
 
         [TestMethod]
-        public void ParseEndings_ReturnsEndings_ForStødtandPage()
+        public void ParseEndings_ForStødtandPage_ReturnsEndings()
         {
             string content = GetSimpleHTMLPage("StødtandPage.html");
 
@@ -168,7 +168,19 @@ namespace CopyWords.Parsers.Tests
             parser.LoadHtml(content);
 
             string endings = parser.ParseEndings();
-            Assert.AreEqual("-en, ..tænder, ..tænderne", endings);
+            endings.Should().Be("-en, ..tænder, ..tænderne");
+        }
+
+        [TestMethod]
+        public void ParseEndings_ForHøjPage_ReturnsEndings()
+        {
+            string content = GetSimpleHTMLPage("HøjPage.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string endings = parser.ParseEndings();
+            endings.Should().Be("-t, -e || -ere, -est");
         }
 
         #endregion
