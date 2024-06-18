@@ -5,7 +5,8 @@ trigger:
 
 pool:
   #vmImage: windows-latest
-  name: windows-private
+  #name: windows-private
+  name: Default
 
 stages:
 - stage: Build
@@ -36,21 +37,34 @@ stages:
     #     custom: 'workload'
     #     arguments: 'install maui'
 
+    # On MacOS building a release configuration hangs (due to a bug in donet?), so we only run publish task on Windows
     - task: DotNetCoreCLI@2
-      displayName: "dotnet publish: CopyWords.MAUI.csproj"
+      displayName: "[Windows] dotnet publish: CopyWords.MAUI.csproj"
       inputs:
         command: 'publish'
         publishWebProjects: false
         projects: '**/CopyWords.MAUI.csproj'
         arguments: '-c:$(buildConfiguration) -f net8.0-windows10.0.19041.0'
         zipAfterPublish: false
+      condition: eq(variables['Agent.OS'], 'Windows_NT')
 
     - task: DotNetCoreCLI@2
-      displayName: "dotnet test"
+      displayName: "[Windows] dotnet test"
       inputs:
         command: 'test'
         arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
         publishTestResults: true
+      condition: eq(variables['Agent.OS'], 'Windows_NT')
+
+    # On MacOS just compile in Debug configuration
+    - task: DotNetCoreCLI@2
+      displayName: "[MacOS] dotnet test"
+      inputs:
+        command: 'test'
+        projects: '**/*Tests.csproj'
+        arguments: '--configuration Debug --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+        publishTestResults: true
+      condition: eq(variables['Agent.OS'], 'Darwin')
 
     - task: PublishCodeCoverageResults@1
       displayName: 'Publish code coverage report'
@@ -59,13 +73,14 @@ stages:
         summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
     - task: CopyFiles@2
-      displayName: 'Copy build output to artifact staging directory'
+      displayName: '[Windows] Copy build output to artifact staging directory'
       inputs:
         SourceFolder: './source/CopyWords.MAUI/bin/'
         Contents: |
             **/CopyWords*.msix
         TargetFolder: '$(build.artifactstagingdirectory)'
         flattenFolders: true
+      condition: eq(variables['Agent.OS'], 'Windows_NT')
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: drop'
