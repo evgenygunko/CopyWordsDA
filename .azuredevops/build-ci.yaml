@@ -87,6 +87,6 @@ stages:
       inputs:
         PathtoPublish: '$(build.artifactstagingdirectory)'
 
-# - template: /.azuredevops/templates/stages-sync-with-github.yaml
-#   parameters:
-#     repository: CopyWordsDA
+- template: /.azuredevops/templates/stages-sync-with-github.yaml
+  parameters:
+    repository: CopyWordsDA
