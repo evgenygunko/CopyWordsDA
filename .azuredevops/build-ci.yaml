@@ -29,6 +29,12 @@ stages:
                       arguments: "-version '$(Build.BuildNumber)'"
                       filePath: './.build/UpdateVersion.ps1'
 
+                - script: yarn install
+                  displayName: 'yarn install'
+
+                - script: yarn prettier:check
+                  displayName: 'Check prettier adherence'
+
                 # On a private agant we don't need this
                 # - task: DotNetCoreCLI@2
                 #   displayName: "Install MAUI workload"
@@ -56,7 +62,6 @@ stages:
                       projects: '**/*Tests.csproj'
                       arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
                       publishTestResults: true
-                  condition: eq(variables['Agent.OS'], 'Windows_NT')
 
                 ## Temporarily disable to speed up builds
                 # - task: CopyFiles@2
