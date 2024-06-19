@@ -29,11 +29,11 @@ stages:
         cd
         pwd
 
-        rem Pulling changes from Azure Devops
+        echo Pulling changes from Azure Devops
         git clone https://$(azuredevopspersonaltoken)@dev.azure.com/evgenyg/CopyWords/_git/${{ parameters.repository }} local-master
 
         cd local-master
-        rem Fetch and pull latest changes from Azure DevOps
+        echo Fetch and pull latest changes from Azure DevOps
         git fetch origin
         git pull origin master
 
@@ -42,5 +42,4 @@ stages:
         git pull github master --allow-unrelated-histories
 
         echo Pushing changes to Github...
-        git status
         git push -u github HEAD:master
