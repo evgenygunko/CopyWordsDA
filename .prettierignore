@@ -1,0 +1,36 @@
+# Explicitly-ignored files
+Source
+
+# Tool configurations
+.editorconfig
+.eslintignore
+.flowconfig
+.npmrc
+.prettierignore
+package.json
+yarn.lock
+.eslintcache
+.gitmodules
+.vs/
+.yarn/
+.vscode/
+.tscache/
+
+# Images
+*.gif
+*.ico
+*.jpg
+*.png
+*.svg
+
+# Miscellaneous
+*.hb
+*.ps1
+*.sh
+*.txt
+.cache
+.DS_Store
+.gitignore
+.gitattributes
+*.resx
+dist

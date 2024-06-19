@@ -1,45 +1,45 @@
 parameters:
-- name: repository
-  type: string
-  default: false
+    - name: repository
+      type: string
+      default: false
 
 stages:
-- stage: Sync_With_Github
-  dependsOn: Build
-  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+    - stage: Sync_With_Github
+      dependsOn: Build
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
-  jobs:
-  - job: Sync_With_Github
-    pool:
-        vmImage: 'ubuntu-latest'
-    #    name: Default
+      jobs:
+          - job: Sync_With_Github
+            pool:
+                vmImage: 'ubuntu-latest'
+            #    name: Default
 
-    steps:
-    - checkout: none
-      clean: true
+            steps:
+                - checkout: none
+                  clean: true
 
-    - script: |
-        echo Push changes to Github
+                - script: |
+                      echo Push changes to Github
 
-        git config --global user.email "evgeny.gunko@gmail.com"
-        git config --global user.name "Evgeny Gunko"
-        git config --global pull.rebase true
+                      git config --global user.email "evgeny.gunko@gmail.com"
+                      git config --global user.name "Evgeny Gunko"
+                      git config --global pull.rebase true
 
-        echo Current directory:
-        cd
-        pwd
+                      echo Current directory:
+                      cd
+                      pwd
 
-        echo Pulling changes from Azure Devops
-        git clone https://$(azuredevopspersonaltoken)@dev.azure.com/evgenyg/CopyWords/_git/${{ parameters.repository }} local-master
+                      echo Pulling changes from Azure Devops
+                      git clone https://$(azuredevopspersonaltoken)@dev.azure.com/evgenyg/CopyWords/_git/${{ parameters.repository }} local-master
 
-        cd local-master
-        echo Fetch and pull latest changes from Azure DevOps
-        git fetch origin
-        git pull origin master
+                      cd local-master
+                      echo Fetch and pull latest changes from Azure DevOps
+                      git fetch origin
+                      git pull origin master
 
-        echo Pulling changes from Github repository: https://github.com/evgenygunko/${{ parameters.repository }}.git
-        git remote add github https://$(githubpersonaltoken)@github.com/evgenygunko/${{ parameters.repository }}.git
-        git pull github master --allow-unrelated-histories
+                      echo Pulling changes from Github repository: https://github.com/evgenygunko/${{ parameters.repository }}.git
+                      git remote add github https://$(githubpersonaltoken)@github.com/evgenygunko/${{ parameters.repository }}.git
+                      git pull github master --allow-unrelated-histories
 
-        echo Pushing changes to Github...
-        git push -u github HEAD:master
+                      echo Pushing changes to Github...
+                      git push -u github HEAD:master

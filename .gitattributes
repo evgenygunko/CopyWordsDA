@@ -1,0 +1,13 @@
+# By default do not normalize line-endings
+* -text
+
+*.cs diff=csharp
+
+# Binaries
+*.exe	binary
+*.dll	binary
+*.pdb	binary
+*.bin	binary
+*.jpg   binary
+*.png   binary
+*.gif   binary

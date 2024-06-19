@@ -1,79 +1,79 @@
 trigger:
-  branches:
-    include:
-    - master
+    branches:
+        include:
+            - master
 
 pool:
-  #vmImage: windows-latest
-  #name: windows-private
-  name: Default
+    #vmImage: windows-latest
+    #name: windows-private
+    name: Default
 
 stages:
-- stage: Build
+    - stage: Build
 
-  jobs:
-  - job: Build
+      jobs:
+          - job: Build
 
-    steps:
-    - task: PowerShell@2
-      displayName: 'PowerShell Script - set buld number variable'
-      inputs:
-        targetType: 'inline'
-        script: |
-            Write-Host "##vso[build.updatebuildnumber]$(major).$(minor).$(Build.BuildId)"
+            steps:
+                - task: PowerShell@2
+                  displayName: 'PowerShell Script - set buld number variable'
+                  inputs:
+                      targetType: 'inline'
+                      script: |
+                          Write-Host "##vso[build.updatebuildnumber]$(major).$(minor).$(Build.BuildId)"
 
-    - task: PowerShell@2
-      displayName: 'PowerShell Script - update version number in project files'
-      inputs:
-        targetType: filePath
-        arguments: "-version '$(Build.BuildNumber)'"
-        filePath: './.build/UpdateVersion.ps1'
+                - task: PowerShell@2
+                  displayName: 'PowerShell Script - update version number in project files'
+                  inputs:
+                      targetType: filePath
+                      arguments: "-version '$(Build.BuildNumber)'"
+                      filePath: './.build/UpdateVersion.ps1'
 
-    # On a private agant we don't need this
-    # - task: DotNetCoreCLI@2
-    #   displayName: "Install MAUI workload"
-    #   inputs:
-    #     command: 'custom'
-    #     custom: 'workload'
-    #     arguments: 'install maui'
+                # On a private agant we don't need this
+                # - task: DotNetCoreCLI@2
+                #   displayName: "Install MAUI workload"
+                #   inputs:
+                #     command: 'custom'
+                #     custom: 'workload'
+                #     arguments: 'install maui'
 
-    # Temporarily disable to speed up builds
-    # On MacOS building a release configuration hangs (due to a bug in donet?), so we only run publish task on Windows
-    # - task: DotNetCoreCLI@2
-    #   displayName: "[Windows] dotnet publish: CopyWords.MAUI.csproj"
-    #   inputs:
-    #     command: 'publish'
-    #     publishWebProjects: false
-    #     projects: '**/CopyWords.MAUI.csproj'
-    #     arguments: '-c:$(buildConfiguration) -f net8.0-windows10.0.19041.0'
-    #     zipAfterPublish: false
-    #   condition: eq(variables['Agent.OS'], 'Windows_NT')
+                # Temporarily disable to speed up builds
+                # On MacOS building a release configuration hangs (due to a bug in donet?), so we only run publish task on Windows
+                # - task: DotNetCoreCLI@2
+                #   displayName: "[Windows] dotnet publish: CopyWords.MAUI.csproj"
+                #   inputs:
+                #     command: 'publish'
+                #     publishWebProjects: false
+                #     projects: '**/CopyWords.MAUI.csproj'
+                #     arguments: '-c:$(buildConfiguration) -f net8.0-windows10.0.19041.0'
+                #     zipAfterPublish: false
+                #   condition: eq(variables['Agent.OS'], 'Windows_NT')
 
-    - task: DotNetCoreCLI@2
-      displayName: "dotnet test"
-      inputs:
-        command: 'test'
-        projects: '**/*Tests.csproj'
-        arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
-        publishTestResults: true
-      condition: eq(variables['Agent.OS'], 'Windows_NT')
+                - task: DotNetCoreCLI@2
+                  displayName: 'dotnet test'
+                  inputs:
+                      command: 'test'
+                      projects: '**/*Tests.csproj'
+                      arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+                      publishTestResults: true
+                  condition: eq(variables['Agent.OS'], 'Windows_NT')
 
-    ## Temporarily disable to speed up builds
-    # - task: CopyFiles@2
-    #   displayName: '[Windows] Copy build output to artifact staging directory'
-    #   inputs:
-    #     SourceFolder: './source/CopyWords.MAUI/bin/'
-    #     Contents: |
-    #         **/CopyWords*.msix
-    #     TargetFolder: '$(build.artifactstagingdirectory)'
-    #     flattenFolders: true
-    #   condition: eq(variables['Agent.OS'], 'Windows_NT')
+                ## Temporarily disable to speed up builds
+                # - task: CopyFiles@2
+                #   displayName: '[Windows] Copy build output to artifact staging directory'
+                #   inputs:
+                #     SourceFolder: './source/CopyWords.MAUI/bin/'
+                #     Contents: |
+                #         **/CopyWords*.msix
+                #     TargetFolder: '$(build.artifactstagingdirectory)'
+                #     flattenFolders: true
+                #   condition: eq(variables['Agent.OS'], 'Windows_NT')
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: drop'
-      inputs:
-        PathtoPublish: '$(build.artifactstagingdirectory)'
+                - task: PublishBuildArtifacts@1
+                  displayName: 'Publish Artifact: drop'
+                  inputs:
+                      PathtoPublish: '$(build.artifactstagingdirectory)'
 
-- template: /.azuredevops/templates/stages-sync-with-github.yaml
-  parameters:
-    repository: CopyWordsDA
+    - template: /.azuredevops/templates/stages-sync-with-github.yaml
+      parameters:
+          repository: CopyWordsDA
