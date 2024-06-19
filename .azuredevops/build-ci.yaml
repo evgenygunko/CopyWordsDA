@@ -50,30 +50,15 @@ stages:
     #   condition: eq(variables['Agent.OS'], 'Windows_NT')
 
     - task: DotNetCoreCLI@2
-      displayName: "[Windows] dotnet test"
+      displayName: "dotnet test"
       inputs:
         command: 'test'
+        projects: '**/*Tests.csproj'
         arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
         publishTestResults: true
       condition: eq(variables['Agent.OS'], 'Windows_NT')
 
-    # On MacOS just compile in Debug configuration
-    - task: DotNetCoreCLI@2
-      displayName: "[MacOS] dotnet test"
-      inputs:
-        command: 'test'
-        projects: '**/*Tests.csproj'
-        arguments: '--configuration Debug --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
-        publishTestResults: true
-      condition: eq(variables['Agent.OS'], 'Darwin')
-
-    - task: PublishCodeCoverageResults@1
-      displayName: 'Publish code coverage report'
-      inputs:
-        codeCoverageTool: 'Cobertura'
-        summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
-
-    # Temporarily disable to speed up builds
+    ## Temporarily disable to speed up builds
     # - task: CopyFiles@2
     #   displayName: '[Windows] Copy build output to artifact staging directory'
     #   inputs:

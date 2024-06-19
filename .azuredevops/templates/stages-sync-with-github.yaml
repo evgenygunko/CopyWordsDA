@@ -12,9 +12,12 @@ stages:
   - job: Sync_With_Github
     pool:
         vmImage: 'ubuntu-latest'
-    #  name: Win10-private
+    #    name: Default
 
     steps:
+    - checkout: none
+      clean: true
+
     - script: |
         echo Push changes to Github
 
@@ -22,9 +25,22 @@ stages:
         git config --global user.name "Evgeny Gunko"
         git config --global pull.rebase true
 
+        echo Current directory:
+        cd
+        pwd
+
+        rem Pulling changes from Azure Devops
+        git clone https://$(azuredevopspersonaltoken)@dev.azure.com/evgenyg/CopyWords/_git/${{ parameters.repository }} local-master
+
+        cd local-master
+        rem Fetch and pull latest changes from Azure DevOps
+        git fetch origin
+        git pull origin master
+
         echo Pulling changes from Github repository: https://github.com/evgenygunko/${{ parameters.repository }}.git
-        git pull https://github.com/evgenygunko/${{ parameters.repository }}.git master --allow-unrelated-histories
+        git remote add github https://$(githubpersonaltoken)@github.com/evgenygunko/${{ parameters.repository }}.git
+        git pull github master --allow-unrelated-histories
 
         echo Pushing changes to Github...
-        git remote add github https://$(githubpersonaltoken)@github.com/evgenygunko/${{ parameters.repository }}.git
+        git status
         git push -u github HEAD:master
