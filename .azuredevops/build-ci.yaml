@@ -37,16 +37,17 @@ stages:
     #     custom: 'workload'
     #     arguments: 'install maui'
 
+    # Temporarily disable to speed up builds
     # On MacOS building a release configuration hangs (due to a bug in donet?), so we only run publish task on Windows
-    - task: DotNetCoreCLI@2
-      displayName: "[Windows] dotnet publish: CopyWords.MAUI.csproj"
-      inputs:
-        command: 'publish'
-        publishWebProjects: false
-        projects: '**/CopyWords.MAUI.csproj'
-        arguments: '-c:$(buildConfiguration) -f net8.0-windows10.0.19041.0'
-        zipAfterPublish: false
-      condition: eq(variables['Agent.OS'], 'Windows_NT')
+    # - task: DotNetCoreCLI@2
+    #   displayName: "[Windows] dotnet publish: CopyWords.MAUI.csproj"
+    #   inputs:
+    #     command: 'publish'
+    #     publishWebProjects: false
+    #     projects: '**/CopyWords.MAUI.csproj'
+    #     arguments: '-c:$(buildConfiguration) -f net8.0-windows10.0.19041.0'
+    #     zipAfterPublish: false
+    #   condition: eq(variables['Agent.OS'], 'Windows_NT')
 
     - task: DotNetCoreCLI@2
       displayName: "[Windows] dotnet test"
@@ -72,15 +73,16 @@ stages:
         codeCoverageTool: 'Cobertura'
         summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
-    - task: CopyFiles@2
-      displayName: '[Windows] Copy build output to artifact staging directory'
-      inputs:
-        SourceFolder: './source/CopyWords.MAUI/bin/'
-        Contents: |
-            **/CopyWords*.msix
-        TargetFolder: '$(build.artifactstagingdirectory)'
-        flattenFolders: true
-      condition: eq(variables['Agent.OS'], 'Windows_NT')
+    # Temporarily disable to speed up builds
+    # - task: CopyFiles@2
+    #   displayName: '[Windows] Copy build output to artifact staging directory'
+    #   inputs:
+    #     SourceFolder: './source/CopyWords.MAUI/bin/'
+    #     Contents: |
+    #         **/CopyWords*.msix
+    #     TargetFolder: '$(build.artifactstagingdirectory)'
+    #     flattenFolders: true
+    #   condition: eq(variables['Agent.OS'], 'Windows_NT')
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: drop'
