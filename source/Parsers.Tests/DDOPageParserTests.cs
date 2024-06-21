@@ -91,6 +91,18 @@ namespace CopyWords.Parsers.Tests
             word.Should().Be("tiltale");
         }
 
+        [TestMethod]
+        public void ParseHeadword_ForPåHøjtryk_ReturnsPåUnderHøjtryk()
+        {
+            string content = GetSimpleHTMLPage("PåHøjtryk.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string word = parser.ParseHeadword();
+            word.Should().Be("på/under højtryk");
+        }
+
         #endregion
 
         #region Tests for ParsePartOfSpeech
@@ -141,6 +153,18 @@ namespace CopyWords.Parsers.Tests
 
             string word = parser.ParsePartOfSpeech();
             word.Should().Be("verbum");
+        }
+
+        [TestMethod]
+        public void ParsePartOfSpeech_ForPåHøjtryk_ReturnsEmptyString()
+        {
+            string content = GetSimpleHTMLPage("PåHøjtryk.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string word = parser.ParsePartOfSpeech();
+            word.Should().BeEmpty();
         }
 
         #endregion
@@ -463,6 +487,25 @@ namespace CopyWords.Parsers.Tests
             definition1.Examples.Skip(1).First().Should().Be("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater.");
         }
 
+        [TestMethod]
+        public void ParseDefinitions_ForPåHøjtryk_ReturnsOneDefinition()
+        {
+            string content = GetSimpleHTMLPage("PåHøjtryk.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            List<Definition> definitions = parser.ParseDefinitions();
+
+            definitions.Should().HaveCount(1);
+
+            Definition definition1 = definitions.First();
+            definition1.Meaning.Should().Be("intensivt og som regel under tidspres");
+            definition1.Tag.Should().Be("overført");
+            definition1.Examples.Should().HaveCount(1);
+            definition1.Examples.First().Should().Be("håndværkerne [arbejdede] på højtryk for at gøre teatersalen klar.");
+        }
+
         #endregion
 
         #region Tests for ParseVariants
@@ -484,7 +527,7 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseVariants_ForHøj_Returns2Variations()
+        public void ParseVariants_ForHøj_Returns2Variants()
         {
             string content = GetSimpleHTMLPage("Høj.html");
 
@@ -503,7 +546,7 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void ParseVariants_ForSkatPage_Returns2Variations()
+        public void ParseVariants_ForSkatPage_Returns2Variants()
         {
             string content = GetSimpleHTMLPage("Skat.html");
 
@@ -524,9 +567,24 @@ namespace CopyWords.Parsers.Tests
             variants[2].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=skate&query=skat");
         }
 
+        [TestMethod]
+        public void ParseVariants_ForPåHøjtryk_Returns0Variants()
+        {
+            string content = GetSimpleHTMLPage("PåHøjtryk.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            List<Variant> variants = parser.ParseVariants();
+
+            variants.Should().HaveCount(0);
+        }
+
         #endregion
 
-        public static string GetSimpleHTMLPage(string fileName)
+        #region Private Methods
+
+        private static string GetSimpleHTMLPage(string fileName)
         {
             string filePath = Path.Combine(_path!, "TestPages", "ddo", fileName);
             Assert.IsTrue(File.Exists(filePath));
@@ -541,5 +599,7 @@ namespace CopyWords.Parsers.Tests
 
             return fileContent;
         }
+
+        #endregion
     }
 }

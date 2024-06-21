@@ -31,15 +31,33 @@ namespace CopyWords.Parsers
         /// </summary>
         public string ParseHeadword()
         {
+            string headWord = string.Empty;
+
             var div = FindElementByClassName("div", "definitionBoxTop");
 
-            var wordSpan = div.SelectSingleNode("//*[contains(@class, 'match')]/text()");
-            if (wordSpan == null)
+            var spanHeadword = div.SelectSingleNode("//*[contains(@class, 'match')]");
+            if (spanHeadword == null)
             {
                 throw new PageParserException("Cannot find a span element with CSS class 'match'");
             }
 
-            return DecodeText(wordSpan.InnerText);
+            // Check if it has several meanings
+            if (spanHeadword.InnerHtml.Contains("<span class=\"diskret\">"))
+            {
+                headWord += spanHeadword.InnerHtml.Replace("<span class=\"diskret\">", "")
+                        .Replace("</span>", "");
+            }
+            else
+            {
+                headWord = spanHeadword.InnerHtml;
+            }
+
+            // Remove numbers added for additional meanings
+            string pattern = @"<span class=""super"">\d<\/span>";
+            headWord = Regex.Replace(headWord, pattern, string.Empty);
+
+            headWord = DecodeText(headWord);
+            return headWord;
         }
 
         public string ParsePartOfSpeech()
@@ -47,12 +65,14 @@ namespace CopyWords.Parsers
             var div = FindElementByClassName("div", "definitionBoxTop");
 
             var wordSpan = div.SelectSingleNode("//*[contains(@class, 'tekstmedium allow-glossing')]");
-            if (wordSpan == null)
+
+            // Not all searches have part of the speech, e.g. "på højtryk" does not have one
+            if (wordSpan != null)
             {
-                throw new PageParserException("Cannot find a span element with CSS class 'tekstmedium allow-glossing'");
+                return DecodeText(wordSpan.InnerText);
             }
 
-            return DecodeText(wordSpan.InnerText);
+            return string.Empty;
         }
 
         /// <summary>
@@ -147,21 +167,26 @@ namespace CopyWords.Parsers
         {
             List<Definition> definitions = new();
 
-            var contentBetydningerDiv = FindElementById("content-betydninger");
-
-            if (contentBetydningerDiv != null)
+            var div = FindElementById("content-betydninger");
+            if (div == null)
             {
-                var definitionsDivs = contentBetydningerDiv.SelectNodes("./div/div/span/span[contains(@class, 'definition')]");
+                // It is probably "Faste udtryk", try another way...
+                div = FindElementByClassName("div", "artikel");
+            }
+
+            if (div != null)
+            {
+                var definitionsDivs = div.SelectNodes("./div/div/span/span[contains(@class, 'definition')]");
 
                 if (definitionsDivs != null && definitionsDivs.Count > 0)
                 {
-                    foreach (var div in definitionsDivs)
+                    foreach (var definitionDiv in definitionsDivs)
                     {
-                        string meaning = DecodeText(div.InnerText);
-                        string? tag = ParseDefinitionTag(div);
+                        string meaning = DecodeText(definitionDiv.InnerText);
+                        string? tag = ParseDefinitionTag(definitionDiv);
 
                         // Parse examples only for this definition
-                        IEnumerable<string> examples = ParseExamplesForDefinition(div);
+                        IEnumerable<string> examples = ParseExamplesForDefinition(definitionDiv);
 
                         definitions.Add(new Definition(Meaning: meaning, Tag: tag, Examples: examples));
                     }
@@ -247,33 +272,37 @@ namespace CopyWords.Parsers
 
             var ahrefNodes = searchResultBoxDiv.SelectNodes("./div/a");
 
-            foreach (var ahref in ahrefNodes)
+            // Not all searches have word variants, e.g. "på højtryk" does not have one
+            if (ahrefNodes != null)
             {
-                if (ahref != null && ahref.Attributes["href"] != null)
+                foreach (var ahref in ahrefNodes)
                 {
-                    string word = ahref.ParentNode
-                        .InnerText
-                        .Trim();
-
-                    // replace any sequence of spaces or tabs with a single space
-                    char[] separators = new char[] { ' ', '\r', '\t', '\n' };
-
-                    string[] temp = word.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-                    word = string.Join(" ", temp);
-
-                    // decorade variant number with parenthesis
-                    Match match = Regex.Match(word, "([0-9]+)");
-                    if (match.Success)
+                    if (ahref != null && ahref.Attributes["href"] != null)
                     {
-                        string v = match.Groups[0].Value;
-                        word = word.Replace(v, $"({v})");
+                        string word = ahref.ParentNode
+                            .InnerText
+                            .Trim();
+
+                        // replace any sequence of spaces or tabs with a single space
+                        char[] separators = new char[] { ' ', '\r', '\t', '\n' };
+
+                        string[] temp = word.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+                        word = string.Join(" ", temp);
+
+                        // decorade variant number with parenthesis
+                        Match match = Regex.Match(word, "([0-9]+)");
+                        if (match.Success)
+                        {
+                            string v = match.Groups[0].Value;
+                            word = word.Replace(v, $"({v})");
+                        }
+
+                        word = word.Replace("&nbsp;", " ->");
+
+                        string variationUrl = DecodeText(ahref.Attributes["href"].Value);
+
+                        variants.Add(new Variant(word, variationUrl));
                     }
-
-                    word = word.Replace("&nbsp;", " ->");
-
-                    string variationUrl = DecodeText(ahref.Attributes["href"].Value);
-
-                    variants.Add(new Variant(word, variationUrl));
                 }
             }
 

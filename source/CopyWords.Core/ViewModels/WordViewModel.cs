@@ -74,6 +74,8 @@ namespace CopyWords.Core.ViewModels
 
         public bool CanCopyFront => !IsBusy && Front != "<>";
 
+        public bool CanCopyForms => !IsBusy && !string.IsNullOrEmpty(Forms);
+
         public Color PlaySoundButtonColor => GetButtonColor(CanPlaySound);
 
         public Color SaveSoundButtonColor => GetButtonColor(CanSaveSoundFile);
@@ -82,7 +84,7 @@ namespace CopyWords.Core.ViewModels
 
         public Color CopyBackButtonColor => GetButtonColor(CanCopyFront);
 
-        public Color CopyFormsButtonColor => GetButtonColor(CanCopyFront);
+        public Color CopyFormsButtonColor => GetButtonColor(CanCopyForms);
 
         public Color CopyExamplesButtonColor => GetButtonColor(CanCopyFront);
 
@@ -140,7 +142,7 @@ namespace CopyWords.Core.ViewModels
             await CompileAndCopyToClipboard("back", _copySelectedToClipboardService.CompileBackAsync);
         }
 
-        [RelayCommand(CanExecute = nameof(CanCopyFront))]
+        [RelayCommand(CanExecute = nameof(CanCopyForms))]
         public async Task CopyFormsAsync()
         {
             string formattedText = await _copySelectedToClipboardService.CompileFormsAsync(Forms);
