@@ -137,5 +137,63 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         #endregion
+
+        #region Tests for GetVariantAsync
+
+        [TestMethod]
+        public async Task GetVariantAsync_WhenExceptionThrown_DisplaysAlerts()
+        {
+            string url = _fixture.Create<string>();
+
+            Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
+            lookUpWordMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>())).ThrowsAsync(new Exception("exception from unit test"));
+
+            var sut = _fixture.Create<MainViewModel>();
+
+            await sut.GetVariantAsync(url);
+
+            dialogServiceMock.Verify(x => x.DisplayAlert("Error occurred while parsing the word", "exception from unit test", "OK"));
+        }
+
+        [TestMethod]
+        public async Task GetVariantAsync_WhenSearchReturnsNull_DisplaysAlert()
+        {
+            string url = _fixture.Create<string>();
+
+            Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
+            lookUpWordMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>())).ReturnsAsync((WordModel?)null);
+
+            var sut = _fixture.Create<MainViewModel>();
+
+            await sut.GetVariantAsync(url);
+
+            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot find word", $"Could not parse the word by URL '{url}'", "OK"));
+        }
+
+        [TestMethod]
+        public async Task GetVariantAsync_WhenSearchIsSuccessful_UpdatesUI()
+        {
+            string url = _fixture.Create<string>();
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
+            lookUpWordMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>())).ReturnsAsync(wordModel);
+
+            var sut = _fixture.Create<MainViewModel>();
+
+            await sut.GetVariantAsync(url);
+
+            sut.WordViewModel.Front.Should().Be(wordModel.Headword);
+
+            dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        #endregion
     }
 }

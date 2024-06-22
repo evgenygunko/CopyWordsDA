@@ -49,6 +49,48 @@ namespace CopyWords.Core.ViewModels
             IsBusy = true;
 
             WordModel wordModel = await LookUpWordInDictionaryAsync(SearchWord);
+            UpdateUI(wordModel);
+
+            IsBusy = false;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanShowSettingsDialog))]
+        public async Task ShowSettingsDialog()
+        {
+            await Shell.Current.GoToAsync("SettingsPage");
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        public async Task GetVariantAsync(string url)
+        {
+            IsBusy = true;
+
+            WordModel wordModel = null;
+            try
+            {
+                wordModel = await _lookUpWord.GetWordByUrlAsync(url);
+
+                if (wordModel == null)
+                {
+                    await _dialogService.DisplayAlert("Cannot find word", $"Could not parse the word by URL '{url}'", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.DisplayAlert("Error occurred while parsing the word", ex.Message, "OK");
+            }
+
+            UpdateUI(wordModel);
+
+            IsBusy = false;
+        }
+
+        internal void UpdateUI(WordModel wordModel)
+        {
+            IsBusy = true;
 
             if (wordModel != null)
             {
@@ -69,7 +111,11 @@ namespace CopyWords.Core.ViewModels
                 foreach (var variant in wordModel.Variations)
                 {
                     var variantVM = new VariantViewModel(variant);
-                    variantVM.Clicked += (sender, url) => Debug.WriteLine($"Variant clicked, will lookup '{url}'");
+                    variantVM.Clicked += async (sender, url) =>
+                    {
+                        Debug.WriteLine($"Variant clicked, will lookup '{url}'");
+                        await GetVariantAsync(url);
+                    };
 
                     _wordViewModel.Variants.Add(variantVM);
                 }
@@ -77,16 +123,6 @@ namespace CopyWords.Core.ViewModels
 
             IsBusy = false;
         }
-
-        [RelayCommand(CanExecute = nameof(CanShowSettingsDialog))]
-        public async Task ShowSettingsDialog()
-        {
-            await Shell.Current.GoToAsync("SettingsPage");
-        }
-
-        #endregion
-
-        #region Internal Methods
 
         internal async Task<WordModel> LookUpWordInDictionaryAsync(string word)
         {

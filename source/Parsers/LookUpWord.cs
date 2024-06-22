@@ -10,6 +10,8 @@ namespace CopyWords.Parsers
         (bool isValid, string? errorMessage) CheckThatWordIsValid(string lookUp);
 
         Task<WordModel?> LookUpWordAsync(string wordToLookUp);
+
+        Task<WordModel?> GetWordByUrlAsync(string url);
     }
 
     public class LookUpWord : ILookUpWord
@@ -63,6 +65,12 @@ namespace CopyWords.Parsers
 
             string url = DDOBaseUrl + $"?query={wordToLookUp}&search=S%C3%B8g";
 
+            var wordModel = await GetWordByUrlAsync(url);
+            return wordModel;
+        }
+
+        public async Task<WordModel?> GetWordByUrlAsync(string url)
+        {
             // Download and parse a page from DDO
             string? ddoPageHtml = await _fileDownloader.DownloadPageAsync(url, Encoding.UTF8);
             if (string.IsNullOrEmpty(ddoPageHtml))
