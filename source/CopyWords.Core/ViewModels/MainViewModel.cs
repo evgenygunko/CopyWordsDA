@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CopyWords.Core.Services;
 using CopyWords.Parsers;
 using CopyWords.Parsers.Models;
 
@@ -10,11 +11,16 @@ namespace CopyWords.Core.ViewModels
     {
         private ILookUpWord _lookUpWord;
         private WordViewModel _wordViewModel;
+        private readonly IDialogService _dialogService;
 
-        public MainViewModel(ILookUpWord lookUpWord, WordViewModel wordViewModel)
+        public MainViewModel(
+            ILookUpWord lookUpWord,
+            WordViewModel wordViewModel,
+            IDialogService dialogService)
         {
             _lookUpWord = lookUpWord;
             _wordViewModel = wordViewModel;
+            _dialogService = dialogService;
         }
 
         #region Properties
@@ -38,11 +44,11 @@ namespace CopyWords.Core.ViewModels
         #region Commands
 
         [RelayCommand(CanExecute = nameof(CanExecuteLookUp))]
-        public async Task LookUp()
+        public async Task LookUpAsync()
         {
             IsBusy = true;
 
-            WordModel wordModel = await LookUpWordAsync(SearchWord);
+            WordModel wordModel = await LookUpWordInDictionaryAsync(SearchWord);
 
             if (wordModel != null)
             {
@@ -80,9 +86,9 @@ namespace CopyWords.Core.ViewModels
 
         #endregion
 
-        #region Private Methods
+        #region Internal Methods
 
-        private async Task<WordModel> LookUpWordAsync(string word)
+        internal async Task<WordModel> LookUpWordInDictionaryAsync(string word)
         {
             if (string.IsNullOrEmpty(word))
             {
@@ -92,7 +98,7 @@ namespace CopyWords.Core.ViewModels
             (bool isValid, string errorMessage) = _lookUpWord.CheckThatWordIsValid(word);
             if (!isValid)
             {
-                await Shell.Current.DisplayAlert("Invalid search term", errorMessage, "OK");
+                await _dialogService.DisplayAlert("Invalid search term", errorMessage, "OK");
                 return null;
             }
 
@@ -103,12 +109,12 @@ namespace CopyWords.Core.ViewModels
 
                 if (wordModel == null)
                 {
-                    await Shell.Current.DisplayAlert("Cannot find word", $"Could not find a translation for '{word}'", "OK");
+                    await _dialogService.DisplayAlert("Cannot find word", $"Could not find a translation for '{word}'", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error occurred while searching translations", ex.Message, "OK");
+                await _dialogService.DisplayAlert("Error occurred while searching translations", ex.Message, "OK");
                 return null;
             }
 

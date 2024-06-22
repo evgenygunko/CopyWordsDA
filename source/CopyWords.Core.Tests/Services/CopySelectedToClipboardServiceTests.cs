@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using Autofac.Extras.Moq;
+using AutoFixture;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.Parsers.Models;
@@ -10,70 +10,60 @@ namespace CopyWords.Core.Tests.Services
     [TestClass]
     public class CopySelectedToClipboardServiceTests
     {
+        private readonly Fixture _fixture = FixtureFactory.CreateFixture();
+
         #region Tests for CompileFrontAsync
 
         [TestMethod]
         public async Task CompileFrontAsync_ForGrillspyd_ReturnsFormattedFront()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                const string meaning = "grillspyd";
-                const string partOfSpeech = "substantiv, intetkøn";
+            const string meaning = "grillspyd";
+            const string partOfSpeech = "substantiv, intetkøn";
 
-                var sut = mock.Create<CopySelectedToClipboardService>();
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-                string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
 
-                front.Should().Be("et grillspyd");
-            }
+            front.Should().Be("et grillspyd");
         }
 
         [TestMethod]
         public async Task CompileFrontAsync_ForuUderholdning_ReturnsFormattedFront()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                const string meaning = "underholdning";
-                const string partOfSpeech = "substantiv, fælleskøn";
+            const string meaning = "underholdning";
+            const string partOfSpeech = "substantiv, fælleskøn";
 
-                var sut = mock.Create<CopySelectedToClipboardService>();
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-                string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
 
-                front.Should().Be("en underholdning");
-            }
+            front.Should().Be("en underholdning");
         }
 
         [TestMethod]
         public async Task CompileFrontAsync_ForKigge_ReturnsFormattedFront()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                const string meaning = "kigge";
-                const string partOfSpeech = "verbum";
+            const string meaning = "kigge";
+            const string partOfSpeech = "verbum";
 
-                var sut = mock.Create<CopySelectedToClipboardService>();
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-                string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
 
-                front.Should().Be("at kigge");
-            }
+            front.Should().Be("at kigge");
         }
 
         [TestMethod]
         public async Task CompileFrontAsync_ForHøj_ReturnsFormattedFront()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                const string meaning = "høj";
-                const string partOfSpeech = "adjektiv";
+            const string meaning = "høj";
+            const string partOfSpeech = "adjektiv";
 
-                var sut = mock.Create<CopySelectedToClipboardService>();
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-                string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
 
-                front.Should().Be("høj <span style=\"color: rgba(0, 0, 0, 0.4)\">ADJEKTIV</span>");
-            }
+            front.Should().Be("høj <span style=\"color: rgba(0, 0, 0, 0.4)\">ADJEKTIV</span>");
         }
 
         #endregion
@@ -83,38 +73,32 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenOneExampleIsSelected_DoesNotAddNumbers()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var wordVariantVMs = CreateVMForGrillspyd();
-                wordVariantVMs[0].Examples[0].IsChecked = true;
+            var wordVariantVMs = CreateVMForGrillspyd();
+            wordVariantVMs[0].Examples[0].IsChecked = true;
 
-                var sut = mock.Create<CopySelectedToClipboardService>();
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-                string result = await sut.CompileBackAsync(wordVariantVMs);
+            string result = await sut.CompileBackAsync(wordVariantVMs);
 
-                result.Should().Be("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
-            }
+            result.Should().Be("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
 
         [TestMethod]
         public async Task CompileBackAsync_WhenSeveralExamplesAreSelected_AddsNumbers()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var wordVariantVMs = CreateVMForHaj();
-                wordVariantVMs[0].Examples[0].IsChecked = true;
-                wordVariantVMs[1].Examples[0].IsChecked = true;
-                wordVariantVMs[2].Examples[0].IsChecked = true;
+            var wordVariantVMs = CreateVMForHaj();
+            wordVariantVMs[0].Examples[0].IsChecked = true;
+            wordVariantVMs[1].Examples[0].IsChecked = true;
+            wordVariantVMs[2].Examples[0].IsChecked = true;
 
-                var sut = mock.Create<CopySelectedToClipboardService>();
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-                string result = await sut.CompileBackAsync(wordVariantVMs);
+            string result = await sut.CompileBackAsync(wordVariantVMs);
 
-                result.Should().Be(
-                    "1.&nbsp;stor, langstrakt bruskfisk<br>" +
-                    $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br>" +
-                    $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.");
-            }
+            result.Should().Be(
+                "1.&nbsp;stor, langstrakt bruskfisk<br>" +
+                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br>" +
+                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.");
         }
 
         #endregion
@@ -124,36 +108,30 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileExamplesAsync_WhenOneExampleSelected_DoesNotAddNumbers()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var wordVariantVMs = CreateVMForGrillspyd();
-                wordVariantVMs[0].Examples[0].IsChecked = true;
+            var wordVariantVMs = CreateVMForGrillspyd();
+            wordVariantVMs[0].Examples[0].IsChecked = true;
 
-                var sut = mock.Create<CopySelectedToClipboardService>();
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-                string result = await sut.CompileExamplesAsync(wordVariantVMs);
+            string result = await sut.CompileExamplesAsync(wordVariantVMs);
 
-                result.Should().Be("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver");
-            }
+            result.Should().Be("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver");
         }
 
         [TestMethod]
         public async Task CompileExamplesAsync_WhenTwoExamplesSelected_AddsNumbers()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var wordVariantVMs = CreateVMForGrillspyd();
-                wordVariantVMs[0].Examples[0].IsChecked = true;
-                wordVariantVMs[0].Examples[1].IsChecked = true;
+            var wordVariantVMs = CreateVMForGrillspyd();
+            wordVariantVMs[0].Examples[0].IsChecked = true;
+            wordVariantVMs[0].Examples[1].IsChecked = true;
 
-                var sut = mock.Create<CopySelectedToClipboardService>();
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-                string result = await sut.CompileExamplesAsync(wordVariantVMs);
+            string result = await sut.CompileExamplesAsync(wordVariantVMs);
 
-                result.Should().Be(
-                    "1. Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver" + Environment.NewLine +
-                    "2. Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater");
-            }
+            result.Should().Be(
+                "1. Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver" + Environment.NewLine +
+                "2. Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater");
         }
 
         #endregion

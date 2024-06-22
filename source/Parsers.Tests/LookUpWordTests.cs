@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using Autofac.Extras.Moq;
+using AutoFixture;
 using CopyWords.Parsers.Models;
 using CopyWords.Parsers.Services;
 using FluentAssertions;
@@ -11,6 +11,8 @@ namespace CopyWords.Parsers.Tests
     [TestClass]
     public class LookUpWordTests
     {
+        private readonly Fixture _fixture = FixtureFactory.CreateFixture();
+
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
@@ -25,67 +27,52 @@ namespace CopyWords.Parsers.Tests
         [DataRow("")]
         public void CheckThatWordIsValid_WhenLookUpIsNullOrEmpty_ReturnsFalse(string lookUp)
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var sut = mock.Create<LookUpWord>();
+            var sut = _fixture.Create<LookUpWord>();
 
-                (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid(lookUp);
+            (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid(lookUp);
 
-                isValid.Should().BeFalse("error: " + errorMessage);
-                errorMessage.Should().Be("LookUp text cannot be null or empty.");
-            }
+            isValid.Should().BeFalse("error: " + errorMessage);
+            errorMessage.Should().Be("LookUp text cannot be null or empty.");
         }
 
         [TestMethod]
         public void CheckThatWordIsValid_ForUrl_ReturnsFalse()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var sut = mock.Create<LookUpWord>();
+            var sut = _fixture.Create<LookUpWord>();
 
-                (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("http://ordnet.dk/ddo/ordbog");
+            (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("http://ordnet.dk/ddo/ordbog");
 
-                isValid.Should().BeFalse("error: " + errorMessage);
-            }
+            isValid.Should().BeFalse("error: " + errorMessage);
         }
 
         [TestMethod]
         public void CheckThatWordIsValid_ForQuote_ReturnsFalse()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var sut = mock.Create<LookUpWord>();
+            var sut = _fixture.Create<LookUpWord>();
 
-                (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("ordbo'g");
+            (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("ordbo'g");
 
-                isValid.Should().BeFalse("error: " + errorMessage);
-            }
+            isValid.Should().BeFalse("error: " + errorMessage);
         }
 
         [TestMethod]
         public void CheckThatWordIsValid_ForWord_ReturnsTrue()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var sut = mock.Create<LookUpWord>();
+            var sut = _fixture.Create<LookUpWord>();
 
-                (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("refusionsopgørelse");
+            (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("refusionsopgørelse");
 
-                isValid.Should().BeTrue("error: " + errorMessage);
-            }
+            isValid.Should().BeTrue("error: " + errorMessage);
         }
 
         [TestMethod]
         public void CheckThatWordIsValid_ForTwoWords_ReturnsTrue()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var sut = mock.Create<LookUpWord>();
+            var sut = _fixture.Create<LookUpWord>();
 
-                (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("rindende vand");
+            (bool isValid, string? errorMessage) = sut.CheckThatWordIsValid("rindende vand");
 
-                isValid.Should().BeTrue("error: " + errorMessage);
-            }
+            isValid.Should().BeTrue("error: " + errorMessage);
         }
 
         #endregion
@@ -98,13 +85,10 @@ namespace CopyWords.Parsers.Tests
         [DataRow("æø")]
         public void LookUpWordAsync_WhenWordIsNotValid_ThrowsException(string wordToLookup)
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var sut = mock.Create<LookUpWord>();
+            var sut = _fixture.Create<LookUpWord>();
 
-                _ = sut.Invoking(y => y.LookUpWordAsync("Hello"))
-                    .Should().ThrowAsync<ArgumentException>();
-            }
+            _ = sut.Invoking(y => y.LookUpWordAsync("Hello"))
+                .Should().ThrowAsync<ArgumentException>();
         }
 
         [TestMethod]
@@ -122,32 +106,31 @@ namespace CopyWords.Parsers.Tests
 
             var variants = new List<Variant>() { new Variant("haj", "https://ordnet.dk/ddo/ordbog?select=haj&query=haj") };
 
-            using (var mock = AutoMock.GetLoose())
-            {
-                mock.Mock<IFileDownloader>().Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
+            Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
+            fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
 
-                mock.Mock<IDDOPageParser>().Setup(x => x.ParseHeadword()).Returns(headWord);
-                mock.Mock<IDDOPageParser>().Setup(x => x.ParsePartOfSpeech()).Returns(partOfSpeech);
-                mock.Mock<IDDOPageParser>().Setup(x => x.ParseEndings()).Returns(endings);
-                mock.Mock<IDDOPageParser>().Setup(x => x.ParseSound()).Returns(soundUrl);
-                mock.Mock<IDDOPageParser>().Setup(x => x.ParseDefinitions()).Returns(definitions);
-                mock.Mock<IDDOPageParser>().Setup(x => x.ParseVariants()).Returns(variants);
+            Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+            ddoPageParserMock.Setup(x => x.ParseHeadword()).Returns(headWord);
+            ddoPageParserMock.Setup(x => x.ParsePartOfSpeech()).Returns(partOfSpeech);
+            ddoPageParserMock.Setup(x => x.ParseEndings()).Returns(endings);
+            ddoPageParserMock.Setup(x => x.ParseSound()).Returns(soundUrl);
+            ddoPageParserMock.Setup(x => x.ParseDefinitions()).Returns(definitions);
+            ddoPageParserMock.Setup(x => x.ParseVariants()).Returns(variants);
 
-                var sut = mock.Create<LookUpWord>();
+            var sut = _fixture.Create<LookUpWord>();
 
-                WordModel? result = await sut.LookUpWordAsync("haj");
+            WordModel? result = await sut.LookUpWordAsync("haj");
 
-                result.Should().NotBeNull();
-                result!.Headword.Should().Be(headWord);
-                result!.PartOfSpeech.Should().Be(partOfSpeech);
-                result!.Endings.Should().Be(endings);
-                result!.SoundUrl.Should().Be(soundUrl);
-                result!.SoundFileName.Should().Be("haj.mp3");
-                result!.Definitions.Should().HaveCount(3);
-                result!.Variations.Should().HaveCount(1);
+            result.Should().NotBeNull();
+            result!.Headword.Should().Be(headWord);
+            result!.PartOfSpeech.Should().Be(partOfSpeech);
+            result!.Endings.Should().Be(endings);
+            result!.SoundUrl.Should().Be(soundUrl);
+            result!.SoundFileName.Should().Be("haj.mp3");
+            result!.Definitions.Should().HaveCount(3);
+            result!.Variations.Should().HaveCount(1);
 
-                mock.Mock<IFileDownloader>().Verify(x => x.DownloadPageAsync(It.Is<string>(str => str.EndsWith($"?query={headWord}&search=S%C3%B8g")), Encoding.UTF8));
-            }
+            fileDownloaderMock.Verify(x => x.DownloadPageAsync(It.Is<string>(str => str.EndsWith($"?query={headWord}&search=S%C3%B8g")), Encoding.UTF8));
         }
 
         #endregion
