@@ -156,6 +156,18 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
+        public void ParsePartOfSpeech_ForSåsom_ReturnsKonjunktion()
+        {
+            string content = GetSimpleHTMLPage("Såsom.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string word = parser.ParsePartOfSpeech();
+            word.Should().Be("konjunktion");
+        }
+
+        [TestMethod]
         public void ParsePartOfSpeech_ForPåHøjtryk_ReturnsEmptyString()
         {
             string content = GetSimpleHTMLPage("PåHøjtryk.html");

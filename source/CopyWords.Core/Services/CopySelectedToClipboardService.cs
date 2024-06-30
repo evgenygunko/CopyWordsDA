@@ -47,7 +47,8 @@ namespace CopyWords.Core.Services
                 {
                     front = $"at {front}";
                 }
-                if (partOfSpeech.Equals("adjektiv", StringComparison.OrdinalIgnoreCase))
+                if (partOfSpeech.Equals("adjektiv", StringComparison.OrdinalIgnoreCase)
+                    || partOfSpeech.Equals("konjunktion", StringComparison.OrdinalIgnoreCase))
                 {
                     front = front + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, partOfSpeech.ToUpper());
                 }

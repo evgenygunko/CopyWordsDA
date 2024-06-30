@@ -81,6 +81,9 @@
     <None Update="TestPages\ddo\Stødtand.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestPages\ddo\Såsom.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestPages\ddo\Tiltale.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
