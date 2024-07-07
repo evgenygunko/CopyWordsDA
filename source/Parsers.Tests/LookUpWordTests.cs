@@ -166,31 +166,41 @@ namespace CopyWords.Parsers.Tests
         [TestMethod]
         public async Task GetWordByUrlAsync_WhenTranslatorAPIUrlIsPassed_CallsTranslatorApi()
         {
-            string url = _fixture.Create<string>();
+            string ddoUrl = _fixture.Create<string>();
+            string translatorApiUrl = "http://localhost:7014/api/Translate";
+            string headWord = _fixture.Create<string>();
+            List<Definition> definitions = _fixture.Create<List<Definition>>();
+
+            TranslationOutput translationOutput = new TranslationOutput("акула", "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы");
 
             Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
             fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
 
             Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+            ddoPageParserMock.Setup(x => x.ParseHeadword()).Returns(headWord);
+            ddoPageParserMock.Setup(x => x.ParseDefinitions()).Returns(definitions);
 
-            Options options = new Options(TranslatorApiURL: "http://localhost:7014/api/Translate");
+            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
+            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
+
+            Options options = new Options(TranslatorApiURL: translatorApiUrl);
 
             var sut = _fixture.Create<LookUpWord>();
 
-            //WordModel? result = await sut.GetWordByUrlAsync(url, options);
-            Func<Task> act = () => sut.GetWordByUrlAsync(url, options);
-            await act.Should().ThrowAsync<NotImplementedException>();
+            WordModel? result = await sut.GetWordByUrlAsync(ddoUrl, options);
 
-            /*result.Should().NotBeNull();
+            result.Should().NotBeNull();
 
-            fileDownloaderMock.Verify(x => x.DownloadPageAsync(url, Encoding.UTF8));
+            fileDownloaderMock.Verify(x => x.DownloadPageAsync(ddoUrl, Encoding.UTF8));
 
             ddoPageParserMock.Verify(x => x.LoadHtml(It.IsAny<string>()));
             ddoPageParserMock.Verify(x => x.ParseHeadword());
             ddoPageParserMock.Verify(x => x.ParseEndings());
             ddoPageParserMock.Verify(x => x.ParseSound());
             ddoPageParserMock.Verify(x => x.ParseDefinitions());
-            ddoPageParserMock.Verify(x => x.ParseVariants());*/
+            ddoPageParserMock.Verify(x => x.ParseVariants());
+
+            translatorAPIClientMock.Verify(x => x.TranslateAsync(translatorApiUrl, It.Is<TranslationInput>(i => i.HeadWord == headWord)));
         }
 
         #endregion

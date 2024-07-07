@@ -6,6 +6,7 @@
         string Endings,
         string? SoundUrl,
         string? SoundFileName,
+        string? Translation,
         IEnumerable<Definition> Definitions,
         IEnumerable<Variant> Variations);
 

@@ -42,6 +42,9 @@ namespace CopyWords.Core.ViewModels
         private string front = "<>";
 
         [ObservableProperty]
+        private string translation = "";
+
+        [ObservableProperty]
         private string partOfSpeech = "";
 
         [ObservableProperty]

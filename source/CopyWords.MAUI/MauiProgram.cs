@@ -42,6 +42,7 @@ public static class MauiProgram
         builder.Services.AddHttpClient<ISaveSoundFileService, SaveSoundFileService>();
         builder.Services.AddHttpClient<ISaveImageFileService, SaveImageFileService>();
         builder.Services.AddHttpClient<IFileDownloader, FileDownloader>();
+        builder.Services.AddHttpClient<ITranslatorAPIClient, TranslatorAPIClient>();
 
         builder.Services.AddSingleton<MainViewModel>();
         builder.Services.AddSingleton<WordViewModel>();

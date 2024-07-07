@@ -102,6 +102,7 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.Forms = wordModel.Endings;
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
                 _wordViewModel.SoundFileName = wordModel.SoundFileName;
+                _wordViewModel.Translation = wordModel.Translation;
 
                 _wordViewModel.Definitions.Clear();
                 int i = 1;
