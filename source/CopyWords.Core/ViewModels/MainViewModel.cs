@@ -9,15 +9,18 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
+        private readonly ISettingsService _settingsService;
         private ILookUpWord _lookUpWord;
         private WordViewModel _wordViewModel;
         private readonly IDialogService _dialogService;
 
         public MainViewModel(
+            ISettingsService settingsService,
             ILookUpWord lookUpWord,
             WordViewModel wordViewModel,
             IDialogService dialogService)
         {
+            _settingsService = settingsService;
             _lookUpWord = lookUpWord;
             _wordViewModel = wordViewModel;
             _dialogService = dialogService;
@@ -71,7 +74,7 @@ namespace CopyWords.Core.ViewModels
             WordModel wordModel = null;
             try
             {
-                wordModel = await _lookUpWord.GetWordByUrlAsync(url);
+                wordModel = await _lookUpWord.GetWordByUrlAsync(url, new Options(TranslatorApiURL: _settingsService.GetTranslatorApiUrl()));
 
                 if (wordModel == null)
                 {
@@ -141,7 +144,7 @@ namespace CopyWords.Core.ViewModels
             WordModel wordModel = null;
             try
             {
-                wordModel = await _lookUpWord.LookUpWordAsync(word);
+                wordModel = await _lookUpWord.LookUpWordAsync(word, new Options(TranslatorApiURL: _settingsService.GetTranslatorApiUrl()));
 
                 if (wordModel == null)
                 {

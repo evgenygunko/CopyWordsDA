@@ -9,9 +9,9 @@ namespace CopyWords.Parsers
     {
         (bool isValid, string? errorMessage) CheckThatWordIsValid(string lookUp);
 
-        Task<WordModel?> LookUpWordAsync(string wordToLookUp);
+        Task<WordModel?> LookUpWordAsync(string wordToLookUp, Options? options = null);
 
-        Task<WordModel?> GetWordByUrlAsync(string url);
+        Task<WordModel?> GetWordByUrlAsync(string url, Options? options = null);
     }
 
     public class LookUpWord : ILookUpWord
@@ -55,7 +55,7 @@ namespace CopyWords.Parsers
             return (isValid, errorMessage);
         }
 
-        public async Task<WordModel?> LookUpWordAsync(string wordToLookUp)
+        public async Task<WordModel?> LookUpWordAsync(string wordToLookUp, Options? options = null)
         {
             (bool isValid, string? errorMessage) = CheckThatWordIsValid(wordToLookUp);
             if (!isValid)
@@ -65,11 +65,11 @@ namespace CopyWords.Parsers
 
             string url = DDOBaseUrl + $"?query={wordToLookUp}&search=S%C3%B8g";
 
-            var wordModel = await GetWordByUrlAsync(url);
+            var wordModel = await GetWordByUrlAsync(url, options);
             return wordModel;
         }
 
-        public async Task<WordModel?> GetWordByUrlAsync(string url)
+        public async Task<WordModel?> GetWordByUrlAsync(string url, Options? options = null)
         {
             // Download and parse a page from DDO
             string? ddoPageHtml = await _fileDownloader.DownloadPageAsync(url, Encoding.UTF8);
@@ -79,8 +79,14 @@ namespace CopyWords.Parsers
             }
 
             _ddoPageParser.LoadHtml(ddoPageHtml);
-
             string headWord = _ddoPageParser.ParseHeadword();
+
+            // If TranslatorAPI URL is configured, call translator app and add returned translation to word model.
+            if (!string.IsNullOrEmpty(options?.TranslatorApiURL))
+            {
+                // todo: to implement
+                throw new NotImplementedException();
+            }
 
             var wordModel = new WordModel(
                 Headword: headWord,

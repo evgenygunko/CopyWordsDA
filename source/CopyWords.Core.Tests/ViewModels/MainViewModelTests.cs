@@ -24,7 +24,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
             lookUpWordMock.Setup(x => x.CheckThatWordIsValid(It.IsAny<string>())).Returns(() => (true, null));
-            lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>())).ReturnsAsync(wordModel);
+            lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
             var sut = _fixture.Create<MainViewModel>();
             sut.SearchWord = search;
@@ -87,7 +87,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
             lookUpWordMock.Setup(x => x.CheckThatWordIsValid(It.IsAny<string>())).Returns(() => (true, null));
-            lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>())).ThrowsAsync(new Exception("exception from unit test"));
+            lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ThrowsAsync(new Exception("exception from unit test"));
 
             var sut = _fixture.Create<MainViewModel>();
 
@@ -106,7 +106,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
             lookUpWordMock.Setup(x => x.CheckThatWordIsValid(It.IsAny<string>())).Returns(() => (true, null));
-            lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>())).ReturnsAsync((WordModel?)null);
+            lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync((WordModel?)null);
 
             var sut = _fixture.Create<MainViewModel>();
 
@@ -126,7 +126,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
             lookUpWordMock.Setup(x => x.CheckThatWordIsValid(It.IsAny<string>())).Returns(() => (true, null));
-            lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>())).ReturnsAsync(wordModel);
+            lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
             var sut = _fixture.Create<MainViewModel>();
 
@@ -134,6 +134,27 @@ namespace CopyWords.Core.Tests.ViewModels
 
             result.Should().Be(wordModel);
             dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task LookUpWordInDictionaryAsync_Should_PassTranslatorAPIUrlToLookup()
+        {
+            string search = _fixture.Create<string>();
+            string translatorApiURL = _fixture.Create<string>();
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetTranslatorApiUrl()).Returns(translatorApiURL);
+
+            Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
+            lookUpWordMock.Setup(x => x.CheckThatWordIsValid(It.IsAny<string>())).Returns(() => (true, null));
+            lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
+
+            var sut = _fixture.Create<MainViewModel>();
+
+            _ = await sut.LookUpWordInDictionaryAsync(search);
+
+            lookUpWordMock.Verify(x => x.LookUpWordAsync(search, It.Is<Options>(opt => opt.TranslatorApiURL == translatorApiURL)));
         }
 
         #endregion
@@ -148,7 +169,7 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
-            lookUpWordMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>())).ThrowsAsync(new Exception("exception from unit test"));
+            lookUpWordMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>(), It.IsAny<Options>())).ThrowsAsync(new Exception("exception from unit test"));
 
             var sut = _fixture.Create<MainViewModel>();
 
@@ -165,7 +186,7 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
-            lookUpWordMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>())).ReturnsAsync((WordModel?)null);
+            lookUpWordMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync((WordModel?)null);
 
             var sut = _fixture.Create<MainViewModel>();
 
@@ -183,7 +204,7 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
-            lookUpWordMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>())).ReturnsAsync(wordModel);
+            lookUpWordMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
             var sut = _fixture.Create<MainViewModel>();
 

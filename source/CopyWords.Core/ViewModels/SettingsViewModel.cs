@@ -17,11 +17,12 @@ namespace CopyWords.Core.ViewModels
             IDialogService dialogService)
         {
             _settingsService = settingsService;
+            _dialogService = dialogService;
 
             AnkiSoundsFolder = _settingsService.GetAnkiSoundsFolder();
             UseMp3gain = _settingsService.UseMp3gain;
             Mp3gainPath = _settingsService.GetMp3gainPath();
-            _dialogService = dialogService;
+            TranslatorApiUrl = _settingsService.GetTranslatorApiUrl();
         }
 
         #region Properties
@@ -42,6 +43,10 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string mp3gainPath;
 
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
+        private string translatorApiUrl;
+
         public string About => $".net version: {RuntimeInformation.FrameworkDescription}";
 
         public bool CanSaveSettings
@@ -52,6 +57,11 @@ namespace CopyWords.Core.ViewModels
                 if (UseMp3gain)
                 {
                     result &= File.Exists(Mp3gainPath);
+                }
+
+                if (!string.IsNullOrEmpty(TranslatorApiUrl))
+                {
+                    result &= Uri.TryCreate(TranslatorApiUrl, UriKind.Absolute, out Uri _);
                 }
 
                 return result;
@@ -109,6 +119,7 @@ namespace CopyWords.Core.ViewModels
             _settingsService.SetAnkiSoundsFolder(AnkiSoundsFolder);
             _settingsService.UseMp3gain = UseMp3gain;
             _settingsService.SetMp3gainPath(Mp3gainPath);
+            _settingsService.SetTranslatorApiUrl(TranslatorApiUrl);
 
             await _dialogService.DisplayToast("Settings have been updated");
 

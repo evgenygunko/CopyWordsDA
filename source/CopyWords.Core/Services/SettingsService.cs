@@ -22,6 +22,10 @@ namespace CopyWords.Core.Services
         void SetMp3gainPath(string path);
 
         bool UseMp3gain { get; set; }
+
+        void SetTranslatorApiUrl(string url);
+
+        string GetTranslatorApiUrl();
     }
 
     public class SettingsService : ISettingsService
@@ -84,6 +88,10 @@ namespace CopyWords.Core.Services
                 Preferences.Default.Set(settingName, newValue.ToString(CultureInfo.CurrentCulture));
             }
         }
+
+        public string GetTranslatorApiUrl() => Preferences.Default.Get("TranslatorApi", string.Empty);
+
+        public void SetTranslatorApiUrl(string url) => Preferences.Default.Set("TranslatorApi", url);
 
         #endregion
     }

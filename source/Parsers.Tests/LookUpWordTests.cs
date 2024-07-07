@@ -163,6 +163,36 @@ namespace CopyWords.Parsers.Tests
             ddoPageParserMock.Verify(x => x.ParseVariants());
         }
 
+        [TestMethod]
+        public async Task GetWordByUrlAsync_WhenTranslatorAPIUrlIsPassed_CallsTranslatorApi()
+        {
+            string url = _fixture.Create<string>();
+
+            Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
+            fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
+
+            Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+
+            Options options = new Options(TranslatorApiURL: "http://localhost:7014/api/Translate");
+
+            var sut = _fixture.Create<LookUpWord>();
+
+            //WordModel? result = await sut.GetWordByUrlAsync(url, options);
+            Func<Task> act = () => sut.GetWordByUrlAsync(url, options);
+            await act.Should().ThrowAsync<NotImplementedException>();
+
+            /*result.Should().NotBeNull();
+
+            fileDownloaderMock.Verify(x => x.DownloadPageAsync(url, Encoding.UTF8));
+
+            ddoPageParserMock.Verify(x => x.LoadHtml(It.IsAny<string>()));
+            ddoPageParserMock.Verify(x => x.ParseHeadword());
+            ddoPageParserMock.Verify(x => x.ParseEndings());
+            ddoPageParserMock.Verify(x => x.ParseSound());
+            ddoPageParserMock.Verify(x => x.ParseDefinitions());
+            ddoPageParserMock.Verify(x => x.ParseVariants());*/
+        }
+
         #endregion
     }
 }
