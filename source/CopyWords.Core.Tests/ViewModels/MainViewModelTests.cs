@@ -145,6 +145,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetTranslatorApiUrl()).Returns(translatorApiURL);
+            settingsServiceMock.Setup(x => x.UseTranslator).Returns(true);
 
             Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
             lookUpWordMock.Setup(x => x.CheckThatWordIsValid(It.IsAny<string>())).Returns(() => (true, null));

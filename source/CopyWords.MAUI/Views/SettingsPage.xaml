@@ -116,20 +116,38 @@
             </Button>
         </Grid>
 
-        <!-- TranslatorAPI URL -->
-        <Label Grid.Row="4" Grid.Column="0" Text="TranslatorAPI URL:" Margin="0,40,0,0"></Label>
+        <!-- Translator settings -->
+        <Grid Grid.Row="4" Grid.ColumnSpan="3" Margin="0,40,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <Entry Grid.Row="5" Grid.ColumnSpan="3"
-                   Margin="0,10,0,0"
-                   Text="{Binding TranslatorApiUrl, FallbackValue='http://localhost:7014/api/Translate' }">
-            <Entry.Behaviors>
-                <toolkit:UriValidationBehavior 
-                    InvalidStyle="{StaticResource InvalidEntryStyle}"
-                    ValidStyle="{StaticResource ValidEntryStyle}"
-                    Flags="ValidateOnValueChanged"
-                    UriKind="Absolute" />
-            </Entry.Behaviors>
-        </Entry>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Text="Use translator" VerticalOptions="Center"></Label>
+            <CheckBox Grid.Row="0" Grid.Column="1" x:Name="chkUseTranslator" IsChecked="{Binding UseTranslator}" HorizontalOptions="Start" />
+
+            <!-- TranslatorAPI URL -->
+            <Label Grid.Row="1" Grid.Column="0" Text="TranslatorAPI URL:"></Label>
+
+            <Entry Grid.Row="2" Grid.ColumnSpan="3"
+                    Margin="0,10,0,0"
+                    Text="{Binding TranslatorApiUrl, FallbackValue='http://localhost:7014/api/Translate' }"
+                    IsEnabled="{Binding UseTranslator}">
+                <Entry.Behaviors>
+                    <toolkit:UriValidationBehavior 
+                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                        ValidStyle="{StaticResource ValidEntryStyle}"
+                        Flags="ValidateOnValueChanged"
+                        UriKind="Absolute" />
+                </Entry.Behaviors>
+            </Entry>
+        </Grid>
 
         <Button Grid.Row="6" Grid.Column="1"
                 Margin="0,20,0,0"

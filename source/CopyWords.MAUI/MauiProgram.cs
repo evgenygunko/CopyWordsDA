@@ -32,6 +32,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<SettingsPage>();
 
+        // Proxies for .net classes which don't have interfaces
+        builder.Services.AddSingleton<IShellService, ShellService>();
+        builder.Services.AddSingleton<IFileIOService, FileIOService>();
+
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
         builder.Services.AddSingleton<ILookUpWord, LookUpWord>();
         builder.Services.AddSingleton<IDDOPageParser, DDOPageParser>();

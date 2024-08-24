@@ -26,6 +26,8 @@ namespace CopyWords.Core.Services
         void SetTranslatorApiUrl(string url);
 
         string GetTranslatorApiUrl();
+
+        bool UseTranslator { get; set; }
     }
 
     public class SettingsService : ISettingsService
@@ -66,6 +68,12 @@ namespace CopyWords.Core.Services
         {
             get => RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Preferences.Default.Get<bool>("UseMp3gain", false);
             set => Preferences.Default.Set("UseMp3gain", value);
+        }
+
+        public bool UseTranslator
+        {
+            get => Preferences.Default.Get<bool>("UseTranslator", false);
+            set => Preferences.Default.Set("UseTranslator", value);
         }
 
         #region Private Methods

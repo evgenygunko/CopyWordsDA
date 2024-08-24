@@ -74,7 +74,13 @@ namespace CopyWords.Core.ViewModels
             WordModel wordModel = null;
             try
             {
-                wordModel = await _lookUpWord.GetWordByUrlAsync(url, new Options(TranslatorApiURL: _settingsService.GetTranslatorApiUrl()));
+                string translatorApiURL = null;
+                if (_settingsService.UseTranslator && !string.IsNullOrEmpty(_settingsService.GetTranslatorApiUrl()))
+                {
+                    translatorApiURL = _settingsService.GetTranslatorApiUrl();
+                }
+
+                wordModel = await _lookUpWord.GetWordByUrlAsync(url, new Options(TranslatorApiURL: translatorApiURL));
 
                 if (wordModel == null)
                 {
@@ -145,7 +151,12 @@ namespace CopyWords.Core.ViewModels
             WordModel wordModel = null;
             try
             {
-                wordModel = await _lookUpWord.LookUpWordAsync(word, new Options(TranslatorApiURL: _settingsService.GetTranslatorApiUrl()));
+                string translatorApiURL = null;
+                if (_settingsService.UseTranslator && !string.IsNullOrEmpty(_settingsService.GetTranslatorApiUrl()))
+                {
+                    translatorApiURL = _settingsService.GetTranslatorApiUrl();
+                }
+                wordModel = await _lookUpWord.LookUpWordAsync(word, new Options(TranslatorApiURL: translatorApiURL));
 
                 if (wordModel == null)
                 {

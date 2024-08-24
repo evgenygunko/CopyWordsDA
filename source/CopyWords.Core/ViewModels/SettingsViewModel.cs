@@ -11,17 +11,26 @@ namespace CopyWords.Core.ViewModels
     {
         private readonly ISettingsService _settingsService;
         private readonly IDialogService _dialogService;
+        private readonly IShellService _shellService;
+        private readonly IFileIOService _fileIOService;
 
         public SettingsViewModel(
             ISettingsService settingsService,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            IShellService shellService,
+            IFileIOService fileIOService)
         {
             _settingsService = settingsService;
             _dialogService = dialogService;
+            _shellService = shellService;
+            _fileIOService = fileIOService;
 
             AnkiSoundsFolder = _settingsService.GetAnkiSoundsFolder();
+
             UseMp3gain = _settingsService.UseMp3gain;
             Mp3gainPath = _settingsService.GetMp3gainPath();
+
+            UseTranslator = _settingsService.UseTranslator;
             TranslatorApiUrl = _settingsService.GetTranslatorApiUrl();
         }
 
@@ -47,19 +56,23 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string translatorApiUrl;
 
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
+        private bool useTranslator;
+
         public string About => $".net version: {RuntimeInformation.FrameworkDescription}";
 
         public bool CanSaveSettings
         {
             get
             {
-                bool result = Directory.Exists(AnkiSoundsFolder);
+                bool result = _fileIOService.DirectoryExists(AnkiSoundsFolder);
                 if (UseMp3gain)
                 {
-                    result &= File.Exists(Mp3gainPath);
+                    result &= _fileIOService.FileExists(Mp3gainPath);
                 }
 
-                if (!string.IsNullOrEmpty(TranslatorApiUrl))
+                if (UseTranslator)
                 {
                     result &= Uri.TryCreate(TranslatorApiUrl, UriKind.Absolute, out Uri _);
                 }
@@ -119,17 +132,18 @@ namespace CopyWords.Core.ViewModels
             _settingsService.SetAnkiSoundsFolder(AnkiSoundsFolder);
             _settingsService.UseMp3gain = UseMp3gain;
             _settingsService.SetMp3gainPath(Mp3gainPath);
+            _settingsService.UseTranslator = UseTranslator;
             _settingsService.SetTranslatorApiUrl(TranslatorApiUrl);
 
             await _dialogService.DisplayToast("Settings have been updated");
 
-            await Shell.Current.GoToAsync("..");
+            await _shellService.GoToAsync("..");
         }
 
         [RelayCommand]
         public async Task CancelAsync()
         {
-            await Shell.Current.GoToAsync("..");
+            await _shellService.GoToAsync("..");
         }
 
         #endregion
