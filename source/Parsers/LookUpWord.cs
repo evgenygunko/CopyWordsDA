@@ -83,6 +83,10 @@ namespace CopyWords.Parsers
 
             _ddoPageParser.LoadHtml(ddoPageHtml);
             string headWord = _ddoPageParser.ParseHeadword();
+
+            string soundUrl = _ddoPageParser.ParseSound();
+            string soundFileName = string.IsNullOrEmpty(soundUrl) ? string.Empty : $"{headWord}.mp3";
+
             List<Definition> definitions = _ddoPageParser.ParseDefinitions();
 
             // If TranslatorAPI URL is configured, call translator app and add returned translation to word model.
@@ -99,8 +103,8 @@ namespace CopyWords.Parsers
                 Headword: headWord,
                 PartOfSpeech: _ddoPageParser.ParsePartOfSpeech(),
                 Endings: _ddoPageParser.ParseEndings(),
-                SoundUrl: _ddoPageParser.ParseSound(),
-                SoundFileName: $"{headWord}.mp3",
+                SoundUrl: soundUrl,
+                SoundFileName: soundFileName,
                 Translation: translation,
                 Definitions: definitions,
                 Variations: _ddoPageParser.ParseVariants()

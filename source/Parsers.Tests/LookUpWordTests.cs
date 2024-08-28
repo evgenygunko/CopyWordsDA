@@ -164,6 +164,31 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
+        public async Task GetWordByUrlAsync_WhenSoundUrlIsEmpty_SetsSoundFileNameToEmptyString()
+        {
+            string url = _fixture.Create<string>();
+            string headWord = _fixture.Create<string>();
+
+            Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
+            fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("i forb. med.html");
+
+            Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+            ddoPageParserMock.Setup(x => x.ParseHeadword()).Returns(headWord);
+            ddoPageParserMock.Setup(x => x.ParseSound()).Returns(string.Empty);
+
+            var sut = _fixture.Create<LookUpWord>();
+            WordModel? result = await sut.GetWordByUrlAsync(url);
+
+            result.Should().NotBeNull();
+            result!.SoundFileName.Should().BeEmpty();
+            result!.SoundUrl.Should().BeEmpty();
+
+            fileDownloaderMock.Verify(x => x.DownloadPageAsync(url, Encoding.UTF8));
+
+            ddoPageParserMock.Verify(x => x.ParseSound());
+        }
+
+        [TestMethod]
         public async Task GetWordByUrlAsync_WhenTranslatorAPIUrlIsPassed_CallsTranslatorApi()
         {
             string ddoUrl = _fixture.Create<string>();

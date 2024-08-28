@@ -66,6 +66,19 @@ namespace CopyWords.Core.Tests.Services
             front.Should().Be("høj <span style=\"color: rgba(0, 0, 0, 0.4)\">ADJEKTIV</span>");
         }
 
+        [TestMethod]
+        public async Task CompileFrontAsync_ForIFM_ReturnsFormattedFront()
+        {
+            const string meaning = "i forb. med";
+            const string partOfSpeech = "forkortelse";
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+
+            front.Should().Be("i forb. med <span style=\"color: rgba(0, 0, 0, 0.4)\">FORKORTELSE</span>");
+        }
+
         #endregion
 
         #region Tests for CompileBackAsync
@@ -115,7 +128,7 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileExamplesAsync(wordVariantVMs);
 
-            result.Should().Be("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver");
+            result.Should().Be("<span style=\"color: rgba(0, 0, 0, 1)\">Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver</span>");
         }
 
         [TestMethod]
@@ -130,8 +143,8 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileExamplesAsync(wordVariantVMs);
 
             result.Should().Be(
-                "1. Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver" + Environment.NewLine +
-                "2. Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater");
+                "<span style=\"color: rgba(0, 0, 0, 1)\">1.&nbsp;Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 1)\">2.&nbsp;Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater</span>");
         }
 
         #endregion

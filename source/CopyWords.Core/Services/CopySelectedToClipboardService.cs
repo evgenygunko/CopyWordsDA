@@ -48,7 +48,8 @@ namespace CopyWords.Core.Services
                     front = $"at {front}";
                 }
                 if (partOfSpeech.Equals("adjektiv", StringComparison.OrdinalIgnoreCase)
-                    || partOfSpeech.Equals("konjunktion", StringComparison.OrdinalIgnoreCase))
+                    || partOfSpeech.Equals("konjunktion", StringComparison.OrdinalIgnoreCase)
+                    || partOfSpeech.Equals("forkortelse", StringComparison.OrdinalIgnoreCase))
                 {
                     front = front + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, partOfSpeech.ToUpper());
                 }
@@ -121,10 +122,18 @@ namespace CopyWords.Core.Services
             {
                 if (count > 1)
                 {
-                    sb.Append($"{i}. ");
+                    sb.Append(CultureInfo.CurrentCulture, $"<span style=\"color: rgba(0, 0, 0, 1)\">{i}.&nbsp;{exampleVM.Example}</span>");
+                }
+                else
+                {
+                    sb.Append(CultureInfo.CurrentCulture, $"<span style=\"color: rgba(0, 0, 0, 1)\">{exampleVM.Example}</span>");
                 }
 
-                sb.AppendLine(exampleVM.Example);
+                if (i < count)
+                {
+                    sb.Append("<br>");
+                }
+
                 i++;
             }
 
