@@ -17,6 +17,10 @@ namespace CopyWords.Parsers
     public class LookUpWord : ILookUpWord
     {
         private const string DDOBaseUrl = "https://ordnet.dk/ddo/ordbog";
+        private const string LanguageDA = "da";
+        private const string LanguageRU = "ru";
+        private const string LanguageEN = "en";
+        private readonly string[] DestinationLanguages = [LanguageRU, LanguageEN];
 
         private readonly IDDOPageParser _ddoPageParser;
         private readonly IFileDownloader _fileDownloader;
@@ -93,10 +97,10 @@ namespace CopyWords.Parsers
             string? translation = null;
             if (!string.IsNullOrEmpty(options?.TranslatorApiURL))
             {
-                var translationInput = new TranslationInput(headWord, definitions.First().Meaning);
+                var translationInput = new TranslationInput(headWord, definitions.First().Meaning, LanguageDA, DestinationLanguages);
 
-                TranslationOutput? translationOutput = await _translatorAPIClient.TranslateAsync(options.TranslatorApiURL, translationInput);
-                translation = translationOutput?.HeadWord;
+                IEnumerable<TranslationOutput>? translations = await _translatorAPIClient.TranslateAsync(options.TranslatorApiURL, translationInput);
+                translation = translations?.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord;
             }
 
             var wordModel = new WordModel(

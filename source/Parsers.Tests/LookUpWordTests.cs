@@ -196,7 +196,10 @@ namespace CopyWords.Parsers.Tests
             string headWord = _fixture.Create<string>();
             List<Definition> definitions = _fixture.Create<List<Definition>>();
 
-            TranslationOutput translationOutput = new TranslationOutput("акула", "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы");
+            var translations = new List<TranslationOutput>()
+            {
+                new TranslationOutput("ru", "акула", "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы")
+            };
 
             Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
             fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
@@ -206,7 +209,7 @@ namespace CopyWords.Parsers.Tests
             ddoPageParserMock.Setup(x => x.ParseDefinitions()).Returns(definitions);
 
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
-            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
+            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
 
             Options options = new Options(TranslatorApiURL: translatorApiUrl);
 
@@ -215,6 +218,7 @@ namespace CopyWords.Parsers.Tests
             WordModel? result = await sut.GetWordByUrlAsync(ddoUrl, options);
 
             result.Should().NotBeNull();
+            result!.Translation.Should().Be("акула");
 
             fileDownloaderMock.Verify(x => x.DownloadPageAsync(ddoUrl, Encoding.UTF8));
 
