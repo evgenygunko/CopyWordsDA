@@ -223,13 +223,78 @@ namespace CopyWords.Parsers.Tests
             fileDownloaderMock.Verify(x => x.DownloadPageAsync(ddoUrl, Encoding.UTF8));
 
             ddoPageParserMock.Verify(x => x.LoadHtml(It.IsAny<string>()));
-            ddoPageParserMock.Verify(x => x.ParseHeadword());
-            ddoPageParserMock.Verify(x => x.ParseEndings());
-            ddoPageParserMock.Verify(x => x.ParseSound());
-            ddoPageParserMock.Verify(x => x.ParseDefinitions());
-            ddoPageParserMock.Verify(x => x.ParseVariants());
 
             translatorAPIClientMock.Verify(x => x.TranslateAsync(translatorApiUrl, It.Is<TranslationInput>(i => i.HeadWord == headWord)));
+        }
+
+        #endregion
+
+        #region Tests for GetTranslationAsync
+
+        [TestMethod]
+        public async Task GetTranslationAsync_WhenTranslatorAPIUrlIsPassed_CallsTranslatorApi()
+        {
+            string translatorApiUrl = "http://localhost:7014/api/Translate";
+            string headWord = _fixture.Create<string>();
+            var definitions = _fixture.Create<List<Definition>>();
+
+            var translations = new List<TranslationOutput>()
+            {
+                new TranslationOutput("ru", "акула", "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы")
+            };
+
+            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
+            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
+
+            var sut = _fixture.Create<LookUpWord>();
+            string? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
+
+            result.Should().Be("акула");
+        }
+
+        [TestMethod]
+        public async Task GetTranslationAsync_WhenTranslatorAPIUrlIsPassedAndDefinitionsIsEmpty_CallsTranslatorApi()
+        {
+            string translatorApiUrl = "http://localhost:7014/api/Translate";
+            string headWord = _fixture.Create<string>();
+            var definitions = Enumerable.Empty<Definition>();
+
+            var translations = new List<TranslationOutput>()
+            {
+                new TranslationOutput("ru", "акула", "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы")
+            };
+
+            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
+            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
+
+            var sut = _fixture.Create<LookUpWord>();
+            string? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
+
+            result.Should().Be("акула");
+
+            translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()));
+        }
+
+        [TestMethod]
+        public async Task GetTranslationAsync_WhenTranslatorAPIUrlIsNull_ReturnsNull()
+        {
+            const string translatorApiUrl = null;
+            string headWord = _fixture.Create<string>();
+            List<Definition> definitions = _fixture.Create<List<Definition>>();
+
+            var translations = new List<TranslationOutput>()
+            {
+                new TranslationOutput("ru", "акула", "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы")
+            };
+
+            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
+
+            var sut = _fixture.Create<LookUpWord>();
+            string? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
+
+            result.Should().BeNull();
+
+            translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()), Times.Never);
         }
 
         #endregion

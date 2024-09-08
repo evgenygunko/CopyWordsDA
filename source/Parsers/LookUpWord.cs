@@ -94,14 +94,7 @@ namespace CopyWords.Parsers
             List<Definition> definitions = _ddoPageParser.ParseDefinitions();
 
             // If TranslatorAPI URL is configured, call translator app and add returned translation to word model.
-            string? translation = null;
-            if (!string.IsNullOrEmpty(options?.TranslatorApiURL))
-            {
-                var translationInput = new TranslationInput(headWord, definitions.First().Meaning, LanguageDA, DestinationLanguages);
-
-                IEnumerable<TranslationOutput>? translations = await _translatorAPIClient.TranslateAsync(options.TranslatorApiURL, translationInput);
-                translation = translations?.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord;
-            }
+            string? translation = await GetTranslationAsync(options?.TranslatorApiURL, headWord, definitions);
 
             var wordModel = new WordModel(
                 Headword: headWord,
@@ -115,6 +108,25 @@ namespace CopyWords.Parsers
             );
 
             return wordModel;
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal async Task<string?> GetTranslationAsync(string? translatorApiURL, string headWord, IEnumerable<Definition> definitions)
+        {
+            string? translation = null;
+
+            if (!string.IsNullOrEmpty(translatorApiURL))
+            {
+                var translationInput = new TranslationInput(headWord, definitions.FirstOrDefault()?.Meaning, LanguageDA, DestinationLanguages);
+
+                IEnumerable<TranslationOutput>? translations = await _translatorAPIClient.TranslateAsync(translatorApiURL, translationInput);
+                translation = translations?.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord;
+            }
+
+            return translation;
         }
 
         #endregion

@@ -103,6 +103,18 @@ namespace CopyWords.Parsers.Tests
             word.Should().Be("på/under højtryk");
         }
 
+        [TestMethod]
+        public void ParseHeadword_Should_ParsePåtage()
+        {
+            string content = GetSimpleHTMLPage("Påtage.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string word = parser.ParseHeadword();
+            word.Should().Be("påtage");
+        }
+
         #endregion
 
         #region Tests for ParsePartOfSpeech
@@ -590,6 +602,22 @@ namespace CopyWords.Parsers.Tests
             List<Variant> variants = parser.ParseVariants();
 
             variants.Should().HaveCount(0);
+        }
+
+        [TestMethod]
+        public void ParseVariants_ForPåtage_Returns1Variant()
+        {
+            string content = GetSimpleHTMLPage("Påtage.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            List<Variant> variants = parser.ParseVariants();
+
+            variants.Should().HaveCount(1);
+
+            variants[0].Word.Should().Be("påtage vb.");
+            variants[0].Url.Should().Be("https://ordnet.dk/ddo/ordbog?select=påtage&query=påtage");
         }
 
         #endregion
