@@ -9,7 +9,7 @@ namespace CopyWords.Core.Services
     {
         Task<string> CompileFrontAsync(string meaning, string partOfSpeech);
 
-        Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs);
+        Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs, bool isTranslationTranslationChecked, string translation);
 
         Task<string> CompileFormsAsync(string forms);
 
@@ -58,15 +58,23 @@ namespace CopyWords.Core.Services
             return Task.FromResult(front);
         }
 
-        public Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs)
+        public Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs, bool isTranslationTranslationChecked, string translation)
         {
             if (definitionVMs == null)
             {
                 return Task.FromResult(string.Empty);
             }
 
-            List<string> meanings = new();
+            StringBuilder sb = new StringBuilder();
 
+            // If translation selected, add it first
+            if (isTranslationTranslationChecked && !string.IsNullOrEmpty(translation))
+            {
+                sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, translation) + "<br>");
+            }
+
+            // Now go through all meanings and add with numbering.
+            List<string> meanings = new();
             foreach (var definitionVM in definitionVMs)
             {
                 // The meaning is the same for all examples - so find first example which is selected
@@ -85,8 +93,6 @@ namespace CopyWords.Core.Services
                 }
             }
 
-            // Now go through all meanings and add numbering
-            StringBuilder sb = new StringBuilder();
             int count = meanings.Count;
             int i = 1;
 

@@ -84,6 +84,21 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for CompileBackAsync
 
         [TestMethod]
+        public async Task CompileBackAsync_WhenTranslationIsSelected_AddsTranslationToResult()
+        {
+            var wordVariantVMs = CreateVMForGrillspyd();
+            wordVariantVMs[0].Examples[0].IsChecked = true;
+            bool isTranslationTranslationChecked = true;
+            const string translation = "Шашлыки";
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string result = await sut.CompileBackAsync(wordVariantVMs, isTranslationTranslationChecked, translation);
+
+            result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">Шашлыки</span><br>spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+        }
+
+        [TestMethod]
         public async Task CompileBackAsync_WhenOneExampleIsSelected_DoesNotAddNumbers()
         {
             var wordVariantVMs = CreateVMForGrillspyd();
@@ -91,7 +106,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(wordVariantVMs);
+            string result = await sut.CompileBackAsync(wordVariantVMs, isTranslationTranslationChecked: false, translation: null);
 
             result.Should().Be("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
@@ -106,7 +121,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(wordVariantVMs);
+            string result = await sut.CompileBackAsync(wordVariantVMs, isTranslationTranslationChecked: false, translation: null);
 
             result.Should().Be(
                 "1.&nbsp;stor, langstrakt bruskfisk<br>" +
@@ -151,7 +166,7 @@ namespace CopyWords.Core.Tests.Services
 
         #region Private Methods
 
-        private static ObservableCollection<DefinitionViewModel> CreateVMForGrillspyd()
+        internal static ObservableCollection<DefinitionViewModel> CreateVMForGrillspyd()
         {
             var definition = new Definition(
                 Meaning: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",

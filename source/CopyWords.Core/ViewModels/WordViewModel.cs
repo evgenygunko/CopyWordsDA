@@ -1,10 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CopyWords.Core.Exceptions;
 using CopyWords.Core.Services;
 
 namespace CopyWords.Core.ViewModels
@@ -43,6 +41,9 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         private string translation = "";
+
+        [ObservableProperty]
+        private bool isTranslationTranslationChecked;
 
         [ObservableProperty]
         private string partOfSpeech = "";
@@ -135,6 +136,7 @@ namespace CopyWords.Core.ViewModels
         public async Task CopyFrontAsync()
         {
             string formattedText = await _copySelectedToClipboardService.CompileFrontAsync(Front, PartOfSpeech);
+
             await _clipboardService.CopyTextToClipboardAsync(formattedText);
             await _dialogService.DisplayToast("Front copied");
         }
@@ -142,7 +144,24 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task CopyBackAsync()
         {
-            await CompileAndCopyToClipboard("back", _copySelectedToClipboardService.CompileBackAsync);
+            try
+            {
+                string textToCopy = await _copySelectedToClipboardService.CompileBackAsync(Definitions, IsTranslationTranslationChecked, Translation);
+
+                if (!string.IsNullOrEmpty(textToCopy))
+                {
+                    await _clipboardService.CopyTextToClipboardAsync(textToCopy);
+                    await _dialogService.DisplayToast("Back copied");
+                }
+                else
+                {
+                    await _dialogService.DisplayAlert("Text not copied", "Please select at least one example", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.DisplayAlert($"Cannot copy Back", $"Error occurred while trying to copy Back: " + ex.Message, "OK");
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyForms))]
@@ -156,38 +175,29 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task CopyExamplesAsync()
         {
-            await CompileAndCopyToClipboard("examples", _copySelectedToClipboardService.CompileExamplesAsync);
-        }
-
-        #endregion
-
-        #region Internal methods
-
-        internal async Task CompileAndCopyToClipboard(string wordPartName, Func<ObservableCollection<DefinitionViewModel>, Task<string>> action)
-        {
             try
             {
-                string textToCopy = await action(Definitions);
+                string textToCopy = await _copySelectedToClipboardService.CompileExamplesAsync(Definitions);
 
                 if (!string.IsNullOrEmpty(textToCopy))
                 {
                     await _clipboardService.CopyTextToClipboardAsync(textToCopy);
-                    await _dialogService.DisplayToast(string.Concat(wordPartName[0].ToString().ToUpper(CultureInfo.CurrentCulture), wordPartName.AsSpan(1), " copied"));
+                    await _dialogService.DisplayToast("Examples copied");
                 }
                 else
                 {
                     await _dialogService.DisplayAlert("Text not copied", "Please select at least one example", "OK");
                 }
             }
-            catch (PrepareWordForCopyingException ex)
-            {
-                await _dialogService.DisplayAlert($"Cannot copy {wordPartName}", ex.Message, "OK");
-            }
             catch (Exception ex)
             {
-                await _dialogService.DisplayAlert($"Cannot copy {wordPartName}", $"Error occurred while trying to copy {wordPartName}: " + ex.Message, "OK");
+                await _dialogService.DisplayAlert($"Cannot copy Examples", $"Error occurred while trying to copy Examples: " + ex.Message, "OK");
             }
         }
+
+        #endregion
+
+        #region Private methods
 
         private static Color GetButtonColor(bool isEnabled)
         {
