@@ -120,7 +120,7 @@ namespace CopyWords.Parsers
 
             if (!string.IsNullOrEmpty(translatorApiURL))
             {
-                var translationInput = new TranslationInput(headWord, definitions.FirstOrDefault()?.Meaning, LanguageDA, DestinationLanguages);
+                var translationInput = new TranslationInput(headWord, definitions.Select(x => x.Meaning), LanguageDA, DestinationLanguages);
 
                 IEnumerable<TranslationOutput>? translations = await _translatorAPIClient.TranslateAsync(translatorApiURL, translationInput);
                 translation = translations?.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord;

@@ -198,7 +198,7 @@ namespace CopyWords.Parsers.Tests
 
             var translations = new List<TranslationOutput>()
             {
-                new TranslationOutput("ru", "акула", "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы")
+                new TranslationOutput("ru", "акула", new List<string>() { "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы" })
             };
 
             Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
@@ -240,7 +240,7 @@ namespace CopyWords.Parsers.Tests
 
             var translations = new List<TranslationOutput>()
             {
-                new TranslationOutput("ru", "акула", "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы")
+                new TranslationOutput("ru", "акула", new List<string>() { "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы" })
             };
 
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
@@ -261,7 +261,7 @@ namespace CopyWords.Parsers.Tests
 
             var translations = new List<TranslationOutput>()
             {
-                new TranslationOutput("ru", "акула", "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы")
+                new TranslationOutput("ru", "акула", new List<string>() { "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы" })
             };
 
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
@@ -284,7 +284,7 @@ namespace CopyWords.Parsers.Tests
 
             var translations = new List<TranslationOutput>()
             {
-                new TranslationOutput("ru", "акула", "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы")
+                new TranslationOutput("ru", "акула", new List<string>() { "крупная вытянутая хрящевая рыба с поперечным ртом на нижней стороне головы" })
             };
 
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();

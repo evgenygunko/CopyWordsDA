@@ -1,4 +1,4 @@
 ﻿namespace CopyWords.Parsers.Models
 {
-    public record TranslationInput(string HeadWord, string? Meaning, string sourceLanguage, IEnumerable<string> destinationLanguages);
+    public record TranslationInput(string HeadWord, IEnumerable<string> Meanings, string sourceLanguage, IEnumerable<string> destinationLanguages);
 }
