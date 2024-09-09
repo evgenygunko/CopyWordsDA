@@ -15,7 +15,7 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for CompileFrontAsync
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForGrillspyd_ReturnsFormattedFront()
+        public async Task CompileFrontAsync_ForSubstantivIntetkøn_AddsArticle()
         {
             const string meaning = "grillspyd";
             const string partOfSpeech = "substantiv, intetkøn";
@@ -28,7 +28,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForuUderholdning_ReturnsFormattedFront()
+        public async Task CompileFrontAsync_ForuSubstantivFælleskøn_AddsArticle()
         {
             const string meaning = "underholdning";
             const string partOfSpeech = "substantiv, fælleskøn";
@@ -41,7 +41,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForKigge_ReturnsFormattedFront()
+        public async Task CompileFrontAsync_ForVerbum_AddsAt()
         {
             const string meaning = "kigge";
             const string partOfSpeech = "verbum";
@@ -54,7 +54,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForHøj_ReturnsFormattedFront()
+        public async Task CompileFrontAsync_ForAdjektiv_AddsLabel()
         {
             const string meaning = "høj";
             const string partOfSpeech = "adjektiv";
@@ -67,7 +67,20 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForIFM_ReturnsFormattedFront()
+        public async Task CompileFrontAsync_ForAdverbium_AddsLabel()
+        {
+            const string meaning = "ligeud";
+            const string partOfSpeech = "adverbium";
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+
+            front.Should().Be("ligeud <span style=\"color: rgba(0, 0, 0, 0.4)\">ADVERBIUM</span>");
+        }
+
+        [TestMethod]
+        public async Task CompileFrontAsync_ForForkortelse_AddsLabel()
         {
             const string meaning = "i forb. med";
             const string partOfSpeech = "forkortelse";
