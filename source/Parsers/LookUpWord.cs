@@ -86,23 +86,26 @@ namespace CopyWords.Parsers
             }
 
             _ddoPageParser.LoadHtml(ddoPageHtml);
-            string headWord = _ddoPageParser.ParseHeadword();
+            string headWordDA = _ddoPageParser.ParseHeadword();
 
             string soundUrl = _ddoPageParser.ParseSound();
-            string soundFileName = string.IsNullOrEmpty(soundUrl) ? string.Empty : $"{headWord}.mp3";
+            string soundFileName = string.IsNullOrEmpty(soundUrl) ? string.Empty : $"{headWordDA}.mp3";
 
             List<Definition> definitions = _ddoPageParser.ParseDefinitions();
 
-            // If TranslatorAPI URL is configured, call translator app and add returned translation to word model.
-            string? translation = await GetTranslationAsync(options?.TranslatorApiURL, headWord, definitions);
+            // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
+            IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headWordDA, definitions);
+            Headword headword = new Headword(
+                headWordDA,
+                translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
+                translations.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord);
 
             var wordModel = new WordModel(
-                Headword: headWord,
+                Headword: headword,
                 PartOfSpeech: _ddoPageParser.ParsePartOfSpeech(),
                 Endings: _ddoPageParser.ParseEndings(),
                 SoundUrl: soundUrl,
                 SoundFileName: soundFileName,
-                Translation: translation,
                 Definitions: definitions,
                 Variations: _ddoPageParser.ParseVariants()
             );
@@ -114,19 +117,23 @@ namespace CopyWords.Parsers
 
         #region Internal Methods
 
-        internal async Task<string?> GetTranslationAsync(string? translatorApiURL, string headWord, IEnumerable<Definition> definitions)
+        internal async Task<IEnumerable<TranslationOutput>> GetTranslationAsync(string? translatorApiURL, string headWord, IEnumerable<Definition> definitions)
         {
-            string? translation = null;
+            IEnumerable<TranslationOutput>? translations = null;
 
             if (!string.IsNullOrEmpty(translatorApiURL))
             {
                 var translationInput = new TranslationInput(headWord, definitions.Select(x => x.Meaning), LanguageDA, DestinationLanguages);
 
-                IEnumerable<TranslationOutput>? translations = await _translatorAPIClient.TranslateAsync(translatorApiURL, translationInput);
-                translation = translations?.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord;
+                translations = await _translatorAPIClient.TranslateAsync(translatorApiURL, translationInput);
             }
 
-            return translation;
+            if (translations is null)
+            {
+                translations = Enumerable.Empty<TranslationOutput>();
+            }
+
+            return translations;
         }
 
         #endregion

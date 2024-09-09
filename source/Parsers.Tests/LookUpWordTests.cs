@@ -122,7 +122,7 @@ namespace CopyWords.Parsers.Tests
             WordModel? result = await sut.LookUpWordAsync("haj");
 
             result.Should().NotBeNull();
-            result!.Headword.Should().Be(headWord);
+            result!.Headword.Original.Should().Be(headWord);
             result!.PartOfSpeech.Should().Be(partOfSpeech);
             result!.Endings.Should().Be(endings);
             result!.SoundUrl.Should().Be(soundUrl);
@@ -218,7 +218,7 @@ namespace CopyWords.Parsers.Tests
             WordModel? result = await sut.GetWordByUrlAsync(ddoUrl, options);
 
             result.Should().NotBeNull();
-            result!.Translation.Should().Be("акула");
+            result!.Headword.Russian.Should().Be("акула");
 
             fileDownloaderMock.Verify(x => x.DownloadPageAsync(ddoUrl, Encoding.UTF8));
 
@@ -247,9 +247,13 @@ namespace CopyWords.Parsers.Tests
             translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
 
             var sut = _fixture.Create<LookUpWord>();
-            string? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
+            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
 
-            result.Should().Be("акула");
+            result.Should().HaveCount(1);
+
+            TranslationOutput translationRU = result.Single();
+            translationRU.Language.Should().Be("ru");
+            translationRU.HeadWord.Should().Be("акула");
         }
 
         [TestMethod]
@@ -268,17 +272,21 @@ namespace CopyWords.Parsers.Tests
             translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
 
             var sut = _fixture.Create<LookUpWord>();
-            string? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
+            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
 
-            result.Should().Be("акула");
+            result.Should().HaveCount(1);
+
+            TranslationOutput translationRU = result.Single();
+            translationRU.Language.Should().Be("ru");
+            translationRU.HeadWord.Should().Be("акула");
 
             translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()));
         }
 
         [TestMethod]
-        public async Task GetTranslationAsync_WhenTranslatorAPIUrlIsNull_ReturnsNull()
+        public async Task GetTranslationAsync_WhenTranslatorAPIUrlIsNull_ReturnsEmpty()
         {
-            const string translatorApiUrl = null;
+            const string? translatorApiUrl = null;
             string headWord = _fixture.Create<string>();
             List<Definition> definitions = _fixture.Create<List<Definition>>();
 
@@ -290,9 +298,9 @@ namespace CopyWords.Parsers.Tests
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
 
             var sut = _fixture.Create<LookUpWord>();
-            string? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
+            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
 
-            result.Should().BeNull();
+            result.Should().HaveCount(0);
 
             translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()), Times.Never);
         }

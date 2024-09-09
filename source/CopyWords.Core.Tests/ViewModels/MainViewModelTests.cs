@@ -34,7 +34,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.IsBusy.Should().BeFalse();
 
             sut.WordViewModel.Should().NotBeNull();
-            sut.WordViewModel.Front.Should().Be(wordModel.Headword);
+            sut.WordViewModel.Front.Should().Be(wordModel.Headword.Original);
             sut.WordViewModel.PartOfSpeech.Should().Be(wordModel.PartOfSpeech);
             sut.WordViewModel.Forms.Should().Be(wordModel.Endings);
             sut.WordViewModel.SoundUrl.Should().Be(wordModel.SoundUrl);
@@ -211,7 +211,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             await sut.GetVariantAsync(url);
 
-            sut.WordViewModel.Front.Should().Be(wordModel.Headword);
+            sut.WordViewModel.Front.Should().Be(wordModel.Headword.Original);
 
             dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
