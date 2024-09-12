@@ -26,9 +26,9 @@ My card templates:
 
   See examples:
 
-  - [front.html](<(https://raw.githubusercontent.com/evgenygunko/CopyWordsDA/master/card_templates/front.html)>)
-  - [back.html](<(https://raw.githubusercontent.com/evgenygunko/CopyWordsDA/master/card_templates/back.html)>)
-  - [styling.css](<(https://raw.githubusercontent.com/evgenygunko/CopyWordsDA/master/card_templates/styling.css)>)
+  - [front.html](<(card_templates/front.html)>)
+  - [back.html](<(card_templates/back.html)>)
+  - [styling.css](<(card_templates/styling.css)>)
 
 ## Sound Functionality
 
