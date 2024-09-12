@@ -34,3 +34,4 @@ yarn.lock
 .gitattributes
 *.resx
 dist
+card_templates/
