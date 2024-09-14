@@ -368,30 +368,35 @@ namespace CopyWords.Parsers.Tests
 
             Definition definition1 = definitions.First();
             definition1.Meaning.Should().Be("rette blikket i en bestemt retning");
-            definition1.Examples.Should().HaveCount(3);
-            definition1.Examples.First().Should().Be("Børnene kiggede spørgende på hinanden.");
-            definition1.Examples.Skip(1).First().Should().Be("kig lige en gang!");
-            definition1.Examples.Skip(2).First().Should().Be("Han kiggede sig rundt, som om han ledte efter noget.");
+            Translation translation1 = definition1.Translations.First();
+            translation1.Examples.Should().HaveCount(3);
+            translation1.Examples.First().Original.Should().Be("Børnene kiggede spørgende på hinanden.");
+            translation1.Examples.Skip(1).First().Original.Should().Be("kig lige en gang!");
+            translation1.Examples.Skip(2).First().Original.Should().Be("Han kiggede sig rundt, som om han ledte efter noget.");
 
             Definition definition2 = definitions.Skip(1).First();
             definition2.Meaning.Should().Be("undersøge nærmere; sætte sig ind i");
-            definition2.Examples.Should().HaveCount(1);
-            definition2.Examples.First().Should().Be("hun har kigget på de psykiske eftervirkninger hos voldtagne piger og kvinder.");
+            Translation translation2 = definition2.Translations.First();
+            translation2.Examples.Should().HaveCount(1);
+            translation2.Examples.First().Original.Should().Be("hun har kigget på de psykiske eftervirkninger hos voldtagne piger og kvinder.");
 
             Definition definition3 = definitions.Skip(2).First();
             definition3.Meaning.Should().Be("prøve at finde");
-            definition3.Examples.Should().HaveCount(1);
-            definition3.Examples.First().Should().Be("Vi kigger efter en bil i det prislag, og Carinaen opfylder de fleste af de krav, vi stiller.");
+            Translation translation3 = definition3.Translations.First();
+            translation3.Examples.Should().HaveCount(1);
+            translation3.Examples.First().Original.Should().Be("Vi kigger efter en bil i det prislag, og Carinaen opfylder de fleste af de krav, vi stiller.");
 
             Definition definition4 = definitions.Skip(3).First();
             definition4.Meaning.Should().Be("skrive af efter nogen; kopiere noget");
-            definition4.Examples.Should().HaveCount(1);
-            definition4.Examples.First().Should().Be("Berg er ikke altid lige smart, bl.a. ikke når hun afleverer blækregning for sent OG vedlægger den opgave, hun har kigget efter.");
+            Translation translation4 = definition4.Translations.First();
+            translation4.Examples.Should().HaveCount(1);
+            translation4.Examples.First().Original.Should().Be("Berg er ikke altid lige smart, bl.a. ikke når hun afleverer blækregning for sent OG vedlægger den opgave, hun har kigget efter.");
 
             Definition definition5 = definitions.Skip(4).First();
             definition5.Meaning.Should().Be("se på; betragte");
-            definition5.Examples.Should().HaveCount(1);
-            definition5.Examples.First().Should().Be("Har du lyst til at gå ud og kigge stjerner, Oskar? Det er sådan et smukt vejr.");
+            Translation translation5 = definition5.Translations.First();
+            translation5.Examples.Should().HaveCount(1);
+            translation5.Examples.First().Original.Should().Be("Har du lyst til at gå ud og kigge stjerner, Oskar? Det er sådan et smukt vejr.");
         }
 
         [TestMethod]
@@ -424,19 +429,22 @@ namespace CopyWords.Parsers.Tests
             Definition definition1 = definitions.First();
             definition1.Meaning.Should().Be("stor, langstrakt bruskfisk med tværstillet mund på undersiden af hovedet, med 5-7 gællespalter uden gællelåg og med kraftig, ru hud");
             definition1.Tag.Should().BeNull();
-            definition1.Examples.Should().HaveCount(1);
-            definition1.Examples.First().Should().Be("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham.");
+            Translation translation1 = definition1.Translations.First();
+            translation1.Examples.Should().HaveCount(1);
+            translation1.Examples.First().Original.Should().Be("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham.");
 
             Definition definition2 = definitions.Skip(1).First();
             definition2.Meaning.Should().Be("grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning");
             definition2.Tag.Should().Be("slang");
-            definition2.Examples.Should().HaveCount(0);
+            Translation translation2 = definition2.Translations.First();
+            translation2.Examples.Should().HaveCount(0);
 
             Definition definition3 = definitions.Skip(2).First();
             definition3.Meaning.Should().Be("person der er særlig dygtig til et spil, håndværk el.lign.");
             definition3.Tag.Should().Be("slang");
-            definition3.Examples.Should().HaveCount(1);
-            definition3.Examples.First().Should().Be("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb.");
+            Translation translation3 = definition3.Translations.First();
+            translation3.Examples.Should().HaveCount(1);
+            translation3.Examples.First().Original.Should().Be("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb.");
         }
 
         [TestMethod]
@@ -453,9 +461,10 @@ namespace CopyWords.Parsers.Tests
 
             Definition definition1 = definitions.First();
 
-            definition1.Examples.Should().HaveCount(2);
-            definition1.Examples.First().Should().Be("For mig er dannebrog noget samlende på tværs af køn, alder, etnicitet, værdier og politisk ståsted.");
-            definition1.Examples.Skip(1).First().Should().Be("der var Dannebrog på bordet og balloner og gaver fra gæsterne. Om aftenen var vi alle trætte, men glade for en god fødselsdag.");
+            Translation translation1 = definition1.Translations.First();
+            translation1.Examples.Should().HaveCount(2);
+            translation1.Examples.First().Original.Should().Be("For mig er dannebrog noget samlende på tværs af køn, alder, etnicitet, værdier og politisk ståsted.");
+            translation1.Examples.Skip(1).First().Original.Should().Be("der var Dannebrog på bordet og balloner og gaver fra gæsterne. Om aftenen var vi alle trætte, men glade for en god fødselsdag.");
         }
 
         [TestMethod]
@@ -472,9 +481,10 @@ namespace CopyWords.Parsers.Tests
 
             Definition definition1 = definitions.First();
 
-            definition1.Examples.Should().HaveCount(2);
-            definition1.Examples.First().Should().Be("Det her er så sindssygt, at jeg kan blive stiktosset over det.");
-            definition1.Examples.Skip(1).First().Should().Be("Du ved godt, at jeg bliver stiktosset, når du hopper i sofaen.");
+            Translation translation1 = definition1.Translations.First();
+            translation1.Examples.Should().HaveCount(2);
+            translation1.Examples.First().Original.Should().Be("Det her er så sindssygt, at jeg kan blive stiktosset over det.");
+            translation1.Examples.Skip(1).First().Original.Should().Be("Du ved godt, at jeg bliver stiktosset, når du hopper i sofaen.");
         }
 
         [TestMethod]
@@ -490,6 +500,9 @@ namespace CopyWords.Parsers.Tests
             definitions.Should().HaveCount(1);
 
             Definition definition1 = definitions.First();
+
+            Translation translation1 = definition1.Translations.First();
+            translation1.Examples.Should().HaveCount(2);
         }
 
         [TestMethod]
@@ -506,9 +519,10 @@ namespace CopyWords.Parsers.Tests
 
             Definition definition1 = definitions.First();
 
-            definition1.Examples.Should().HaveCount(2);
-            definition1.Examples.First().Should().Be("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver.");
-            definition1.Examples.Skip(1).First().Should().Be("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater.");
+            Translation translation1 = definition1.Translations.First();
+            translation1.Examples.Should().HaveCount(2);
+            translation1.Examples.First().Original.Should().Be("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver.");
+            translation1.Examples.Skip(1).First().Original.Should().Be("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater.");
         }
 
         [TestMethod]
@@ -526,8 +540,9 @@ namespace CopyWords.Parsers.Tests
             Definition definition1 = definitions.First();
             definition1.Meaning.Should().Be("intensivt og som regel under tidspres");
             definition1.Tag.Should().Be("overført");
-            definition1.Examples.Should().HaveCount(1);
-            definition1.Examples.First().Should().Be("håndværkerne [arbejdede] på højtryk for at gøre teatersalen klar.");
+            Translation translation1 = definition1.Translations.First();
+            translation1.Examples.Should().HaveCount(1);
+            translation1.Examples.First().Original.Should().Be("håndværkerne [arbejdede] på højtryk for at gøre teatersalen klar.");
         }
 
         #endregion

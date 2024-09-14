@@ -39,6 +39,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
         builder.Services.AddSingleton<ILookUpWord, LookUpWord>();
         builder.Services.AddSingleton<IDDOPageParser, DDOPageParser>();
+        builder.Services.AddSingleton<ISpanishDictPageParser, SpanishDictPageParser>();
         builder.Services.AddSingleton<ICopySelectedToClipboardService, CopySelectedToClipboardService>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
         builder.Services.AddSingleton<IClipboardService, ClipboardService>();

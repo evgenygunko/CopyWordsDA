@@ -80,7 +80,7 @@ namespace CopyWords.Core.ViewModels
                     translatorApiURL = _settingsService.GetTranslatorApiUrl();
                 }
 
-                wordModel = await _lookUpWord.GetWordByUrlAsync(url, new Options(TranslatorApiURL: translatorApiURL));
+                wordModel = await _lookUpWord.GetWordByUrlAsync(url, new Options(SourceLanguage.Danish, translatorApiURL));
 
                 if (wordModel == null)
                 {
@@ -156,7 +156,7 @@ namespace CopyWords.Core.ViewModels
                 {
                     translatorApiURL = _settingsService.GetTranslatorApiUrl();
                 }
-                wordModel = await _lookUpWord.LookUpWordAsync(word, new Options(TranslatorApiURL: translatorApiURL));
+                wordModel = await _lookUpWord.LookUpWordAsync(word, new Options(SourceLanguage.Danish, translatorApiURL));
 
                 if (wordModel == null)
                 {

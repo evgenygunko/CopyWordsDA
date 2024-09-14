@@ -229,10 +229,13 @@ namespace CopyWords.Core.Tests.Services
             var definition = new Definition(
                 Meaning: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
                 Tag: null,
-                Examples:
-                [
-                    "Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver",
-                    "Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater"
+                Position: 1,
+                Translations: [
+                    new Translation("", "", null, new List<Example>()
+                    {
+                        new Example("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver", null, null),
+                        new Example("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater", null, null)
+                    })
                 ]);
 
             var definitionVM = new DefinitionViewModel(definition, pos: 1);
@@ -248,25 +251,34 @@ namespace CopyWords.Core.Tests.Services
             var definition1 = new Definition(
                 Meaning: "stor, langstrakt bruskfisk",
                 Tag: null,
-                Examples:
-                [
-                    "Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham"
+                Position: 1,
+                Translations: [
+                    new Translation("", "", null, new List<Example>()
+                    {
+                        new Example("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", null, null)
+                    })
                 ]);
 
             var definition2 = new Definition(
                 Meaning: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning",
                 Tag: "SLANG",
-                Examples:
-                [
-                    "-"
+                Position: 2,
+                Translations: [
+                    new Translation("", "", null, new List<Example>()
+                    {
+                        new Example("-", null, null)
+                    })
                 ]);
 
             var definition3 = new Definition(
                 Meaning: "person der er særlig dygtig til et spil, håndværk el.lign.",
                 Tag: "SLANG",
-                Examples:
-                [
-                    "Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb"
+                Position: 3,
+                Translations: [
+                    new Translation("", "", null, new List<Example>()
+                    {
+                        new Example("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", null, null)
+                    })
                 ]);
 
             return new ObservableCollection<DefinitionViewModel>()

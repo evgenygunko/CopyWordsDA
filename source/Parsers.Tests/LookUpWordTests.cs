@@ -87,8 +87,47 @@ namespace CopyWords.Parsers.Tests
         {
             var sut = _fixture.Create<LookUpWord>();
 
-            _ = sut.Invoking(y => y.LookUpWordAsync("Hello"))
+            _ = sut.Invoking(y => y.LookUpWordAsync("Hello", new Options(SourceLanguage.Danish, TranslatorApiURL: null)))
                 .Should().ThrowAsync<ArgumentException>();
+        }
+
+        [TestMethod]
+        public async Task LookUpWordAsync_WhenSourceLanguageIsDanish_CallsDDOPageParser()
+        {
+            string wordToLookup = "haj";
+            SourceLanguage sourceLanguage = SourceLanguage.Danish;
+
+            Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+
+            Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
+            fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
+
+            var sut = _fixture.Create<LookUpWord>();
+            WordModel? result = await sut.LookUpWordAsync(wordToLookup, new Options(sourceLanguage, TranslatorApiURL: null));
+
+            result.Should().NotBeNull();
+            ddoPageParserMock.Verify(x => x.ParseHeadword());
+        }
+
+        [TestMethod]
+        public void LookUpWordAsync_WhenSourceLanguageIsSpanish_CallsSpanishDictPageParser()
+        {
+            string wordToLookup = "ser";
+            SourceLanguage sourceLanguage = SourceLanguage.Spanish;
+
+            Mock<ISpanishDictPageParser> spanishDictPageParserMock = _fixture.Freeze<Mock<ISpanishDictPageParser>>();
+
+            Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
+            fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("ser.html");
+
+            var sut = _fixture.Create<LookUpWord>();
+            _ = sut.Invoking(y => y.LookUpWordAsync(wordToLookup, new Options(sourceLanguage, TranslatorApiURL: null)))
+                .Should().ThrowAsync<ArgumentException>();
+
+            /*WordModel? result = await sut.LookUpWordAsync(wordToLookup, new Options(sourceLanguage, TranslatorApiURL: null));
+
+            result.Should().NotBeNull();
+            spanishDictPageParserMock.Verify(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>()));*/
         }
 
         [TestMethod]
@@ -99,9 +138,9 @@ namespace CopyWords.Parsers.Tests
             const string endings = "-en, -er, -erne";
             const string soundUrl = "https://static.ordnet.dk/mp3/11019/11019539_1.mp3";
 
-            var definition1 = new Definition("stor, langstrakt bruskfisk", Tag: null, Enumerable.Empty<string>());
-            var definition2 = new Definition("grisk, skrupelløs person", Tag: "slang", Enumerable.Empty<string>());
-            var definition3 = new Definition("person der er særlig dygtig til et spil", Tag: "slang", Enumerable.Empty<string>());
+            var definition1 = new Definition("stor, langstrakt bruskfisk", Tag: null, Position: 1, Enumerable.Empty<Translation>());
+            var definition2 = new Definition("grisk, skrupelløs person", Tag: "slang", Position: 2, Enumerable.Empty<Translation>());
+            var definition3 = new Definition("person der er særlig dygtig til et spil", Tag: "slang", Position: 3, Enumerable.Empty<Translation>());
             var definitions = new List<Definition>() { definition1, definition2, definition3 };
 
             var variants = new List<Variant>() { new Variant("haj", "https://ordnet.dk/ddo/ordbog?select=haj&query=haj") };
@@ -119,7 +158,7 @@ namespace CopyWords.Parsers.Tests
 
             var sut = _fixture.Create<LookUpWord>();
 
-            WordModel? result = await sut.LookUpWordAsync("haj");
+            WordModel? result = await sut.LookUpWordAsync("haj", new Options(SourceLanguage.Danish, TranslatorApiURL: null));
 
             result.Should().NotBeNull();
             result!.Headword.Original.Should().Be(headWord);
@@ -138,6 +177,17 @@ namespace CopyWords.Parsers.Tests
         #region Tests for GetWordByUrlAsync
 
         [TestMethod]
+        public void GetWordByUrlAsync_WhenSourceLanguageIsNotDanish_ThrowsException()
+        {
+            string url = _fixture.Create<string>();
+
+            var sut = _fixture.Create<LookUpWord>();
+
+            _ = sut.Invoking(x => x.GetWordByUrlAsync(url, new Options(SourceLanguage.Spanish, TranslatorApiURL: null)))
+                .Should().ThrowAsync<ArgumentException>();
+        }
+
+        [TestMethod]
         public async Task GetWordByUrlAsync_Should_DownloadPageAndCallParser()
         {
             string url = _fixture.Create<string>();
@@ -149,7 +199,7 @@ namespace CopyWords.Parsers.Tests
 
             var sut = _fixture.Create<LookUpWord>();
 
-            WordModel? result = await sut.GetWordByUrlAsync(url);
+            WordModel? result = await sut.GetWordByUrlAsync(url, new Options(SourceLanguage.Danish, TranslatorApiURL: null));
 
             result.Should().NotBeNull();
 
@@ -177,7 +227,7 @@ namespace CopyWords.Parsers.Tests
             ddoPageParserMock.Setup(x => x.ParseSound()).Returns(string.Empty);
 
             var sut = _fixture.Create<LookUpWord>();
-            WordModel? result = await sut.GetWordByUrlAsync(url);
+            WordModel? result = await sut.GetWordByUrlAsync(url, new Options(SourceLanguage.Danish, TranslatorApiURL: null));
 
             result.Should().NotBeNull();
             result!.SoundFileName.Should().BeEmpty();
@@ -211,7 +261,7 @@ namespace CopyWords.Parsers.Tests
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
             translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
 
-            Options options = new Options(TranslatorApiURL: translatorApiUrl);
+            Options options = new Options(SourceLanguage.Danish, translatorApiUrl);
 
             var sut = _fixture.Create<LookUpWord>();
 

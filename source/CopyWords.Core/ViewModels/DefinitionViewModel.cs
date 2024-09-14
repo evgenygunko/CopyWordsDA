@@ -13,9 +13,9 @@ namespace CopyWords.Core.ViewModels
             Meaning = definition.Meaning;
 
             Examples.Clear();
-            foreach (string example in definition.Examples)
+            foreach (Example example in definition.Translations.First().Examples)
             {
-                Examples.Add(new ExampleViewModel(example));
+                Examples.Add(new ExampleViewModel(example.Original));
             }
 
             if (Examples.Count == 0)

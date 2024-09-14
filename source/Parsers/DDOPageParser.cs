@@ -24,6 +24,8 @@ namespace CopyWords.Parsers
 
     public class DDOPageParser : PageParserBase, IDDOPageParser
     {
+        internal const string DDOBaseUrl = "https://ordnet.dk/ddo/ordbog";
+
         #region Public Methods
 
         /// <summary>
@@ -180,6 +182,8 @@ namespace CopyWords.Parsers
 
                 if (definitionsDivs != null && definitionsDivs.Count > 0)
                 {
+                    int definitionPosition = 0;
+
                     foreach (var definitionDiv in definitionsDivs)
                     {
                         string meaning = DecodeText(definitionDiv.InnerText);
@@ -187,8 +191,12 @@ namespace CopyWords.Parsers
 
                         // Parse examples only for this definition
                         IEnumerable<string> examples = ParseExamplesForDefinition(definitionDiv);
+                        IEnumerable<Example> examplesList = examples.Select(x => new Example(Original: x, English: null, Russian: null));
 
-                        definitions.Add(new Definition(Meaning: meaning, Tag: tag, Examples: examples));
+                        List<Translation> translations = new();
+                        translations.Add(new Translation(meaning, "a", ImageUrl: null, Examples: examplesList));
+
+                        definitions.Add(new Definition(meaning, tag, definitionPosition++, translations));
                     }
                 }
             }
