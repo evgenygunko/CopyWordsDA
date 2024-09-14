@@ -44,7 +44,7 @@
             <Label Text="{Binding PartOfSpeech, FallbackValue='adjektiv'}" Margin="7,5,3,3" VerticalOptions="End" />
         </HorizontalStackLayout>
 
-        <!-- Box with translation -->
+        <!-- Box with translations -->
         <Border Grid.Row="3"     
                 IsVisible="{Binding Headword.Russian, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"                        
                 BackgroundColor="#eaeff2"
@@ -59,11 +59,37 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding Headword.IsTranslationTranslationChecked}" />
-                <Label Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <!-- Russian -->
+                <CheckBox Grid.Row="0" Grid.Column="0" x:Name="checkBoxRU" IsChecked="{Binding Headword.IsRussianTranslationChecked}" />
+                <Label Grid.Row="0" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="{Binding Headword.Russian, FallbackValue='акула'}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsTranslationTranslationChecked}" Value="false">
+                            <Setter Property="BackgroundColor" Value="#eaeff2" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsTranslationTranslationChecked}" Value="true">
+                            <Setter Property="BackgroundColor" Value="LightBlue" />
+                            <Setter Property="FontSize" Value="18" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <!-- English -->
+                <CheckBox Grid.Row="1" Grid.Column="0" x:Name="checkBoxEN" IsChecked="{Binding Headword.IsEnglishTranslationChecked}" />
+                <Label Grid.Row="1" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Headword.English, FallbackValue='shark'}"/>
                         </FormattedString>
                     </Label.FormattedText>
 

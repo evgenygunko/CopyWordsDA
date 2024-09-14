@@ -69,9 +69,13 @@ namespace CopyWords.Core.Services
             StringBuilder sb = new StringBuilder();
 
             // If translation selected, add it first
-            if (headword.IsTranslationTranslationChecked && !string.IsNullOrEmpty(headword.Russian))
+            if (headword.IsRussianTranslationChecked && !string.IsNullOrEmpty(headword.Russian))
             {
                 sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headword.Russian) + "<br>");
+            }
+            if (headword.IsEnglishTranslationChecked && !string.IsNullOrEmpty(headword.English))
+            {
+                sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headword.English) + "<br>");
             }
 
             // Now go through all meanings and add with numbering.

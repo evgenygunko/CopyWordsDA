@@ -108,10 +108,7 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.Forms = wordModel.Endings;
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
                 _wordViewModel.SoundFileName = wordModel.SoundFileName;
-
-                _wordViewModel.Headword.Original = wordModel.Headword.Original;
-                _wordViewModel.Headword.English = wordModel.Headword.English;
-                _wordViewModel.Headword.Russian = wordModel.Headword.Russian;
+                _wordViewModel.Headword.Update(wordModel.Headword);
 
                 _wordViewModel.Definitions.Clear();
                 int i = 1;

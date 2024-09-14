@@ -3,7 +3,6 @@ using AutoFixture;
 using CopyWords.Core.Services;
 using CopyWords.Core.Tests.Services;
 using CopyWords.Core.ViewModels;
-using CopyWords.Parsers.Models;
 using Moq;
 
 namespace CopyWords.Core.Tests.ViewModels
@@ -43,9 +42,8 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task CopyBackAsync_Should_CallCopySelectedToClipboardService()
         {
+            // Arrange
             var definitions = CopySelectedToClipboardServiceTests.CreateVMForGrillspyd();
-            Headword translation = _fixture.Create<Headword>();
-            bool isTranslationTranslationChecked = true;
             string formattedBack = _fixture.Create<string>();
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
@@ -62,13 +60,10 @@ namespace CopyWords.Core.Tests.ViewModels
                 sut.Definitions.Add(definition);
             }
 
-            sut.Headword.Original = translation.Original;
-            sut.Headword.English = translation.English;
-            sut.Headword.Russian = translation.Russian;
-            sut.Headword.IsTranslationTranslationChecked = isTranslationTranslationChecked;
-
+            // Act
             await sut.CopyBackAsync();
 
+            // Assert
             copySelectedToClipboardServiceMock.Verify(x => x.CompileBackAsync(definitions, It.IsAny<HeadwordViewModel>()));
             clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(It.IsAny<string>()));
             dialogServiceMock.Verify(x => x.DisplayToast("Back copied"));

@@ -8,9 +8,7 @@ namespace CopyWords.Core.ViewModels
     {
         public HeadwordViewModel(Headword headword)
         {
-            Original = headword?.Original;
-            English = headword?.English;
-            Russian = headword?.Russian;
+            Update(headword);
         }
 
         [ObservableProperty]
@@ -23,6 +21,28 @@ namespace CopyWords.Core.ViewModels
         private string? russian;
 
         [ObservableProperty]
-        private bool isTranslationTranslationChecked;
+        private bool isEnglishTranslationChecked;
+
+        [ObservableProperty]
+        private bool isRussianTranslationChecked;
+
+        public void Update(Headword headword)
+        {
+            Original = headword?.Original;
+
+            // Make first letter lower case, it looks better
+            English = FirstLetterToLower(headword?.English);
+            Russian = FirstLetterToLower(headword?.Russian);
+        }
+
+        internal static string? FirstLetterToLower(string? input)
+        {
+            if (string.IsNullOrEmpty(input) || char.IsLower(input[0]))
+            {
+                return input; // If the input is null/empty or first letter is already lowercase, return as is
+            }
+
+            return char.ToLower(input[0]) + input.Substring(1);
+        }
     }
 }
