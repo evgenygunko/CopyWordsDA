@@ -9,7 +9,7 @@ namespace CopyWords.Core.Services
     {
         Task<string> CompileFrontAsync(string meaning, string partOfSpeech);
 
-        Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs, bool isTranslationTranslationChecked, string translation);
+        Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs, HeadwordViewModel headword);
 
         Task<string> CompileFormsAsync(string forms);
 
@@ -59,7 +59,7 @@ namespace CopyWords.Core.Services
             return Task.FromResult(front);
         }
 
-        public Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs, bool isTranslationTranslationChecked, string translation)
+        public Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs, HeadwordViewModel headword)
         {
             if (definitionVMs == null)
             {
@@ -69,9 +69,9 @@ namespace CopyWords.Core.Services
             StringBuilder sb = new StringBuilder();
 
             // If translation selected, add it first
-            if (isTranslationTranslationChecked && !string.IsNullOrEmpty(translation))
+            if (headword.IsTranslationTranslationChecked && !string.IsNullOrEmpty(headword.Russian))
             {
-                sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, translation) + "<br>");
+                sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headword.Russian) + "<br>");
             }
 
             // Now go through all meanings and add with numbering.

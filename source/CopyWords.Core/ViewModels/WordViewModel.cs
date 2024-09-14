@@ -24,6 +24,8 @@ namespace CopyWords.Core.ViewModels
             _copySelectedToClipboardService = copySelectedToClipboardService;
             _dialogService = dialogService;
             _clipboardService = clipboardService;
+
+            Headword = new HeadwordViewModel(default);
         }
 
         #region Properties
@@ -40,10 +42,7 @@ namespace CopyWords.Core.ViewModels
         private string front = "<>";
 
         [ObservableProperty]
-        private string translation = "";
-
-        [ObservableProperty]
-        private bool isTranslationTranslationChecked;
+        private HeadwordViewModel headword;
 
         [ObservableProperty]
         private string partOfSpeech = "";
@@ -146,7 +145,7 @@ namespace CopyWords.Core.ViewModels
         {
             try
             {
-                string textToCopy = await _copySelectedToClipboardService.CompileBackAsync(Definitions, IsTranslationTranslationChecked, Translation);
+                string textToCopy = await _copySelectedToClipboardService.CompileBackAsync(Definitions, Headword);
 
                 if (!string.IsNullOrEmpty(textToCopy))
                 {

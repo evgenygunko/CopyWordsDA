@@ -101,12 +101,14 @@ namespace CopyWords.Core.Tests.Services
         {
             var wordVariantVMs = CreateVMForGrillspyd();
             wordVariantVMs[0].Examples[0].IsChecked = true;
-            bool isTranslationTranslationChecked = true;
-            const string translation = "Шашлыки";
+
+            var headword = new Headword("Grillspyd", "Kebabs", "Шашлыки");
+            var headwordVM = new HeadwordViewModel(headword);
+            headwordVM.IsTranslationTranslationChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(wordVariantVMs, isTranslationTranslationChecked, translation);
+            string result = await sut.CompileBackAsync(wordVariantVMs, headwordVM);
 
             result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">Шашлыки</span><br>spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
@@ -117,9 +119,12 @@ namespace CopyWords.Core.Tests.Services
             var wordVariantVMs = CreateVMForGrillspyd();
             wordVariantVMs[0].Examples[0].IsChecked = true;
 
+            var headwordVM = _fixture.Create<HeadwordViewModel>();
+            headwordVM.IsTranslationTranslationChecked = false;
+
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(wordVariantVMs, isTranslationTranslationChecked: false, translation: null);
+            string result = await sut.CompileBackAsync(wordVariantVMs, headwordVM);
 
             result.Should().Be("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
@@ -132,9 +137,12 @@ namespace CopyWords.Core.Tests.Services
             wordVariantVMs[1].Examples[0].IsChecked = true;
             wordVariantVMs[2].Examples[0].IsChecked = true;
 
+            var headwordVM = _fixture.Create<HeadwordViewModel>();
+            headwordVM.IsTranslationTranslationChecked = false;
+
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(wordVariantVMs, isTranslationTranslationChecked: false, translation: null);
+            string result = await sut.CompileBackAsync(wordVariantVMs, headwordVM);
 
             result.Should().Be(
                 "1.&nbsp;stor, langstrakt bruskfisk<br>" +

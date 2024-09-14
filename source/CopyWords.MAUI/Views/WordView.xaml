@@ -46,7 +46,7 @@
 
         <!-- Box with translation -->
         <Border Grid.Row="3"     
-                IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"                        
+                IsVisible="{Binding Headword.Russian, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"                        
                 BackgroundColor="#eaeff2"
                 Stroke="#CCCCCC"
                 StrokeThickness="1"
@@ -59,19 +59,19 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding IsTranslationTranslationChecked}" />
+                <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding Headword.IsTranslationTranslationChecked}" />
                 <Label Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span Text="{Binding Translation, FallbackValue='акула'}"/>
+                            <Span Text="{Binding Headword.Russian, FallbackValue='акула'}"/>
                         </FormattedString>
                     </Label.FormattedText>
 
                     <Label.Triggers>
-                        <DataTrigger TargetType="Label" Binding="{Binding IsTranslationTranslationChecked}" Value="false">
+                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsTranslationTranslationChecked}" Value="false">
                             <Setter Property="BackgroundColor" Value="#eaeff2" />
                         </DataTrigger>
-                        <DataTrigger TargetType="Label" Binding="{Binding IsTranslationTranslationChecked}" Value="true">
+                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsTranslationTranslationChecked}" Value="true">
                             <Setter Property="BackgroundColor" Value="LightBlue" />
                             <Setter Property="FontSize" Value="18" />
                         </DataTrigger>

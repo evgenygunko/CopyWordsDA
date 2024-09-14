@@ -109,8 +109,9 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
                 _wordViewModel.SoundFileName = wordModel.SoundFileName;
 
-                // todo: find a better way to show translations, maybe allow selecting a destination language?
-                _wordViewModel.Translation = wordModel.Headword.Russian;
+                _wordViewModel.Headword.Original = wordModel.Headword.Original;
+                _wordViewModel.Headword.English = wordModel.Headword.English;
+                _wordViewModel.Headword.Russian = wordModel.Headword.Russian;
 
                 _wordViewModel.Definitions.Clear();
                 int i = 1;

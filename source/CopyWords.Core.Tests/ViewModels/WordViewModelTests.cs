@@ -3,6 +3,7 @@ using AutoFixture;
 using CopyWords.Core.Services;
 using CopyWords.Core.Tests.Services;
 using CopyWords.Core.ViewModels;
+using CopyWords.Parsers.Models;
 using Moq;
 
 namespace CopyWords.Core.Tests.ViewModels
@@ -43,12 +44,14 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task CopyBackAsync_Should_CallCopySelectedToClipboardService()
         {
             var definitions = CopySelectedToClipboardServiceTests.CreateVMForGrillspyd();
-            string translation = _fixture.Create<string>();
+            Headword translation = _fixture.Create<Headword>();
             bool isTranslationTranslationChecked = true;
             string formattedBack = _fixture.Create<string>();
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(definitions, isTranslationTranslationChecked, translation)).ReturnsAsync(formattedBack);
+            copySelectedToClipboardServiceMock
+                .Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>(), It.IsAny<HeadwordViewModel>()))
+                .ReturnsAsync(formattedBack);
 
             Mock<IClipboardService> clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
@@ -59,12 +62,14 @@ namespace CopyWords.Core.Tests.ViewModels
                 sut.Definitions.Add(definition);
             }
 
-            sut.Translation = translation;
-            sut.IsTranslationTranslationChecked = isTranslationTranslationChecked;
+            sut.Headword.Original = translation.Original;
+            sut.Headword.English = translation.English;
+            sut.Headword.Russian = translation.Russian;
+            sut.Headword.IsTranslationTranslationChecked = isTranslationTranslationChecked;
 
             await sut.CopyBackAsync();
 
-            copySelectedToClipboardServiceMock.Verify(x => x.CompileBackAsync(definitions, isTranslationTranslationChecked, translation));
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileBackAsync(definitions, It.IsAny<HeadwordViewModel>()));
             clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(It.IsAny<string>()));
             dialogServiceMock.Verify(x => x.DisplayToast("Back copied"));
         }
@@ -77,7 +82,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
             copySelectedToClipboardServiceMock
-                .Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>(), It.IsAny<bool>(), It.IsAny<string>()))
+                .Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>(), It.IsAny<HeadwordViewModel>()))
                 .ReturnsAsync(formattedBack);
 
             Mock<IClipboardService> clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
@@ -116,7 +121,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
             copySelectedToClipboardServiceMock
-                .Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>(), It.IsAny<bool>(), It.IsAny<string>()))
+                .Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>(), It.IsAny<HeadwordViewModel>()))
                 .ThrowsAsync(new Exception("exception from unit test"));
 
             Mock<IClipboardService> clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
