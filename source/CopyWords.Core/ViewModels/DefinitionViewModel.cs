@@ -13,7 +13,7 @@ namespace CopyWords.Core.ViewModels
             Meaning = definition.Meaning;
 
             Examples.Clear();
-            foreach (Example example in definition.Translations.First().Examples)
+            foreach (Example example in definition.Meanings.First().Examples)
             {
                 Examples.Add(new ExampleViewModel(example.Original));
             }

@@ -4,5 +4,5 @@
         string Meaning,
         string? Tag,
         int Position,
-        IEnumerable<Translation> Translations);
+        IEnumerable<Meaning> Meanings);
 }

@@ -9,11 +9,11 @@ namespace CopyWords.Parsers
 {
     public interface ISpanishDictPageParser
     {
-        Models.SpanishDict.WordJsonModel? ParseWordJson(string htmlPage);
+        WordJsonModel? ParseWordJson(string htmlPage);
 
-        string ParseHeadword(Models.SpanishDict.WordJsonModel wordObj);
+        string ParseHeadword(WordJsonModel wordObj);
 
-        string? ParseSound(Models.SpanishDict.WordJsonModel? wordObj);
+        string? ParseSound(WordJsonModel? wordObj);
 
         string CreateSoundURL(string sound);
 
@@ -28,7 +28,7 @@ namespace CopyWords.Parsers
 
         #region Public Methods
 
-        public Models.SpanishDict.WordJsonModel? ParseWordJson(string htmlPage)
+        public WordJsonModel? ParseWordJson(string htmlPage)
         {
             Models.SpanishDict.WordJsonModel? wordObj = null;
 
@@ -68,7 +68,7 @@ namespace CopyWords.Parsers
         /// <summary>
         /// Gets a string which contains Spanish word.
         /// </summary>
-        public string ParseHeadword(Models.SpanishDict.WordJsonModel wordObj)
+        public string ParseHeadword(WordJsonModel wordObj)
         {
             if (wordObj == null)
             {
@@ -85,7 +85,7 @@ namespace CopyWords.Parsers
         /// <summary>
         /// Gets ID of the sound file (which would be part of URL).
         /// </summary>
-        public string? ParseSound(Models.SpanishDict.WordJsonModel? wordObj)
+        public string? ParseSound(WordJsonModel? wordObj)
         {
             if (wordObj == null)
             {
@@ -115,7 +115,7 @@ namespace CopyWords.Parsers
 
         public string CreateSoundURL(string sound) => $"{SoundBaseUrl}lang_es_pron_{sound}_speaker_7_syllable_all_version_50.mp4";
 
-        public IEnumerable<SpanishDictDefinition> ParseTranslations(Models.SpanishDict.WordJsonModel? wordObj)
+        public IEnumerable<SpanishDictDefinition> ParseTranslations(WordJsonModel? wordObj)
         {
             if (wordObj == null)
             {
@@ -124,20 +124,20 @@ namespace CopyWords.Parsers
 
             var variants = new List<SpanishDictDefinition>();
 
-            Models.SpanishDict.Neodict[]? neodicts = wordObj.sdDictionaryResultsProps.entry?.neodict;
+            Neodict[]? neodicts = wordObj.sdDictionaryResultsProps.entry?.neodict;
 
             if (neodicts == null)
             {
                 return variants;
             }
 
-            foreach (Models.SpanishDict.Neodict neodict in neodicts)
+            foreach (Neodict neodict in neodicts)
             {
                 // WordVariant: WordES + WortType
                 //      Contexts
                 //          Translations
                 //              Examples
-                Models.SpanishDict.Posgroup posgroup = neodict.posGroups[0];
+                Posgroup posgroup = neodict.posGroups[0];
                 string wordES = neodict.subheadword;
                 string wordType = posgroup.posDisplay.name;
 
@@ -146,15 +146,15 @@ namespace CopyWords.Parsers
 
                 var contexts = new List<SpanishDictContext>();
                 int contextPosition = 1;
-                foreach (Models.SpanishDict.Sens sens in senses)
+                foreach (Sens sens in senses)
                 {
-                    var translations = new List<Models.Translation>();
+                    var meanings = new List<Models.Meaning>();
                     int translationPosition = 0;
 
-                    foreach (Models.SpanishDict.Translation tr in sens.translations)
+                    foreach (Translation tr in sens.translations)
                     {
                         var examples = new List<Models.Example>();
-                        foreach (Models.SpanishDict.Example ex in tr.examples)
+                        foreach (Example ex in tr.examples)
                         {
                             examples.Add(new Models.Example(Original: ex.textEs, English: ex.textEn, Russian: null));
                         }
@@ -189,7 +189,7 @@ namespace CopyWords.Parsers
                             imageUrl = ImageBaseUrl + encoded;
                         }
 
-                        translations.Add(new Models.Translation(fullTranslation, alphabeticalPosition, imageUrl, examples));
+                        meanings.Add(new Models.Meaning(fullTranslation, alphabeticalPosition, imageUrl, examples));
                     }
 
                     // Add context, e.g. "(colloquial) (extremely good) (Spain)"
@@ -209,7 +209,7 @@ namespace CopyWords.Parsers
                         fullContext += $" ({contextRegion})";
                     }
 
-                    contexts.Add(new SpanishDictContext(fullContext, contextPosition++, translations));
+                    contexts.Add(new SpanishDictContext(fullContext, contextPosition++, meanings));
                 }
 
                 variants.Add(new SpanishDictDefinition(wordES, wordType, contexts));

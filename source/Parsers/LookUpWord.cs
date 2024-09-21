@@ -134,7 +134,7 @@ namespace CopyWords.Parsers
                 translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
                 translations.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord);
 
-            IEnumerable<Definition> definitions = ddoDefinitions.Select(x => new Definition(headword, x.Meaning, x.Tag, partOfSpeech, endings, x.Position, x.Translations));
+            IEnumerable<Definition> definitions = ddoDefinitions.Select(x => new Definition(headword, x.Meaning, x.Tag, partOfSpeech, endings, x.Position, x.Meanings));
 
             var wordModel = new WordModel(
                 Word: headWordDA,

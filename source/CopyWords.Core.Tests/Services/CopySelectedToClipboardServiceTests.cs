@@ -233,8 +233,8 @@ namespace CopyWords.Core.Tests.Services
                 PartOfSpeech: "substantiv",
                 Endings: "-det eller (uofficielt) -et, -, -dene",
                 Position: 1,
-                Translations: [
-                    new Translation("", "", null, new List<Example>()
+                Meanings: [
+                    new Meaning("", "", null, new List<Example>()
                     {
                         new Example("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver", null, null),
                         new Example("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater", null, null)
@@ -258,8 +258,8 @@ namespace CopyWords.Core.Tests.Services
                 PartOfSpeech: "substantiv",
                 Endings: "-en, -er, -erne",
                 Position: 1,
-                Translations: [
-                    new Translation("", "", null, new List<Example>()
+                Meanings: [
+                    new Meaning("", "", null, new List<Example>()
                     {
                         new Example("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", null, null)
                     })
@@ -272,8 +272,8 @@ namespace CopyWords.Core.Tests.Services
                 PartOfSpeech: "substantiv",
                 Endings: "-en, -er, -erne",
                 Position: 2,
-                Translations: [
-                    new Translation("", "", null, new List<Example>()
+                Meanings: [
+                    new Meaning("", "", null, new List<Example>()
                     {
                         new Example("-", null, null)
                     })
@@ -286,8 +286,8 @@ namespace CopyWords.Core.Tests.Services
                 PartOfSpeech: "substantiv",
                 Endings: "-en, -er, -erne",
                 Position: 3,
-                Translations: [
-                    new Translation("", "", null, new List<Example>()
+                Meanings: [
+                    new Meaning("", "", null, new List<Example>()
                     {
                         new Example("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", null, null)
                     })

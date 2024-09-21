@@ -3,5 +3,5 @@
     public record SpanishDictContext(
         string ContextEN,
         int Position,
-        IEnumerable<Models.Translation> Translations);
+        IEnumerable<Models.Meaning> Meanings);
 }

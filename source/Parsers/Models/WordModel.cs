@@ -14,14 +14,14 @@
         string PartOfSpeech,
         string Endings, // only for Danish dictionary
         int Position,
-        IEnumerable<Translation> Translations);
+        IEnumerable<Meaning> Meanings);
 
     public record Headword(
         string Original,
         string? English,
         string? Russian);
 
-    public record Translation(
+    public record Meaning(
         string English,
         string AlphabeticalPosition,
         string? ImageUrl,
