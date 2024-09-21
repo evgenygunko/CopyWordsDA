@@ -138,9 +138,9 @@ namespace CopyWords.Parsers.Tests
             const string endings = "-en, -er, -erne";
             const string soundUrl = "https://static.ordnet.dk/mp3/11019/11019539_1.mp3";
 
-            var definition1 = new Definition("stor, langstrakt bruskfisk", Tag: null, Position: 1, Enumerable.Empty<Translation>());
-            var definition2 = new Definition("grisk, skrupelløs person", Tag: "slang", Position: 2, Enumerable.Empty<Translation>());
-            var definition3 = new Definition("person der er særlig dygtig til et spil", Tag: "slang", Position: 3, Enumerable.Empty<Translation>());
+            var definition1 = new Definition("stor, langstrakt bruskfisk", Tag: null, partOfSpeech, Position: 1, Enumerable.Empty<Translation>());
+            var definition2 = new Definition("grisk, skrupelløs person", Tag: "slang", partOfSpeech, Position: 2, Enumerable.Empty<Translation>());
+            var definition3 = new Definition("person der er særlig dygtig til et spil", Tag: "slang", partOfSpeech, Position: 3, Enumerable.Empty<Translation>());
             var definitions = new List<Definition>() { definition1, definition2, definition3 };
 
             var variants = new List<Variant>() { new Variant("haj", "https://ordnet.dk/ddo/ordbog?select=haj&query=haj") };
@@ -150,7 +150,6 @@ namespace CopyWords.Parsers.Tests
 
             Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
             ddoPageParserMock.Setup(x => x.ParseHeadword()).Returns(headWord);
-            ddoPageParserMock.Setup(x => x.ParsePartOfSpeech()).Returns(partOfSpeech);
             ddoPageParserMock.Setup(x => x.ParseEndings()).Returns(endings);
             ddoPageParserMock.Setup(x => x.ParseSound()).Returns(soundUrl);
             ddoPageParserMock.Setup(x => x.ParseDefinitions()).Returns(definitions);
@@ -162,7 +161,6 @@ namespace CopyWords.Parsers.Tests
 
             result.Should().NotBeNull();
             result!.Headword.Original.Should().Be(headWord);
-            result!.PartOfSpeech.Should().Be(partOfSpeech);
             result!.Endings.Should().Be(endings);
             result!.SoundUrl.Should().Be(soundUrl);
             result!.SoundFileName.Should().Be("haj.mp3");

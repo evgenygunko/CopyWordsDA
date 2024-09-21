@@ -229,6 +229,7 @@ namespace CopyWords.Core.Tests.Services
             var definition = new Definition(
                 Meaning: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
                 Tag: null,
+                PartOfSpeech: "substantiv",
                 Position: 1,
                 Translations: [
                     new Translation("", "", null, new List<Example>()
@@ -251,6 +252,7 @@ namespace CopyWords.Core.Tests.Services
             var definition1 = new Definition(
                 Meaning: "stor, langstrakt bruskfisk",
                 Tag: null,
+                PartOfSpeech: "substantiv",
                 Position: 1,
                 Translations: [
                     new Translation("", "", null, new List<Example>()
@@ -262,6 +264,7 @@ namespace CopyWords.Core.Tests.Services
             var definition2 = new Definition(
                 Meaning: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning",
                 Tag: "SLANG",
+                PartOfSpeech: "substantiv",
                 Position: 2,
                 Translations: [
                     new Translation("", "", null, new List<Example>()
@@ -273,6 +276,7 @@ namespace CopyWords.Core.Tests.Services
             var definition3 = new Definition(
                 Meaning: "person der er særlig dygtig til et spil, håndværk el.lign.",
                 Tag: "SLANG",
+                PartOfSpeech: "substantiv",
                 Position: 3,
                 Translations: [
                     new Translation("", "", null, new List<Example>()

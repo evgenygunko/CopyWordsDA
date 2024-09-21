@@ -35,7 +35,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             sut.WordViewModel.Should().NotBeNull();
             sut.WordViewModel.Front.Should().Be(wordModel.Headword.Original);
-            sut.WordViewModel.PartOfSpeech.Should().Be(wordModel.PartOfSpeech);
+            sut.WordViewModel.PartOfSpeech.Should().Be(wordModel.Definitions.First().PartOfSpeech);
             sut.WordViewModel.Forms.Should().Be(wordModel.Endings);
             sut.WordViewModel.SoundUrl.Should().Be(wordModel.SoundUrl);
             sut.WordViewModel.SoundFileName.Should().Be(wordModel.SoundFileName);

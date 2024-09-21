@@ -132,7 +132,6 @@ namespace CopyWords.Parsers
 
             var wordModel = new WordModel(
                 Headword: headword,
-                PartOfSpeech: _ddoPageParser.ParsePartOfSpeech(),
                 Endings: _ddoPageParser.ParseEndings(),
                 SoundUrl: soundUrl,
                 SoundFileName: soundFileName,
@@ -173,7 +172,7 @@ namespace CopyWords.Parsers
             {
                 foreach (Context context in wordVariant.Contexts)
                 {
-                    definitions.Add(new Definition(Meaning: context.ContextEN, Tag: null, context.Position, context.Translations));
+                    definitions.Add(new Definition(Meaning: context.ContextEN, Tag: null, PartOfSpeech: "", context.Position, context.Translations));
                 }
             }
 

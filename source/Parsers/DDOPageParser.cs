@@ -9,8 +9,6 @@ namespace CopyWords.Parsers
     {
         string ParseHeadword();
 
-        string ParsePartOfSpeech();
-
         string ParseEndings();
 
         string ParsePronunciation();
@@ -60,21 +58,6 @@ namespace CopyWords.Parsers
 
             headWord = DecodeText(headWord);
             return headWord;
-        }
-
-        public string ParsePartOfSpeech()
-        {
-            var div = FindElementByClassName("div", "definitionBoxTop");
-
-            var wordSpan = div.SelectSingleNode("//*[contains(@class, 'tekstmedium allow-glossing')]");
-
-            // Not all searches have part of the speech, e.g. "på højtryk" does not have one
-            if (wordSpan != null)
-            {
-                return DecodeText(wordSpan.InnerText);
-            }
-
-            return string.Empty;
         }
 
         /// <summary>
@@ -196,12 +179,33 @@ namespace CopyWords.Parsers
                         List<Translation> translations = new();
                         translations.Add(new Translation(meaning, "a", ImageUrl: null, Examples: examplesList));
 
-                        definitions.Add(new Definition(meaning, tag, definitionPosition++, translations));
+                        string partOfSpeech = ParsePartOfSpeech();
+
+                        definitions.Add(new Definition(meaning, tag, partOfSpeech, definitionPosition++, translations));
                     }
                 }
             }
 
             return definitions;
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        public string ParsePartOfSpeech()
+        {
+            var div = FindElementByClassName("div", "definitionBoxTop");
+
+            var wordSpan = div.SelectSingleNode("//*[contains(@class, 'tekstmedium allow-glossing')]");
+
+            // Not all searches have part of the speech, e.g. "på højtryk" does not have one
+            if (wordSpan != null)
+            {
+                return DecodeText(wordSpan.InnerText);
+            }
+
+            return string.Empty;
         }
 
         #endregion

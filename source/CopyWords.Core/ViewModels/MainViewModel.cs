@@ -104,7 +104,7 @@ namespace CopyWords.Core.ViewModels
             if (wordModel != null)
             {
                 _wordViewModel.Front = wordModel.Headword.Original;
-                _wordViewModel.PartOfSpeech = wordModel.PartOfSpeech;
+                _wordViewModel.PartOfSpeech = wordModel.Definitions.First().PartOfSpeech;
                 _wordViewModel.Forms = wordModel.Endings;
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
                 _wordViewModel.SoundFileName = wordModel.SoundFileName;
