@@ -118,10 +118,14 @@ namespace CopyWords.Parsers
             _ddoPageParser.LoadHtml(html);
             string headWordDA = _ddoPageParser.ParseHeadword();
 
+            string partOfSpeech = _ddoPageParser.ParsePartOfSpeech();
+            string endings = _ddoPageParser.ParseEndings();
+
             string soundUrl = _ddoPageParser.ParseSound();
             string soundFileName = string.IsNullOrEmpty(soundUrl) ? string.Empty : $"{headWordDA}.mp3";
 
-            List<Definition> definitions = _ddoPageParser.ParseDefinitions();
+            List<Models.DDO.DDODefinition> ddoDefinitions = _ddoPageParser.ParseDefinitions();
+            IEnumerable<Definition> definitions = ddoDefinitions.Select(x => new Definition(x.Meaning, x.Tag, partOfSpeech, endings, x.Position, x.Translations));
 
             // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
             IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headWordDA, definitions);

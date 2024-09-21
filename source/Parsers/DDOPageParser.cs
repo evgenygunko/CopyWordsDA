@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using CopyWords.Parsers.Exceptions;
 using CopyWords.Parsers.Models;
+using CopyWords.Parsers.Models.DDO;
 using HtmlAgilityPack;
 
 namespace CopyWords.Parsers
@@ -9,11 +10,15 @@ namespace CopyWords.Parsers
     {
         string ParseHeadword();
 
+        string ParsePartOfSpeech();
+
+        string ParseEndings();
+
         string ParsePronunciation();
 
         string ParseSound();
 
-        List<Definition> ParseDefinitions();
+        List<DDODefinition> ParseDefinitions();
 
         List<Variant> ParseVariants();
     }
@@ -56,6 +61,58 @@ namespace CopyWords.Parsers
 
             headWord = DecodeText(headWord);
             return headWord;
+        }
+
+        public string ParsePartOfSpeech()
+        {
+            var div = FindElementByClassName("div", "definitionBoxTop");
+
+            var wordSpan = div.SelectSingleNode("//*[contains(@class, 'tekstmedium allow-glossing')]");
+
+            // Not all searches have part of the speech, e.g. "på højtryk" does not have one
+            if (wordSpan != null)
+            {
+                return DecodeText(wordSpan.InnerText);
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets endings for found word.
+        /// </summary>
+        public string ParseEndings()
+        {
+            string endings = string.Empty;
+
+            var div = FindElementById("id-boj");
+
+            if (div != null)
+            {
+                var spanEndings = div.SelectSingleNode("./span[contains(@class, 'tekstmedium allow-glossing')]");
+                if (spanEndings != null)
+                {
+                    // Check if it has several meanings
+                    if (spanEndings.InnerHtml.Contains("<span class=\"diskret\">"))
+                    {
+                        string[] meanings = spanEndings.InnerHtml.Split("<span class=\"dividerDouble\">&#160;</span>");
+                        foreach (string meaning in meanings)
+                        {
+                            endings += meaning.Replace("<span class=\"diskret\">", "")
+                                .Replace("</span>", "");
+                            endings += "||";
+                        }
+
+                        endings = endings.TrimEnd("||".ToCharArray());
+                    }
+                    else
+                    {
+                        endings = spanEndings.InnerHtml.Replace("<span class=\"dividerDouble\">&#160;</span>", "||");
+                    }
+                }
+            }
+
+            return DecodeText(endings);
         }
 
         /// <summary>
@@ -109,9 +166,9 @@ namespace CopyWords.Parsers
         /// <summary>
         /// Gets definitions for found word. It will concatenate different definitions into one string with line breaks.
         /// </summary>
-        public List<Definition> ParseDefinitions()
+        public List<DDODefinition> ParseDefinitions()
         {
-            List<Definition> definitions = new();
+            List<DDODefinition> definitions = new();
 
             var div = FindElementById("content-betydninger");
             if (div == null)
@@ -140,71 +197,12 @@ namespace CopyWords.Parsers
                         List<Translation> translations = new();
                         translations.Add(new Translation(meaning, "a", ImageUrl: null, Examples: examplesList));
 
-                        string partOfSpeech = ParsePartOfSpeech();
-                        string endings = ParseEndings();
-
-                        definitions.Add(new Definition(meaning, tag, partOfSpeech, endings, definitionPosition++, translations));
+                        definitions.Add(new DDODefinition(meaning, tag, definitionPosition++, translations));
                     }
                 }
             }
 
             return definitions;
-        }
-
-        #endregion
-
-        #region Internal Methods
-
-        internal string ParsePartOfSpeech()
-        {
-            var div = FindElementByClassName("div", "definitionBoxTop");
-
-            var wordSpan = div.SelectSingleNode("//*[contains(@class, 'tekstmedium allow-glossing')]");
-
-            // Not all searches have part of the speech, e.g. "på højtryk" does not have one
-            if (wordSpan != null)
-            {
-                return DecodeText(wordSpan.InnerText);
-            }
-
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// Gets endings for found word.
-        /// </summary>
-        internal string ParseEndings()
-        {
-            string endings = string.Empty;
-
-            var div = FindElementById("id-boj");
-
-            if (div != null)
-            {
-                var spanEndings = div.SelectSingleNode("./span[contains(@class, 'tekstmedium allow-glossing')]");
-                if (spanEndings != null)
-                {
-                    // Check if it has several meanings
-                    if (spanEndings.InnerHtml.Contains("<span class=\"diskret\">"))
-                    {
-                        string[] meanings = spanEndings.InnerHtml.Split("<span class=\"dividerDouble\">&#160;</span>");
-                        foreach (string meaning in meanings)
-                        {
-                            endings += meaning.Replace("<span class=\"diskret\">", "")
-                                .Replace("</span>", "");
-                            endings += "||";
-                        }
-
-                        endings = endings.TrimEnd("||".ToCharArray());
-                    }
-                    else
-                    {
-                        endings = spanEndings.InnerHtml.Replace("<span class=\"dividerDouble\">&#160;</span>", "||");
-                    }
-                }
-            }
-
-            return DecodeText(endings);
         }
 
         #endregion

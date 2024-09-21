@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using CopyWords.Parsers.Models;
+using CopyWords.Parsers.Models.DDO;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -348,7 +349,7 @@ namespace CopyWords.Parsers.Tests
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Definition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions();
 
             definitions.Should().HaveCount(1);
             definitions.First().Meaning.Should().Be("noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse");
@@ -362,11 +363,11 @@ namespace CopyWords.Parsers.Tests
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Definition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions();
 
             definitions.Should().HaveCount(5);
 
-            Definition definition1 = definitions.First();
+            DDODefinition definition1 = definitions.First();
             definition1.Meaning.Should().Be("rette blikket i en bestemt retning");
             Translation translation1 = definition1.Translations.First();
             translation1.Examples.Should().HaveCount(3);
@@ -374,25 +375,25 @@ namespace CopyWords.Parsers.Tests
             translation1.Examples.Skip(1).First().Original.Should().Be("kig lige en gang!");
             translation1.Examples.Skip(2).First().Original.Should().Be("Han kiggede sig rundt, som om han ledte efter noget.");
 
-            Definition definition2 = definitions.Skip(1).First();
+            DDODefinition definition2 = definitions.Skip(1).First();
             definition2.Meaning.Should().Be("undersøge nærmere; sætte sig ind i");
             Translation translation2 = definition2.Translations.First();
             translation2.Examples.Should().HaveCount(1);
             translation2.Examples.First().Original.Should().Be("hun har kigget på de psykiske eftervirkninger hos voldtagne piger og kvinder.");
 
-            Definition definition3 = definitions.Skip(2).First();
+            DDODefinition definition3 = definitions.Skip(2).First();
             definition3.Meaning.Should().Be("prøve at finde");
             Translation translation3 = definition3.Translations.First();
             translation3.Examples.Should().HaveCount(1);
             translation3.Examples.First().Original.Should().Be("Vi kigger efter en bil i det prislag, og Carinaen opfylder de fleste af de krav, vi stiller.");
 
-            Definition definition4 = definitions.Skip(3).First();
+            DDODefinition definition4 = definitions.Skip(3).First();
             definition4.Meaning.Should().Be("skrive af efter nogen; kopiere noget");
             Translation translation4 = definition4.Translations.First();
             translation4.Examples.Should().HaveCount(1);
             translation4.Examples.First().Original.Should().Be("Berg er ikke altid lige smart, bl.a. ikke når hun afleverer blækregning for sent OG vedlægger den opgave, hun har kigget efter.");
 
-            Definition definition5 = definitions.Skip(4).First();
+            DDODefinition definition5 = definitions.Skip(4).First();
             definition5.Meaning.Should().Be("se på; betragte");
             Translation translation5 = definition5.Translations.First();
             translation5.Examples.Should().HaveCount(1);
@@ -407,7 +408,7 @@ namespace CopyWords.Parsers.Tests
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Definition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions();
 
             definitions.Should().HaveCount(1);
 
@@ -422,24 +423,24 @@ namespace CopyWords.Parsers.Tests
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Definition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions();
 
             definitions.Should().HaveCount(3);
 
-            Definition definition1 = definitions.First();
+            DDODefinition definition1 = definitions.First();
             definition1.Meaning.Should().Be("stor, langstrakt bruskfisk med tværstillet mund på undersiden af hovedet, med 5-7 gællespalter uden gællelåg og med kraftig, ru hud");
             definition1.Tag.Should().BeNull();
             Translation translation1 = definition1.Translations.First();
             translation1.Examples.Should().HaveCount(1);
             translation1.Examples.First().Original.Should().Be("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham.");
 
-            Definition definition2 = definitions.Skip(1).First();
+            DDODefinition definition2 = definitions.Skip(1).First();
             definition2.Meaning.Should().Be("grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning");
             definition2.Tag.Should().Be("slang");
             Translation translation2 = definition2.Translations.First();
             translation2.Examples.Should().HaveCount(0);
 
-            Definition definition3 = definitions.Skip(2).First();
+            DDODefinition definition3 = definitions.Skip(2).First();
             definition3.Meaning.Should().Be("person der er særlig dygtig til et spil, håndværk el.lign.");
             definition3.Tag.Should().Be("slang");
             Translation translation3 = definition3.Translations.First();
@@ -455,11 +456,11 @@ namespace CopyWords.Parsers.Tests
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Definition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions();
 
             definitions.Should().HaveCount(1);
 
-            Definition definition1 = definitions.First();
+            DDODefinition definition1 = definitions.First();
 
             Translation translation1 = definition1.Translations.First();
             translation1.Examples.Should().HaveCount(2);
@@ -475,11 +476,11 @@ namespace CopyWords.Parsers.Tests
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Definition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions();
 
             definitions.Should().HaveCount(1);
 
-            Definition definition1 = definitions.First();
+            DDODefinition definition1 = definitions.First();
 
             Translation translation1 = definition1.Translations.First();
             translation1.Examples.Should().HaveCount(2);
@@ -495,11 +496,11 @@ namespace CopyWords.Parsers.Tests
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Definition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions();
 
             definitions.Should().HaveCount(1);
 
-            Definition definition1 = definitions.First();
+            DDODefinition definition1 = definitions.First();
 
             Translation translation1 = definition1.Translations.First();
             translation1.Examples.Should().HaveCount(2);
@@ -513,11 +514,11 @@ namespace CopyWords.Parsers.Tests
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Definition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions();
 
             definitions.Should().HaveCount(1);
 
-            Definition definition1 = definitions.First();
+            DDODefinition definition1 = definitions.First();
 
             Translation translation1 = definition1.Translations.First();
             translation1.Examples.Should().HaveCount(2);
@@ -533,11 +534,11 @@ namespace CopyWords.Parsers.Tests
             DDOPageParser parser = new DDOPageParser();
             parser.LoadHtml(content);
 
-            List<Definition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions();
 
             definitions.Should().HaveCount(1);
 
-            Definition definition1 = definitions.First();
+            DDODefinition definition1 = definitions.First();
             definition1.Meaning.Should().Be("intensivt og som regel under tidspres");
             definition1.Tag.Should().Be("overført");
             Translation translation1 = definition1.Translations.First();
