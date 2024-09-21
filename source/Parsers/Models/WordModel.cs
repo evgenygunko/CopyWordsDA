@@ -2,7 +2,6 @@
 {
     public record WordModel(
         Headword Headword,
-        string Endings, // only for Danish dictionary
         string? SoundUrl,
         string? SoundFileName,
         IEnumerable<Definition> Definitions,
@@ -12,6 +11,7 @@
         string Meaning,
         string? Tag,
         string PartOfSpeech,
+        string Endings, // only for Danish dictionary
         int Position,
         IEnumerable<Translation> Translations);
 

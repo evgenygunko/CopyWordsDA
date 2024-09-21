@@ -9,8 +9,6 @@ namespace CopyWords.Parsers
     {
         string ParseHeadword();
 
-        string ParseEndings();
-
         string ParsePronunciation();
 
         string ParseSound();
@@ -58,43 +56,6 @@ namespace CopyWords.Parsers
 
             headWord = DecodeText(headWord);
             return headWord;
-        }
-
-        /// <summary>
-        /// Gets endings for found word.
-        /// </summary>
-        public string ParseEndings()
-        {
-            string endings = string.Empty;
-
-            var div = FindElementById("id-boj");
-
-            if (div != null)
-            {
-                var spanEndings = div.SelectSingleNode("./span[contains(@class, 'tekstmedium allow-glossing')]");
-                if (spanEndings != null)
-                {
-                    // Check if it has several meanings
-                    if (spanEndings.InnerHtml.Contains("<span class=\"diskret\">"))
-                    {
-                        string[] meanings = spanEndings.InnerHtml.Split("<span class=\"dividerDouble\">&#160;</span>");
-                        foreach (string meaning in meanings)
-                        {
-                            endings += meaning.Replace("<span class=\"diskret\">", "")
-                                .Replace("</span>", "");
-                            endings += "||";
-                        }
-
-                        endings = endings.TrimEnd("||".ToCharArray());
-                    }
-                    else
-                    {
-                        endings = spanEndings.InnerHtml.Replace("<span class=\"dividerDouble\">&#160;</span>", "||");
-                    }
-                }
-            }
-
-            return DecodeText(endings);
         }
 
         /// <summary>
@@ -180,8 +141,9 @@ namespace CopyWords.Parsers
                         translations.Add(new Translation(meaning, "a", ImageUrl: null, Examples: examplesList));
 
                         string partOfSpeech = ParsePartOfSpeech();
+                        string endings = ParseEndings();
 
-                        definitions.Add(new Definition(meaning, tag, partOfSpeech, definitionPosition++, translations));
+                        definitions.Add(new Definition(meaning, tag, partOfSpeech, endings, definitionPosition++, translations));
                     }
                 }
             }
@@ -193,7 +155,7 @@ namespace CopyWords.Parsers
 
         #region Internal Methods
 
-        public string ParsePartOfSpeech()
+        internal string ParsePartOfSpeech()
         {
             var div = FindElementByClassName("div", "definitionBoxTop");
 
@@ -206,6 +168,43 @@ namespace CopyWords.Parsers
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets endings for found word.
+        /// </summary>
+        internal string ParseEndings()
+        {
+            string endings = string.Empty;
+
+            var div = FindElementById("id-boj");
+
+            if (div != null)
+            {
+                var spanEndings = div.SelectSingleNode("./span[contains(@class, 'tekstmedium allow-glossing')]");
+                if (spanEndings != null)
+                {
+                    // Check if it has several meanings
+                    if (spanEndings.InnerHtml.Contains("<span class=\"diskret\">"))
+                    {
+                        string[] meanings = spanEndings.InnerHtml.Split("<span class=\"dividerDouble\">&#160;</span>");
+                        foreach (string meaning in meanings)
+                        {
+                            endings += meaning.Replace("<span class=\"diskret\">", "")
+                                .Replace("</span>", "");
+                            endings += "||";
+                        }
+
+                        endings = endings.TrimEnd("||".ToCharArray());
+                    }
+                    else
+                    {
+                        endings = spanEndings.InnerHtml.Replace("<span class=\"dividerDouble\">&#160;</span>", "||");
+                    }
+                }
+            }
+
+            return DecodeText(endings);
         }
 
         #endregion

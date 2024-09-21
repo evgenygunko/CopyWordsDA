@@ -230,6 +230,7 @@ namespace CopyWords.Core.Tests.Services
                 Meaning: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
                 Tag: null,
                 PartOfSpeech: "substantiv",
+                Endings: "-det eller (uofficielt) -et, -, -dene",
                 Position: 1,
                 Translations: [
                     new Translation("", "", null, new List<Example>()
@@ -253,6 +254,7 @@ namespace CopyWords.Core.Tests.Services
                 Meaning: "stor, langstrakt bruskfisk",
                 Tag: null,
                 PartOfSpeech: "substantiv",
+                Endings: "-en, -er, -erne",
                 Position: 1,
                 Translations: [
                     new Translation("", "", null, new List<Example>()
@@ -265,6 +267,7 @@ namespace CopyWords.Core.Tests.Services
                 Meaning: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning",
                 Tag: "SLANG",
                 PartOfSpeech: "substantiv",
+                Endings: "-en, -er, -erne",
                 Position: 2,
                 Translations: [
                     new Translation("", "", null, new List<Example>()
@@ -277,6 +280,7 @@ namespace CopyWords.Core.Tests.Services
                 Meaning: "person der er særlig dygtig til et spil, håndværk el.lign.",
                 Tag: "SLANG",
                 PartOfSpeech: "substantiv",
+                Endings: "-en, -er, -erne",
                 Position: 3,
                 Translations: [
                     new Translation("", "", null, new List<Example>()
