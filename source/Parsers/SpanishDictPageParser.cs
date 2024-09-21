@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Web;
 using CopyWords.Parsers.Exceptions;
-using CopyWords.Parsers.Models;
+using CopyWords.Parsers.Models.SpanishDict;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 
@@ -17,7 +17,7 @@ namespace CopyWords.Parsers
 
         string CreateSoundURL(string sound);
 
-        IEnumerable<WordVariant> ParseTranslations(Models.SpanishDict.WordJsonModel? wordObj);
+        IEnumerable<SpanishDictDefinition> ParseTranslations(Models.SpanishDict.WordJsonModel? wordObj);
     }
 
     public class SpanishDictPageParser : ISpanishDictPageParser
@@ -115,14 +115,14 @@ namespace CopyWords.Parsers
 
         public string CreateSoundURL(string sound) => $"{SoundBaseUrl}lang_es_pron_{sound}_speaker_7_syllable_all_version_50.mp4";
 
-        public IEnumerable<WordVariant> ParseTranslations(Models.SpanishDict.WordJsonModel? wordObj)
+        public IEnumerable<SpanishDictDefinition> ParseTranslations(Models.SpanishDict.WordJsonModel? wordObj)
         {
             if (wordObj == null)
             {
-                return Enumerable.Empty<WordVariant>();
+                return Enumerable.Empty<SpanishDictDefinition>();
             }
 
-            var variants = new List<WordVariant>();
+            var variants = new List<SpanishDictDefinition>();
 
             Models.SpanishDict.Neodict[]? neodicts = wordObj.sdDictionaryResultsProps.entry?.neodict;
 
@@ -144,19 +144,19 @@ namespace CopyWords.Parsers
                 // Flatten the list  - some words have 2 elements in neodict (hipócrita) and some just one (afeitar)
                 var senses = neodict.posGroups.SelectMany(x => x.senses);
 
-                var contexts = new List<Context>();
+                var contexts = new List<SpanishDictContext>();
                 int contextPosition = 1;
                 foreach (Models.SpanishDict.Sens sens in senses)
                 {
-                    var translations = new List<Translation>();
+                    var translations = new List<Models.Translation>();
                     int translationPosition = 0;
 
                     foreach (Models.SpanishDict.Translation tr in sens.translations)
                     {
-                        var examples = new List<Example>();
+                        var examples = new List<Models.Example>();
                         foreach (Models.SpanishDict.Example ex in tr.examples)
                         {
-                            examples.Add(new Example(Original: ex.textEs, English: ex.textEn, Russian: null));
+                            examples.Add(new Models.Example(Original: ex.textEs, English: ex.textEn, Russian: null));
                         }
 
                         string alphabeticalPosition = char.ConvertFromUtf32((int)'a' + translationPosition++);
@@ -189,7 +189,7 @@ namespace CopyWords.Parsers
                             imageUrl = ImageBaseUrl + encoded;
                         }
 
-                        translations.Add(new Translation(fullTranslation, alphabeticalPosition, imageUrl, examples));
+                        translations.Add(new Models.Translation(fullTranslation, alphabeticalPosition, imageUrl, examples));
                     }
 
                     // Add context, e.g. "(colloquial) (extremely good) (Spain)"
@@ -209,10 +209,10 @@ namespace CopyWords.Parsers
                         fullContext += $" ({contextRegion})";
                     }
 
-                    contexts.Add(new Context(fullContext, contextPosition++, translations));
+                    contexts.Add(new SpanishDictContext(fullContext, contextPosition++, translations));
                 }
 
-                variants.Add(new WordVariant(wordES, wordType, contexts));
+                variants.Add(new SpanishDictDefinition(wordES, wordType, contexts));
             }
 
             return variants;

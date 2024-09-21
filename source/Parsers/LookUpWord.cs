@@ -166,7 +166,7 @@ namespace CopyWords.Parsers
                 soundFileName = $"{headwordES}.mp4";
             }
 
-            IEnumerable<WordVariant> wordVariants = _spanishDictPageParser.ParseTranslations(wordObj);
+            IEnumerable<Models.SpanishDict.SpanishDictDefinition> wordVariants = _spanishDictPageParser.ParseTranslations(wordObj);
             if (wordVariants == null)
             {
                 return null;
