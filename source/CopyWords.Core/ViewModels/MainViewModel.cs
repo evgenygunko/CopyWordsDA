@@ -103,12 +103,12 @@ namespace CopyWords.Core.ViewModels
 
             if (wordModel != null)
             {
-                _wordViewModel.Front = wordModel.Headword.Original;
+                _wordViewModel.Front = wordModel.Word;
                 _wordViewModel.PartOfSpeech = wordModel.Definitions.First().PartOfSpeech;
                 _wordViewModel.Forms = wordModel.Definitions.First().Endings;
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
                 _wordViewModel.SoundFileName = wordModel.SoundFileName;
-                _wordViewModel.Headword.Update(wordModel.Headword);
+                _wordViewModel.Headword.Update(wordModel.Definitions.First().Headword);
 
                 _wordViewModel.Definitions.Clear();
                 int i = 1;

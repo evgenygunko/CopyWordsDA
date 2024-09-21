@@ -161,7 +161,7 @@ namespace CopyWords.Parsers.Tests
             WordModel? result = await sut.LookUpWordAsync("haj", new Options(SourceLanguage.Danish, TranslatorApiURL: null));
 
             result.Should().NotBeNull();
-            result!.Headword.Original.Should().Be(headWord);
+            result!.Word.Should().Be(headWord);
             result!.SoundUrl.Should().Be(soundUrl);
             result!.SoundFileName.Should().Be("haj.mp3");
             result!.Definitions.Should().HaveCount(3);
@@ -265,7 +265,7 @@ namespace CopyWords.Parsers.Tests
             WordModel? result = await sut.GetWordByUrlAsync(ddoUrl, options);
 
             result.Should().NotBeNull();
-            result!.Headword.Russian.Should().Be("акула");
+            result!.Definitions.First().Headword.Russian.Should().Be("акула");
 
             fileDownloaderMock.Verify(x => x.DownloadPageAsync(ddoUrl, Encoding.UTF8));
 
@@ -283,7 +283,7 @@ namespace CopyWords.Parsers.Tests
         {
             string translatorApiUrl = "http://localhost:7014/api/Translate";
             string headWord = _fixture.Create<string>();
-            var definitions = _fixture.Create<List<Definition>>();
+            var meanings = _fixture.Create<List<string>>();
 
             var translations = new List<TranslationOutput>()
             {
@@ -294,7 +294,7 @@ namespace CopyWords.Parsers.Tests
             translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
 
             var sut = _fixture.Create<LookUpWord>();
-            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
+            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, meanings);
 
             result.Should().HaveCount(1);
 
@@ -304,11 +304,11 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public async Task GetTranslationAsync_WhenTranslatorAPIUrlIsPassedAndDefinitionsIsEmpty_CallsTranslatorApi()
+        public async Task GetTranslationAsync_WhenTranslatorAPIUrlIsPassedAndMeaningsIsEmpty_CallsTranslatorApi()
         {
             string translatorApiUrl = "http://localhost:7014/api/Translate";
             string headWord = _fixture.Create<string>();
-            var definitions = Enumerable.Empty<Definition>();
+            var meanings = Enumerable.Empty<string>();
 
             var translations = new List<TranslationOutput>()
             {
@@ -319,7 +319,7 @@ namespace CopyWords.Parsers.Tests
             translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
 
             var sut = _fixture.Create<LookUpWord>();
-            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
+            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, meanings);
 
             result.Should().HaveCount(1);
 
@@ -335,7 +335,7 @@ namespace CopyWords.Parsers.Tests
         {
             const string? translatorApiUrl = null;
             string headWord = _fixture.Create<string>();
-            List<Definition> definitions = _fixture.Create<List<Definition>>();
+            List<string> meanings = _fixture.Create<List<string>>();
 
             var translations = new List<TranslationOutput>()
             {
@@ -345,7 +345,7 @@ namespace CopyWords.Parsers.Tests
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
 
             var sut = _fixture.Create<LookUpWord>();
-            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, definitions);
+            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, meanings);
 
             result.Should().HaveCount(0);
 

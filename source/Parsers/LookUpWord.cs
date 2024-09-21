@@ -125,17 +125,19 @@ namespace CopyWords.Parsers
             string soundFileName = string.IsNullOrEmpty(soundUrl) ? string.Empty : $"{headWordDA}.mp3";
 
             List<Models.DDO.DDODefinition> ddoDefinitions = _ddoPageParser.ParseDefinitions();
-            IEnumerable<Definition> definitions = ddoDefinitions.Select(x => new Definition(x.Meaning, x.Tag, partOfSpeech, endings, x.Position, x.Translations));
 
             // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-            IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headWordDA, definitions);
+            IEnumerable<string> meanings = ddoDefinitions.Select(x => x.Meaning);
+            IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headWordDA, meanings);
             Headword headword = new Headword(
                 headWordDA,
                 translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
                 translations.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord);
 
+            IEnumerable<Definition> definitions = ddoDefinitions.Select(x => new Definition(headword, x.Meaning, x.Tag, partOfSpeech, endings, x.Position, x.Translations));
+
             var wordModel = new WordModel(
-                Headword: headword,
+                Word: headWordDA,
                 SoundUrl: soundUrl,
                 SoundFileName: soundFileName,
                 Definitions: definitions,
@@ -170,17 +172,8 @@ namespace CopyWords.Parsers
                 return null;
             }
 
-            List<Definition> definitions = new();
-            foreach (WordVariant wordVariant in wordVariants)
-            {
-                foreach (Context context in wordVariant.Contexts)
-                {
-                    definitions.Add(new Definition(Meaning: context.ContextEN, Tag: null, PartOfSpeech: "", Endings: "", context.Position, context.Translations));
-                }
-            }
-
             // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-            IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headwordES, Enumerable.Empty<Definition>());
+            IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headwordES, Enumerable.Empty<string>());
             Headword headword = new Headword(
                 headwordES,
                 translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
@@ -188,8 +181,17 @@ namespace CopyWords.Parsers
 
             throw new NotImplementedException();
 
-            //var wordModel = new WordModel(word, soundUrl, soundFileName, translations);
-            /*var wordModel = new WordModel(
+            /*
+            List<Definition> definitions = new();
+            foreach (WordVariant wordVariant in wordVariants)
+            {
+                foreach (Context context in wordVariant.Contexts)
+                {
+                    definitions.Add(new Definition( Meaning: context.ContextEN, Tag: null, PartOfSpeech: "", Endings: "", context.Position, context.Translations));
+                }
+            }
+
+            var wordModel = new WordModel(
                 Headword: headword,
                 PartOfSpeech: null, // todo: to implement
                 Endings: null, // Spanish words don't have endings, this property only makes sense for Danish
@@ -202,13 +204,13 @@ namespace CopyWords.Parsers
             return wordModel;*/
         }
 
-        internal async Task<IEnumerable<TranslationOutput>> GetTranslationAsync(string? translatorApiURL, string headWord, IEnumerable<Definition> definitions)
+        internal async Task<IEnumerable<TranslationOutput>> GetTranslationAsync(string? translatorApiURL, string headWord, IEnumerable<string> meanings)
         {
             IEnumerable<TranslationOutput>? translations = null;
 
             if (!string.IsNullOrEmpty(translatorApiURL))
             {
-                var translationInput = new TranslationInput(headWord, definitions.Select(x => x.Meaning), LanguageDA, DestinationLanguages);
+                var translationInput = new TranslationInput(headWord, meanings, LanguageDA, DestinationLanguages);
 
                 translations = await _translatorAPIClient.TranslateAsync(translatorApiURL, translationInput);
             }

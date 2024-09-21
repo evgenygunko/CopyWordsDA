@@ -1,13 +1,14 @@
 ﻿namespace CopyWords.Parsers.Models
 {
     public record WordModel(
-        Headword Headword,
+        string Word,
         string? SoundUrl,
         string? SoundFileName,
         IEnumerable<Definition> Definitions,
         IEnumerable<Variant> Variations); // only for Danish dictionary
 
     public record Definition(
+        Headword Headword,
         string Meaning,
         string? Tag,
         string PartOfSpeech,

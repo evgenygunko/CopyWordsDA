@@ -227,6 +227,7 @@ namespace CopyWords.Core.Tests.Services
         internal static ObservableCollection<DefinitionViewModel> CreateVMForGrillspyd()
         {
             var definition = new Definition(
+                Headword: new Headword("grillspyd", null, null),
                 Meaning: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
                 Tag: null,
                 PartOfSpeech: "substantiv",
@@ -251,6 +252,7 @@ namespace CopyWords.Core.Tests.Services
         private static ObservableCollection<DefinitionViewModel> CreateVMForHaj()
         {
             var definition1 = new Definition(
+                Headword: new Headword("haj", null, null),
                 Meaning: "stor, langstrakt bruskfisk",
                 Tag: null,
                 PartOfSpeech: "substantiv",
@@ -264,6 +266,7 @@ namespace CopyWords.Core.Tests.Services
                 ]);
 
             var definition2 = new Definition(
+                Headword: new Headword("haj", null, null),
                 Meaning: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning",
                 Tag: "SLANG",
                 PartOfSpeech: "substantiv",
@@ -277,6 +280,7 @@ namespace CopyWords.Core.Tests.Services
                 ]);
 
             var definition3 = new Definition(
+                Headword: new Headword("haj", null, null),
                 Meaning: "person der er særlig dygtig til et spil, håndværk el.lign.",
                 Tag: "SLANG",
                 PartOfSpeech: "substantiv",
