@@ -1,0 +1,495 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Fel%20veneno",
+    "wordOfTheDayData": {
+        "wordId": 36693,
+        "wordSource": "hormigueo",
+        "wordDisplay": "el hormigueo",
+        "image": "https:\u002F\u002Fd25rq8gxcq0p71.cloudfront.net\u002Fios-wotd-images\u002Foriginal\u002Fab408967-00e6-4fe5-848d-9b613258b840.png",
+        "translationText": "tingling",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=el-hormigueo&key=d8b5f633ed9f271163507653e4b7e3f9"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 21,
+    "excludeAds": false,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "d3fh33eu6ay0qj.cloudfront.net",
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "d1q4kshf6f0axi.cloudfront.net",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "coreWebVitals": true,
+        "sdIdentity": true,
+        "sdPrimisTest": false,
+        "sdCss": false,
+        "sdParty": false,
+        "sdAnimation": false,
+        "sdVocabVoice": false,
+        "adhesionMarketingInt": 1,
+        "translateEverythingSlideCopy": "crl_document_image_prioritized",
+        "premiumBenefitsLandingPageRound2": null,
+        "randomizedExperiments": { "translate_everything_slide_copy": "crl_document_image_prioritized" }
+    },
+    "serverNowAtPageview": 1717571589149,
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "el veneno",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Fel%20veneno",
+            "path": "translate",
+            "token": "el veneno",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Fel%20veneno",
+            "path": "examples",
+            "token": "el veneno",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Fel%20veneno",
+            "path": "pronunciation",
+            "token": "el veneno",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Fel%20veneno",
+            "path": "thesaurus",
+            "token": "el veneno",
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "veneno",
+                "textToPronounce": "veneno",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=veneno&key=02e80ba4541b077d1015c29dcf0ace65",
+                "pronunciations": [
+                    {
+                        "id": 12906,
+                        "ipa": "be*ˈne*no",
+                        "abc": "ve*ˈne*no",
+                        "spa": "beh*ˈneh*noh",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 12907,
+                        "ipa": "be*ˈne*no",
+                        "abc": "ve*ˈne*no",
+                        "spa": "beh*ˈneh*noh",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "venom",
+                "textToPronounce": "venom",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=venom&key=8b4eac2d1686525d52999ca7dc70471b",
+                "pronunciations": [
+                    {
+                        "id": 103636,
+                        "ipa": "ˈvɛ*nəm",
+                        "abc": "ˈve*nom",
+                        "spa": "ˈveh*nuhm",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "venom"
+                    },
+                    {
+                        "id": 103637,
+                        "ipa": "ˈvɛ*nəm",
+                        "abc": "ˈve*nom",
+                        "spa": "ˈveh*nuhm",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "venom"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": {
+                "displayText": "poison",
+                "textToPronounce": "poison",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=poison&key=8f1b7ed7ec097ab7f413b9dbcd2c42a8",
+                "pronunciations": [
+                    {
+                        "id": 7040,
+                        "ipa": "ˈpɔɪ*zɪn",
+                        "abc": "ˈpoi*son",
+                        "spa": "ˈpoy*zihn",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "poison"
+                    },
+                    {
+                        "id": 7041,
+                        "ipa": "ˈpɔɪ*zən",
+                        "abc": "ˈpoi*son",
+                        "spa": "ˈpoy*zuhn",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "poison"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef2"
+            }
+        },
+        "addToListProps": {
+            "word": {
+                "id": 64220,
+                "source": "veneno",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "neodict": [
+                {
+                    "subheadword": "veneno",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "n",
+                                "abbrEs": "s",
+                                "nameEn": "noun",
+                                "nameEs": "sustantivo"
+                            },
+                            "entryLang": "es",
+                            "gender": { "gender": "M" },
+                            "senses": [
+                                {
+                                    "contextEn": "toxic substance",
+                                    "contextEs": "sustancia tóxica",
+                                    "gender": "M",
+                                    "id": 11542,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "of an animal",
+                                            "contextEs": "de un animal",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The wound still has venom in it.",
+                                                    "textEs": "La herida aún tiene el veneno dentro."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 17315,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fd533b470-18a4-4cae-ad08-3ee8858ae02c.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "venom"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "These mushrooms contain a deadly poison.",
+                                                    "textEs": "Estos hongos contienen un veneno mortal."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 17311,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fd07aa7fd-a3fd-4d06-9751-656180d8b1ee.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "poison"
+                                        }
+                                    ],
+                                    "subheadword": "veneno",
+                                    "idx": 1,
+                                    "context": "toxic substance",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "venom",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fd533b470-18a4-4cae-ad08-3ee8858ae02c.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [ "venom" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "of an animal",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "La herida aún tiene el veneno dentro.", "The wound still has venom in it." ] ]
+                                        },
+                                        {
+                                            "translation": "poison",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fd07aa7fd-a3fd-4d06-9751-656180d8b1ee.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [ "poison" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "Estos hongos contienen un veneno mortal.", "These mushrooms contain a deadly poison." ] ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "ill intent",
+                                    "contextEs": "malevolencia",
+                                    "gender": "M",
+                                    "id": 11544,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "She spat at him with such venom that he didn't even dare respond.",
+                                                    "textEs": "Le espetó con tal veneno que ni se atrevió a responderle."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 17313,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "venom"
+                                        }
+                                    ],
+                                    "subheadword": "veneno",
+                                    "idx": 2,
+                                    "context": "ill intent",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "venom",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [ "venom" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "Le espetó con tal veneno que ni se atrevió a responderle.", "She spat at him with such venom that he didn't even dare respond." ] ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "masculine noun",
+                                "tooltip": {
+                                    "def": "A masculine noun is used with masculine articles and adjectives (e.g. el hombre guapo, el sol amarillo).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fmasculine-and-feminine-nouns"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "veneno",
+            "regionChoice": "spain",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [ "beh*ˈneh*noh" ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": { "linkedArticles": [] },
+    "searchBoxProps": {
+        "initialSearchText": "el veneno",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [ "take", "buddy", "get", "bear", "square", "escape", "live", "party" ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [ "bae", "YOLO", "okurrr", "LOL", "my bad", "dude", "y'all", "wassup" ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [ "witching hour", "break a leg", "in a nutshell", "it's raining cats and dogs" ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [ "ser vs estar", "por vs para", "saber vs conocer", "cabra vs chivo" ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 64220
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "el veneno",
+        "originalQuery": "el veneno",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": null,
+    "verbLang": "es",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "lockedPremiumContentProps": null,
+    "adList": "[\"adTopLarge\",\"adSide1\",\"adSide3\",\"adMiddle2\"]",
+    "dictionaryPossibleResults": [
+        {
+            "wordId": 64220,
+            "wordSource": "veneno",
+            "resultHeuristic": "inflection",
+            "result": "el veneno",
+            "translation1": "the venom",
+            "inflectionType": "singular",
+            "partOfSpeech": "noun with definite article",
+            "inflectionDescription": "See the entry for veneno.",
+            "audioUrls": {
+                "result": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=el-veneno&key=5e41da87dbd8631dafd8f3b17e67230f",
+                "translation1": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=the-venom&key=245105e1363a4e73d55f0b5cec1cff76"
+            }
+        }
+    ],
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 64220,
+        "renderImmediately": true
+    }
+}

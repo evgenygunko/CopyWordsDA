@@ -174,42 +174,44 @@ namespace CopyWords.Parsers
                 soundFileName = $"{headwordES}.mp4";
             }
 
-            IEnumerable<Models.SpanishDict.SpanishDictDefinition> wordVariants = _spanishDictPageParser.ParseTranslations(wordObj);
-            if (wordVariants == null)
+            // SpanishDict can return several definitions (e.g. for a "transitive verb" and "reflexive verb").
+            IEnumerable<Models.SpanishDict.SpanishDictDefinition> spanishDictDefinitions = _spanishDictPageParser.ParseDefinitions(wordObj);
+            if (spanishDictDefinitions == null)
             {
                 return null;
             }
 
-            // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-            IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headwordES, Enumerable.Empty<string>());
-            Headword headword = new Headword(
-                headwordES,
-                translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
-                translations.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord);
-
-            throw new NotImplementedException();
-
-            /*
             List<Definition> definitions = new();
-            foreach (WordVariant wordVariant in wordVariants)
+            foreach (var spanishDictDefinition in spanishDictDefinitions)
             {
-                foreach (Context context in wordVariant.Contexts)
+                List<Context> contexts = new();
+                foreach (var spanishDictContext in spanishDictDefinition.Contexts)
                 {
-                    definitions.Add(new Definition( Meaning: context.ContextEN, Tag: null, PartOfSpeech: "", Endings: "", context.Position, context.Translations));
+                    contexts.Add(new Context(spanishDictContext.ContextEN, spanishDictContext.Position, spanishDictContext.Meanings));
+
+                    // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
+                    IEnumerable<string> meaningsToTranslate = spanishDictContext.Meanings.Select(x => x.Description);
+                    IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headwordES, meaningsToTranslate);
+
+                    Headword headword = new Headword(
+                        headwordES,
+                        translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
+                        translations.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord);
+
+                    // Spanish words don't have endings, this property only makes sense for Danish
+                    definitions.Add(new Definition(headword, PartOfSpeech: spanishDictDefinition.Type, Endings: "", contexts));
                 }
             }
 
             var wordModel = new WordModel(
-                Headword: headword,
-                PartOfSpeech: null, // todo: to implement
-                Endings: null, // Spanish words don't have endings, this property only makes sense for Danish
+                Word: headwordES,
                 SoundUrl: soundUrl,
                 SoundFileName: soundFileName,
                 Definitions: definitions,
                 Variations: Enumerable.Empty<Variant>() // there are no word variants in SpanishDict 
             );
 
-            return wordModel;*/
+            return wordModel;
         }
 
         internal async Task<IEnumerable<TranslationOutput>> GetTranslationAsync(string? translatorApiURL, string headWord, IEnumerable<string> meanings)

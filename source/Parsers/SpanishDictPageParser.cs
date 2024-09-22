@@ -17,7 +17,7 @@ namespace CopyWords.Parsers
 
         string CreateSoundURL(string sound);
 
-        IEnumerable<SpanishDictDefinition> ParseTranslations(Models.SpanishDict.WordJsonModel? wordObj);
+        IEnumerable<SpanishDictDefinition> ParseDefinitions(WordJsonModel? wordObj);
     }
 
     public class SpanishDictPageParser : ISpanishDictPageParser
@@ -30,7 +30,7 @@ namespace CopyWords.Parsers
 
         public WordJsonModel? ParseWordJson(string htmlPage)
         {
-            Models.SpanishDict.WordJsonModel? wordObj = null;
+            WordJsonModel? wordObj = null;
 
             IEnumerable<HtmlNode> scripts = FindScripts(htmlPage);
 
@@ -51,7 +51,7 @@ namespace CopyWords.Parsers
                         .TrimEnd()
                         .TrimEnd(';');
 
-                    wordObj = JsonConvert.DeserializeObject<Models.SpanishDict.WordJsonModel>(json);
+                    wordObj = JsonConvert.DeserializeObject<WordJsonModel>(json);
 
                     // Now SpanishDict returns a page with a widget from Microsoft Translator when it can't find a word in its database.
                     // We want to return "not found" in this case.                        
@@ -115,7 +115,7 @@ namespace CopyWords.Parsers
 
         public string CreateSoundURL(string sound) => $"{SoundBaseUrl}lang_es_pron_{sound}_speaker_7_syllable_all_version_50.mp4";
 
-        public IEnumerable<SpanishDictDefinition> ParseTranslations(WordJsonModel? wordObj)
+        public IEnumerable<SpanishDictDefinition> ParseDefinitions(WordJsonModel? wordObj)
         {
             if (wordObj == null)
             {

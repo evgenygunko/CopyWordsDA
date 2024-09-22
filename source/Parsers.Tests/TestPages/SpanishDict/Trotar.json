@@ -1,0 +1,921 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Ftrotar",
+    "wordOfTheDayData": {
+        "wordSource": "vacío",
+        "wordDisplay": "vacío",
+        "translationText": "empty",
+        "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=vac%C3%ADo&key=a705f512aef9460512ba548d8ece6e32"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 21,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "d3fh33eu6ay0qj.cloudfront.net",
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "d1q4kshf6f0axi.cloudfront.net",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdPriceTestingLatam": false,
+        "coreWebVitals": true,
+        "sdIdentity": true,
+        "sdCss": false,
+        "adhesionMarketingInt": 3,
+        "sdDefer": false,
+        "reduxlessVocabQuiz": null,
+        "documentTranslation": null,
+        "voiceTranslation": null,
+        "randomizedExperiments": {}
+    },
+    "serverNowAtPageview": 1694327415494,
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "trotar",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Ftrotar",
+            "path": "translate",
+            "token": "trotar",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Conjugation",
+            "active": false,
+            "href": "\u002Fconjugate\u002Ftrotar",
+            "path": "conjugate",
+            "token": "trotar",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Ftrotar",
+            "path": "examples",
+            "token": "trotar",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Ftrotar",
+            "path": "pronunciation",
+            "token": "trotar",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Ftrotar",
+            "path": "thesaurus",
+            "token": "trotar",
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "trotar",
+                "textToPronounce": "trotar",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=trotar&key=9b76c3c984c6c86f0353cab9d772e392",
+                "pronunciations": [
+                    {
+                        "id": 12594,
+                        "ipa": "tɾo*ˈtaɾ",
+                        "abc": "tro*ˈtar",
+                        "spa": "troh*ˈtahr",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 12595,
+                        "ipa": "tɾo*ˈtaɾ",
+                        "abc": "tro*ˈtar",
+                        "spa": "troh*ˈtahr",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "to jog",
+                "textToPronounce": "jog",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=jog&key=8791dfb3e18651aba18ae4501aeab7df",
+                "pronunciations": [
+                    {
+                        "id": 7554,
+                        "ipa": "dʒɑg",
+                        "abc": "jog",
+                        "spa": "jag",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "jog"
+                    },
+                    {
+                        "id": 7555,
+                        "ipa": "dʒɒg",
+                        "abc": "jog",
+                        "spa": "jag",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "jog"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 62554,
+                "source": "trotar",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "chambers": "Do not client render",
+            "collins": "Do not client render",
+            "neodict": [
+                {
+                    "subheadword": "trotar",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "vi",
+                                "abbrEs": "vi",
+                                "nameEn": "intransitive verb",
+                                "nameEs": "verbo intransitivo"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "to run",
+                                    "contextEs": "correr",
+                                    "gender": null,
+                                    "id": 16797,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vi",
+                                        "abbrEs": "vi",
+                                        "nameEn": "intransitive verb",
+                                        "nameEs": "verbo intransitivo"
+                                    },
+                                    "regions": [
+                                        {
+                                            "abbrEn": "Mex",
+                                            "abbrEs": "Mex",
+                                            "nameEn": "Mexico",
+                                            "nameEs": "México"
+                                        },
+                                        {
+                                            "abbrEn": "Pan",
+                                            "abbrEs": "Pan",
+                                            "nameEn": "Panama",
+                                            "nameEs": "Panamá"
+                                        },
+                                        {
+                                            "abbrEn": "SoCone",
+                                            "abbrEs": "ConoSur",
+                                            "nameEn": "Southern Cone",
+                                            "nameEs": "Cono Sur"
+                                        }
+                                    ],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "I go jogging every morning.",
+                                                    "textEs": "Salgo a trotar todas las mañanas."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 26131,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002F13117538-0ac5-43e0-a84e-42ab9a9f0948.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to jog"
+                                        }
+                                    ],
+                                    "subheadword": "trotar",
+                                    "idx": 1,
+                                    "context": "to run",
+                                    "regionsDisplay": [
+                                        {
+                                            "name": "Mexico",
+                                            "tooltip": {
+                                                "def": "Regionalism used in Mexico"
+                                            }
+                                        },
+                                        {
+                                            "name": "Panama",
+                                            "tooltip": {
+                                                "def": "Regionalism used in Panama"
+                                            }
+                                        },
+                                        {
+                                            "name": "Southern Cone",
+                                            "tooltip": null
+                                        }
+                                    ],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to jog",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002F13117538-0ac5-43e0-a84e-42ab9a9f0948.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to jog"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Salgo a trotar todas las mañanas.",
+                                                    "I go jogging every morning."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "horseback riding",
+                                    "contextEs": "equitación",
+                                    "gender": null,
+                                    "id": 16798,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vi",
+                                        "abbrEs": "vi",
+                                        "nameEn": "intransitive verb",
+                                        "nameEs": "verbo intransitivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Carolina gets up early every day to take the horse out to trot.",
+                                                    "textEs": "Carolina se levanta temprano cada día a sacar el caballo a trotar."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 26132,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to trot"
+                                        }
+                                    ],
+                                    "subheadword": "trotar",
+                                    "idx": 2,
+                                    "context": "horseback riding",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to trot",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to trot"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Carolina se levanta temprano cada día a sacar el caballo a trotar.",
+                                                    "Carolina gets up early every day to take the horse out to trot."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "to bustle about",
+                                    "contextEs": "ajetrearse",
+                                    "gender": null,
+                                    "id": 16799,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vi",
+                                        "abbrEs": "vi",
+                                        "nameEn": "intransitive verb",
+                                        "nameEs": "verbo intransitivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [
+                                        {
+                                            "abbrEn": "col",
+                                            "abbrEs": "col",
+                                            "nameEn": "colloquial",
+                                            "nameEs": "coloquial"
+                                        }
+                                    ],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "I'm tired of rushing around all day.",
+                                                    "textEs": "Ya me cansé de estar trotando todo el día."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 26133,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to rush around"
+                                        }
+                                    ],
+                                    "subheadword": "trotar",
+                                    "idx": 3,
+                                    "context": "to bustle about",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [
+                                        {
+                                            "name": "colloquial",
+                                            "tooltip": {
+                                                "def": "A word or phrase that is commonly used in conversational speech (e.g., skinny, grandma)."
+                                            }
+                                        }
+                                    ],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to rush around",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to rush around"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Ya me cansé de estar trotando todo el día.",
+                                                    "I'm tired of rushing around all day."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "intransitive verb",
+                                "tooltip": {
+                                    "def": "An intransitive verb is one that does not require a direct object (e.g. The man sneezed.).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "neoharrap": [
+                {
+                    "subheadword": "trotar",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "vi",
+                                "abbrEs": "vi",
+                                "nameEn": "intransitive verb",
+                                "nameEs": "verbo intransitivo"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEs": "",
+                                    "regions": [],
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "to trot",
+                                            "examples": []
+                                        }
+                                    ],
+                                    "contextEn": "",
+                                    "partOfSpeech": {
+                                        "abbrEn": "vi",
+                                        "abbrEs": "vi",
+                                        "nameEn": "intransitive verb",
+                                        "nameEs": "verbo intransitivo"
+                                    },
+                                    "subheadword": "trotar",
+                                    "idx": 1,
+                                    "context": "general",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to trot",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to trot"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEs": "coloquial",
+                                    "regions": [],
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "contextEs": "andar mucho",
+                                            "translation": "to dash o run around",
+                                            "examples": []
+                                        }
+                                    ],
+                                    "contextEn": "colloquial",
+                                    "partOfSpeech": {
+                                        "abbrEn": "vi",
+                                        "abbrEs": "vi",
+                                        "nameEn": "intransitive verb",
+                                        "nameEs": "verbo intransitivo"
+                                    },
+                                    "subheadword": "trotar",
+                                    "idx": 2,
+                                    "context": "colloquial",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to dash o run around",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to dash o run around"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": []
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "intransitive verb",
+                                "tooltip": {
+                                    "def": "An intransitive verb is one that does not require a direct object (e.g. The man sneezed.).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "velazquez": "Do not client render"
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "trotar",
+            "regionChoice": "spain",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [
+                "troh*ˈtahr"
+            ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": {
+        "linkedArticles": []
+    },
+    "searchBoxProps": {
+        "initialSearchText": "trotar",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [
+                    "bae",
+                    "YOLO",
+                    "okurrr",
+                    "LOL",
+                    "my bad",
+                    "dude",
+                    "y'all",
+                    "wassup"
+                ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 62554
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "trotar",
+        "originalQuery": "trotar",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": {
+        "id": 62554,
+        "infinitive": "trotar",
+        "matchedConjugation": "trotar",
+        "isReflexive": 1,
+        "isReflexiveVariation": false,
+        "verbType": 1,
+        "supportsConjugationDrills": 1,
+        "reason": "exact match",
+        "infinitiveTranslation": "jog",
+        "pastParticiple": {
+            "word": "trotado",
+            "translation": "jogged"
+        },
+        "gerund": {
+            "word": "trotando",
+            "translation": "jogging"
+        },
+        "paradigms": {
+            "presentIndicative": [
+                {
+                    "word": "troto",
+                    "translation": "jog",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=troto&key=fd6a9c03aa2390d5cf31e462ca5362e2&region=spain"
+                },
+                {
+                    "word": "trotas",
+                    "translation": "jog",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=trotas&key=1c05f88aebc89887da4324675f35d76e&region=spain"
+                },
+                {
+                    "word": "trota",
+                    "translation": "jogs",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=trota&key=14abc7dd52e6110282f0648dfb430b01&region=spain"
+                },
+                {
+                    "word": "trotamos",
+                    "translation": "jog",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=trotamos&key=802be10f5465da5e1ff3640bfe08a45f&region=spain"
+                },
+                {
+                    "word": "trotáis",
+                    "translation": "jog",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=trot%C3%A1is&key=e94a3b939bff9553af2e167a0b57f79f&region=spain"
+                },
+                {
+                    "word": "trotan",
+                    "translation": "jog",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=trotan&key=02d6e1bf26082b4284bc0e83894dc421&region=spain"
+                },
+                {
+                    "word": "trotás",
+                    "translation": "jog",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=trot%C3%A1s&key=8fe8caf91c8f8403b822ede2255db990&region=latam"
+                }
+            ],
+            "preteritIndicative": [
+                {
+                    "word": "troté",
+                    "translation": "jogged",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=trot%C3%A9&key=998a5d0716bd12eeeedaacbac37dbdf7&region=spain"
+                },
+                {
+                    "word": "trotaste",
+                    "translation": "jogged",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=trotaste&key=e9d4c68daae44d3e521d2cec234247e6&region=spain"
+                },
+                {
+                    "word": "trotó",
+                    "translation": "jogged",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=trot%C3%B3&key=1a0577372dce2b9f036f91ab2590ccfb&region=spain"
+                },
+                {
+                    "word": "trotamos",
+                    "translation": "jogged",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=trotamos&key=802be10f5465da5e1ff3640bfe08a45f&region=spain"
+                },
+                {
+                    "word": "trotasteis",
+                    "translation": "jogged",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=trotasteis&key=d82f69f599f323fee26c6de4ce97ee50&region=spain&name=maria22k"
+                },
+                {
+                    "word": "trotaron",
+                    "translation": "jogged",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=trotaron&key=bef3fb28a611127c329dad871f02b17e&region=spain"
+                },
+                {
+                    "word": "trotaste",
+                    "translation": "jogged",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=trotaste&key=e9d4c68daae44d3e521d2cec234247e6&region=latam"
+                }
+            ],
+            "imperfectIndicative": [
+                {
+                    "word": "trotaba",
+                    "translation": "was jogging",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=trotaba&key=6c3f2f38363ddfe4b096e7e89f0e723e&region=spain"
+                },
+                {
+                    "word": "trotabas",
+                    "translation": "were jogging",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=trotabas&key=e4cdfb77865b3aa714810ebc4ed9c27c&region=spain"
+                },
+                {
+                    "word": "trotaba",
+                    "translation": "was jogging",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=trotaba&key=6c3f2f38363ddfe4b096e7e89f0e723e&region=spain"
+                },
+                {
+                    "word": "trotábamos",
+                    "translation": "were jogging",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=trot%C3%A1bamos&key=cbddd87cacdf1b91680104167cf71ccd&region=spain"
+                },
+                {
+                    "word": "trotabais",
+                    "translation": "were jogging",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=trotabais&key=5fd23c0ffb6d83251e6ce1b0ed3b6d36&region=spain"
+                },
+                {
+                    "word": "trotaban",
+                    "translation": "were jogging",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=trotaban&key=b213f2f33c75ce39b430f3f4e0ca6329&region=spain"
+                },
+                {
+                    "word": "trotabas",
+                    "translation": "were jogging",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=trotabas&key=e4cdfb77865b3aa714810ebc4ed9c27c&region=latam"
+                }
+            ],
+            "conditionalIndicative": [
+                {
+                    "word": "trotaría",
+                    "translation": "would jog",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=trotar%C3%ADa&key=99b72d5c1d40eb659e4f26346a9ced97&region=spain"
+                },
+                {
+                    "word": "trotarías",
+                    "translation": "would jog",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=trotar%C3%ADas&key=5846ca22931ea0eaae143fb58a791cfb&region=spain"
+                },
+                {
+                    "word": "trotaría",
+                    "translation": "would jog",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=trotar%C3%ADa&key=99b72d5c1d40eb659e4f26346a9ced97&region=spain"
+                },
+                {
+                    "word": "trotaríamos",
+                    "translation": "would jog",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=trotar%C3%ADamos&key=3ce1ea013ebc69d68469093306b92fea&region=spain"
+                },
+                {
+                    "word": "trotaríais",
+                    "translation": "would jog",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=trotar%C3%ADais&key=9c644a226cac82bd11eed176519e5012&region=spain"
+                },
+                {
+                    "word": "trotarían",
+                    "translation": "would jog",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=trotar%C3%ADan&key=e2ff5feabd83f1cca1f0f1b4e1f93ece&region=spain"
+                },
+                {
+                    "word": "trotarías",
+                    "translation": "would jog",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=trotar%C3%ADas&key=5846ca22931ea0eaae143fb58a791cfb&region=latam"
+                }
+            ],
+            "futureIndicative": [
+                {
+                    "word": "trotaré",
+                    "translation": "will jog",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=trotar%C3%A9&key=08c343b97b7c9713bd6bd0920ac17400&region=spain"
+                },
+                {
+                    "word": "trotarás",
+                    "translation": "will jog",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=trotar%C3%A1s&key=a0161cfeab5a9fe37f9dc7df12a7c51b&region=spain"
+                },
+                {
+                    "word": "trotará",
+                    "translation": "will jog",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=trotar%C3%A1&key=575c65242a6cc80c863ad728698d7499&region=spain"
+                },
+                {
+                    "word": "trotaremos",
+                    "translation": "will jog",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=trotaremos&key=bda8afe47ae17aa3ddb7e8274251aaf1&region=spain"
+                },
+                {
+                    "word": "trotaréis",
+                    "translation": "will jog",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=trotar%C3%A9is&key=5869d49e44347a25f4258fbbce3f9f43&region=spain"
+                },
+                {
+                    "word": "trotarán",
+                    "translation": "will jog",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=trotar%C3%A1n&key=73877cb091b43de19a777b57c3736fdd&region=spain"
+                },
+                {
+                    "word": "trotarás",
+                    "translation": "will jog",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=trotar%C3%A1s&key=a0161cfeab5a9fe37f9dc7df12a7c51b&region=latam"
+                }
+            ]
+        }
+    },
+    "verbLang": "es",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"trotar\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "lockedPremiumContentProps": null,
+    "adList": "[\"adTopLarge\",\"adSideVideo\",\"adSide1\",\"adSide2\",\"adSide3\",\"adMiddle2\"]",
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 62554
+    }
+}

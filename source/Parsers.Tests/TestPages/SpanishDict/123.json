@@ -1,0 +1,249 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002F123",
+    "wordOfTheDayData": {
+        "wordId": 27776,
+        "wordSource": "endulzar",
+        "wordDisplay": "endulzar",
+        "image": "https:\u002F\u002Fd25rq8gxcq0p71.cloudfront.net\u002Fios-wotd-images\u002Foriginal\u002F804a9b05-e0cd-4e94-8020-29d9ce878939.png",
+        "translationText": "to sweeten",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=endulzar&key=fcae0377e838bd5a077a930dd6daa19a"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 21,
+    "excludeAds": false,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "d3fh33eu6ay0qj.cloudfront.net",
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "d1q4kshf6f0axi.cloudfront.net",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "coreWebVitals": true,
+        "sdIdentity": true,
+        "sdPrimisTest": false,
+        "sdCss": false,
+        "sdParty": false,
+        "sdAnimation": false,
+        "sdVocabVoice": false,
+        "adhesionMarketingInt": 1,
+        "translateEverythingSlideCopy": "crl_document_image_prioritized",
+        "randomizedExperiments": {
+            "translate_everything_slide_copy": "crl_document_image_prioritized"
+        }
+    },
+    "serverNowAtPageview": 1716222067849,
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "en",
+    "langFrom": "en",
+    "langTo": "es",
+    "queryText": "123",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002F123",
+            "path": "translate",
+            "token": "123",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002F123",
+            "path": "examples",
+            "token": "123",
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "one hundred twenty-three",
+                "textToPronounce": "one hundred twenty-three",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=one-hundred-twenty-three&key=c68b72902989b31a43a55cebad02a968",
+                "pronunciations": [],
+                "wordLang": "en",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "ciento veintitrés",
+                "textToPronounce": "ciento veintitrés",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=ciento-veintitr%C3%A9s&key=d10495b8ecab9119ca701ec43401a9b2",
+                "pronunciations": [],
+                "wordLang": "es",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "lang": "en"
+            },
+            "userCount": 0,
+            "shouldShow": false,
+            "shouldBeDisabled": true,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": null,
+            "regionChoice": "us",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [],
+            "wordLang": "en"
+        },
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "entryLang": "en"
+    },
+    "usageNoteAndArticlesProps": {
+        "linkedArticles": []
+    },
+    "searchBoxProps": {
+        "initialSearchText": "123",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [
+                    "bae",
+                    "YOLO",
+                    "okurrr",
+                    "LOL",
+                    "my bad",
+                    "dude",
+                    "y'all",
+                    "wassup"
+                ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [],
+    "sdWordRootProps": {
+        "wordLang": "en"
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "123",
+        "originalQuery": "123",
+        "forcedLanguage": "en",
+        "pageCategory": "translation"
+    },
+    "verb": null,
+    "verbLang": "en",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguia\u002Fel-indicativo-en-ingles"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguia\u002Flos-verbos-en-presente"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Past",
+                    "href": "\u002Fguia\u002Flos-verbos-en-pasado"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguia\u002Flos-verbos-en-futuro"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "untextProps": {
+        "translationEn": "one hundred twenty-three",
+        "translationEs": "ciento veintitrés",
+        "examples": [
+            {
+                "en": "I can count to 123 in Danish.",
+                "es": "Puedo contar hasta 123 en danés.",
+                "pos": "noun"
+            },
+            {
+                "en": "There are 123 pennies in that jar.",
+                "es": "Hay 123 centavos en esa jarra.",
+                "pos": "adjective"
+            }
+        ],
+        "type": "NUMBER"
+    },
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "lockedPremiumContentProps": null,
+    "adList": "[\"adTopLarge\",\"adSide1\",\"adSide3\",\"adMiddle2\"]",
+    "sdInflectionProps": {
+        "wordLang": "en"
+    }
+}
