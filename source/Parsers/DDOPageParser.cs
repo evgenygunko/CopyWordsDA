@@ -183,8 +183,6 @@ namespace CopyWords.Parsers
 
                 if (definitionsDivs != null && definitionsDivs.Count > 0)
                 {
-                    int definitionPosition = 0;
-
                     foreach (var definitionDiv in definitionsDivs)
                     {
                         string meaning = DecodeText(definitionDiv.InnerText);
@@ -194,10 +192,7 @@ namespace CopyWords.Parsers
                         IEnumerable<string> examples = ParseExamplesForDefinition(definitionDiv);
                         IEnumerable<Example> examplesList = examples.Select(x => new Example(Original: x, English: null, Russian: null));
 
-                        List<Meaning> meanings = new();
-                        meanings.Add(new Meaning(meaning, "a", tag, ImageUrl: null, Examples: examplesList));
-
-                        definitions.Add(new DDODefinition(definitionPosition++, meanings));
+                        definitions.Add(new DDODefinition(meaning, tag, examplesList));
                     }
                 }
             }

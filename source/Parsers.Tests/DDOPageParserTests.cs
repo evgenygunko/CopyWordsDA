@@ -352,10 +352,7 @@ namespace CopyWords.Parsers.Tests
             List<DDODefinition> definitions = parser.ParseDefinitions();
 
             definitions.Should().HaveCount(1);
-            definitions.First().Meanings.Should().HaveCount(1);
-
-            Meaning meaning = definitions.First().Meanings.First();
-            meaning.Description.Should().Be("noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse");
+            definitions.First().Meaning.Should().Be("noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse");
         }
 
         [TestMethod]
@@ -371,36 +368,31 @@ namespace CopyWords.Parsers.Tests
             definitions.Should().HaveCount(5);
 
             DDODefinition definition1 = definitions.First();
-            Meaning meaning1 = definition1.Meanings.First();
-            meaning1.Description.Should().Be("rette blikket i en bestemt retning");
-            meaning1.Examples.Should().HaveCount(3);
-            meaning1.Examples.First().Original.Should().Be("Børnene kiggede spørgende på hinanden.");
-            meaning1.Examples.Skip(1).First().Original.Should().Be("kig lige en gang!");
-            meaning1.Examples.Skip(2).First().Original.Should().Be("Han kiggede sig rundt, som om han ledte efter noget.");
+            definition1.Meaning.Should().Be("rette blikket i en bestemt retning");
+            definition1.Examples.Should().HaveCount(3);
+            definition1.Examples.First().Original.Should().Be("Børnene kiggede spørgende på hinanden.");
+            definition1.Examples.Skip(1).First().Original.Should().Be("kig lige en gang!");
+            definition1.Examples.Skip(2).First().Original.Should().Be("Han kiggede sig rundt, som om han ledte efter noget.");
 
             DDODefinition definition2 = definitions.Skip(1).First();
-            Meaning meaning2 = definition2.Meanings.First();
-            meaning2.Description.Should().Be("undersøge nærmere; sætte sig ind i");
-            meaning2.Examples.Should().HaveCount(1);
-            meaning2.Examples.First().Original.Should().Be("hun har kigget på de psykiske eftervirkninger hos voldtagne piger og kvinder.");
+            definition2.Meaning.Should().Be("undersøge nærmere; sætte sig ind i");
+            definition2.Examples.Should().HaveCount(1);
+            definition2.Examples.First().Original.Should().Be("hun har kigget på de psykiske eftervirkninger hos voldtagne piger og kvinder.");
 
             DDODefinition definition3 = definitions.Skip(2).First();
-            Meaning meaning3 = definition3.Meanings.First();
-            meaning3.Description.Should().Be("prøve at finde");
-            meaning3.Examples.Should().HaveCount(1);
-            meaning3.Examples.First().Original.Should().Be("Vi kigger efter en bil i det prislag, og Carinaen opfylder de fleste af de krav, vi stiller.");
+            definition3.Meaning.Should().Be("prøve at finde");
+            definition3.Examples.Should().HaveCount(1);
+            definition3.Examples.First().Original.Should().Be("Vi kigger efter en bil i det prislag, og Carinaen opfylder de fleste af de krav, vi stiller.");
 
             DDODefinition definition4 = definitions.Skip(3).First();
-            Meaning meaning4 = definition4.Meanings.First();
-            meaning4.Description.Should().Be("skrive af efter nogen; kopiere noget");
-            meaning4.Examples.Should().HaveCount(1);
-            meaning4.Examples.First().Original.Should().Be("Berg er ikke altid lige smart, bl.a. ikke når hun afleverer blækregning for sent OG vedlægger den opgave, hun har kigget efter.");
+            definition4.Meaning.Should().Be("skrive af efter nogen; kopiere noget");
+            definition4.Examples.Should().HaveCount(1);
+            definition4.Examples.First().Original.Should().Be("Berg er ikke altid lige smart, bl.a. ikke når hun afleverer blækregning for sent OG vedlægger den opgave, hun har kigget efter.");
 
             DDODefinition definition5 = definitions.Skip(4).First();
-            Meaning meaning5 = definition5.Meanings.First();
-            meaning5.Description.Should().Be("se på; betragte");
-            meaning5.Examples.Should().HaveCount(1);
-            meaning5.Examples.First().Original.Should().Be("Har du lyst til at gå ud og kigge stjerner, Oskar? Det er sådan et smukt vejr.");
+            definition5.Meaning.Should().Be("se på; betragte");
+            definition5.Examples.Should().HaveCount(1);
+            definition5.Examples.First().Original.Should().Be("Har du lyst til at gå ud og kigge stjerner, Oskar? Det er sådan et smukt vejr.");
         }
 
         [TestMethod]
@@ -414,9 +406,7 @@ namespace CopyWords.Parsers.Tests
             List<DDODefinition> definitions = parser.ParseDefinitions();
 
             definitions.Should().HaveCount(1);
-
-            Meaning meaning1 = definitions.First().Meanings.First();
-            meaning1.Description.Should().Be("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+            definitions.First().Meaning.Should().Be("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
 
         [TestMethod]
@@ -432,24 +422,21 @@ namespace CopyWords.Parsers.Tests
             definitions.Should().HaveCount(3);
 
             DDODefinition definition1 = definitions.First();
-            Meaning meaning1 = definition1.Meanings.First();
-            meaning1.Description.Should().Be("stor, langstrakt bruskfisk med tværstillet mund på undersiden af hovedet, med 5-7 gællespalter uden gællelåg og med kraftig, ru hud");
-            meaning1.Tag.Should().BeNull();
-            meaning1.Examples.Should().HaveCount(1);
-            meaning1.Examples.First().Original.Should().Be("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham.");
+            definition1.Meaning.Should().Be("stor, langstrakt bruskfisk med tværstillet mund på undersiden af hovedet, med 5-7 gællespalter uden gællelåg og med kraftig, ru hud");
+            definition1.Tag.Should().BeNull();
+            definition1.Examples.Should().HaveCount(1);
+            definition1.Examples.First().Original.Should().Be("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham.");
 
             DDODefinition definition2 = definitions.Skip(1).First();
-            Meaning meaning2 = definition2.Meanings.First();
-            meaning2.Description.Should().Be("grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning");
-            meaning2.Tag.Should().Be("slang");
-            meaning2.Examples.Should().HaveCount(0);
+            definition2.Meaning.Should().Be("grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning");
+            definition2.Tag.Should().Be("slang");
+            definition2.Examples.Should().HaveCount(0);
 
             DDODefinition definition3 = definitions.Skip(2).First();
-            Meaning meaning3 = definition3.Meanings.First();
-            meaning3.Description.Should().Be("person der er særlig dygtig til et spil, håndværk el.lign.");
-            meaning3.Tag.Should().Be("slang");
-            meaning3.Examples.Should().HaveCount(1);
-            meaning3.Examples.First().Original.Should().Be("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb.");
+            definition3.Meaning.Should().Be("person der er særlig dygtig til et spil, håndværk el.lign.");
+            definition3.Tag.Should().Be("slang");
+            definition3.Examples.Should().HaveCount(1);
+            definition3.Examples.First().Original.Should().Be("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb.");
         }
 
         [TestMethod]
@@ -465,11 +452,9 @@ namespace CopyWords.Parsers.Tests
             definitions.Should().HaveCount(1);
 
             DDODefinition definition1 = definitions.First();
-
-            Meaning meaning1 = definition1.Meanings.First();
-            meaning1.Examples.Should().HaveCount(2);
-            meaning1.Examples.First().Original.Should().Be("For mig er dannebrog noget samlende på tværs af køn, alder, etnicitet, værdier og politisk ståsted.");
-            meaning1.Examples.Skip(1).First().Original.Should().Be("der var Dannebrog på bordet og balloner og gaver fra gæsterne. Om aftenen var vi alle trætte, men glade for en god fødselsdag.");
+            definition1.Examples.Should().HaveCount(2);
+            definition1.Examples.First().Original.Should().Be("For mig er dannebrog noget samlende på tværs af køn, alder, etnicitet, værdier og politisk ståsted.");
+            definition1.Examples.Skip(1).First().Original.Should().Be("der var Dannebrog på bordet og balloner og gaver fra gæsterne. Om aftenen var vi alle trætte, men glade for en god fødselsdag.");
         }
 
         [TestMethod]
@@ -485,11 +470,9 @@ namespace CopyWords.Parsers.Tests
             definitions.Should().HaveCount(1);
 
             DDODefinition definition1 = definitions.First();
-
-            Meaning meaning1 = definition1.Meanings.First();
-            meaning1.Examples.Should().HaveCount(2);
-            meaning1.Examples.First().Original.Should().Be("Det her er så sindssygt, at jeg kan blive stiktosset over det.");
-            meaning1.Examples.Skip(1).First().Original.Should().Be("Du ved godt, at jeg bliver stiktosset, når du hopper i sofaen.");
+            definition1.Examples.Should().HaveCount(2);
+            definition1.Examples.First().Original.Should().Be("Det her er så sindssygt, at jeg kan blive stiktosset over det.");
+            definition1.Examples.Skip(1).First().Original.Should().Be("Du ved godt, at jeg bliver stiktosset, når du hopper i sofaen.");
         }
 
         [TestMethod]
@@ -505,9 +488,7 @@ namespace CopyWords.Parsers.Tests
             definitions.Should().HaveCount(1);
 
             DDODefinition definition1 = definitions.First();
-
-            Meaning meaning1 = definition1.Meanings.First();
-            meaning1.Examples.Should().HaveCount(2);
+            definition1.Examples.Should().HaveCount(2);
         }
 
         [TestMethod]
@@ -523,11 +504,9 @@ namespace CopyWords.Parsers.Tests
             definitions.Should().HaveCount(1);
 
             DDODefinition definition1 = definitions.First();
-
-            Meaning meaning1 = definition1.Meanings.First();
-            meaning1.Examples.Should().HaveCount(2);
-            meaning1.Examples.First().Original.Should().Be("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver.");
-            meaning1.Examples.Skip(1).First().Original.Should().Be("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater.");
+            definition1.Examples.Should().HaveCount(2);
+            definition1.Examples.First().Original.Should().Be("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver.");
+            definition1.Examples.Skip(1).First().Original.Should().Be("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater.");
         }
 
         [TestMethod]
@@ -543,11 +522,10 @@ namespace CopyWords.Parsers.Tests
             definitions.Should().HaveCount(1);
 
             DDODefinition definition1 = definitions.First();
-            Meaning meaning1 = definition1.Meanings.First();
-            meaning1.Description.Should().Be("intensivt og som regel under tidspres");
-            meaning1.Tag.Should().Be("overført");
-            meaning1.Examples.Should().HaveCount(1);
-            meaning1.Examples.First().Original.Should().Be("håndværkerne [arbejdede] på højtryk for at gøre teatersalen klar.");
+            definition1.Meaning.Should().Be("intensivt og som regel under tidspres");
+            definition1.Tag.Should().Be("overført");
+            definition1.Examples.Should().HaveCount(1);
+            definition1.Examples.First().Original.Should().Be("håndværkerne [arbejdede] på højtryk for at gøre teatersalen klar.");
         }
 
         #endregion

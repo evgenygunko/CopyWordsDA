@@ -1,6 +1,7 @@
 ﻿namespace CopyWords.Parsers.Models.DDO
 {
     public record DDODefinition(
-        int Position,
-        IEnumerable<Meaning> Meanings);
+        string Meaning,
+        string? Tag,
+        IEnumerable<Example> Examples);
 }

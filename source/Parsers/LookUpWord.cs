@@ -127,16 +127,24 @@ namespace CopyWords.Parsers
             List<Models.DDO.DDODefinition> ddoDefinitions = _ddoPageParser.ParseDefinitions();
 
             // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-            IEnumerable<string> meanings = ddoDefinitions
-                .SelectMany(d => d.Meanings)
-                .Select(m => m.Description);
-            IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headWordDA, meanings);
+            IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headWordDA, ddoDefinitions.Select(x => x.Meaning));
             Headword headword = new Headword(
                 headWordDA,
                 translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
                 translations.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord);
 
-            IEnumerable<Definition> definitions = ddoDefinitions.Select(x => new Definition(headword, partOfSpeech, endings, x.Position, x.Meanings));
+            List<Definition> definitions = new List<Definition>();
+            int definitionPosition = 0;
+            foreach (var ddoDefinition in ddoDefinitions)
+            {
+                List<Meaning> meanings =
+                [
+                    new Meaning(ddoDefinition.Meaning, AlphabeticalPosition: "a", ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples),
+                ];
+
+                Definition definition = new Definition(headword, partOfSpeech, endings, definitionPosition++, meanings);
+                definitions.Add(definition);
+            }
 
             var wordModel = new WordModel(
                 Word: headWordDA,
