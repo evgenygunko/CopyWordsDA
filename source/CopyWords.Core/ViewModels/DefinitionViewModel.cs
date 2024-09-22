@@ -6,11 +6,10 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class DefinitionViewModel : ObservableObject
     {
-        public DefinitionViewModel(Definition definition, int pos)
+        public DefinitionViewModel(Meaning meaning)
         {
-            Meaning meaning = definition.Meanings.First();
-
-            Position = pos + ". ";
+            // todo: Add ContextViewModel and MeaningViewModel
+            Position = meaning.AlphabeticalPosition + ". ";
             Tag = meaning.Tag?.ToUpper();
             Meaning = meaning.Description;
 

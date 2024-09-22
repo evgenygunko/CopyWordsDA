@@ -228,20 +228,12 @@ namespace CopyWords.Core.Tests.Services
         {
             const string meaning = "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning";
 
-            var definition = new Definition(
-                Headword: new Headword("grillspyd", null, null),
-                PartOfSpeech: "substantiv",
-                Endings: "-det eller (uofficielt) -et, -, -dene",
-                Position: 1,
-                Meanings: [
-                    new Meaning(Description: meaning, AlphabeticalPosition: "", Tag: null, ImageUrl: null, Examples: new List<Example>()
-                    {
-                        new Example("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver", null, null),
-                        new Example("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater", null, null)
-                    })
-                ]);
-
-            var definitionVM = new DefinitionViewModel(definition, pos: 1);
+            var definitionVM = new DefinitionViewModel(
+                new Meaning(Description: meaning, AlphabeticalPosition: "", Tag: null, ImageUrl: null, Examples: new List<Example>()
+                {
+                    new Example("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver", null, null),
+                    new Example("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater", null, null)
+                }));
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -251,50 +243,27 @@ namespace CopyWords.Core.Tests.Services
 
         private static ObservableCollection<DefinitionViewModel> CreateVMForHaj()
         {
-            const string meaning1 = "stor, langstrakt bruskfisk";
-            var definition1 = new Definition(
-                Headword: new Headword("haj", null, null),
-                PartOfSpeech: "substantiv",
-                Endings: "-en, -er, -erne",
-                Position: 1,
-                Meanings: [
-                    new Meaning(Description: meaning1, AlphabeticalPosition: "", Tag: null, ImageUrl: null, Examples: new List<Example>()
-                    {
-                        new Example("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", null, null)
-                    })
-                ]);
+            var definitionVM1 = new DefinitionViewModel(
+                new Meaning(Description: "stor, langstrakt bruskfisk", AlphabeticalPosition: "", Tag: null, ImageUrl: null, Examples: new List<Example>()
+                {
+                    new Example("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", null, null)
+                }));
 
-            const string meaning2 = "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning";
-            var definition2 = new Definition(
-                Headword: new Headword("haj", null, null),
-                PartOfSpeech: "substantiv",
-                Endings: "-en, -er, -erne",
-                Position: 2,
-                Meanings: [
-                    new Meaning(Description: meaning2, AlphabeticalPosition: "", Tag: "SLANG", ImageUrl: null, Examples: new List<Example>()
-                    {
-                        new Example("-", null, null)
-                    })
-                ]);
+            var definitionVM2 = new DefinitionViewModel(
+                new Meaning(Description: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning", AlphabeticalPosition: "", Tag: "SLANG", ImageUrl: null, Examples: new List<Example>()
+                {
+                    new Example("-", null, null)
+                }));
 
-            const string meaning3 = "person der er særlig dygtig til et spil, håndværk el.lign.";
-            var definition3 = new Definition(
-                Headword: new Headword("haj", null, null),
-                PartOfSpeech: "substantiv",
-                Endings: "-en, -er, -erne",
-                Position: 3,
-                Meanings: [
-                    new Meaning(Description: meaning3, AlphabeticalPosition: "", Tag: "SLANG", ImageUrl: null, Examples: new List<Example>()
-                    {
-                        new Example("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", null, null)
-                    })
-                ]);
+            var definitionVM3 = new DefinitionViewModel(
+                new Meaning(Description: "person der er særlig dygtig til et spil, håndværk el.lign.", AlphabeticalPosition: "", Tag: "SLANG", ImageUrl: null, Examples: new List<Example>()
+                {
+                    new Example("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", null, null)
+                }));
 
             return new ObservableCollection<DefinitionViewModel>()
             {
-                new DefinitionViewModel(definition1, pos: 1),
-                new DefinitionViewModel(definition2, pos: 2),
-                new DefinitionViewModel(definition3, pos: 3),
+                definitionVM1, definitionVM2, definitionVM3
             };
         }
 

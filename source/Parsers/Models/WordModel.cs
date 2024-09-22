@@ -11,13 +11,17 @@
         Headword Headword,
         string PartOfSpeech,
         string Endings, // only for Danish dictionary
-        int Position,
-        IEnumerable<Meaning> Meanings);
+        IEnumerable<Context> Contexts);
 
     public record Headword(
         string Original,
         string? English,
         string? Russian);
+
+    public record Context(
+        string ContextEN,
+        int Position,
+        IEnumerable<Meaning> Meanings);
 
     public record Meaning(
         string Description,

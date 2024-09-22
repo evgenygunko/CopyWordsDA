@@ -133,24 +133,22 @@ namespace CopyWords.Parsers
                 translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
                 translations.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord);
 
-            List<Definition> definitions = new List<Definition>();
-            int definitionPosition = 0;
+            // For DDO, we create one Definition with one Context and several Meanings.
+            List<Meaning> meanings = new List<Meaning>();
+            int pos = 0;
             foreach (var ddoDefinition in ddoDefinitions)
             {
-                List<Meaning> meanings =
-                [
-                    new Meaning(ddoDefinition.Meaning, AlphabeticalPosition: "a", ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples),
-                ];
-
-                Definition definition = new Definition(headword, partOfSpeech, endings, definitionPosition++, meanings);
-                definitions.Add(definition);
+                meanings.Add(new Meaning(ddoDefinition.Meaning, AlphabeticalPosition: (pos++).ToString(), ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples));
             }
+
+            Context context = new Context(ContextEN: "", Position: 1, meanings);
+            Definition definition = new Definition(headword, partOfSpeech, endings, [context]);
 
             var wordModel = new WordModel(
                 Word: headWordDA,
                 SoundUrl: soundUrl,
                 SoundFileName: soundFileName,
-                Definitions: definitions,
+                Definitions: [definition],
                 Variations: _ddoPageParser.ParseVariants()
             );
 

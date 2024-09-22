@@ -164,7 +164,14 @@ namespace CopyWords.Parsers.Tests
             result!.Word.Should().Be(headWord);
             result!.SoundUrl.Should().Be(soundUrl);
             result!.SoundFileName.Should().Be("haj.mp3");
-            result!.Definitions.Should().HaveCount(3);
+
+            // For DDO, we create one Definition with one Context and several Meanings.
+            result!.Definitions.Should().HaveCount(1);
+            var definition = result.Definitions.First();
+            definition.Contexts.Should().HaveCount(1);
+            var context = definition.Contexts.First();
+            context.Meanings.Should().HaveCount(3);
+
             result!.Variations.Should().HaveCount(1);
 
             fileDownloaderMock.Verify(x => x.DownloadPageAsync(It.Is<string>(str => str.EndsWith($"?query={headWord}&search=S%C3%B8g")), Encoding.UTF8));

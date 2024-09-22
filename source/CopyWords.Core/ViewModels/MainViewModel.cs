@@ -111,10 +111,12 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.Headword.Update(wordModel.Definitions.First().Headword);
 
                 _wordViewModel.Definitions.Clear();
-                int i = 1;
-                foreach (var definition in wordModel.Definitions)
+
+                // todo: this is temporary, until we add ContextViewModel and view
+                var contextModel = wordModel.Definitions.First().Contexts.First();
+                foreach (var meaning in contextModel.Meanings)
                 {
-                    _wordViewModel.Definitions.Add(new DefinitionViewModel(definition, i++));
+                    _wordViewModel.Definitions.Add(new DefinitionViewModel(meaning));
                 }
 
                 _wordViewModel.Variants.Clear();
