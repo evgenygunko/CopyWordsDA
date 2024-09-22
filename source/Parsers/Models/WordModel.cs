@@ -9,8 +9,6 @@
 
     public record Definition(
         Headword Headword,
-        string Meaning,
-        string? Tag,
         string PartOfSpeech,
         string Endings, // only for Danish dictionary
         int Position,
@@ -22,8 +20,9 @@
         string? Russian);
 
     public record Meaning(
-        string English,
+        string Description,
         string AlphabeticalPosition,
+        string? Tag,
         string? ImageUrl,
         IEnumerable<Example> Examples);
 

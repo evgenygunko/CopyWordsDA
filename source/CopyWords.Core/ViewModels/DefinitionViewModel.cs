@@ -8,12 +8,14 @@ namespace CopyWords.Core.ViewModels
     {
         public DefinitionViewModel(Definition definition, int pos)
         {
+            Meaning meaning = definition.Meanings.First();
+
             Position = pos + ". ";
-            Tag = definition.Tag?.ToUpper();
-            Meaning = definition.Meaning;
+            Tag = meaning.Tag?.ToUpper();
+            Meaning = meaning.Description;
 
             Examples.Clear();
-            foreach (Example example in definition.Meanings.First().Examples)
+            foreach (Example example in meaning.Examples)
             {
                 Examples.Add(new ExampleViewModel(example.Original));
             }

@@ -226,15 +226,15 @@ namespace CopyWords.Core.Tests.Services
 
         internal static ObservableCollection<DefinitionViewModel> CreateVMForGrillspyd()
         {
+            const string meaning = "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning";
+
             var definition = new Definition(
                 Headword: new Headword("grillspyd", null, null),
-                Meaning: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
-                Tag: null,
                 PartOfSpeech: "substantiv",
                 Endings: "-det eller (uofficielt) -et, -, -dene",
                 Position: 1,
                 Meanings: [
-                    new Meaning("", "", null, new List<Example>()
+                    new Meaning(Description: meaning, AlphabeticalPosition: "", Tag: null, ImageUrl: null, Examples: new List<Example>()
                     {
                         new Example("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver", null, null),
                         new Example("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater", null, null)
@@ -251,43 +251,40 @@ namespace CopyWords.Core.Tests.Services
 
         private static ObservableCollection<DefinitionViewModel> CreateVMForHaj()
         {
+            const string meaning1 = "stor, langstrakt bruskfisk";
             var definition1 = new Definition(
                 Headword: new Headword("haj", null, null),
-                Meaning: "stor, langstrakt bruskfisk",
-                Tag: null,
                 PartOfSpeech: "substantiv",
                 Endings: "-en, -er, -erne",
                 Position: 1,
                 Meanings: [
-                    new Meaning("", "", null, new List<Example>()
+                    new Meaning(Description: meaning1, AlphabeticalPosition: "", Tag: null, ImageUrl: null, Examples: new List<Example>()
                     {
                         new Example("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", null, null)
                     })
                 ]);
 
+            const string meaning2 = "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning";
             var definition2 = new Definition(
                 Headword: new Headword("haj", null, null),
-                Meaning: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning",
-                Tag: "SLANG",
                 PartOfSpeech: "substantiv",
                 Endings: "-en, -er, -erne",
                 Position: 2,
                 Meanings: [
-                    new Meaning("", "", null, new List<Example>()
+                    new Meaning(Description: meaning2, AlphabeticalPosition: "", Tag: "SLANG", ImageUrl: null, Examples: new List<Example>()
                     {
                         new Example("-", null, null)
                     })
                 ]);
 
+            const string meaning3 = "person der er særlig dygtig til et spil, håndværk el.lign.";
             var definition3 = new Definition(
                 Headword: new Headword("haj", null, null),
-                Meaning: "person der er særlig dygtig til et spil, håndværk el.lign.",
-                Tag: "SLANG",
                 PartOfSpeech: "substantiv",
                 Endings: "-en, -er, -erne",
                 Position: 3,
                 Meanings: [
-                    new Meaning("", "", null, new List<Example>()
+                    new Meaning(Description: meaning3, AlphabeticalPosition: "", Tag: "SLANG", ImageUrl: null, Examples: new List<Example>()
                     {
                         new Example("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", null, null)
                     })

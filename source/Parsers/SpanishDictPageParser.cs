@@ -189,7 +189,7 @@ namespace CopyWords.Parsers
                             imageUrl = ImageBaseUrl + encoded;
                         }
 
-                        meanings.Add(new Models.Meaning(fullTranslation, alphabeticalPosition, imageUrl, examples));
+                        meanings.Add(new Models.Meaning(fullTranslation, alphabeticalPosition, Tag: null, imageUrl, examples));
                     }
 
                     // Add context, e.g. "(colloquial) (extremely good) (Spain)"
