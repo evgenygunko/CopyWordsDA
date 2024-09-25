@@ -16,7 +16,7 @@
             <Setter Property="TextColor" Value="Green" />
         </Style>-->
     </ContentPage.Resources>
-    
+
     <Grid Padding="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -33,7 +33,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Path to Anki media collection -->
-        <Border Grid.Row="0"     
+        <Border Grid.Row="0"
                 Grid.ColumnSpan="3"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 10"
@@ -51,9 +51,9 @@
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="0" Text="Path to Anki media collection:" />                
+                <Label Grid.Row="0" Grid.Column="0" Text="Path to Anki media collection:" />
                 <Entry Grid.Column="0" Grid.Row="1" Margin="0,10,0,0" Text="{Binding AnkiSoundsFolder}" />
-                
+
                 <Button Grid.Column="1"
                         Grid.Row="1"
                         Margin="10,0,0,0"
@@ -70,7 +70,7 @@
         </Border>
 
         <!-- Path to mp3gain -->
-        <Border Grid.Row="1"     
+        <Border Grid.Row="1"
                 Grid.ColumnSpan="3"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 10"
@@ -81,8 +81,8 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="90"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
@@ -91,17 +91,18 @@
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="0" Text="Use mp3gain" VerticalOptions="Center"></Label>                
-                <CheckBox Grid.Row="0" 
+                <Label Grid.Row="0" Grid.Column="0" Text="Use mp3gain" VerticalOptions="Center"></Label>
+                <CheckBox Grid.Row="0"
                           Grid.Column="1"
-                          x:Name="chkUseMp3gain" 
-                          IsChecked="{Binding UseMp3gain}" 
+                          HorizontalOptions="Start"
+                          x:Name="chkUseMp3gain"
+                          IsChecked="{Binding UseMp3gain}"
                           IsEnabled="{Binding CanUseMp3gain}" />
-                
-                <Label Grid.Row="1" 
-                       Grid.ColumnSpan="3" 
-                       Text="Path to mp3gain: ℹ️" 
-                       ToolTipProperties.Text="Download mp3gain with unicode support (v1.3.4): https://sourceforge.net/projects/mp3gain/files/MP3Gain-Windows%20(Beta)/1.3.4/" 
+
+                <Label Grid.Row="1"
+                       Grid.ColumnSpan="3"
+                       Text="Path to mp3gain: ℹ️"
+                       ToolTipProperties.Text="Download mp3gain with unicode support (v1.3.4): https://sourceforge.net/projects/mp3gain/files/MP3Gain-Windows%20(Beta)/1.3.4/"
                        VerticalOptions="Center">
                     <Label.Triggers>
                         <DataTrigger TargetType="Label" Binding="{Binding UseMp3gain}" Value="false">
@@ -135,7 +136,7 @@
         </Border>
 
         <!-- Translator settings -->
-        <Border Grid.Row="2"     
+        <Border Grid.Row="2"
                 Grid.ColumnSpan="3"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 10"
@@ -167,7 +168,7 @@
                         IsEnabled="{Binding UseTranslator}">
 
                     <Entry.Behaviors>
-                        <toolkit:UriValidationBehavior 
+                        <toolkit:UriValidationBehavior
                             InvalidStyle="{StaticResource InvalidEntryStyle}"
                             Flags="ValidateOnValueChanged"
                             UriKind="Absolute" />
