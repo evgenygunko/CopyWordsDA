@@ -28,6 +28,8 @@ namespace CopyWords.Core.Services
         string GetTranslatorApiUrl();
 
         bool UseTranslator { get; set; }
+
+        string SelectedParser { get; set; }
     }
 
     public class SettingsService : ISettingsService
@@ -74,6 +76,12 @@ namespace CopyWords.Core.Services
         {
             get => Preferences.Default.Get<bool>("UseTranslator", false);
             set => Preferences.Default.Set("UseTranslator", value);
+        }
+
+        public string SelectedParser
+        {
+            get => Preferences.Default.Get("SelectedParser", string.Empty);
+            set => Preferences.Default.Set("SelectedParser", value);
         }
 
         #region Private Methods

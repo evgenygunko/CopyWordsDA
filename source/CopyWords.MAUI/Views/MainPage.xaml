@@ -15,7 +15,7 @@
                     Glyph="&#xe5d5;"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
-        
+
         <ToolbarItem Command="{Binding ShowSettingsDialogCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource
@@ -25,9 +25,10 @@
         </ToolbarItem>
     </ContentPage.ToolbarItems>
 
-    <ScrollView VerticalOptions="FillAndExpand">        
+    <ScrollView VerticalOptions="FillAndExpand">
         <Grid Padding="10,20,10,10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
                 <RowDefinition Height="auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
@@ -37,14 +38,28 @@
                 <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
+            <!-- Select dictionary -->
+            <HorizontalStackLayout Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,20">
+                <Label VerticalOptions="Center" Margin="0,0,10,0">Dictionary:</Label>
+
+                <Picker WidthRequest="200"
+                        Margin="0,0,15,0"
+                        ItemsSource="{Binding Parsers}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedParser}"/>
+
+                <!-- .NET MAUI converts SVG files to PNG files. Therefore, when adding an SVG file to your .NET MAUI app project, it should be referenced from XAML or C# with a .png extension.-->
+                <Image Source="{Binding SelectedParser.ImageName}" WidthRequest="32" HeightRequest="32" />
+            </HorizontalStackLayout>
+
             <!-- Lookup word panel -->
-            <Entry Grid.Row="0" Grid.Column="0" Text="{Binding SearchWord}" ReturnCommand="{Binding LookUpCommand}"></Entry>
-            <Button Grid.Row="0" Grid.Column="1" Text="Search" Command="{Binding LookUpCommand}"></Button>
+            <Entry Grid.Row="1" Grid.Column="0" Text="{Binding SearchWord}" ReturnCommand="{Binding LookUpCommand}"></Entry>
+            <Button Grid.Row="1" Grid.Column="1" Text="Search" Command="{Binding LookUpCommand}"></Button>
 
             <!-- Parsed word user control -->
-            <views:WordView Grid.Row="1" Grid.ColumnSpan="2" BindingContext="{Binding Path=WordViewModel}"></views:WordView>
-                
-            <ActivityIndicator Grid.Row="1" Grid.ColumnSpan="2" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />                
+            <views:WordView Grid.Row="2" Grid.ColumnSpan="2" BindingContext="{Binding Path=WordViewModel}"></views:WordView>
+
+            <ActivityIndicator Grid.Row="2" Grid.ColumnSpan="2" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
         </Grid>
     </ScrollView>
 

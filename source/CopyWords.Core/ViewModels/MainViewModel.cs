@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Services;
@@ -24,6 +25,16 @@ namespace CopyWords.Core.ViewModels
             _lookUpWord = lookUpWord;
             _wordViewModel = wordViewModel;
             _dialogService = dialogService;
+
+            Parsers = new ObservableCollection<Models.Parsers>();
+            Parsers.Add(new Models.Parsers("Den Danske Ordbog", "flag_of_denmark.png", SourceLanguage.Danish));
+            Parsers.Add(new Models.Parsers("Spanish Dict", "flag_of_spain.png", SourceLanguage.Spanish));
+
+            SelectedParser = Parsers.FirstOrDefault(x => x.SourceLanguage.ToString() == _settingsService.SelectedParser);
+            if (SelectedParser is null)
+            {
+                SelectedParser = Parsers[0];
+            }
         }
 
         #region Properties
@@ -37,6 +48,17 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(LookUpCommand))]
         private string searchWord;
+
+        public ObservableCollection<Models.Parsers> Parsers { get; }
+
+        [ObservableProperty]
+        private Models.Parsers selectedParser;
+
+        partial void OnSelectedParserChanged(Models.Parsers value)
+        {
+            _settingsService.SelectedParser = value.SourceLanguage.ToString();
+            Debug.WriteLine($"Selected parser has changed to '{value.Name}'");
+        }
 
         public bool CanExecuteLookUp => !IsBusy && !string.IsNullOrWhiteSpace(SearchWord);
 
@@ -80,7 +102,7 @@ namespace CopyWords.Core.ViewModels
                     translatorApiURL = _settingsService.GetTranslatorApiUrl();
                 }
 
-                wordModel = await _lookUpWord.GetWordByUrlAsync(url, new Options(SourceLanguage.Danish, translatorApiURL));
+                wordModel = await _lookUpWord.GetWordByUrlAsync(url, new Options(SelectedParser.SourceLanguage, translatorApiURL));
 
                 if (wordModel == null)
                 {
@@ -158,7 +180,7 @@ namespace CopyWords.Core.ViewModels
                 {
                     translatorApiURL = _settingsService.GetTranslatorApiUrl();
                 }
-                wordModel = await _lookUpWord.LookUpWordAsync(word, new Options(SourceLanguage.Danish, translatorApiURL));
+                wordModel = await _lookUpWord.LookUpWordAsync(word, new Options(SelectedParser.SourceLanguage, translatorApiURL));
 
                 if (wordModel == null)
                 {
