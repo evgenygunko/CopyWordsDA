@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             xmlns:models="clr-namespace:CopyWords.Parsers.Models;assembly=Parsers"
+             x:DataType="viewmodels:HeadwordViewModel"
+             x:Class="CopyWords.MAUI.Views.HeadwordView">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+    
+    <Border Grid.Row="3"     
+                IsVisible="{Binding Russian, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"                        
+                BackgroundColor="#eaeff2"
+                Stroke="#CCCCCC"
+                StrokeThickness="1"
+                Padding="10,0,0,0"
+                Margin="0,0,0,15">
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="28"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <!-- Russian -->
+            <CheckBox Grid.Row="0" Grid.Column="0" x:Name="checkBoxRU" IsChecked="{Binding IsRussianTranslationChecked}" />
+            <Label Grid.Row="0" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding Russian, FallbackValue='акула'}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding IsRussianTranslationChecked}" Value="false">
+                        <Setter Property="BackgroundColor" Value="#eaeff2" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label" Binding="{Binding IsRussianTranslationChecked}" Value="true">
+                        <Setter Property="BackgroundColor" Value="LightBlue" />
+                        <Setter Property="FontSize" Value="18" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+
+            <!-- English -->
+            <CheckBox Grid.Row="1" Grid.Column="0" x:Name="checkBoxEN" IsChecked="{Binding IsEnglishTranslationChecked}" />
+            <Label Grid.Row="1" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding English, FallbackValue='shark'}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding IsEnglishTranslationChecked}" Value="false">
+                        <Setter Property="BackgroundColor" Value="#eaeff2" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label" Binding="{Binding IsEnglishTranslationChecked}" Value="true">
+                        <Setter Property="BackgroundColor" Value="LightBlue" />
+                        <Setter Property="FontSize" Value="18" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+        </Grid>
+    </Border>
+</ContentView>

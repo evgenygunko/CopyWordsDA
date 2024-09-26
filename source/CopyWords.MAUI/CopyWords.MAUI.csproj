@@ -108,6 +108,9 @@
     <MauiXaml Update="Views\ExamplesView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\HeadwordView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\SelectDictionaryView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
