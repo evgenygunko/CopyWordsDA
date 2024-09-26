@@ -53,8 +53,10 @@
             </HorizontalStackLayout>
 
             <!-- Lookup word panel -->
-            <Entry Grid.Row="1" Grid.Column="0" Text="{Binding SearchWord}" ReturnCommand="{Binding LookUpCommand}"></Entry>
-            <Button Grid.Row="1" Grid.Column="1" Text="Search" Command="{Binding LookUpCommand}"></Button>
+            <Entry Grid.Row="1" Grid.Column="0" Margin="0,0,10,0"
+                   Text="{Binding SearchWord}" ReturnCommand="{Binding LookUpCommand}" />
+            <Button Grid.Row="1" Grid.Column="1" 
+                    Text="Search" Command="{Binding LookUpCommand}"></Button>
 
             <!-- Parsed word user control -->
             <views:WordView Grid.Row="2" Grid.ColumnSpan="2" BindingContext="{Binding Path=WordViewModel}"></views:WordView>

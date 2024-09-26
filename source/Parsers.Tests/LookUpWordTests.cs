@@ -360,5 +360,94 @@ namespace CopyWords.Parsers.Tests
         }
 
         #endregion
+
+        #region Tests for ParseDanishWordAsync
+
+        [TestMethod]
+        public async Task ParseDanishWordAsync_Should_ReturnOneDefinitionWithOneContextAndSeveralMeanings()
+        {
+            string html = _fixture.Create<string>();
+            var options = new Options(SourceLanguage.Danish, TranslatorApiURL: null);
+
+            Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
+            fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
+
+            Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+            ddoPageParserMock.Setup(x => x.ParseDefinitions()).Returns(CreateDefinitionsForHaj());
+
+            var sut = _fixture.Create<LookUpWord>();
+
+            WordModel? result = await sut.ParseDanishWordAsync(html, options);
+
+            result.Should().NotBeNull();
+
+            IEnumerable<Definition> definitions = result!.Definitions;
+            definitions.Should().HaveCount(1);
+
+            // For DDO, we create one Definition with one Context and several Meanings.
+            Definition definition1 = definitions.First();
+            definition1.Contexts.Should().HaveCount(1);
+            Context context1 = definition1.Contexts.First();
+            context1.Meanings.Should().HaveCount(3);
+
+            Meaning meaning1 = context1.Meanings.First();
+            meaning1.Description.Should().Be("stor, langstrakt bruskfisk");
+            meaning1.AlphabeticalPosition.Should().Be("1");
+            meaning1.Tag.Should().BeNull();
+            meaning1.ImageUrl.Should().BeNull();
+            meaning1.Examples.Should().HaveCount(1);
+            Example example1 = meaning1!.Examples.First();
+            example1.Original.Should().Be("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham");
+
+            Meaning meaning2 = context1.Meanings.Skip(1).First();
+            meaning2.Description.Should().Be("grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning");
+            meaning2.AlphabeticalPosition.Should().Be("2");
+            meaning2.Tag.Should().Be("SLANG");
+            meaning2.ImageUrl.Should().BeNull();
+            meaning2.Examples.Should().HaveCount(1);
+            Example example2 = meaning2!.Examples.First();
+            example2.Original.Should().Be("-");
+
+            Meaning meaning3 = context1.Meanings.Skip(2).First();
+            meaning3.Description.Should().Be("person der er særlig dygtig til et spil, håndværk el.lign.");
+            meaning3.AlphabeticalPosition.Should().Be("3");
+            meaning3.Tag.Should().Be("SLANG");
+            meaning3.ImageUrl.Should().BeNull();
+            meaning3.Examples.Should().HaveCount(1);
+            Example example3 = meaning3!.Examples.First();
+            example3.Original.Should().Be("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb");
+
+            ddoPageParserMock.Verify(x => x.LoadHtml(It.IsAny<string>()));
+            ddoPageParserMock.Verify(x => x.ParseHeadword());
+            ddoPageParserMock.Verify(x => x.ParseSound());
+            ddoPageParserMock.Verify(x => x.ParseDefinitions());
+            ddoPageParserMock.Verify(x => x.ParseVariants());
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static List<Models.DDO.DDODefinition> CreateDefinitionsForHaj()
+        {
+            var definition1 = new Models.DDO.DDODefinition(Meaning: "stor, langstrakt bruskfisk", Tag: null, new List<Example>()
+                {
+                    new Example("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", null, null)
+                });
+
+            var definition2 = new Models.DDO.DDODefinition(Meaning: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning", Tag: "SLANG", Examples: new List<Example>()
+                {
+                    new Example("-", null, null)
+                });
+
+            var definition3 = new Models.DDO.DDODefinition(Meaning: "person der er særlig dygtig til et spil, håndværk el.lign.", Tag: "SLANG", Examples: new List<Example>()
+                {
+                    new Example("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", null, null)
+                });
+
+            return new List<Models.DDO.DDODefinition>() { definition1, definition2, definition3 };
+        }
+
+        #endregion
     }
 }

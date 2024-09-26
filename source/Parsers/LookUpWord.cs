@@ -135,7 +135,7 @@ namespace CopyWords.Parsers
 
             // For DDO, we create one Definition with one Context and several Meanings.
             List<Meaning> meanings = new List<Meaning>();
-            int pos = 0;
+            int pos = 1;
             foreach (var ddoDefinition in ddoDefinitions)
             {
                 meanings.Add(new Meaning(ddoDefinition.Meaning, AlphabeticalPosition: (pos++).ToString(), ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples));
