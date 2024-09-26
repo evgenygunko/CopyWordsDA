@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             x:DataType="viewmodels:SelectDictionaryViewModel"
+             x:Class="CopyWords.MAUI.Views.SelectDictionaryView">
+    
+    <HorizontalStackLayout Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,20">
+        <Label VerticalOptions="Center" Margin="0,0,10,0">Dictionary:</Label>
+
+        <Picker WidthRequest="200"
+                        Margin="0,0,15,0"
+                        ItemsSource="{Binding Parsers}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedParser}"/>
+
+        <!-- .NET MAUI converts SVG files to PNG files. Therefore, when adding an SVG file to your .NET MAUI app project, it should be referenced from XAML or C# with a .png extension.-->
+        <Image Source="{Binding SelectedParser.ImageName}" WidthRequest="32" HeightRequest="32" />
+    </HorizontalStackLayout>
+</ContentView>

@@ -39,18 +39,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Select dictionary -->
-            <HorizontalStackLayout Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,20">
-                <Label VerticalOptions="Center" Margin="0,0,10,0">Dictionary:</Label>
-
-                <Picker WidthRequest="200"
-                        Margin="0,0,15,0"
-                        ItemsSource="{Binding Parsers}"
-                        ItemDisplayBinding="{Binding Name}"
-                        SelectedItem="{Binding SelectedParser}"/>
-
-                <!-- .NET MAUI converts SVG files to PNG files. Therefore, when adding an SVG file to your .NET MAUI app project, it should be referenced from XAML or C# with a .png extension.-->
-                <Image Source="{Binding SelectedParser.ImageName}" WidthRequest="32" HeightRequest="32" />
-            </HorizontalStackLayout>
+            <views:SelectDictionaryView Grid.Row="0" Grid.ColumnSpan="2" BindingContext="{Binding Path=SelectDictionaryViewModel}" />
 
             <!-- Lookup word panel -->
             <Entry Grid.Row="1" Grid.Column="0" Margin="0,0,10,0"
@@ -59,7 +48,7 @@
                     Text="Search" Command="{Binding LookUpCommand}"></Button>
 
             <!-- Parsed word user control -->
-            <views:WordView Grid.Row="2" Grid.ColumnSpan="2" BindingContext="{Binding Path=WordViewModel}"></views:WordView>
+            <views:WordView Grid.Row="2" Grid.ColumnSpan="2" BindingContext="{Binding Path=WordViewModel}" />
 
             <ActivityIndicator Grid.Row="2" Grid.ColumnSpan="2" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
         </Grid>

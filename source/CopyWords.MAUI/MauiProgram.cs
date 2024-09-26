@@ -51,6 +51,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<MainViewModel>();
         builder.Services.AddSingleton<WordViewModel>();
+        builder.Services.AddSingleton<SelectDictionaryViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
 
         return builder.Build();

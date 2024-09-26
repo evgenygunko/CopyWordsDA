@@ -74,10 +74,10 @@
                     </Label.FormattedText>
 
                     <Label.Triggers>
-                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsTranslationTranslationChecked}" Value="false">
+                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsRussianTranslationChecked}" Value="false">
                             <Setter Property="BackgroundColor" Value="#eaeff2" />
                         </DataTrigger>
-                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsTranslationTranslationChecked}" Value="true">
+                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsRussianTranslationChecked}" Value="true">
                             <Setter Property="BackgroundColor" Value="LightBlue" />
                             <Setter Property="FontSize" Value="18" />
                         </DataTrigger>
@@ -94,10 +94,10 @@
                     </Label.FormattedText>
 
                     <Label.Triggers>
-                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsTranslationTranslationChecked}" Value="false">
+                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsEnglishTranslationChecked}" Value="false">
                             <Setter Property="BackgroundColor" Value="#eaeff2" />
                         </DataTrigger>
-                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsTranslationTranslationChecked}" Value="true">
+                        <DataTrigger TargetType="Label" Binding="{Binding Headword.IsEnglishTranslationChecked}" Value="true">
                             <Setter Property="BackgroundColor" Value="LightBlue" />
                             <Setter Property="FontSize" Value="18" />
                         </DataTrigger>
