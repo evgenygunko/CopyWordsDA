@@ -188,19 +188,18 @@ namespace CopyWords.Parsers
                 foreach (var spanishDictContext in spanishDictDefinition.Contexts)
                 {
                     contexts.Add(new Context(spanishDictContext.ContextEN, spanishDictContext.Position, spanishDictContext.Meanings));
-
-                    // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-                    IEnumerable<string> meaningsToTranslate = spanishDictContext.Meanings.Select(x => x.Description);
-                    IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headwordES, meaningsToTranslate);
-
-                    Headword headword = new Headword(
-                        headwordES,
-                        translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
-                        translations.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord);
-
-                    // Spanish words don't have endings, this property only makes sense for Danish
-                    definitions.Add(new Definition(headword, PartOfSpeech: spanishDictDefinition.Type, Endings: "", contexts));
                 }
+
+                // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
+                IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headwordES, meanings: Enumerable.Empty<string>());
+
+                Headword headword = new Headword(
+                    headwordES,
+                    translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
+                    translations.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord);
+
+                // Spanish words don't have endings, this property only makes sense for Danish
+                definitions.Add(new Definition(headword, PartOfSpeech: spanishDictDefinition.Type, Endings: "", contexts));
             }
 
             var wordModel = new WordModel(

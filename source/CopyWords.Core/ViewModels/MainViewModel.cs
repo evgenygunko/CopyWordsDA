@@ -10,23 +10,31 @@ namespace CopyWords.Core.ViewModels
     public partial class MainViewModel : ObservableObject
     {
         private readonly ISettingsService _settingsService;
+        private readonly ICopySelectedToClipboardService _copySelectedToClipboardService;
+        private readonly IDialogService _dialogService;
+        private readonly IClipboardService _clipboardService;
+
         private ILookUpWord _lookUpWord;
         private WordViewModel _wordViewModel;
         private SelectDictionaryViewModel _selectDictionaryViewModel;
-        private readonly IDialogService _dialogService;
 
         public MainViewModel(
             ISettingsService settingsService,
+            ICopySelectedToClipboardService copySelectedToClipboardService,
+            IDialogService dialogService,
+            IClipboardService clipboardService,
             ILookUpWord lookUpWord,
             WordViewModel wordViewModel,
-            SelectDictionaryViewModel selectDictionaryViewModel,
-            IDialogService dialogService)
+            SelectDictionaryViewModel selectDictionaryViewModel)
         {
             _settingsService = settingsService;
+            _copySelectedToClipboardService = copySelectedToClipboardService;
+            _dialogService = dialogService;
+            _clipboardService = clipboardService;
+
             _lookUpWord = lookUpWord;
             _wordViewModel = wordViewModel;
             _selectDictionaryViewModel = selectDictionaryViewModel;
-            _dialogService = dialogService;
         }
 
         #region Properties
@@ -108,20 +116,13 @@ namespace CopyWords.Core.ViewModels
 
             if (wordModel != null)
             {
-                _wordViewModel.Front = wordModel.Word;
-                _wordViewModel.PartOfSpeech = wordModel.Definitions.First().PartOfSpeech;
-                _wordViewModel.Forms = wordModel.Definitions.First().Endings;
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
                 _wordViewModel.SoundFileName = wordModel.SoundFileName;
-                _wordViewModel.Headword.Update(wordModel.Definitions.First().Headword);
 
-                _wordViewModel.Definitions.Clear();
-
-                // todo: this is temporary, until we add ContextViewModel and view
-                var contextModel = wordModel.Definitions.First().Contexts.First();
-                foreach (var meaning in contextModel.Meanings)
+                _wordViewModel.DefinitionViewModels.Clear();
+                foreach (var definition in wordModel.Definitions)
                 {
-                    _wordViewModel.Definitions.Add(new DefinitionViewModel(meaning));
+                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(definition, _copySelectedToClipboardService, _dialogService, _clipboardService));
                 }
 
                 _wordViewModel.Variants.Clear();

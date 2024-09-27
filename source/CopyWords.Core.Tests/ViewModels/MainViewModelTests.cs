@@ -34,13 +34,10 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.IsBusy.Should().BeFalse();
 
             sut.WordViewModel.Should().NotBeNull();
-            sut.WordViewModel.Front.Should().Be(wordModel.Word);
-            sut.WordViewModel.PartOfSpeech.Should().Be(wordModel.Definitions.First().PartOfSpeech);
-            sut.WordViewModel.Forms.Should().Be(wordModel.Definitions.First().Endings);
             sut.WordViewModel.SoundUrl.Should().Be(wordModel.SoundUrl);
             sut.WordViewModel.SoundFileName.Should().Be(wordModel.SoundFileName);
 
-            sut.WordViewModel.Definitions.Should().HaveCount(wordModel.Definitions.Count());
+            sut.WordViewModel.DefinitionViewModels.Should().HaveCount(wordModel.Definitions.Count());
             sut.WordViewModel.Variants.Should().HaveCount(wordModel.Variations.Count());
         }
 
@@ -211,7 +208,14 @@ namespace CopyWords.Core.Tests.ViewModels
 
             await sut.GetVariantAsync(url);
 
-            sut.WordViewModel.Front.Should().Be(wordModel.Word);
+            sut.IsBusy.Should().BeFalse();
+
+            sut.WordViewModel.Should().NotBeNull();
+            sut.WordViewModel.SoundUrl.Should().Be(wordModel.SoundUrl);
+            sut.WordViewModel.SoundFileName.Should().Be(wordModel.SoundFileName);
+
+            sut.WordViewModel.DefinitionViewModels.Should().HaveCount(wordModel.Definitions.Count());
+            sut.WordViewModel.Variants.Should().HaveCount(wordModel.Variations.Count());
 
             dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }

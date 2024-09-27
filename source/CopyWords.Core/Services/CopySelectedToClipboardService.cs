@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using CopyWords.Core.ViewModels;
 
@@ -7,13 +6,13 @@ namespace CopyWords.Core.Services
 {
     public interface ICopySelectedToClipboardService
     {
-        Task<string> CompileFrontAsync(string meaning, string partOfSpeech);
+        Task<string> CompileFrontAsync(DefinitionViewModel definitionViewModel);
 
-        Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs, HeadwordViewModel headword);
+        Task<string> CompileBackAsync(DefinitionViewModel definitionViewModel);
 
-        Task<string> CompileFormsAsync(string forms);
+        Task<string> CompileFormsAsync(DefinitionViewModel definitionViewModel);
 
-        Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> definitionVMs);
+        Task<string> CompileExamplesAsync(DefinitionViewModel definitionViewModel);
     }
 
     public class CopySelectedToClipboardService : ICopySelectedToClipboardService
@@ -29,99 +28,165 @@ namespace CopyWords.Core.Services
 
         #region Public Methods
 
-        public Task<string> CompileFrontAsync(string meaning, string partOfSpeech)
+        public Task<string> CompileFrontAsync(DefinitionViewModel definitionViewModel)
         {
-            string front = meaning;
-
-            if (!string.IsNullOrEmpty(partOfSpeech))
+            if (definitionViewModel == null)
             {
-                if (partOfSpeech.Equals("substantiv, intetkøn", StringComparison.OrdinalIgnoreCase))
+                return Task.FromResult(string.Empty);
+            }
+
+            string word = definitionViewModel.Word;
+            string partOfSpeech = definitionViewModel.PartOfSpeech;
+
+            string front = word;
+
+            if (!string.IsNullOrEmpty(word))
+            {
+                if (!string.IsNullOrEmpty(partOfSpeech))
                 {
-                    front = $"et {front}";
-                }
-                if (partOfSpeech.Equals("substantiv, fælleskøn", StringComparison.OrdinalIgnoreCase))
-                {
-                    front = $"en {front}";
-                }
-                if (partOfSpeech.Equals("verbum", StringComparison.OrdinalIgnoreCase))
-                {
-                    front = $"at {front}";
-                }
-                if (partOfSpeech.Equals("adjektiv", StringComparison.OrdinalIgnoreCase)
-                    || partOfSpeech.Equals("adverbium", StringComparison.OrdinalIgnoreCase)
-                    || partOfSpeech.Equals("konjunktion", StringComparison.OrdinalIgnoreCase)
-                    || partOfSpeech.Equals("forkortelse", StringComparison.OrdinalIgnoreCase))
-                {
-                    front = front + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, partOfSpeech.ToUpper());
+                    // Danish
+                    if (partOfSpeech.Equals("substantiv, intetkøn", StringComparison.OrdinalIgnoreCase))
+                    {
+                        front = $"et {front}";
+                    }
+                    if (partOfSpeech.Equals("substantiv, fælleskøn", StringComparison.OrdinalIgnoreCase))
+                    {
+                        front = $"en {front}";
+                    }
+                    if (partOfSpeech.Equals("verbum", StringComparison.OrdinalIgnoreCase))
+                    {
+                        front = $"at {front}";
+                    }
+
+                    if (partOfSpeech.Equals("adjektiv", StringComparison.OrdinalIgnoreCase)
+                        || partOfSpeech.Equals("adverbium", StringComparison.OrdinalIgnoreCase)
+                        || partOfSpeech.Equals("konjunktion", StringComparison.OrdinalIgnoreCase)
+                        || partOfSpeech.Equals("forkortelse", StringComparison.OrdinalIgnoreCase))
+                    {
+                        front = front + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, partOfSpeech.ToUpper());
+                    }
+
+                    // Spanish
+                    if (partOfSpeech.Equals("MASCULINE NOUN", StringComparison.OrdinalIgnoreCase))
+                    {
+                        front = $"un {word}";
+                    }
+                    if (partOfSpeech.Equals("FEMININE NOUN", StringComparison.OrdinalIgnoreCase))
+                    {
+                        front = $"una {word}";
+                    }
+                    if (partOfSpeech.Equals("MASCULINE OR FEMININE NOUN", StringComparison.OrdinalIgnoreCase))
+                    {
+                        front = word + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, "m/f");
+                    }
+
+                    if (partOfSpeech.Equals("ADVERB", StringComparison.OrdinalIgnoreCase)
+                        || partOfSpeech.Equals("ADJECTIVE", StringComparison.OrdinalIgnoreCase)
+                        || partOfSpeech.Equals("PHRASE", StringComparison.OrdinalIgnoreCase))
+                    {
+                        front = word + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, partOfSpeech.ToUpper());
+                    }
                 }
             }
 
             return Task.FromResult(front);
         }
 
-        public Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionVMs, HeadwordViewModel headword)
+        public async Task<string> CompileBackAsync(DefinitionViewModel definitionViewModel)
         {
-            if (definitionVMs == null)
+            if (definitionViewModel == null)
             {
-                return Task.FromResult(string.Empty);
+                return string.Empty;
             }
 
             StringBuilder sb = new StringBuilder();
 
-            // If translation selected, add it first
-            if (headword.IsRussianTranslationChecked && !string.IsNullOrEmpty(headword.Russian))
+            // todo: If translation selected, add it first
+            /*if (headword.IsRussianTranslationChecked && !string.IsNullOrEmpty(headword.Russian))
             {
                 sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headword.Russian) + "<br>");
             }
             if (headword.IsEnglishTranslationChecked && !string.IsNullOrEmpty(headword.English))
             {
                 sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headword.English) + "<br>");
-            }
+            }*/
 
-            // Now go through all meanings and add with numbering.
-            List<string> meanings = new();
-            foreach (var definitionVM in definitionVMs)
+            List<string> backMeanings = new();
+            int imageIndex = 0;
+
+            foreach (var contextVM in definitionViewModel.ContextViewModels)
             {
-                // The meaning is the same for all examples - so find first example which is selected
-                ExampleViewModel exampleVM = definitionVM.Examples.FirstOrDefault(x => x.IsChecked);
-                if (exampleVM != null)
+                bool isContextAddedToFirstBackMeaning = false;
+
+                foreach (var meaningVM in contextVM.MeaningViewModels)
                 {
-                    string htmlMeaning = string.Empty;
-                    if (!string.IsNullOrEmpty(definitionVM.Tag))
+                    // The meaning is the same for all examples - so find first example which is selected
+                    ExampleViewModel exampleVM = meaningVM.ExampleViewModels.FirstOrDefault(x => x.IsChecked);
+                    if (exampleVM != null)
                     {
-                        htmlMeaning = $"<span style=\"color:#404040; background-color:#eaeff2; border:1px solid #CCCCCC; margin-right:10px; font-size: 80%;\">{definitionVM.Tag}</span>";
+                        string backMeaning = meaningVM.English;
+
+                        // We add context only to first translation so that it doesn't clutter view
+                        if (!isContextAddedToFirstBackMeaning)
+                        {
+                            backMeaning += " " + contextVM.ContextEN;
+                        }
+
+                        if (meaningVM.IsImageChecked && !string.IsNullOrEmpty(meaningVM.ImageUrl))
+                        {
+                            // Download image, resize and save to Anki media collection folder
+                            string imageFileName = definitionViewModel.Word;
+                            if (imageIndex > 0)
+                            {
+                                imageFileName += imageIndex;
+                            }
+
+                            bool result = await _saveImageFileService.SaveImageFileAsync(meaningVM.ImageUrl, imageFileName);
+                            if (result)
+                            {
+                                backMeaning += $"<br><img src=\"{imageFileName}.jpg\">";
+                                imageIndex++;
+                            }
+                        }
+
+                        backMeanings.Add(backMeaning);
+                        isContextAddedToFirstBackMeaning = true;
                     }
-
-                    htmlMeaning += definitionVM.Meaning;
-
-                    meanings.Add(htmlMeaning);
                 }
             }
 
-            int count = meanings.Count;
+            // Now go through all meanings and add numbering
+            int count = backMeanings.Count;
             int i = 1;
 
-            foreach (string meaning in meanings)
+            foreach (string backMeaning in backMeanings)
             {
                 if (count > 1)
                 {
                     sb.Append($"{i}.&nbsp;");
                 }
 
-                sb.Append(meaning);
-                sb.Append("<br>");
+                // Run some cleanup - e.g. when both translation and context have the same word and we glue them, remove duplicates
+                sb.Append(backMeaning.Replace("(colloquial) (colloquial)", "(colloquial)", StringComparison.CurrentCulture));
+
+                if (i < count)
+                {
+                    sb.Append("<br>");
+                }
+
                 i++;
             }
 
-            return Task.FromResult(sb.ToString().TrimEnd("<br>".ToCharArray()));
+            return sb.ToString();
         }
 
-        public Task<string> CompileFormsAsync(string forms) => Task.FromResult(forms);
+        public Task<string> CompileFormsAsync(DefinitionViewModel definitionViewModel) => Task.FromResult(definitionViewModel.Forms);
 
-        public Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> definitionVMs)
+        public Task<string> CompileExamplesAsync(DefinitionViewModel definitionViewModel)
         {
-            var selectedExampleVMs = definitionVMs
-                .SelectMany(x => x.Examples)
+            var selectedExampleVMs = definitionViewModel.ContextViewModels
+                .SelectMany(x => x.MeaningViewModels)
+                .SelectMany(x => x.ExampleViewModels)
                 .Where(x => x.IsChecked)
                 .ToList();
 
@@ -133,11 +198,17 @@ namespace CopyWords.Core.Services
             {
                 if (count > 1)
                 {
-                    sb.Append(CultureInfo.CurrentCulture, $"<span style=\"color: rgba(0, 0, 0, 1)\">{i}.&nbsp;{exampleVM.Example}</span>");
+                    sb.Append(CultureInfo.CurrentCulture, $"<span style=\"color: rgba(0, 0, 0, 1)\">{i}.&nbsp;{exampleVM.Original}</span>");
                 }
                 else
                 {
-                    sb.Append(CultureInfo.CurrentCulture, $"<span style=\"color: rgba(0, 0, 0, 1)\">{exampleVM.Example}</span>");
+                    sb.Append(CultureInfo.CurrentCulture, $"<span style=\"color: rgba(0, 0, 0, 1)\">{exampleVM.Original}</span>");
+                }
+
+                if (!string.IsNullOrEmpty(exampleVM.English))
+                {
+                    sb.Append("&nbsp;");
+                    sb.Append("<span style=\"color: rgba(0, 0, 0, 0.4)\">" + exampleVM.English + "</span>");
                 }
 
                 if (i < count)
