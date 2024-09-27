@@ -26,6 +26,7 @@ namespace CopyWords.Core.ViewModels
             _fileIOService = fileIOService;
 
             AnkiSoundsFolder = _settingsService.GetAnkiSoundsFolder();
+            FfmpegBinFolder = _settingsService.GetFfmpegBinFolder();
 
             UseMp3gain = _settingsService.UseMp3gain;
             Mp3gainPath = _settingsService.GetMp3gainPath();
@@ -39,6 +40,10 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string ankiSoundsFolder;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
+        private string ffmpegBinFolder;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
@@ -66,7 +71,7 @@ namespace CopyWords.Core.ViewModels
         {
             get
             {
-                bool result = _fileIOService.DirectoryExists(AnkiSoundsFolder);
+                bool result = _fileIOService.DirectoryExists(AnkiSoundsFolder) && _fileIOService.DirectoryExists(FfmpegBinFolder);
                 if (UseMp3gain)
                 {
                     result &= _fileIOService.FileExists(Mp3gainPath);
@@ -94,6 +99,18 @@ namespace CopyWords.Core.ViewModels
             if (result.IsSuccessful)
             {
                 AnkiSoundsFolder = result.Folder.Path;
+            }
+        }
+
+        [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst14.0")]
+        [RelayCommand]
+        public async Task PickFfmpegBinFolderAsync(CancellationToken cancellationToken)
+        {
+            var result = await FolderPicker.Default.PickAsync(cancellationToken);
+            if (result.IsSuccessful)
+            {
+                FfmpegBinFolder = result.Folder.Path;
             }
         }
 
@@ -130,6 +147,7 @@ namespace CopyWords.Core.ViewModels
         public async Task SaveSettingsAsync()
         {
             _settingsService.SetAnkiSoundsFolder(AnkiSoundsFolder);
+            _settingsService.SetFfmpegBinFolder(FfmpegBinFolder);
             _settingsService.UseMp3gain = UseMp3gain;
             _settingsService.SetMp3gainPath(Mp3gainPath);
             _settingsService.UseTranslator = UseTranslator;

@@ -39,10 +39,13 @@ namespace CopyWords.Core.Tests.ViewModels
         #region Tests for CanSaveSettings
 
         [TestMethod]
-        public void CanSaveSettings_WhenAnkiSoundsFolderExists_ReturnsTrue()
+        public void CanSaveSettings_WhenAnkiSoundsFolderExistsAndFfmpegBinFolderIsSet_ReturnsTrue()
         {
             string ankiSoundsFolder = _fixture.Create<string>();
             const bool ankiSoundsFolderExists = true;
+
+            string ffmpegBinFolder = _fixture.Create<string>();
+            const bool ffmpegBinFolderExists = true;
 
             const bool useMp3gain = false;
             string mp3gainPath = string.Empty;
@@ -51,13 +54,15 @@ namespace CopyWords.Core.Tests.ViewModels
 
             Mock<ISettingsService> settingsServiceMock = new Mock<ISettingsService>();
             settingsServiceMock.Setup(x => x.GetAnkiSoundsFolder()).Returns(ankiSoundsFolder);
+            settingsServiceMock.Setup(x => x.GetFfmpegBinFolder()).Returns(ffmpegBinFolder);
             settingsServiceMock.Setup(x => x.UseMp3gain).Returns(useMp3gain);
             settingsServiceMock.Setup(x => x.GetMp3gainPath()).Returns(mp3gainPath);
             settingsServiceMock.Setup(x => x.UseTranslator).Returns(useTranslator);
             settingsServiceMock.Setup(x => x.GetTranslatorApiUrl()).Returns(translatorApiUrl);
 
             Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-            fileIOServiceMock.Setup(x => x.DirectoryExists(It.IsAny<string?>())).Returns(ankiSoundsFolderExists);
+            fileIOServiceMock.Setup(x => x.DirectoryExists(ankiSoundsFolder)).Returns(ankiSoundsFolderExists);
+            fileIOServiceMock.Setup(x => x.DirectoryExists(ffmpegBinFolder)).Returns(ffmpegBinFolderExists);
 
             var sut = new SettingsViewModel(settingsServiceMock.Object, new Mock<IDialogService>().Object, new Mock<IShellService>().Object, fileIOServiceMock.Object);
 
@@ -65,10 +70,13 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void CanSaveSettings_WhenAnkiSoundsFolderDoesNotExist_ReturnsFalse()
+        public void CanSaveSettings_WhenAnkiSoundsFolderDoesNotExistAndFfmpegBinFolderIsSet_ReturnsFalse()
         {
             string ankiSoundsFolder = _fixture.Create<string>();
             const bool ankiSoundsFolderExists = false;
+
+            string ffmpegBinFolder = _fixture.Create<string>();
+            const bool ffmpegBinFolderExists = true;
 
             const bool useMp3gain = false;
             string mp3gainPath = string.Empty;
@@ -77,13 +85,46 @@ namespace CopyWords.Core.Tests.ViewModels
 
             Mock<ISettingsService> settingsServiceMock = new Mock<ISettingsService>();
             settingsServiceMock.Setup(x => x.GetAnkiSoundsFolder()).Returns(ankiSoundsFolder);
+            settingsServiceMock.Setup(x => x.GetFfmpegBinFolder()).Returns(ffmpegBinFolder);
             settingsServiceMock.Setup(x => x.UseMp3gain).Returns(useMp3gain);
             settingsServiceMock.Setup(x => x.GetMp3gainPath()).Returns(mp3gainPath);
             settingsServiceMock.Setup(x => x.UseTranslator).Returns(useTranslator);
             settingsServiceMock.Setup(x => x.GetTranslatorApiUrl()).Returns(translatorApiUrl);
 
             Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-            fileIOServiceMock.Setup(x => x.DirectoryExists(It.IsAny<string?>())).Returns(ankiSoundsFolderExists);
+            fileIOServiceMock.Setup(x => x.DirectoryExists(ankiSoundsFolder)).Returns(ankiSoundsFolderExists);
+            fileIOServiceMock.Setup(x => x.DirectoryExists(ffmpegBinFolder)).Returns(ffmpegBinFolderExists);
+
+            var sut = new SettingsViewModel(settingsServiceMock.Object, new Mock<IDialogService>().Object, new Mock<IShellService>().Object, fileIOServiceMock.Object);
+
+            sut.CanSaveSettings.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void CanSaveSettings_WhenAnkiSoundsFolderExistsButFfmpegBinFolderDoesNot_ReturnsFalse()
+        {
+            string ankiSoundsFolder = _fixture.Create<string>();
+            const bool ankiSoundsFolderExists = true;
+
+            string ffmpegBinFolder = _fixture.Create<string>();
+            const bool ffmpegBinFolderExists = false;
+
+            const bool useMp3gain = false;
+            string mp3gainPath = string.Empty;
+            const bool useTranslator = false;
+            string translatorApiUrl = string.Empty;
+
+            Mock<ISettingsService> settingsServiceMock = new Mock<ISettingsService>();
+            settingsServiceMock.Setup(x => x.GetAnkiSoundsFolder()).Returns(ankiSoundsFolder);
+            settingsServiceMock.Setup(x => x.GetFfmpegBinFolder()).Returns(ffmpegBinFolder);
+            settingsServiceMock.Setup(x => x.UseMp3gain).Returns(useMp3gain);
+            settingsServiceMock.Setup(x => x.GetMp3gainPath()).Returns(mp3gainPath);
+            settingsServiceMock.Setup(x => x.UseTranslator).Returns(useTranslator);
+            settingsServiceMock.Setup(x => x.GetTranslatorApiUrl()).Returns(translatorApiUrl);
+
+            Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(ankiSoundsFolder)).Returns(ankiSoundsFolderExists);
+            fileIOServiceMock.Setup(x => x.DirectoryExists(ffmpegBinFolder)).Returns(ffmpegBinFolderExists);
 
             var sut = new SettingsViewModel(settingsServiceMock.Object, new Mock<IDialogService>().Object, new Mock<IShellService>().Object, fileIOServiceMock.Object);
 

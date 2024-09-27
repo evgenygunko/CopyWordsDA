@@ -23,6 +23,7 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -69,8 +70,53 @@
             </Grid>
         </Border>
 
-        <!-- Path to mp3gain -->
+        <!-- Path to Ffmpeg -->
         <Border Grid.Row="1"
+                Grid.ColumnSpan="3"
+                Stroke="#CCCCCC"
+                StrokeShape="RoundRectangle 10"
+                StrokeThickness="1"
+                Margin="0,30,0,0"
+                Padding="10,10,10,20">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0"
+                       Grid.ColumnSpan="3"
+                       Text="Path to Ffmpeg: ℹ️"
+                       ToolTipProperties.Text="Run 'which ffmpeg' on MacOS or 'Get-Command ffmpeg' on Windows"
+                       VerticalOptions="Center">
+                </Label>
+
+                <Entry Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Text="{Binding FfmpegBinFolder}" />
+
+                <Button Grid.Row="1"
+                    Grid.Column="3"
+                    Margin="10,0,0,0"
+                    Command="{Binding PickFfmpegBinFolderCommand}"
+                    BackgroundColor="Gray">
+
+                    <Button.ImageSource>
+                        <FontImageSource
+                        FontFamily="MaterialIconsOutlined-Regular"
+                        Glyph="&#xe2c8;"/>
+                    </Button.ImageSource>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Path to mp3gain -->
+        <Border Grid.Row="2"
                 Grid.ColumnSpan="3"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 10"
@@ -136,7 +182,7 @@
         </Border>
 
         <!-- Translator settings -->
-        <Border Grid.Row="2"
+        <Border Grid.Row="3"
                 Grid.ColumnSpan="3"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 10"
@@ -177,15 +223,15 @@
             </Grid>
         </Border>
 
-        <Button Grid.Row="3" Grid.Column="1"
+        <Button Grid.Row="4" Grid.Column="1"
             Margin="0,20,0,0"
             Text="Save"
             Command="{Binding SaveSettingsCommand}"/>
-        <Button Grid.Row="3" Grid.Column="2"
+        <Button Grid.Row="4" Grid.Column="2"
                 Margin="10,20,0,0"
                 Text="Cancel"
                 Command="{Binding CancelCommand}"/>
 
-        <Label Text="{Binding About}" Grid.Row="4" Grid.ColumnSpan="2" VerticalOptions="End"></Label>
+        <Label Text="{Binding About}" Grid.Row="5" Grid.ColumnSpan="2" VerticalOptions="End"></Label>
     </Grid>
 </ContentPage>
