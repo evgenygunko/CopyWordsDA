@@ -25,6 +25,8 @@ namespace CopyWords.Core.ViewModels
             _clipboardService = clipboardService;
 
             Word = definition.Headword.Original;
+            HeadwordViewModel = new HeadwordViewModel(definition.Headword);
+
             PartOfSpeech = definition.PartOfSpeech;
 
             ContextViewModels.Clear();
@@ -41,6 +43,9 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(CopyBackCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyExamplesCommand))]
         private string word;
+
+        [ObservableProperty]
+        private HeadwordViewModel headwordViewModel;
 
         [ObservableProperty]
         private string partOfSpeech;

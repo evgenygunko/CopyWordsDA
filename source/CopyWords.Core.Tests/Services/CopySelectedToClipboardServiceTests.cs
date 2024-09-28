@@ -211,19 +211,17 @@ namespace CopyWords.Core.Tests.Services
 
         #region Danish
 
-        /*[TestMethod]
+        [TestMethod]
         public async Task CompileBackAsync_WhenRussianTranslationIsSelected_AddsTranslationToResult()
         {
-            var wordVariantVMs = CreateVMForGrillspyd();
-            wordVariantVMs[0].Examples[0].IsChecked = true;
-
-            var headword = new Headword("Grillspyd", "kebabs", "шашлыки");
-            var headwordVM = new HeadwordViewModel(headword);
-            headwordVM.IsRussianTranslationChecked = true;
+            var definitionVMs = CreateVMForGrillspyd();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
+            definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = false;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(wordVariantVMs, headwordVM);
+            string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br>spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
@@ -231,16 +229,14 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenEnglishTranslationIsSelected_AddsTranslationToResult()
         {
-            var wordVariantVMs = CreateVMForGrillspyd();
-            wordVariantVMs[0].Examples[0].IsChecked = true;
-
-            var headword = new Headword("Grillspyd", "kebabs", "шашлыки");
-            var headwordVM = new HeadwordViewModel(headword);
-            headwordVM.IsEnglishTranslationChecked = true;
+            var definitionVMs = CreateVMForGrillspyd();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = false;
+            definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(wordVariantVMs, headwordVM);
+            string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
@@ -250,28 +246,23 @@ namespace CopyWords.Core.Tests.Services
         {
             var definitionVMs = CreateVMForGrillspyd();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
-
-            var headword = new Headword("Grillspyd", "kebabs", "шашлыки");
-            var headwordVM = new HeadwordViewModel(headword);
-            headwordVM.IsRussianTranslationChecked = true;
-            headwordVM.IsEnglishTranslationChecked = true;
+            definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
+            definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br><span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
-        }*/
+        }
 
         [TestMethod]
         public async Task CompileBackAsync_WhenOneExampleIsSelected_DoesNotAddNumbers()
         {
             var definitionVMs = CreateVMForGrillspyd();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
-
-            var headwordVM = _fixture.Create<HeadwordViewModel>();
-            headwordVM.IsRussianTranslationChecked = false;
-            headwordVM.IsEnglishTranslationChecked = false;
+            definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = false;
+            definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = false;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
@@ -494,7 +485,7 @@ namespace CopyWords.Core.Tests.Services
 
         private ObservableCollection<DefinitionViewModel> CreateVMForGrillspyd()
         {
-            var definition = new Definition(new Headword("grillspyd", null, null), PartOfSpeech: "substantiv, intetkøn", Endings: "-det eller (uofficielt) -et, -, -dene",
+            var definition = new Definition(new Headword(Original: "grillspyd", English: "Kebabs", Russian: "Шашлыки"), PartOfSpeech: "substantiv, intetkøn", Endings: "-det eller (uofficielt) -et, -, -dene",
                 new List<Context>
                 {
                     new Context(ContextEN: "", Position: "",

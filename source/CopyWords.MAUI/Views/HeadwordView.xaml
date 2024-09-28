@@ -18,13 +18,11 @@
                 IsVisible="{Binding Russian, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"                        
                 BackgroundColor="#eaeff2"
                 Stroke="#CCCCCC"
-                StrokeThickness="1"
-                Padding="10,0,0,0"
-                Margin="0,0,0,15">
+                StrokeThickness="1">
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="28"></ColumnDefinition>
+                <ColumnDefinition Width="35"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 

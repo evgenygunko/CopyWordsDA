@@ -17,6 +17,7 @@ namespace CopyWords.Parsers
     public class LookUpWord : ILookUpWord
     {
         private const string LanguageDA = "da";
+        private const string LanguageES = "es";
         private const string LanguageRU = "ru";
         private const string LanguageEN = "en";
         private readonly string[] DestinationLanguages = [LanguageRU, LanguageEN];
@@ -127,7 +128,7 @@ namespace CopyWords.Parsers
             List<Models.DDO.DDODefinition> ddoDefinitions = _ddoPageParser.ParseDefinitions();
 
             // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-            IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headWordDA, ddoDefinitions.Select(x => x.Meaning));
+            IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, sourceLangauge: LanguageDA, headWordDA, ddoDefinitions.Select(x => x.Meaning));
             Headword headword = new Headword(
                 headWordDA,
                 translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
@@ -191,7 +192,7 @@ namespace CopyWords.Parsers
                 }
 
                 // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-                IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, spanishDictDefinition.WordES, meanings: Enumerable.Empty<string>());
+                IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, sourceLangauge: LanguageES, spanishDictDefinition.WordES, meanings: Enumerable.Empty<string>());
 
                 Headword headword = new Headword(
                     spanishDictDefinition.WordES,
@@ -213,13 +214,13 @@ namespace CopyWords.Parsers
             return wordModel;
         }
 
-        internal async Task<IEnumerable<TranslationOutput>> GetTranslationAsync(string? translatorApiURL, string headWord, IEnumerable<string> meanings)
+        internal async Task<IEnumerable<TranslationOutput>> GetTranslationAsync(string? translatorApiURL, string sourceLangauge, string headWord, IEnumerable<string> meanings)
         {
             IEnumerable<TranslationOutput>? translations = null;
 
             if (!string.IsNullOrEmpty(translatorApiURL))
             {
-                var translationInput = new TranslationInput(headWord, meanings, LanguageDA, DestinationLanguages);
+                var translationInput = new TranslationInput(headWord, meanings, sourceLangauge, DestinationLanguages);
 
                 translations = await _translatorAPIClient.TranslateAsync(translatorApiURL, translationInput);
             }

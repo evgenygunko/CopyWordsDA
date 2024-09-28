@@ -20,10 +20,8 @@
                             <RowDefinition Height="auto"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="auto"></RowDefinition>
                         </Grid.RowDefinitions>
-
-                        <!-- Box with headword and its translations -->
-                        <!--<views:HeadwordView Grid.Row="0" Grid.ColumnSpan="2" BindingContext="{Binding Path=Headword}" />-->
 
                         <!-- Headword -->
                         <VerticalStackLayout Grid.Row="0" VerticalOptions="Center">
@@ -31,8 +29,11 @@
                             <Label TextColor="Gray" Text="{Binding PartOfSpeech, FallbackValue='transitive verb'}" />
                         </VerticalStackLayout>
 
+                        <!-- Box with headword and its translations -->
+                        <views:HeadwordView Grid.Row="1" Grid.ColumnSpan="2" BindingContext="{Binding Path=HeadwordViewModel}" Margin="0,5,0,0" />
+
                         <!-- Forms -->
-                        <!--<HorizontalStackLayout Grid.Row="1">
+                        <!--<HorizontalStackLayout Grid.Row="2">
                             <Border     
                                     IsVisible="{Binding Forms, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"                        
                                     BackgroundColor="#eaeff2"
@@ -45,7 +46,7 @@
                         </HorizontalStackLayout>-->
 
                         <!-- Copy front, copy back, and copy examples buttons -->
-                        <HorizontalStackLayout Grid.Row="1" Spacing="5" Margin="0,10,0,0">
+                        <HorizontalStackLayout Grid.Row="2" Spacing="5" Margin="0,10,0,0">
                             <Button Text="Copy front" FontSize="12" 
                                 BackgroundColor="{Binding CopyFrontButtonColor}"
                                 Command="{Binding CopyFrontCommand}" />
@@ -60,10 +61,10 @@
                         </HorizontalStackLayout>
 
                         <!-- Contexts -->
-                        <views:ContextsView Grid.Row="2" />
+                        <views:ContextsView Grid.Row="3" />
 
                         <!-- Horizontal line -->
-                        <BoxView Grid.Row="3" Color="LightGray" HeightRequest="1" Margin="0,10,0,10"/>
+                        <BoxView Grid.Row="4" Color="LightGray" HeightRequest="1" Margin="0,10,0,10"/>
                     </Grid>
 
                     <!--Examples -->

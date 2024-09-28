@@ -301,7 +301,7 @@ namespace CopyWords.Parsers.Tests
             translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
 
             var sut = _fixture.Create<LookUpWord>();
-            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, meanings);
+            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLangauge: "da", headWord, meanings);
 
             result.Should().HaveCount(1);
 
@@ -326,7 +326,7 @@ namespace CopyWords.Parsers.Tests
             translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
 
             var sut = _fixture.Create<LookUpWord>();
-            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, meanings);
+            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLangauge: "da", headWord, meanings);
 
             result.Should().HaveCount(1);
 
@@ -352,7 +352,7 @@ namespace CopyWords.Parsers.Tests
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
 
             var sut = _fixture.Create<LookUpWord>();
-            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, meanings);
+            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLangauge: "da", headWord, meanings);
 
             result.Should().HaveCount(0);
 

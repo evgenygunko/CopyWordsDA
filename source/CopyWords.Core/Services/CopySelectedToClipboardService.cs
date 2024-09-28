@@ -101,15 +101,16 @@ namespace CopyWords.Core.Services
 
             StringBuilder sb = new StringBuilder();
 
-            // todo: If translation selected, add it first
-            /* if (headword.IsRussianTranslationChecked && !string.IsNullOrEmpty(headword.Russian))
-             {
-                 sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headword.Russian) + "<br>");
-             }
-             if (headword.IsEnglishTranslationChecked && !string.IsNullOrEmpty(headword.English))
-             {
-                 sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headword.English) + "<br>");
-             }*/
+            // If translation selected, add it first
+            var headwordVM = definitionViewModel.HeadwordViewModel;
+            if (headwordVM.IsRussianTranslationChecked && !string.IsNullOrEmpty(headwordVM.Russian))
+            {
+                sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headwordVM.Russian) + "<br>");
+            }
+            if (headwordVM.IsEnglishTranslationChecked && !string.IsNullOrEmpty(headwordVM.English))
+            {
+                sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headwordVM.English) + "<br>");
+            }
 
             List<string> backMeanings = new();
             int imageIndex = 0;
