@@ -141,7 +141,7 @@ namespace CopyWords.Parsers
                 meanings.Add(new Meaning(ddoDefinition.Meaning, AlphabeticalPosition: (pos++).ToString(), ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples));
             }
 
-            Context context = new Context(ContextEN: "", Position: 1, meanings);
+            Context context = new Context(ContextEN: "", Position: "", meanings);
             Definition definition = new Definition(headword, partOfSpeech, endings, [context]);
 
             var wordModel = new WordModel(
@@ -187,7 +187,7 @@ namespace CopyWords.Parsers
                 List<Context> contexts = new();
                 foreach (var spanishDictContext in spanishDictDefinition.Contexts)
                 {
-                    contexts.Add(new Context(spanishDictContext.ContextEN, spanishDictContext.Position, spanishDictContext.Meanings));
+                    contexts.Add(new Context(spanishDictContext.ContextEN, spanishDictContext.Position.ToString(), spanishDictContext.Meanings));
                 }
 
                 // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.

@@ -20,7 +20,7 @@
 
     public record Context(
         string ContextEN,
-        int Position,
+        string Position,
         IEnumerable<Meaning> Meanings);
 
     public record Meaning(

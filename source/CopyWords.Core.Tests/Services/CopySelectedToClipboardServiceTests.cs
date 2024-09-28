@@ -550,7 +550,7 @@ namespace CopyWords.Core.Tests.Services
             var definition = new Definition(new Headword("coche", null, null), PartOfSpeech: "MASCULINE NOUN", Endings: "",
                 new List<Context>
                 {
-                    new Context("(vehicle)", 1,
+                    new Context("(vehicle)", "1",
                         new List<Meaning>
                         {
                             new Meaning("car", "a", Tag: null, ImageUrl: null,
@@ -559,7 +559,7 @@ namespace CopyWords.Core.Tests.Services
                                 new List<Example>() { new Example(Original: "Todos estos coches tienen bolsas de aire.", English: "All these automobiles have airbags.", Russian: "") }),
                         }),
 
-                    new Context("(vehicle led by horses)", 2,
+                    new Context("(vehicle led by horses)", "2",
                         new List<Meaning>
                         {
                             new Meaning("carriage", "a", Tag: null, ImageUrl: null,
@@ -585,7 +585,7 @@ namespace CopyWords.Core.Tests.Services
             var definition = new Definition(new Headword("casa", null, null), PartOfSpeech: "feminine noun", Endings: "",
                 new List<Context>
                 {
-                    new Context("(dwelling)", 1,
+                    new Context("(dwelling)", "1",
                         new List<Meaning>
                         {
                             new Meaning("house", "a", Tag: null, ImageUrl: null,
@@ -610,7 +610,7 @@ namespace CopyWords.Core.Tests.Services
             var definition1 = new Definition(new Headword("afeitar", null, null), PartOfSpeech: "TRANSITIVE VERB", Endings: "",
                 new List<Context>
                 {
-                    new Context("(to remove hair)", 1,
+                    new Context("(to remove hair)", "1",
                         new List<Meaning>
                         {
                             new Meaning("to shave", "a", Tag: null, ImageUrl: null,
@@ -623,7 +623,7 @@ namespace CopyWords.Core.Tests.Services
             var definition2 = new Definition(new Headword("afeitarse", null, null), PartOfSpeech: "REFLEXIVE VERB", Endings: "",
                 new List<Context>
                 {
-                    new Context("(to shave oneself)", 1,
+                    new Context("(to shave oneself)", "1",
                         new List<Meaning>
                         {
                             new Meaning("to shave", "a", Tag: null, ImageUrl: null,
@@ -647,13 +647,13 @@ namespace CopyWords.Core.Tests.Services
             var definition = new Definition(new Headword("bien", null, null), PartOfSpeech: "ADVERB", Endings: "",
                 new List<Context>
                 {
-                    new Context("(in good health)", 1,
+                    new Context("(in good health)", "1",
                         new List<Meaning>
                         {
                             new Meaning("well", "a", Tag: null, ImageUrl: null,
                                 new List<Example>() { new Example(Original: "Últimamente no me he sentido bien.", English: "I haven't felt well lately.", Russian: "") }),
                         }),
-                    new Context("(properly)", 2,
+                    new Context("(properly)", "2",
                         new List<Meaning>
                         {
                             new Meaning("well", "a", Tag: null, ImageUrl: null,
@@ -678,7 +678,7 @@ namespace CopyWords.Core.Tests.Services
             var definition1 = new Definition(new Headword("guay", null, null), PartOfSpeech: "INTERJECTION", Endings: "",
                 new List<Context>
                 {
-                    new Context("(colloquial) (used to express approval) (Spain)", 1,
+                    new Context("(colloquial) (used to express approval) (Spain)", "1",
                         new List<Meaning>
                         {
                             new Meaning("cool (colloquial)", "a", Tag: null, ImageUrl: null,
@@ -697,7 +697,7 @@ namespace CopyWords.Core.Tests.Services
             var definition2 = new Definition(new Headword("guay", null, null), PartOfSpeech: "ADJECTIVE", Endings: "",
                 new List<Context>
                 {
-                    new Context("(colloquial) (extremely good) (Spain)", 1,
+                    new Context("(colloquial) (extremely good) (Spain)", "1",
                         new List<Meaning>
                         {
                             new Meaning("cool (colloquial)", "a", Tag: null, ImageUrl: null,
@@ -727,7 +727,7 @@ namespace CopyWords.Core.Tests.Services
             var definition = new Definition(new Headword("luce", null, null), PartOfSpeech: "PHRASE", Endings: "",
                 new List<Context>
                 {
-                    new Context("(third person singular)", 1,
+                    new Context("(third person singular)", "1",
                         new List<Meaning>
                         {
                             new Meaning("he looks (masculine)", "a", Tag: null, ImageUrl: null,
@@ -737,7 +737,7 @@ namespace CopyWords.Core.Tests.Services
                             new Meaning("it looks", "c", Tag: null, ImageUrl: null,
                                 new List<Example>() { new Example(Original: "¿Llevaste tu uniforme a la tintorería? Luce impecable el día de hoy.", English: "Did you take your uniform to the cleaners? It looks immaculate today.", Russian: "") }),
                         }),
-                    new Context("(formal) (second person singular)", 2,
+                    new Context("(formal) (second person singular)", "2",
                         new List<Meaning>
                         {
                             new Meaning("you look", "a", Tag: null, ImageUrl: null,
@@ -761,7 +761,7 @@ namespace CopyWords.Core.Tests.Services
             var definition = new Definition(new Headword("saltamontes", null, null), PartOfSpeech: "MASCULINE NOUN", Endings: "",
                 new List<Context>
                 {
-                    new Context("(animal)", 1,
+                    new Context("(animal)", "1",
                         new List<Meaning>
                         {
                             new Meaning("grasshopper", "a", Tag: null, ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/5bf100e5-da54-4be6-a55c-281edcd08b10.jpg",
@@ -788,7 +788,7 @@ namespace CopyWords.Core.Tests.Services
             var definition = new Definition(new Headword("veneno", null, null), PartOfSpeech: "MASCULINE NOUN", Endings: "",
                 new List<Context>
                 {
-                    new Context("(toxic substance)", 1,
+                    new Context("(toxic substance)", "1",
                         new List<Meaning>
                         {
                             new Meaning("venom (of an animal)", "a", Tag: null, ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d533b470-18a4-4cae-ad08-3ee8858ae02c.jpg",
@@ -800,7 +800,7 @@ namespace CopyWords.Core.Tests.Services
                                     new Example(Original: "Estos hongos contienen un veneno mortal.", English: "These mushrooms contain a deadly poison.", Russian: "")
                                 })
                         }),
-                    new Context("(ill intent)", 2,
+                    new Context("(ill intent)", "2",
                         new List<Meaning>
                         {
                             new Meaning("venom", "a", Tag: null, ImageUrl: null,

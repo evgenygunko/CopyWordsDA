@@ -22,7 +22,7 @@ namespace CopyWords.Core.ViewModels
         private string contextEN;
 
         [ObservableProperty]
-        private int position;
+        private string position;
 
         public ObservableCollection<MeaningViewModel> MeaningViewModels { get; } = new();
     }

@@ -3,10 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             xmlns:templateSelector="clr-namespace:CopyWords.MAUI.Helpers"
              x:Class="CopyWords.MAUI.Views.ContextsView">
 
     <ContentView.Resources>
         <ResourceDictionary>
+            <!-- For SpanishDict -->
             <DataTemplate x:Key="contextsTemplate"
                           x:DataType="viewmodels:ContextViewModel">
                 <!-- Context -->
@@ -21,11 +23,25 @@
                     <views:MeaningsView />
                 </VerticalStackLayout>
             </DataTemplate>
+
+            <!-- For DDO -->
+            <DataTemplate x:Key="meaningsTemplate"
+                          x:DataType="viewmodels:ContextViewModel">
+
+                <!--Meanings -->
+                <views:MeaningsView />
+            </DataTemplate>
+
+            <templateSelector:ContextTemplateSelector x:Key="contextTemplateSelector"
+                                                   ContextsTemplate="{StaticResource contextsTemplate}"
+                                                   MeaningsTemplate="{StaticResource meaningsTemplate}" />
+
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <VerticalStackLayout
-            BindableLayout.ItemsSource="{Binding ContextViewModels}"
-            BindableLayout.ItemTemplate="{StaticResource contextsTemplate}" />
+    <StackLayout>
+        <CollectionView ItemsSource="{Binding ContextViewModels}" 
+                        ItemTemplate="{StaticResource contextTemplateSelector}"/>
+    </StackLayout>
 
 </ContentView>
