@@ -10,7 +10,7 @@ namespace CopyWords.Core.Services
 
         Task<string> CompileBackAsync(DefinitionViewModel definitionViewModel);
 
-        Task<string> CompileFormsAsync(DefinitionViewModel definitionViewModel);
+        Task<string> CompileEndingsAsync(DefinitionViewModel definitionViewModel);
 
         Task<string> CompileExamplesAsync(DefinitionViewModel definitionViewModel);
     }
@@ -186,7 +186,7 @@ namespace CopyWords.Core.Services
             return sb.ToString();
         }
 
-        public Task<string> CompileFormsAsync(DefinitionViewModel definitionViewModel) => Task.FromResult(definitionViewModel.Forms);
+        public Task<string> CompileEndingsAsync(DefinitionViewModel definitionViewModel) => Task.FromResult(definitionViewModel.Endings);
 
         public Task<string> CompileExamplesAsync(DefinitionViewModel definitionViewModel)
         {

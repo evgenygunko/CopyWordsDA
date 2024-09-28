@@ -28,6 +28,7 @@ namespace CopyWords.Core.ViewModels
             HeadwordViewModel = new HeadwordViewModel(definition.Headword);
 
             PartOfSpeech = definition.PartOfSpeech;
+            Endings = definition.Endings;
 
             ContextViewModels.Clear();
             foreach (var context in definition.Contexts)
@@ -51,16 +52,18 @@ namespace CopyWords.Core.ViewModels
         private string partOfSpeech;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(CopyFormsCommand))]
-        private string forms = "";
+        [NotifyCanExecuteChangedFor(nameof(CopyEndingsCommand))]
+        private string endings = "";
 
         public bool CanCopyFront => !string.IsNullOrEmpty(Word);
 
-        public bool CanCopyForms => !string.IsNullOrEmpty(Forms);
+        public bool CanCopyEndings => !string.IsNullOrEmpty(Endings);
 
         public Color CopyFrontButtonColor => GetButtonColor(CanCopyFront);
 
         public Color CopyBackButtonColor => GetButtonColor(CanCopyFront);
+
+        public Color CopyEndingsButtonColor => GetButtonColor(CanCopyEndings);
 
         public Color CopyExamplesButtonColor => GetButtonColor(CanCopyFront);
 
@@ -82,12 +85,10 @@ namespace CopyWords.Core.ViewModels
             await CompileAndCopyToClipboard("back", _copySelectedToClipboardService.CompileBackAsync);
         }
 
-        [RelayCommand(CanExecute = nameof(CanCopyForms))]
-        public async Task CopyFormsAsync()
+        [RelayCommand(CanExecute = nameof(CanCopyEndings))]
+        public async Task CopyEndingsAsync()
         {
-            string formattedText = await _copySelectedToClipboardService.CompileFormsAsync(this);
-            await _clipboardService.CopyTextToClipboardAsync(formattedText);
-            await _dialogService.DisplayToast("Forms copied");
+            await CompileAndCopyToClipboard("endidngs", _copySelectedToClipboardService.CompileEndingsAsync);
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]

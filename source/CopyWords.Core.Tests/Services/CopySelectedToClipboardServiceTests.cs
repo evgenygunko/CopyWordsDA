@@ -409,6 +409,22 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
+        #region Tests for CompileEndingsAsync
+
+        [TestMethod]
+        public async Task CompileEndingsAsync_Should_CopyEndings()
+        {
+            var definitionVMs = CreateVMForGrillspyd();
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string result = await sut.CompileEndingsAsync(definitionVMs[0]);
+
+            result.Should().Be("-det eller (uofficielt) -et, -, -dene");
+        }
+
+        #endregion
+
         #region Tests for CompileExamplesAsync
 
         #region Danish
