@@ -14,27 +14,38 @@
                           x:DataType="viewmodels:MeaningViewModel">
                 <!-- Meanings -->
                 <VerticalStackLayout Padding="10,10,0,0">
-                    <HorizontalStackLayout>
-                        <Label Text="{Binding AlphabeticalPosition, FallbackValue='AlphabeticalPosition'}" />
-                        <Label Text=". &#6158;" />
-                        <Label TextColor="#1b85e5" FontAttributes="Bold" Text="{Binding English, FallbackValue='English'}" />
-                    </HorizontalStackLayout>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                    <HorizontalStackLayout IsVisible="{Binding ImageUrl, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
-                        <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding IsImageChecked}" />
-                        <Border Stroke="Transparent" StrokeThickness="5">
-                            <Border.Triggers>
-                                <DataTrigger TargetType="Border" Binding="{Binding IsImageChecked}" Value="true">
-                                    <Setter Property="Stroke" Value="LightBlue" />
-                                </DataTrigger>
-                            </Border.Triggers>
+                        <Label Grid.Row="0" Grid.Column="0" Text="{Binding AlphabeticalPosition, FallbackValue='AlphabeticalPosition'}" />
+                        <Label Grid.Row="0" Grid.Column="1" Text=". &#6158;" />
+                        <Label Grid.Row="0" Grid.Column="2" TextColor="#1b85e5" FontAttributes="Bold" Text="{Binding English, FallbackValue='English'}" />
 
-                            <Image Source="{Binding ImageUrl, FallbackValue='https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/5bf100e5-da54-4be6-a55c-281edcd08b10.jpg'}"
+                        <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="3" IsVisible="{Binding ImageUrl, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
+                            <CheckBox x:Name="checkBox" IsChecked="{Binding IsImageChecked}" />
+                            <Border Stroke="Transparent" StrokeThickness="5">
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsImageChecked}" Value="true">
+                                        <Setter Property="Stroke" Value="LightBlue" />
+                                    </DataTrigger>
+                                </Border.Triggers>
+
+                                <Image Source="{Binding ImageUrl, FallbackValue='https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/5bf100e5-da54-4be6-a55c-281edcd08b10.jpg'}"
                                 MaximumHeightRequest="150"
                                 MaximumWidthRequest="150"
                                 HorizontalOptions="Start"/>
-                        </Border>
-                    </HorizontalStackLayout>
+                            </Border>
+                        </HorizontalStackLayout>
+                    </Grid>                    
 
                     <!--Examples -->
                     <views:ExamplesView />
