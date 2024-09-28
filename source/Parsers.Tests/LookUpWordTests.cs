@@ -426,6 +426,77 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
+        #region Tests for ParseSpanishWordAsync
+
+        [TestMethod]
+        public async Task ParseSpanishWordAsync_Should_Return2MeaningsForAfeitar()
+        {
+            string headwordES = "afeitar";
+            string html = _fixture.Create<string>();
+            var options = new Options(SourceLanguage.Danish, TranslatorApiURL: null);
+
+            Mock<ISpanishDictPageParser> spanishDictPageParserMock = _fixture.Freeze<Mock<ISpanishDictPageParser>>();
+            spanishDictPageParserMock.Setup(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>())).Returns(headwordES);
+            spanishDictPageParserMock.Setup(x => x.ParseDefinitions(It.IsAny<Models.SpanishDict.WordJsonModel>())).Returns(CreateDefinitionsForAfeitar());
+
+            var sut = _fixture.Create<LookUpWord>();
+
+            WordModel? result = await sut.ParseSpanishWordAsync(html, options);
+
+            result.Should().NotBeNull();
+
+            result!.Word.Should().Be(headwordES);
+
+            IEnumerable<Definition> definitions = result!.Definitions;
+            definitions.Should().HaveCount(2);
+
+            // 1. afeitar
+            Definition definition1 = definitions.First();
+            definition1.Headword.Original.Should().Be("afeitar");
+            definition1.Contexts.Should().HaveCount(1);
+            definition1.PartOfSpeech.Should().Be("TRANSITIVE VERB");
+            Context context1 = definition1.Contexts.First();
+            context1.ContextEN.Should().Be("(to remove hair)");
+            context1.Position.Should().Be("1");
+            context1.Meanings.Should().HaveCount(1);
+
+            Meaning meaning1 = context1.Meanings.First();
+            meaning1.Description.Should().Be("to shave");
+            meaning1.AlphabeticalPosition.Should().Be("a");
+            meaning1.Tag.Should().BeNull();
+            meaning1.ImageUrl.Should().BeNull();
+            meaning1.Examples.Should().HaveCount(1);
+            Example example1 = meaning1!.Examples.First();
+            example1.Original.Should().Be("Para el verano, papá decidió afeitar al perro.");
+            example1.English.Should().Be("For the summer, dad decided to shave the dog.");
+
+            // 2. afeitarse
+            Definition definition2 = definitions.Skip(1).First();
+            definition2.Headword.Original.Should().Be("afeitarse");
+            definition2.PartOfSpeech.Should().Be("REFLEXIVE VERB");
+            definition2.Contexts.Should().HaveCount(1);
+            context1 = definition2.Contexts.First();
+            context1.Position.Should().Be("1");
+            context1.Meanings.Should().HaveCount(1);
+
+            meaning1 = context1.Meanings.First();
+            meaning1.Description.Should().Be("to shave");
+            meaning1.AlphabeticalPosition.Should().Be("a");
+            meaning1.Tag.Should().BeNull();
+            meaning1.ImageUrl.Should().BeNull();
+            meaning1.Examples.Should().HaveCount(1);
+            example1 = meaning1!.Examples.First();
+            example1.Original.Should().Be("¿Con qué frecuencia te afeitas la barba?");
+            example1.English.Should().Be("How often do you shave your beard?");
+
+            spanishDictPageParserMock.Verify(x => x.ParseWordJson(html));
+            spanishDictPageParserMock.Verify(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>()));
+            spanishDictPageParserMock.Verify(x => x.ParseSound(It.IsAny<Models.SpanishDict.WordJsonModel>()));
+            spanishDictPageParserMock.Verify(x => x.ParseDefinitions(It.IsAny<Models.SpanishDict.WordJsonModel>()));
+        }
+
+        #endregion
+
         #region Private Methods
 
         private static List<Models.DDO.DDODefinition> CreateDefinitionsForHaj()
@@ -446,6 +517,33 @@ namespace CopyWords.Parsers.Tests
                 });
 
             return new List<Models.DDO.DDODefinition>() { definition1, definition2, definition3 };
+        }
+
+        private static List<Models.SpanishDict.SpanishDictDefinition> CreateDefinitionsForAfeitar()
+        {
+            var definition1 = new Models.SpanishDict.SpanishDictDefinition(WordES: "afeitar", Type: "TRANSITIVE VERB",
+                new List<Models.SpanishDict.SpanishDictContext>
+                {
+                    new Models.SpanishDict.SpanishDictContext(ContextEN: "(to remove hair)", Position: 1,
+                        new List<Meaning>
+                        {
+                            new Meaning("to shave", "a", Tag: null, ImageUrl: null,
+                                new List<Example>() { new Example(Original: "Para el verano, papá decidió afeitar al perro.", English: "For the summer, dad decided to shave the dog.", Russian: "") }),
+                        }),
+                });
+
+            var definition2 = new Models.SpanishDict.SpanishDictDefinition(WordES: "afeitarse", Type: "REFLEXIVE VERB",
+                new List<Models.SpanishDict.SpanishDictContext>
+                {
+                    new Models.SpanishDict.SpanishDictContext(ContextEN: "(to shave oneself)", Position: 1,
+                        new List<Meaning>
+                        {
+                            new Meaning("to shave", "a", Tag: null, ImageUrl: null,
+                                new List<Example>() { new Example(Original: "¿Con qué frecuencia te afeitas la barba?", English: "How often do you shave your beard?", Russian: "") }),
+                        }),
+                });
+
+            return new List<Models.SpanishDict.SpanishDictDefinition>() { definition1, definition2 };
         }
 
         #endregion

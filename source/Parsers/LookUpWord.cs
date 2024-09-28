@@ -191,10 +191,10 @@ namespace CopyWords.Parsers
                 }
 
                 // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-                IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, headwordES, meanings: Enumerable.Empty<string>());
+                IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(options?.TranslatorApiURL, spanishDictDefinition.WordES, meanings: Enumerable.Empty<string>());
 
                 Headword headword = new Headword(
-                    headwordES,
+                    spanishDictDefinition.WordES,
                     translations.FirstOrDefault(x => x.Language == LanguageEN)?.HeadWord,
                     translations.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord);
 
