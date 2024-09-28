@@ -10,6 +10,7 @@ namespace CopyWords.Core.ViewModels
         {
             English = meaning.Description;
             AlphabeticalPosition = meaning.AlphabeticalPosition;
+            tag = meaning.Tag;
             ImageUrl = meaning.ImageUrl;
 
             ExampleViewModels.Clear();
@@ -24,6 +25,9 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         private string alphabeticalPosition;
+
+        [ObservableProperty]
+        private string tag;
 
         [ObservableProperty]
         private string imageUrl;

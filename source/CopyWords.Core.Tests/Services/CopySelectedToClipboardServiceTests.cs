@@ -31,15 +31,14 @@ namespace CopyWords.Core.Tests.Services
 
         #region Danish
 
-        /*[TestMethod]
+        [TestMethod]
         public async Task CompileFrontAsync_ForSubstantivIntetkøn_AddsArticle()
         {
-            const string meaning = "grillspyd";
-            const string partOfSpeech = "substantiv, intetkøn";
+            var definitionVMs = CreateVMForGrillspyd();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+            string front = await sut.CompileFrontAsync(definitionVMs[0]);
 
             front.Should().Be("et grillspyd");
         }
@@ -47,12 +46,11 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileFrontAsync_ForuSubstantivFælleskøn_AddsArticle()
         {
-            const string meaning = "underholdning";
-            const string partOfSpeech = "substantiv, fælleskøn";
+            var definitionVMs = CreateVMForUnderholdning();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+            string front = await sut.CompileFrontAsync(definitionVMs[0]);
 
             front.Should().Be("en underholdning");
         }
@@ -60,12 +58,11 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileFrontAsync_ForVerbum_AddsAt()
         {
-            const string meaning = "kigge";
-            const string partOfSpeech = "verbum";
+            var definitionVMs = CreateVMForKigge();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+            string front = await sut.CompileFrontAsync(definitionVMs[0]);
 
             front.Should().Be("at kigge");
         }
@@ -73,12 +70,11 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileFrontAsync_ForAdjektiv_AddsLabel()
         {
-            const string meaning = "høj";
-            const string partOfSpeech = "adjektiv";
+            var definitionVMs = CreateVMForHøj();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+            string front = await sut.CompileFrontAsync(definitionVMs[0]);
 
             front.Should().Be("høj <span style=\"color: rgba(0, 0, 0, 0.4)\">ADJEKTIV</span>");
         }
@@ -86,12 +82,11 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileFrontAsync_ForAdverbium_AddsLabel()
         {
-            const string meaning = "ligeud";
-            const string partOfSpeech = "adverbium";
+            var definitionVMs = CreateVMForLigeud();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+            string front = await sut.CompileFrontAsync(definitionVMs[0]);
 
             front.Should().Be("ligeud <span style=\"color: rgba(0, 0, 0, 0.4)\">ADVERBIUM</span>");
         }
@@ -99,15 +94,14 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileFrontAsync_ForForkortelse_AddsLabel()
         {
-            const string meaning = "i forb. med";
-            const string partOfSpeech = "forkortelse";
+            var definitionVMs = CreateVMForIForbindleseMed();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(meaning, partOfSpeech);
+            string front = await sut.CompileFrontAsync(definitionVMs[0]);
 
             front.Should().Be("i forb. med <span style=\"color: rgba(0, 0, 0, 0.4)\">FORKORTELSE</span>");
-        } */
+        }
 
         #endregion
 
@@ -254,8 +248,8 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenBothTranslationsAreSelected_AddsTranslationsToResult()
         {
-            var wordVariantVMs = CreateVMForGrillspyd();
-            wordVariantVMs[0].Examples[0].IsChecked = true;
+            var definitionVMs = CreateVMForGrillspyd();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var headword = new Headword("Grillspyd", "kebabs", "шашлыки");
             var headwordVM = new HeadwordViewModel(headword);
@@ -264,16 +258,16 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(wordVariantVMs, headwordVM);
+            string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br><span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
-        }
+        }*/
 
         [TestMethod]
         public async Task CompileBackAsync_WhenOneExampleIsSelected_DoesNotAddNumbers()
         {
-            var wordVariantVMs = CreateVMForGrillspyd();
-            wordVariantVMs[0].Examples[0].IsChecked = true;
+            var definitionVMs = CreateVMForGrillspyd();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var headwordVM = _fixture.Create<HeadwordViewModel>();
             headwordVM.IsRussianTranslationChecked = false;
@@ -281,7 +275,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(wordVariantVMs, headwordVM);
+            string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
@@ -289,24 +283,24 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenSeveralExamplesAreSelected_AddsNumbers()
         {
-            var wordVariantVMs = CreateVMForHaj();
-            wordVariantVMs[0].Examples[0].IsChecked = true;
-            wordVariantVMs[1].Examples[0].IsChecked = true;
-            wordVariantVMs[2].Examples[0].IsChecked = true;
-
-            var headwordVM = _fixture.Create<HeadwordViewModel>();
-            headwordVM.IsRussianTranslationChecked = false;
-            headwordVM.IsEnglishTranslationChecked = false;
+            var definitionVMs = CreateVMForHaj();
+            foreach (var maningVM in definitionVMs[0].ContextViewModels[0].MeaningViewModels)
+            {
+                foreach (var exampleVM in maningVM.ExampleViewModels)
+                {
+                    exampleVM.IsChecked = true;
+                }
+            }
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(wordVariantVMs, headwordVM);
+            string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be(
                 "1.&nbsp;stor, langstrakt bruskfisk<br>" +
                 $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br>" +
                 $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.");
-        } */
+        }
 
         #endregion
 
@@ -498,16 +492,25 @@ namespace CopyWords.Core.Tests.Services
 
         #region Danish
 
-        /*internal static ObservableCollection<DefinitionViewModel> CreateVMForGrillspyd()
+        private ObservableCollection<DefinitionViewModel> CreateVMForGrillspyd()
         {
-            const string meaning = "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning";
-
-            var definitionVM = new DefinitionViewModel(
-                new Meaning(Description: meaning, AlphabeticalPosition: "", Tag: null, ImageUrl: null, Examples: new List<Example>()
+            var definition = new Definition(new Headword("grillspyd", null, null), PartOfSpeech: "substantiv, intetkøn", Endings: "-det eller (uofficielt) -et, -, -dene",
+                new List<Context>
                 {
-                    new Example("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver", null, null),
-                    new Example("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater", null, null)
-                }));
+                    new Context(ContextEN: "", Position: "",
+                        new List<Meaning>
+                        {
+                            new Meaning("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning", "1", Tag: null, ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver", null, null),
+                                    new Example("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater", null, null)
+                                })
+                        }),
+                }
+            );
+
+            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -515,31 +518,191 @@ namespace CopyWords.Core.Tests.Services
             };
         }
 
-        private static ObservableCollection<DefinitionViewModel> CreateVMForHaj()
+        private ObservableCollection<DefinitionViewModel> CreateVMForUnderholdning()
         {
-            var definitionVM1 = new DefinitionViewModel(
-                new Meaning(Description: "stor, langstrakt bruskfisk", AlphabeticalPosition: "", Tag: null, ImageUrl: null, Examples: new List<Example>()
+            var definition = new Definition(new Headword("underholdning", null, null), PartOfSpeech: "substantiv, fælleskøn", Endings: "-en",
+                new List<Context>
                 {
-                    new Example("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", null, null)
-                }));
+                    new Context(ContextEN: "", Position: "",
+                        new List<Meaning>
+                        {
+                            new Meaning("noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse", "1", Tag: null, ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("8000 medarbejdere skal til fest med god mad og underholdning af bl.a. Hans Otto Bisgaard", null, null),
+                                    new Example("vi havde jo ikke radio, TV eller video, så underholdningen bestod mest af kortspil i familien", null, null)
+                                })
+                        }),
+                }
+            );
 
-            var definitionVM2 = new DefinitionViewModel(
-                new Meaning(Description: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning", AlphabeticalPosition: "", Tag: "SLANG", ImageUrl: null, Examples: new List<Example>()
-                {
-                    new Example("-", null, null)
-                }));
-
-            var definitionVM3 = new DefinitionViewModel(
-                new Meaning(Description: "person der er særlig dygtig til et spil, håndværk el.lign.", AlphabeticalPosition: "", Tag: "SLANG", ImageUrl: null, Examples: new List<Example>()
-                {
-                    new Example("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", null, null)
-                }));
+            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
-                definitionVM1, definitionVM2, definitionVM3
+                definitionVM
             };
-        }*/
+        }
+
+        private ObservableCollection<DefinitionViewModel> CreateVMForKigge()
+        {
+            var definition = new Definition(new Headword("kigge", null, null), PartOfSpeech: "verbum", Endings: "-r, -de, -t",
+                new List<Context>
+                {
+                    new Context(ContextEN: "", Position: "",
+                        new List<Meaning>
+                        {
+                            new Meaning("rette blikket i en bestemt retning", "1", Tag: null, ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("Børnene kiggede spørgende på hinanden", null, null),
+                                    new Example("kig lige en gang!", null, null),
+                                    new Example("Han kiggede sig rundt, som om han ledte efter noget", null, null),
+                                }),
+                            new Meaning("undersøge nærmere; sætte sig ind i", "2", Tag: null, ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("hun har kigget på de psykiske eftervirkninger hos voldtagne piger og kvinder", null, null)
+                                })
+                        }),
+                }
+            );
+
+            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+
+            return new ObservableCollection<DefinitionViewModel>()
+            {
+                definitionVM
+            };
+        }
+
+        private ObservableCollection<DefinitionViewModel> CreateVMForHøj()
+        {
+            var definition = new Definition(new Headword("høj", null, null), PartOfSpeech: "adjektiv", Endings: "-t, -e || -ere, -est",
+                new List<Context>
+                {
+                    new Context(ContextEN: "", Position: "",
+                        new List<Meaning>
+                        {
+                            new Meaning("med forholdsvis stor udstrækning i lodret retning", "1", Tag: null, ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("Overalt var der rejst høje flagstænger med røde og hvide bannere", null, null),
+                                    new Example("I de sidste skoleår var jeg den absolut højeste i klassen – med mine 1,90 meter", null, null),
+                                }),
+                            new Meaning("med en forholdsvis stor værdi på en eksisterende eller tænkt skala; af stor størrelse, omfang el.lign.", "2", Tag: null, ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("I år ser det ud til at antallet af rapporterede salmonellatilfælde bliver 40 pct. højere end i fjor", null, null),
+                                    new Example("medarbejdere med en negativ holdning til erhvervslivet er ikke i høj kurs", null, null),
+                                })
+                        }),
+                }
+            );
+
+            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+
+            return new ObservableCollection<DefinitionViewModel>()
+            {
+                definitionVM
+            };
+        }
+
+        private ObservableCollection<DefinitionViewModel> CreateVMForLigeud()
+        {
+            var definition = new Definition(new Headword("ligeud", null, null), PartOfSpeech: "adverbium", Endings: "",
+                new List<Context>
+                {
+                    new Context(ContextEN: "", Position: "",
+                        new List<Meaning>
+                        {
+                            new Meaning("uden at dreje eller skifte kurs om bevægelse eller retning", "1", Tag: null, ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("Vi skulle stå med samlede ben, med vægten lagt på hælene og se ligeud", null, null)
+                                }),
+                            new Meaning("uden omsvøb", "2", Tag: null, ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("det er for at sige det ligeud: skidehamrende-irriterende", null, null)
+                                }),
+                            new Meaning("billet til kørsel uden omstigning med et offentligt transportmiddel", "3", Tag: null, ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("To ligeud, sagde moderen da konduktøren kom, – pigerne kører på én billet", null, null)
+                                })
+                        }),
+                }
+            );
+
+            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+
+            return new ObservableCollection<DefinitionViewModel>()
+            {
+                definitionVM
+            };
+        }
+
+        private ObservableCollection<DefinitionViewModel> CreateVMForIForbindleseMed()
+        {
+            var definition = new Definition(new Headword("i forb. med", null, null), PartOfSpeech: "forkortelse", Endings: "",
+                new List<Context>
+                {
+                    new Context(ContextEN: "", Position: "",
+                        new List<Meaning>
+                        {
+                            new Meaning("= i forbindelse med", "1", Tag: null, ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("Stillingen som sognepræst i Hellebæk og Hornbæk pastorater skal besættes midlertidigt i forb. med et barselsvikariat", null, null),
+                                    new Example("Afviklingsselskabet Finansiel Stabilitet forventer at skære yderligere stillinger væk i de næste par måneder ifm. en koncernomlægning", null, null),
+                                })
+                        }),
+                }
+            );
+
+            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+
+            return new ObservableCollection<DefinitionViewModel>()
+            {
+                definitionVM
+            };
+        }
+
+        private ObservableCollection<DefinitionViewModel> CreateVMForHaj()
+        {
+            var definition = new Definition(new Headword("haj", null, null), PartOfSpeech: "substantiv, fælleskøn", Endings: "-en, -er, -erne",
+                new List<Context>
+                {
+                    new Context(ContextEN: "", Position: "",
+                        new List<Meaning>
+                        {
+                            new Meaning("stor, langstrakt bruskfisk", "1", Tag: null, ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", null, null),
+                                }),
+                            new Meaning("grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning", "2", Tag: "SLANG", ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("-", null, null),
+                                }),
+                            new Meaning("person der er særlig dygtig til et spil, håndværk el.lign.", "3", Tag: "SLANG", ImageUrl: null,
+                                new List<Example>()
+                                {
+                                    new Example("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", null, null),
+                                })
+                        }),
+                }
+            );
+
+            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+
+            return new ObservableCollection<DefinitionViewModel>()
+            {
+                definitionVM
+            };
+        }
 
         #endregion
 

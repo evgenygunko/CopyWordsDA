@@ -102,14 +102,14 @@ namespace CopyWords.Core.Services
             StringBuilder sb = new StringBuilder();
 
             // todo: If translation selected, add it first
-            /*if (headword.IsRussianTranslationChecked && !string.IsNullOrEmpty(headword.Russian))
-            {
-                sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headword.Russian) + "<br>");
-            }
-            if (headword.IsEnglishTranslationChecked && !string.IsNullOrEmpty(headword.English))
-            {
-                sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headword.English) + "<br>");
-            }*/
+            /* if (headword.IsRussianTranslationChecked && !string.IsNullOrEmpty(headword.Russian))
+             {
+                 sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headword.Russian) + "<br>");
+             }
+             if (headword.IsEnglishTranslationChecked && !string.IsNullOrEmpty(headword.English))
+             {
+                 sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headword.English) + "<br>");
+             }*/
 
             List<string> backMeanings = new();
             int imageIndex = 0;
@@ -127,9 +127,14 @@ namespace CopyWords.Core.Services
                         string backMeaning = meaningVM.English;
 
                         // We add context only to first translation so that it doesn't clutter view
-                        if (!isContextAddedToFirstBackMeaning)
+                        if (!isContextAddedToFirstBackMeaning && !string.IsNullOrEmpty(contextVM.ContextEN))
                         {
                             backMeaning += " " + contextVM.ContextEN;
+                        }
+
+                        if (!string.IsNullOrEmpty(meaningVM.Tag))
+                        {
+                            backMeaning = $"<span style=\"color:#404040; background-color:#eaeff2; border:1px solid #CCCCCC; margin-right:10px; font-size: 80%;\">{meaningVM.Tag}</span>" + backMeaning;
                         }
 
                         if (meaningVM.IsImageChecked && !string.IsNullOrEmpty(meaningVM.ImageUrl))
