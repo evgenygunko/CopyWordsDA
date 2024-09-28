@@ -429,15 +429,15 @@ namespace CopyWords.Core.Tests.Services
 
         #region Danish
 
-        /*[TestMethod]
+        [TestMethod]
         public async Task CompileExamplesAsync_WhenOneExampleSelected_DoesNotAddNumbers()
         {
-            var wordVariantVMs = CreateVMForGrillspyd();
-            wordVariantVMs[0].Examples[0].IsChecked = true;
+            var definitionVMs = CreateVMForGrillspyd();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileExamplesAsync(wordVariantVMs);
+            string result = await sut.CompileExamplesAsync(definitionVMs[0]);
 
             result.Should().Be("<span style=\"color: rgba(0, 0, 0, 1)\">Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver</span>");
         }
@@ -445,18 +445,18 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileExamplesAsync_WhenTwoExamplesSelected_AddsNumbers()
         {
-            var wordVariantVMs = CreateVMForGrillspyd();
-            wordVariantVMs[0].Examples[0].IsChecked = true;
-            wordVariantVMs[0].Examples[1].IsChecked = true;
+            var definitionVMs = CreateVMForGrillspyd();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[1].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileExamplesAsync(wordVariantVMs);
+            string result = await sut.CompileExamplesAsync(definitionVMs[0]);
 
             result.Should().Be(
                 "<span style=\"color: rgba(0, 0, 0, 1)\">1.&nbsp;Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver</span><br>" +
                 "<span style=\"color: rgba(0, 0, 0, 1)\">2.&nbsp;Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater</span>");
-        } */
+        }
 
         #endregion
 

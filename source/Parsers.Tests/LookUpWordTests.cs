@@ -110,7 +110,7 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public void LookUpWordAsync_WhenSourceLanguageIsSpanish_CallsSpanishDictPageParser()
+        public async Task LookUpWordAsync_WhenSourceLanguageIsSpanish_CallsSpanishDictPageParser()
         {
             string wordToLookup = "ser";
             SourceLanguage sourceLanguage = SourceLanguage.Spanish;
@@ -124,10 +124,10 @@ namespace CopyWords.Parsers.Tests
             _ = sut.Invoking(y => y.LookUpWordAsync(wordToLookup, new Options(sourceLanguage, TranslatorApiURL: null)))
                 .Should().ThrowAsync<ArgumentException>();
 
-            /*WordModel? result = await sut.LookUpWordAsync(wordToLookup, new Options(sourceLanguage, TranslatorApiURL: null));
+            WordModel? result = await sut.LookUpWordAsync(wordToLookup, new Options(sourceLanguage, TranslatorApiURL: null));
 
             result.Should().NotBeNull();
-            spanishDictPageParserMock.Verify(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>()));*/
+            spanishDictPageParserMock.Verify(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>()));
         }
 
         [TestMethod]
