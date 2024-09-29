@@ -122,13 +122,13 @@ namespace CopyWords.Parsers
                 return Enumerable.Empty<SpanishDictDefinition>();
             }
 
-            var variants = new List<SpanishDictDefinition>();
+            var spanishDictDefinitions = new List<SpanishDictDefinition>();
 
             Neodict[]? neodicts = wordObj.sdDictionaryResultsProps.entry?.neodict;
 
             if (neodicts == null)
             {
-                return variants;
+                return spanishDictDefinitions;
             }
 
             foreach (Neodict neodict in neodicts)
@@ -139,7 +139,7 @@ namespace CopyWords.Parsers
                 //              Examples
                 Posgroup posgroup = neodict.posGroups[0];
                 string wordES = neodict.subheadword;
-                string wordType = posgroup.posDisplay.name;
+                string partOfSpeech = posgroup.posDisplay.name;
 
                 // Flatten the list  - some words have 2 elements in neodict (hipócrita) and some just one (afeitar)
                 var senses = neodict.posGroups.SelectMany(x => x.senses);
@@ -212,10 +212,10 @@ namespace CopyWords.Parsers
                     contexts.Add(new SpanishDictContext(fullContext, contextPosition++, meanings));
                 }
 
-                variants.Add(new SpanishDictDefinition(wordES, wordType, contexts));
+                spanishDictDefinitions.Add(new SpanishDictDefinition(wordES, partOfSpeech, contexts));
             }
 
-            return variants;
+            return spanishDictDefinitions;
         }
 
         #endregion

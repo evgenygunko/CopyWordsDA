@@ -78,7 +78,7 @@ namespace CopyWords.Parsers.Tests
             // afeitar
             definition = result[0];
             definition.WordES.Should().Be("afeitar");
-            definition.Type.Should().Be("transitive verb");
+            definition.PartOfSpeech.Should().Be("transitive verb");
 
             definition.Contexts.Should().HaveCount(1);
             context = definition.Contexts.First();
@@ -94,7 +94,7 @@ namespace CopyWords.Parsers.Tests
             // afeitarse
             definition = result[1];
             definition.WordES.Should().Be("afeitarse");
-            definition.Type.Should().Be("reflexive verb");
+            definition.PartOfSpeech.Should().Be("reflexive verb");
 
             definition.Contexts.Should().HaveCount(1);
             context = definition.Contexts.First();
@@ -123,7 +123,7 @@ namespace CopyWords.Parsers.Tests
 
             definition = result[0];
             definition.WordES.Should().Be("trotar");
-            definition.Type.Should().Be("intransitive verb");
+            definition.PartOfSpeech.Should().Be("intransitive verb");
 
             definition.Contexts.Should().HaveCount(3);
 
@@ -174,7 +174,7 @@ namespace CopyWords.Parsers.Tests
 
             definition = result[0];
             definition.WordES.Should().Be("coche");
-            definition.Type.Should().Be("masculine noun");
+            definition.PartOfSpeech.Should().Be("masculine noun");
 
             definition.Contexts.Should().HaveCount(4);
 
@@ -236,7 +236,7 @@ namespace CopyWords.Parsers.Tests
             // el hipócrita, la hipócrita
             definition = result[0];
             definition.WordES.Should().Be("el hipócrita, la hipócrita");
-            definition.Type.Should().Be("masculine or feminine noun");
+            definition.PartOfSpeech.Should().Be("masculine or feminine noun");
 
             definition.Contexts.Should().HaveCount(2);
 
@@ -282,7 +282,7 @@ namespace CopyWords.Parsers.Tests
             // guay
             definition = result[0];
             definition.WordES.Should().Be("guay");
-            definition.Type.Should().Be("interjection");
+            definition.PartOfSpeech.Should().Be("interjection");
 
             definition.Contexts.Should().HaveCount(3);
 
@@ -359,7 +359,7 @@ namespace CopyWords.Parsers.Tests
 
             definition = result[0];
             definition.WordES.Should().Be("club nocturno");
-            definition.Type.Should().Be("masculine noun");
+            definition.PartOfSpeech.Should().Be("masculine noun");
 
             definition.Contexts.Should().HaveCount(1);
 
@@ -391,7 +391,7 @@ namespace CopyWords.Parsers.Tests
 
             definition = result[0];
             definition.WordES.Should().Be("veneno");
-            definition.Type.Should().Be("masculine noun");
+            definition.PartOfSpeech.Should().Be("masculine noun");
 
             definition.Contexts.Should().HaveCount(2);
 
@@ -466,7 +466,7 @@ namespace CopyWords.Parsers.Tests
 
             definition = result[0];
             definition.WordES.Should().Be("saltamontes");
-            definition.Type.Should().Be("masculine noun");
+            definition.PartOfSpeech.Should().Be("masculine noun");
 
             definition.Contexts.Should().HaveCount(1);
 
@@ -501,7 +501,7 @@ namespace CopyWords.Parsers.Tests
 
             definition = result[0];
             definition.WordES.Should().Be("indígena");
-            definition.Type.Should().Be("adjective");
+            definition.PartOfSpeech.Should().Be("adjective");
 
             definition.Contexts.Should().HaveCount(2);
 

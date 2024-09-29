@@ -2,6 +2,6 @@
 {
     public record SpanishDictDefinition(
         string WordES,
-        string Type,
+        string PartOfSpeech,
         IEnumerable<SpanishDictContext> Contexts);
 }

@@ -521,7 +521,7 @@ namespace CopyWords.Parsers.Tests
 
         private static List<Models.SpanishDict.SpanishDictDefinition> CreateDefinitionsForAfeitar()
         {
-            var definition1 = new Models.SpanishDict.SpanishDictDefinition(WordES: "afeitar", Type: "TRANSITIVE VERB",
+            var definition1 = new Models.SpanishDict.SpanishDictDefinition(WordES: "afeitar", PartOfSpeech: "TRANSITIVE VERB",
                 new List<Models.SpanishDict.SpanishDictContext>
                 {
                     new Models.SpanishDict.SpanishDictContext(ContextEN: "(to remove hair)", Position: 1,
@@ -532,7 +532,7 @@ namespace CopyWords.Parsers.Tests
                         }),
                 });
 
-            var definition2 = new Models.SpanishDict.SpanishDictDefinition(WordES: "afeitarse", Type: "REFLEXIVE VERB",
+            var definition2 = new Models.SpanishDict.SpanishDictDefinition(WordES: "afeitarse", PartOfSpeech: "REFLEXIVE VERB",
                 new List<Models.SpanishDict.SpanishDictContext>
                 {
                     new Models.SpanishDict.SpanishDictContext(ContextEN: "(to shave oneself)", Position: 1,

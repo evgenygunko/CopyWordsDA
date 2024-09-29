@@ -55,6 +55,10 @@
                                 BackgroundColor="{Binding CopyBackButtonColor}"
                                 Command="{Binding CopyBackCommand}" />
 
+                            <Button Text="Copy word type" FontSize="12" 
+                                BackgroundColor="{Binding CopyPartOfSpeechButtonColor}"
+                                Command="{Binding CopyPartOfSpeechCommand}"></Button>
+
                             <Button Text="Copy endings" FontSize="12" 
                                 BackgroundColor="{Binding CopyEndingsButtonColor}"
                                 Command="{Binding CopyEndingsCommand}"></Button>

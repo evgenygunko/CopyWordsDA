@@ -200,7 +200,7 @@ namespace CopyWords.Parsers
                     translations.FirstOrDefault(x => x.Language == LanguageRU)?.HeadWord);
 
                 // Spanish words don't have endings, this property only makes sense for Danish
-                definitions.Add(new Definition(headword, PartOfSpeech: spanishDictDefinition.Type, Endings: "", contexts));
+                definitions.Add(new Definition(headword, spanishDictDefinition.PartOfSpeech, Endings: "", contexts));
             }
 
             var wordModel = new WordModel(

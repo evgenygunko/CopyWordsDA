@@ -10,6 +10,8 @@ namespace CopyWords.Core.Services
 
         Task<string> CompileBackAsync(DefinitionViewModel definitionViewModel);
 
+        Task<string> CompilePartOfSpeechAsync(DefinitionViewModel definitionViewModel);
+
         Task<string> CompileEndingsAsync(DefinitionViewModel definitionViewModel);
 
         Task<string> CompileExamplesAsync(DefinitionViewModel definitionViewModel);
@@ -58,14 +60,6 @@ namespace CopyWords.Core.Services
                         front = $"at {front}";
                     }
 
-                    if (partOfSpeech.Equals("adjektiv", StringComparison.OrdinalIgnoreCase)
-                        || partOfSpeech.Equals("adverbium", StringComparison.OrdinalIgnoreCase)
-                        || partOfSpeech.Equals("konjunktion", StringComparison.OrdinalIgnoreCase)
-                        || partOfSpeech.Equals("forkortelse", StringComparison.OrdinalIgnoreCase))
-                    {
-                        front = front + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, partOfSpeech.ToUpper());
-                    }
-
                     // Spanish
                     if (partOfSpeech.Equals("MASCULINE NOUN", StringComparison.OrdinalIgnoreCase))
                     {
@@ -78,13 +72,6 @@ namespace CopyWords.Core.Services
                     if (partOfSpeech.Equals("MASCULINE OR FEMININE NOUN", StringComparison.OrdinalIgnoreCase))
                     {
                         front = word + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, "m/f");
-                    }
-
-                    if (partOfSpeech.Equals("ADVERB", StringComparison.OrdinalIgnoreCase)
-                        || partOfSpeech.Equals("ADJECTIVE", StringComparison.OrdinalIgnoreCase)
-                        || partOfSpeech.Equals("PHRASE", StringComparison.OrdinalIgnoreCase))
-                    {
-                        front = word + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, partOfSpeech.ToUpper());
                     }
                 }
             }
@@ -185,6 +172,8 @@ namespace CopyWords.Core.Services
 
             return sb.ToString();
         }
+
+        public Task<string> CompilePartOfSpeechAsync(DefinitionViewModel definitionViewModel) => Task.FromResult(definitionViewModel.PartOfSpeech);
 
         public Task<string> CompileEndingsAsync(DefinitionViewModel definitionViewModel) => Task.FromResult(definitionViewModel.Endings);
 

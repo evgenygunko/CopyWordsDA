@@ -68,7 +68,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForAdjektiv_AddsLabel()
+        public async Task CompileFrontAsync_ForAdjektiv_CopiesFront()
         {
             var definitionVMs = CreateVMForHøj();
 
@@ -76,11 +76,11 @@ namespace CopyWords.Core.Tests.Services
 
             string front = await sut.CompileFrontAsync(definitionVMs[0]);
 
-            front.Should().Be("høj <span style=\"color: rgba(0, 0, 0, 0.4)\">ADJEKTIV</span>");
+            front.Should().Be("høj");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForAdverbium_AddsLabel()
+        public async Task CompileFrontAsync_ForAdverbium_CopiesFront()
         {
             var definitionVMs = CreateVMForLigeud();
 
@@ -88,11 +88,11 @@ namespace CopyWords.Core.Tests.Services
 
             string front = await sut.CompileFrontAsync(definitionVMs[0]);
 
-            front.Should().Be("ligeud <span style=\"color: rgba(0, 0, 0, 0.4)\">ADVERBIUM</span>");
+            front.Should().Be("ligeud");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForForkortelse_AddsLabel()
+        public async Task CompileFrontAsync_ForForkortelse_CopiesFrontl()
         {
             var definitionVMs = CreateVMForIForbindleseMed();
 
@@ -100,7 +100,7 @@ namespace CopyWords.Core.Tests.Services
 
             string front = await sut.CompileFrontAsync(definitionVMs[0]);
 
-            front.Should().Be("i forb. med <span style=\"color: rgba(0, 0, 0, 0.4)\">FORKORTELSE</span>");
+            front.Should().Be("i forb. med");
         }
 
         #endregion
@@ -161,7 +161,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForBien_AddsAdverbToTheEnd()
+        public async Task CompileFrontAsync_ForBien_CopiesFront()
         {
             var definitionVMs = CreateVMForBien();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -170,11 +170,11 @@ namespace CopyWords.Core.Tests.Services
 
             string front = await sut.CompileFrontAsync(definitionVMs[0]);
 
-            front.Should().Be("bien <span style=\"color: rgba(0, 0, 0, 0.4)\">ADVERB</span>");
+            front.Should().Be("bien");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForGuayWhenAdjectiveSelected_AddsAdjectiveToTheEnd()
+        public async Task CompileFrontAsync_ForGuayWhenAdjectiveSelected_CopiesFront()
         {
             var definitionVMs = CreateVMForGuay();
             definitionVMs[1].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -185,11 +185,11 @@ namespace CopyWords.Core.Tests.Services
 
             string front = await sut.CompileFrontAsync(definitionVMs[1]);
 
-            front.Should().Be("guay <span style=\"color: rgba(0, 0, 0, 0.4)\">ADJECTIVE</span>");
+            front.Should().Be("guay");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForLuce_AddsPhraseToTheEnd()
+        public async Task CompileFrontAsync_ForLuce_CopiesFront()
         {
             var definitionVMs = CreateVMForLuce();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -200,7 +200,7 @@ namespace CopyWords.Core.Tests.Services
 
             string front = await sut.CompileFrontAsync(definitionVMs[0]);
 
-            front.Should().Be("luce <span style=\"color: rgba(0, 0, 0, 0.4)\">PHRASE</span>");
+            front.Should().Be("luce");
         }
 
         #endregion
@@ -406,6 +406,22 @@ namespace CopyWords.Core.Tests.Services
         }
 
         #endregion
+
+        #endregion
+
+        #region Tests for CompilePartOfSpeechAsync
+
+        [TestMethod]
+        public async Task CompilePartOfSpeechAsync_Should_CopyPartOfSpeech()
+        {
+            var definitionVMs = CreateVMForGrillspyd();
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string result = await sut.CompilePartOfSpeechAsync(definitionVMs[0]);
+
+            result.Should().Be("substantiv, intetkøn");
+        }
 
         #endregion
 

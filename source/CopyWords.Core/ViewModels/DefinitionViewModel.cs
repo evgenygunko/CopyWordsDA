@@ -49,19 +49,24 @@ namespace CopyWords.Core.ViewModels
         private HeadwordViewModel headwordViewModel;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(CopyPartOfSpeechCommand))]
         private string partOfSpeech;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(CopyEndingsCommand))]
-        private string endings = "";
+        private string endings;
 
         public bool CanCopyFront => !string.IsNullOrEmpty(Word);
+
+        public bool CanCopyPartOfSpeech => !string.IsNullOrEmpty(PartOfSpeech);
 
         public bool CanCopyEndings => !string.IsNullOrEmpty(Endings);
 
         public Color CopyFrontButtonColor => GetButtonColor(CanCopyFront);
 
         public Color CopyBackButtonColor => GetButtonColor(CanCopyFront);
+
+        public Color CopyPartOfSpeechButtonColor => GetButtonColor(CanCopyPartOfSpeech);
 
         public Color CopyEndingsButtonColor => GetButtonColor(CanCopyEndings);
 
@@ -85,10 +90,16 @@ namespace CopyWords.Core.ViewModels
             await CompileAndCopyToClipboard("back", _copySelectedToClipboardService.CompileBackAsync);
         }
 
+        [RelayCommand(CanExecute = nameof(CanCopyPartOfSpeech))]
+        public async Task CopyPartOfSpeechAsync()
+        {
+            await CompileAndCopyToClipboard("word type", _copySelectedToClipboardService.CompilePartOfSpeechAsync);
+        }
+
         [RelayCommand(CanExecute = nameof(CanCopyEndings))]
         public async Task CopyEndingsAsync()
         {
-            await CompileAndCopyToClipboard("endidngs", _copySelectedToClipboardService.CompileEndingsAsync);
+            await CompileAndCopyToClipboard("endings", _copySelectedToClipboardService.CompileEndingsAsync);
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
