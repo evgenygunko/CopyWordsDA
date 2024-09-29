@@ -41,7 +41,7 @@
 
     <StackLayout>
         <CollectionView ItemsSource="{Binding ContextViewModels}" 
-                        ItemTemplate="{StaticResource contextTemplateSelector}"/>
+                        ItemTemplate="{StaticResource contextTemplateSelector}" />
     </StackLayout>
 
 </ContentView>

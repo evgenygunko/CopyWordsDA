@@ -16,7 +16,7 @@
     
     <Border Grid.Row="3"     
                 IsVisible="{Binding Russian, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"                        
-                BackgroundColor="#eaeff2"
+                BackgroundColor="{StaticResource TranslationBoxColor}"
                 Stroke="#CCCCCC"
                 StrokeThickness="1">
 
@@ -42,10 +42,10 @@
 
                 <Label.Triggers>
                     <DataTrigger TargetType="Label" Binding="{Binding IsRussianTranslationChecked}" Value="false">
-                        <Setter Property="BackgroundColor" Value="#eaeff2" />
+                        <Setter Property="BackgroundColor" Value="{StaticResource TranslationBoxColor}" />
                     </DataTrigger>
                     <DataTrigger TargetType="Label" Binding="{Binding IsRussianTranslationChecked}" Value="true">
-                        <Setter Property="BackgroundColor" Value="LightBlue" />
+                        <Setter Property="BackgroundColor" Value="{StaticResource SelectedItemColor}" />
                         <Setter Property="FontSize" Value="18" />
                     </DataTrigger>
                 </Label.Triggers>
@@ -62,10 +62,10 @@
 
                 <Label.Triggers>
                     <DataTrigger TargetType="Label" Binding="{Binding IsEnglishTranslationChecked}" Value="false">
-                        <Setter Property="BackgroundColor" Value="#eaeff2" />
+                        <Setter Property="BackgroundColor" Value="{StaticResource TranslationBoxColor}" />
                     </DataTrigger>
                     <DataTrigger TargetType="Label" Binding="{Binding IsEnglishTranslationChecked}" Value="true">
-                        <Setter Property="BackgroundColor" Value="LightBlue" />
+                        <Setter Property="BackgroundColor" Value="{StaticResource SelectedItemColor}" />
                         <Setter Property="FontSize" Value="18" />
                     </DataTrigger>
                 </Label.Triggers>

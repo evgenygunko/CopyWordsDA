@@ -23,7 +23,7 @@
 
                     <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding IsChecked}" />
 
-                    <Label Grid.Column="1" LineBreakMode="WordWrap" Padding="10,0,0,0" VerticalOptions="Center">
+                    <Label Grid.Column="1" LineBreakMode="WordWrap" Padding="10,5,10,5" VerticalOptions="Center">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="{Binding Original, FallbackValue='Example Original'}"/>
@@ -34,8 +34,12 @@
 
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="true">
-                                <Setter Property="BackgroundColor" Value="LightBlue" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource SelectedItemColor}" />
                                 <Setter Property="FontSize" Value="18" />
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="false">
+                                <Setter Property="BackgroundColor" Value="{StaticResource GreyBoxColor}" />
                             </DataTrigger>
                         </Label.Triggers>
                     </Label>

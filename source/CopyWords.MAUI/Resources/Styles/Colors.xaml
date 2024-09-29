@@ -31,6 +31,10 @@
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
 
+    <Color x:Key="TranslationBoxColor">#eaeff2</Color>
+    <Color x:Key="GreyBoxColor">#eaeff2</Color>
+    <Color x:Key="SelectedItemColor">LightBlue</Color>
+    
     <Color x:Key="Yellow100Accent">#F7B548</Color>
     <Color x:Key="Yellow200Accent">#FFD590</Color>
     <Color x:Key="Yellow300Accent">#FFE5B9</Color>
