@@ -15,10 +15,11 @@ param(
     [string]$version
 )
 
+# Update project files
 $projectFiles = Get-ChildItem -Path $PSScriptRoot/../*.csproj -Recurse -Force
 
 foreach ($file in $projectFiles) {
-    Write-Host "Found project file:" $file.Name
+    Write-Host "Found project file:" $file.FullName
 
     $xml = [xml](Get-Content $file)
     [bool]$updated = $false
@@ -40,5 +41,30 @@ foreach ($file in $projectFiles) {
         $xml.Save($file.FullName)
     } else {
         Write-Host "'PackageVersion' property not found in the project file"
+    }
+}
+
+# Update MAUI .appxmanifest File
+$appxmanifestFiles = Get-ChildItem -Path $PSScriptRoot/../*.appxmanifest -Recurse -Force
+
+foreach ($file in $appxmanifestFiles) {
+    Write-Host "Found appxmanifest file:" $file.FullName
+
+    $xml = [xml](Get-Content $file)
+    [bool]$updated = $false
+
+    $xml.GetElementsByTagName("Identity") | ForEach-Object{
+        Write-Host "Updating Identity element..."
+
+        $_."Version" = $version
+
+        $updated = $true
+    }
+
+    if ($updated) {
+        $xml.Save($file.FullName)
+        Write-Host "'$($file.FullName)' file saved"
+    } else {
+        Write-Host "'Identity' element not found in '$($file.FullName)'"
     }
 }

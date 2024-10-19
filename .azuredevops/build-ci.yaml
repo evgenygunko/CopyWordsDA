@@ -20,7 +20,7 @@ stages:
                   inputs:
                       targetType: 'inline'
                       script: |
-                          Write-Host "##vso[build.updatebuildnumber]$(major).$(minor).$(Build.BuildId)"
+                          Write-Host "##vso[build.updatebuildnumber]$(major).$(minor).$(Build.BuildId).0"
 
                 - task: PowerShell@2
                   displayName: 'PowerShell Script - update version number in project files'
@@ -43,18 +43,6 @@ stages:
                 #     custom: 'workload'
                 #     arguments: 'install maui'
 
-                # Temporarily disable to speed up builds
-                # On MacOS building a release configuration hangs (due to a bug in donet?), so we only run publish task on Windows
-                # - task: DotNetCoreCLI@2
-                #   displayName: "[Windows] dotnet publish: CopyWords.MAUI.csproj"
-                #   inputs:
-                #     command: 'publish'
-                #     publishWebProjects: false
-                #     projects: '**/CopyWords.MAUI.csproj'
-                #     arguments: '-c:$(buildConfiguration) -f net8.0-windows10.0.19041.0'
-                #     zipAfterPublish: false
-                #   condition: eq(variables['Agent.OS'], 'Windows_NT')
-
                 - task: DotNetCoreCLI@2
                   displayName: 'dotnet test'
                   inputs:
@@ -63,16 +51,26 @@ stages:
                       arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
                       publishTestResults: true
 
-                ## Temporarily disable to speed up builds
-                # - task: CopyFiles@2
-                #   displayName: '[Windows] Copy build output to artifact staging directory'
-                #   inputs:
-                #     SourceFolder: './source/CopyWords.MAUI/bin/'
-                #     Contents: |
-                #         **/CopyWords*.msix
-                #     TargetFolder: '$(build.artifactstagingdirectory)'
-                #     flattenFolders: true
-                #   condition: eq(variables['Agent.OS'], 'Windows_NT')
+                # On MacOS building a release configuration hangs (due to a bug in donet?), so we only run publish task on Windows
+                - task: DotNetCoreCLI@2
+                  displayName: '[Windows] dotnet publish: CopyWords.MAUI.csproj'
+                  inputs:
+                      command: 'publish'
+                      publishWebProjects: false
+                      projects: '**/CopyWords.MAUI.csproj'
+                      arguments: '-c:$(buildConfiguration) -f net8.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64'
+                      zipAfterPublish: false
+                  condition: eq(variables['Agent.OS'], 'Windows_NT')
+
+                - task: CopyFiles@2
+                  displayName: '[Windows] Copy build output to artifact staging directory'
+                  inputs:
+                      SourceFolder: './source/CopyWords.MAUI/bin/'
+                      Contents: |
+                          **/CopyWords*.msix
+                      TargetFolder: '$(build.artifactstagingdirectory)'
+                      flattenFolders: true
+                  condition: eq(variables['Agent.OS'], 'Windows_NT')
 
                 - task: PublishBuildArtifacts@1
                   displayName: 'Publish Artifact: drop'
