@@ -3,6 +3,7 @@ using System.Runtime.Versioning;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 
 namespace CopyWords.Core.ViewModels
@@ -25,14 +26,15 @@ namespace CopyWords.Core.ViewModels
             _shellService = shellService;
             _fileIOService = fileIOService;
 
-            AnkiSoundsFolder = _settingsService.GetAnkiSoundsFolder();
-            FfmpegBinFolder = _settingsService.GetFfmpegBinFolder();
+            AppSettings appSettings = _settingsService.LoadSettings();
+            AnkiSoundsFolder = appSettings.AnkiSoundsFolder;
+            FfmpegBinFolder = appSettings.FfmpegBinFolder;
 
-            UseMp3gain = _settingsService.UseMp3gain;
-            Mp3gainPath = _settingsService.GetMp3gainPath();
+            UseMp3gain = appSettings.UseMp3gain;
+            Mp3gainPath = appSettings.Mp3gainPath;
 
-            UseTranslator = _settingsService.UseTranslator;
-            TranslatorApiUrl = _settingsService.GetTranslatorApiUrl();
+            UseTranslator = appSettings.UseTranslator;
+            TranslatorApiUrl = appSettings.TranslatorApiUrl;
         }
 
         #region Properties
@@ -146,12 +148,16 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanSaveSettings))]
         public async Task SaveSettingsAsync()
         {
-            _settingsService.SetAnkiSoundsFolder(AnkiSoundsFolder);
-            _settingsService.SetFfmpegBinFolder(FfmpegBinFolder);
-            _settingsService.UseMp3gain = UseMp3gain;
-            _settingsService.SetMp3gainPath(Mp3gainPath);
-            _settingsService.UseTranslator = UseTranslator;
-            _settingsService.SetTranslatorApiUrl(TranslatorApiUrl);
+            AppSettings appSettings = _settingsService.LoadSettings();
+
+            appSettings.AnkiSoundsFolder = AnkiSoundsFolder;
+            appSettings.FfmpegBinFolder = FfmpegBinFolder;
+            appSettings.UseMp3gain = UseMp3gain;
+            appSettings.Mp3gainPath = Mp3gainPath;
+            appSettings.UseTranslator = UseTranslator;
+            appSettings.TranslatorApiUrl = TranslatorApiUrl;
+
+            _settingsService.SaveSettings(appSettings);
 
             await _dialogService.DisplayToast("Settings have been updated");
 

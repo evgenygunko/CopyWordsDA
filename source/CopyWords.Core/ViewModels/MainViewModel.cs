@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Parsers;
 using CopyWords.Parsers.Models;
@@ -88,9 +89,10 @@ namespace CopyWords.Core.ViewModels
             try
             {
                 string translatorApiURL = null;
-                if (_settingsService.UseTranslator && !string.IsNullOrEmpty(_settingsService.GetTranslatorApiUrl()))
+                AppSettings appSettings = _settingsService.LoadSettings();
+                if (appSettings.UseTranslator && !string.IsNullOrEmpty(appSettings.TranslatorApiUrl))
                 {
-                    translatorApiURL = _settingsService.GetTranslatorApiUrl();
+                    translatorApiURL = appSettings.TranslatorApiUrl;
                 }
 
                 wordModel = await _lookUpWord.GetWordByUrlAsync(url, new Options(_selectDictionaryViewModel.SelectedParser.SourceLanguage, translatorApiURL));
@@ -160,9 +162,10 @@ namespace CopyWords.Core.ViewModels
             try
             {
                 string translatorApiURL = null;
-                if (_settingsService.UseTranslator && !string.IsNullOrEmpty(_settingsService.GetTranslatorApiUrl()))
+                AppSettings appSettings = _settingsService.LoadSettings();
+                if (appSettings.UseTranslator && !string.IsNullOrEmpty(appSettings.TranslatorApiUrl))
                 {
-                    translatorApiURL = _settingsService.GetTranslatorApiUrl();
+                    translatorApiURL = appSettings.TranslatorApiUrl;
                 }
                 wordModel = await _lookUpWord.LookUpWordAsync(word, new Options(_selectDictionaryViewModel.SelectedParser.SourceLanguage, translatorApiURL));
 

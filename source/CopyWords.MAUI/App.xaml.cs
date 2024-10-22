@@ -1,4 +1,5 @@
-﻿using CopyWords.Core.Services;
+﻿using CopyWords.Core.Models;
+using CopyWords.Core.Services;
 
 namespace CopyWords.MAUI;
 
@@ -15,20 +16,25 @@ public partial class App : Application
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
+        AppSettings appSettings = _settingsService.LoadSettings();
+
         Window window = new Window(new AppShell())
         {
-            Width = _settingsService.MainWindowWidth,
-            Height = _settingsService.MainWindowHeight,
-            X = _settingsService.MainWindowXPos,
-            Y = _settingsService.MainWindowYPos
+            Width = appSettings.MainWindowWidth,
+            Height = appSettings.MainWindowHeight,
+            X = appSettings.MainWindowXPos,
+            Y = appSettings.MainWindowYPos
         };
 
         window.SizeChanged += (s, e) =>
         {
-            _settingsService.MainWindowWidth = window.Width;
-            _settingsService.MainWindowHeight = window.Height;
-            _settingsService.MainWindowXPos = window.X;
-            _settingsService.MainWindowYPos = window.Y;
+            AppSettings appSettings1 = _settingsService.LoadSettings();
+            appSettings1.MainWindowWidth = window.Width;
+            appSettings1.MainWindowHeight = window.Height;
+            appSettings1.MainWindowXPos = window.X;
+            appSettings1.MainWindowYPos = window.Y;
+
+            _settingsService.SaveSettings(appSettings1);
         };
 
         return window;

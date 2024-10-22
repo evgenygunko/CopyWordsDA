@@ -13,8 +13,9 @@ namespace CopyWords.Core.Services
         public SaveImageFileService(
             ISettingsService settingsService,
             HttpClient httpClient,
-            IDialogService dialogService)
-            : base(settingsService, httpClient, dialogService)
+            IDialogService dialogService,
+            IFileIOService fileIOService)
+            : base(settingsService, httpClient, dialogService, fileIOService)
         {
         }
 

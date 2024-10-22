@@ -18,8 +18,9 @@ namespace CopyWords.Core.Services
             ISettingsService settingsService,
             HttpClient httpClient,
             IDialogService dialogService,
-            IClipboardService clipboardService)
-            : base(settingsService, httpClient, dialogService)
+            IClipboardService clipboardService,
+            IFileIOService fileIOService)
+            : base(settingsService, httpClient, dialogService, fileIOService)
         {
             _clipboardService = clipboardService;
         }
@@ -48,7 +49,7 @@ namespace CopyWords.Core.Services
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                if (_settingsService.UseMp3gain && !await CallMp3gainAsync(soundFileFullPath))
+                if (_settingsService.LoadSettings().UseMp3gain && !await CallMp3gainAsync(soundFileFullPath))
                 {
                     return false;
                 }
@@ -78,7 +79,7 @@ namespace CopyWords.Core.Services
             string soundName = Path.GetFileNameWithoutExtension(mp4File);
             string destFileFullPath = Path.Combine(Path.GetDirectoryName(mp4File), $"{soundName}.mp3");
 
-            string ffmpegBinFolder = _settingsService.GetFfmpegBinFolder();
+            string ffmpegBinFolder = _settingsService.LoadSettings().FfmpegBinFolder;
             if (!Directory.Exists(ffmpegBinFolder))
             {
                 await _dialogService.DisplayAlert("Cannot find ffmpeg bin folder", $"Cannot find ffmpeg bin folder '{ffmpegBinFolder}'. Please update it in Settings.", "OK");
@@ -96,7 +97,7 @@ namespace CopyWords.Core.Services
         {
             Debug.Assert(File.Exists(sourceMp3File));
 
-            string mp3gainPath = _settingsService.GetMp3gainPath();
+            string mp3gainPath = _settingsService.LoadSettings().Mp3gainPath;
             if (!File.Exists(mp3gainPath))
             {
                 await _dialogService.DisplayAlert("Cannot find path to mp3gain", $"Cannot find mp3gain by '{mp3gainPath}'. Please update it in Settings.", "OK");

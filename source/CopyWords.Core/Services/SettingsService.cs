@@ -1,72 +1,56 @@
 ﻿using System.Globalization;
 using System.Runtime.InteropServices;
+using CopyWords.Core.Models;
 
 namespace CopyWords.Core.Services
 {
     public interface ISettingsService
     {
-        double MainWindowWidth { get; set; }
+        AppSettings LoadSettings();
 
-        double MainWindowHeight { get; set; }
-
-        double MainWindowXPos { get; set; }
-
-        double MainWindowYPos { get; set; }
-
-        string GetAnkiSoundsFolder();
-
-        void SetAnkiSoundsFolder(string path);
-
-        string GetFfmpegBinFolder();
-
-        void SetFfmpegBinFolder(string path);
-
-        string GetMp3gainPath();
-
-        void SetMp3gainPath(string path);
-
-        bool UseMp3gain { get; set; }
-
-        void SetTranslatorApiUrl(string url);
-
-        string GetTranslatorApiUrl();
-
-        bool UseTranslator { get; set; }
-
-        string SelectedParser { get; set; }
+        void SaveSettings(AppSettings appSettings);
     }
 
     public class SettingsService : ISettingsService
     {
-        public double MainWindowWidth
+        public AppSettings LoadSettings()
         {
-            get => GetDoubleValue(nameof(MainWindowWidth), 800);
-            set => SetDoubleValue(nameof(MainWindowWidth), value);
+            AppSettings appSettings = new AppSettings();
+            appSettings.MainWindowWidth = GetDoubleValue("MainWindowWidth", 800);
+            appSettings.MainWindowHeight = GetDoubleValue("MainWindowHeight", 600);
+            appSettings.MainWindowXPos = GetDoubleValue("MainWindowXPos", 100);
+            appSettings.MainWindowYPos = GetDoubleValue("MainWindowYPos", 100);
+
+            appSettings.AnkiSoundsFolder = Preferences.Default.Get("AnkiSoundsFolder", Path.GetTempPath());
+            appSettings.FfmpegBinFolder = GetFfmpegBinFolder();
+            appSettings.Mp3gainPath = Preferences.Default.Get("Mp3gainPath", string.Empty);
+            appSettings.UseMp3gain = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Preferences.Default.Get<bool>("UseMp3gain", false);
+            appSettings.UseTranslator = Preferences.Default.Get<bool>("UseTranslator", false);
+            appSettings.TranslatorApiUrl = Preferences.Default.Get("TranslatorApiUrl", string.Empty);
+            appSettings.SelectedParser = Preferences.Default.Get("SelectedParser", string.Empty);
+
+            return appSettings;
         }
 
-        public double MainWindowHeight
+        public void SaveSettings(AppSettings appSettings)
         {
-            get => GetDoubleValue(nameof(MainWindowHeight), 600);
-            set => SetDoubleValue(nameof(MainWindowHeight), value);
+            SetDoubleValue("MainWindowWidth", appSettings.MainWindowWidth);
+            SetDoubleValue("MainWindowHeight", appSettings.MainWindowHeight);
+            SetDoubleValue("MainWindowXPos", appSettings.MainWindowXPos);
+            SetDoubleValue("MainWindowYPos", appSettings.MainWindowYPos);
+
+            Preferences.Default.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder);
+            Preferences.Default.Set("FfmpegBinFolder", appSettings.FfmpegBinFolder);
+            Preferences.Default.Set("Mp3gainPath", appSettings.Mp3gainPath);
+            Preferences.Default.Set("UseMp3gain", appSettings.UseMp3gain);
+            Preferences.Default.Set("UseTranslator", appSettings.UseTranslator);
+            Preferences.Default.Set("TranslatorApiUrl", appSettings.TranslatorApiUrl);
+            Preferences.Default.Set("SelectedParser", appSettings.SelectedParser);
         }
 
-        public double MainWindowXPos
-        {
-            get => GetDoubleValue(nameof(MainWindowXPos), 100);
-            set => SetDoubleValue(nameof(MainWindowXPos), value);
-        }
+        #region Private Methods
 
-        public double MainWindowYPos
-        {
-            get => GetDoubleValue(nameof(MainWindowYPos), 100);
-            set => SetDoubleValue(nameof(MainWindowYPos), value);
-        }
-
-        public string GetAnkiSoundsFolder() => Preferences.Default.Get("AnkiSoundsFolder", Path.GetTempPath());
-
-        public void SetAnkiSoundsFolder(string path) => Preferences.Default.Set("AnkiSoundsFolder", path);
-
-        public string GetFfmpegBinFolder()
+        private string GetFfmpegBinFolder()
         {
             if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
             {
@@ -76,32 +60,6 @@ namespace CopyWords.Core.Services
             string wingetPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "AppData", "Local", "Microsoft", "WinGet", "Links");
             return Preferences.Default.Get("FfmpegBinFolder", wingetPath);
         }
-
-        public void SetFfmpegBinFolder(string path) => Preferences.Default.Set("FfmpegBinFolder", path);
-
-        public string GetMp3gainPath() => Preferences.Default.Get("Mp3gainPath", string.Empty);
-
-        public void SetMp3gainPath(string path) => Preferences.Default.Set("Mp3gainPath", path);
-
-        public bool UseMp3gain
-        {
-            get => RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Preferences.Default.Get<bool>("UseMp3gain", false);
-            set => Preferences.Default.Set("UseMp3gain", value);
-        }
-
-        public bool UseTranslator
-        {
-            get => Preferences.Default.Get<bool>("UseTranslator", false);
-            set => Preferences.Default.Set("UseTranslator", value);
-        }
-
-        public string SelectedParser
-        {
-            get => Preferences.Default.Get("SelectedParser", string.Empty);
-            set => Preferences.Default.Set("SelectedParser", value);
-        }
-
-        #region Private Methods
 
         private static double GetDoubleValue(string settingName, int defaultValue)
         {
@@ -121,10 +79,6 @@ namespace CopyWords.Core.Services
                 Preferences.Default.Set(settingName, newValue.ToString(CultureInfo.CurrentCulture));
             }
         }
-
-        public string GetTranslatorApiUrl() => Preferences.Default.Get("TranslatorApi", string.Empty);
-
-        public void SetTranslatorApiUrl(string url) => Preferences.Default.Set("TranslatorApi", url);
 
         #endregion
     }

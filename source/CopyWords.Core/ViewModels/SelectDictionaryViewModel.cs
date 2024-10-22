@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Parsers.Models;
 
@@ -19,7 +20,7 @@ namespace CopyWords.Core.ViewModels
             Parsers.Add(new Models.Parsers("Den Danske Ordbog", "flag_of_denmark.png", SourceLanguage.Danish));
             Parsers.Add(new Models.Parsers("Spanish Dict", "flag_of_spain.png", SourceLanguage.Spanish));
 
-            SelectedParser = Parsers.FirstOrDefault(x => x.SourceLanguage.ToString() == _settingsService.SelectedParser);
+            SelectedParser = Parsers.FirstOrDefault(x => x.SourceLanguage.ToString() == _settingsService.LoadSettings().SelectedParser);
             if (SelectedParser is null)
             {
                 SelectedParser = Parsers[0];
@@ -33,7 +34,15 @@ namespace CopyWords.Core.ViewModels
 
         partial void OnSelectedParserChanged(Models.Parsers value)
         {
-            _settingsService.SelectedParser = value.SourceLanguage.ToString();
+            SaveSelectedParserInSettings(value);
+        }
+
+        internal void SaveSelectedParserInSettings(Models.Parsers value)
+        {
+            AppSettings appSettings = _settingsService.LoadSettings();
+            appSettings.SelectedParser = value.SourceLanguage.ToString();
+            _settingsService.SaveSettings(appSettings);
+
             Debug.WriteLine($"Selected parser has changed to '{value.Name}'");
         }
     }

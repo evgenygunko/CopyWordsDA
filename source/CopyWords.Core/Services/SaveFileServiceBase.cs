@@ -7,15 +7,18 @@ namespace CopyWords.Core.Services
         protected readonly ISettingsService _settingsService;
         protected readonly HttpClient _httpClient;
         protected readonly IDialogService _dialogService;
+        private readonly IFileIOService _fileIOService;
 
         protected SaveFileServiceBase(
             ISettingsService settingsService,
             HttpClient httpClient,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            IFileIOService fileIOService)
         {
             _settingsService = settingsService;
             _httpClient = httpClient;
             _dialogService = dialogService;
+            _fileIOService = fileIOService;
         }
 
         protected async Task<string> DownloadFileAsync(string url, string fileName)
@@ -48,12 +51,12 @@ namespace CopyWords.Core.Services
             return destFileFullPath;
         }
 
-        protected async Task<bool> CopyFileToAnkiFolderAsync(string sourceFile)
+        protected internal async Task<bool> CopyFileToAnkiFolderAsync(string sourceFile)
         {
-            Debug.Assert(File.Exists(sourceFile));
+            Debug.Assert(_fileIOService.FileExists(sourceFile));
 
-            string ankiSoundsFolder = _settingsService.GetAnkiSoundsFolder();
-            if (!Directory.Exists(ankiSoundsFolder))
+            string ankiSoundsFolder = _settingsService.LoadSettings().AnkiSoundsFolder;
+            if (!_fileIOService.DirectoryExists(ankiSoundsFolder))
             {
                 await _dialogService.DisplayAlert("Path to Anki folder is incorrect", $"Cannot find path to Anki folder '{ankiSoundsFolder}'. Please update it in Settings.", "OK");
                 return false;
@@ -61,7 +64,7 @@ namespace CopyWords.Core.Services
 
             string destinationFile = Path.Combine(ankiSoundsFolder, Path.GetFileName(sourceFile));
 
-            if (File.Exists(destinationFile))
+            if (_fileIOService.FileExists(destinationFile))
             {
                 bool answer = await _dialogService.DisplayAlert("File already exists", $"File '{Path.GetFileName(sourceFile)}' already exists. Overwrite?", "Yes", "No");
                 if (!answer)
