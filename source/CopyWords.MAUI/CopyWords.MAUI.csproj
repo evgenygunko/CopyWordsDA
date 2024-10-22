@@ -23,7 +23,7 @@
     <Nullable>enable</Nullable>
 
     <!-- Display name -->
-    <ApplicationTitle>CopyWords.MAUI.DA</ApplicationTitle>
+    <ApplicationTitle>CopyWords</ApplicationTitle>
 
     <!-- App Identifier -->
     <ApplicationId>com.companyname.copywords.maui.da</ApplicationId>

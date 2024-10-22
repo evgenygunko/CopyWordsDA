@@ -9,7 +9,7 @@
     Shell.NavBarIsVisible="True">
 
     <ShellContent
-        Title="CopyWordDA"
+        Title="CopyWords"
         ContentTemplate="{DataTemplate views:MainPage}"
         Route="MainPage" />
 

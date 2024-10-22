@@ -65,7 +65,7 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool useTranslator;
 
-        public string About => $".net version: {RuntimeInformation.FrameworkDescription}";
+        public string About => $"App version: {AppInfo.VersionString} (Build {AppInfo.BuildString}), {RuntimeInformation.FrameworkDescription}";
 
         public bool CanSaveSettings
         {
