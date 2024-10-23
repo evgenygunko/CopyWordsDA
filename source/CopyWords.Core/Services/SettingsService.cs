@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 using CopyWords.Core.Models;
 
 namespace CopyWords.Core.Services
@@ -9,10 +10,25 @@ namespace CopyWords.Core.Services
         AppSettings LoadSettings();
 
         void SaveSettings(AppSettings appSettings);
+
+        Task<AppSettings> ImportSettingsAsync(string filePath);
+
+        Task ExportSettingsAsync(string filePath);
     }
 
     public class SettingsService : ISettingsService
     {
+        private readonly IPreferences _preferences;
+        private readonly IFileIOService _fileIOService;
+
+        public SettingsService(
+            IPreferences preferences,
+            IFileIOService fileIOService)
+        {
+            _preferences = preferences;
+            _fileIOService = fileIOService;
+        }
+
         public AppSettings LoadSettings()
         {
             AppSettings appSettings = new AppSettings();
@@ -21,13 +37,13 @@ namespace CopyWords.Core.Services
             appSettings.MainWindowXPos = GetDoubleValue("MainWindowXPos", 100);
             appSettings.MainWindowYPos = GetDoubleValue("MainWindowYPos", 100);
 
-            appSettings.AnkiSoundsFolder = Preferences.Default.Get("AnkiSoundsFolder", Path.GetTempPath());
+            appSettings.AnkiSoundsFolder = _preferences.Get("AnkiSoundsFolder", Path.GetTempPath());
             appSettings.FfmpegBinFolder = GetFfmpegBinFolder();
-            appSettings.Mp3gainPath = Preferences.Default.Get("Mp3gainPath", string.Empty);
-            appSettings.UseMp3gain = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Preferences.Default.Get<bool>("UseMp3gain", false);
-            appSettings.UseTranslator = Preferences.Default.Get<bool>("UseTranslator", false);
-            appSettings.TranslatorApiUrl = Preferences.Default.Get("TranslatorApiUrl", string.Empty);
-            appSettings.SelectedParser = Preferences.Default.Get("SelectedParser", string.Empty);
+            appSettings.Mp3gainPath = _preferences.Get("Mp3gainPath", string.Empty);
+            appSettings.UseMp3gain = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && _preferences.Get<bool>("UseMp3gain", false);
+            appSettings.UseTranslator = _preferences.Get<bool>("UseTranslator", false);
+            appSettings.TranslatorApiUrl = _preferences.Get("TranslatorApiUrl", string.Empty);
+            appSettings.SelectedParser = _preferences.Get("SelectedParser", string.Empty);
 
             return appSettings;
         }
@@ -39,13 +55,31 @@ namespace CopyWords.Core.Services
             SetDoubleValue("MainWindowXPos", appSettings.MainWindowXPos);
             SetDoubleValue("MainWindowYPos", appSettings.MainWindowYPos);
 
-            Preferences.Default.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder);
-            Preferences.Default.Set("FfmpegBinFolder", appSettings.FfmpegBinFolder);
-            Preferences.Default.Set("Mp3gainPath", appSettings.Mp3gainPath);
-            Preferences.Default.Set("UseMp3gain", appSettings.UseMp3gain);
-            Preferences.Default.Set("UseTranslator", appSettings.UseTranslator);
-            Preferences.Default.Set("TranslatorApiUrl", appSettings.TranslatorApiUrl);
-            Preferences.Default.Set("SelectedParser", appSettings.SelectedParser);
+            _preferences.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder);
+            _preferences.Set("FfmpegBinFolder", appSettings.FfmpegBinFolder);
+            _preferences.Set("Mp3gainPath", appSettings.Mp3gainPath);
+            _preferences.Set("UseMp3gain", appSettings.UseMp3gain);
+            _preferences.Set("UseTranslator", appSettings.UseTranslator);
+            _preferences.Set("TranslatorApiUrl", appSettings.TranslatorApiUrl);
+            _preferences.Set("SelectedParser", appSettings.SelectedParser);
+        }
+
+        public async Task<AppSettings> ImportSettingsAsync(string filePath)
+        {
+            var json = await _fileIOService.ReadAllTextAsync(filePath);
+            AppSettings appSettings = JsonSerializer.Deserialize<AppSettings>(json);
+
+            SaveSettings(appSettings);
+
+            return appSettings;
+        }
+
+        public async Task ExportSettingsAsync(string filePath)
+        {
+            AppSettings appSettings = LoadSettings();
+            string json = JsonSerializer.Serialize(appSettings);
+
+            await _fileIOService.WriteAllTextAsync(filePath, json);
         }
 
         #region Private Methods
@@ -54,16 +88,16 @@ namespace CopyWords.Core.Services
         {
             if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
             {
-                return Preferences.Default.Get("FfmpegBinFolder", "/usr/local/bin/");
+                return _preferences.Get("FfmpegBinFolder", "/usr/local/bin/");
             }
 
             string wingetPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "AppData", "Local", "Microsoft", "WinGet", "Links");
-            return Preferences.Default.Get("FfmpegBinFolder", wingetPath);
+            return _preferences.Get("FfmpegBinFolder", wingetPath);
         }
 
-        private static double GetDoubleValue(string settingName, int defaultValue)
+        private double GetDoubleValue(string settingName, int defaultValue)
         {
-            string str = Preferences.Default.Get(settingName, defaultValue.ToString(CultureInfo.CurrentCulture));
+            string str = _preferences.Get(settingName, defaultValue.ToString(CultureInfo.CurrentCulture));
             if (double.TryParse(str, out double doubleValue) && doubleValue > 0)
             {
                 return doubleValue;
@@ -72,11 +106,11 @@ namespace CopyWords.Core.Services
             return defaultValue;
         }
 
-        private static void SetDoubleValue(string settingName, double newValue)
+        private void SetDoubleValue(string settingName, double newValue)
         {
             if (newValue > 0)
             {
-                Preferences.Default.Set(settingName, newValue.ToString(CultureInfo.CurrentCulture));
+                _preferences.Set(settingName, newValue.ToString(CultureInfo.CurrentCulture));
             }
         }
 

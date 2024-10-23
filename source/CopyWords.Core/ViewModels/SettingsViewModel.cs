@@ -14,17 +14,23 @@ namespace CopyWords.Core.ViewModels
         private readonly IDialogService _dialogService;
         private readonly IShellService _shellService;
         private readonly IFileIOService _fileIOService;
+        private readonly IFolderPicker _folderPicker;
+        private readonly IFilePicker _filePicker;
 
         public SettingsViewModel(
             ISettingsService settingsService,
             IDialogService dialogService,
             IShellService shellService,
-            IFileIOService fileIOService)
+            IFileIOService fileIOService,
+            IFolderPicker folderPicker,
+            IFilePicker filePicker)
         {
             _settingsService = settingsService;
             _dialogService = dialogService;
             _shellService = shellService;
             _fileIOService = fileIOService;
+            _folderPicker = folderPicker;
+            _filePicker = filePicker;
 
             AppSettings appSettings = _settingsService.LoadSettings();
             AnkiSoundsFolder = appSettings.AnkiSoundsFolder;
@@ -91,6 +97,56 @@ namespace CopyWords.Core.ViewModels
         #endregion
 
         #region Commands
+
+        [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst14.0")]
+        [RelayCommand]
+        public async Task ExportSettingsAsync(CancellationToken cancellationToken)
+        {
+            string settingFileFolder = "";
+
+            var result = await _folderPicker.PickAsync(cancellationToken);
+            if (result.IsSuccessful)
+            {
+                settingFileFolder = result.Folder.Path;
+                string settingFile = Path.Combine(settingFileFolder, "CopyWords_Settings.json");
+
+                if (_fileIOService.FileExists(settingFile))
+                {
+                    bool answer = await _dialogService.DisplayAlert("File already exists", $"File '{Path.GetFileName(settingFile)}' already exists. Overwrite?", "Yes", "No");
+                    if (!answer)
+                    {
+                        return;
+                    }
+                }
+
+                await _settingsService.ExportSettingsAsync(settingFile);
+
+                await _dialogService.DisplayToast($"Settings exported to '{settingFile}'.");
+                await _shellService.GoToAsync("..");
+            }
+        }
+
+        [RelayCommand]
+        public async Task ImportSettingsAsync()
+        {
+            string settingFile = await PickSettingsFilePathAsync();
+
+            if (!string.IsNullOrEmpty(settingFile))
+            {
+                try
+                {
+                    await _settingsService.ImportSettingsAsync(settingFile);
+
+                    await _dialogService.DisplayToast("Settings imported.");
+                    await _shellService.GoToAsync("..");
+                }
+                catch (Exception ex)
+                {
+                    await _dialogService.DisplayAlert("Cannot import setting", $"Cannot import settings from the file '{settingFile}'. Error: {ex}", "OK");
+                }
+            }
+        }
 
         [SupportedOSPlatform("windows")]
         [SupportedOSPlatform("maccatalyst14.0")]
@@ -168,6 +224,42 @@ namespace CopyWords.Core.ViewModels
         public async Task CancelAsync()
         {
             await _shellService.GoToAsync("..");
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private async Task<string> PickSettingsFilePathAsync()
+        {
+            string settingsFilePath = "";
+
+            var customFileType = new FilePickerFileType(
+                new Dictionary<DevicePlatform, IEnumerable<string>>
+                {
+                    { DevicePlatform.WinUI, new[] { ".json" } }, // file extension
+                });
+
+            PickOptions options = new()
+            {
+                PickerTitle = "Please select path to settings file",
+                FileTypes = customFileType,
+            };
+
+            try
+            {
+                var result = await _filePicker.PickAsync(options);
+                if (result != null)
+                {
+                    settingsFilePath = result.FullPath;
+                }
+            }
+            catch (Exception)
+            {
+                // The user canceled or something went wrong
+            }
+
+            return settingsFilePath;
         }
 
         #endregion

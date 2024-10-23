@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.MAUI.Views;
@@ -35,6 +36,9 @@ public static class MauiProgram
         // Proxies for .net classes which don't have interfaces
         builder.Services.AddSingleton<IShellService, ShellService>();
         builder.Services.AddSingleton<IFileIOService, FileIOService>();
+        builder.Services.AddSingleton(Preferences.Default);
+        builder.Services.AddSingleton(FolderPicker.Default);
+        builder.Services.AddSingleton(FilePicker.Default);
 
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
         builder.Services.AddSingleton<ILookUpWord, LookUpWord>();
