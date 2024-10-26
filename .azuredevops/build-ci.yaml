@@ -4,9 +4,10 @@ trigger:
             - master
 
 pool:
-    #vmImage: windows-latest
-    #name: windows-private
-    name: Default
+    vmImage: windows-latest
+
+    # Uncomment to run on on-prem agent
+    #name: Default
 
 stages:
     - stage: Build
@@ -35,13 +36,17 @@ stages:
                 - script: yarn prettier:check
                   displayName: 'Check prettier adherence'
 
-                # On a private agant we don't need this
-                # - task: DotNetCoreCLI@2
-                #   displayName: "Install MAUI workload"
+                # # On a private agant we don't need this
+                # - task: UseDotNet@2
                 #   inputs:
-                #     command: 'custom'
-                #     custom: 'workload'
-                #     arguments: 'install maui'
+                #       packageType: 'sdk'
+                #       version: '8.0.x' # Specify .NET SDK version as needed
+                #   condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
+
+                # # On a private agant we don't need this
+                # - script: dotnet workload install maui
+                #   displayName: 'Install .NET MAUI Workload'
+                #   condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
 
                 - task: DotNetCoreCLI@2
                   displayName: 'dotnet test'
@@ -50,6 +55,22 @@ stages:
                       projects: '**/*Tests.csproj'
                       arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
                       publishTestResults: true
+
+                # On a private agant we don't need this
+                - task: DownloadSecureFile@1
+                  displayName: 'Download code signing certificate'
+                  inputs:
+                      secureFile: 'cert.pfx'
+                  condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'), eq(variables['Agent.OS'], 'Windows_NT'))
+
+                - task: PowerShell@2
+                  displayName: 'Install Signing Certficiate'
+                  inputs:
+                      targetType: 'inline'
+                      script: |
+                          $password = "$(SIGNING_CERTIFICATE_PASSWORD)" | ConvertTo-SecureString -Force -AsPlainText
+                          Import-PfxCertificate -FilePath "$(Agent.TempDirectory)/cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password $password
+                  condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'), eq(variables['Agent.OS'], 'Windows_NT'))
 
                 # On MacOS building a release configuration hangs (due to a bug in donet?), so we only run publish task on Windows
                 - task: DotNetCoreCLI@2
@@ -70,7 +91,7 @@ stages:
                           **/CopyWords*.msix
                       TargetFolder: '$(build.artifactstagingdirectory)'
                       flattenFolders: true
-                  condition: eq(variables['Agent.OS'], 'Windows_NT')
+                  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
 
                 - task: PublishBuildArtifacts@1
                   displayName: 'Publish Artifact: drop'
