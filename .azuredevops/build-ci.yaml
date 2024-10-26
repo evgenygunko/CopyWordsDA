@@ -42,27 +42,17 @@ stages:
                 #       packageType: 'sdk'
                 #       version: '8.0.x' # Specify .NET SDK version as needed
                 #   condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
-
                 # # On a private agant we don't need this
                 # - script: dotnet workload install maui
                 #   displayName: 'Install .NET MAUI Workload'
                 #   condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
 
-                - task: DotNetCoreCLI@2
-                  displayName: 'dotnet test'
-                  inputs:
-                      command: 'test'
-                      projects: '**/*Tests.csproj'
-                      arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
-                      publishTestResults: true
-
-                # On a private agant we don't need this
                 - task: DownloadSecureFile@1
                   displayName: 'Download code signing certificate'
                   inputs:
                       secureFile: 'cert.pfx'
-                  condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'), eq(variables['Agent.OS'], 'Windows_NT'))
 
+                # On a private agant we don't need this
                 - task: PowerShell@2
                   displayName: 'Install Signing Certficiate'
                   inputs:
@@ -71,6 +61,37 @@ stages:
                           $password = "$(SIGNING_CERTIFICATE_PASSWORD)" | ConvertTo-SecureString -Force -AsPlainText
                           Import-PfxCertificate -FilePath "$(Agent.TempDirectory)/cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password $password
                   condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'), eq(variables['Agent.OS'], 'Windows_NT'))
+
+                - task: PowerShell@2
+                  displayName: 'Convert .pfx to .cer'
+                  inputs:
+                      targetType: 'inline'
+                      script: |
+                          # Define paths
+                          $pfxPath = "$(Agent.TempDirectory)/cert.pfx"
+                          $cerPath = "$(Build.ArtifactStagingDirectory)/cert.cer"
+
+                          # Secure password conversion
+                          $password = "$(SIGNING_CERTIFICATE_PASSWORD)" | ConvertTo-SecureString -Force -AsPlainText
+
+                          # Load the .pfx file and export as .cer
+                          $certificate = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
+                          $certificate.Import($pfxPath, $password, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
+
+                          # Export the .cer file
+                          $cerBytes = $certificate.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
+                          [System.IO.File]::WriteAllBytes($cerPath, $cerBytes)
+
+                          Write-Output "Certificate exported to $cerPath"
+                  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
+
+                - task: DotNetCoreCLI@2
+                  displayName: 'dotnet test'
+                  inputs:
+                      command: 'test'
+                      projects: '**/*Tests.csproj'
+                      arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+                      publishTestResults: true
 
                 # On MacOS building a release configuration hangs (due to a bug in donet?), so we only run publish task on Windows
                 - task: DotNetCoreCLI@2
