@@ -2,9 +2,9 @@
 .SYNOPSIS
     Script to updating project version.
 .DESCRIPTION
-    Script will update version for all csharp projects.
-.PARAMETER mode
-    Specify a value for the version
+    Script will update the display version of the application.
+.PARAMETER version
+    The build version.
 .EXAMPLE
     UpdateVersion.ps1 "1.2.3.4"
 #>
@@ -15,6 +15,10 @@ param(
     [string]$version
 )
 
+# The display version of the application. This should be at most a three part version number such as 1.0.0.
+# Split the version string by '.' and remove the last segment
+$applicationDisplayVersion = ($version -split '\.')[0..2] -join '.'
+
 # Update project files
 $projectFiles = Get-ChildItem -Path $PSScriptRoot/../*.csproj -Recurse -Force
 
@@ -24,23 +28,25 @@ foreach ($file in $projectFiles) {
     $xml = [xml](Get-Content $file)
     [bool]$updated = $false
 
-    $xml.GetElementsByTagName("PackageVersion") | ForEach-Object{
-        Write-Host "Updating PackageVersion to:" $version
-        $_."#text" = $version
+    $xml.GetElementsByTagName("ApplicationDisplayVersion") | ForEach-Object{
+        Write-Host "Updating ApplicationDisplayVersion to:" $applicationDisplayVersion
+        $_."#text" = $applicationDisplayVersion
 
         $updated = $true
     }
 
-    $xml.GetElementsByTagName("Version") | ForEach-Object{
-        Write-Host "Updating Version to:" $version
+    $xml.GetElementsByTagName("FileVersion") | ForEach-Object{
+        Write-Host "Updating FileVersion to:" $version
         $_."#text" = $version
+
+        $updated = $true
     }
 
     if ($updated) {
         Write-Host "Project file saved"
         $xml.Save($file.FullName)
     } else {
-        Write-Host "'PackageVersion' property not found in the project file"
+        Write-Host "Neither the 'ApplicationDisplayVersion' nor the 'FileVersion' property was found in the project file '$($file.FullName)'."
     }
 }
 

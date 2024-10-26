@@ -26,12 +26,15 @@
     <ApplicationTitle>CopyWords</ApplicationTitle>
 
     <!-- App Identifier -->
-    <ApplicationId>com.companyname.copywords.maui.da</ApplicationId>
+    <ApplicationId>com.companyname.copywords.maui</ApplicationId>
     <ApplicationIdGuid>236EB894-5837-4869-8977-4ACF61BDD5CE</ApplicationIdGuid>
 
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
+
+    <!-- Affect file info on Windows -->
+    <FileVersion>1.0.10</FileVersion>
 
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
@@ -51,6 +54,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.22621.0</TargetFrameworks>
+    <Title>CopyWords.MAUI</Title>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
     <CreatePackage>false</CreatePackage>
