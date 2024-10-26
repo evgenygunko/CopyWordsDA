@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System.Runtime.InteropServices;
+using AutoFixture;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using FluentAssertions;
@@ -31,7 +32,12 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Get("AnkiSoundsFolder", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("FfmpegBinFolder", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("Mp3gainPath", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("UseMp3gain", It.IsAny<bool>(), It.IsAny<string>()));
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                preferencesMock.Verify(x => x.Get("UseMp3gain", It.IsAny<bool>(), It.IsAny<string>()));
+            }
+
             preferencesMock.Verify(x => x.Get("UseTranslator", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("TranslatorApiUrl", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
