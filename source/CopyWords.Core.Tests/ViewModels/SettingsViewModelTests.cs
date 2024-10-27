@@ -454,9 +454,13 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task ImportSettingsAsync_WhenFileIsSelected_ImportsSettings()
         {
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.ImportSettingsAsync(It.IsAny<string>())).ReturnsAsync(appSettings);
+
             var fileResult = _fixture.Create<FileResult>();
 
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
@@ -471,6 +475,12 @@ namespace CopyWords.Core.Tests.ViewModels
                 new Mock<IFolderPicker>().Object,
                 filePickerMock.Object);
             await sut.ImportSettingsAsync();
+
+            sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
+            sut.UseMp3gain.Should().Be(appSettings.UseMp3gain);
+            sut.Mp3gainPath.Should().Be(appSettings.Mp3gainPath);
+            sut.UseTranslator.Should().Be(appSettings.UseTranslator);
+            sut.TranslatorApiUrl.Should().Be(appSettings.TranslatorApiUrl);
 
             settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()));
             dialogServiceMock.Verify(x => x.DisplayToast("Settings imported."));

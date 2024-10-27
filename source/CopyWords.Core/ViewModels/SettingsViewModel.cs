@@ -33,14 +33,7 @@ namespace CopyWords.Core.ViewModels
             _filePicker = filePicker;
 
             AppSettings appSettings = _settingsService.LoadSettings();
-            AnkiSoundsFolder = appSettings.AnkiSoundsFolder;
-            FfmpegBinFolder = appSettings.FfmpegBinFolder;
-
-            UseMp3gain = appSettings.UseMp3gain;
-            Mp3gainPath = appSettings.Mp3gainPath;
-
-            UseTranslator = appSettings.UseTranslator;
-            TranslatorApiUrl = appSettings.TranslatorApiUrl;
+            UpdateUI(appSettings);
         }
 
         #region Properties
@@ -103,12 +96,10 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task ExportSettingsAsync(CancellationToken cancellationToken)
         {
-            string settingFileFolder = "";
-
             var result = await _folderPicker.PickAsync(cancellationToken);
             if (result.IsSuccessful)
             {
-                settingFileFolder = result.Folder.Path;
+                string settingFileFolder = result.Folder.Path;
                 string settingFile = Path.Combine(settingFileFolder, "CopyWords_Settings.json");
 
                 if (_fileIOService.FileExists(settingFile))
@@ -136,7 +127,8 @@ namespace CopyWords.Core.ViewModels
             {
                 try
                 {
-                    await _settingsService.ImportSettingsAsync(settingFile);
+                    AppSettings appSettings = await _settingsService.ImportSettingsAsync(settingFile);
+                    UpdateUI(appSettings);
 
                     await _dialogService.DisplayToast("Settings imported.");
                     await _shellService.GoToAsync("..");
@@ -234,17 +226,25 @@ namespace CopyWords.Core.ViewModels
         {
             string settingsFilePath = "";
 
-            var customFileType = new FilePickerFileType(
-                new Dictionary<DevicePlatform, IEnumerable<string>>
-                {
-                    { DevicePlatform.WinUI, new[] { ".json" } }, // file extension
-                });
-
-            PickOptions options = new()
+            PickOptions? options = null;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                PickerTitle = "Please select path to settings file",
-                FileTypes = customFileType,
-            };
+                // Attempting to use a filter on MacOS causes the FilePicker to throw an exception.
+                // There’s a related issue on GitHub (https://github.com/dotnet/maui/issues/9394#issuecomment-1285814762)
+                // indicating it should work, but an exception still occurs. 
+                // For now, filtering is enabled only for Windows.
+                var customFileType = new FilePickerFileType(
+                    new Dictionary<DevicePlatform, IEnumerable<string>>
+                    {
+                        { DevicePlatform.WinUI, new[] { ".json" } }, // file extension
+                        { DevicePlatform.MacCatalyst, new[] { "json" } }, // UTType values
+                    });
+
+                options = new()
+                {
+                    PickerTitle = "Please select path to settings file", FileTypes = customFileType,
+                };
+            }
 
             try
             {
@@ -254,12 +254,24 @@ namespace CopyWords.Core.ViewModels
                     settingsFilePath = result.FullPath;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // The user canceled or something went wrong
             }
 
             return settingsFilePath;
+        }
+
+        private void UpdateUI(AppSettings appSettings)
+        {
+            AnkiSoundsFolder = appSettings.AnkiSoundsFolder;
+            FfmpegBinFolder = appSettings.FfmpegBinFolder;
+
+            UseMp3gain = appSettings.UseMp3gain;
+            Mp3gainPath = appSettings.Mp3gainPath;
+
+            UseTranslator = appSettings.UseTranslator;
+            TranslatorApiUrl = appSettings.TranslatorApiUrl;
         }
 
         #endregion
