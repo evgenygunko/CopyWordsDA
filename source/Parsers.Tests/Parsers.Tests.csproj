@@ -147,6 +147,9 @@
     <None Update="TestPages\SpanishDict\hipócrita.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestPages\SpanishDict\iglesia.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestPages\SpanishDict\indígena.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

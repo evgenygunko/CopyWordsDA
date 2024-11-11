@@ -541,6 +541,41 @@ namespace CopyWords.Parsers.Tests
             meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/0ca649f9-134a-4210-ae48-2a8bbadb32cc.jpg");
         }
 
+        [TestMethod]
+        public void ParseDefinitions_ForIglesia_SetsImageUrl()
+        {
+            var parser = new SpanishDictPageParser();
+
+            List<SpanishDictDefinition> result = parser.ParseDefinitions(LoadTestObject("iglesia")).ToList();
+
+            result.Should().HaveCount(1);
+
+            SpanishDictDefinition definition;
+            SpanishDictContext context;
+            Meaning meaning;
+            Models.Example example;
+
+            definition = result[0];
+            definition.WordES.Should().Be("iglesia");
+            definition.PartOfSpeech.Should().Be("feminine noun");
+
+            definition.Contexts.Should().HaveCount(1);
+
+            // 1. (animal)
+            context = definition.Contexts.First();
+            context.ContextEN.Should().Be("(religious)");
+            context.Meanings.Should().HaveCount(1);
+
+            meaning = context.Meanings.First();
+            meaning.Description.Should().Be("church");
+            meaning.Examples.Should().HaveCount(1);
+            example = meaning.Examples.First();
+            example.Original.Should().Be("Vámonos a la iglesia que la misa comienza pronto.");
+            example.English.Should().Be("Let's go to the church; mass starts soon.");
+
+            meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/temple%253B%2520church.jpg");
+        }
+
         #endregion
 
         #region Private methods
