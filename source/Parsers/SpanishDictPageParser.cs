@@ -182,8 +182,11 @@ namespace CopyWords.Parsers
 
                             // Sometimes images are encoded, but with some very strict rules. Try to decode and then encode again.
                             string decoded = HttpUtility.UrlDecode(imageId);
-                            string encoded = decoded.Replace(",", "%2C")
+                            string encoded = decoded
+                                .Replace(",", "%2C")
                                 .Replace(";", "%3B")
+                                .Replace("(", "%28")
+                                .Replace(")", "%29")
                                 .Replace(" ", "%20")
                                 .Replace("%", "%25");
 

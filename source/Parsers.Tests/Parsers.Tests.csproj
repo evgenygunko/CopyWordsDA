@@ -168,6 +168,9 @@
     <None Update="TestPages\SpanishDict\Udfordring.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestPages\SpanishDict\vaso.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestPages\SpanishDict\veneno.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

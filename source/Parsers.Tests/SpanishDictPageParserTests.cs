@@ -561,7 +561,7 @@ namespace CopyWords.Parsers.Tests
 
             definition.Contexts.Should().HaveCount(1);
 
-            // 1. (animal)
+            // 1. (religious)
             context = definition.Contexts.First();
             context.ContextEN.Should().Be("(religious)");
             context.Meanings.Should().HaveCount(1);
@@ -574,6 +574,41 @@ namespace CopyWords.Parsers.Tests
             example.English.Should().Be("Let's go to the church; mass starts soon.");
 
             meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/temple%253B%2520church.jpg");
+        }
+
+        [TestMethod]
+        public void ParseDefinitions_ForVaso_SetsImageUrl()
+        {
+            var parser = new SpanishDictPageParser();
+
+            List<SpanishDictDefinition> result = parser.ParseDefinitions(LoadTestObject("vaso")).ToList();
+
+            result.Should().HaveCount(1);
+
+            SpanishDictDefinition definition;
+            SpanishDictContext context;
+            Meaning meaning;
+            Models.Example example;
+
+            definition = result[0];
+            definition.WordES.Should().Be("vaso");
+            definition.PartOfSpeech.Should().Be("masculine noun");
+
+            definition.Contexts.Should().HaveCountGreaterThan(1);
+
+            // 1. (tableware)
+            context = definition.Contexts.First();
+            context.ContextEN.Should().Be("(tableware)");
+            context.Meanings.Should().HaveCountGreaterThan(1);
+
+            meaning = context.Meanings.First();
+            meaning.Description.Should().Be("glass");
+            meaning.Examples.Should().HaveCount(1);
+            example = meaning.Examples.First();
+            example.Original.Should().Be("Toma un vaso del estante si tienes sed.");
+            example.English.Should().Be("Get a glass from the shelf if you're thirsty.");
+
+            meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/Glass%2520%2528empty%2529.jpg");
         }
 
         #endregion
