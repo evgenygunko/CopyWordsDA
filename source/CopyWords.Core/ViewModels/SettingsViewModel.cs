@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿#nullable enable
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -40,11 +41,11 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private string ankiSoundsFolder;
+        private string? ankiSoundsFolder;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private string ffmpegBinFolder;
+        private string? ffmpegBinFolder;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
@@ -56,11 +57,11 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private string mp3gainPath;
+        private string? mp3gainPath;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private string translatorApiUrl;
+        private string? translatorApiUrl;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
@@ -80,7 +81,7 @@ namespace CopyWords.Core.ViewModels
 
                 if (UseTranslator)
                 {
-                    result &= Uri.TryCreate(TranslatorApiUrl, UriKind.Absolute, out Uri _);
+                    result &= Uri.TryCreate(TranslatorApiUrl, UriKind.Absolute, out Uri? _);
                 }
 
                 return result;
@@ -242,7 +243,8 @@ namespace CopyWords.Core.ViewModels
 
                 options = new()
                 {
-                    PickerTitle = "Please select path to settings file", FileTypes = customFileType,
+                    PickerTitle = "Please select path to settings file",
+                    FileTypes = customFileType,
                 };
             }
 
@@ -256,6 +258,7 @@ namespace CopyWords.Core.ViewModels
             }
             catch (Exception ex)
             {
+                _ = ex;
                 // The user canceled or something went wrong
             }
 

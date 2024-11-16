@@ -1,10 +1,11 @@
-﻿namespace CopyWords.Core.Services
+﻿#nullable enable
+namespace CopyWords.Core.Services
 {
     public interface IFileIOService
     {
-        bool DirectoryExists(string path);
+        bool DirectoryExists(string? path);
 
-        bool FileExists(string path);
+        bool FileExists(string? path);
 
         Task<string> ReadAllTextAsync(string path, CancellationToken cancellationToken = default);
 
@@ -13,9 +14,9 @@
 
     public class FileIOService : IFileIOService
     {
-        public bool DirectoryExists(string path) => Directory.Exists(path);
+        public bool DirectoryExists(string? path) => Directory.Exists(path);
 
-        public bool FileExists(string path) => File.Exists(path);
+        public bool FileExists(string? path) => File.Exists(path);
 
         public async Task<string> ReadAllTextAsync(string path, CancellationToken cancellationToken = default) => await File.ReadAllTextAsync(path);
 
