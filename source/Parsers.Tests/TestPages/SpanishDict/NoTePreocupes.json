@@ -1,0 +1,409 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Fno%20te%20preocupes",
+    "wordOfTheDayData": {
+        "image": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002Foriginal\u002F0a015bbd-432f-4084-ac02-71a8c40d12e5.png",
+        "wordId": 98584,
+        "wordSource": "hervido",
+        "wordDisplay": "hervido",
+        "translationText": "boiled",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=hervido&key=fb8cf9b28849e1dfb0a8db79f547372b"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 19,
+    "excludeAds": false,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "audio-cdn.sdcdns.com",
+        "hegemoneAssetHost": "sd-hegemone-production.sdcdns.com",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "neodarwin-prod.sdcdns.com",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdIdentity": true,
+        "sdPrimisTest": false,
+        "sdCss": false,
+        "sdAnimation": false,
+        "adhesionMarketingInt": 3,
+        "translateEverythingSlideCopy": "crl_document_image_prioritized",
+        "randomizedExperiments": {
+            "translate_everything_slide_copy": "crl_document_image_prioritized"
+        }
+    },
+    "serverNowAtPageview": 1732086485989,
+    "pageCategory": "translation",
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "no te preocupes",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Fno%20te%20preocupes",
+            "path": "translate",
+            "token": "no te preocupes",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Fno%20te%20preocupes",
+            "path": "examples",
+            "token": "no te preocupes",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Fno%20te%20preocupes",
+            "path": "pronunciation",
+            "token": "no te preocupes",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Fno%20te%20preocupes",
+            "path": "thesaurus",
+            "token": "no te preocupes",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "no te preocupes",
+                "textToPronounce": "no te preocupes",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=no-te-preocupes&key=20d9f3837b165f938df35d571ceef7d0",
+                "pronunciations": [
+                    {
+                        "id": 2618,
+                        "ipa": "no te pɾe*o*ˈku*pes",
+                        "abc": "no te pre*o*ˈcu*pes",
+                        "spa": "noh teh preh*oh*ˈkoo*pehs",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 2619,
+                        "ipa": "no te pɾe*o*ˈku*pes",
+                        "abc": "no te pre*o*ˈcu*pes",
+                        "spa": "noh teh preh*oh*ˈkoo*pehs",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "don't worry",
+                "textToPronounce": "don't worry",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=en&text=don't-worry&key=bc7d7cf95b09eb509262c9d95423a121",
+                "pronunciations": [
+                    {
+                        "id": 12100,
+                        "ipa": "doʊnt ˈwə*ɹi",
+                        "abc": "don't ˈwo*rry",
+                        "spa": "dont ˈwuh*ri",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "don't worry"
+                    },
+                    {
+                        "id": 12101,
+                        "ipa": "dəʊnt ˈwə*ɹi",
+                        "abc": "don't ˈwo*rry",
+                        "spa": "downt ˈwuh*ri",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "don't worry"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 108841,
+                "source": "no te preocupes",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "neodict": [
+                {
+                    "subheadword": "no te preocupes",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "phr",
+                                "abbrEs": "fr",
+                                "nameEn": "phrase",
+                                "nameEs": "frase"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "",
+                                    "contextEs": "",
+                                    "gender": null,
+                                    "id": 600,
+                                    "partOfSpeech": {
+                                        "abbrEn": "phr",
+                                        "abbrEs": "fr",
+                                        "nameEn": "phrase",
+                                        "nameEs": "frase"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Don't worry about the results of the test.",
+                                                    "textEs": "No te preocupes por los resultados del examen."
+                                                },
+                                                {
+                                                    "textEn": "Don't worry, be happy.",
+                                                    "textEs": "No te preocupes, sé feliz."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 854,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fdon%27t%20worry.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "don't worry"
+                                        }
+                                    ],
+                                    "subheadword": "no te preocupes",
+                                    "idx": 1,
+                                    "context": "general",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "don't worry",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fdon%27t%20worry.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "don't worry"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "No te preocupes por los resultados del examen.",
+                                                    "Don't worry about the results of the test."
+                                                ],
+                                                [
+                                                    "No te preocupes, sé feliz.",
+                                                    "Don't worry, be happy."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "phrase",
+                                "tooltip": {
+                                    "def": "A phrase is a group of words commonly used together (e.g., once upon a time).",
+                                    "href": null
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "no te preocupes",
+            "regionChoice": "latam",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [
+                "noh teh preh*oh*ˈkoo*pehs"
+            ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": {
+        "linkedArticles": []
+    },
+    "searchBoxProps": {
+        "initialSearchText": "no te preocupes",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [
+                    "bae",
+                    "YOLO",
+                    "okurrr",
+                    "LOL",
+                    "my bad",
+                    "dude",
+                    "y'all",
+                    "wassup"
+                ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 108841
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "no te preocupes",
+        "originalQuery": "no te preocupes",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": null,
+    "verbLang": "es",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "adList": "[\"adTopLarge\",\"adSide1\",\"adSide3\",\"adMiddle2\"]",
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 108841
+    }
+}

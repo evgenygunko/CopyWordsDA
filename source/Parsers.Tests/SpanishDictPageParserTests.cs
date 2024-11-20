@@ -611,6 +611,41 @@ namespace CopyWords.Parsers.Tests
             meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/Glass%2520%2528empty%2529.jpg");
         }
 
+        [TestMethod]
+        public void ParseDefinitions_ForNoTePreocupes_SetsImageUrl()
+        {
+            var parser = new SpanishDictPageParser();
+
+            List<SpanishDictDefinition> result = parser.ParseDefinitions(LoadTestObject("NoTePreocupes")).ToList();
+
+            result.Should().HaveCount(1);
+
+            SpanishDictDefinition definition;
+            SpanishDictContext context;
+            Meaning meaning;
+            Models.Example example;
+
+            definition = result[0];
+            definition.WordES.Should().Be("no te preocupes");
+            definition.PartOfSpeech.Should().Be("phrase");
+
+            definition.Contexts.Should().HaveCount(1);
+
+            // 1. (general)
+            context = definition.Contexts.First();
+            context.ContextEN.Should().Be("(general)");
+            context.Meanings.Should().HaveCount(1);
+
+            meaning = context.Meanings.First();
+            meaning.Description.Should().Be("don't worry");
+            meaning.Examples.Should().HaveCountGreaterThan(1);
+            example = meaning.Examples.First();
+            example.Original.Should().Be("No te preocupes por los resultados del examen.");
+            example.English.Should().Be("Don't worry about the results of the test.");
+
+            meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/don%2527t%2520worry.jpg");
+        }
+
         #endregion
 
         #region Private methods

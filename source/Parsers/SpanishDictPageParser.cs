@@ -185,6 +185,7 @@ namespace CopyWords.Parsers
                             string encoded = decoded
                                 .Replace(",", "%2C")
                                 .Replace(";", "%3B")
+                                .Replace("'", "%27")
                                 .Replace("(", "%28")
                                 .Replace(")", "%29")
                                 .Replace(" ", "%20")
