@@ -1,13 +1,19 @@
 ﻿#nullable enable
 using CommunityToolkit.Mvvm.ComponentModel;
+using CopyWords.Core.Models;
+using CopyWords.Core.Services;
 using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.ViewModels
 {
     public partial class HeadwordViewModel : ObservableObject
     {
-        public HeadwordViewModel(Headword headword)
+        private readonly ISettingsService _settingsService;
+
+        public HeadwordViewModel(Headword headword, ISettingsService settingsService)
         {
+            _settingsService = settingsService;
+
             Update(headword);
         }
 
@@ -26,6 +32,9 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         private bool isRussianTranslationChecked;
 
+        [ObservableProperty]
+        private bool showEnglishTranslation;
+
         public void Update(Headword headword)
         {
             Original = headword?.Original;
@@ -33,6 +42,16 @@ namespace CopyWords.Core.ViewModels
             // Make first letter lower case, it looks better
             English = FirstLetterToLower(headword?.English);
             Russian = FirstLetterToLower(headword?.Russian);
+
+            AppSettings appSettings = _settingsService.LoadSettings();
+            if (appSettings.SelectedParser == SourceLanguage.Spanish.ToString())
+            {
+                ShowEnglishTranslation = false;
+            }
+            else
+            {
+                ShowEnglishTranslation = true;
+            }
         }
 
         internal static string? FirstLetterToLower(string? input)

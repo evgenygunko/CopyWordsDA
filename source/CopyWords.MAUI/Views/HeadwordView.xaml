@@ -52,8 +52,11 @@
             </Label>
 
             <!-- English -->
-            <CheckBox Grid.Row="1" Grid.Column="0" x:Name="checkBoxEN" IsChecked="{Binding IsEnglishTranslationChecked}" />
-            <Label Grid.Row="1" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center">
+            <CheckBox Grid.Row="1" Grid.Column="0" x:Name="checkBoxEN" 
+                      IsChecked="{Binding IsEnglishTranslationChecked}"
+                      IsVisible="{Binding ShowEnglishTranslation}"/>
+            <Label Grid.Row="1" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center"
+                      IsVisible="{Binding ShowEnglishTranslation}">
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="{Binding English, FallbackValue='shark'}"/>

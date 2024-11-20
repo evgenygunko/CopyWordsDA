@@ -124,7 +124,7 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.DefinitionViewModels.Clear();
                 foreach (var definition in wordModel.Definitions)
                 {
-                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(definition, _copySelectedToClipboardService, _dialogService, _clipboardService));
+                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(definition, _copySelectedToClipboardService, _dialogService, _clipboardService, _settingsService));
                 }
 
                 _wordViewModel.Variants.Clear();

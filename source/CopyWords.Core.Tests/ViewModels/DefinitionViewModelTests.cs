@@ -1,4 +1,6 @@
-﻿using CopyWords.Core.Exceptions;
+﻿using AutoFixture;
+using CopyWords.Core.Exceptions;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.Parsers.Models;
@@ -12,6 +14,7 @@ namespace CopyWords.Core.Tests.ViewModels
         private Mock<ICopySelectedToClipboardService> _copySelectedToClipboardServiceMock = default!;
         private Mock<IClipboardService> _clipboardServiceMock = default!;
         private Mock<IDialogService> _dialogServiceMock = default!;
+        private Mock<ISettingsService> _settingsServiceMock = default!;
 
         private Mock<Func<DefinitionViewModel, Task<string>>> _func = default!;
 
@@ -21,6 +24,12 @@ namespace CopyWords.Core.Tests.ViewModels
             _copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
             _clipboardServiceMock = new Mock<IClipboardService>();
             _dialogServiceMock = new Mock<IDialogService>();
+
+            var fixture = FixtureFactory.CreateFixture();
+            AppSettings appSettings = fixture.Create<AppSettings>();
+
+            _settingsServiceMock = new Mock<ISettingsService>();
+            _settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
             _func = new Mock<Func<DefinitionViewModel, Task<string>>>();
             _func.Setup(x => x.Invoke(It.IsAny<DefinitionViewModel>())).Returns((DefinitionViewModel vm) => Task.FromResult(vm.Word));
@@ -32,7 +41,7 @@ namespace CopyWords.Core.Tests.ViewModels
             const string textToCopy = "test word";
             Definition definition = new Definition(new Headword(textToCopy, null, null), PartOfSpeech: "verb", Endings: "", Enumerable.Empty<Context>());
 
-            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
             _clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(textToCopy));
@@ -45,7 +54,7 @@ namespace CopyWords.Core.Tests.ViewModels
             string textToCopy = string.Empty;
             Definition definition = new Definition(new Headword(textToCopy, null, null), PartOfSpeech: "verb", Endings: "", Enumerable.Empty<Context>());
 
-            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
             _clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(It.IsAny<string>()), Times.Never);
@@ -60,7 +69,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             _func.Setup(x => x.Invoke(It.IsAny<DefinitionViewModel>())).ThrowsAsync(new PrepareWordForCopyingException("exception from unit tests"));
 
-            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
             _clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(It.IsAny<string>()), Times.Never);
@@ -75,7 +84,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             _func.Setup(x => x.Invoke(It.IsAny<DefinitionViewModel>())).ThrowsAsync(new Exception("exception from unit tests"));
 
-            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
             _clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(It.IsAny<string>()), Times.Never);

@@ -18,14 +18,15 @@ namespace CopyWords.Core.ViewModels
             Definition definition,
             ICopySelectedToClipboardService copySelectedToClipboardService,
             IDialogService dialogService,
-            IClipboardService clipboardService)
+            IClipboardService clipboardService,
+            ISettingsService settingsService)
         {
             _copySelectedToClipboardService = copySelectedToClipboardService;
             _dialogService = dialogService;
             _clipboardService = clipboardService;
 
             Word = definition.Headword.Original;
-            HeadwordViewModel = new HeadwordViewModel(definition.Headword);
+            HeadwordViewModel = new HeadwordViewModel(definition.Headword, settingsService);
 
             PartOfSpeech = definition.PartOfSpeech;
             Endings = definition.Endings;

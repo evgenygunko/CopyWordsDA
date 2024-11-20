@@ -16,6 +16,7 @@ namespace CopyWords.Core.Tests.Services
         private Mock<ICopySelectedToClipboardService> _copySelectedToClipboardServiceMock = default!;
         private Mock<IClipboardService> _clipboardServiceMock = default!;
         private Mock<IDialogService> _dialogServiceMock = default!;
+        private Mock<ISettingsService> _settingsServiceMock = default!;
 
         [TestInitialize]
         public void Initialize()
@@ -25,6 +26,7 @@ namespace CopyWords.Core.Tests.Services
             _copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
             _clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
             _dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            _settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
         }
 
         #region Tests for CompileFrontAsync
@@ -533,7 +535,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -559,7 +566,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -591,7 +603,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -623,7 +640,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -658,7 +680,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -684,7 +711,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -719,7 +751,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -756,7 +793,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -781,7 +823,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -804,7 +851,12 @@ namespace CopyWords.Core.Tests.Services
                         }),
                 }
             );
-            var definitionVM1 = new DefinitionViewModel(definition1, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM1 = new DefinitionViewModel(
+                definition1,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             var definition2 = new Definition(new Headword("afeitarse", null, null), PartOfSpeech: "REFLEXIVE VERB", Endings: "",
                 new List<Context>
@@ -817,7 +869,12 @@ namespace CopyWords.Core.Tests.Services
                         }),
                 }
             );
-            var definitionVM2 = new DefinitionViewModel(definition2, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM2 = new DefinitionViewModel(
+                definition2,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -849,7 +906,12 @@ namespace CopyWords.Core.Tests.Services
                 // ...
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -878,7 +940,12 @@ namespace CopyWords.Core.Tests.Services
                     // ...
                 }
             );
-            var definitionVM1 = new DefinitionViewModel(definition1, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM1 = new DefinitionViewModel(
+                definition1,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             var definition2 = new Definition(new Headword("guay", null, null), PartOfSpeech: "ADJECTIVE", Endings: "",
                 new List<Context>
@@ -897,7 +964,12 @@ namespace CopyWords.Core.Tests.Services
                     // ...
                 }
             );
-            var definitionVM2 = new DefinitionViewModel(definition2, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM2 = new DefinitionViewModel(
+                definition2,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -932,7 +1004,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -959,7 +1036,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
 
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -996,7 +1078,12 @@ namespace CopyWords.Core.Tests.Services
                         }),
                 }
             );
-            var definitionVM = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object);
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                _copySelectedToClipboardServiceMock.Object,
+                _dialogServiceMock.Object,
+                _clipboardServiceMock.Object,
+                _settingsServiceMock.Object);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {

@@ -1,7 +1,10 @@
 ﻿using AutoFixture;
+using CopyWords.Core.Models;
+using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.Parsers.Models;
 using FluentAssertions;
+using Moq;
 
 namespace CopyWords.Core.Tests.ViewModels
 {
@@ -25,6 +28,40 @@ namespace CopyWords.Core.Tests.ViewModels
             // we also make first letter lower case
             sut.English.Should().Be("kebabs");
             sut.Russian.Should().Be("шашлыки");
+        }
+
+        [TestMethod]
+        public void Update_WhenSpanishDisctionarySelectes_SetsShowEnglishTranslationToFalse()
+        {
+            var headword = new Headword("Casa", "House", "Дом");
+
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.SelectedParser = SourceLanguage.Spanish.ToString();
+
+            var ssettingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            ssettingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+
+            var sut = _fixture.Create<HeadwordViewModel>();
+            sut.Update(headword);
+
+            sut.ShowEnglishTranslation.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void Update_WhenDanishDisctionarySelectes_SetsShowEnglishTranslationToTrue()
+        {
+            var headword = new Headword("Grillspyd", "Kebabs", "Шашлыки");
+
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.SelectedParser = SourceLanguage.Danish.ToString();
+
+            var ssettingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            ssettingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+
+            var sut = _fixture.Create<HeadwordViewModel>();
+            sut.Update(headword);
+
+            sut.ShowEnglishTranslation.Should().BeTrue();
         }
 
         #endregion
