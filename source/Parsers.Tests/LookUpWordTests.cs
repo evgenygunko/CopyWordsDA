@@ -250,10 +250,10 @@ namespace CopyWords.Parsers.Tests
             string headWord = _fixture.Create<string>();
             var definitions = _fixture.Create<List<Models.DDO.DDODefinition>>();
 
-            var translations = new List<TranslationOutput>()
-            {
-                new TranslationOutput("ru", "акула")
-            };
+            var translationOutput = new TranslationOutput(
+                [
+                    new TranslationItem("ru", "акула")
+                ]);
 
             Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
             fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
@@ -263,7 +263,7 @@ namespace CopyWords.Parsers.Tests
             ddoPageParserMock.Setup(x => x.ParseDefinitions()).Returns(definitions);
 
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
-            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
+            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
 
             Options options = new Options(SourceLanguage.Danish, translatorApiUrl);
 
@@ -293,20 +293,20 @@ namespace CopyWords.Parsers.Tests
             string meaning = _fixture.Create<string>();
             string partOfSpeech = _fixture.Create<string>();
 
-            var translations = new List<TranslationOutput>()
-            {
-                new TranslationOutput("ru", "акула")
-            };
+            var translationOutput = new TranslationOutput(
+                [
+                    new TranslationItem("ru", "акула")
+                ]);
 
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
-            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
+            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
 
             var sut = _fixture.Create<LookUpWord>();
-            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, meaning, partOfSpeech, sourceLangauge: "da");
+            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLangauge: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
 
-            result.Should().HaveCount(1);
+            result.Translations.Should().HaveCount(1);
 
-            TranslationOutput translationRU = result.Single();
+            TranslationItem translationRU = result.Translations.Single();
             translationRU.Language.Should().Be("ru");
             translationRU.Translation.Should().Be("акула");
         }
@@ -319,20 +319,20 @@ namespace CopyWords.Parsers.Tests
             string meaning = _fixture.Create<string>();
             string partOfSpeech = _fixture.Create<string>();
 
-            var translations = new List<TranslationOutput>()
-            {
-                new TranslationOutput("ru", "акула")
-            };
+            var translationOutput = new TranslationOutput(
+                [
+                    new TranslationItem("ru", "акула")
+                ]);
 
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
-            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translations);
+            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
 
             var sut = _fixture.Create<LookUpWord>();
-            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, meaning, partOfSpeech, sourceLangauge: "da");
+            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLangauge: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
 
-            result.Should().HaveCount(1);
+            result.Translations.Should().HaveCount(1);
 
-            TranslationOutput translationRU = result.Single();
+            TranslationItem translationRU = result.Translations.Single();
             translationRU.Language.Should().Be("ru");
             translationRU.Translation.Should().Be("акула");
 
@@ -347,17 +347,12 @@ namespace CopyWords.Parsers.Tests
             string meaning = _fixture.Create<string>();
             string partOfSpeech = _fixture.Create<string>();
 
-            var translations = new List<TranslationOutput>()
-            {
-                new TranslationOutput("ru", "акула")
-            };
-
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
 
             var sut = _fixture.Create<LookUpWord>();
-            IEnumerable<TranslationOutput>? result = await sut.GetTranslationAsync(translatorApiUrl, headWord, meaning, partOfSpeech, sourceLangauge: "da");
+            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLangauge: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
 
-            result.Should().HaveCount(0);
+            result.Translations.Should().HaveCount(0);
 
             translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()), Times.Never);
         }

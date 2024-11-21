@@ -128,17 +128,21 @@ namespace CopyWords.Parsers
             List<Models.DDO.DDODefinition> ddoDefinitions = _ddoPageParser.ParseDefinitions();
 
             // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-            IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(
-            options?.TranslatorApiURL,
-                    word: headWordDA,
-                    meaning: ddoDefinitions.Select(x => x.Meaning).FirstOrDefault() ?? "",
-                    partOfSpeech: partOfSpeech,
-                    sourceLangauge: LanguageDA);
+            var firstDefinition = ddoDefinitions.FirstOrDefault();
+            IEnumerable<string> examples = firstDefinition?.Examples.Select(x => x.Original) ?? Enumerable.Empty<string>();
+
+            TranslationOutput translationOutput = await GetTranslationAsync(
+                options?.TranslatorApiURL,
+                sourceLangauge: LanguageDA,
+                word: headWordDA,
+                meaning: firstDefinition?.Meaning ?? "",
+                partOfSpeech: partOfSpeech,
+                examples: examples);
 
             Headword headword = new Headword(
                 headWordDA,
-                translations.FirstOrDefault(x => x.Language == LanguageEN)?.Translation,
-                translations.FirstOrDefault(x => x.Language == LanguageRU)?.Translation);
+                translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageEN)?.Translation,
+                translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageRU)?.Translation);
 
             // For DDO, we create one Definition with one Context and several Meanings.
             List<Meaning> meanings = new List<Meaning>();
@@ -198,17 +202,20 @@ namespace CopyWords.Parsers
                 }
 
                 // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-                IEnumerable<TranslationOutput>? translations = await GetTranslationAsync(
+                IEnumerable<string> examples = contexts.FirstOrDefault()?.Meanings.FirstOrDefault()?.Examples.Select(x => x.Original) ?? Enumerable.Empty<string>();
+
+                TranslationOutput translationOutput = await GetTranslationAsync(
                     options?.TranslatorApiURL,
+                    sourceLangauge: LanguageES,
                     word: spanishDictDefinition.WordES,
                     meaning: contexts.FirstOrDefault()?.Meanings.FirstOrDefault()?.Description ?? "",
                     partOfSpeech: spanishDictDefinition.PartOfSpeech,
-                    sourceLangauge: LanguageES);
+                    examples: examples);
 
                 Headword headword = new Headword(
                     spanishDictDefinition.WordES,
-                    translations.FirstOrDefault(x => x.Language == LanguageEN)?.Translation,
-                    translations.FirstOrDefault(x => x.Language == LanguageRU)?.Translation);
+                    translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageEN)?.Translation,
+                    translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageRU)?.Translation);
 
                 // Spanish words don't have endings, this property only makes sense for Danish
                 definitions.Add(new Definition(headword, spanishDictDefinition.PartOfSpeech, Endings: "", contexts));
@@ -225,23 +232,24 @@ namespace CopyWords.Parsers
             return wordModel;
         }
 
-        internal async Task<IEnumerable<TranslationOutput>> GetTranslationAsync(string? translatorApiURL, string word, string meaning, string partOfSpeech, string sourceLangauge)
+        internal async Task<TranslationOutput> GetTranslationAsync(
+            string? translatorApiURL,
+            string sourceLangauge,
+            string word,
+            string meaning,
+            string partOfSpeech,
+            IEnumerable<string> examples)
         {
-            IEnumerable<TranslationOutput>? translations = null;
+            TranslationOutput? translationOutput = null;
 
             if (!string.IsNullOrEmpty(translatorApiURL))
             {
-                var translationInput = new TranslationInput(word, meaning, partOfSpeech, sourceLangauge, DestinationLanguages);
+                var translationInput = new TranslationInput(sourceLangauge, DestinationLanguages, word, meaning, partOfSpeech, examples);
 
-                translations = await _translatorAPIClient.TranslateAsync(translatorApiURL, translationInput);
+                translationOutput = await _translatorAPIClient.TranslateAsync(translatorApiURL, translationInput);
             }
 
-            if (translations is null)
-            {
-                translations = Enumerable.Empty<TranslationOutput>();
-            }
-
-            return translations;
+            return translationOutput ?? new TranslationOutput(Array.Empty<TranslationItem>());
         }
 
         #endregion
