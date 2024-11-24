@@ -2,5 +2,5 @@
 {
     public record TranslationOutput(TranslationItem[] Translations);
 
-    public record TranslationItem(string Language, string? Translation);
+    public record TranslationItem(string Language, IEnumerable<string> TranslationVariants);
 }

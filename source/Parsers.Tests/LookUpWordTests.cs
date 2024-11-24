@@ -252,7 +252,7 @@ namespace CopyWords.Parsers.Tests
 
             var translationOutput = new TranslationOutput(
                 [
-                    new TranslationItem("ru", "акула")
+                    new TranslationItem("ru", [ "акула" ])
                 ]);
 
             Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
@@ -295,7 +295,7 @@ namespace CopyWords.Parsers.Tests
 
             var translationOutput = new TranslationOutput(
                 [
-                    new TranslationItem("ru", "акула")
+                    new TranslationItem("ru", [ "акула" ])
                 ]);
 
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
@@ -308,7 +308,8 @@ namespace CopyWords.Parsers.Tests
 
             TranslationItem translationRU = result.Translations.Single();
             translationRU.Language.Should().Be("ru");
-            translationRU.Translation.Should().Be("акула");
+            translationRU.TranslationVariants.Should().HaveCount(1);
+            translationRU.TranslationVariants.First().Should().Be("акула");
         }
 
         [TestMethod]
@@ -321,7 +322,7 @@ namespace CopyWords.Parsers.Tests
 
             var translationOutput = new TranslationOutput(
                 [
-                    new TranslationItem("ru", "акула")
+                    new TranslationItem("ru", [ "акула" ])
                 ]);
 
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
@@ -334,7 +335,8 @@ namespace CopyWords.Parsers.Tests
 
             TranslationItem translationRU = result.Translations.Single();
             translationRU.Language.Should().Be("ru");
-            translationRU.Translation.Should().Be("акула");
+            translationRU.TranslationVariants.Should().HaveCount(1);
+            translationRU.TranslationVariants.First().Should().Be("акула");
 
             translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()));
         }
@@ -431,7 +433,7 @@ namespace CopyWords.Parsers.Tests
         {
             string headwordES = "afeitar";
             string html = _fixture.Create<string>();
-            var options = new Options(SourceLanguage.Danish, TranslatorApiURL: null);
+            var options = new Options(SourceLanguage.Spanish, TranslatorApiURL: null);
 
             Mock<ISpanishDictPageParser> spanishDictPageParserMock = _fixture.Freeze<Mock<ISpanishDictPageParser>>();
             spanishDictPageParserMock.Setup(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>())).Returns(headwordES);
@@ -493,6 +495,53 @@ namespace CopyWords.Parsers.Tests
             spanishDictPageParserMock.Verify(x => x.ParseDefinitions(It.IsAny<Models.SpanishDict.WordJsonModel>()));
         }
 
+        [TestMethod]
+        public async Task ParseSpanishWordAsync_Should_CallTranslationService()
+        {
+            string headwordES = "casa";
+            string html = _fixture.Create<string>();
+
+            string translationApiURL = _fixture.Create<Uri>().ToString();
+            var options = new Options(SourceLanguage.Spanish, TranslatorApiURL: translationApiURL);
+            var translationOutput = new TranslationOutput(
+                [
+                    new TranslationItem("ru", [ "дом" ]),
+                    new TranslationItem("en", [ "house", "household" ])
+                ]);
+
+            Mock<ISpanishDictPageParser> spanishDictPageParserMock = _fixture.Freeze<Mock<ISpanishDictPageParser>>();
+            spanishDictPageParserMock.Setup(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>())).Returns(headwordES);
+            spanishDictPageParserMock.Setup(x => x.ParseDefinitions(It.IsAny<Models.SpanishDict.WordJsonModel>())).Returns(CreateDefinitionsForCasa());
+
+            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
+            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
+
+            var sut = _fixture.Create<LookUpWord>();
+            WordModel? result = await sut.ParseSpanishWordAsync(html, options);
+
+            result.Should().NotBeNull();
+
+            result!.Word.Should().Be(headwordES);
+
+            IEnumerable<Definition> definitions = result!.Definitions;
+            definitions.Should().HaveCount(1);
+
+            // 1. house (dwelling)
+            Definition definition1 = definitions.First();
+            definition1.Headword.Original.Should().Be("casa");
+            definition1.Headword.Russian.Should().Be("дом");
+            definition1.Headword.English.Should().Be("house, household");
+
+            translatorAPIClientMock.Verify(x => x.TranslateAsync(translationApiURL, It.Is<TranslationInput>(input =>
+                input.SourceLanguage == "es"
+                && input.DestinationLanguages.Count() == 2
+                && input.Word == headwordES
+                && input.Meaning == "house (dwelling)"
+                && input.PartOfSpeech == "feminine noun"
+                && input.Examples.Count() == 1 && input.Examples.First() == "Vivimos en una casa con un gran jardín.")),
+                Times.Once());
+        }
+
         #endregion
 
         #region Private Methods
@@ -544,6 +593,27 @@ namespace CopyWords.Parsers.Tests
             return new List<Models.SpanishDict.SpanishDictDefinition>() { definition1, definition2 };
         }
 
+        private static List<Models.SpanishDict.SpanishDictDefinition> CreateDefinitionsForCasa()
+        {
+            var definition1 = new Models.SpanishDict.SpanishDictDefinition(WordES: "casa", PartOfSpeech: "feminine noun",
+                new List<Models.SpanishDict.SpanishDictContext>
+                {
+                    new Models.SpanishDict.SpanishDictContext(ContextEN: "(dwelling)", Position: 1,
+                        new List<Meaning>
+                        {
+                            new Meaning("house", "a", Tag: null, ImageUrl: null,
+                                new List<Example>() { new Example(Original: "Vivimos en una casa con un gran jardín.", English: "We live in a house with a big garden.", Russian: "") }),
+                        }),
+                    new Models.SpanishDict.SpanishDictContext(ContextEN: "(household)", Position: 1,
+                        new List<Meaning>
+                        {
+                            new Meaning("home", "a", Tag: null, ImageUrl: null,
+                                new List<Example>() { new Example(Original: "Mi casa es donde mi familia y mis amigos están.", English: "My home is where my family and friends are.", Russian: "") }),
+                        }),
+                });
+
+            return new List<Models.SpanishDict.SpanishDictDefinition>() { definition1 };
+        }
         #endregion
     }
 }
