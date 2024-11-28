@@ -41,20 +41,41 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
-        #region ParseSound tests
+        #region ParseSoundURL tests
 
         [DataTestMethod]
-        [DataRow("afeitar", "4189")]
-        [DataRow("águila", "13701")]
-        [DataRow("aprovechar", "13603")]
-        [DataRow("costar un ojo de la cara", null)]
-        public void ParseSound_Should_ReturnSoundFileIdFromModel(string word, string expectedSoundId)
+        [DataRow("afeitar", "https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_4189_speaker_7_syllable_all_version_50.mp4")]
+        [DataRow("águila", "https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_13701_speaker_7_syllable_all_version_50.mp4")]
+        [DataRow("aprovechar", "https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_13603_speaker_7_syllable_all_version_50.mp4")]
+        public void ParseSoundURL_WhenSpanishPronunciationWithVideoExists_ReturnSoundURL(string word, string expectedSoundURL)
         {
             var parser = new SpanishDictPageParser();
+            string? result = parser.ParseSoundURL(LoadTestObject(word));
 
-            string? result = parser.ParseSound(LoadTestObject(word));
+            result.Should().Be(expectedSoundURL);
+        }
 
-            result.Should().Be(expectedSoundId);
+        [TestMethod]
+        public void ParseSoundURL_WhenNoPronunciationsExist_ReturnNull()
+        {
+            const string word = "costar un ojo de la cara";
+
+            var parser = new SpanishDictPageParser();
+            string? result = parser.ParseSoundURL(LoadTestObject(word));
+
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void ParseSoundURL_WhenSpanishPronunciationHasNoVideo_UsesLatinAmericaPronunciation()
+        {
+            // When there is no video for the sound, it uses a robotic pronunciation. We don't want to use it because the quality is too poor.
+            const string word = "aconsejar";
+            var parser = new SpanishDictPageParser();
+
+            string? result = parser.ParseSoundURL(LoadTestObject(word));
+
+            result.Should().Be("https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_265_speaker_3_syllable_all_version_51.mp4");
         }
 
         #endregion

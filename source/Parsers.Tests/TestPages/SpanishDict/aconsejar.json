@@ -1,0 +1,897 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Faconsejar",
+    "wordOfTheDayData": {
+        "image": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002Foriginal\u002Fea426974-665c-4d10-8290-2cf68c76f839.png",
+        "wordId": 6537,
+        "wordSource": "agradecer",
+        "wordDisplay": "agradecer",
+        "translationText": "to thank",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=agradecer&key=282332f7878fac78ebd1ae90dca14ff4"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 19,
+    "excludeAds": false,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "audio-cdn.sdcdns.com",
+        "hegemoneAssetHost": "sd-hegemone-production.sdcdns.com",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "neodarwin-prod.sdcdns.com",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdIdentity": true,
+        "sdPrimisTest": false,
+        "sdCss": false,
+        "sdAnimation": false,
+        "adhesionMarketingInt": 0,
+        "translateEverythingSlideCopy": "crl_document_image_prioritized",
+        "randomizedExperiments": {
+            "translate_everything_slide_copy": "crl_document_image_prioritized"
+        }
+    },
+    "serverNowAtPageview": 1732819501593,
+    "pageCategory": "translation",
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "Aconsejar",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Faconsejar",
+            "path": "translate",
+            "token": "aconsejar",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Conjugation",
+            "active": false,
+            "href": "\u002Fconjugate\u002Faconsejar",
+            "path": "conjugate",
+            "token": "aconsejar",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Faconsejar",
+            "path": "examples",
+            "token": "aconsejar",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Faconsejar",
+            "path": "pronunciation",
+            "token": "aconsejar",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Faconsejar",
+            "path": "thesaurus",
+            "token": "aconsejar",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "aconsejar",
+                "textToPronounce": "aconsejar",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=aconsejar&key=e051456a6da848ac2b61b0a33aaaea6b",
+                "pronunciations": [
+                    {
+                        "id": 265,
+                        "ipa": "a*kon*se*ˈxaɾ",
+                        "abc": "a*con*se*ˈjaɾ",
+                        "spa": "ah*kohn*seh*ˈhahr",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 266,
+                        "ipa": "a*kon*se*ˈχaɾ",
+                        "abc": "a*con*se*ˈjaɾ",
+                        "spa": "ah*kohn*seh*ˈhahr",
+                        "region": "SPAIN",
+                        "hasVideo": 0,
+                        "speakerId": 7,
+                        "version": 16
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "to advise",
+                "textToPronounce": "advise",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=en&text=advise&key=3d1ed2c1bae10461b6e01293f261b1f9",
+                "pronunciations": [
+                    {
+                        "id": 1181,
+                        "ipa": "æd*ˈvaɪz",
+                        "abc": "ad*ˈvise",
+                        "spa": "ahd*ˈvayz",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "advise"
+                    },
+                    {
+                        "id": 1182,
+                        "ipa": "æd*ˈvaɪz",
+                        "abc": "ad*ˈvise",
+                        "spa": "ahd*ˈvayz",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "advise"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 7730,
+                "source": "aconsejar",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "neodict": [
+                {
+                    "subheadword": "aconsejar",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "vtr",
+                                "abbrEs": "vtr",
+                                "nameEn": "transitive verb",
+                                "nameEs": "verbo transitivo"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "to suggest",
+                                    "contextEs": "sugerir",
+                                    "gender": null,
+                                    "id": 9195,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The authorities advise everyone to stay inside during the storm.",
+                                                    "textEs": "Las autoridades aconsejan permanecer adentro durante la tormenta."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 13510,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fadviser.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to advise"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The doctor recommended rest to help his knee recover.",
+                                                    "textEs": "El médico le aconsejó reposo para curar su lesión de rodilla."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 20452,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to recommend"
+                                        }
+                                    ],
+                                    "subheadword": "aconsejar",
+                                    "idx": 1,
+                                    "context": "to suggest",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to advise",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fadviser.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to advise"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Las autoridades aconsejan permanecer adentro durante la tormenta.",
+                                                    "The authorities advise everyone to stay inside during the storm."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "to recommend",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to recommend"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "El médico le aconsejó reposo para curar su lesión de rodilla.",
+                                                    "The doctor recommended rest to help his knee recover."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "to give advice to a person",
+                                    "contextEs": "dar consejo a una persona",
+                                    "gender": null,
+                                    "id": 13353,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "I don't know what to do. Can you advise me?",
+                                                    "textEs": "No sé qué hacer. ¿Me puedes aconsejar?"
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 20454,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to advise"
+                                        }
+                                    ],
+                                    "subheadword": "aconsejar",
+                                    "idx": 2,
+                                    "context": "to give advice to a person",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to advise",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to advise"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "No sé qué hacer. ¿Me puedes aconsejar?",
+                                                    "I don't know what to do. Can you advise me?"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "to make necessary",
+                                    "contextEs": "hacer necesario",
+                                    "gender": null,
+                                    "id": 13352,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The huge tourist influx makes limiting access to the park advisable.",
+                                                    "textEs": "La gran afluencia de turistas aconseja restringir la entrada al parque."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 20453,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to make advisable"
+                                        }
+                                    ],
+                                    "subheadword": "aconsejar",
+                                    "idx": 3,
+                                    "context": "to make necessary",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to make advisable",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to make advisable"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "La gran afluencia de turistas aconseja restringir la entrada al parque.",
+                                                    "The huge tourist influx makes limiting access to the park advisable."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "transitive verb",
+                                "tooltip": {
+                                    "def": "A transitive verb is a verb that requires a direct object (e.g., I bought a book.).",
+                                    "href": "https:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "subheadword": "aconsejarse",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "vpr",
+                                "abbrEs": "vpr",
+                                "nameEn": "pronominal verb",
+                                "nameEs": "verbo pronominal"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "to get advice; used with \"con\"",
+                                    "contextEs": "recibir consejo; usado con \"con\"",
+                                    "gender": null,
+                                    "id": 9196,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vpr",
+                                        "abbrEs": "vpr",
+                                        "nameEn": "pronominal verb",
+                                        "nameEs": "verbo pronominal"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "You should seek advice from a lawyer.",
+                                                    "textEs": "Deberías aconsejarte con un abogado."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 13511,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to seek advice from"
+                                        }
+                                    ],
+                                    "subheadword": "aconsejarse",
+                                    "idx": 4,
+                                    "context": "to get advice; used with \"con\"",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to seek advice from",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to seek advice from"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Deberías aconsejarte con un abogado.",
+                                                    "You should seek advice from a lawyer."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "pronominal verb",
+                                "tooltip": {
+                                    "def": "A pronominal verb always uses a reflexive pronoun. (e.g., Te ves cansado.).",
+                                    "href": "https:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "aconsejar",
+            "regionChoice": "latam",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [
+                "ah*kohn*seh*ˈhahr"
+            ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": {
+        "linkedArticles": []
+    },
+    "searchBoxProps": {
+        "initialSearchText": "Aconsejar",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [
+                    "bae",
+                    "YOLO",
+                    "okurrr",
+                    "LOL",
+                    "my bad",
+                    "dude",
+                    "y'all",
+                    "wassup"
+                ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 7730
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "Aconsejar",
+        "originalQuery": "Aconsejar",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": {
+        "id": 7730,
+        "infinitive": "aconsejar",
+        "matchedConjugation": "aconsejar",
+        "isReflexive": 2,
+        "isReflexiveVariation": false,
+        "verbType": 1,
+        "supportsConjugationDrills": 1,
+        "reason": "exact match",
+        "infinitiveTranslation": "advise",
+        "pastParticiple": {
+            "word": "aconsejado",
+            "audioQueryString": "?lang=es&text=aconsejado&key=ea8376e38b7c3c7e4604f81f24ad402a",
+            "translation": "advised"
+        },
+        "gerund": {
+            "word": "aconsejando",
+            "audioQueryString": "?lang=es&text=aconsejando&key=aca4fec214aec509cbb5f5f3cec5b508",
+            "translation": "advising"
+        },
+        "paradigms": {
+            "presentIndicative": [
+                {
+                    "word": "aconsejo",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=aconsejo&key=2873114b1ec8c6f5966f3c77818f332d",
+                    "translation": "advise"
+                },
+                {
+                    "word": "aconsejas",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=aconsejas&key=07433e4d0abd8918f825c200b955c630",
+                    "translation": "advise"
+                },
+                {
+                    "word": "aconseja",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=aconseja&key=23b8b01c24e100a12e765b4480063330",
+                    "translation": "advises"
+                },
+                {
+                    "word": "aconsejamos",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=aconsejamos&key=533e75e8edfa1dfecb48fbe5fdb30680",
+                    "translation": "advise"
+                },
+                {
+                    "word": "aconsejáis",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=aconsej%C3%A1is&key=d2277fd3a2fcfd9c01dd71b1642b7047&region=spain",
+                    "translation": "advise"
+                },
+                {
+                    "word": "aconsejan",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=aconsejan&key=fe0c324af43ba61610961240690e27e2",
+                    "translation": "advise"
+                },
+                {
+                    "word": "aconsejás",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=aconsej%C3%A1s&key=0e9cceb292df99b3d8707cd0fb2763ce&region=latam",
+                    "translation": "advise"
+                }
+            ],
+            "preteritIndicative": [
+                {
+                    "word": "aconsejé",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=aconsej%C3%A9&key=c55e78c809a6a775edf6fbe0219e4e44",
+                    "translation": "advised"
+                },
+                {
+                    "word": "aconsejaste",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=aconsejaste&key=7742a2b64439f827d5b1f7e3e9393dfd",
+                    "translation": "advised"
+                },
+                {
+                    "word": "aconsejó",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=aconsej%C3%B3&key=a01bffa4a7426429f0132dce7b68df98",
+                    "translation": "advised"
+                },
+                {
+                    "word": "aconsejamos",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=aconsejamos&key=533e75e8edfa1dfecb48fbe5fdb30680",
+                    "translation": "advised"
+                },
+                {
+                    "word": "aconsejasteis",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=aconsejasteis&key=1b49089aba329f756d30fe1fe24716bf&region=spain&name=maria22k",
+                    "translation": "advised"
+                },
+                {
+                    "word": "aconsejaron",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=aconsejaron&key=3a838006e32b4ed5cba2a5dbb0ec214a",
+                    "translation": "advised"
+                },
+                {
+                    "word": "aconsejaste",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=aconsejaste&key=7742a2b64439f827d5b1f7e3e9393dfd&region=latam",
+                    "translation": "advised"
+                }
+            ],
+            "imperfectIndicative": [
+                {
+                    "word": "aconsejaba",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=aconsejaba&key=ac8c3ac180caca4e6334859e3020c15a",
+                    "translation": "was advising"
+                },
+                {
+                    "word": "aconsejabas",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=aconsejabas&key=d9786375cb5f484d5a581d2f685ec9da",
+                    "translation": "were advising"
+                },
+                {
+                    "word": "aconsejaba",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=aconsejaba&key=ac8c3ac180caca4e6334859e3020c15a",
+                    "translation": "was advising"
+                },
+                {
+                    "word": "aconsejábamos",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=aconsej%C3%A1bamos&key=32044f5a0549eaca11bd64bbb62a7c27",
+                    "translation": "were advising"
+                },
+                {
+                    "word": "aconsejabais",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=aconsejabais&key=bb1014aa327c78957537a401b3c3a0d6&region=spain",
+                    "translation": "were advising"
+                },
+                {
+                    "word": "aconsejaban",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=aconsejaban&key=5e43dddd22b885030f234dec92e497eb",
+                    "translation": "were advising"
+                },
+                {
+                    "word": "aconsejabas",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=aconsejabas&key=d9786375cb5f484d5a581d2f685ec9da&region=latam",
+                    "translation": "were advising"
+                }
+            ],
+            "conditionalIndicative": [
+                {
+                    "word": "aconsejaría",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%ADa&key=53c5f54a6683d471e6246409249865c3",
+                    "translation": "would advise"
+                },
+                {
+                    "word": "aconsejarías",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%ADas&key=1fb67297f7ad805f4fce78e052f97865",
+                    "translation": "would advise"
+                },
+                {
+                    "word": "aconsejaría",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%ADa&key=53c5f54a6683d471e6246409249865c3",
+                    "translation": "would advise"
+                },
+                {
+                    "word": "aconsejaríamos",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%ADamos&key=a99f486e6614b02c955cf11e3078ccdc",
+                    "translation": "would advise"
+                },
+                {
+                    "word": "aconsejaríais",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%ADais&key=93683c273bad2089b931f067c8a21739&region=spain",
+                    "translation": "would advise"
+                },
+                {
+                    "word": "aconsejarían",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%ADan&key=d3f22f1c3607b6109aacbb8b3a1b703c",
+                    "translation": "would advise"
+                },
+                {
+                    "word": "aconsejarías",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%ADas&key=1fb67297f7ad805f4fce78e052f97865&region=latam",
+                    "translation": "would advise"
+                }
+            ],
+            "futureIndicative": [
+                {
+                    "word": "aconsejaré",
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%A9&key=0836dffa1b9f1322a2405fff7a0bd714",
+                    "translation": "will advise"
+                },
+                {
+                    "word": "aconsejarás",
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%A1s&key=de6f75e70981081e9d07be9b598111ec",
+                    "translation": "will advise"
+                },
+                {
+                    "word": "aconsejará",
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%A1&key=9bf4b760cfef670a2a5bc39cfb29ce82",
+                    "translation": "will advise"
+                },
+                {
+                    "word": "aconsejaremos",
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=aconsejaremos&key=c36a277c93b545a01df15702468b313d",
+                    "translation": "will advise"
+                },
+                {
+                    "word": "aconsejaréis",
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%A9is&key=9d6fe05e7f3ecbe884fe8acff9389baf&region=spain",
+                    "translation": "will advise"
+                },
+                {
+                    "word": "aconsejarán",
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%A1n&key=ac33a90a3917318e014157b67387dc0c",
+                    "translation": "will advise"
+                },
+                {
+                    "word": "aconsejarás",
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=aconsejar%C3%A1s&key=de6f75e70981081e9d07be9b598111ec&region=latam",
+                    "translation": "will advise"
+                }
+            ]
+        }
+    },
+    "verbLang": "es",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"aconsejar\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "adList": "[\"adTopLarge\",\"adSide1\",\"adSide3\",\"adMiddle2\",\"adMiddle1\"]",
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 7730
+    }
+}

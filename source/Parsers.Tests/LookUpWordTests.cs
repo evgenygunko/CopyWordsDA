@@ -491,7 +491,7 @@ namespace CopyWords.Parsers.Tests
 
             spanishDictPageParserMock.Verify(x => x.ParseWordJson(html));
             spanishDictPageParserMock.Verify(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>()));
-            spanishDictPageParserMock.Verify(x => x.ParseSound(It.IsAny<Models.SpanishDict.WordJsonModel>()));
+            spanishDictPageParserMock.Verify(x => x.ParseSoundURL(It.IsAny<Models.SpanishDict.WordJsonModel>()));
             spanishDictPageParserMock.Verify(x => x.ParseDefinitions(It.IsAny<Models.SpanishDict.WordJsonModel>()));
         }
 

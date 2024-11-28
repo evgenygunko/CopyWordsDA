@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Web;
+﻿using System.Web;
 using CopyWords.Parsers.Exceptions;
 using CopyWords.Parsers.Models.SpanishDict;
 using HtmlAgilityPack;
@@ -13,9 +12,7 @@ namespace CopyWords.Parsers
 
         string ParseHeadword(WordJsonModel wordObj);
 
-        string? ParseSound(WordJsonModel? wordObj);
-
-        string CreateSoundURL(string sound);
+        string? ParseSoundURL(WordJsonModel? wordObj);
 
         IEnumerable<SpanishDictDefinition> ParseDefinitions(WordJsonModel? wordObj);
     }
@@ -85,14 +82,12 @@ namespace CopyWords.Parsers
         /// <summary>
         /// Gets ID of the sound file (which would be part of URL).
         /// </summary>
-        public string? ParseSound(WordJsonModel? wordObj)
+        public string? ParseSoundURL(WordJsonModel? wordObj)
         {
             if (wordObj == null)
             {
                 return null;
             }
-
-            string? soundId = null;
 
             Models.SpanishDict.Pronunciation[] pronunciations = wordObj
                 .resultCardHeaderProps
@@ -100,20 +95,21 @@ namespace CopyWords.Parsers
                 .headword
                 .pronunciations;
 
-            foreach (Models.SpanishDict.Pronunciation pronunciation in pronunciations)
+            Pronunciation? pronunciation = pronunciations.FirstOrDefault(x => x.region == "SPAIN" && x.hasVideo == 1);
+            if (pronunciation == null)
             {
-                if (string.Equals(pronunciation.region, "SPAIN", StringComparison.OrdinalIgnoreCase)
-                    && pronunciation.speakerId == 7)
-                {
-                    soundId = pronunciation.id.ToString(CultureInfo.InvariantCulture);
-                    break;
-                }
+                // If can't find a sound for the Spanish region, try to find one for Latin America.
+                pronunciation = pronunciations.FirstOrDefault(x => x.region == "LATAM" && x.hasVideo == 1);
             }
 
-            return soundId;
-        }
+            string? soundURL = null;
+            if (pronunciation != null)
+            {
+                soundURL = $"{SoundBaseUrl}lang_es_pron_{pronunciation.id}_speaker_{pronunciation.speakerId}_syllable_all_version_{pronunciation.version}.mp4";
+            }
 
-        public string CreateSoundURL(string sound) => $"{SoundBaseUrl}lang_es_pron_{sound}_speaker_7_syllable_all_version_50.mp4";
+            return soundURL;
+        }
 
         public IEnumerable<SpanishDictDefinition> ParseDefinitions(WordJsonModel? wordObj)
         {

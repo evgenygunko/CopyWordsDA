@@ -178,13 +178,12 @@ namespace CopyWords.Parsers
             }
 
             string headwordES = _spanishDictPageParser.ParseHeadword(wordObj);
-            string? sound = _spanishDictPageParser.ParseSound(wordObj);
 
-            string? soundUrl = null;
+            string? soundUrl = _spanishDictPageParser.ParseSoundURL(wordObj);
             string? soundFileName = null;
-            if (!string.IsNullOrEmpty(sound))
+
+            if (!string.IsNullOrEmpty(soundUrl))
             {
-                soundUrl = _spanishDictPageParser.CreateSoundURL(sound);
                 soundFileName = $"{headwordES}.mp4";
             }
 
