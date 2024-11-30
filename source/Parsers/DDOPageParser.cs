@@ -181,6 +181,12 @@ namespace CopyWords.Parsers
             {
                 var definitionsDivs = div.SelectNodes("./div/div/span/span[contains(@class, 'definition')]");
 
+                if (definitionsDivs == null)
+                {
+                    // Sometimes the word is marked as "Faste udtryk" and has one more level of div blocks.
+                    definitionsDivs = div.SelectNodes("./div/div/div/span/span[contains(@class, 'definition')]");
+                }
+
                 if (definitionsDivs != null && definitionsDivs.Count > 0)
                 {
                     foreach (var definitionDiv in definitionsDivs)

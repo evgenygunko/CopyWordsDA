@@ -528,6 +528,26 @@ namespace CopyWords.Parsers.Tests
             definition1.Examples.First().Original.Should().Be("håndværkerne [arbejdede] på højtryk for at gøre teatersalen klar.");
         }
 
+        [TestMethod]
+        public void ParseDefinitions_ForFrabede_ReturnsOneDefinition()
+        {
+            string content = GetSimpleHTMLPage("frabede.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            List<DDODefinition> definitions = parser.ParseDefinitions();
+
+            definitions.Should().HaveCount(1);
+
+            DDODefinition definition1 = definitions.First();
+            definition1.Meaning.Should().Be("bede sig fritaget for; afslå; sige nej tak til");
+            definition1.Tag.Should().BeNull();
+            definition1.Examples.Should().HaveCount(2);
+            definition1.Examples.First().Original.Should().Be("ud af 2,4 millioner husstande har kun 36.000 frabedt sig reklametryksager.");
+            definition1.Examples.Last().Original.Should().Be("Al opmærksomhed på min fødselsdag den 21. sept. frabedes.");
+        }
+
         #endregion
 
         #region Tests for ParseVariants

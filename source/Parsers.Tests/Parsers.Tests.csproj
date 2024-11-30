@@ -54,6 +54,9 @@
     <None Update="TestPages\ddo\Dannebrog.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestPages\ddo\frabede.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestPages\ddo\Grillspyd.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
