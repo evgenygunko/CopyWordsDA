@@ -261,6 +261,11 @@ namespace CopyWords.Parsers
                 }
             }
 
+            if (examples.Count == 0)
+            {
+                examples.Add("-");
+            }
+
             return examples;
         }
 

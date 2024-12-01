@@ -430,13 +430,35 @@ namespace CopyWords.Parsers.Tests
             DDODefinition definition2 = definitions.Skip(1).First();
             definition2.Meaning.Should().Be("grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning");
             definition2.Tag.Should().Be("slang");
-            definition2.Examples.Should().HaveCount(0);
+            definition2.Examples.Should().HaveCount(1);
+            definition2.Examples.First().Original.Should().Be("-");
 
             DDODefinition definition3 = definitions.Skip(2).First();
             definition3.Meaning.Should().Be("person der er særlig dygtig til et spil, håndværk el.lign.");
             definition3.Tag.Should().Be("slang");
             definition3.Examples.Should().HaveCount(1);
             definition3.Examples.First().Original.Should().Be("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb.");
+        }
+
+        [TestMethod]
+        public void ParseDefinitions_ForFladtang_ReturnsOneEmptyExample()
+        {
+            // When there are no examples, we still want to add an empty example to allow copying back the meaning.
+            // (Copying requires selecting one or more examples.)
+            string content = GetSimpleHTMLPage("fladtang.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            List<DDODefinition> definitions = parser.ParseDefinitions();
+
+            definitions.Should().HaveCount(1);
+
+            DDODefinition definition1 = definitions.First(); ;
+            definition1.Meaning.Should().Be("lille tang med aflange, flade og riflede kæber som bruges til at holde fast på små genstande fx i forbindelse med elektriker- eller hobbyarbejde");
+            definition1.Tag.Should().BeNull();
+            definition1.Examples.Should().HaveCount(1);
+            definition1.Examples.First().Original.Should().Be("-");
         }
 
         [TestMethod]
