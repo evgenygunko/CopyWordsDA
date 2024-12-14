@@ -15,6 +15,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IClipboardService _clipboardService;
 
         public DefinitionViewModel(
+            string word,
             Definition definition,
             ICopySelectedToClipboardService copySelectedToClipboardService,
             IDialogService dialogService,
@@ -25,7 +26,7 @@ namespace CopyWords.Core.ViewModels
             _dialogService = dialogService;
             _clipboardService = clipboardService;
 
-            Word = definition.Headword.Original;
+            Word = word;
             HeadwordViewModel = new HeadwordViewModel(definition.Headword, settingsService);
 
             PartOfSpeech = definition.PartOfSpeech;

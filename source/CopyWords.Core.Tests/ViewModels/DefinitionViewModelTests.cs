@@ -38,23 +38,23 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task CompileAndCopyToClipboard_WhenWordIsCopied_DisplaysToast()
         {
-            const string textToCopy = "test word";
-            Definition definition = new Definition(new Headword(textToCopy, null, null), PartOfSpeech: "verb", Endings: "", Enumerable.Empty<Context>());
+            const string word = "word";
+            Definition definition = new Definition(new Headword("the headword", null, null), PartOfSpeech: "verb", Endings: "", Enumerable.Empty<Context>());
 
-            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
+            var sut = new DefinitionViewModel(word, definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
-            _clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(textToCopy));
+            _clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(word));
             _dialogServiceMock.Verify(x => x.DisplayToast("Front copied"));
         }
 
         [TestMethod]
         public async Task CompileAndCopyToClipboard_WhenWordIsNotCopied_DisplaysWarning()
         {
-            string textToCopy = string.Empty;
-            Definition definition = new Definition(new Headword(textToCopy, null, null), PartOfSpeech: "verb", Endings: "", Enumerable.Empty<Context>());
+            const string word = "";
+            Definition definition = new Definition(new Headword(string.Empty, null, null), PartOfSpeech: "verb", Endings: "", Enumerable.Empty<Context>());
 
-            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
+            var sut = new DefinitionViewModel(word, definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
             _clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(It.IsAny<string>()), Times.Never);
@@ -64,12 +64,12 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task CompileAndCopyToClipboard_WhenPrepareWordForCopyingExceptionThrown_ShowsWarning()
         {
-            const string textToCopy = "test word";
-            Definition definition = new Definition(new Headword(textToCopy, null, null), PartOfSpeech: "verb", Endings: "", Enumerable.Empty<Context>());
+            const string word = "word";
+            Definition definition = new Definition(new Headword("the headword", null, null), PartOfSpeech: "verb", Endings: "", Enumerable.Empty<Context>());
 
             _func.Setup(x => x.Invoke(It.IsAny<DefinitionViewModel>())).ThrowsAsync(new PrepareWordForCopyingException("exception from unit tests"));
 
-            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
+            var sut = new DefinitionViewModel(word, definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
             _clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(It.IsAny<string>()), Times.Never);
@@ -79,12 +79,12 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task CompileAndCopyToClipboard_WhenExceptionThrown_ShowsWarning()
         {
-            const string textToCopy = "test word";
-            Definition definition = new Definition(new Headword(textToCopy, null, null), PartOfSpeech: "verb", Endings: "", Enumerable.Empty<Context>());
+            const string word = "word";
+            Definition definition = new Definition(new Headword("the headword", null, null), PartOfSpeech: "verb", Endings: "", Enumerable.Empty<Context>());
 
             _func.Setup(x => x.Invoke(It.IsAny<DefinitionViewModel>())).ThrowsAsync(new Exception("exception from unit tests"));
 
-            var sut = new DefinitionViewModel(definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
+            var sut = new DefinitionViewModel(word, definition, _copySelectedToClipboardServiceMock.Object, _dialogServiceMock.Object, _clipboardServiceMock.Object, _settingsServiceMock.Object);
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
             _clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(It.IsAny<string>()), Times.Never);

@@ -536,6 +536,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "grillspyd",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -567,6 +568,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "underholdning",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -604,6 +606,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "kigge",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -641,6 +644,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "høj",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -681,6 +685,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "ligeud",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -712,6 +717,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "i forb. med",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -752,6 +758,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "haj",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -770,7 +777,7 @@ namespace CopyWords.Core.Tests.Services
 
         private ObservableCollection<DefinitionViewModel> CreateVMForCoche()
         {
-            var definition = new Definition(new Headword("coche", null, null), PartOfSpeech: "MASCULINE NOUN", Endings: "",
+            var definition = new Definition(new Headword("el coche", null, null), PartOfSpeech: "MASCULINE NOUN", Endings: "",
                 new List<Context>
                 {
                     new Context("(vehicle)", "1",
@@ -794,6 +801,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "coche",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -810,7 +818,7 @@ namespace CopyWords.Core.Tests.Services
 
         private ObservableCollection<DefinitionViewModel> CreateVMForCasa()
         {
-            var definition = new Definition(new Headword("casa", null, null), PartOfSpeech: "feminine noun", Endings: "",
+            var definition = new Definition(new Headword("la casa", null, null), PartOfSpeech: "feminine noun", Endings: "",
                 new List<Context>
                 {
                     new Context("(dwelling)", "1",
@@ -824,6 +832,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "casa",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -833,53 +842,6 @@ namespace CopyWords.Core.Tests.Services
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
                 definitionVM
-            };
-
-            return definitionVMs;
-        }
-
-        private ObservableCollection<DefinitionViewModel> CreateVMForAfeitar()
-        {
-            var definition1 = new Definition(new Headword("afeitar", null, null), PartOfSpeech: "TRANSITIVE VERB", Endings: "",
-                new List<Context>
-                {
-                    new Context("(to remove hair)", "1",
-                        new List<Meaning>
-                        {
-                            new Meaning("to shave", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Para el verano, papá decidió afeitar al perro.", English: "For the summer, dad decided to shave the dog.", Russian: "") }),
-                        }),
-                }
-            );
-            var definitionVM1 = new DefinitionViewModel(
-                definition1,
-                _copySelectedToClipboardServiceMock.Object,
-                _dialogServiceMock.Object,
-                _clipboardServiceMock.Object,
-                _settingsServiceMock.Object);
-
-            var definition2 = new Definition(new Headword("afeitarse", null, null), PartOfSpeech: "REFLEXIVE VERB", Endings: "",
-                new List<Context>
-                {
-                    new Context("(to shave oneself)", "1",
-                        new List<Meaning>
-                        {
-                            new Meaning("to shave", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "¿Con qué frecuencia te afeitas la barba?", English: "How often do you shave your beard?", Russian: "") }),
-                        }),
-                }
-            );
-            var definitionVM2 = new DefinitionViewModel(
-                definition2,
-                _copySelectedToClipboardServiceMock.Object,
-                _dialogServiceMock.Object,
-                _clipboardServiceMock.Object,
-                _settingsServiceMock.Object);
-
-            var definitionVMs = new ObservableCollection<DefinitionViewModel>()
-            {
-                definitionVM1,
-                definitionVM2
             };
 
             return definitionVMs;
@@ -907,6 +869,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "bien",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -941,6 +904,7 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
             var definitionVM1 = new DefinitionViewModel(
+                "guay",
                 definition1,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -965,6 +929,7 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
             var definitionVM2 = new DefinitionViewModel(
+                "guay",
                 definition2,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -1005,6 +970,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "luce",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -1021,7 +987,7 @@ namespace CopyWords.Core.Tests.Services
 
         private ObservableCollection<DefinitionViewModel> CreateVMForSaltamontes()
         {
-            var definition = new Definition(new Headword("saltamontes", null, null), PartOfSpeech: "MASCULINE NOUN", Endings: "",
+            var definition = new Definition(new Headword("el saltamontes", null, null), PartOfSpeech: "MASCULINE NOUN", Endings: "",
                 new List<Context>
                 {
                     new Context("(animal)", "1",
@@ -1037,6 +1003,7 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
+                "saltamontes",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
@@ -1053,7 +1020,7 @@ namespace CopyWords.Core.Tests.Services
 
         private ObservableCollection<DefinitionViewModel> CreateVMForVeneno()
         {
-            var definition = new Definition(new Headword("veneno", null, null), PartOfSpeech: "MASCULINE NOUN", Endings: "",
+            var definition = new Definition(new Headword("el veneno", null, null), PartOfSpeech: "MASCULINE NOUN", Endings: "",
                 new List<Context>
                 {
                     new Context("(toxic substance)", "1",
@@ -1079,6 +1046,7 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
             var definitionVM = new DefinitionViewModel(
+                "veneno",
                 definition,
                 _copySelectedToClipboardServiceMock.Object,
                 _dialogServiceMock.Object,
