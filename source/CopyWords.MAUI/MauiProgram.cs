@@ -2,7 +2,6 @@
 using CommunityToolkit.Maui.Storage;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
-using CopyWords.MAUI.Views;
 using CopyWords.Parsers;
 using CopyWords.Parsers.Services;
 using Microsoft.Extensions.Logging;
@@ -29,9 +28,6 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-
-        builder.Services.AddSingleton<MainPage>();
-        builder.Services.AddSingleton<SettingsPage>();
 
         // Proxies for .net classes which don't have interfaces
         builder.Services.AddSingleton<IShellService, ShellService>();
