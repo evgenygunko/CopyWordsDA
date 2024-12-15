@@ -17,32 +17,25 @@
                   HeightRequest="48">
 
             <TitleBar.Content>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+                <!-- Show Settings dialog -->
+                <Button HorizontalOptions="End"
+                        ToolTipProperties.Text="Open Settings dialog"
+                        Margin="10,0,0,0"
+                        Clicked="ButtonSettings_Clicked"
+                        Padding="5"
+                        WidthRequest="42"
+                        HeightRequest="42"
+                        MaximumHeightRequest="42"
+                        MaximumWidthRequest="42"
+                        BackgroundColor="{StaticResource Gray200}">
 
-                    <!-- Show Settings dialog -->
-                    <Button Grid.Column="2"
-                            ToolTipProperties.Text="Open Settings dialog"
-                            Margin="10,0,0,0"
-                            Clicked="ButtonSettings_Clicked"
-                            Padding="5"
-                            WidthRequest="42"
-                            HeightRequest="42"
-                            MaximumHeightRequest="42"
-                            MaximumWidthRequest="42"
-                            BackgroundColor="{StaticResource Gray200}">
-
-                        <Button.ImageSource>
-                            <FontImageSource
+                    <Button.ImageSource>
+                        <FontImageSource
                                 FontFamily="MaterialIconsOutlined-Regular"
                                 Glyph="&#xe8b8;"
                                 Size="26" />
-                        </Button.ImageSource>
-                    </Button>
-                </Grid>
+                    </Button.ImageSource>
+                </Button>
             </TitleBar.Content>
         </TitleBar>
     </Window.TitleBar>
