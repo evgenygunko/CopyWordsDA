@@ -2,13 +2,16 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:Class="CopyWords.MAUI.Views.MeaningsView">
 
     <ContentView.Resources>
         <ResourceDictionary>
-            <toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+            <!-- Workaround for a crash on Mac: type IsStringNotNullOrWhiteSpaceConverter cannot be found -->
+            <!--<toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />-->
+            <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
 
             <DataTemplate x:Key="translationsTemplate"
                           x:DataType="viewmodels:MeaningViewModel">
@@ -19,7 +22,7 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        
+
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
@@ -45,7 +48,7 @@
                                     HorizontalOptions="Start"/>
                             </Border>
                         </HorizontalStackLayout>
-                    </Grid>                    
+                    </Grid>
 
                     <!--Examples -->
                     <views:ExamplesView Margin="0,0,0,10" />

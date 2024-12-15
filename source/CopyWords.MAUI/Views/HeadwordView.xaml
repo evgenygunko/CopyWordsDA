@@ -2,6 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              xmlns:models="clr-namespace:CopyWords.Parsers.Models;assembly=Parsers"
@@ -10,12 +11,14 @@
 
     <ContentView.Resources>
         <ResourceDictionary>
-            <toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+            <!-- Workaround for a crash on Mac: type IsStringNotNullOrWhiteSpaceConverter cannot be found -->
+            <!--<toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />-->
+            <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
         </ResourceDictionary>
     </ContentView.Resources>
-    
-    <Border Grid.Row="3"     
-                IsVisible="{Binding Russian, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"                        
+
+    <Border Grid.Row="3"
+                IsVisible="{Binding Russian, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
                 BackgroundColor="{StaticResource TranslationBoxColor}"
                 Stroke="#CCCCCC"
                 StrokeThickness="1">
@@ -52,7 +55,7 @@
             </Label>
 
             <!-- English -->
-            <CheckBox Grid.Row="1" Grid.Column="0" x:Name="checkBoxEN" 
+            <CheckBox Grid.Row="1" Grid.Column="0" x:Name="checkBoxEN"
                       IsChecked="{Binding IsEnglishTranslationChecked}"
                       IsVisible="{Binding ShowEnglishTranslation}"/>
             <Label Grid.Row="1" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center"

@@ -2,13 +2,16 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:Class="CopyWords.MAUI.Views.DefinitionsView">
 
     <ContentView.Resources>
         <ResourceDictionary>
-            <toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+            <!-- Workaround for a crash on Mac: type IsStringNotNullOrWhiteSpaceConverter cannot be found -->
+            <!--<toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />-->
+            <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
 
             <DataTemplate x:Key="definitionsTemplate"
                           x:DataType="viewmodels:DefinitionViewModel">
@@ -35,7 +38,7 @@
 
                         <!-- Endings -->
                         <HorizontalStackLayout Grid.Row="2" IsVisible="{Binding Endings, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
-                            <Border                         
+                            <Border
                                     BackgroundColor="{StaticResource GreyBoxColor}"
                                     Stroke="#CCCCCC"
                                     StrokeThickness="1"
@@ -47,23 +50,23 @@
 
                         <!-- Copy front, copy back, copy endings, and copy examples buttons -->
                         <HorizontalStackLayout Grid.Row="3" Spacing="5" Margin="0,10,0,0">
-                            <Button Text="Copy Front" FontSize="12" 
+                            <Button Text="Copy Front" FontSize="12"
                                 BackgroundColor="{Binding CopyFrontButtonColor}"
                                 Command="{Binding CopyFrontCommand}" />
 
-                            <Button Text="Copy Back" FontSize="12" 
+                            <Button Text="Copy Back" FontSize="12"
                                 BackgroundColor="{Binding CopyBackButtonColor}"
                                 Command="{Binding CopyBackCommand}" />
 
-                            <Button Text="Copy Part of Speech" FontSize="12" 
+                            <Button Text="Copy Part of Speech" FontSize="12"
                                 BackgroundColor="{Binding CopyPartOfSpeechButtonColor}"
                                 Command="{Binding CopyPartOfSpeechCommand}"></Button>
 
-                            <Button Text="Copy Endings" FontSize="12" 
+                            <Button Text="Copy Endings" FontSize="12"
                                 BackgroundColor="{Binding CopyEndingsButtonColor}"
                                 Command="{Binding CopyEndingsCommand}"></Button>
 
-                            <Button Text="Copy Examples" FontSize="12" 
+                            <Button Text="Copy Examples" FontSize="12"
                                 BackgroundColor="{Binding CopyExamplesButtonColor}"
                                 Command="{Binding CopyExamplesCommand}" />
                         </HorizontalStackLayout>

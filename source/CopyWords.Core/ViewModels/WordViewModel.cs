@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿#nullable enable
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -11,16 +12,13 @@ namespace CopyWords.Core.ViewModels
     {
         private readonly ISaveSoundFileService _saveSoundFileService;
         private readonly IDialogService _dialogService;
-        private readonly IClipboardService _clipboardService;
 
         public WordViewModel(
             ISaveSoundFileService saveSoundFileService,
-            IDialogService dialogService,
-            IClipboardService clipboardService)
+            IDialogService dialogService)
         {
             _saveSoundFileService = saveSoundFileService;
             _dialogService = dialogService;
-            _clipboardService = clipboardService;
         }
 
         #region Properties
@@ -32,12 +30,12 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PlaySoundCommand))]
         [NotifyPropertyChangedFor(nameof(PlaySoundButtonColor))]
-        private string _soundUrl;
+        private string? soundUrl;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSoundFileCommand))]
         [NotifyPropertyChangedFor(nameof(SaveSoundButtonColor))]
-        private string _soundFileName;
+        private string? soundFileName;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PlaySoundCommand))]
@@ -58,13 +56,36 @@ namespace CopyWords.Core.ViewModels
         #region Commands
 
         [RelayCommand(CanExecute = nameof(CanPlaySound))]
-        public void PlaySound(object control)
+        public async Task PlaySoundAsync(object control)
         {
+            if (string.IsNullOrEmpty(SoundUrl))
+            {
+                await _dialogService.DisplayAlert("Cannot play sound file", "Cannot play sound file, SoundUrl is null or empty", "OK");
+                return;
+            }
+
             IsBusy = true;
 
             Debug.WriteLine("Will play " + SoundUrl);
 
-            MediaElement mediaElement = (MediaElement)control;
+            var stackSound = (HorizontalStackLayout)control;
+            IView? view = stackSound.Children.SingleOrDefault(x => x.GetType() == typeof(MediaElement));
+
+            if (view is not MediaElement)
+            {
+                await _dialogService.DisplayAlert("Cannot play sound file", "Cannot find MediaElement control in the view", "OK");
+                return;
+            }
+
+            MediaElement mediaElement = (MediaElement)view;
+
+            // Workaround for a bug in MediaElement: 
+            // On MacOS, the app crashes at startup with the runtime exception:
+            // "System.MissingMethodException: No parameterless constructor defined for type 'CommunityToolkit.Maui.Views.MediaElement'."
+            // To resolve this, we create the MediaElement manually in the C# file. 
+            // However, it must be added to the Visual Tree; otherwise, there is no sound.
+            // Reference: https://stackoverflow.com/a/75535084
+            //MediaElement mediaElement = (MediaElement)control;
             mediaElement.Source = MediaSource.FromUri(SoundUrl);
             mediaElement.Play();
 

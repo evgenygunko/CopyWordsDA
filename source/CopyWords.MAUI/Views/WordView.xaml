@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              xmlns:models="clr-namespace:CopyWords.Parsers.Models;assembly=Parsers"
              x:DataType="viewmodels:WordViewModel"
              x:Class="CopyWords.MAUI.Views.WordView">
 
-    <ContentView.Resources>
-        <ResourceDictionary>
-            <toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
-        </ResourceDictionary>
-
-    </ContentView.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -32,17 +25,27 @@
         <BoxView Grid.Row="1" Color="LightGray"  HeightRequest="1" Margin="0,15,0,10" />
 
         <!-- Sound -->
-        <HorizontalStackLayout Grid.Row="2" Spacing="5">
-            <toolkit:MediaElement x:Name="mediaElement" IsVisible="false" ShouldAutoPlay="false" />
+        <HorizontalStackLayout Grid.Row="2" Spacing="5" x:Name="stackSound">
+            <!-- Workaround for a bug in MediaElement:
+                On MacOS, the app crashes at startup with the runtime exception:
+                "System.MissingMethodException: No parameterless constructor defined for type 'CommunityToolkit.Maui.Views.MediaElement'."
+                To resolve this, we create the MediaElement manually in the C# file.
+                However, it must be added to the Visual Tree; otherwise, there is no sound.
+                Reference: https://stackoverflow.com/a/75535084
+            -->
+            <!--<toolkit:MediaElement x:Name="mediaElement" IsVisible="true" ShouldAutoPlay="false" />-->
+            <!--<Button BackgroundColor="{Binding PlaySoundButtonColor}"
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding Source={x:Reference mediaElement}}" >-->
             <Button BackgroundColor="{Binding PlaySoundButtonColor}"
                     Command="{Binding PlaySoundCommand}"
-                    CommandParameter="{Binding Source={x:Reference mediaElement}}" >
+                    CommandParameter="{Binding Source={x:Reference stackSound}}" >
 
                 <Button.ImageSource>
                     <FontImageSource
                         FontFamily="MaterialIconsOutlined-Regular"
                         Glyph="&#xe1c4;"/>
-                </Button.ImageSource>                
+                </Button.ImageSource>
             </Button>
 
             <Button BackgroundColor="{Binding SaveSoundButtonColor}"

@@ -102,7 +102,7 @@ stages:
                       command: 'publish'
                       publishWebProjects: false
                       projects: '**/CopyWords.MAUI.csproj'
-                      arguments: '-c:$(buildConfiguration) -f net8.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64'
+                      arguments: '-c:$(buildConfiguration) -f net9.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64'
                       zipAfterPublish: false
                   condition: eq(variables['Agent.OS'], 'Windows_NT')
 
