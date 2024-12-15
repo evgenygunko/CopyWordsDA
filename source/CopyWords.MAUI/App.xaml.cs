@@ -1,15 +1,20 @@
 ﻿using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using CopyWords.Core.ViewModels;
 
 namespace CopyWords.MAUI;
 
 public partial class App : Application
 {
     private readonly ISettingsService _settingsService;
+    private readonly MainWindowViewModel _mainWindowViewModel;
 
-    public App(ISettingsService settingsService)
+    public App(
+        ISettingsService settingsService,
+        MainWindowViewModel mainWindowViewModel)
     {
         _settingsService = settingsService;
+        _mainWindowViewModel = mainWindowViewModel;
 
         InitializeComponent();
     }
@@ -18,7 +23,7 @@ public partial class App : Application
     {
         AppSettings appSettings = _settingsService.LoadSettings();
 
-        Window window = new Window(new AppShell())
+        Window window = new MainWindow(_mainWindowViewModel)
         {
             Width = appSettings.MainWindowWidth,
             Height = appSettings.MainWindowHeight,

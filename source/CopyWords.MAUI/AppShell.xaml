@@ -5,8 +5,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:CopyWords.MAUI.Views"
     xmlns:local="clr-namespace:CopyWords.MAUI"
+    xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
     Shell.FlyoutBehavior="Disabled"
-    Shell.NavBarIsVisible="True">
+    Shell.NavBarIsVisible="{Binding ShowNavBar}">
+
+    <Shell.BindingContext>
+        <viewmodels:ShellViewModel />
+    </Shell.BindingContext>
 
     <ShellContent
         Title="CopyWords"

@@ -5,17 +5,28 @@
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:DataType="viewmodels:SelectDictionaryViewModel"
              x:Class="CopyWords.MAUI.Views.SelectDictionaryView">
-    
-    <HorizontalStackLayout Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,20">
-        <Label VerticalOptions="Center" Margin="0,0,10,0">Dictionary:</Label>
 
-        <Picker WidthRequest="200"
-                        Margin="0,0,15,0"
-                        ItemsSource="{Binding Parsers}"
-                        ItemDisplayBinding="{Binding Name}"
-                        SelectedItem="{Binding SelectedParser}"/>
+    <Grid Margin="0,0,0,20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label  Grid.Column="0"
+                VerticalOptions="Center"
+                Margin="0,0,10,0">Dictionary:</Label>
 
         <!-- .NET MAUI converts SVG files to PNG files. Therefore, when adding an SVG file to your .NET MAUI app project, it should be referenced from XAML or C# with a .png extension.-->
-        <Image Source="{Binding SelectedParser.ImageName}" WidthRequest="32" HeightRequest="32" />
-    </HorizontalStackLayout>
+        <Image  Grid.Column="1"
+                Source="{Binding SelectedParser.ImageName}"
+                Margin="0,0,10,0"
+                WidthRequest="32"
+                HeightRequest="32" />
+
+        <Picker Grid.Column="2"
+                ItemsSource="{Binding Parsers}"
+                ItemDisplayBinding="{Binding Name}"
+                SelectedItem="{Binding SelectedParser}"/>
+    </Grid>
 </ContentView>

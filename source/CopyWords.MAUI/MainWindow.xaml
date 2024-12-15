@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:local="clr-namespace:CopyWords.MAUI"
+        xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+        x:DataType="viewmodels:MainWindowViewModel"
+        x:Class="CopyWords.MAUI.MainWindow">
+
+    <Window.Page>
+        <local:AppShell />
+    </Window.Page>
+
+    <Window.TitleBar>
+        <TitleBar x:Name="titleBar"
+                  Title="{Binding Title}"
+                  Subtitle="{Binding Subtitle}"
+                  HeightRequest="48">
+
+            <TitleBar.Content>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Show Settings dialog -->
+                    <Button Grid.Column="2"
+                            ToolTipProperties.Text="Open Settings dialog"
+                            Margin="10,0,0,0"
+                            Clicked="ButtonSettings_Clicked"
+                            Padding="5"
+                            WidthRequest="42"
+                            HeightRequest="42"
+                            MaximumHeightRequest="42"
+                            MaximumWidthRequest="42"
+                            BackgroundColor="{StaticResource Gray200}">
+
+                        <Button.ImageSource>
+                            <FontImageSource
+                                FontFamily="MaterialIconsOutlined-Regular"
+                                Glyph="&#xe8b8;"
+                                Size="26" />
+                        </Button.ImageSource>
+                    </Button>
+                </Grid>
+            </TitleBar.Content>
+        </TitleBar>
+    </Window.TitleBar>
+</Window>

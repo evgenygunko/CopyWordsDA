@@ -28,7 +28,6 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-
         // Proxies for .net classes which don't have interfaces
         builder.Services.AddSingleton<IShellService, ShellService>();
         builder.Services.AddSingleton<IFileIOService, FileIOService>();
@@ -49,6 +48,7 @@ public static class MauiProgram
         builder.Services.AddHttpClient<IFileDownloader, FileDownloader>();
         builder.Services.AddHttpClient<ITranslatorAPIClient, TranslatorAPIClient>();
 
+        builder.Services.AddSingleton<MainWindowViewModel>();
         builder.Services.AddSingleton<MainViewModel>();
         builder.Services.AddSingleton<WordViewModel>();
         builder.Services.AddSingleton<SelectDictionaryViewModel>();
