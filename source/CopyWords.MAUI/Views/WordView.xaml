@@ -36,10 +36,10 @@
             <!--<toolkit:MediaElement x:Name="mediaElement" IsVisible="true" ShouldAutoPlay="false" />-->
             <!--<Button BackgroundColor="{Binding PlaySoundButtonColor}"
                     Command="{Binding PlaySoundCommand}"
-                    CommandParameter="{Binding Source={x:Reference mediaElement}}" >-->
+                    CommandParameter="{Binding Source={x:Reference mediaElement}, x:DataType=MediaElement}" >-->
             <Button BackgroundColor="{Binding PlaySoundButtonColor}"
                     Command="{Binding PlaySoundCommand}"
-                    CommandParameter="{Binding Source={x:Reference stackSound}}" >
+                    CommandParameter="{Binding Source={x:Reference stackSound}, x:DataType=HorizontalStackLayout}" >
 
                 <Button.ImageSource>
                     <FontImageSource
