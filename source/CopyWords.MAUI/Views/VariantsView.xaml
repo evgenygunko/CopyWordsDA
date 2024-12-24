@@ -4,10 +4,10 @@
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              x:Class="CopyWords.MAUI.Views.VariantsView">
-    
+
     <ContentView.Resources>
         <ResourceDictionary>
-            <DataTemplate x:Key="variantTemplate" 
+            <DataTemplate x:Key="variantTemplate"
                           x:DataType="viewmodels:VariantViewModel">
 
                 <Label>
@@ -25,7 +25,8 @@
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <VerticalStackLayout 
+    <VerticalStackLayout
+            x:DataType="viewmodels:WordViewModel"
             BindableLayout.ItemsSource="{Binding Variants}"
             BindableLayout.ItemTemplate="{StaticResource variantTemplate}"
             Margin="0,10,0,0" />

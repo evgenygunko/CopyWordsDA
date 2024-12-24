@@ -40,7 +40,8 @@
     </ContentView.Resources>
 
     <StackLayout>
-        <CollectionView ItemsSource="{Binding ContextViewModels}" 
+        <CollectionView x:DataType="viewmodels:DefinitionViewModel"
+                        ItemsSource="{Binding ContextViewModels}"
                         ItemTemplate="{StaticResource contextTemplateSelector}" />
     </StackLayout>
 

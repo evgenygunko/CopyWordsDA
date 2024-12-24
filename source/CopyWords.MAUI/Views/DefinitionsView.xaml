@@ -83,6 +83,7 @@
     </ContentView.Resources>
 
     <VerticalStackLayout
+            x:DataType="viewmodels:WordViewModel"
             BindableLayout.ItemsSource="{Binding DefinitionViewModels}"
             BindableLayout.ItemTemplate="{StaticResource definitionsTemplate}" />
 

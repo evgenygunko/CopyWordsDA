@@ -58,6 +58,7 @@
     </ContentView.Resources>
 
     <VerticalStackLayout
+            x:DataType="viewmodels:ContextViewModel"
             BindableLayout.ItemsSource="{Binding MeaningViewModels}"
             BindableLayout.ItemTemplate="{StaticResource translationsTemplate}" />
 

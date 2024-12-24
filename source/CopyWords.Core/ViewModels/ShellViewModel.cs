@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿// Ignore Spelling: Nav
+
+using System.Runtime.InteropServices;
 
 namespace CopyWords.Core.ViewModels
 {

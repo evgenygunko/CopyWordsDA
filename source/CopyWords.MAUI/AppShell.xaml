@@ -6,6 +6,7 @@
     xmlns:views="clr-namespace:CopyWords.MAUI.Views"
     xmlns:local="clr-namespace:CopyWords.MAUI"
     xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+    x:DataType="viewmodels:ShellViewModel"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="{Binding ShowNavBar}">
 
