@@ -229,7 +229,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task CompileBackAsync_WhenOnlyRussianTranslationIsSelected_RemovedTralingBrTag()
+        public async Task CompileBackAsync_WhenOnlyRussianTranslationIsSelected_DoesNotAddSpan()
         {
             var definitionVMs = CreateVMForGrillspyd();
             //definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -240,7 +240,7 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span>");
+            result.Should().Be("шашлыки");
         }
 
         [TestMethod]

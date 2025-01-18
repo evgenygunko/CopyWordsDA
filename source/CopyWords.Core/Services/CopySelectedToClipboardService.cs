@@ -86,19 +86,6 @@ namespace CopyWords.Core.Services
                 return string.Empty;
             }
 
-            StringBuilder sb = new StringBuilder();
-
-            // If translation selected, add it first
-            var headwordVM = definitionViewModel.HeadwordViewModel;
-            if (headwordVM.IsRussianTranslationChecked && !string.IsNullOrEmpty(headwordVM.Russian))
-            {
-                sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headwordVM.Russian) + "<br>");
-            }
-            if (headwordVM.IsEnglishTranslationChecked && !string.IsNullOrEmpty(headwordVM.English))
-            {
-                sb.Append(string.Format(CultureInfo.CurrentCulture, TemplateGrayText, headwordVM.English) + "<br>");
-            }
-
             List<string> backMeanings = new();
             int imageIndex = 0;
 
@@ -148,7 +135,21 @@ namespace CopyWords.Core.Services
                 }
             }
 
-            // Now go through all meanings and add numbering
+            StringBuilder sb = new StringBuilder();
+
+            // If translation selected, add it first
+            string format = (backMeanings.Count > 0) ? TemplateGrayText : "{0}";
+            var headwordVM = definitionViewModel.HeadwordViewModel;
+            if (headwordVM.IsRussianTranslationChecked && !string.IsNullOrEmpty(headwordVM.Russian))
+            {
+                sb.Append(string.Format(CultureInfo.CurrentCulture, format, headwordVM.Russian) + "<br>");
+            }
+            if (headwordVM.IsEnglishTranslationChecked && !string.IsNullOrEmpty(headwordVM.English))
+            {
+                sb.Append(string.Format(CultureInfo.CurrentCulture, format, headwordVM.English) + "<br>");
+            }
+
+            //Now go through all meanings and add numbering
             int count = backMeanings.Count;
             int i = 1;
 
