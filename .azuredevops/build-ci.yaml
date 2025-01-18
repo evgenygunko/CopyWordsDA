@@ -9,6 +9,9 @@ pool:
     # Uncomment to run on on-prem agent
     #name: Default
 
+variables:
+    - group: AccessTokens
+
 stages:
     - stage: Build
 
@@ -104,7 +107,7 @@ stages:
                       projects: '**/CopyWords.MAUI.csproj'
                       arguments: '-c:$(buildConfiguration) -f net9.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64'
                       zipAfterPublish: false
-                  condition: eq(variables['Agent.OS'], 'Windows_NT')
+                  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
 
                 - task: CopyFiles@2
                   displayName: '[Windows] Copy build output to artifact staging directory'

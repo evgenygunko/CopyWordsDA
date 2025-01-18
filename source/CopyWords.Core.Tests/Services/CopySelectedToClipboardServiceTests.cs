@@ -229,6 +229,21 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
+        public async Task CompileBackAsync_WhenOnlyRussianTranslationIsSelected_RemovedTralingBrTag()
+        {
+            var definitionVMs = CreateVMForGrillspyd();
+            //definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
+            definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = false;
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string result = await sut.CompileBackAsync(definitionVMs[0]);
+
+            result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span>");
+        }
+
+        [TestMethod]
         public async Task CompileBackAsync_WhenEnglishTranslationIsSelected_AddsTranslationToResult()
         {
             var definitionVMs = CreateVMForGrillspyd();

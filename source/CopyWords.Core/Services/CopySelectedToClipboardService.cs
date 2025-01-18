@@ -170,7 +170,13 @@ namespace CopyWords.Core.Services
                 i++;
             }
 
-            return sb.ToString();
+            string text = sb.ToString();
+            if (text.EndsWith("<br>"))
+            {
+                text = text.Substring(0, text.LastIndexOf("<br>"));
+            }
+
+            return text;
         }
 
         public Task<string> CompilePartOfSpeechAsync(DefinitionViewModel definitionViewModel) => Task.FromResult(definitionViewModel.PartOfSpeech);
