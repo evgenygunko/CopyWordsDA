@@ -1,4 +1,6 @@
-﻿#nullable enable
+﻿// Ignore Spelling: Ffmpeg
+
+#nullable enable
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using CommunityToolkit.Maui.Storage;

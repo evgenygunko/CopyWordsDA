@@ -47,12 +47,14 @@ public static class MauiProgram
         builder.Services.AddHttpClient<ISaveImageFileService, SaveImageFileService>();
         builder.Services.AddHttpClient<IFileDownloader, FileDownloader>();
         builder.Services.AddHttpClient<ITranslatorAPIClient, TranslatorAPIClient>();
+        builder.Services.AddHttpClient<IUpdateService, UpdateService>();
 
         builder.Services.AddSingleton<MainWindowViewModel>();
         builder.Services.AddSingleton<MainViewModel>();
         builder.Services.AddSingleton<WordViewModel>();
         builder.Services.AddSingleton<SelectDictionaryViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
+        builder.Services.AddSingleton<GetUpdateViewModel>();
 
         return builder.Build();
     }

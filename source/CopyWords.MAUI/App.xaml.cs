@@ -1,4 +1,6 @@
-﻿using CopyWords.Core.Models;
+﻿// Ignore Spelling: App
+
+using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 
@@ -7,14 +9,20 @@ namespace CopyWords.MAUI;
 public partial class App : Application
 {
     private readonly ISettingsService _settingsService;
+    private readonly IUpdateService _updateService;
     private readonly MainWindowViewModel _mainWindowViewModel;
+    private readonly GetUpdateViewModel _getUpdateViewModel;
 
     public App(
         ISettingsService settingsService,
-        MainWindowViewModel mainWindowViewModel)
+        IUpdateService updateService,
+        MainWindowViewModel mainWindowViewModel,
+        GetUpdateViewModel getUpdateViewModel)
     {
         _settingsService = settingsService;
+        _updateService = updateService;
         _mainWindowViewModel = mainWindowViewModel;
+        _getUpdateViewModel = getUpdateViewModel;
 
         InitializeComponent();
     }
@@ -23,8 +31,9 @@ public partial class App : Application
     {
         AppSettings appSettings = _settingsService.LoadSettings();
 
-        Window window = new MainWindow(_mainWindowViewModel)
+        Window window = new MainWindow(_updateService, _getUpdateViewModel)
         {
+            BindingContext = _mainWindowViewModel,
             Width = appSettings.MainWindowWidth,
             Height = appSettings.MainWindowHeight,
             X = appSettings.MainWindowXPos,

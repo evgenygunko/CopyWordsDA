@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿// Ignore Spelling: Verbum Coche Substantiv Intetkøn Foru Forkortelse Guay Fælleskøn Frontl Bien Adverbium Adjektiv
+
+using System.Collections.ObjectModel;
 using AutoFixture;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;

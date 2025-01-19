@@ -132,6 +132,9 @@
     <MauiXaml Update="Views\ExamplesView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\GetUpdatePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\HeadwordView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

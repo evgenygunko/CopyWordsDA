@@ -1,4 +1,6 @@
-﻿using System.Web;
+﻿// Ignore Spelling: Json Dict
+
+using System.Web;
 using CopyWords.Parsers.Exceptions;
 using CopyWords.Parsers.Models.SpanishDict;
 using HtmlAgilityPack;

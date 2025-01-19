@@ -1,4 +1,6 @@
-﻿using CopyWords.MAUI.Views;
+﻿// Ignore Spelling: App
+
+using CopyWords.MAUI.Views;
 
 namespace CopyWords.MAUI;
 

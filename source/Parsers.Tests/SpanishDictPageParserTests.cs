@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿// Ignore Spelling: Coche Veneno Vaso Trotar Saltamontes Preocupes Nocturno Mitologo Iglesia Guay Indígena Hipócrita Dict Afeitar
+
+using System.Reflection;
 using CopyWords.Parsers.Models;
 using CopyWords.Parsers.Models.SpanishDict;
 using FluentAssertions;
