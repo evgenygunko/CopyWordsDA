@@ -126,6 +126,9 @@
     <MauiXaml Update="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\CannotCheckUpdates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\ContextsView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

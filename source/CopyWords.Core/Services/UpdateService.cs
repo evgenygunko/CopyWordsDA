@@ -1,13 +1,14 @@
 ﻿#nullable enable
 using System.Text.Json;
+using CopyWords.Core.Models;
 
 namespace CopyWords.Core.Services
 {
     public interface IUpdateService
     {
-        Task<Version> GetLatestReleaseVersionAsync();
+        Task<ReleaseInfo> GetLatestReleaseVersionAsync();
 
-        Task<bool> IsUpdateAvailableAsync();
+        Task<bool> IsUpdateAvailableAsync(string currentVersion);
     }
 
     public class UpdateService : IUpdateService
@@ -21,7 +22,7 @@ namespace CopyWords.Core.Services
             _httpClient = httpClient;
         }
 
-        public async Task<Version> GetLatestReleaseVersionAsync()
+        public async Task<ReleaseInfo> GetLatestReleaseVersionAsync()
         {
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("request");
 
@@ -30,24 +31,43 @@ namespace CopyWords.Core.Services
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var release = JsonDocument.Parse(jsonResponse);
-            string? versionTag = release.RootElement.GetProperty("tag_name").GetString();
 
-            if (!string.IsNullOrEmpty(versionTag))
+            string versionTag = release.RootElement.GetProperty("tag_name").GetString() ?? "";
+            string latestVersion = versionTag.TrimStart('v');
+            string description = release.RootElement.GetProperty("body").GetString() ?? "";
+
+            string downloadUrl = "";
+            if (release.RootElement.TryGetProperty("assets", out JsonElement assets) && assets.ValueKind == JsonValueKind.Array)
             {
-                versionTag = versionTag.TrimStart('v');
-                if (Version.TryParse(versionTag, out Version? version))
+                foreach (var asset in assets.EnumerateArray())
                 {
-                    return version;
+                    if (asset.TryGetProperty("browser_download_url", out JsonElement urlElement))
+                    {
+                        downloadUrl = urlElement.GetString() ?? "";
+                        break;
+                    }
                 }
             }
 
-            return new Version(0, 0);
+            return new ReleaseInfo(latestVersion, description, downloadUrl);
         }
 
-        public Task<bool> IsUpdateAvailableAsync()
+        public async Task<bool> IsUpdateAvailableAsync(string currentVersion)
         {
-            // todo: to implement
-            return Task.FromResult(false);
+            Version? current;
+            if (!Version.TryParse(currentVersion, out current))
+            {
+                return false;
+            }
+
+            ReleaseInfo releaseInfo = await GetLatestReleaseVersionAsync();
+            Version? latest;
+            if (!Version.TryParse(releaseInfo.LatestVersion, out latest))
+            {
+                return false;
+            }
+
+            return latest > current;
         }
     }
 }
