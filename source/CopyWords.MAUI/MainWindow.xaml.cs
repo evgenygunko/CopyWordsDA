@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.MAUI.Views;
@@ -27,7 +28,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            if (await _updateService.IsUpdateAvailableAsync(AppInfo.VersionString))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && await _updateService.IsUpdateAvailableAsync(AppInfo.VersionString))
             {
                 await Navigation.PushModalAsync(new GetUpdatePage
                 {
