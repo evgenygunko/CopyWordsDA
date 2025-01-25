@@ -119,7 +119,6 @@ namespace CopyWords.Core.Services.Tests
             bool result = await sut.IsUpdateAvailableAsync(currentVersion);
 
             result.Should().BeFalse();
-
         }
 
         [TestMethod]
@@ -153,7 +152,6 @@ namespace CopyWords.Core.Services.Tests
             bool result = await sut.IsUpdateAvailableAsync(currentVersion);
 
             result.Should().BeFalse();
-
         }
 
         [TestMethod]
@@ -187,9 +185,8 @@ namespace CopyWords.Core.Services.Tests
             bool result = await sut.IsUpdateAvailableAsync(currentVersion);
 
             result.Should().BeTrue();
-
-
         }
+
         #endregion
     }
 }

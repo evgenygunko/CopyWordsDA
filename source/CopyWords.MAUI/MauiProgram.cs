@@ -2,9 +2,12 @@
 using CommunityToolkit.Maui.Storage;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
+using CopyWords.Core.ViewModels.Popups;
+using CopyWords.MAUI.Views.Popups;
 using CopyWords.Parsers;
 using CopyWords.Parsers.Services;
 using Microsoft.Extensions.Logging;
+using Syncfusion.Maui.Toolkit.Hosting;
 
 namespace CopyWords.MAUI;
 
@@ -15,6 +18,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .ConfigureSyncfusionToolkit()
             .UseMauiCommunityToolkit()
             .UseMauiCommunityToolkitMediaElement()
             .ConfigureFonts(fonts =>
@@ -55,6 +59,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<SelectDictionaryViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
         builder.Services.AddSingleton<GetUpdateViewModel>();
+        builder.Services.AddSingleton<SelectDictionaryPopupViewModel>();
+
+        builder.Services.AddTransientPopup<SelectDictionaryPopup, SelectDictionaryPopupViewModel>();
 
         return builder.Build();
     }

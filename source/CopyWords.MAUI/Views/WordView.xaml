@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              xmlns:models="clr-namespace:CopyWords.Parsers.Models;assembly=Parsers"
@@ -37,26 +38,32 @@
             <!--<Button BackgroundColor="{Binding PlaySoundButtonColor}"
                     Command="{Binding PlaySoundCommand}"
                     CommandParameter="{Binding Source={x:Reference mediaElement}, x:DataType=MediaElement}" >-->
-            <Button BackgroundColor="{Binding PlaySoundButtonColor}"
+            <ImageButton
+                    WidthRequest="48"
+                    HeightRequest="48"
+                    BackgroundColor="{Binding PlaySoundButtonColor}"
                     Command="{Binding PlaySoundCommand}"
                     CommandParameter="{Binding Source={x:Reference stackSound}, x:DataType=HorizontalStackLayout}" >
 
-                <Button.ImageSource>
+                <ImageButton.Source>
                     <FontImageSource
                         FontFamily="MaterialIconsOutlined-Regular"
                         Glyph="&#xe1c4;"/>
-                </Button.ImageSource>
-            </Button>
+                </ImageButton.Source>
+            </ImageButton>
 
-            <Button BackgroundColor="{Binding SaveSoundButtonColor}"
+            <ImageButton
+                    WidthRequest="48"
+                    HeightRequest="48"
+                    BackgroundColor="{Binding SaveSoundButtonColor}"
                     Command="{Binding SaveSoundFileCommand}" >
 
-                <Button.ImageSource>
+                <ImageButton.Source>
                     <FontImageSource
                         FontFamily="MaterialIconsOutlined-Regular"
                         Glyph="&#xe161;"/>
-                </Button.ImageSource>
-            </Button>
+                </ImageButton.Source>
+            </ImageButton>
         </HorizontalStackLayout>
 
         <!-- Horizontal line -->

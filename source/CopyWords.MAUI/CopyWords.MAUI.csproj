@@ -114,6 +114,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.14" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
+    <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.3" />
     <PackageReference Include="System.Text.Json" Version="9.0.0" />
   </ItemGroup>
 
@@ -142,6 +143,9 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\MeaningsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Popups\SelectDictionaryPopup.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\SelectDictionaryView.xaml">

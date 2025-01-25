@@ -18,24 +18,21 @@
 
             <TitleBar.Content>
                 <!-- Show Settings dialog -->
-                <Button HorizontalOptions="End"
+                <ImageButton
+                        HorizontalOptions="End"
+                        WidthRequest="40"
+                        HeightRequest="40"
                         ToolTipProperties.Text="Open Settings dialog"
-                        Margin="10,0,0,0"
                         Clicked="ButtonSettings_Clicked"
-                        Padding="5"
-                        WidthRequest="42"
-                        HeightRequest="42"
-                        MaximumHeightRequest="42"
-                        MaximumWidthRequest="42"
                         BackgroundColor="{StaticResource Gray200}">
 
-                    <Button.ImageSource>
+                    <ImageButton.Source>
                         <FontImageSource
                                 FontFamily="MaterialIconsOutlined-Regular"
                                 Glyph="&#xe8b8;"
                                 Size="26" />
-                    </Button.ImageSource>
-                </Button>
+                    </ImageButton.Source>
+                </ImageButton>
             </TitleBar.Content>
         </TitleBar>
     </Window.TitleBar>

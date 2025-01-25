@@ -2,6 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
              xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
@@ -12,6 +13,16 @@
             <!-- Workaround for a crash on Mac: type IsStringNotNullOrWhiteSpaceConverter cannot be found -->
             <!--<toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />-->
             <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+
+            <DataTemplate x:Key="copyButtonTemplate"
+                          x:DataType="buttons:SfButton">
+                <Label
+                    Text="{Binding Path=Text, Source={RelativeSource FindAncestor, AncestorType={x:Type buttons:SfButton }}, FallbackValue='Button Text'}"
+                    FontSize="12"
+                    TextColor="White"
+                    VerticalOptions="Center"
+                    Margin="10"/>
+            </DataTemplate>
 
             <DataTemplate x:Key="definitionsTemplate"
                           x:DataType="viewmodels:DefinitionViewModel">
@@ -49,24 +60,34 @@
                         </HorizontalStackLayout>
 
                         <!-- Copy front, copy back, copy endings, and copy examples buttons -->
-                        <HorizontalStackLayout Grid.Row="3" Spacing="5" Margin="0,10,0,0">
-                            <Button Text="Copy Front" FontSize="12"
+                        <HorizontalStackLayout Grid.Row="3" Spacing="8" Margin="0,10,0,0">
+                            <buttons:SfButton
+                                Text="Copy Front"
+                                Content="{StaticResource copyButtonTemplate}"
                                 BackgroundColor="{Binding CopyFrontButtonColor}"
                                 Command="{Binding CopyFrontCommand}" />
 
-                            <Button Text="Copy Back" FontSize="12"
+                            <buttons:SfButton
+                                Text="Copy Back"
+                                Content="{StaticResource copyButtonTemplate}"
                                 BackgroundColor="{Binding CopyBackButtonColor}"
                                 Command="{Binding CopyBackCommand}" />
 
-                            <Button Text="Copy Part of Speech" FontSize="12"
+                            <buttons:SfButton
+                                Text="Copy Part of Speech"
+                                Content="{StaticResource copyButtonTemplate}"
                                 BackgroundColor="{Binding CopyPartOfSpeechButtonColor}"
-                                Command="{Binding CopyPartOfSpeechCommand}"></Button>
+                                Command="{Binding CopyPartOfSpeechCommand}" />
 
-                            <Button Text="Copy Endings" FontSize="12"
+                            <buttons:SfButton
+                                Text="Copy Endings"
+                                Content="{StaticResource copyButtonTemplate}"
                                 BackgroundColor="{Binding CopyEndingsButtonColor}"
-                                Command="{Binding CopyEndingsCommand}"></Button>
+                                Command="{Binding CopyEndingsCommand}" />
 
-                            <Button Text="Copy Examples" FontSize="12"
+                            <buttons:SfButton
+                                Text="Copy Examples"
+                                Content="{StaticResource copyButtonTemplate}"
                                 BackgroundColor="{Binding CopyExamplesButtonColor}"
                                 Command="{Binding CopyExamplesCommand}" />
                         </HorizontalStackLayout>

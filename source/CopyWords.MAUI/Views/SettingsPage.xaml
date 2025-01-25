@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CopyWords.MAUI.Views.SettingsPage"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:DataType="viewmodels:SettingsViewModel"
              Title="Settings"
@@ -55,10 +56,10 @@
                 <Label Grid.Row="0" Text="Export or import settings to a file:" />
 
                 <HorizontalStackLayout Grid.Row="1" Margin="0,10,0,0">
-                    <Button Text="Export"
+                    <buttons:SfButton Text="Export"
                             Margin="0,0,10,0"
                             Command="{Binding ExportSettingsCommand}" />
-                    <Button Text="Import"
+                    <buttons:SfButton Text="Import"
                             Command="{Binding ImportSettingsCommand}" />
                 </HorizontalStackLayout>
             </Grid>
@@ -87,18 +88,19 @@
                 <Label Grid.Row="0" Grid.Column="0" Text="Path to Anki media collection:" />
                 <Entry Grid.Column="0" Grid.Row="1" Margin="0,10,0,0" Text="{Binding AnkiSoundsFolder}" />
 
-                <Button Grid.Column="1"
+                <ImageButton
+                        Grid.Column="1"
                         Grid.Row="1"
                         Margin="10,0,0,0"
                         BackgroundColor="Gray"
                         Command="{Binding PickAnkiSoundsFolderCommand}">
 
-                    <Button.ImageSource>
+                    <ImageButton.Source>
                         <FontImageSource
-                                FontFamily="MaterialIconsOutlined-Regular"
-                                Glyph="&#xe2c8;"/>
-                    </Button.ImageSource>
-                </Button>
+                            FontFamily="MaterialIconsOutlined-Regular"
+                            Glyph="&#xe2c8;"/>
+                    </ImageButton.Source>
+                </ImageButton>
             </Grid>
         </Border>
 
@@ -132,18 +134,19 @@
 
                 <Entry Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Text="{Binding FfmpegBinFolder}" />
 
-                <Button Grid.Row="1"
+                <ImageButton
+                    Grid.Row="1"
                     Grid.Column="3"
                     Margin="10,0,0,0"
                     Command="{Binding PickFfmpegBinFolderCommand}"
                     BackgroundColor="Gray">
 
-                    <Button.ImageSource>
+                    <ImageButton.Source>
                         <FontImageSource
-                        FontFamily="MaterialIconsOutlined-Regular"
-                        Glyph="&#xe2c8;"/>
-                    </Button.ImageSource>
-                </Button>
+                            FontFamily="MaterialIconsOutlined-Regular"
+                            Glyph="&#xe2c8;" />
+                    </ImageButton.Source>
+                </ImageButton>
             </Grid>
         </Border>
 
@@ -191,25 +194,26 @@
 
                 <Entry Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0" Text="{Binding Mp3gainPath}" IsEnabled="{Binding UseMp3gain}"/>
 
-                <Button Grid.Row="2"
+                <ImageButton
+                    Grid.Row="2"
                     Grid.Column="3"
                     Margin="10,0,0,0"
                     Command="{Binding PickMp3gainPathCommand}"
                     BackgroundColor="Gray"
                     IsEnabled="{Binding UseMp3gain}">
 
-                    <Button.ImageSource>
+                    <ImageButton.Source>
                         <FontImageSource
-                        FontFamily="MaterialIconsOutlined-Regular"
-                        Glyph="&#xe2c8;"/>
-                    </Button.ImageSource>
+                            FontFamily="MaterialIconsOutlined-Regular"
+                            Glyph="&#xe2c8;"/>
+                    </ImageButton.Source>
 
-                    <Button.Triggers>
-                        <DataTrigger TargetType="Button" Binding="{Binding UseMp3gain}" Value="false">
+                    <ImageButton.Triggers>
+                        <DataTrigger TargetType="ImageButton" Binding="{Binding UseMp3gain}" Value="false">
                             <Setter Property="BackgroundColor" Value="LightGray" />
                         </DataTrigger>
-                    </Button.Triggers>
-                </Button>
+                    </ImageButton.Triggers>
+                </ImageButton>
             </Grid>
         </Border>
 
@@ -255,11 +259,11 @@
             </Grid>
         </Border>
 
-        <Button Grid.Row="5" Grid.Column="1"
+        <buttons:SfButton Grid.Row="5" Grid.Column="1"
             Margin="0,20,0,0"
             Text="Save"
             Command="{Binding SaveSettingsCommand}"/>
-        <Button Grid.Row="5" Grid.Column="2"
+        <buttons:SfButton Grid.Row="5" Grid.Column="2"
                 Margin="10,20,0,0"
                 Text="Cancel"
                 Command="{Binding CancelCommand}"/>
