@@ -1,5 +1,6 @@
 # Explicitly-ignored files
 Source
+README.md
 
 # Tool configurations
 .editorconfig

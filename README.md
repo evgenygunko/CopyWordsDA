@@ -41,27 +41,36 @@ The settings dialog can be accessed by clicking the **Settings** button in the a
 
 Anki card templates can be customized but unfortunately, they cannot be exported directly. Templates are saved with a "deck," which is a set of cards the user wants to learn. Users can add new cards with new words to their collection, making learning and memorization more efficient.
 
-My card templates:
+1. Open Anki, click Tools -> Manage Note Types -> Add. Add a name for your new note type.
+2. Select your note type and click "Fields". Add the following fields:
+   - Front
+   - Back
+   - PartOfSpeech
+   - Forms
+   - Example
+   - Sound
+   - MyHint
+   - Transcription
+   - Synonymer
 
-- **Forward Card Template**: The word in the foreign language is shown, and you need to guess the translation.
-  ![Forward card front](./img/Forward_card_front_template.png)
-  ![Forward card back](./img/Forward_card_back_template.png)
-  ![Forward card styling](./img/Forward_card_styling.png)
+![Fields](./img/Note_type_fields.png)
 
-- **Reverse Card Template**: The translation is shown, and you need to type the word in the foreign language.
-  ![Reverse card front](./img/Reverse_card_front_template.png)
-  ![Reverse card back](./img/Reverse_card_back_template.png)
-  ![Reverse card styling](./img/Reverse_card_styling.png)
+3. Click cards and add Forward and Reverse cards:
 
-  See examples:
-
-- **Forward Card Template**:
-
+    **Forward Card Template**
+    The word in the foreign language is shown, and you need to guess the translation.
   - [front.html](./card_templates/Forward_card_front_template.html)
+    ![Forward card front](./img/Forward_card_front_template.png)
   - [back.html](./card_templates/Forward_card_back_template.html)
+    ![Forward card back](./img/Forward_card_back_template.png)
   - [styling.css](./card_templates/Forward_card_styling.css)
+    ![Forward card styling](./img/Forward_card_styling.png)
 
-- **Reverse Card Template**:
+    **Reverse Card Template**
+    The translation is shown, and you need to type the word in the foreign language.
   - [front.html](./card_templates/Reverse_card_front_template.html)
+    ![Reverse card front](./img/Reverse_card_front_template.png)
   - [back.html](./card_templates/Reverse_card_back_template.html)
+    ![Reverse card back](./img/Reverse_card_back_template.png)
   - [styling.css](./card_templates/Reverse_card_styling.css)
+    ![Reverse card styling](./img/Reverse_card_styling.png)
