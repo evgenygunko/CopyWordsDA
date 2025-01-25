@@ -1,0 +1,25 @@
+<span style="color: red; font-size: larger;">{{Front}}</span>{{Sound}}<br>
+
+{{#PartOfSpeech}}
+<span style="color: gray;">{{PartOfSpeech}}</span><br>
+{{/PartOfSpeech}}
+
+{{#Synonymer}}
+<span style="color: gray;">Synonymer:&nbsp;{{Synonymer}}</span><br>
+{{/Synonymer}}
+
+{{#Transcription}}
+<span style="color: gray;">{{Transcription}}</span><br>
+{{/Transcription}}
+
+{{#Forms}}
+<span style="color: gray; font-style: italic;">{{Forms}}</span><br>
+{{/Forms}}
+
+{{#MyHint}}
+<a href="#"
+onclick="document.getElementById('hint').style.display='block';return false;">show hint</a>
+<div id="hint" style="display: none;text-align:left">{{MyHint}}</div><br>
+{{/MyHint}}
+
+<span style="color: gray;">{{Example}}</span>
