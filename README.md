@@ -1,10 +1,11 @@
 # CopyWords
 
-This is a helper tool for adding new Danish or Spanish words to [Anki](http://ankisrs.net/) flashcard system.
+CopyWords is a helper tool designed for adding new Danish or Spanish words to the [Anki](http://ankisrs.net/) flashcard system.
 
-I have customized Anki's card template to include additional information about a word, such as transcription, sound file, and more. The CopyWords tool simplifies the process of adding new cards by automatically searching for a word in online dictionaries and parsing different parts of it. You can then click on various "Copy text" buttons to copy the information to the clipboard and paste it into the Anki editor.
+The Anki card template has been customized to include additional details about a word, such as its transcription, sound file, and more. CopyWords simplifies the process of adding new cards by automatically searching for words in online dictionaries and parsing their components. Users can then use the "Copy text" buttons to copy specific information to the clipboard and paste it into the Anki editor.
 
-The app is built using [Microsoft .NET MAUI](https://learn.microsoft.com/en-us/dotnet/maui/what-is-maui) technology and runs on both Windows and macOS.
+The app is built using [Microsoft .NET MAUI](https://learn.microsoft.com/en-us/dotnet/maui/what-is-maui) technology and is compatible with both Windows and macOS.
+
 
 ## How to Use
 

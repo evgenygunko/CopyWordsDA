@@ -42,7 +42,12 @@
                     VerticalOptions="Center"
                     Margin="0,0,0,0"
                     Text="{Binding SelectedParser.Name}" />
+
             </HorizontalStackLayout>
+
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding SelectDictionaryCommand}" />
+            </Border.GestureRecognizers>
         </Border>
 
         <ImageButton
