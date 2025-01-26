@@ -11,7 +11,6 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <Label  Grid.Column="0"
@@ -30,37 +29,45 @@
                 StrokeThickness="1"
                 Padding="10,10,10,10">
 
-            <HorizontalStackLayout>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
                 <!-- .NET MAUI converts SVG files to PNG files. Therefore, when adding an SVG file to your .NET MAUI app project, it should be referenced from XAML or C# with a .png extension.-->
-                <Image  Grid.Column="1"
+                <Image
+                    Grid.Column="0"
                     Source="{Binding SelectedParser.ImageName}"
                     Margin="0,0,10,0"
                     WidthRequest="32"
                     HeightRequest="32" />
 
                 <Label
+                    Grid.Column="1"
                     VerticalOptions="Center"
                     Margin="0,0,0,0"
                     Text="{Binding SelectedParser.Name}" />
 
-            </HorizontalStackLayout>
+                <ImageButton
+                    Grid.Column="2"
+                    Margin="10,0,0,0"
+                    CornerRadius="14"
+                    BackgroundColor="Gray">
+
+                    <ImageButton.Source>
+                        <FontImageSource
+                            FontFamily="MaterialIconsOutlined-Regular"
+                            Glyph="&#xe5c5;"/>
+                    </ImageButton.Source>
+                </ImageButton>
+
+            </Grid>
 
             <Border.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding SelectDictionaryCommand}" />
             </Border.GestureRecognizers>
         </Border>
-
-        <ImageButton
-                Grid.Column="2"
-                Margin="10,0,0,0"
-                BackgroundColor="Gray"
-                Command="{Binding SelectDictionaryCommand}">
-
-            <ImageButton.Source>
-                <FontImageSource
-                            FontFamily="MaterialIconsOutlined-Regular"
-                            Glyph="&#xf1c5;"/>
-            </ImageButton.Source>
-        </ImageButton>
     </Grid>
 </ContentView>
