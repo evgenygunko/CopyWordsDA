@@ -1,7 +1,6 @@
 ﻿// Ignore Spelling: Coche Veneno Vaso Trotar Saltamontes Preocupes Nocturno Mitologo Iglesia Guay Indígena Hipócrita Dict Afeitar
 
 using System.Reflection;
-using CopyWords.Parsers.Models;
 using CopyWords.Parsers.Models.SpanishDict;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -108,7 +107,7 @@ namespace CopyWords.Parsers.Tests
             context.ContextEN.Should().Be("(to remove hair)");
             context.Meanings.Should().HaveCount(1);
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("to shave");
+            meaning.Original.Should().Be("to shave");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Para el verano, papá decidió afeitar al perro.");
@@ -124,7 +123,7 @@ namespace CopyWords.Parsers.Tests
             context.ContextEN.Should().Be("(to shave oneself)");
             context.Meanings.Should().HaveCount(1);
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("to shave");
+            meaning.Original.Should().Be("to shave");
             example = meaning.Examples.First();
             example.Original.Should().Be("¿Con qué frecuencia te afeitas la barba?");
             example.English.Should().Be("How often do you shave your beard?");
@@ -154,7 +153,7 @@ namespace CopyWords.Parsers.Tests
             context.ContextEN.Should().Be("(to run) (Mexico)");
             context.Meanings.Should().HaveCount(1);
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("to jog");
+            meaning.Original.Should().Be("to jog");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Salgo a trotar todas las mañanas.");
@@ -164,7 +163,7 @@ namespace CopyWords.Parsers.Tests
             context.ContextEN.Should().Be("(horseback riding)");
             context.Meanings.Should().HaveCount(1);
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("to trot");
+            meaning.Original.Should().Be("to trot");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Carolina se levanta temprano cada día a sacar el caballo a trotar.");
@@ -174,7 +173,7 @@ namespace CopyWords.Parsers.Tests
             context.ContextEN.Should().Be("(colloquial) (to bustle about)");
             context.Meanings.Should().HaveCount(1);
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("to rush around");
+            meaning.Original.Should().Be("to rush around");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Ya me cansé de estar trotando todo el día.");
@@ -207,14 +206,14 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(2);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("car");
+            meaning.Original.Should().Be("car");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Mi coche no prende porque tiene una falla en el motor.");
             example.English.Should().Be("My car won't start because of a problem with the engine.");
 
             meaning = context.Meanings.Skip(1).First();
-            meaning.Description.Should().Be("automobile");
+            meaning.Original.Should().Be("automobile");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Todos estos coches tienen bolsas de aire.");
@@ -226,14 +225,14 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(2);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("carriage");
+            meaning.Original.Should().Be("carriage");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Los monarcas llegaron en un coche elegante.");
             example.English.Should().Be("The monarchs arrived in an elegant carriage.");
 
             meaning = context.Meanings.Skip(1).First();
-            meaning.Description.Should().Be("coach");
+            meaning.Original.Should().Be("coach");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Los coches de caballos se utilizaban mucho más antes de que se inventara el automóvil.");
@@ -269,7 +268,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(1);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("hypocrite");
+            meaning.Original.Should().Be("hypocrite");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Es una hipócrita. Pues y no va por ahí criticándome a mis espaldas.");
@@ -281,7 +280,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(1);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("hypocritical");
+            meaning.Original.Should().Be("hypocritical");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("No soporto esa sonrisa hipócrita que tiene.");
@@ -315,7 +314,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(2);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("cool (colloquial)");
+            meaning.Original.Should().Be("cool (colloquial)");
             meaning.Examples.Should().HaveCount(2);
             example = meaning.Examples.First();
             example.Original.Should().Be("¿Quieres que veamos la peli en mi ordenador? - ¡Guay, tío!");
@@ -330,7 +329,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(2);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("cool (colloquial)");
+            meaning.Original.Should().Be("cool (colloquial)");
             meaning.Examples.Should().HaveCount(2);
             example = meaning.Examples.First();
             example.Original.Should().Be("La fiesta de anoche estuvo muy guay.");
@@ -340,7 +339,7 @@ namespace CopyWords.Parsers.Tests
             example.English.Should().Be("Your friends are cool, Roberto. Where did you meet them?");
 
             meaning = context.Meanings.Skip(1).First();
-            meaning.Description.Should().Be("super (colloquial)");
+            meaning.Original.Should().Be("super (colloquial)");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("¡Que monopatín tan guay!");
@@ -352,14 +351,14 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(2);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("awesome (colloquial) (adjective)");
+            meaning.Original.Should().Be("awesome (colloquial) (adjective)");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Nos lo pasamos guay en la fiesta de Reme.");
             example.English.Should().Be("We had an awesome time at Reme's party.");
 
             meaning = context.Meanings.Skip(1).First();
-            meaning.Description.Should().Be("great (colloquial) (adjective)");
+            meaning.Original.Should().Be("great (colloquial) (adjective)");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Tu coche nos vendría guay para la excursión.");
@@ -392,7 +391,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(1);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("nightclub");
+            meaning.Original.Should().Be("nightclub");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Este bar va a cerrar pronto, pero hay un club nocturno cerca de aquí que abre hasta las 3 am.");
@@ -424,7 +423,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(2);
 
             Meaning meaning1 = context.Meanings.First();
-            meaning1.Description.Should().Be("venom (of an animal)");
+            meaning1.Original.Should().Be("venom (of an animal)");
             meaning1.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d533b470-18a4-4cae-ad08-3ee8858ae02c.jpg");
             meaning1.Examples.Should().HaveCount(1);
             example = meaning1.Examples.First();
@@ -432,7 +431,7 @@ namespace CopyWords.Parsers.Tests
             example.English.Should().Be("The wound still has venom in it.");
 
             Meaning meaning2 = context.Meanings.Skip(1).First();
-            meaning2.Description.Should().Be("poison");
+            meaning2.Original.Should().Be("poison");
             meaning2.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d07aa7fd-a3fd-4d06-9751-656180d8b1ee.jpg");
             meaning2.Examples.Should().HaveCount(1);
             example = meaning2.Examples.First();
@@ -445,7 +444,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(1);
 
             meaning1 = context.Meanings.First();
-            meaning1.Description.Should().Be("venom");
+            meaning1.Original.Should().Be("venom");
             meaning1.ImageUrl.Should().BeNull();
             meaning1.Examples.Should().HaveCount(1);
             example = meaning1.Examples.First();
@@ -499,7 +498,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(1);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("grasshopper");
+            meaning.Original.Should().Be("grasshopper");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Los saltamontes pueden saltar muy alto.");
@@ -534,7 +533,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(2);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("indigenous");
+            meaning.Original.Should().Be("indigenous");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("El gobierno quiere preservar el folclor y las tradiciones indígenas.");
@@ -543,7 +542,7 @@ namespace CopyWords.Parsers.Tests
             meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/native%252C%2520indigenous.jpg");
 
             meaning = context.Meanings.Skip(1).First();
-            meaning.Description.Should().Be("native");
+            meaning.Original.Should().Be("native");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("La comunidad indígena no está de acuerdo con la tala del bosque.");
@@ -555,7 +554,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(1);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("native");
+            meaning.Original.Should().Be("native");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Este parque natural está protegido por los indígenas que habitan la zona.");
@@ -590,7 +589,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(1);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("church");
+            meaning.Original.Should().Be("church");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Vámonos a la iglesia que la misa comienza pronto.");
@@ -625,7 +624,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCountGreaterThan(1);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("glass");
+            meaning.Original.Should().Be("glass");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Toma un vaso del estante si tienes sed.");
@@ -660,7 +659,7 @@ namespace CopyWords.Parsers.Tests
             context.Meanings.Should().HaveCount(1);
 
             meaning = context.Meanings.First();
-            meaning.Description.Should().Be("don't worry");
+            meaning.Original.Should().Be("don't worry");
             meaning.Examples.Should().HaveCountGreaterThan(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("No te preocupes por los resultados del examen.");

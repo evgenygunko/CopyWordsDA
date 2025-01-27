@@ -8,7 +8,7 @@ namespace CopyWords.Core.ViewModels
     {
         public MeaningViewModel(Meaning meaning)
         {
-            English = meaning.Description;
+            Original = meaning.Original;
             AlphabeticalPosition = meaning.AlphabeticalPosition;
             tag = meaning.Tag;
             ImageUrl = meaning.ImageUrl;
@@ -21,7 +21,7 @@ namespace CopyWords.Core.ViewModels
         }
 
         [ObservableProperty]
-        private string english;
+        private string original;
 
         [ObservableProperty]
         private string alphabeticalPosition;

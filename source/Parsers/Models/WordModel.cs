@@ -24,7 +24,8 @@
         IEnumerable<Meaning> Meanings);
 
     public record Meaning(
-        string Description,
+        string Original,
+        string? Russian,
         string AlphabeticalPosition,
         string? Tag,
         string? ImageUrl,

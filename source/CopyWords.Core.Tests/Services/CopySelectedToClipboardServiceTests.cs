@@ -542,8 +542,13 @@ namespace CopyWords.Core.Tests.Services
                     new Context(ContextEN: "", Position: "",
                         new List<Meaning>
                         {
-                            new Meaning("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning", "1", Tag: null, ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(
+                                Original: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
+                                Russian: "заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле",
+                                AlphabeticalPosition: "1",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
                                 {
                                     new Example("Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver", null, null),
                                     new Example("Det lykkedes mig at få bestilt hovedretten – den velkendte, græske specialitet, som består af grillspyd med skiftevis lammekød og tomater", null, null)
@@ -574,8 +579,12 @@ namespace CopyWords.Core.Tests.Services
                     new Context(ContextEN: "", Position: "",
                         new List<Meaning>
                         {
-                            new Meaning("noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse", "1", Tag: null, ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(Original: "noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse",
+                                Russian: "что-то, что развлекает, радует или отвлекает кого-то, например, представление, более легкий и не особенно требовательный интеллектуальный продукт или приятное занятие",
+                                AlphabeticalPosition: "1",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
                                 {
                                     new Example("8000 medarbejdere skal til fest med god mad og underholdning af bl.a. Hans Otto Bisgaard", null, null),
                                     new Example("vi havde jo ikke radio, TV eller video, så underholdningen bestod mest af kortspil i familien", null, null)
@@ -606,14 +615,14 @@ namespace CopyWords.Core.Tests.Services
                     new Context(ContextEN: "", Position: "",
                         new List<Meaning>
                         {
-                            new Meaning("rette blikket i en bestemt retning", "1", Tag: null, ImageUrl: null,
+                            new Meaning(Original : "rette blikket i en bestemt retning", Russian : "направить взгляд в определенном направлении", AlphabeticalPosition: "1", Tag: null, ImageUrl: null,
                                 new List<Example>()
                                 {
                                     new Example("Børnene kiggede spørgende på hinanden", null, null),
                                     new Example("kig lige en gang!", null, null),
                                     new Example("Han kiggede sig rundt, som om han ledte efter noget", null, null),
                                 }),
-                            new Meaning("undersøge nærmere; sætte sig ind i", "2", Tag: null, ImageUrl: null,
+                            new Meaning(Original: "undersøge nærmere; sætte sig ind i", Russian: "присмотритесь повнимательнее; попасть в", AlphabeticalPosition: "2", Tag: null, ImageUrl: null,
                                 new List<Example>()
                                 {
                                     new Example("hun har kigget på de psykiske eftervirkninger hos voldtagne piger og kvinder", null, null)
@@ -644,14 +653,24 @@ namespace CopyWords.Core.Tests.Services
                     new Context(ContextEN: "", Position: "",
                         new List<Meaning>
                         {
-                            new Meaning("med forholdsvis stor udstrækning i lodret retning", "1", Tag: null, ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(
+                                Original : "med forholdsvis stor udstrækning i lodret retning",
+                                Russian : "с относительно большой протяженностью в вертикальном направлении",
+                                AlphabeticalPosition : "1",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
                                 {
                                     new Example("Overalt var der rejst høje flagstænger med røde og hvide bannere", null, null),
                                     new Example("I de sidste skoleår var jeg den absolut højeste i klassen – med mine 1,90 meter", null, null),
                                 }),
-                            new Meaning("med en forholdsvis stor værdi på en eksisterende eller tænkt skala; af stor størrelse, omfang el.lign.", "2", Tag: null, ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(
+                                Original : "med en forholdsvis stor værdi på en eksisterende eller tænkt skala; af stor størrelse, omfang el.lign.",
+                                Russian : "с относительно большой ценностью в существующих или воображаемых масштабах; большого размера, масштаба и т. д.",
+                                AlphabeticalPosition : "2",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
                                 {
                                     new Example("I år ser det ud til at antallet af rapporterede salmonellatilfælde bliver 40 pct. højere end i fjor", null, null),
                                     new Example("medarbejdere med en negativ holdning til erhvervslivet er ikke i høj kurs", null, null),
@@ -682,18 +701,33 @@ namespace CopyWords.Core.Tests.Services
                     new Context(ContextEN: "", Position: "",
                         new List<Meaning>
                         {
-                            new Meaning("uden at dreje eller skifte kurs om bevægelse eller retning", "1", Tag: null, ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(
+                                Original : "uden at dreje eller skifte kurs om bevægelse eller retning",
+                                Russian : "не поворачиваясь и не меняя курс или направление движения",
+                                AlphabeticalPosition : "1",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
                                 {
                                     new Example("Vi skulle stå med samlede ben, med vægten lagt på hælene og se ligeud", null, null)
                                 }),
-                            new Meaning("uden omsvøb", "2", Tag: null, ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(
+                                Original : "uden omsvøb",
+                                Russian : "без каких-либо обременений",
+                                AlphabeticalPosition : "2",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples : new List<Example>()
                                 {
                                     new Example("det er for at sige det ligeud: skidehamrende-irriterende", null, null)
                                 }),
-                            new Meaning("billet til kørsel uden omstigning med et offentligt transportmiddel", "3", Tag: null, ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(
+                                Original : "billet til kørsel uden omstigning med et offentligt transportmiddel",
+                                Russian : "билет на проезд без пересадки в общественном транспорте",
+                                AlphabeticalPosition : "3",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples : new List<Example>()
                                 {
                                     new Example("To ligeud, sagde moderen da konduktøren kom, – pigerne kører på én billet", null, null)
                                 })
@@ -723,8 +757,13 @@ namespace CopyWords.Core.Tests.Services
                     new Context(ContextEN: "", Position: "",
                         new List<Meaning>
                         {
-                            new Meaning("= i forbindelse med", "1", Tag: null, ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(
+                                Original: "= i forbindelse med",
+                                Russian: "= в связи с",
+                                AlphabeticalPosition: "1",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
                                 {
                                     new Example("Stillingen som sognepræst i Hellebæk og Hornbæk pastorater skal besættes midlertidigt i forb. med et barselsvikariat", null, null),
                                     new Example("Afviklingsselskabet Finansiel Stabilitet forventer at skære yderligere stillinger væk i de næste par måneder ifm. en koncernomlægning", null, null),
@@ -755,18 +794,33 @@ namespace CopyWords.Core.Tests.Services
                     new Context(ContextEN: "", Position: "",
                         new List<Meaning>
                         {
-                            new Meaning("stor, langstrakt bruskfisk", "1", Tag: null, ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(
+                                Original: "stor, langstrakt bruskfisk",
+                                Russian: "крупная, удлиненная хрящевая рыба",
+                                AlphabeticalPosition: "1",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
                                 {
                                     new Example("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", null, null),
                                 }),
-                            new Meaning("grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning", "2", Tag: "SLANG", ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(
+                                Original: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning",
+                                Russian: "жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других",
+                                AlphabeticalPosition: "2",
+                                Tag: "SLANG",
+                                ImageUrl: null,
+                                Examples: new List<Example>()
                                 {
                                     new Example("-", null, null),
                                 }),
-                            new Meaning("person der er særlig dygtig til et spil, håndværk el.lign.", "3", Tag: "SLANG", ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(
+                                Original: "person der er særlig dygtig til et spil, håndværk el.lign.",
+                                Russian: "человек, который особенно умел в игре, ремесле и т. д.",
+                                AlphabeticalPosition: "3",
+                                Tag: "SLANG",
+                                ImageUrl: null,
+                                Examples: new List<Example>()
                                 {
                                     new Example("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", null, null),
                                 })
@@ -800,19 +854,51 @@ namespace CopyWords.Core.Tests.Services
                     new Context("(vehicle)", "1",
                         new List<Meaning>
                         {
-                            new Meaning("car", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Mi coche no prende porque tiene una falla en el motor.", English: "My car won't start because of a problem with the engine.", Russian: "") }),
-                            new Meaning("automobile", "b", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Todos estos coches tienen bolsas de aire.", English: "All these automobiles have airbags.", Russian: "") }),
+                            new Meaning(
+                                Original: "car",
+                                Russian: "автомобиль",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Mi coche no prende porque tiene una falla en el motor.", English: "My car won't start because of a problem with the engine.", Russian: "")
+                                    }),
+                            new Meaning(
+                                Original: "automobile",
+                                Russian: "автомобиль",
+                                AlphabeticalPosition: "b",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Todos estos coches tienen bolsas de aire.", English: "All these automobiles have airbags.", Russian: "")
+                                    }),
                         }),
 
                     new Context("(vehicle led by horses)", "2",
                         new List<Meaning>
                         {
-                            new Meaning("carriage", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Los monarcas llegaron en un coche elegante.", English: "The monarchs arrived in an elegant carriage.", Russian: "") }),
-                            new Meaning("coach", "b", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Los coches de caballos se utilizaban mucho más antes de que se inventara el automóvil.", English: "Horse-drawn coaches were used much more before the invention of the automobile.", Russian: "") }),
+                            new Meaning(
+                                Original: "carriage",
+                                Russian: "карета",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Los monarcas llegaron en un coche elegante.", English: "The monarchs arrived in an elegant carriage.", Russian: "")
+                                    }),
+                            new Meaning(
+                                Original: "coach",
+                                Russian: "пассажирский вагон",
+                                AlphabeticalPosition: "b",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Los coches de caballos se utilizaban mucho más antes de que se inventara el automóvil.", English: "Horse-drawn coaches were used much more before the invention of the automobile.", Russian: "")
+                                    }),
                         })
                 }
             );
@@ -841,8 +927,16 @@ namespace CopyWords.Core.Tests.Services
                     new Context("(dwelling)", "1",
                         new List<Meaning>
                         {
-                            new Meaning("house", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Vivimos en una casa con un gran jardín.", English: "We live in a house with a big garden.", Russian: "") }),
+                            new Meaning(
+                                Original: "house",
+                                Russian: "дом",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Vivimos en una casa con un gran jardín.", English: "We live in a house with a big garden.", Russian: "")
+                                    }),
                         }),
                     // ...
                 }
@@ -872,14 +966,30 @@ namespace CopyWords.Core.Tests.Services
                     new Context("(in good health)", "1",
                         new List<Meaning>
                         {
-                            new Meaning("well", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Últimamente no me he sentido bien.", English: "I haven't felt well lately.", Russian: "") }),
+                            new Meaning(
+                                Original: "well",
+                                Russian: "хорошо",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Últimamente no me he sentido bien.", English: "I haven't felt well lately.", Russian: "")
+                                    }),
                         }),
                     new Context("(properly)", "2",
                         new List<Meaning>
                         {
-                            new Meaning("well", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Si la carne molida no se cocina bien, las bacterias no mueren.", English: "If the ground meat is not cooked well, the bacteria don't die.", Russian: "") }),
+                            new Meaning(
+                                Original: "well",
+                                Russian: "хорошо",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Si la carne molida no se cocina bien, las bacterias no mueren.", English: "If the ground meat is not cooked well, the bacteria don't die.", Russian: "")
+                                    }),
                         }),
                 }
                 // ...
@@ -909,13 +1019,27 @@ namespace CopyWords.Core.Tests.Services
                     new Context("(colloquial) (used to express approval) (Spain)", "1",
                         new List<Meaning>
                         {
-                            new Meaning("cool (colloquial)", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() {
-                                    new Example(Original: "¿Quieres que veamos la peli en mi ordenador? - ¡Guay, tío!", English: "Do you want to watch the movie on my computer? - Cool, man!", Russian: ""),
-                                    new Example(Original: "¡Gané un viaje a Francia! - ¡Guay!", English: "I won a trip to France! - Cool!", Russian: "")
-                                }),
-                            new Meaning("great (colloquial)", "b", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Puedes tomarte el día libre mañana. - ¡Guay!", English: "You can take the day off tomorrow. - Great!", Russian: "") }),
+                            new Meaning(
+                                Original: "cool (colloquial)",
+                                Russian: "классно",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "¿Quieres que veamos la peli en mi ordenador? - ¡Guay, tío!", English: "Do you want to watch the movie on my computer? - Cool, man!", Russian: ""),
+                                        new Example(Original: "¡Gané un viaje a Francia! - ¡Guay!", English: "I won a trip to France! - Cool!", Russian: "")
+                                    }),
+                            new Meaning(
+                                Original: "great (colloquial)",
+                                Russian: "отлично",
+                                AlphabeticalPosition: "b",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Puedes tomarte el día libre mañana. - ¡Guay!", English: "You can take the day off tomorrow. - Great!", Russian: "")
+                                    }),
                         }),
                     // ...
                 }
@@ -934,13 +1058,27 @@ namespace CopyWords.Core.Tests.Services
                     new Context("(colloquial) (extremely good) (Spain)", "1",
                         new List<Meaning>
                         {
-                            new Meaning("cool (colloquial)", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() {
-                                    new Example(Original: "La fiesta de anoche estuvo muy guay.", English: "Last night's party was really cool.", Russian: ""),
-                                    new Example(Original: "Tus amigos son guays, Roberto. ¿Dónde los conociste?", English: "Your friends are cool, Roberto. Where did you meet them?", Russian: "")
-                                }),
-                            new Meaning("super (colloquial)", "b", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "¡Que monopatín tan guay!", English: "That's a super skateboard!", Russian: "") }),
+                            new Meaning(
+                                Original: "cool (colloquial)",
+                                Russian: "классный",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "La fiesta de anoche estuvo muy guay.", English: "Last night's party was really cool.", Russian: ""),
+                                        new Example(Original: "Tus amigos son guays, Roberto. ¿Dónde los conociste?", English: "Your friends are cool, Roberto. Where did you meet them?", Russian: "")
+                                    }),
+                            new Meaning(
+                                Original: "super (colloquial)",
+                                Russian: "супер",
+                                AlphabeticalPosition: "b",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "¡Que monopatín tan guay!", English: "That's a super skateboard!", Russian: "")
+                                    }),
                         }),
                     // ...
                 }
@@ -970,18 +1108,50 @@ namespace CopyWords.Core.Tests.Services
                     new Context("(third person singular)", "1",
                         new List<Meaning>
                         {
-                            new Meaning("he looks (masculine)", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Luce más fuerte. ¿Ha estado yendo al gimnasio?", English: "He looks stronger. Has he been going to the gym?", Russian: ""), }),
-                            new Meaning("she looks (feminine)", "b", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Luce muy bien con el pelo corto.", English: "She looks great with short hair.", Russian: "") }),
-                            new Meaning("it looks", "c", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "¿Llevaste tu uniforme a la tintorería? Luce impecable el día de hoy.", English: "Did you take your uniform to the cleaners? It looks immaculate today.", Russian: "") }),
+                            new Meaning(
+                                Original: "he looks (masculine)",
+                                Russian: "он выглядит",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Luce más fuerte. ¿Ha estado yendo al gimnasio?", English: "He looks stronger. Has he been going to the gym?", Russian: ""),
+                                    }),
+                            new Meaning(
+                                Original: "she looks (feminine)",
+                                Russian: "она выглядит",
+                                AlphabeticalPosition: "b",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Luce muy bien con el pelo corto.", English: "She looks great with short hair.", Russian: "")
+                                    }),
+                            new Meaning(
+                                Original: "it looks",
+                                Russian: "это выглядит",
+                                AlphabeticalPosition: "c",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "¿Llevaste tu uniforme a la tintorería? Luce impecable el día de hoy.", English: "Did you take your uniform to the cleaners? It looks immaculate today.", Russian: "")
+                                    }),
                         }),
                     new Context("(formal) (second person singular)", "2",
                         new List<Meaning>
                         {
-                            new Meaning("you look", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Luce muy elegante, Sra. Vargas. ¿Tiene planes para hoy?", English: "You look very elegant, Mrs. Vargas. Do you have plans for today?", Russian: ""), }),
+                            new Meaning(
+                                Original: "you look",
+                                Russian: "ты выглядишь",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Luce muy elegante, Sra. Vargas. ¿Tiene planes para hoy?", English: "You look very elegant, Mrs. Vargas. Do you have plans for today?", Russian: ""),
+                                    }),
                         })
                 }
             );
@@ -1010,10 +1180,16 @@ namespace CopyWords.Core.Tests.Services
                     new Context("(animal)", "1",
                         new List<Meaning>
                         {
-                            new Meaning("grasshopper", "a", Tag: null, ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/5bf100e5-da54-4be6-a55c-281edcd08b10.jpg",
-                                new List<Example>() {
-                                    new Example(Original: "Los saltamontes pueden saltar muy alto.", English: "Grasshoppers can jump really high.", Russian: "")
-                                })
+                            new Meaning(
+                                Original: "grasshopper",
+                                Russian: "кузнечик",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/5bf100e5-da54-4be6-a55c-281edcd08b10.jpg",
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Los saltamontes pueden saltar muy alto.", English: "Grasshoppers can jump really high.", Russian: "")
+                                    })
                         }),
                     // ...
                 }
@@ -1043,22 +1219,40 @@ namespace CopyWords.Core.Tests.Services
                     new Context("(toxic substance)", "1",
                         new List<Meaning>
                         {
-                            new Meaning("venom (of an animal)", "a", Tag: null, ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d533b470-18a4-4cae-ad08-3ee8858ae02c.jpg",
-                                new List<Example>() {
-                                    new Example(Original: "La herida aún tiene el veneno dentro.", English: "The wound still has venom in it.", Russian: "")
-                                }),
-                            new Meaning("poison", "b", Tag: null, ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d07aa7fd-a3fd-4d06-9751-656180d8b1ee.jpg",
-                                new List<Example>() {
-                                    new Example(Original: "Estos hongos contienen un veneno mortal.", English: "These mushrooms contain a deadly poison.", Russian: "")
-                                })
+                            new Meaning(
+                                Original: "venom (of an animal)",
+                                Russian: "яд (животного)",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d533b470-18a4-4cae-ad08-3ee8858ae02c.jpg",
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "La herida aún tiene el veneno dentro.", English: "The wound still has venom in it.", Russian: "")
+                                    }),
+                            new Meaning(
+                                Original: "poison",
+                                Russian: "яд",
+                                AlphabeticalPosition: "b",
+                                Tag: null,
+                                ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d07aa7fd-a3fd-4d06-9751-656180d8b1ee.jpg",
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Estos hongos contienen un veneno mortal.", English: "These mushrooms contain a deadly poison.", Russian: "")
+                                    })
                         }),
                     new Context("(ill intent)", "2",
                         new List<Meaning>
                         {
-                            new Meaning("venom", "a", Tag: null, ImageUrl: null,
-                                new List<Example>() {
-                                    new Example(Original: "Le espetó con tal veneno que ni se atrevió a responderle.", English: "She spat at him with such venom that he didn't even dare respond.", Russian: "")
-                                })
+                            new Meaning(
+                                Original: "venom",
+                                Russian: "злоба",
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Le espetó con tal veneno que ni se atrevió a responderle.", English: "She spat at him with such venom that he didn't even dare respond.", Russian: "")
+                                    })
                         }),
                 }
             );

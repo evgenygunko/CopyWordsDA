@@ -99,7 +99,7 @@ namespace CopyWords.Core.Services
                     ExampleViewModel exampleVM = meaningVM.ExampleViewModels.FirstOrDefault(x => x.IsChecked);
                     if (exampleVM != null)
                     {
-                        string backMeaning = meaningVM.English;
+                        string backMeaning = meaningVM.Original;
 
                         // We add context only to first translation so that it doesn't clutter view
                         if (!isContextAddedToFirstBackMeaning && !string.IsNullOrEmpty(contextVM.ContextEN))

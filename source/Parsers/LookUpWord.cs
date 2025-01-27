@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿// Ignore Spelling: Downloader Dict ddo
+
+using System.Text;
 using System.Text.RegularExpressions;
 using CopyWords.Parsers.Models;
 using CopyWords.Parsers.Services;
@@ -152,7 +154,9 @@ namespace CopyWords.Parsers
             int pos = 1;
             foreach (var ddoDefinition in ddoDefinitions)
             {
-                meanings.Add(new Meaning(ddoDefinition.Meaning, AlphabeticalPosition: (pos++).ToString(), ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples));
+                // todo: translate
+                string? russian = null;
+                meanings.Add(new Meaning(ddoDefinition.Meaning, russian, AlphabeticalPosition: (pos++).ToString(), ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples));
             }
 
             Context context = new Context(ContextEN: "", Position: "", meanings);
@@ -200,11 +204,16 @@ namespace CopyWords.Parsers
                 List<Context> contexts = new();
                 foreach (var spanishDictContext in spanishDictDefinition.Contexts)
                 {
-                    contexts.Add(new Context(spanishDictContext.ContextEN, spanishDictContext.Position.ToString(), spanishDictContext.Meanings));
+                    // todo: translate
+                    string? russian = null;
+
+                    IEnumerable<Meaning> meanings = spanishDictContext.Meanings.Select(
+                        x => new Meaning(x.Original, Russian: russian, AlphabeticalPosition: x.AlphabeticalPosition, Tag: null, ImageUrl: x.ImageUrl, Examples: x.Examples));
+                    contexts.Add(new Context(spanishDictContext.ContextEN, spanishDictContext.Position.ToString(), meanings));
                 }
 
                 // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-                string meanningToTranslate = contexts.FirstOrDefault()?.Meanings.FirstOrDefault()?.Description + " " + contexts.FirstOrDefault()?.ContextEN
+                string meanningToTranslate = contexts.FirstOrDefault()?.Meanings.FirstOrDefault()?.Original + " " + contexts.FirstOrDefault()?.ContextEN
                     ?? "";
                 IEnumerable<string> examplesToTranslate = contexts.FirstOrDefault()?.Meanings.FirstOrDefault()?.Examples.Select(x => x.Original)
                     ?? Enumerable.Empty<string>();
@@ -234,7 +243,7 @@ namespace CopyWords.Parsers
                 SoundUrl: soundUrl,
                 SoundFileName: soundFileName,
                 Definitions: definitions,
-                Variations: Enumerable.Empty<Variant>() // there are no word variants in SpanishDict 
+                Variations: Enumerable.Empty<Variant>() // there are no word variants in SpanishDict
             );
 
             return wordModel;

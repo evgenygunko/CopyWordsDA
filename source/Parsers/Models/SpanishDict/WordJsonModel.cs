@@ -1,4 +1,5 @@
 ﻿#nullable disable
+#pragma warning disable VSSpell001 // Spell Check
 
 namespace CopyWords.Parsers.Models.SpanishDict
 {
@@ -633,3 +634,5 @@ namespace CopyWords.Parsers.Models.SpanishDict
 
 #pragma warning restore CA1819 // Properties should not return arrays
 }
+
+#pragma warning restore VSSpell001 // Spell Check

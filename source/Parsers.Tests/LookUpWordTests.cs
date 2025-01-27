@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿// Ignore Spelling: Dict Api Afeitar
+
+using System.Text;
 using AutoFixture;
 using CopyWords.Parsers.Models;
 using CopyWords.Parsers.Services;
@@ -391,7 +393,7 @@ namespace CopyWords.Parsers.Tests
             context1.Meanings.Should().HaveCount(3);
 
             Meaning meaning1 = context1.Meanings.First();
-            meaning1.Description.Should().Be("stor, langstrakt bruskfisk");
+            meaning1.Original.Should().Be("stor, langstrakt bruskfisk");
             meaning1.AlphabeticalPosition.Should().Be("1");
             meaning1.Tag.Should().BeNull();
             meaning1.ImageUrl.Should().BeNull();
@@ -400,7 +402,7 @@ namespace CopyWords.Parsers.Tests
             example1.Original.Should().Be("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham");
 
             Meaning meaning2 = context1.Meanings.Skip(1).First();
-            meaning2.Description.Should().Be("grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning");
+            meaning2.Original.Should().Be("grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning");
             meaning2.AlphabeticalPosition.Should().Be("2");
             meaning2.Tag.Should().Be("SLANG");
             meaning2.ImageUrl.Should().BeNull();
@@ -409,7 +411,7 @@ namespace CopyWords.Parsers.Tests
             example2.Original.Should().Be("-");
 
             Meaning meaning3 = context1.Meanings.Skip(2).First();
-            meaning3.Description.Should().Be("person der er særlig dygtig til et spil, håndværk el.lign.");
+            meaning3.Original.Should().Be("person der er særlig dygtig til et spil, håndværk el.lign.");
             meaning3.AlphabeticalPosition.Should().Be("3");
             meaning3.Tag.Should().Be("SLANG");
             meaning3.ImageUrl.Should().BeNull();
@@ -461,7 +463,7 @@ namespace CopyWords.Parsers.Tests
             context1.Meanings.Should().HaveCount(1);
 
             Meaning meaning1 = context1.Meanings.First();
-            meaning1.Description.Should().Be("to shave");
+            meaning1.Original.Should().Be("to shave");
             meaning1.AlphabeticalPosition.Should().Be("a");
             meaning1.Tag.Should().BeNull();
             meaning1.ImageUrl.Should().BeNull();
@@ -480,7 +482,7 @@ namespace CopyWords.Parsers.Tests
             context1.Meanings.Should().HaveCount(1);
 
             meaning1 = context1.Meanings.First();
-            meaning1.Description.Should().Be("to shave");
+            meaning1.Original.Should().Be("to shave");
             meaning1.AlphabeticalPosition.Should().Be("a");
             meaning1.Tag.Should().BeNull();
             meaning1.ImageUrl.Should().BeNull();
@@ -572,9 +574,9 @@ namespace CopyWords.Parsers.Tests
                 new List<Models.SpanishDict.SpanishDictContext>
                 {
                     new Models.SpanishDict.SpanishDictContext(ContextEN: "(to remove hair)", Position: 1,
-                        new List<Meaning>
+                        new List<Models.SpanishDict.Meaning>
                         {
-                            new Meaning("to shave", "a", Tag: null, ImageUrl: null,
+                            new Models.SpanishDict.Meaning(Original: "to shave", AlphabeticalPosition: "a", ImageUrl: null,
                                 new List<Example>() { new Example(Original: "Para el verano, papá decidió afeitar al perro.", English: "For the summer, dad decided to shave the dog.", Russian: "") }),
                         }),
                 });
@@ -583,9 +585,9 @@ namespace CopyWords.Parsers.Tests
                 new List<Models.SpanishDict.SpanishDictContext>
                 {
                     new Models.SpanishDict.SpanishDictContext(ContextEN: "(to shave oneself)", Position: 1,
-                        new List<Meaning>
+                        new List<Models.SpanishDict.Meaning>
                         {
-                            new Meaning("to shave", "a", Tag: null, ImageUrl: null,
+                            new Models.SpanishDict.Meaning(Original: "to shave", AlphabeticalPosition: "a", ImageUrl: null,
                                 new List<Example>() { new Example(Original: "¿Con qué frecuencia te afeitas la barba?", English: "How often do you shave your beard?", Russian: "") }),
                         }),
                 });
@@ -599,15 +601,15 @@ namespace CopyWords.Parsers.Tests
                 new List<Models.SpanishDict.SpanishDictContext>
                 {
                     new Models.SpanishDict.SpanishDictContext(ContextEN: "(dwelling)", Position: 1,
-                        new List<Meaning>
+                        new List<Models.SpanishDict.Meaning>
                         {
-                            new Meaning("house", "a", Tag: null, ImageUrl: null,
+                            new Models.SpanishDict.Meaning(Original: "house", AlphabeticalPosition: "a", ImageUrl: null,
                                 new List<Example>() { new Example(Original: "Vivimos en una casa con un gran jardín.", English: "We live in a house with a big garden.", Russian: "") }),
                         }),
                     new Models.SpanishDict.SpanishDictContext(ContextEN: "(household)", Position: 1,
-                        new List<Meaning>
+                        new List<Models.SpanishDict.Meaning>
                         {
-                            new Meaning("home", "a", Tag: null, ImageUrl: null,
+                            new Models.SpanishDict.Meaning(Original: "home", AlphabeticalPosition: "a", ImageUrl: null,
                                 new List<Example>() { new Example(Original: "Mi casa es donde mi familia y mis amigos están.", English: "My home is where my family and friends are.", Russian: "") }),
                         }),
                 });

@@ -31,7 +31,7 @@
 
                         <Label Grid.Row="0" Grid.Column="0" Text="{Binding AlphabeticalPosition, FallbackValue='AlphabeticalPosition'}" />
                         <Label Grid.Row="0" Grid.Column="1" Text=". &#6158;" />
-                        <Label Grid.Row="0" Grid.Column="2" Text="{Binding English, FallbackValue='English'}" />
+                        <Label Grid.Row="0" Grid.Column="2" Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}" />
 
                         <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="3" IsVisible="{Binding ImageUrl, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
                             <CheckBox x:Name="checkBox" IsChecked="{Binding IsImageChecked}" />

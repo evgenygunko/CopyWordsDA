@@ -53,7 +53,7 @@ namespace CopyWords.Parsers
                     wordObj = JsonConvert.DeserializeObject<WordJsonModel>(json);
 
                     // Now SpanishDict returns a page with a widget from Microsoft Translator when it can't find a word in its database.
-                    // We want to return "not found" in this case.                        
+                    // We want to return "not found" in this case.
                     if (wordObj?.resultCardHeaderProps == null)
                     {
                         wordObj = null;
@@ -146,7 +146,7 @@ namespace CopyWords.Parsers
                 int contextPosition = 1;
                 foreach (Sens sens in senses)
                 {
-                    var meanings = new List<Models.Meaning>();
+                    var meanings = new List<Meaning>();
                     int translationPosition = 0;
 
                     foreach (Translation tr in sens.translations)
@@ -192,7 +192,7 @@ namespace CopyWords.Parsers
                             imageUrl = ImageBaseUrl + encoded;
                         }
 
-                        meanings.Add(new Models.Meaning(fullTranslation, alphabeticalPosition, Tag: null, imageUrl, examples));
+                        meanings.Add(new Meaning(fullTranslation, alphabeticalPosition, imageUrl, examples));
                     }
 
                     // Add context, e.g. "(colloquial) (extremely good) (Spain)"
