@@ -544,7 +544,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
-                                Russian: "заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле",
+                                Translation: "заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -580,7 +580,7 @@ namespace CopyWords.Core.Tests.Services
                         new List<Meaning>
                         {
                             new Meaning(Original: "noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse",
-                                Russian: "что-то, что развлекает, радует или отвлекает кого-то, например, представление, более легкий и не особенно требовательный интеллектуальный продукт или приятное занятие",
+                                Translation: "что-то, что развлекает, радует или отвлекает кого-то, например, представление, более легкий и не особенно требовательный интеллектуальный продукт или приятное занятие",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -615,14 +615,14 @@ namespace CopyWords.Core.Tests.Services
                     new Context(ContextEN: "", Position: "",
                         new List<Meaning>
                         {
-                            new Meaning(Original : "rette blikket i en bestemt retning", Russian : "направить взгляд в определенном направлении", AlphabeticalPosition: "1", Tag: null, ImageUrl: null,
+                            new Meaning(Original : "rette blikket i en bestemt retning", Translation : "направить взгляд в определенном направлении", AlphabeticalPosition: "1", Tag: null, ImageUrl: null,
                                 new List<Example>()
                                 {
                                     new Example(Original : "Børnene kiggede spørgende på hinanden", Translation: null),
                                     new Example(Original : "kig lige en gang!", Translation: null),
                                     new Example(Original : "Han kiggede sig rundt, som om han ledte efter noget", Translation: null),
                                 }),
-                            new Meaning(Original: "undersøge nærmere; sætte sig ind i", Russian: "присмотритесь повнимательнее; попасть в", AlphabeticalPosition: "2", Tag: null, ImageUrl: null,
+                            new Meaning(Original: "undersøge nærmere; sætte sig ind i", Translation: "присмотритесь повнимательнее; попасть в", AlphabeticalPosition: "2", Tag: null, ImageUrl: null,
                                 new List<Example>()
                                 {
                                     new Example(Original : "hun har kigget på de psykiske eftervirkninger hos voldtagne piger og kvinder", Translation: null)
@@ -655,7 +655,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original : "med forholdsvis stor udstrækning i lodret retning",
-                                Russian : "с относительно большой протяженностью в вертикальном направлении",
+                                Translation : "с относительно большой протяженностью в вертикальном направлении",
                                 AlphabeticalPosition : "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -666,7 +666,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original : "med en forholdsvis stor værdi på en eksisterende eller tænkt skala; af stor størrelse, omfang el.lign.",
-                                Russian : "с относительно большой ценностью в существующих или воображаемых масштабах; большого размера, масштаба и т. д.",
+                                Translation : "с относительно большой ценностью в существующих или воображаемых масштабах; большого размера, масштаба и т. д.",
                                 AlphabeticalPosition : "2",
                                 Tag: null,
                                 ImageUrl: null,
@@ -703,7 +703,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original : "uden at dreje eller skifte kurs om bevægelse eller retning",
-                                Russian : "не поворачиваясь и не меняя курс или направление движения",
+                                Translation : "не поворачиваясь и не меняя курс или направление движения",
                                 AlphabeticalPosition : "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -713,7 +713,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original : "uden omsvøb",
-                                Russian : "без каких-либо обременений",
+                                Translation : "без каких-либо обременений",
                                 AlphabeticalPosition : "2",
                                 Tag: null,
                                 ImageUrl: null,
@@ -723,7 +723,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original : "billet til kørsel uden omstigning med et offentligt transportmiddel",
-                                Russian : "билет на проезд без пересадки в общественном транспорте",
+                                Translation : "билет на проезд без пересадки в общественном транспорте",
                                 AlphabeticalPosition : "3",
                                 Tag: null,
                                 ImageUrl: null,
@@ -759,7 +759,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "= i forbindelse med",
-                                Russian: "= в связи с",
+                                Translation: "= в связи с",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -796,7 +796,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "stor, langstrakt bruskfisk",
-                                Russian: "крупная, удлиненная хрящевая рыба",
+                                Translation: "крупная, удлиненная хрящевая рыба",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -806,7 +806,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning",
-                                Russian: "жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других",
+                                Translation: "жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других",
                                 AlphabeticalPosition: "2",
                                 Tag: "SLANG",
                                 ImageUrl: null,
@@ -816,7 +816,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original: "person der er særlig dygtig til et spil, håndværk el.lign.",
-                                Russian: "человек, который особенно умел в игре, ремесле и т. д.",
+                                Translation: "человек, который особенно умел в игре, ремесле и т. д.",
                                 AlphabeticalPosition: "3",
                                 Tag: "SLANG",
                                 ImageUrl: null,
@@ -856,7 +856,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "car",
-                                Russian: "автомобиль",
+                                Translation: "автомобиль",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
@@ -866,7 +866,7 @@ namespace CopyWords.Core.Tests.Services
                                     }),
                             new Meaning(
                                 Original: "automobile",
-                                Russian: "автомобиль",
+                                Translation: "автомобиль",
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
@@ -881,7 +881,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "carriage",
-                                Russian: "карета",
+                                Translation: "карета",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
@@ -891,7 +891,7 @@ namespace CopyWords.Core.Tests.Services
                                     }),
                             new Meaning(
                                 Original: "coach",
-                                Russian: "пассажирский вагон",
+                                Translation: "пассажирский вагон",
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
@@ -929,7 +929,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "house",
-                                Russian: "дом",
+                                Translation: "дом",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
@@ -968,7 +968,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "well",
-                                Russian: "хорошо",
+                                Translation: "хорошо",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
@@ -982,7 +982,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "well",
-                                Russian: "хорошо",
+                                Translation: "хорошо",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
@@ -1021,7 +1021,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "cool (colloquial)",
-                                Russian: "классно",
+                                Translation: "классно",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
@@ -1032,7 +1032,7 @@ namespace CopyWords.Core.Tests.Services
                                     }),
                             new Meaning(
                                 Original: "great (colloquial)",
-                                Russian: "отлично",
+                                Translation: "отлично",
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
@@ -1060,7 +1060,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "cool (colloquial)",
-                                Russian: "классный",
+                                Translation: "классный",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
@@ -1071,7 +1071,7 @@ namespace CopyWords.Core.Tests.Services
                                     }),
                             new Meaning(
                                 Original: "super (colloquial)",
-                                Russian: "супер",
+                                Translation: "супер",
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
@@ -1110,7 +1110,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "he looks (masculine)",
-                                Russian: "он выглядит",
+                                Translation: "он выглядит",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
@@ -1120,7 +1120,7 @@ namespace CopyWords.Core.Tests.Services
                                     }),
                             new Meaning(
                                 Original: "she looks (feminine)",
-                                Russian: "она выглядит",
+                                Translation: "она выглядит",
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
@@ -1130,7 +1130,7 @@ namespace CopyWords.Core.Tests.Services
                                     }),
                             new Meaning(
                                 Original: "it looks",
-                                Russian: "это выглядит",
+                                Translation: "это выглядит",
                                 AlphabeticalPosition: "c",
                                 Tag: null,
                                 ImageUrl: null,
@@ -1144,7 +1144,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "you look",
-                                Russian: "ты выглядишь",
+                                Translation: "ты выглядишь",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
@@ -1182,7 +1182,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "grasshopper",
-                                Russian: "кузнечик",
+                                Translation: "кузнечик",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/5bf100e5-da54-4be6-a55c-281edcd08b10.jpg",
@@ -1221,7 +1221,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "venom (of an animal)",
-                                Russian: "яд (животного)",
+                                Translation: "яд (животного)",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d533b470-18a4-4cae-ad08-3ee8858ae02c.jpg",
@@ -1231,7 +1231,7 @@ namespace CopyWords.Core.Tests.Services
                                     }),
                             new Meaning(
                                 Original: "poison",
-                                Russian: "яд",
+                                Translation: "яд",
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d07aa7fd-a3fd-4d06-9751-656180d8b1ee.jpg",
@@ -1245,7 +1245,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "venom",
-                                Russian: "злоба",
+                                Translation: "злоба",
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,

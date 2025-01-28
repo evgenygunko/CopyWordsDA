@@ -156,7 +156,7 @@ namespace CopyWords.Parsers
             {
                 // todo: translate
                 string? russian = null;
-                meanings.Add(new Meaning(ddoDefinition.Meaning, russian, AlphabeticalPosition: (pos++).ToString(), ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples));
+                meanings.Add(new Meaning(Original: ddoDefinition.Meaning, Translation: russian, AlphabeticalPosition: (pos++).ToString(), ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples));
             }
 
             Context context = new Context(ContextEN: "", Position: "", meanings);
@@ -204,7 +204,7 @@ namespace CopyWords.Parsers
                     string? russian = null;
 
                     IEnumerable<Meaning> meanings = spanishDictContext.Meanings.Select(
-                        x => new Meaning(x.Original, Russian: russian, AlphabeticalPosition: x.AlphabeticalPosition, Tag: null, ImageUrl: x.ImageUrl, Examples: x.Examples));
+                        x => new Meaning(Original: x.Original, Translation: russian, AlphabeticalPosition: x.AlphabeticalPosition, Tag: null, ImageUrl: x.ImageUrl, Examples: x.Examples));
                     contexts.Add(new Context(spanishDictContext.ContextEN, spanishDictContext.Position.ToString(), meanings));
                 }
 

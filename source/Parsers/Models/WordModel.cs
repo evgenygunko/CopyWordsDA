@@ -25,7 +25,7 @@
 
     public record Meaning(
         string Original,
-        string? Russian,
+        string? Translation,
         string AlphabeticalPosition,
         string? Tag,
         string? ImageUrl,
