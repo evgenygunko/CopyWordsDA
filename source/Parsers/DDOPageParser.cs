@@ -196,7 +196,7 @@ namespace CopyWords.Parsers
 
                         // Parse examples only for this definition
                         IEnumerable<string> examples = ParseExamplesForDefinition(definitionDiv);
-                        IEnumerable<Example> examplesList = examples.Select(x => new Example(Original: x, English: null, Russian: null));
+                        IEnumerable<Example> examplesList = examples.Select(x => new Example(Original: x, Translation: null));
 
                         definitions.Add(new DDODefinition(meaning, tag, examplesList));
                     }

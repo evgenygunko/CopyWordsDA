@@ -207,10 +207,10 @@ namespace CopyWords.Core.Services
                     sb.Append(CultureInfo.CurrentCulture, $"<span style=\"color: rgba(0, 0, 0, 1)\">{exampleVM.Original}</span>");
                 }
 
-                if (!string.IsNullOrEmpty(exampleVM.English))
+                if (!string.IsNullOrEmpty(exampleVM.Translation))
                 {
                     sb.Append("&nbsp;");
-                    sb.Append("<span style=\"color: rgba(0, 0, 0, 0.4)\">" + exampleVM.English + "</span>");
+                    sb.Append("<span style=\"color: rgba(0, 0, 0, 0.4)\">" + exampleVM.Translation + "</span>");
                 }
 
                 if (i < count)

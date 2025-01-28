@@ -111,7 +111,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Para el verano, papá decidió afeitar al perro.");
-            example.English.Should().Be("For the summer, dad decided to shave the dog.");
+            example.Translation.Should().Be("For the summer, dad decided to shave the dog.");
 
             // afeitarse
             definition = result[1];
@@ -126,7 +126,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Original.Should().Be("to shave");
             example = meaning.Examples.First();
             example.Original.Should().Be("¿Con qué frecuencia te afeitas la barba?");
-            example.English.Should().Be("How often do you shave your beard?");
+            example.Translation.Should().Be("How often do you shave your beard?");
         }
 
         [TestMethod]
@@ -157,7 +157,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Salgo a trotar todas las mañanas.");
-            example.English.Should().Be("I go jogging every morning.");
+            example.Translation.Should().Be("I go jogging every morning.");
 
             context = definition.Contexts.Skip(1).First();
             context.ContextEN.Should().Be("(horseback riding)");
@@ -167,7 +167,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Carolina se levanta temprano cada día a sacar el caballo a trotar.");
-            example.English.Should().Be("Carolina gets up early every day to take the horse out to trot.");
+            example.Translation.Should().Be("Carolina gets up early every day to take the horse out to trot.");
 
             context = definition.Contexts.Skip(2).First();
             context.ContextEN.Should().Be("(colloquial) (to bustle about)");
@@ -177,7 +177,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Ya me cansé de estar trotando todo el día.");
-            example.English.Should().Be("I'm tired of rushing around all day.");
+            example.Translation.Should().Be("I'm tired of rushing around all day.");
         }
 
         [TestMethod]
@@ -210,14 +210,14 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Mi coche no prende porque tiene una falla en el motor.");
-            example.English.Should().Be("My car won't start because of a problem with the engine.");
+            example.Translation.Should().Be("My car won't start because of a problem with the engine.");
 
             meaning = context.Meanings.Skip(1).First();
             meaning.Original.Should().Be("automobile");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Todos estos coches tienen bolsas de aire.");
-            example.English.Should().Be("All these automobiles have airbags.");
+            example.Translation.Should().Be("All these automobiles have airbags.");
 
             // 2. (vehicle led by horses)
             context = definition.Contexts.Skip(1).First();
@@ -229,14 +229,14 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Los monarcas llegaron en un coche elegante.");
-            example.English.Should().Be("The monarchs arrived in an elegant carriage.");
+            example.Translation.Should().Be("The monarchs arrived in an elegant carriage.");
 
             meaning = context.Meanings.Skip(1).First();
             meaning.Original.Should().Be("coach");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Los coches de caballos se utilizaban mucho más antes de que se inventara el automóvil.");
-            example.English.Should().Be("Horse-drawn coaches were used much more before the invention of the automobile.");
+            example.Translation.Should().Be("Horse-drawn coaches were used much more before the invention of the automobile.");
 
             // ...
         }
@@ -272,7 +272,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Es una hipócrita. Pues y no va por ahí criticándome a mis espaldas.");
-            example.English.Should().Be("She's a hypocrite. It turns out she goes around criticizing me behind my back.");
+            example.Translation.Should().Be("She's a hypocrite. It turns out she goes around criticizing me behind my back.");
 
             // (false)
             context = definition.Contexts.Skip(1).First();
@@ -284,7 +284,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("No soporto esa sonrisa hipócrita que tiene.");
-            example.English.Should().Be("I cannot stand that hypocritical smile of his.");
+            example.Translation.Should().Be("I cannot stand that hypocritical smile of his.");
         }
 
         [TestMethod]
@@ -318,10 +318,10 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(2);
             example = meaning.Examples.First();
             example.Original.Should().Be("¿Quieres que veamos la peli en mi ordenador? - ¡Guay, tío!");
-            example.English.Should().Be("Do you want to watch the movie on my computer? - Cool, man!");
+            example.Translation.Should().Be("Do you want to watch the movie on my computer? - Cool, man!");
             example = meaning.Examples.Skip(1).First();
             example.Original.Should().Be("¡Gané un viaje a Francia! - ¡Guay!");
-            example.English.Should().Be("I won a trip to France! - Cool!");
+            example.Translation.Should().Be("I won a trip to France! - Cool!");
 
             // 2. (colloquial) (extremely good) (Spain)
             context = definition.Contexts.Skip(1).First();
@@ -333,17 +333,17 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(2);
             example = meaning.Examples.First();
             example.Original.Should().Be("La fiesta de anoche estuvo muy guay.");
-            example.English.Should().Be("Last night's party was really cool.");
+            example.Translation.Should().Be("Last night's party was really cool.");
             example = meaning.Examples.Skip(1).First();
             example.Original.Should().Be("Tus amigos son guays, Roberto. ¿Dónde los conociste?");
-            example.English.Should().Be("Your friends are cool, Roberto. Where did you meet them?");
+            example.Translation.Should().Be("Your friends are cool, Roberto. Where did you meet them?");
 
             meaning = context.Meanings.Skip(1).First();
             meaning.Original.Should().Be("super (colloquial)");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("¡Que monopatín tan guay!");
-            example.English.Should().Be("That's a super skateboard!");
+            example.Translation.Should().Be("That's a super skateboard!");
 
             // 3. (colloquial) (extremely well) (Spain)
             context = definition.Contexts.Skip(2).First();
@@ -355,14 +355,14 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Nos lo pasamos guay en la fiesta de Reme.");
-            example.English.Should().Be("We had an awesome time at Reme's party.");
+            example.Translation.Should().Be("We had an awesome time at Reme's party.");
 
             meaning = context.Meanings.Skip(1).First();
             meaning.Original.Should().Be("great (colloquial) (adjective)");
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Tu coche nos vendría guay para la excursión.");
-            example.English.Should().Be("It would be great if we could use your car for the trip.");
+            example.Translation.Should().Be("It would be great if we could use your car for the trip.");
         }
 
         [TestMethod]
@@ -395,7 +395,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Este bar va a cerrar pronto, pero hay un club nocturno cerca de aquí que abre hasta las 3 am.");
-            example.English.Should().Be("This bar is going to close soon, but there's a nightclub nearby that's open until 3 am.");
+            example.Translation.Should().Be("This bar is going to close soon, but there's a nightclub nearby that's open until 3 am.");
         }
 
         [TestMethod]
@@ -428,7 +428,7 @@ namespace CopyWords.Parsers.Tests
             meaning1.Examples.Should().HaveCount(1);
             example = meaning1.Examples.First();
             example.Original.Should().Be("La herida aún tiene el veneno dentro.");
-            example.English.Should().Be("The wound still has venom in it.");
+            example.Translation.Should().Be("The wound still has venom in it.");
 
             Meaning meaning2 = context.Meanings.Skip(1).First();
             meaning2.Original.Should().Be("poison");
@@ -436,7 +436,7 @@ namespace CopyWords.Parsers.Tests
             meaning2.Examples.Should().HaveCount(1);
             example = meaning2.Examples.First();
             example.Original.Should().Be("Estos hongos contienen un veneno mortal.");
-            example.English.Should().Be("These mushrooms contain a deadly poison.");
+            example.Translation.Should().Be("These mushrooms contain a deadly poison.");
 
             // 2. (ill intent)
             context = definition.Contexts.Skip(1).First();
@@ -449,7 +449,7 @@ namespace CopyWords.Parsers.Tests
             meaning1.Examples.Should().HaveCount(1);
             example = meaning1.Examples.First();
             example.Original.Should().Be("Le espetó con tal veneno que ni se atrevió a responderle.");
-            example.English.Should().Be("She spat at him with such venom that he didn't even dare respond.");
+            example.Translation.Should().Be("She spat at him with such venom that he didn't even dare respond.");
         }
 
         [TestMethod]
@@ -502,7 +502,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Los saltamontes pueden saltar muy alto.");
-            example.English.Should().Be("Grasshoppers can jump really high.");
+            example.Translation.Should().Be("Grasshoppers can jump really high.");
 
             meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/5bf100e5-da54-4be6-a55c-281edcd08b10.jpg");
         }
@@ -537,7 +537,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("El gobierno quiere preservar el folclor y las tradiciones indígenas.");
-            example.English.Should().Be("The government wants to preserve the indigenous folklore and traditions.");
+            example.Translation.Should().Be("The government wants to preserve the indigenous folklore and traditions.");
 
             meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/native%252C%2520indigenous.jpg");
 
@@ -546,7 +546,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("La comunidad indígena no está de acuerdo con la tala del bosque.");
-            example.English.Should().Be("The native community is against the clearing of the forest.");
+            example.Translation.Should().Be("The native community is against the clearing of the forest.");
 
             // 2. (indigenous person)
             context = definition.Contexts.Skip(1).First();
@@ -558,7 +558,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Este parque natural está protegido por los indígenas que habitan la zona.");
-            example.English.Should().Be("This natural park is protected by the natives that inhabit the area.");
+            example.Translation.Should().Be("This natural park is protected by the natives that inhabit the area.");
 
             meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/0ca649f9-134a-4210-ae48-2a8bbadb32cc.jpg");
         }
@@ -593,7 +593,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Vámonos a la iglesia que la misa comienza pronto.");
-            example.English.Should().Be("Let's go to the church; mass starts soon.");
+            example.Translation.Should().Be("Let's go to the church; mass starts soon.");
 
             meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/temple%253B%2520church.jpg");
         }
@@ -628,7 +628,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCount(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("Toma un vaso del estante si tienes sed.");
-            example.English.Should().Be("Get a glass from the shelf if you're thirsty.");
+            example.Translation.Should().Be("Get a glass from the shelf if you're thirsty.");
 
             meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/Glass%2520%2528empty%2529.jpg");
         }
@@ -663,7 +663,7 @@ namespace CopyWords.Parsers.Tests
             meaning.Examples.Should().HaveCountGreaterThan(1);
             example = meaning.Examples.First();
             example.Original.Should().Be("No te preocupes por los resultados del examen.");
-            example.English.Should().Be("Don't worry about the results of the test.");
+            example.Translation.Should().Be("Don't worry about the results of the test.");
 
             meaning.ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/don%2527t%2520worry.jpg");
         }

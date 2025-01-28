@@ -154,7 +154,7 @@ namespace CopyWords.Parsers
                         var examples = new List<Models.Example>();
                         foreach (Example ex in tr.examples)
                         {
-                            examples.Add(new Models.Example(Original: ex.textEs, English: ex.textEn, Russian: null));
+                            examples.Add(new Models.Example(Original: ex.textEs, Translation: ex.textEn));
                         }
 
                         string alphabeticalPosition = char.ConvertFromUtf32((int)'a' + translationPosition++);

@@ -304,7 +304,7 @@ namespace CopyWords.Parsers.Tests
             translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
 
             var sut = _fixture.Create<LookUpWord>();
-            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLangauge: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
+            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLanguage: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
 
             result.Translations.Should().HaveCount(1);
 
@@ -331,7 +331,7 @@ namespace CopyWords.Parsers.Tests
             translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
 
             var sut = _fixture.Create<LookUpWord>();
-            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLangauge: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
+            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLanguage: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
 
             result.Translations.Should().HaveCount(1);
 
@@ -354,7 +354,7 @@ namespace CopyWords.Parsers.Tests
             var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
 
             var sut = _fixture.Create<LookUpWord>();
-            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLangauge: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
+            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLanguage: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
 
             result.Translations.Should().HaveCount(0);
 
@@ -470,7 +470,7 @@ namespace CopyWords.Parsers.Tests
             meaning1.Examples.Should().HaveCount(1);
             Example example1 = meaning1!.Examples.First();
             example1.Original.Should().Be("Para el verano, papá decidió afeitar al perro.");
-            example1.English.Should().Be("For the summer, dad decided to shave the dog.");
+            example1.Translation.Should().Be("For the summer, dad decided to shave the dog.");
 
             // 2. afeitarse
             Definition definition2 = definitions.Skip(1).First();
@@ -489,7 +489,7 @@ namespace CopyWords.Parsers.Tests
             meaning1.Examples.Should().HaveCount(1);
             example1 = meaning1!.Examples.First();
             example1.Original.Should().Be("¿Con qué frecuencia te afeitas la barba?");
-            example1.English.Should().Be("How often do you shave your beard?");
+            example1.Translation.Should().Be("How often do you shave your beard?");
 
             spanishDictPageParserMock.Verify(x => x.ParseWordJson(html));
             spanishDictPageParserMock.Verify(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>()));
@@ -552,17 +552,17 @@ namespace CopyWords.Parsers.Tests
         {
             var definition1 = new Models.DDO.DDODefinition(Meaning: "stor, langstrakt bruskfisk", Tag: null, new List<Example>()
                 {
-                    new Example("Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", null, null)
+                    new Example(Original: "Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", Translation: null)
                 });
 
             var definition2 = new Models.DDO.DDODefinition(Meaning: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning", Tag: "SLANG", Examples: new List<Example>()
                 {
-                    new Example("-", null, null)
+                    new Example(Original: "-", Translation: null)
                 });
 
             var definition3 = new Models.DDO.DDODefinition(Meaning: "person der er særlig dygtig til et spil, håndværk el.lign.", Tag: "SLANG", Examples: new List<Example>()
                 {
-                    new Example("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", null, null)
+                    new Example(Original : "Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", Translation: null)
                 });
 
             return new List<Models.DDO.DDODefinition>() { definition1, definition2, definition3 };
@@ -577,7 +577,7 @@ namespace CopyWords.Parsers.Tests
                         new List<Models.SpanishDict.Meaning>
                         {
                             new Models.SpanishDict.Meaning(Original: "to shave", AlphabeticalPosition: "a", ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Para el verano, papá decidió afeitar al perro.", English: "For the summer, dad decided to shave the dog.", Russian: "") }),
+                                new List<Example>() { new Example(Original: "Para el verano, papá decidió afeitar al perro.", Translation: "For the summer, dad decided to shave the dog.") }),
                         }),
                 });
 
@@ -588,7 +588,7 @@ namespace CopyWords.Parsers.Tests
                         new List<Models.SpanishDict.Meaning>
                         {
                             new Models.SpanishDict.Meaning(Original: "to shave", AlphabeticalPosition: "a", ImageUrl: null,
-                                new List<Example>() { new Example(Original: "¿Con qué frecuencia te afeitas la barba?", English: "How often do you shave your beard?", Russian: "") }),
+                                new List<Example>() { new Example(Original: "¿Con qué frecuencia te afeitas la barba?", Translation: "How often do you shave your beard?") }),
                         }),
                 });
 
@@ -604,13 +604,13 @@ namespace CopyWords.Parsers.Tests
                         new List<Models.SpanishDict.Meaning>
                         {
                             new Models.SpanishDict.Meaning(Original: "house", AlphabeticalPosition: "a", ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Vivimos en una casa con un gran jardín.", English: "We live in a house with a big garden.", Russian: "") }),
+                                new List<Example>() { new Example(Original: "Vivimos en una casa con un gran jardín.", Translation: "We live in a house with a big garden.") }),
                         }),
                     new Models.SpanishDict.SpanishDictContext(ContextEN: "(household)", Position: 1,
                         new List<Models.SpanishDict.Meaning>
                         {
                             new Models.SpanishDict.Meaning(Original: "home", AlphabeticalPosition: "a", ImageUrl: null,
-                                new List<Example>() { new Example(Original: "Mi casa es donde mi familia y mis amigos están.", English: "My home is where my family and friends are.", Russian: "") }),
+                                new List<Example>() { new Example(Original: "Mi casa es donde mi familia y mis amigos están.", Translation: "My home is where my family and friends are.") }),
                         }),
                 });
 

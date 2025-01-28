@@ -33,8 +33,7 @@
 
     public record Example(
         string Original,
-        string? English,
-        string? Russian);
+        string? Translation);
 
     /// <summary>
     /// List of related words (only for Danish dictionary)

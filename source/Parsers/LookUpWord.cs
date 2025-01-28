@@ -29,7 +29,7 @@ namespace CopyWords.Parsers
         private readonly IFileDownloader _fileDownloader;
         private readonly ITranslatorAPIClient _translatorAPIClient;
 
-        private readonly Regex lookupRegex = new Regex(@"^[\w ]+$");
+        private readonly Regex _lookupRegex = new Regex(@"^[\w ]+$");
 
         public LookUpWord(
             IDDOPageParser ddoPageParser,
@@ -56,7 +56,7 @@ namespace CopyWords.Parsers
             }
             else
             {
-                isValid = lookupRegex.IsMatch(lookUp);
+                isValid = _lookupRegex.IsMatch(lookUp);
 
                 if (!isValid)
                 {
@@ -131,21 +131,21 @@ namespace CopyWords.Parsers
 
             // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
             var firstDefinition = ddoDefinitions.FirstOrDefault();
-            IEnumerable<string> examples = firstDefinition?.Examples.Select(x => x.Original) ?? Enumerable.Empty<string>();
+            IEnumerable<string> examples = firstDefinition?.Examples.Select(x => x.Original) ?? [];
 
             TranslationOutput translationOutput = await GetTranslationAsync(
-                options?.TranslatorApiURL,
-                sourceLangauge: LanguageDA,
+                options.TranslatorApiURL,
+                sourceLanguage: LanguageDA,
                 word: headWordDA,
                 meaning: firstDefinition?.Meaning ?? "",
                 partOfSpeech: partOfSpeech,
                 examples: examples);
 
             IEnumerable<string>? translationVariantsEN = translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageEN)?.TranslationVariants;
-            string translationsEN = string.Join(", ", translationVariantsEN ?? Enumerable.Empty<string>());
+            string translationsEN = string.Join(", ", translationVariantsEN ?? []);
 
             IEnumerable<string>? translationVariantsRU = translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageRU)?.TranslationVariants;
-            string translationsRU = string.Join(", ", translationVariantsRU ?? Enumerable.Empty<string>());
+            string translationsRU = string.Join(", ", translationVariantsRU ?? []);
 
             Headword headword = new Headword(headWordDA, translationsEN, translationsRU);
 
@@ -193,10 +193,6 @@ namespace CopyWords.Parsers
 
             // SpanishDict can return several definitions (e.g. for a "transitive verb" and "reflexive verb").
             IEnumerable<Models.SpanishDict.SpanishDictDefinition> spanishDictDefinitions = _spanishDictPageParser.ParseDefinitions(wordObj);
-            if (spanishDictDefinitions == null)
-            {
-                return null;
-            }
 
             List<Definition> definitions = new();
             foreach (var spanishDictDefinition in spanishDictDefinitions)
@@ -213,24 +209,23 @@ namespace CopyWords.Parsers
                 }
 
                 // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-                string meanningToTranslate = contexts.FirstOrDefault()?.Meanings.FirstOrDefault()?.Original + " " + contexts.FirstOrDefault()?.ContextEN
-                    ?? "";
+                string meaningToTranslate = contexts.FirstOrDefault()?.Meanings.FirstOrDefault()?.Original + " " + contexts.FirstOrDefault()?.ContextEN;
                 IEnumerable<string> examplesToTranslate = contexts.FirstOrDefault()?.Meanings.FirstOrDefault()?.Examples.Select(x => x.Original)
-                    ?? Enumerable.Empty<string>();
+                    ?? [];
 
                 TranslationOutput translationOutput = await GetTranslationAsync(
                     options?.TranslatorApiURL,
-                    sourceLangauge: LanguageES,
+                    sourceLanguage: LanguageES,
                     word: spanishDictDefinition.WordES,
-                    meaning: meanningToTranslate,
+                    meaning: meaningToTranslate,
                     partOfSpeech: spanishDictDefinition.PartOfSpeech,
                     examples: examplesToTranslate);
 
                 IEnumerable<string>? translationVariantsEN = translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageEN)?.TranslationVariants;
-                string translationsEN = string.Join(", ", translationVariantsEN ?? Enumerable.Empty<string>());
+                string translationsEN = string.Join(", ", translationVariantsEN ?? []);
 
                 IEnumerable<string>? translationVariantsRU = translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageRU)?.TranslationVariants;
-                string translationsRU = string.Join(", ", translationVariantsRU ?? Enumerable.Empty<string>());
+                string translationsRU = string.Join(", ", translationVariantsRU ?? []);
 
                 Headword headword = new Headword(spanishDictDefinition.WordES, translationsEN, translationsRU);
 
@@ -243,7 +238,7 @@ namespace CopyWords.Parsers
                 SoundUrl: soundUrl,
                 SoundFileName: soundFileName,
                 Definitions: definitions,
-                Variations: Enumerable.Empty<Variant>() // there are no word variants in SpanishDict
+                Variations: [] // there are no word variants in SpanishDict
             );
 
             return wordModel;
@@ -251,7 +246,7 @@ namespace CopyWords.Parsers
 
         internal async Task<TranslationOutput> GetTranslationAsync(
             string? translatorApiURL,
-            string sourceLangauge,
+            string sourceLanguage,
             string word,
             string meaning,
             string partOfSpeech,
@@ -261,12 +256,12 @@ namespace CopyWords.Parsers
 
             if (!string.IsNullOrEmpty(translatorApiURL))
             {
-                var translationInput = new TranslationInput(sourceLangauge, DestinationLanguages, word, meaning, partOfSpeech, examples);
+                var translationInput = new TranslationInput(sourceLanguage, DestinationLanguages, word, meaning, partOfSpeech, examples);
 
                 translationOutput = await _translatorAPIClient.TranslateAsync(translatorApiURL, translationInput);
             }
 
-            return translationOutput ?? new TranslationOutput(Array.Empty<TranslationItem>());
+            return translationOutput ?? new TranslationOutput([]);
         }
 
         #endregion

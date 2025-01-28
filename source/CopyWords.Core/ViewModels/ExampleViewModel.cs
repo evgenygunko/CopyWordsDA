@@ -8,14 +8,14 @@ namespace CopyWords.Core.ViewModels
         public ExampleViewModel(Example example)
         {
             Original = example?.Original;
-            English = example?.English;
+            Translation = example?.Translation;
         }
 
         [ObservableProperty]
         private string original;
 
         [ObservableProperty]
-        private string english;
+        private string translation;
 
         [ObservableProperty]
         private bool isChecked;
