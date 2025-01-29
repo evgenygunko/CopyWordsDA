@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using CopyWords.Core.ViewModels;
+using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.Services
 {
@@ -19,13 +20,17 @@ namespace CopyWords.Core.Services
 
     public class CopySelectedToClipboardService : ICopySelectedToClipboardService
     {
-        private readonly ISaveImageFileService _saveImageFileService;
-
         private const string TemplateGrayText = "<span style=\"color: rgba(0, 0, 0, 0.4)\">{0}</span>";
 
-        public CopySelectedToClipboardService(ISaveImageFileService saveImageFileService)
+        private readonly ISaveImageFileService _saveImageFileService;
+        private readonly ISettingsService _settingsService;
+
+        public CopySelectedToClipboardService(
+            ISaveImageFileService saveImageFileService,
+            ISettingsService settingsService)
         {
             _saveImageFileService = saveImageFileService;
+            _settingsService = settingsService;
         }
 
         #region Public Methods
@@ -101,13 +106,6 @@ namespace CopyWords.Core.Services
                     {
                         var backMeaning = new StringBuilder();
 
-                        // If translation exists, add it first
-                        if (!string.IsNullOrEmpty(meaningVM.Translation))
-                        {
-                            backMeaning.AppendFormat(TemplateGrayText, meaningVM.Translation);
-                            backMeaning.Append("<br>");
-                        }
-
                         backMeaning.Append(meaningVM.Original);
 
                         // We add context only to first translation so that it doesn't clutter view
@@ -120,6 +118,13 @@ namespace CopyWords.Core.Services
                         if (!string.IsNullOrEmpty(meaningVM.Tag))
                         {
                             backMeaning.Insert(0, $"<span style=\"color:#404040; background-color:#eaeff2; border:1px solid #CCCCCC; margin-right:10px; font-size: 80%;\">{meaningVM.Tag}</span>");
+                        }
+
+                        // If translation for the meaning exists, add it to the new line
+                        if (!string.IsNullOrEmpty(meaningVM.Translation))
+                        {
+                            backMeaning.Append("<br>");
+                            backMeaning.AppendFormat(TemplateGrayText, meaningVM.Translation);
                         }
 
                         if (meaningVM.IsImageChecked && !string.IsNullOrEmpty(meaningVM.ImageUrl))
@@ -147,7 +152,7 @@ namespace CopyWords.Core.Services
 
             StringBuilder sb = new StringBuilder();
 
-            // If translation selected, add it first
+            // If translation for the headword is selected, add it first.
             string format = (backMeanings.Count > 0) ? TemplateGrayText : "{0}";
             var headwordVM = definitionViewModel.HeadwordViewModel;
             if (headwordVM.IsRussianTranslationChecked && !string.IsNullOrEmpty(headwordVM.Russian))
@@ -162,6 +167,7 @@ namespace CopyWords.Core.Services
             // Now go through all meanings and add numbering
             int count = backMeanings.Count;
             int i = 1;
+            bool isSpanish = _settingsService.LoadSettings().SelectedParser == SourceLanguage.Spanish.ToString();
 
             foreach (string backMeaning in backMeanings)
             {
@@ -175,7 +181,8 @@ namespace CopyWords.Core.Services
 
                 if (i < count)
                 {
-                    sb.Append("<br>");
+                    // Spanish meanings are usually very short, so a horizontal line doesn't look good.
+                    sb.Append(isSpanish ? "<br>" : "<hr>");
                 }
 
                 i++;

@@ -2,6 +2,7 @@
 
 using System.Collections.ObjectModel;
 using AutoFixture;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.Parsers.Models;
@@ -218,6 +219,8 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenTranslationInMeaningIsEmpty_OnlyAddsOriginalMeaningToResult()
         {
+            SetSelectedParser(SourceLanguage.Danish);
+
             var definitionVMs = CreateVMForLigeud();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[2].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = false;
@@ -227,13 +230,14 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be(
-                "billet til kørsel uden omstigning med et offentligt transportmiddel");
+            result.Should().Be("billet til kørsel uden omstigning med et offentligt transportmiddel");
         }
 
         [TestMethod]
         public async Task CompileBackAsync_WhenRussianTranslationIsSelected_AddsTranslationToResult()
         {
+            SetSelectedParser(SourceLanguage.Danish);
+
             var definitionVMs = CreateVMForGrillspyd();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
@@ -245,13 +249,15 @@ namespace CopyWords.Core.Tests.Services
 
             result.Should().Be(
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span><br>" +
-                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
         }
 
         [TestMethod]
         public async Task CompileBackAsync_WhenOnlyRussianTranslationIsSelected_DoesNotAddSpan()
         {
+            SetSelectedParser(SourceLanguage.Danish);
+
             var definitionVMs = CreateVMForGrillspyd();
             //definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
@@ -267,6 +273,8 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenEnglishTranslationIsSelected_AddsTranslationToResult()
         {
+            SetSelectedParser(SourceLanguage.Danish);
+
             var definitionVMs = CreateVMForGrillspyd();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = false;
@@ -276,14 +284,17 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span><br>" +
-                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+            result.Should().Be(
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>" +
+                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
         }
 
         [TestMethod]
         public async Task CompileBackAsync_WhenBothTranslationsAreSelected_AddsTranslationsToResult()
         {
+            SetSelectedParser(SourceLanguage.Danish);
+
             var definitionVMs = CreateVMForGrillspyd();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
@@ -296,13 +307,15 @@ namespace CopyWords.Core.Tests.Services
             result.Should().Be(
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br>" +
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span><br>" +
-                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
         }
 
         [TestMethod]
         public async Task CompileBackAsync_WhenOneExampleIsSelected_DoesNotAddNumbers()
         {
+            SetSelectedParser(SourceLanguage.Danish);
+
             var definitionVMs = CreateVMForGrillspyd();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = false;
@@ -313,13 +326,15 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span><br>" +
-                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
         }
 
         [TestMethod]
         public async Task CompileBackAsync_WhenSeveralExamplesAreSelected_AddsNumbers()
         {
+            SetSelectedParser(SourceLanguage.Danish);
+
             var definitionVMs = CreateVMForHaj();
             foreach (var maningVM in definitionVMs[0].ContextViewModels[0].MeaningViewModels)
             {
@@ -334,9 +349,9 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be(
-                "1.&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><br>stor, langstrakt bruskfisk<br>" +
-                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><br>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br>" +
-                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span><span style=\"color: rgba(0, 0, 0, 0.4)\">человек, который особенно умел в игре, ремесле и т. д.</span><br>person der er særlig dygtig til et spil, håndværk el.lign.");
+                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><hr>" +
+                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><hr>" +
+                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">человек, который особенно умел в игре, ремесле и т. д.</span>");
         }
 
         #endregion
@@ -346,6 +361,8 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_ForCocheWhenOneExampleSelected_ReturnsOneBackMeaning()
         {
+            SetSelectedParser(SourceLanguage.Spanish);
+
             var definitionVMs = CreateVMForCoche();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
@@ -353,13 +370,14 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">автомобиль</span><br>" +
-                "car (vehicle)");
+            result.Should().Be("car (vehicle)");
         }
 
         [TestMethod]
         public async Task CompileBackAsync_ForCocheWhenTwoExamplesSelected_ReturnsOneBackMeaning()
         {
+            SetSelectedParser(SourceLanguage.Spanish);
+
             var definitionVMs = CreateVMForCoche();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].ContextViewModels[1].MeaningViewModels[1].ExampleViewModels[0].IsChecked = true;
@@ -369,13 +387,15 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be(
-                "1.&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">автомобиль</span><br>car (vehicle)<br>" +
-                "2.&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">пассажирский вагон</span><br>coach (vehicle led by horses)");
+                "1.&nbsp;car (vehicle)<br>" +
+                "2.&nbsp;coach (vehicle led by horses)");
         }
 
         [TestMethod]
         public async Task CompileBackAsync_WhenImageUrlIsPresentAndSelected_CallsSaveImageFileService()
         {
+            SetSelectedParser(SourceLanguage.Spanish);
+
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
@@ -389,14 +409,17 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">кузнечик</span><br>" +
-                "grasshopper (animal)<br><img src=\"saltamontes.jpg\">");
+                "grasshopper (animal)<br>" +
+                "<img src=\"saltamontes.jpg\">");
+
             saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ImageUrl, "saltamontes"));
         }
 
         [TestMethod]
         public async Task CompileBackAsync_WhenImageUrlIsPresentButNotSelected_DoesNotCallSaveImageFileService()
         {
+            SetSelectedParser(SourceLanguage.Spanish);
+
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
@@ -409,15 +432,15 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">кузнечик</span><br>" +
-                "grasshopper (animal)");
+            result.Should().Be("grasshopper (animal)");
             saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
         public async Task CompileBackAsync_WhenImageUrlIsNull_DoesNotCallSaveImageFileService()
         {
+            SetSelectedParser(SourceLanguage.Spanish);
+
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
@@ -428,15 +451,16 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">он выглядит</span><br>" +
-                "he looks (masculine) (third person singular)");
+            result.Should().Be("he looks (masculine) (third person singular)");
+
             saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
         public async Task CompileBackAsync_WhenMultipleImagesArePresentAndSelected_SavesImagesUnderDifferentNames()
         {
+            SetSelectedParser(SourceLanguage.Spanish);
+
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
@@ -454,8 +478,9 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be(
-                "1.&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">яд (животного)</span><br>venom (of an animal) (toxic substance)<br><img src=\"veneno.jpg\"><br>" +
-                "2.&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">яд</span><br>poison<br><img src=\"veneno1.jpg\">");
+                "1.&nbsp;venom (of an animal) (toxic substance)<br><img src=\"veneno.jpg\"><br>" +
+                "2.&nbsp;poison<br><img src=\"veneno1.jpg\">");
+
             saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ImageUrl, "veneno"));
             saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(definitionVMs[0].ContextViewModels[0].MeaningViewModels[1].ImageUrl, "veneno1"));
         }
@@ -892,23 +917,23 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "car",
-                                Translation: "автомобиль",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Mi coche no prende porque tiene una falla en el motor.", Translation : "My car won't start because of a problem with the engine.")
+                                        new Example(Original: "Mi coche no prende porque tiene una falla en el motor.", Translation: "My car won't start because of a problem with the engine.")
                                     }),
                             new Meaning(
                                 Original: "automobile",
-                                Translation: "автомобиль",
+                                Translation: null,
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Todos estos coches tienen bolsas de aire.", Translation : "All these automobiles have airbags.")
+                                        new Example(Original: "Todos estos coches tienen bolsas de aire.", Translation: "All these automobiles have airbags.")
                                     }),
                         }),
 
@@ -917,23 +942,23 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "carriage",
-                                Translation: "карета",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Los monarcas llegaron en un coche elegante.", Translation : "The monarchs arrived in an elegant carriage.")
+                                        new Example(Original: "Los monarcas llegaron en un coche elegante.", Translation: "The monarchs arrived in an elegant carriage.")
                                     }),
                             new Meaning(
                                 Original: "coach",
-                                Translation: "пассажирский вагон",
+                                Translation: null,
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Los coches de caballos se utilizaban mucho más antes de que se inventara el automóvil.", Translation : "Horse-drawn coaches were used much more before the invention of the automobile.")
+                                        new Example(Original: "Los coches de caballos se utilizaban mucho más antes de que se inventara el automóvil.", Translation: "Horse-drawn coaches were used much more before the invention of the automobile.")
                                     }),
                         })
                 }
@@ -965,13 +990,13 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "house",
-                                Translation: "дом",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Vivimos en una casa con un gran jardín.", Translation : "We live in a house with a big garden.")
+                                        new Example(Original: "Vivimos en una casa con un gran jardín.", Translation: "We live in a house with a big garden.")
                                     }),
                         }),
                     // ...
@@ -1004,13 +1029,13 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "well",
-                                Translation: "хорошо",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Últimamente no me he sentido bien.", Translation : "I haven't felt well lately.")
+                                        new Example(Original: "Últimamente no me he sentido bien.", Translation: "I haven't felt well lately.")
                                     }),
                         }),
                     new Context("(properly)", "2",
@@ -1018,13 +1043,13 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "well",
-                                Translation: "хорошо",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Si la carne molida no se cocina bien, las bacterias no mueren.", Translation : "If the ground meat is not cooked well, the bacteria don't die.")
+                                        new Example(Original: "Si la carne molida no se cocina bien, las bacterias no mueren.", Translation: "If the ground meat is not cooked well, the bacteria don't die.")
                                     }),
                         }),
                 }
@@ -1057,24 +1082,24 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "cool (colloquial)",
-                                Translation: "классно",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "¿Quieres que veamos la peli en mi ordenador? - ¡Guay, tío!", Translation : "Do you want to watch the movie on my computer? - Cool, man!"),
-                                        new Example(Original: "¡Gané un viaje a Francia! - ¡Guay!", Translation : "I won a trip to France! - Cool!")
+                                        new Example(Original: "¿Quieres que veamos la peli en mi ordenador? - ¡Guay, tío!", Translation: "Do you want to watch the movie on my computer? - Cool, man!"),
+                                        new Example(Original: "¡Gané un viaje a Francia! - ¡Guay!", Translation: "I won a trip to France! - Cool!")
                                     }),
                             new Meaning(
                                 Original: "great (colloquial)",
-                                Translation: "отлично",
+                                Translation: null,
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Puedes tomarte el día libre mañana. - ¡Guay!", Translation : "You can take the day off tomorrow. - Great!")
+                                        new Example(Original: "Puedes tomarte el día libre mañana. - ¡Guay!", Translation: "You can take the day off tomorrow. - Great!")
                                     }),
                         }),
                     // ...
@@ -1096,24 +1121,24 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "cool (colloquial)",
-                                Translation: "классный",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "La fiesta de anoche estuvo muy guay.", Translation : "Last night's party was really cool."),
-                                        new Example(Original: "Tus amigos son guays, Roberto. ¿Dónde los conociste?", Translation : "Your friends are cool, Roberto. Where did you meet them?")
+                                        new Example(Original: "La fiesta de anoche estuvo muy guay.", Translation: "Last night's party was really cool."),
+                                        new Example(Original: "Tus amigos son guays, Roberto. ¿Dónde los conociste?", Translation: "Your friends are cool, Roberto. Where did you meet them?")
                                     }),
                             new Meaning(
                                 Original: "super (colloquial)",
-                                Translation: "супер",
+                                Translation: null,
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "¡Que monopatín tan guay!", Translation : "That's a super skateboard!")
+                                        new Example(Original: "¡Que monopatín tan guay!", Translation: "That's a super skateboard!")
                                     }),
                         }),
                     // ...
@@ -1146,13 +1171,13 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "he looks (masculine)",
-                                Translation: "он выглядит",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Luce más fuerte. ¿Ha estado yendo al gimnasio?", Translation : "He looks stronger. Has he been going to the gym?"),
+                                        new Example(Original: "Luce más fuerte. ¿Ha estado yendo al gimnasio?", Translation: "He looks stronger. Has he been going to the gym?"),
                                     }),
                             new Meaning(
                                 Original: "she looks (feminine)",
@@ -1162,17 +1187,17 @@ namespace CopyWords.Core.Tests.Services
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Luce muy bien con el pelo corto.", Translation : "She looks great with short hair.")
+                                        new Example(Original: "Luce muy bien con el pelo corto.", Translation: "She looks great with short hair.")
                                     }),
                             new Meaning(
                                 Original: "it looks",
-                                Translation: "это выглядит",
+                                Translation: null,
                                 AlphabeticalPosition: "c",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "¿Llevaste tu uniforme a la tintorería? Luce impecable el día de hoy.", Translation : "Did you take your uniform to the cleaners? It looks immaculate today.")
+                                        new Example(Original: "¿Llevaste tu uniforme a la tintorería? Luce impecable el día de hoy.", Translation: "Did you take your uniform to the cleaners? It looks immaculate today.")
                                     }),
                         }),
                     new Context("(formal) (second person singular)", "2",
@@ -1180,13 +1205,13 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "you look",
-                                Translation: "ты выглядишь",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Luce muy elegante, Sra. Vargas. ¿Tiene planes para hoy?", Translation : "You look very elegant, Mrs. Vargas. Do you have plans for today?"),
+                                        new Example(Original: "Luce muy elegante, Sra. Vargas. ¿Tiene planes para hoy?", Translation: "You look very elegant, Mrs. Vargas. Do you have plans for today?"),
                                     }),
                         })
                 }
@@ -1218,13 +1243,13 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "grasshopper",
-                                Translation: "кузнечик",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/5bf100e5-da54-4be6-a55c-281edcd08b10.jpg",
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Los saltamontes pueden saltar muy alto.", Translation : "Grasshoppers can jump really high.")
+                                        new Example(Original: "Los saltamontes pueden saltar muy alto.", Translation: "Grasshoppers can jump really high.")
                                     })
                         }),
                     // ...
@@ -1257,23 +1282,23 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "venom (of an animal)",
-                                Translation: "яд (животного)",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d533b470-18a4-4cae-ad08-3ee8858ae02c.jpg",
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "La herida aún tiene el veneno dentro.", Translation : "The wound still has venom in it.")
+                                        new Example(Original: "La herida aún tiene el veneno dentro.", Translation: "The wound still has venom in it.")
                                     }),
                             new Meaning(
                                 Original: "poison",
-                                Translation: "яд",
+                                Translation: null,
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d07aa7fd-a3fd-4d06-9751-656180d8b1ee.jpg",
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Estos hongos contienen un veneno mortal.", Translation : "These mushrooms contain a deadly poison.")
+                                        new Example(Original: "Estos hongos contienen un veneno mortal.", Translation: "These mushrooms contain a deadly poison.")
                                     })
                         }),
                     new Context("(ill intent)", "2",
@@ -1281,13 +1306,13 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "venom",
-                                Translation: "злоба",
+                                Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
                                 Examples: new List<Example>()
                                     {
-                                        new Example(Original: "Le espetó con tal veneno que ni se atrevió a responderle.", Translation : "She spat at him with such venom that he didn't even dare respond.")
+                                        new Example(Original: "Le espetó con tal veneno que ni se atrevió a responderle.", Translation: "She spat at him with such venom that he didn't even dare respond.")
                                     })
                         }),
                 }
@@ -1311,6 +1336,15 @@ namespace CopyWords.Core.Tests.Services
         #endregion
 
         private static string StyleAttributeForTag => "style=\"color:#404040; background-color:#eaeff2; border:1px solid #CCCCCC; margin-right:10px; font-size: 80%;\"";
+
+        private void SetSelectedParser(SourceLanguage sourceLanguage)
+        {
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.SelectedParser = sourceLanguage.ToString();
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+        }
 
         #endregion
     }

@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Dict Api Afeitar
+﻿// Ignore Spelling: Dict Api Afeitar App
 
 using System.Text;
 using AutoFixture;
@@ -285,6 +285,34 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
+        #region Tests for TranslateMeaningAsync
+
+        [TestMethod]
+        public async Task TranslateMeaningAsync_Should_ReturnRussianTranslation()
+        {
+            string translatorApiUrl = "http://localhost:7014/api/Translate";
+            const string sourceLanguage = "da";
+            const string meaning = "stor, langstrakt bruskfisk";
+
+            var translationOutput = new TranslationOutput(
+                [
+                    new TranslationItem("ru", [ "крупная, удлиненная хрящевая рыба" ]),
+                    new TranslationItem("en", [ "large, elongated cartilaginous fish" ])
+                ]);
+
+            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
+            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
+
+            var sut = _fixture.Create<LookUpWord>();
+            string? result = await sut.TranslateMeaningAsync(translatorApiUrl, sourceLanguage, meaning, examples: Enumerable.Empty<string>());
+
+            result.Should().Be("крупная, удлиненная хрящевая рыба");
+
+            translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()));
+        }
+
+        #endregion
+
         #region Tests for GetTranslationAsync
 
         [TestMethod]
@@ -312,35 +340,6 @@ namespace CopyWords.Parsers.Tests
             translationRU.Language.Should().Be("ru");
             translationRU.TranslationVariants.Should().HaveCount(1);
             translationRU.TranslationVariants.First().Should().Be("акула");
-        }
-
-        [TestMethod]
-        public async Task GetTranslationAsync_WhenTranslatorAPIUrlIsPassedAndMeaningsIsEmpty_CallsTranslatorApi()
-        {
-            string translatorApiUrl = "http://localhost:7014/api/Translate";
-            string headWord = _fixture.Create<string>();
-            string meaning = _fixture.Create<string>();
-            string partOfSpeech = _fixture.Create<string>();
-
-            var translationOutput = new TranslationOutput(
-                [
-                    new TranslationItem("ru", [ "акула" ])
-                ]);
-
-            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
-            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
-
-            var sut = _fixture.Create<LookUpWord>();
-            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLanguage: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
-
-            result.Translations.Should().HaveCount(1);
-
-            TranslationItem translationRU = result.Translations.Single();
-            translationRU.Language.Should().Be("ru");
-            translationRU.TranslationVariants.Should().HaveCount(1);
-            translationRU.TranslationVariants.First().Should().Be("акула");
-
-            translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()));
         }
 
         [TestMethod]
@@ -424,6 +423,94 @@ namespace CopyWords.Parsers.Tests
             ddoPageParserMock.Verify(x => x.ParseSound());
             ddoPageParserMock.Verify(x => x.ParseDefinitions());
             ddoPageParserMock.Verify(x => x.ParseVariants());
+        }
+
+        [TestMethod]
+        public async Task ParseDanishWordAsync_Should_CallTranslationAppForHeadwordAndMeanings()
+        {
+            string html = _fixture.Create<string>();
+            var options = new Options(SourceLanguage.Danish, TranslatorApiURL: _fixture.Create<Uri>().ToString());
+
+            Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
+            fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
+
+            Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+            ddoPageParserMock.Setup(x => x.ParseDefinitions()).Returns(CreateDefinitionsForHaj());
+
+            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
+            translatorAPIClientMock
+                .Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()))
+                .ReturnsAsync(_fixture.Create<TranslationOutput>());
+
+            var sut = _fixture.Create<LookUpWord>();
+
+            WordModel? result = await sut.ParseDanishWordAsync(html, options);
+
+            result.Should().NotBeNull();
+
+            IEnumerable<Definition> definitions = result!.Definitions;
+            definitions.Should().HaveCount(1);
+
+            // For DDO, we create one Definition with one Context and several Meanings.
+            Definition definition1 = definitions.First();
+            definition1.Contexts.Should().HaveCount(1);
+            Context context1 = definition1.Contexts.First();
+            context1.Meanings.Should().HaveCount(3);
+
+            // We should call Translator app once for the headword and three times for the meanings.
+            translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()), Times.Exactly(4));
+        }
+
+        [TestMethod]
+        public async Task ParseDanishWordAsync_Should_CallTranslationAppMax6Times()
+        {
+            // some words have a lot of meanings, we will only translate first 5 meanings + the headword.
+            var ddoDefinitions = new List<Models.DDO.DDODefinition>()
+            {
+                _fixture.Create<Models.DDO.DDODefinition>(),
+                _fixture.Create<Models.DDO.DDODefinition>(),
+                _fixture.Create<Models.DDO.DDODefinition>(),
+                _fixture.Create<Models.DDO.DDODefinition>(),
+                _fixture.Create<Models.DDO.DDODefinition>(),
+                _fixture.Create<Models.DDO.DDODefinition>(),
+                _fixture.Create<Models.DDO.DDODefinition>(),
+                _fixture.Create<Models.DDO.DDODefinition>(),
+                _fixture.Create<Models.DDO.DDODefinition>(),
+                _fixture.Create<Models.DDO.DDODefinition>()
+            };
+            ddoDefinitions.Should().HaveCount(10);
+
+            string html = _fixture.Create<string>();
+            var options = new Options(SourceLanguage.Danish, TranslatorApiURL: _fixture.Create<Uri>().ToString());
+
+            Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
+            fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("haj.html");
+
+            Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+            ddoPageParserMock.Setup(x => x.ParseDefinitions()).Returns(ddoDefinitions);
+
+            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
+            translatorAPIClientMock
+                .Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()))
+                .ReturnsAsync(_fixture.Create<TranslationOutput>());
+
+            var sut = _fixture.Create<LookUpWord>();
+
+            WordModel? result = await sut.ParseDanishWordAsync(html, options);
+
+            result.Should().NotBeNull();
+
+            IEnumerable<Definition> definitions = result!.Definitions;
+            definitions.Should().HaveCount(1);
+
+            // For DDO, we create one Definition with one Context and several Meanings.
+            Definition definition1 = definitions.First();
+            definition1.Contexts.Should().HaveCount(1);
+            Context context1 = definition1.Contexts.First();
+            context1.Meanings.Should().HaveCount(10);
+
+            // We should call Translator app once for the headword and three times for the meanings.
+            translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()), Times.Exactly(6));
         }
 
         #endregion
@@ -534,6 +621,7 @@ namespace CopyWords.Parsers.Tests
             definition1.Headword.Russian.Should().Be("дом");
             definition1.Headword.English.Should().Be("house, household");
 
+            // For Spanish words, we only translate headword but don't translate meanings.
             translatorAPIClientMock.Verify(x => x.TranslateAsync(translationApiURL, It.Is<TranslationInput>(input =>
                 input.SourceLanguage == "es"
                 && input.DestinationLanguages.Count() == 2

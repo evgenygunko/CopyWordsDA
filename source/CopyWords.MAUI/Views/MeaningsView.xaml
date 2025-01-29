@@ -34,14 +34,14 @@
                         <Label Grid.Row="0" Grid.Column="0" Text="{Binding AlphabeticalPosition, FallbackValue='AlphabeticalPosition'}" />
                         <Label Grid.Row="0" Grid.Column="1" Text=". &#6158;" />
 
-                        <!-- If Translation is defined, show Translation above the Original meaning -->
+                        <!-- If Translation is defined, show Translation below the Original -->
                         <Label Grid.Row="0" Grid.Column="2"
                                IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="Gray" />
-                                    <Span Text="{x:Static system:Environment.NewLine}"/>
                                     <Span Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}"/>
+                                    <Span Text="{x:Static system:Environment.NewLine}"/>
+                                    <Span Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="Gray" />
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>

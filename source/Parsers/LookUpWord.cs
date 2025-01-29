@@ -154,9 +154,13 @@ namespace CopyWords.Parsers
             int pos = 1;
             foreach (var ddoDefinition in ddoDefinitions)
             {
-                // todo: translate
-                string? russian = null;
-                meanings.Add(new Meaning(Original: ddoDefinition.Meaning, Translation: russian, AlphabeticalPosition: (pos++).ToString(), ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples));
+                // Safe check - some words have a lot of meanings, we will only translate first 5.
+                string? meaningTranslation = null;
+                if (pos <= 5)
+                {
+                    meaningTranslation = await TranslateMeaningAsync(options.TranslatorApiURL, LanguageDA, ddoDefinition.Meaning, ddoDefinition.Examples.Select(x => x.Original));
+                }
+                meanings.Add(new Meaning(Original: ddoDefinition.Meaning, Translation: meaningTranslation, AlphabeticalPosition: (pos++).ToString(), ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples));
             }
 
             Context context = new Context(ContextEN: "", Position: "", meanings);
@@ -242,6 +246,30 @@ namespace CopyWords.Parsers
             );
 
             return wordModel;
+        }
+
+        internal async Task<string?> TranslateMeaningAsync(
+            string? translatorApiURL,
+            string sourceLanguage,
+            string meaning,
+            IEnumerable<string> examples)
+        {
+            TranslationOutput translationOutput = await GetTranslationAsync(
+                translatorApiURL,
+                sourceLanguage: sourceLanguage,
+                word: "",
+                meaning: meaning,
+                partOfSpeech: "",
+                examples: examples);
+
+            string? translationsRU = null;
+            if (translationOutput != null)
+            {
+                IEnumerable<string>? translationVariantsRU = translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageRU)?.TranslationVariants;
+                translationsRU = string.Join(", ", translationVariantsRU ?? []);
+            }
+
+            return translationsRU;
         }
 
         internal async Task<TranslationOutput> GetTranslationAsync(
