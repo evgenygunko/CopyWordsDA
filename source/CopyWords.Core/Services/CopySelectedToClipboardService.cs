@@ -99,17 +99,27 @@ namespace CopyWords.Core.Services
                     ExampleViewModel exampleVM = meaningVM.ExampleViewModels.FirstOrDefault(x => x.IsChecked);
                     if (exampleVM != null)
                     {
-                        string backMeaning = meaningVM.Original;
+                        var backMeaning = new StringBuilder();
+
+                        // If translation exists, add it first
+                        if (!string.IsNullOrEmpty(meaningVM.Translation))
+                        {
+                            backMeaning.AppendFormat(TemplateGrayText, meaningVM.Translation);
+                            backMeaning.Append("<br>");
+                        }
+
+                        backMeaning.Append(meaningVM.Original);
 
                         // We add context only to first translation so that it doesn't clutter view
                         if (!isContextAddedToFirstBackMeaning && !string.IsNullOrEmpty(contextVM.ContextEN))
                         {
-                            backMeaning += " " + contextVM.ContextEN;
+                            backMeaning.Append(" ");
+                            backMeaning.Append(contextVM.ContextEN);
                         }
 
                         if (!string.IsNullOrEmpty(meaningVM.Tag))
                         {
-                            backMeaning = $"<span style=\"color:#404040; background-color:#eaeff2; border:1px solid #CCCCCC; margin-right:10px; font-size: 80%;\">{meaningVM.Tag}</span>" + backMeaning;
+                            backMeaning.Insert(0, $"<span style=\"color:#404040; background-color:#eaeff2; border:1px solid #CCCCCC; margin-right:10px; font-size: 80%;\">{meaningVM.Tag}</span>");
                         }
 
                         if (meaningVM.IsImageChecked && !string.IsNullOrEmpty(meaningVM.ImageUrl))
@@ -124,12 +134,12 @@ namespace CopyWords.Core.Services
                             bool result = await _saveImageFileService.SaveImageFileAsync(meaningVM.ImageUrl, imageFileName);
                             if (result)
                             {
-                                backMeaning += $"<br><img src=\"{imageFileName}.jpg\">";
+                                backMeaning.Append($"<br><img src=\"{imageFileName}.jpg\">");
                                 imageIndex++;
                             }
                         }
 
-                        backMeanings.Add(backMeaning);
+                        backMeanings.Add(backMeaning.ToString());
                         isContextAddedToFirstBackMeaning = true;
                     }
                 }
@@ -149,7 +159,7 @@ namespace CopyWords.Core.Services
                 sb.Append(string.Format(CultureInfo.CurrentCulture, format, headwordVM.English) + "<br>");
             }
 
-            //Now go through all meanings and add numbering
+            // Now go through all meanings and add numbering
             int count = backMeanings.Count;
             int i = 1;
 

@@ -216,6 +216,22 @@ namespace CopyWords.Core.Tests.Services
         #region Danish
 
         [TestMethod]
+        public async Task CompileBackAsync_WhenTranslationInMeaningIsEmpty_OnlyAddsOriginalMeaningToResult()
+        {
+            var definitionVMs = CreateVMForLigeud();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[2].ExampleViewModels[0].IsChecked = true;
+            definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = false;
+            definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = false;
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string result = await sut.CompileBackAsync(definitionVMs[0]);
+
+            result.Should().Be(
+                "billet til kørsel uden omstigning med et offentligt transportmiddel");
+        }
+
+        [TestMethod]
         public async Task CompileBackAsync_WhenRussianTranslationIsSelected_AddsTranslationToResult()
         {
             var definitionVMs = CreateVMForGrillspyd();
@@ -227,7 +243,10 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br>spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+            result.Should().Be(
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span><br>" +
+                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
 
         [TestMethod]
@@ -257,7 +276,9 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+            result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span><br>" +
+                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
 
         [TestMethod]
@@ -272,7 +293,11 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br><span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+            result.Should().Be(
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span><br>" +
+                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
 
         [TestMethod]
@@ -287,7 +312,9 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+            result.Should().Be(
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span><br>" +
+                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
 
         [TestMethod]
@@ -307,9 +334,9 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be(
-                "1.&nbsp;stor, langstrakt bruskfisk<br>" +
-                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br>" +
-                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.");
+                "1.&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><br>stor, langstrakt bruskfisk<br>" +
+                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><br>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br>" +
+                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span><span style=\"color: rgba(0, 0, 0, 0.4)\">человек, который особенно умел в игре, ремесле и т. д.</span><br>person der er særlig dygtig til et spil, håndværk el.lign.");
         }
 
         #endregion
@@ -326,7 +353,8 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("car (vehicle)");
+            result.Should().Be("<span style=\"color: rgba(0, 0, 0, 0.4)\">автомобиль</span><br>" +
+                "car (vehicle)");
         }
 
         [TestMethod]
@@ -341,8 +369,8 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be(
-                "1.&nbsp;car (vehicle)<br>" +
-                "2.&nbsp;coach (vehicle led by horses)");
+                "1.&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">автомобиль</span><br>car (vehicle)<br>" +
+                "2.&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">пассажирский вагон</span><br>coach (vehicle led by horses)");
         }
 
         [TestMethod]
@@ -360,7 +388,9 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("grasshopper (animal)<br><img src=\"saltamontes.jpg\">");
+            result.Should().Be(
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">кузнечик</span><br>" +
+                "grasshopper (animal)<br><img src=\"saltamontes.jpg\">");
             saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ImageUrl, "saltamontes"));
         }
 
@@ -379,7 +409,9 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("grasshopper (animal)");
+            result.Should().Be(
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">кузнечик</span><br>" +
+                "grasshopper (animal)");
             saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
@@ -396,7 +428,9 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("he looks (masculine) (third person singular)");
+            result.Should().Be(
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">он выглядит</span><br>" +
+                "he looks (masculine) (third person singular)");
             saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
@@ -419,7 +453,9 @@ namespace CopyWords.Core.Tests.Services
 
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
-            result.Should().Be("1.&nbsp;venom (of an animal) (toxic substance)<br><img src=\"veneno.jpg\"><br>2.&nbsp;poison<br><img src=\"veneno1.jpg\">");
+            result.Should().Be(
+                "1.&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">яд (животного)</span><br>venom (of an animal) (toxic substance)<br><img src=\"veneno.jpg\"><br>" +
+                "2.&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">яд</span><br>poison<br><img src=\"veneno1.jpg\">");
             saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ImageUrl, "veneno"));
             saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(definitionVMs[0].ContextViewModels[0].MeaningViewModels[1].ImageUrl, "veneno1"));
         }
@@ -723,7 +759,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original : "billet til kørsel uden omstigning med et offentligt transportmiddel",
-                                Translation : "билет на проезд без пересадки в общественном транспорте",
+                                Translation : null,
                                 AlphabeticalPosition : "3",
                                 Tag: null,
                                 ImageUrl: null,

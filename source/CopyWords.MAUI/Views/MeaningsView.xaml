@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
+             xmlns:system="clr-namespace:System;assembly=netstandard"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:Class="CopyWords.MAUI.Views.MeaningsView">
@@ -12,6 +13,7 @@
             <!-- Workaround for a crash on Mac: type IsStringNotNullOrWhiteSpaceConverter cannot be found -->
             <!--<toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />-->
             <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+            <converters:MyIsStringNullOrWhiteSpaceConverter x:Key="IsStringNullOrWhiteSpaceConverter" />
 
             <DataTemplate x:Key="translationsTemplate"
                           x:DataType="viewmodels:MeaningViewModel">
@@ -31,7 +33,23 @@
 
                         <Label Grid.Row="0" Grid.Column="0" Text="{Binding AlphabeticalPosition, FallbackValue='AlphabeticalPosition'}" />
                         <Label Grid.Row="0" Grid.Column="1" Text=". &#6158;" />
-                        <Label Grid.Row="0" Grid.Column="2" Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}" />
+
+                        <!-- If Translation is defined, show Translation above the Original meaning -->
+                        <Label Grid.Row="0" Grid.Column="2"
+                               IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="Gray" />
+                                    <Span Text="{x:Static system:Environment.NewLine}"/>
+                                    <Span Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <!-- If Translation is not defined, only show Original meaning -->
+                        <Label Grid.Row="0" Grid.Column="2"
+                               IsVisible="{Binding Translation, Converter={StaticResource IsStringNullOrWhiteSpaceConverter}}"
+                               Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}">
+                        </Label>
 
                         <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="3" IsVisible="{Binding ImageUrl, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
                             <CheckBox x:Name="checkBox" IsChecked="{Binding IsImageChecked}" />
