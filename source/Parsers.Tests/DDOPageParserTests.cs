@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿// Ignore Spelling: Underholdning Tiltale Højtryk Substantiv På Grillspyd Høj Kigge Stødtand Såsom Stiktosset Påtage Konjunktion Haj Frabede Fladtang Dannebrog
+
+using System.Reflection;
 using CopyWords.Parsers.Models;
 using CopyWords.Parsers.Models.DDO;
 using FluentAssertions;
@@ -454,7 +456,8 @@ namespace CopyWords.Parsers.Tests
 
             definitions.Should().HaveCount(1);
 
-            DDODefinition definition1 = definitions.First(); ;
+            DDODefinition definition1 = definitions.First();
+            ;
             definition1.Meaning.Should().Be("lille tang med aflange, flade og riflede kæber som bruges til at holde fast på små genstande fx i forbindelse med elektriker- eller hobbyarbejde");
             definition1.Tag.Should().BeNull();
             definition1.Examples.Should().HaveCount(1);

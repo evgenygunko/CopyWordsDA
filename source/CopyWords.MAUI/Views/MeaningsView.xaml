@@ -18,8 +18,8 @@
             <DataTemplate x:Key="translationsTemplate"
                           x:DataType="viewmodels:MeaningViewModel">
                 <!-- Meanings -->
-                <VerticalStackLayout Padding="10,10,0,0">
-                    <Grid>
+                <VerticalStackLayout>
+                    <Grid Margin="0,0,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
@@ -36,6 +36,7 @@
 
                         <!-- If Translation is defined, show Translation below the Original -->
                         <Label Grid.Row="0" Grid.Column="2"
+                               Margin="0,0,0,10"
                                IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
                             <Label.FormattedText>
                                 <FormattedString>
@@ -51,7 +52,10 @@
                                Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}">
                         </Label>
 
-                        <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="3" IsVisible="{Binding ImageUrl, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
+                        <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="3"
+                                    Margin="10,0,0,0"
+                                    IsVisible="{Binding ImageUrl, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
+
                             <CheckBox x:Name="checkBox" IsChecked="{Binding IsImageChecked}" />
                             <Border Stroke="Transparent" StrokeThickness="5">
                                 <Border.Triggers>
@@ -65,11 +69,16 @@
                                     MaximumWidthRequest="150"
                                     HorizontalOptions="Start"/>
                             </Border>
+
                         </HorizontalStackLayout>
                     </Grid>
 
                     <!--Examples -->
-                    <views:ExamplesView Margin="0,0,0,10" />
+                    <views:ExamplesView Margin="10,0,0,10" />
+
+                    <!-- Horizontal line -->
+                    <BoxView Grid.Row="5" Color="LightGray" HeightRequest="1" Margin="0,10,0,15"
+                        IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}" />
                 </VerticalStackLayout>
             </DataTemplate>
         </ResourceDictionary>

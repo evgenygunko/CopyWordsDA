@@ -7,7 +7,6 @@ using CopyWords.MAUI.Views.Popups;
 using CopyWords.Parsers;
 using CopyWords.Parsers.Services;
 using Microsoft.Extensions.Logging;
-using Syncfusion.Maui.Toolkit.Hosting;
 
 namespace CopyWords.MAUI;
 
@@ -18,7 +17,6 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .ConfigureSyncfusionToolkit()
             .UseMauiCommunityToolkit()
             .UseMauiCommunityToolkitMediaElement()
             .ConfigureFonts(fonts =>

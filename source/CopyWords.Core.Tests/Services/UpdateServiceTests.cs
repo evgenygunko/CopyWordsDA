@@ -155,7 +155,7 @@ namespace CopyWords.Core.Services.Tests
         }
 
         [TestMethod]
-        public async Task IsUpdateAvailableAsync_WhenCurrentVersionIsLessThanLatestVersion_ReturnsTeue()
+        public async Task IsUpdateAvailableAsync_WhenCurrentVersionIsLessThanLatestVersion_ReturnsTrue()
         {
             const string currentVersion = "1.2.2";
 

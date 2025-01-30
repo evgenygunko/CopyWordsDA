@@ -12,7 +12,7 @@
             <DataTemplate x:Key="contextsTemplate"
                           x:DataType="viewmodels:ContextViewModel">
                 <!-- Context -->
-                <VerticalStackLayout VerticalOptions="Center" Padding="10">
+                <VerticalStackLayout VerticalOptions="Center">
                     <HorizontalStackLayout>
                         <Label Text="{Binding Position, FallbackValue='Position'}" />
                         <Label Text=". &#6158;" />
@@ -20,7 +20,10 @@
                     </HorizontalStackLayout>
 
                     <!--Meanings -->
-                    <views:MeaningsView />
+                    <views:MeaningsView Margin="15,0,0,0" />
+
+                    <!-- Horizontal line -->
+                    <BoxView Color="LightGray" HeightRequest="1" Margin="0,15,0,15"/>
                 </VerticalStackLayout>
             </DataTemplate>
 
