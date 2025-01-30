@@ -103,6 +103,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Get("UseTranslator", false, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("TranslatorApiUrl", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("TranslateMeanings", true, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("TranslateHeadword", true, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
         }
 
@@ -139,6 +140,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("UseTranslator", false, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("TranslatorApiUrl", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("TranslateMeanings", false, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("TranslateHeadword", false, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
         }
 

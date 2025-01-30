@@ -71,6 +71,10 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
+        private bool translateHeadword;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool translateMeanings;
 
         public string About => $"App version: {AppInfo.VersionString} (Build {AppInfo.BuildString}), {RuntimeInformation.FrameworkDescription}";
@@ -212,6 +216,7 @@ namespace CopyWords.Core.ViewModels
             appSettings.UseTranslator = UseTranslator;
             appSettings.TranslatorApiUrl = TranslatorApiUrl;
             appSettings.TranslateMeanings = TranslateMeanings;
+            appSettings.TranslateHeadword = TranslateHeadword;
 
             _settingsService.SaveSettings(appSettings);
 
@@ -283,6 +288,7 @@ namespace CopyWords.Core.ViewModels
             UseTranslator = appSettings.UseTranslator;
             TranslatorApiUrl = appSettings.TranslatorApiUrl;
             TranslateMeanings = appSettings.TranslateMeanings;
+            TranslateHeadword = appSettings.TranslateHeadword;
         }
 
         #endregion

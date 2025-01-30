@@ -46,6 +46,7 @@ namespace CopyWords.Core.Services
             appSettings.UseTranslator = _preferences.Get<bool>("UseTranslator", false);
             appSettings.TranslatorApiUrl = _preferences.Get("TranslatorApiUrl", string.Empty);
             appSettings.TranslateMeanings = _preferences.Get<bool>("TranslateMeanings", true);
+            appSettings.TranslateHeadword = _preferences.Get<bool>("TranslateHeadword", true);
             appSettings.SelectedParser = _preferences.Get("SelectedParser", string.Empty);
 
             return appSettings;
@@ -65,6 +66,7 @@ namespace CopyWords.Core.Services
             _preferences.Set("UseTranslator", appSettings.UseTranslator);
             _preferences.Set("TranslatorApiUrl", appSettings.TranslatorApiUrl);
             _preferences.Set("TranslateMeanings", appSettings.TranslateMeanings);
+            _preferences.Set("TranslateHeadword", appSettings.TranslateHeadword);
             _preferences.Set("SelectedParser", appSettings.SelectedParser);
         }
 

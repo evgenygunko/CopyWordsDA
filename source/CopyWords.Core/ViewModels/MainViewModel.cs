@@ -95,7 +95,8 @@ namespace CopyWords.Core.ViewModels
                     translatorApiURL = appSettings.TranslatorApiUrl;
                 }
 
-                wordModel = await _lookUpWord.GetWordByUrlAsync(url, new Options(_selectDictionaryViewModel.SelectedParser.SourceLanguage, translatorApiURL, appSettings.TranslateMeanings));
+                wordModel = await _lookUpWord.GetWordByUrlAsync(url,
+                    new Options(_selectDictionaryViewModel.SelectedParser.SourceLanguage, translatorApiURL, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
 
                 if (wordModel == null)
                 {
@@ -167,7 +168,8 @@ namespace CopyWords.Core.ViewModels
                 {
                     translatorApiURL = appSettings.TranslatorApiUrl;
                 }
-                wordModel = await _lookUpWord.LookUpWordAsync(word, new Options(_selectDictionaryViewModel.SelectedParser.SourceLanguage, translatorApiURL, appSettings.TranslateMeanings));
+                wordModel = await _lookUpWord.LookUpWordAsync(word,
+                    new Options(_selectDictionaryViewModel.SelectedParser.SourceLanguage, translatorApiURL, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
 
                 if (wordModel == null)
                 {

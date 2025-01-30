@@ -248,6 +248,15 @@
 
                 <HorizontalStackLayout Margin="20,10,0,0">
                     <Label
+                        Text="Translate headword"
+                        VerticalOptions="Center"></Label>
+                    <CheckBox
+                        IsChecked="{Binding TranslateHeadword}"
+                        HorizontalOptions="Start" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Margin="20,10,0,0">
+                    <Label
                         Text="Translate meanings"
                         VerticalOptions="Center"></Label>
                     <CheckBox

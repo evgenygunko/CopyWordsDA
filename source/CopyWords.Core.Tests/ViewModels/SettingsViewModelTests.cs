@@ -40,6 +40,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.UseTranslator.Should().Be(appSettings.UseTranslator);
             sut.TranslatorApiUrl.Should().Be(appSettings.TranslatorApiUrl);
             sut.TranslateMeanings.Should().Be(appSettings.TranslateMeanings);
+            sut.TranslateHeadword.Should().Be(appSettings.TranslateHeadword);
         }
 
         #region Tests for CanSaveSettings
@@ -244,6 +245,7 @@ namespace CopyWords.Core.Tests.ViewModels
             bool useTranslator = _fixture.Create<bool>();
             string translatorApiUrl = _fixture.Create<string>();
             bool translateMeanings = _fixture.Create<bool>();
+            bool translateHeadword = _fixture.Create<bool>();
 
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             Mock<IShellService> shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
@@ -262,6 +264,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.UseTranslator = useTranslator;
             sut.TranslatorApiUrl = translatorApiUrl;
             sut.TranslateMeanings = translateMeanings;
+            sut.TranslateHeadword = translateHeadword;
 
             await sut.SaveSettingsAsync();
 
@@ -487,6 +490,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.UseTranslator.Should().Be(appSettings.UseTranslator);
             sut.TranslatorApiUrl.Should().Be(appSettings.TranslatorApiUrl);
             sut.TranslateMeanings.Should().Be(appSettings.TranslateMeanings);
+            sut.TranslateHeadword.Should().Be(appSettings.TranslateHeadword);
 
             settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()));
             dialogServiceMock.Verify(x => x.DisplayToast("Settings imported."));
