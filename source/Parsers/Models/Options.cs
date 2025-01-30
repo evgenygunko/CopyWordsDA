@@ -6,5 +6,5 @@
         Spanish
     }
 
-    public record Options(SourceLanguage SourceLang, string? TranslatorApiURL);
+    public record Options(SourceLanguage SourceLang, string? TranslatorApiURL, bool TranslateMeanings);
 }

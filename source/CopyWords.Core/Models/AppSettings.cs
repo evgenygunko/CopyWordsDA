@@ -1,4 +1,6 @@
-﻿namespace CopyWords.Core.Models
+﻿// Ignore Spelling: Ffmpeg Api App
+
+namespace CopyWords.Core.Models
 {
     public class AppSettings
     {
@@ -21,6 +23,8 @@
         public string TranslatorApiUrl { get; set; }
 
         public bool UseTranslator { get; set; }
+
+        public bool TranslateMeanings { get; set; }
 
         public string SelectedParser { get; set; }
     }

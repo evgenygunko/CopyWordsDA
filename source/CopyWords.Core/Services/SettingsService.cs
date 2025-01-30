@@ -45,6 +45,7 @@ namespace CopyWords.Core.Services
             appSettings.UseMp3gain = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && _preferences.Get<bool>("UseMp3gain", false);
             appSettings.UseTranslator = _preferences.Get<bool>("UseTranslator", false);
             appSettings.TranslatorApiUrl = _preferences.Get("TranslatorApiUrl", string.Empty);
+            appSettings.TranslateMeanings = _preferences.Get<bool>("TranslateMeanings", true);
             appSettings.SelectedParser = _preferences.Get("SelectedParser", string.Empty);
 
             return appSettings;
@@ -63,6 +64,7 @@ namespace CopyWords.Core.Services
             _preferences.Set("UseMp3gain", appSettings.UseMp3gain);
             _preferences.Set("UseTranslator", appSettings.UseTranslator);
             _preferences.Set("TranslatorApiUrl", appSettings.TranslatorApiUrl);
+            _preferences.Set("TranslateMeanings", appSettings.TranslateMeanings);
             _preferences.Set("SelectedParser", appSettings.SelectedParser);
         }
 

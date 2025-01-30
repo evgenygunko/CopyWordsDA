@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿// Ignore Spelling: App
+
+using System.Runtime.InteropServices;
 using AutoFixture;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
@@ -91,6 +93,17 @@ namespace CopyWords.Core.Tests.Services
             // ExportSettingsAsync reads settings from current preferences storage
             preferencesMock.Verify(x => x.Get("AnkiSoundsFolder", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("FfmpegBinFolder", It.IsAny<string>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("Mp3gainPath", It.IsAny<string>(), It.IsAny<string>()));
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                preferencesMock.Verify(x => x.Get("UseMp3gain", false, It.IsAny<string>()));
+            }
+
+            preferencesMock.Verify(x => x.Get("UseTranslator", false, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("TranslatorApiUrl", It.IsAny<string>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("TranslateMeanings", true, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
         }
 
         #endregion
@@ -117,6 +130,16 @@ namespace CopyWords.Core.Tests.Services
             // ImportSettingsAsync also saves settings to current preferences storage
             preferencesMock.Verify(x => x.Set("AnkiSoundsFolder", result.AnkiSoundsFolder, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("FfmpegBinFolder", result.FfmpegBinFolder, It.IsAny<string>()));
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                preferencesMock.Verify(x => x.Set("UseMp3gain", false, It.IsAny<string>()));
+            }
+
+            preferencesMock.Verify(x => x.Set("UseTranslator", false, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("TranslatorApiUrl", It.IsAny<string>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("TranslateMeanings", false, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
         }
 
         #endregion

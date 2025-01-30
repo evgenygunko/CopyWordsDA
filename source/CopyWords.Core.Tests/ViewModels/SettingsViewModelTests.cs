@@ -1,4 +1,6 @@
-﻿using System.Runtime.Versioning;
+﻿// Ignore Spelling: Ffmpeg Api
+
+using System.Runtime.Versioning;
 using AutoFixture;
 using CommunityToolkit.Maui.Storage;
 using CopyWords.Core.Models;
@@ -37,6 +39,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.Mp3gainPath.Should().Be(appSettings.Mp3gainPath);
             sut.UseTranslator.Should().Be(appSettings.UseTranslator);
             sut.TranslatorApiUrl.Should().Be(appSettings.TranslatorApiUrl);
+            sut.TranslateMeanings.Should().Be(appSettings.TranslateMeanings);
         }
 
         #region Tests for CanSaveSettings
@@ -134,7 +137,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
             fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
-            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.FfmpegBinFolder)).Returns(true); ;
+            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.FfmpegBinFolder)).Returns(true);
             fileIOServiceMock.Setup(x => x.FileExists(appSettings.Mp3gainPath)).Returns(mp3gainPathExists);
 
             var sut = new SettingsViewModel(
@@ -240,6 +243,7 @@ namespace CopyWords.Core.Tests.ViewModels
             string mp3gainPath = _fixture.Create<string>();
             bool useTranslator = _fixture.Create<bool>();
             string translatorApiUrl = _fixture.Create<string>();
+            bool translateMeanings = _fixture.Create<bool>();
 
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             Mock<IShellService> shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
@@ -257,6 +261,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.Mp3gainPath = mp3gainPath;
             sut.UseTranslator = useTranslator;
             sut.TranslatorApiUrl = translatorApiUrl;
+            sut.TranslateMeanings = translateMeanings;
 
             await sut.SaveSettingsAsync();
 
@@ -481,6 +486,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.Mp3gainPath.Should().Be(appSettings.Mp3gainPath);
             sut.UseTranslator.Should().Be(appSettings.UseTranslator);
             sut.TranslatorApiUrl.Should().Be(appSettings.TranslatorApiUrl);
+            sut.TranslateMeanings.Should().Be(appSettings.TranslateMeanings);
 
             settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()));
             dialogServiceMock.Verify(x => x.DisplayToast("Settings imported."));

@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
 using CopyWords.Core.ViewModels;
-using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.Services
 {
@@ -23,14 +22,11 @@ namespace CopyWords.Core.Services
         private const string TemplateGrayText = "<span style=\"color: rgba(0, 0, 0, 0.4)\">{0}</span>";
 
         private readonly ISaveImageFileService _saveImageFileService;
-        private readonly ISettingsService _settingsService;
 
         public CopySelectedToClipboardService(
-            ISaveImageFileService saveImageFileService,
-            ISettingsService settingsService)
+            ISaveImageFileService saveImageFileService)
         {
             _saveImageFileService = saveImageFileService;
-            _settingsService = settingsService;
         }
 
         #region Public Methods
@@ -93,6 +89,7 @@ namespace CopyWords.Core.Services
 
             List<string> backMeanings = new();
             int imageIndex = 0;
+            bool translateMeanings = false;
 
             foreach (var contextVM in definitionViewModel.ContextViewModels)
             {
@@ -125,6 +122,7 @@ namespace CopyWords.Core.Services
                         {
                             backMeaning.Append("<br>");
                             backMeaning.AppendFormat(TemplateGrayText, meaningVM.Translation);
+                            translateMeanings |= true;
                         }
 
                         if (meaningVM.IsImageChecked && !string.IsNullOrEmpty(meaningVM.ImageUrl))
@@ -167,7 +165,6 @@ namespace CopyWords.Core.Services
             // Now go through all meanings and add numbering
             int count = backMeanings.Count;
             int i = 1;
-            bool isSpanish = _settingsService.LoadSettings().SelectedParser == SourceLanguage.Spanish.ToString();
 
             foreach (string backMeaning in backMeanings)
             {
@@ -182,7 +179,8 @@ namespace CopyWords.Core.Services
                 if (i < count)
                 {
                     // Spanish meanings are usually very short, so a horizontal line doesn't look good.
-                    sb.Append(isSpanish ? "<br>" : "<hr>");
+                    // For Danish dictionary, add <hr> tag only if "translate meanings" is selected.
+                    sb.Append(translateMeanings ? "<hr>" : "<br>");
                 }
 
                 i++;

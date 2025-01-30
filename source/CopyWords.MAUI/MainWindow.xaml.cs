@@ -9,18 +9,15 @@ namespace CopyWords.MAUI;
 public partial class MainWindow : Window
 {
     private readonly IUpdateService _updateService;
-    private readonly IDialogService _dialogService;
     private readonly GetUpdateViewModel _getUpdateViewModel;
 
     public MainWindow(
         IUpdateService updateService,
-        IDialogService dialogService,
         GetUpdateViewModel getUpdateViewModel)
     {
         InitializeComponent();
 
         _updateService = updateService;
-        _dialogService = dialogService;
         _getUpdateViewModel = getUpdateViewModel;
     }
 

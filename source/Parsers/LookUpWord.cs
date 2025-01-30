@@ -156,7 +156,7 @@ namespace CopyWords.Parsers
             {
                 // Safe check - some words have a lot of meanings, we will only translate first 5.
                 string? meaningTranslation = null;
-                if (pos <= 5)
+                if (options.TranslateMeanings && pos <= 5)
                 {
                     meaningTranslation = await TranslateMeaningAsync(options.TranslatorApiURL, LanguageDA, ddoDefinition.Meaning, ddoDefinition.Examples.Select(x => x.Original));
                 }

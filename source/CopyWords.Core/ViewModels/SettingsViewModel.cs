@@ -69,6 +69,10 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool useTranslator;
 
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
+        private bool translateMeanings;
+
         public string About => $"App version: {AppInfo.VersionString} (Build {AppInfo.BuildString}), {RuntimeInformation.FrameworkDescription}";
 
         public bool CanSaveSettings
@@ -207,6 +211,7 @@ namespace CopyWords.Core.ViewModels
             appSettings.Mp3gainPath = Mp3gainPath;
             appSettings.UseTranslator = UseTranslator;
             appSettings.TranslatorApiUrl = TranslatorApiUrl;
+            appSettings.TranslateMeanings = TranslateMeanings;
 
             _settingsService.SaveSettings(appSettings);
 
@@ -234,7 +239,7 @@ namespace CopyWords.Core.ViewModels
             {
                 // Attempting to use a filter on MacOS causes the FilePicker to throw an exception.
                 // There’s a related issue on GitHub (https://github.com/dotnet/maui/issues/9394#issuecomment-1285814762)
-                // indicating it should work, but an exception still occurs. 
+                // indicating it should work, but an exception still occurs.
                 // For now, filtering is enabled only for Windows.
                 var customFileType = new FilePickerFileType(
                     new Dictionary<DevicePlatform, IEnumerable<string>>
@@ -277,6 +282,7 @@ namespace CopyWords.Core.ViewModels
 
             UseTranslator = appSettings.UseTranslator;
             TranslatorApiUrl = appSettings.TranslatorApiUrl;
+            TranslateMeanings = appSettings.TranslateMeanings;
         }
 
         #endregion

@@ -2,7 +2,6 @@
 
 using System.Collections.ObjectModel;
 using AutoFixture;
-using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.Parsers.Models;
@@ -217,10 +216,30 @@ namespace CopyWords.Core.Tests.Services
         #region Danish
 
         [TestMethod]
+        public async Task CompileBackAsyncWhenTranslationInMeaningIsNotEmpty_AddsHRTagAsADelimiterBetweenMeanings()
+        {
+            var definitionVMs = CreateVMForHaj();
+            foreach (var maningVM in definitionVMs[0].ContextViewModels[0].MeaningViewModels)
+            {
+                foreach (var exampleVM in maningVM.ExampleViewModels)
+                {
+                    exampleVM.IsChecked = true;
+                }
+            }
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string result = await sut.CompileBackAsync(definitionVMs[0]);
+
+            result.Should().Be(
+                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><hr>" +
+                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><hr>" +
+                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">человек, который особенно умел в игре, ремесле и т. д.</span>");
+        }
+
+        [TestMethod]
         public async Task CompileBackAsync_WhenTranslationInMeaningIsEmpty_OnlyAddsOriginalMeaningToResult()
         {
-            SetSelectedParser(SourceLanguage.Danish);
-
             var definitionVMs = CreateVMForLigeud();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[2].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = false;
@@ -236,8 +255,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenRussianTranslationIsSelected_AddsTranslationToResult()
         {
-            SetSelectedParser(SourceLanguage.Danish);
-
             var definitionVMs = CreateVMForGrillspyd();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
@@ -256,8 +273,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenOnlyRussianTranslationIsSelected_DoesNotAddSpan()
         {
-            SetSelectedParser(SourceLanguage.Danish);
-
             var definitionVMs = CreateVMForGrillspyd();
             //definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
@@ -273,8 +288,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenEnglishTranslationIsSelected_AddsTranslationToResult()
         {
-            SetSelectedParser(SourceLanguage.Danish);
-
             var definitionVMs = CreateVMForGrillspyd();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = false;
@@ -293,8 +306,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenBothTranslationsAreSelected_AddsTranslationsToResult()
         {
-            SetSelectedParser(SourceLanguage.Danish);
-
             var definitionVMs = CreateVMForGrillspyd();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
@@ -314,8 +325,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenOneExampleIsSelected_DoesNotAddNumbers()
         {
-            SetSelectedParser(SourceLanguage.Danish);
-
             var definitionVMs = CreateVMForGrillspyd();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = false;
@@ -333,8 +342,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenSeveralExamplesAreSelected_AddsNumbers()
         {
-            SetSelectedParser(SourceLanguage.Danish);
-
             var definitionVMs = CreateVMForHaj();
             foreach (var maningVM in definitionVMs[0].ContextViewModels[0].MeaningViewModels)
             {
@@ -361,8 +368,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_ForCocheWhenOneExampleSelected_ReturnsOneBackMeaning()
         {
-            SetSelectedParser(SourceLanguage.Spanish);
-
             var definitionVMs = CreateVMForCoche();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
@@ -376,8 +381,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_ForCocheWhenTwoExamplesSelected_ReturnsOneBackMeaning()
         {
-            SetSelectedParser(SourceLanguage.Spanish);
-
             var definitionVMs = CreateVMForCoche();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].ContextViewModels[1].MeaningViewModels[1].ExampleViewModels[0].IsChecked = true;
@@ -394,8 +397,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenImageUrlIsPresentAndSelected_CallsSaveImageFileService()
         {
-            SetSelectedParser(SourceLanguage.Spanish);
-
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
@@ -418,8 +419,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenImageUrlIsPresentButNotSelected_DoesNotCallSaveImageFileService()
         {
-            SetSelectedParser(SourceLanguage.Spanish);
-
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
@@ -439,8 +438,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenImageUrlIsNull_DoesNotCallSaveImageFileService()
         {
-            SetSelectedParser(SourceLanguage.Spanish);
-
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
@@ -459,8 +456,6 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task CompileBackAsync_WhenMultipleImagesArePresentAndSelected_SavesImagesUnderDifferentNames()
         {
-            SetSelectedParser(SourceLanguage.Spanish);
-
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
@@ -1336,15 +1331,6 @@ namespace CopyWords.Core.Tests.Services
         #endregion
 
         private static string StyleAttributeForTag => "style=\"color:#404040; background-color:#eaeff2; border:1px solid #CCCCCC; margin-right:10px; font-size: 80%;\"";
-
-        private void SetSelectedParser(SourceLanguage sourceLanguage)
-        {
-            AppSettings appSettings = _fixture.Create<AppSettings>();
-            appSettings.SelectedParser = sourceLanguage.ToString();
-
-            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
-        }
 
         #endregion
     }
