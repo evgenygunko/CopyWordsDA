@@ -23,9 +23,9 @@ namespace CopyWords.Parsers.Services
 
         public async Task<WordModel> TranslateAsync(string url, SourceLanguage sourceLanguage, WordModel wordModel)
         {
-            Models.Translations.Input.TranslationInput2 translationInput = CreateTranslationInputFromWordModel(sourceLanguage, wordModel);
+            Models.Translations.Input.TranslationInput translationInput = CreateTranslationInputFromWordModel(sourceLanguage, wordModel);
 
-            Models.Translations.Output.TranslationOutput2? translationOutput = await _translatorAPIClient.Translate2Async(url, translationInput);
+            Models.Translations.Output.TranslationOutput? translationOutput = await _translatorAPIClient.TranslateAsync(url, translationInput);
 
             if (translationOutput == null)
             {
@@ -36,7 +36,7 @@ namespace CopyWords.Parsers.Services
             return wordModelWithTranslations;
         }
 
-        private Models.Translations.Input.TranslationInput2 CreateTranslationInputFromWordModel(SourceLanguage sourceLanguage, WordModel wordModel)
+        private Models.Translations.Input.TranslationInput CreateTranslationInputFromWordModel(SourceLanguage sourceLanguage, WordModel wordModel)
         {
             Definition firstDefinition = wordModel.Definitions.First();
 
@@ -63,7 +63,7 @@ namespace CopyWords.Parsers.Services
                 }
             }
 
-            var translationInput = new Models.Translations.Input.TranslationInput2(
+            var translationInput = new Models.Translations.Input.TranslationInput(
                 Version: "1",
                 SourceLanguage: sourceLanguage.ToString(),
                 DestinationLanguages: DestinationLanguages,
@@ -72,7 +72,7 @@ namespace CopyWords.Parsers.Services
             return translationInput;
         }
 
-        private WordModel CreateWordModelFromTranslationOutput(WordModel wordModel, Models.Translations.Output.TranslationOutput2 translationOutput)
+        private WordModel CreateWordModelFromTranslationOutput(WordModel wordModel, Models.Translations.Output.TranslationOutput translationOutput)
         {
             var definitionsWithTranslations = new List<Definition>();
             int i = 0;
@@ -118,7 +118,7 @@ namespace CopyWords.Parsers.Services
             return wordModelWithTranslations;
         }
 
-        private Headword CreateHeadWordWithTranslations(string headwordOriginal, Models.Translations.Output.TranslationOutput2 translationOutput)
+        private Headword CreateHeadWordWithTranslations(string headwordOriginal, Models.Translations.Output.TranslationOutput translationOutput)
         {
             IEnumerable<string>? translationVariantsEN = translationOutput.Headword.FirstOrDefault(x => x.Language == LanguageEN)?.HeadwordTranslations;
             string translationsEN = string.Join(", ", translationVariantsEN ?? []);

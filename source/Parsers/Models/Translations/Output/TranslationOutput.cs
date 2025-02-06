@@ -1,7 +1,7 @@
 ﻿namespace CopyWords.Parsers.Models.Translations.Output
 {
     // The output model returned by the Azure function.
-    public record TranslationOutput2(Headword[] Headword, Meaning[] Meanings);
+    public record TranslationOutput(Headword[] Headword, Meaning[] Meanings);
 
     public record Headword(string Language, IEnumerable<string> HeadwordTranslations);
 

@@ -1,6 +1,6 @@
 ﻿namespace CopyWords.Parsers.Models.Translations.Input
 {
-    public record TranslationInput2(
+    public record TranslationInput(
         string Version,
         string SourceLanguage,
         IEnumerable<string> DestinationLanguages,
