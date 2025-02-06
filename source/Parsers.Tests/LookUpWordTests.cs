@@ -262,7 +262,7 @@ namespace CopyWords.Parsers.Tests
             ddoPageParserMock.Setup(x => x.ParseDefinitions()).Returns(definitions);
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
-            translationsServiceMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<SourceLanguage>(), It.IsAny<WordModel>())).ReturnsAsync(_fixture.Create<WordModel>());
+            translationsServiceMock.Setup(x => x.TranslateAsync(It.IsAny<Options>(), It.IsAny<WordModel>())).ReturnsAsync(_fixture.Create<WordModel>());
 
             var sut = _fixture.Create<LookUpWord>();
 
@@ -270,7 +270,7 @@ namespace CopyWords.Parsers.Tests
 
             result.Should().NotBeNull();
 
-            translationsServiceMock.Verify(x => x.TranslateAsync(translatorApiUrl, SourceLanguage.Danish, It.IsAny<WordModel>()));
+            translationsServiceMock.Verify(x => x.TranslateAsync(options, It.IsAny<WordModel>()));
         }
 
         [TestMethod]
@@ -296,7 +296,7 @@ namespace CopyWords.Parsers.Tests
             WordModel? result = await sut.GetWordByUrlAsync(ddoUrl, options);
 
             result.Should().NotBeNull();
-            translationsServiceMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<SourceLanguage>(), It.IsAny<WordModel>()), Times.Never);
+            translationsServiceMock.Verify(x => x.TranslateAsync(It.IsAny<Options>(), It.IsAny<WordModel>()), Times.Never);
         }
 
         [TestMethod]
@@ -322,7 +322,31 @@ namespace CopyWords.Parsers.Tests
             WordModel? result = await sut.GetWordByUrlAsync(ddoUrl, options);
 
             result.Should().NotBeNull();
-            translationsServiceMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<SourceLanguage>(), It.IsAny<WordModel>()), Times.Never);
+            translationsServiceMock.Verify(x => x.TranslateAsync(It.IsAny<Options>(), It.IsAny<WordModel>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task GetWordByUrlAsync_WhenParserReturnsNull_DoesNotCallTranslationsService()
+        {
+            string ddoUrl = _fixture.Create<string>();
+            string translatorApiUrl = "http://localhost:7014/api/Translate";
+            string headWord = _fixture.Create<string>();
+
+            Options options = new Options(SourceLanguage.Spanish, translatorApiUrl, TranslateHeadword: true, TranslateMeanings: true);
+
+            Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
+            fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8)).ReturnsAsync("casa.html");
+
+            Mock<ISpanishDictPageParser> spanishDictPageParserMock = _fixture.Freeze<Mock<ISpanishDictPageParser>>();
+            spanishDictPageParserMock.Setup(x => x.ParseWordJson(It.IsAny<string>())).Returns((Models.SpanishDict.WordJsonModel?)null);
+
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+
+            var sut = _fixture.Create<LookUpWord>();
+            WordModel? result = await sut.GetWordByUrlAsync(ddoUrl, options);
+
+            result.Should().BeNull();
+            translationsServiceMock.Verify(x => x.TranslateAsync(It.IsAny<Options>(), It.IsAny<WordModel>()), Times.Never);
         }
 
         #endregion

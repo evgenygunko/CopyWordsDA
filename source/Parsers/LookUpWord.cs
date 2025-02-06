@@ -112,7 +112,7 @@ namespace CopyWords.Parsers
                 && !string.IsNullOrEmpty(options.TranslatorApiURL)
                 && (options.TranslateHeadword || options.TranslateMeanings))
             {
-                wordModel = await _translationsService.TranslateAsync(options.TranslatorApiURL, options.SourceLang, wordModel);
+                wordModel = await _translationsService.TranslateAsync(options, wordModel);
             }
 
             return wordModel;
