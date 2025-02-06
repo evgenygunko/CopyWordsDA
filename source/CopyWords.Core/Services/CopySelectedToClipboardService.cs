@@ -178,9 +178,8 @@ namespace CopyWords.Core.Services
 
                 if (i < count)
                 {
-                    // Spanish meanings are usually very short, so a horizontal line doesn't look good.
-                    // For Danish dictionary, add <hr> tag only if "translate meanings" is selected.
-                    sb.Append(translateMeanings ? "<hr>" : "<br>");
+                    // If the translations are selected, add an additional <br> tag so that the meanings look visually better separated.
+                    sb.Append(translateMeanings ? "<br><br>" : "<br>");
                 }
 
                 i++;

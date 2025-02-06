@@ -232,8 +232,8 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be(
-                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><hr>" +
-                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><hr>" +
+                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><br><br>" +
+                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><br><br>" +
                 $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">человек, который особенно умел в игре, ремесле и т. д.</span>");
         }
 
@@ -356,8 +356,8 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs[0]);
 
             result.Should().Be(
-                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><hr>" +
-                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><hr>" +
+                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><br><br>" +
+                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><br><br>" +
                 $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">человек, который особенно умел в игре, ремесле и т. д.</span>");
         }
 
