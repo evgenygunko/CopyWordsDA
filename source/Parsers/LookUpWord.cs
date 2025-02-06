@@ -19,16 +19,9 @@ namespace CopyWords.Parsers
 
     public class LookUpWord : ILookUpWord
     {
-        private const string LanguageDA = "da";
-        private const string LanguageES = "es";
-        private const string LanguageRU = "ru";
-        private const string LanguageEN = "en";
-        private readonly string[] DestinationLanguages = [LanguageRU, LanguageEN];
-
         private readonly IDDOPageParser _ddoPageParser;
         private readonly ISpanishDictPageParser _spanishDictPageParser;
         private readonly IFileDownloader _fileDownloader;
-        private readonly ITranslatorAPIClient _translatorAPIClient;
         private readonly ITranslationsService _translationsService;
 
         private readonly Regex _lookupRegex = new Regex(@"^[\w ]+$");
@@ -37,13 +30,11 @@ namespace CopyWords.Parsers
             IDDOPageParser ddoPageParser,
             ISpanishDictPageParser spanishDictPageParser,
             IFileDownloader fileDownloader,
-            ITranslatorAPIClient translatorAPIClient,
             ITranslationsService translationsService)
         {
             _ddoPageParser = ddoPageParser;
             _spanishDictPageParser = spanishDictPageParser;
             _fileDownloader = fileDownloader;
-            _translatorAPIClient = translatorAPIClient;
             _translationsService = translationsService;
         }
 
@@ -102,25 +93,29 @@ namespace CopyWords.Parsers
                 return null;
             }
 
+            WordModel? wordModel;
             switch (options.SourceLang)
             {
                 case SourceLanguage.Danish:
-                    WordModel wordModel = ParseDanishWord(html);
-
-                    if (!string.IsNullOrEmpty(options.TranslatorApiURL) && (options.TranslateHeadword || options.TranslateMeanings))
-                    {
-                        wordModel = await _translationsService.TranslateAsync(options.TranslatorApiURL, options.SourceLang, wordModel);
-                    }
-
-                    return wordModel;
+                    wordModel = ParseDanishWord(html);
+                    break;
 
                 case SourceLanguage.Spanish:
-                    // todo: call _translationsService.TranslateAsync()
-                    return await ParseSpanishWordAsync(html, options);
+                    wordModel = ParseSpanishWord(html);
+                    break;
 
                 default:
                     throw new ArgumentException($"Source language '{options.SourceLang}' is not supported");
             }
+
+            if (wordModel != null
+                && !string.IsNullOrEmpty(options.TranslatorApiURL)
+                && (options.TranslateHeadword || options.TranslateMeanings))
+            {
+                wordModel = await _translationsService.TranslateAsync(options.TranslatorApiURL, options.SourceLang, wordModel);
+            }
+
+            return wordModel;
         }
 
         #endregion
@@ -167,7 +162,7 @@ namespace CopyWords.Parsers
             return wordModel;
         }
 
-        internal async Task<WordModel?> ParseSpanishWordAsync(string html, Options options)
+        internal WordModel? ParseSpanishWord(string html)
         {
             Models.SpanishDict.WordJsonModel? wordObj = _spanishDictPageParser.ParseWordJson(html);
             if (wordObj == null)
@@ -200,10 +195,12 @@ namespace CopyWords.Parsers
                     contexts.Add(new Context(spanishDictContext.ContextEN, spanishDictContext.Position.ToString(), meanings));
                 }
 
-                Headword headword = await CreateHeadwordModelForSpanishAsync(options, spanishDictDefinition, contexts);
-
                 // Spanish words don't have endings, this property only makes sense for Danish
-                definitions.Add(new Definition(headword, spanishDictDefinition.PartOfSpeech, Endings: "", contexts));
+                definitions.Add(new Definition(
+                    Headword: new Headword(Original: spanishDictDefinition.WordES, English: null, Russian: null),
+                    PartOfSpeech: spanishDictDefinition.PartOfSpeech,
+                    Endings: "",
+                    Contexts: contexts));
             }
 
             var wordModel = new WordModel(
@@ -215,56 +212,6 @@ namespace CopyWords.Parsers
             );
 
             return wordModel;
-        }
-
-        internal async Task<Headword> CreateHeadwordModelForSpanishAsync(Options options, Models.SpanishDict.SpanishDictDefinition spanishDictDefinition, List<Context> contexts)
-        {
-            string? translationsEN = null;
-            string? translationsRU = null;
-
-            // If TranslatorAPI URL is configured, call translator app and add returned translations to word model.
-            if (options.TranslateHeadword && !string.IsNullOrEmpty(options.TranslatorApiURL))
-            {
-                string meaningToTranslate = contexts.FirstOrDefault()?.Meanings.FirstOrDefault()?.Original + " " + contexts.FirstOrDefault()?.ContextEN;
-                IEnumerable<string> examplesToTranslate = contexts.FirstOrDefault()?.Meanings.FirstOrDefault()?.Examples.Select(x => x.Original)
-                    ?? [];
-
-                TranslationOutput translationOutput = await GetTranslationAsync(
-                    options?.TranslatorApiURL,
-                    sourceLanguage: LanguageES,
-                    word: spanishDictDefinition.WordES,
-                    meaning: meaningToTranslate,
-                    partOfSpeech: spanishDictDefinition.PartOfSpeech,
-                    examples: examplesToTranslate);
-
-                IEnumerable<string>? translationVariantsEN = translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageEN)?.TranslationVariants;
-                translationsEN = string.Join(", ", translationVariantsEN ?? []);
-
-                IEnumerable<string>? translationVariantsRU = translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageRU)?.TranslationVariants;
-                translationsRU = string.Join(", ", translationVariantsRU ?? []);
-            }
-
-            return new Headword(spanishDictDefinition.WordES, translationsEN, translationsRU);
-        }
-
-        internal async Task<TranslationOutput> GetTranslationAsync(
-            string? translatorApiURL,
-            string sourceLanguage,
-            string word,
-            string meaning,
-            string partOfSpeech,
-            IEnumerable<string> examples)
-        {
-            TranslationOutput? translationOutput = null;
-
-            if (!string.IsNullOrEmpty(translatorApiURL))
-            {
-                var translationInput = new TranslationInput(sourceLanguage, DestinationLanguages, word, meaning, partOfSpeech, examples);
-
-                translationOutput = await _translatorAPIClient.TranslateAsync(translatorApiURL, translationInput);
-            }
-
-            return translationOutput ?? new TranslationOutput([]);
         }
 
         #endregion

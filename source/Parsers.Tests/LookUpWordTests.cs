@@ -3,7 +3,6 @@
 using System.Text;
 using AutoFixture;
 using CopyWords.Parsers.Models;
-using CopyWords.Parsers.Models.DDO;
 using CopyWords.Parsers.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -328,55 +327,6 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
-        #region Tests for GetTranslationAsync
-
-        [TestMethod]
-        public async Task GetTranslationAsync_WhenTranslatorAPIUrlIsPassed_CallsTranslatorApi()
-        {
-            string translatorApiUrl = "http://localhost:7014/api/Translate";
-            string headWord = _fixture.Create<string>();
-            string meaning = _fixture.Create<string>();
-            string partOfSpeech = _fixture.Create<string>();
-
-            var translationOutput = new TranslationOutput(
-                [
-                    new TranslationItem("ru", [ "акула" ])
-                ]);
-
-            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
-            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
-
-            var sut = _fixture.Create<LookUpWord>();
-            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLanguage: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
-
-            result.Translations.Should().HaveCount(1);
-
-            TranslationItem translationRU = result.Translations.Single();
-            translationRU.Language.Should().Be("ru");
-            translationRU.TranslationVariants.Should().HaveCount(1);
-            translationRU.TranslationVariants.First().Should().Be("акула");
-        }
-
-        [TestMethod]
-        public async Task GetTranslationAsync_WhenTranslatorAPIUrlIsNull_ReturnsEmpty()
-        {
-            const string? translatorApiUrl = null;
-            string headWord = _fixture.Create<string>();
-            string meaning = _fixture.Create<string>();
-            string partOfSpeech = _fixture.Create<string>();
-
-            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
-
-            var sut = _fixture.Create<LookUpWord>();
-            TranslationOutput? result = await sut.GetTranslationAsync(translatorApiUrl, sourceLanguage: "da", headWord, meaning, partOfSpeech, examples: Enumerable.Empty<string>());
-
-            result.Translations.Should().HaveCount(0);
-
-            translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()), Times.Never);
-        }
-
-        #endregion
-
         #region Tests for ParseDanishWord
 
         [TestMethod]
@@ -441,14 +391,13 @@ namespace CopyWords.Parsers.Tests
 
         #endregion
 
-        #region Tests for ParseSpanishWordAsync
+        #region Tests for ParseSpanishWord
 
         [TestMethod]
-        public async Task ParseSpanishWordAsync_Should_Return2MeaningsForAfeitar()
+        public void ParseSpanishWord_Should_Return2MeaningsForAfeitar()
         {
             string headwordES = "afeitar";
             string html = _fixture.Create<string>();
-            var options = new Options(SourceLanguage.Spanish, TranslatorApiURL: null, TranslateHeadword: false, TranslateMeanings: false);
 
             Mock<ISpanishDictPageParser> spanishDictPageParserMock = _fixture.Freeze<Mock<ISpanishDictPageParser>>();
             spanishDictPageParserMock.Setup(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>())).Returns(headwordES);
@@ -456,7 +405,7 @@ namespace CopyWords.Parsers.Tests
 
             var sut = _fixture.Create<LookUpWord>();
 
-            WordModel? result = await sut.ParseSpanishWordAsync(html, options);
+            WordModel? result = sut.ParseSpanishWord(html);
 
             result.Should().NotBeNull();
 
@@ -508,139 +457,6 @@ namespace CopyWords.Parsers.Tests
             spanishDictPageParserMock.Verify(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>()));
             spanishDictPageParserMock.Verify(x => x.ParseSoundURL(It.IsAny<Models.SpanishDict.WordJsonModel>()));
             spanishDictPageParserMock.Verify(x => x.ParseDefinitions(It.IsAny<Models.SpanishDict.WordJsonModel>()));
-        }
-
-        [TestMethod]
-        public async Task ParseSpanishWordAsync_Should_CallTranslationService()
-        {
-            string headwordES = "casa";
-            string html = _fixture.Create<string>();
-
-            string translationApiURL = _fixture.Create<Uri>().ToString();
-            var options = new Options(SourceLanguage.Spanish, TranslatorApiURL: translationApiURL, TranslateHeadword: true, TranslateMeanings: false);
-            var translationOutput = new TranslationOutput(
-                [
-                    new TranslationItem("ru", [ "дом" ]),
-                    new TranslationItem("en", [ "house", "household" ])
-                ]);
-
-            Mock<ISpanishDictPageParser> spanishDictPageParserMock = _fixture.Freeze<Mock<ISpanishDictPageParser>>();
-            spanishDictPageParserMock.Setup(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>())).Returns(headwordES);
-            spanishDictPageParserMock.Setup(x => x.ParseDefinitions(It.IsAny<Models.SpanishDict.WordJsonModel>())).Returns(CreateDefinitionsForCasa());
-
-            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
-            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
-
-            var sut = _fixture.Create<LookUpWord>();
-            WordModel? result = await sut.ParseSpanishWordAsync(html, options);
-
-            result.Should().NotBeNull();
-
-            result!.Word.Should().Be(headwordES);
-
-            IEnumerable<Definition> definitions = result!.Definitions;
-            definitions.Should().HaveCount(1);
-
-            // 1. house (dwelling)
-            Definition definition1 = definitions.First();
-            definition1.Headword.Original.Should().Be("casa");
-            definition1.Headword.Russian.Should().Be("дом");
-            definition1.Headword.English.Should().Be("house, household");
-
-            // For Spanish words, we only translate headword but don't translate meanings.
-            translatorAPIClientMock.Verify(x => x.TranslateAsync(translationApiURL, It.Is<TranslationInput>(input =>
-                input.SourceLanguage == "es"
-                && input.DestinationLanguages.Count() == 2
-                && input.Word == headwordES
-                && input.Meaning == "house (dwelling)"
-                && input.PartOfSpeech == "feminine noun"
-                && input.Examples.Count() == 1 && input.Examples.First() == "Vivimos en una casa con un gran jardín.")),
-                Times.Once());
-        }
-
-        #endregion
-
-        #region Tests for CreateHeadwordModelForSpanishAsync
-
-        [TestMethod]
-        public async Task CreateHeadwordModelForSpanishAsync_WhenTranslateHeadwordIsTrueAndTranslatorApiURLIsNotEmpty_CallsTranslatorAPIClient()
-        {
-            string translatorApiUrl = _fixture.Create<Uri>().ToString();
-            const bool translateHeadword = true;
-
-            var options = new Options(SourceLanguage.Danish, TranslatorApiURL: translatorApiUrl, translateHeadword, TranslateMeanings: true);
-
-            Models.SpanishDict.SpanishDictDefinition spanishDictDefinition = _fixture.Create<Models.SpanishDict.SpanishDictDefinition>();
-            List<Context> contexts = _fixture.Create<List<Context>>();
-
-            var translationOutput = new TranslationOutput(
-                [
-                    new TranslationItem("ru", [ "акула" ]),
-                    new TranslationItem("en", [ "shark" ]),
-                ]);
-
-            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
-            translatorAPIClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>())).ReturnsAsync(translationOutput);
-
-            var sut = _fixture.Create<LookUpWord>();
-            Headword result = await sut.CreateHeadwordModelForSpanishAsync(options, spanishDictDefinition, contexts);
-
-            result.English.Should().Be("shark");
-            result.Russian.Should().Be("акула");
-
-            translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()));
-        }
-
-        [TestMethod]
-        public async Task CreateHeadwordModelForSpanishAsync_WhenTranslateHeadwordIsFalseAndTranslatorApiURLIsNotEmpty_DoesNotCallTranslatorAPIClient()
-        {
-            string translatorApiUrl = _fixture.Create<Uri>().ToString();
-            const bool translateHeadword = false;
-
-            Models.SpanishDict.SpanishDictDefinition spanishDictDefinition = _fixture.Create<Models.SpanishDict.SpanishDictDefinition>();
-            List<Context> contexts = _fixture.Create<List<Context>>();
-
-            var options = new Options(SourceLanguage.Danish, TranslatorApiURL: translatorApiUrl, translateHeadword, TranslateMeanings: true);
-
-            string headWord = _fixture.Create<string>();
-            string partOfSpeech = _fixture.Create<string>();
-            List<DDODefinition> ddoDefinitions = _fixture.Create<List<DDODefinition>>();
-
-            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
-
-            var sut = _fixture.Create<LookUpWord>();
-            Headword result = await sut.CreateHeadwordModelForSpanishAsync(options, spanishDictDefinition, contexts);
-
-            result.English.Should().BeNull();
-            result.Russian.Should().BeNull();
-
-            translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()), Times.Never);
-        }
-
-        [TestMethod]
-        public async Task CreateHeadwordModelForSpanishAsync_WhenTranslateHeadwordIsTrueAndTranslatorApiURLIsEmpty_DoesNotCallTranslatorAPIClient()
-        {
-            const string? translatorApiUrl = null;
-            const bool translateHeadword = true;
-
-            Models.SpanishDict.SpanishDictDefinition spanishDictDefinition = _fixture.Create<Models.SpanishDict.SpanishDictDefinition>();
-            List<Context> contexts = _fixture.Create<List<Context>>();
-
-            var options = new Options(SourceLanguage.Danish, TranslatorApiURL: translatorApiUrl, translateHeadword, TranslateMeanings: true);
-
-            string headWord = _fixture.Create<string>();
-            string partOfSpeech = _fixture.Create<string>();
-            List<DDODefinition> ddoDefinitions = _fixture.Create<List<DDODefinition>>();
-
-            var translatorAPIClientMock = _fixture.Freeze<Mock<ITranslatorAPIClient>>();
-
-            var sut = _fixture.Create<LookUpWord>();
-            Headword result = await sut.CreateHeadwordModelForSpanishAsync(options, spanishDictDefinition, contexts);
-
-            result.English.Should().BeNull();
-            result.Russian.Should().BeNull();
-
-            translatorAPIClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<TranslationInput>()), Times.Never);
         }
 
         #endregion
