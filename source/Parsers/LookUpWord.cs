@@ -29,6 +29,7 @@ namespace CopyWords.Parsers
         private readonly ISpanishDictPageParser _spanishDictPageParser;
         private readonly IFileDownloader _fileDownloader;
         private readonly ITranslatorAPIClient _translatorAPIClient;
+        private readonly ITranslationsService _translationsService;
 
         private readonly Regex _lookupRegex = new Regex(@"^[\w ]+$");
 
@@ -36,12 +37,14 @@ namespace CopyWords.Parsers
             IDDOPageParser ddoPageParser,
             ISpanishDictPageParser spanishDictPageParser,
             IFileDownloader fileDownloader,
-            ITranslatorAPIClient translatorAPIClient)
+            ITranslatorAPIClient translatorAPIClient,
+            ITranslationsService translationsService)
         {
             _ddoPageParser = ddoPageParser;
             _spanishDictPageParser = spanishDictPageParser;
             _fileDownloader = fileDownloader;
             _translatorAPIClient = translatorAPIClient;
+            _translationsService = translationsService;
         }
 
         #region Public Methods
@@ -102,9 +105,17 @@ namespace CopyWords.Parsers
             switch (options.SourceLang)
             {
                 case SourceLanguage.Danish:
-                    return await ParseDanishWordAsync(html, options);
+                    WordModel wordModel = ParseDanishWord(html);
+
+                    if (!string.IsNullOrEmpty(options.TranslatorApiURL) && (options.TranslateHeadword || options.TranslateMeanings))
+                    {
+                        wordModel = await _translationsService.TranslateAsync(options.TranslatorApiURL, options.SourceLang, wordModel);
+                    }
+
+                    return wordModel;
 
                 case SourceLanguage.Spanish:
+                    // todo: call _translationsService.TranslateAsync()
                     return await ParseSpanishWordAsync(html, options);
 
                 default:
@@ -116,7 +127,7 @@ namespace CopyWords.Parsers
 
         #region Internal Methods
 
-        internal async Task<WordModel?> ParseDanishWordAsync(string html, Options options)
+        internal WordModel ParseDanishWord(string html)
         {
             // Download and parse a page from DDO
             _ddoPageParser.LoadHtml(html);
@@ -130,24 +141,20 @@ namespace CopyWords.Parsers
 
             List<DDODefinition> ddoDefinitions = _ddoPageParser.ParseDefinitions();
 
-            Headword headword = await CreateHeadwordModelForDanishAsync(options, headWordDA, partOfSpeech, ddoDefinitions);
-
             // For DDO, we create one Definition with one Context and several Meanings.
             List<Meaning> meanings = new List<Meaning>();
             int pos = 1;
             foreach (var ddoDefinition in ddoDefinitions)
             {
-                // Safe check - some words have a lot of meanings, we will only translate first 5.
-                string? meaningTranslation = null;
-                if (options.TranslateMeanings && pos <= 5)
-                {
-                    meaningTranslation = await TranslateMeaningAsync(options.TranslatorApiURL, LanguageDA, ddoDefinition.Meaning, ddoDefinition.Examples.Select(x => x.Original));
-                }
-                meanings.Add(new Meaning(Original: ddoDefinition.Meaning, Translation: meaningTranslation, AlphabeticalPosition: (pos++).ToString(), ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples));
+                meanings.Add(new Meaning(Original: ddoDefinition.Meaning, Translation: null, AlphabeticalPosition: (pos++).ToString(), ddoDefinition.Tag, ImageUrl: null, Examples: ddoDefinition.Examples));
             }
 
             Context context = new Context(ContextEN: "", Position: "", meanings);
-            Definition definition = new Definition(headword, partOfSpeech, endings, [context]);
+            Definition definition = new Definition(
+                Headword: new Headword(Original: headWordDA, English: null, Russian: null),
+                PartOfSpeech: partOfSpeech,
+                Endings: endings,
+                Contexts: [context]);
 
             var wordModel = new WordModel(
                 Word: headWordDA,
@@ -210,35 +217,6 @@ namespace CopyWords.Parsers
             return wordModel;
         }
 
-        internal async Task<Headword> CreateHeadwordModelForDanishAsync(Options options, string headWordDA, string partOfSpeech, List<DDODefinition> ddoDefinitions)
-        {
-            string? translationsEN = null;
-            string? translationsRU = null;
-
-            // If TranslatorAPI URL is configured, call translator app and add returned translations to the headword model.
-            if (options.TranslateHeadword && !string.IsNullOrEmpty(options.TranslatorApiURL))
-            {
-                var firstDefinition = ddoDefinitions.FirstOrDefault();
-                IEnumerable<string> examples = firstDefinition?.Examples.Select(x => x.Original) ?? [];
-
-                TranslationOutput translationOutput = await GetTranslationAsync(
-                            options.TranslatorApiURL,
-                            sourceLanguage: LanguageDA,
-                            word: headWordDA,
-                            meaning: firstDefinition?.Meaning ?? "",
-                            partOfSpeech: partOfSpeech,
-                            examples: examples);
-
-                IEnumerable<string>? translationVariantsEN = translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageEN)?.TranslationVariants;
-                translationsEN = string.Join(", ", translationVariantsEN ?? []);
-
-                IEnumerable<string>? translationVariantsRU = translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageRU)?.TranslationVariants;
-                translationsRU = string.Join(", ", translationVariantsRU ?? []);
-            }
-
-            return new Headword(headWordDA, translationsEN, translationsRU);
-        }
-
         internal async Task<Headword> CreateHeadwordModelForSpanishAsync(Options options, Models.SpanishDict.SpanishDictDefinition spanishDictDefinition, List<Context> contexts)
         {
             string? translationsEN = null;
@@ -267,30 +245,6 @@ namespace CopyWords.Parsers
             }
 
             return new Headword(spanishDictDefinition.WordES, translationsEN, translationsRU);
-        }
-
-        internal async Task<string?> TranslateMeaningAsync(
-            string? translatorApiURL,
-            string sourceLanguage,
-            string meaning,
-            IEnumerable<string> examples)
-        {
-            TranslationOutput translationOutput = await GetTranslationAsync(
-                translatorApiURL,
-                sourceLanguage: sourceLanguage,
-                word: "",
-                meaning: meaning,
-                partOfSpeech: "",
-                examples: examples);
-
-            string? translationsRU = null;
-            if (translationOutput != null)
-            {
-                IEnumerable<string>? translationVariantsRU = translationOutput.Translations.FirstOrDefault(x => x.Language == LanguageRU)?.TranslationVariants;
-                translationsRU = string.Join(", ", translationVariantsRU ?? []);
-            }
-
-            return translationsRU;
         }
 
         internal async Task<TranslationOutput> GetTranslationAsync(

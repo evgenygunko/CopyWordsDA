@@ -44,6 +44,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ICopySelectedToClipboardService, CopySelectedToClipboardService>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
         builder.Services.AddSingleton<IClipboardService, ClipboardService>();
+        builder.Services.AddSingleton<ITranslationsService, TranslationsService>();
 
         builder.Services.AddHttpClient<ISaveSoundFileService, SaveSoundFileService>();
         builder.Services.AddHttpClient<ISaveImageFileService, SaveImageFileService>();
