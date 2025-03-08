@@ -27,7 +27,7 @@ namespace CopyWords.Parsers.Services
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
             // We are calling function app and it might take time to start it
-            using CancellationTokenSource cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+            using CancellationTokenSource cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
             using HttpResponseMessage response = await _httpClient.PostAsync(url, content, cts.Token);
 
             if (response.IsSuccessStatusCode)

@@ -83,7 +83,8 @@
   <ItemGroup>
     <!-- App Icon -->
     <!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
-    <MauiIcon Include="Resources\AppIcon\appicon.svg" />
+    <MauiIcon Condition="'$(Configuration)' == 'DEBUG'" Include="Resources\AppIcon\AppIconDebug\appicon.png" BaseSize="400,400" />
+    <MauiIcon Condition="'$(Configuration)' == 'RELEASE'" Include="Resources\AppIcon\appicon.svg" />
 
     <!-- Splash Screen -->
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -113,7 +114,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.14" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
     <PackageReference Include="System.Text.Json" Version="9.0.0" />
   </ItemGroup>
 
