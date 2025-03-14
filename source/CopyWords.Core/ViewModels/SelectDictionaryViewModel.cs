@@ -33,6 +33,7 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         private Models.Parsers selectedParser = default!;
 
+        // When the parser is changes in the Popup and Save is pressed.
         [RelayCommand]
         public async Task SelectDictionaryAsync(CancellationToken cancellationToken)
         {
@@ -69,7 +70,8 @@ namespace CopyWords.Core.ViewModels
             Parsers.Add(new Models.Parsers("Den Danske Ordbog", "flag_of_denmark.png", SourceLanguage.Danish));
             Parsers.Add(new Models.Parsers("Spanish Dict", "flag_of_spain.png", SourceLanguage.Spanish));
 
-            Models.Parsers? savedParser = Parsers.FirstOrDefault(x => x.SourceLanguage.ToString() == _settingsService.LoadSettings().SelectedParser);
+            string lastUsedLanguage = _settingsService.LoadSettings().SelectedParser;
+            Models.Parsers? savedParser = Parsers.FirstOrDefault(x => x.SourceLanguage.ToString() == lastUsedLanguage);
             if (savedParser is null)
             {
                 SelectedParser = Parsers[0];
@@ -77,6 +79,26 @@ namespace CopyWords.Core.ViewModels
             else
             {
                 SelectedParser = savedParser;
+            }
+        }
+
+        // When the parser is changed in Picker
+        partial void OnSelectedParserChanged(Models.Parsers value)
+        {
+            SaveSelectedParserInSettings(value);
+        }
+
+        internal void SaveSelectedParserInSettings(Models.Parsers value)
+        {
+            AppSettings appSettings = _settingsService.LoadSettings();
+
+            string selectedParserInPicker = value.SourceLanguage.ToString();
+            if (appSettings.SelectedParser != selectedParserInPicker)
+            {
+                appSettings.SelectedParser = value.SourceLanguage.ToString();
+                _settingsService.SaveSettings(appSettings);
+
+                Debug.WriteLine($"Selected parser has changed to '{value.Name}'");
             }
         }
     }

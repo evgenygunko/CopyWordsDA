@@ -53,9 +53,9 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool useMp3gain;
 
-#pragma warning disable CA1822
         public bool CanUseMp3gain => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-#pragma warning restore CA1822
+
+        public bool CanUseFfmpeg => RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
@@ -83,18 +83,12 @@ namespace CopyWords.Core.ViewModels
         {
             get
             {
-                bool result = _fileIOService.DirectoryExists(AnkiSoundsFolder) && _fileIOService.DirectoryExists(FfmpegBinFolder);
-                if (UseMp3gain)
-                {
-                    result &= _fileIOService.FileExists(Mp3gainPath);
-                }
-
                 if (UseTranslator)
                 {
-                    result &= Uri.TryCreate(TranslatorApiUrl, UriKind.Absolute, out Uri? _);
+                    return Uri.TryCreate(TranslatorApiUrl, UriKind.Absolute, out Uri? _);
                 }
 
-                return result;
+                return true;
             }
         }
 

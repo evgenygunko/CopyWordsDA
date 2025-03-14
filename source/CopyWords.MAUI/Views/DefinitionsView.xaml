@@ -34,7 +34,16 @@
                         </VerticalStackLayout>
 
                         <!-- Box with headword and its translations -->
-                        <views:HeadwordView Grid.Row="1" Grid.ColumnSpan="2" BindingContext="{Binding Path=HeadwordViewModel}" Margin="0,5,0,0" />
+
+                        <StackLayout
+                                    IsVisible="{Binding HeadwordViewModel.English, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="2">
+
+                            <views:HeadwordView
+                                BindingContext="{Binding Path=HeadwordViewModel}"
+                                Margin="0,5,0,0" />
+                        </StackLayout>
 
                         <!-- Endings -->
                         <HorizontalStackLayout Grid.Row="2" IsVisible="{Binding Endings, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">

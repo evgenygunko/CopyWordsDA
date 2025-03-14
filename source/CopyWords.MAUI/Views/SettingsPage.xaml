@@ -17,57 +17,58 @@
         </Style>-->
     </ContentPage.Resources>
 
-    <Grid Padding="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
+    <ScrollView>
+        <Grid Padding="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <!-- Export and Import settings -->
-        <Border Grid.Row="0"
+            <!-- Export and Import settings -->
+            <Border Grid.Row="0"
                 Grid.ColumnSpan="3"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 10"
                 StrokeThickness="1"
                 Padding="10,20,10,20">
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Text="Export or import settings to a file:" />
+                    <Label Grid.Row="0" Text="Export or import settings to a file:" />
 
-                <HorizontalStackLayout Grid.Row="1" Margin="0,10,0,0">
-                    <Button
+                    <HorizontalStackLayout Grid.Row="1" Margin="0,10,0,0">
+                        <Button
                             Margin="0,0,10,0"
                             Text="Export"
                             Command="{Binding ExportSettingsCommand}" />
-                    <Button
+                        <Button
                             Text="Import"
                             Command="{Binding ImportSettingsCommand}" />
-                </HorizontalStackLayout>
-            </Grid>
-        </Border>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
 
-        <!-- Path to Anki media collection -->
-        <Border Grid.Row="1"
+            <!-- Path to Anki media collection -->
+            <Border Grid.Row="1"
                 Grid.ColumnSpan="3"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 10"
@@ -75,38 +76,40 @@
                 Margin="0,30,0,0"
                 Padding="10,20,10,20">
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="0" Text="Path to Anki media collection:" />
-                <Entry Grid.Column="0" Grid.Row="1" Margin="0,10,0,0" Text="{Binding AnkiSoundsFolder}" />
+                    <Label Grid.Row="0" Grid.Column="0" Text="Path to Anki media collection:" />
+                    <Entry Grid.Column="0" Grid.Row="1" Margin="0,10,0,0" Text="{Binding AnkiSoundsFolder}" />
 
-                <ImageButton
+                    <ImageButton
                         Grid.Column="1"
                         Grid.Row="1"
                         Margin="10,0,0,0"
                         BackgroundColor="Gray"
                         Command="{Binding PickAnkiSoundsFolderCommand}">
 
-                    <ImageButton.Source>
-                        <FontImageSource
+                        <ImageButton.Source>
+                            <FontImageSource
                             FontFamily="MaterialIconsOutlined-Regular"
                             Glyph="&#xe2c8;"/>
-                    </ImageButton.Source>
-                </ImageButton>
-            </Grid>
-        </Border>
+                        </ImageButton.Source>
+                    </ImageButton>
+                </Grid>
+            </Border>
 
-        <!-- Path to Ffmpeg -->
-        <Border Grid.Row="2"
+            <!-- Path to Ffmpeg -->
+            <Border
+                IsVisible="{Binding CanUseFfmpeg}"
+                Grid.Row="2"
                 Grid.ColumnSpan="3"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 10"
@@ -114,45 +117,47 @@
                 Margin="0,30,0,0"
                 Padding="10,10,10,20">
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="90"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
 
-                <Label Grid.Row="0"
-                       Grid.ColumnSpan="3"
-                       Text="Path to Ffmpeg: ℹ️"
-                       ToolTipProperties.Text="Run 'which ffmpeg' on MacOS or 'Get-Command ffmpeg' on Windows"
-                       VerticalOptions="Center">
-                </Label>
+                    <Label Grid.Row="0"
+                           Grid.ColumnSpan="3"
+                           Text="Path to Ffmpeg: ℹ️"
+                           ToolTipProperties.Text="Run 'which ffmpeg' on MacOS or 'Get-Command ffmpeg' on Windows"
+                           VerticalOptions="Center">
+                    </Label>
 
-                <Entry Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Text="{Binding FfmpegBinFolder}" />
+                    <Entry Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Text="{Binding FfmpegBinFolder}" />
 
-                <ImageButton
-                    Grid.Row="1"
-                    Grid.Column="3"
-                    Margin="10,0,0,0"
-                    Command="{Binding PickFfmpegBinFolderCommand}"
-                    BackgroundColor="Gray">
+                    <ImageButton
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="10,0,0,0"
+                            Command="{Binding PickFfmpegBinFolderCommand}"
+                            BackgroundColor="Gray">
 
-                    <ImageButton.Source>
-                        <FontImageSource
+                        <ImageButton.Source>
+                            <FontImageSource
                             FontFamily="MaterialIconsOutlined-Regular"
                             Glyph="&#xe2c8;" />
-                    </ImageButton.Source>
-                </ImageButton>
-            </Grid>
-        </Border>
+                        </ImageButton.Source>
+                    </ImageButton>
+                </Grid>
+            </Border>
 
-        <!-- Path to mp3gain -->
-        <Border Grid.Row="3"
+            <!-- Path to mp3gain -->
+            <Border
+                IsVisible="{Binding CanUseMp3gain}"
+                Grid.Row="3"
                 Grid.ColumnSpan="3"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 10"
@@ -160,42 +165,42 @@
                 Margin="0,30,0,0"
                 Padding="10,10,10,20">
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="90"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="0" Text="Use mp3gain" VerticalOptions="Center"></Label>
-                <CheckBox Grid.Row="0"
+                    <Label Grid.Row="0" Grid.Column="0" Text="Use mp3gain" VerticalOptions="Center"></Label>
+                    <CheckBox Grid.Row="0"
                           Grid.Column="1"
                           HorizontalOptions="Start"
                           x:Name="chkUseMp3gain"
                           IsChecked="{Binding UseMp3gain}"
                           IsEnabled="{Binding CanUseMp3gain}" />
 
-                <Label Grid.Row="1"
+                    <Label Grid.Row="1"
                        Grid.ColumnSpan="3"
                        Text="Path to mp3gain: ℹ️"
                        ToolTipProperties.Text="Download mp3gain with unicode support (v1.3.4): https://sourceforge.net/projects/mp3gain/files/MP3Gain-Windows%20(Beta)/1.3.4/"
                        VerticalOptions="Center">
-                    <Label.Triggers>
-                        <DataTrigger TargetType="Label" Binding="{Binding UseMp3gain}" Value="false">
-                            <Setter Property="TextColor" Value="LightGray" />
-                        </DataTrigger>
-                    </Label.Triggers>
-                </Label>
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding UseMp3gain}" Value="false">
+                                <Setter Property="TextColor" Value="LightGray" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
 
-                <Entry Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0" Text="{Binding Mp3gainPath}" IsEnabled="{Binding UseMp3gain}"/>
+                    <Entry Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0" Text="{Binding Mp3gainPath}" IsEnabled="{Binding UseMp3gain}"/>
 
-                <ImageButton
+                    <ImageButton
                     Grid.Row="2"
                     Grid.Column="3"
                     Margin="10,0,0,0"
@@ -203,23 +208,23 @@
                     BackgroundColor="Gray"
                     IsEnabled="{Binding UseMp3gain}">
 
-                    <ImageButton.Source>
-                        <FontImageSource
+                        <ImageButton.Source>
+                            <FontImageSource
                             FontFamily="MaterialIconsOutlined-Regular"
                             Glyph="&#xe2c8;"/>
-                    </ImageButton.Source>
+                        </ImageButton.Source>
 
-                    <ImageButton.Triggers>
-                        <DataTrigger TargetType="ImageButton" Binding="{Binding UseMp3gain}" Value="false">
-                            <Setter Property="BackgroundColor" Value="LightGray" />
-                        </DataTrigger>
-                    </ImageButton.Triggers>
-                </ImageButton>
-            </Grid>
-        </Border>
+                        <ImageButton.Triggers>
+                            <DataTrigger TargetType="ImageButton" Binding="{Binding UseMp3gain}" Value="false">
+                                <Setter Property="BackgroundColor" Value="LightGray" />
+                            </DataTrigger>
+                        </ImageButton.Triggers>
+                    </ImageButton>
+                </Grid>
+            </Border>
 
-        <!-- Translator settings -->
-        <Border Grid.Row="4"
+            <!-- Translator settings -->
+            <Border Grid.Row="4"
                 Grid.ColumnSpan="3"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 10"
@@ -227,59 +232,60 @@
                 Margin="0,30,0,0"
                 Padding="10,10,10,20">
 
-            <VerticalStackLayout>
-                <HorizontalStackLayout>
-                    <Label Text="Use translator" VerticalOptions="Center"></Label>
-                    <CheckBox x:Name="chkUseTranslator" IsChecked="{Binding UseTranslator}" HorizontalOptions="Start" />
-                </HorizontalStackLayout>
+                <VerticalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label Text="Use translator" VerticalOptions="Center"></Label>
+                        <CheckBox x:Name="chkUseTranslator" IsChecked="{Binding UseTranslator}" HorizontalOptions="Start" />
+                    </HorizontalStackLayout>
 
-                <Label Margin="20,0,0,0" Text="TranslatorAPI URL:"></Label>
-                <Entry
+                    <Label Margin="20,0,0,0" Text="TranslatorAPI URL:"></Label>
+                    <Entry
                         Margin="20,10,0,0"
                         Text="{Binding TranslatorApiUrl, FallbackValue='http://localhost:7014/api/Translate' }"
                         IsEnabled="{Binding UseTranslator}">
 
-                    <Entry.Behaviors>
-                        <toolkit:UriValidationBehavior
+                        <Entry.Behaviors>
+                            <toolkit:UriValidationBehavior
                             InvalidStyle="{StaticResource InvalidEntryStyle}"
                             Flags="ValidateOnValueChanged"
                             UriKind="Absolute" />
-                    </Entry.Behaviors>
-                </Entry>
+                        </Entry.Behaviors>
+                    </Entry>
 
-                <HorizontalStackLayout Margin="20,10,0,0">
-                    <Label
+                    <HorizontalStackLayout Margin="20,10,0,0">
+                        <Label
                         Text="Translate headword"
                         VerticalOptions="Center"></Label>
-                    <CheckBox
+                        <CheckBox
                         IsChecked="{Binding TranslateHeadword}"
                         HorizontalOptions="Start" />
-                </HorizontalStackLayout>
+                    </HorizontalStackLayout>
 
-                <HorizontalStackLayout Margin="20,10,0,0">
-                    <Label
+                    <HorizontalStackLayout Margin="20,10,0,0">
+                        <Label
                         Text="Translate meanings"
                         VerticalOptions="Center"></Label>
-                    <CheckBox
+                        <CheckBox
                         IsChecked="{Binding TranslateMeanings}"
                         HorizontalOptions="Start" />
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
-        </Border>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
 
-        <Button
+            <Button
                 Grid.Row="5"
                 Grid.Column="1"
-                Margin="0,20,0,0"
+                Margin="0,20,0,30"
                 Text="Save"
                 Command="{Binding SaveSettingsCommand}"/>
-        <Button
+            <Button
                 Grid.Row="5"
                 Grid.Column="2"
-                Margin="10,20,0,0"
+                Margin="10,20,0,30"
                 Text="Cancel"
                 Command="{Binding CancelCommand}"/>
 
-        <Label Text="{Binding About}" Grid.Row="6" Grid.ColumnSpan="2" VerticalOptions="End"></Label>
-    </Grid>
+            <Label Text="{Binding About}" Grid.Row="6" Grid.ColumnSpan="2" VerticalOptions="End"></Label>
+        </Grid>
+    </ScrollView>
 </ContentPage>

@@ -17,11 +17,10 @@
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <Border Grid.Row="3"
-                IsVisible="{Binding Russian, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
-                BackgroundColor="{StaticResource TranslationBoxColor}"
-                Stroke="#CCCCCC"
-                StrokeThickness="1">
+    <Border
+            BackgroundColor="{StaticResource TranslationBoxColor}"
+            Stroke="#CCCCCC"
+            StrokeThickness="1">
 
         <Grid>
             <Grid.ColumnDefinitions>

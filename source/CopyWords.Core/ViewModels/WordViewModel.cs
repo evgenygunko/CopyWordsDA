@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -43,7 +44,8 @@ namespace CopyWords.Core.ViewModels
         [NotifyPropertyChangedFor(nameof(PlaySoundButtonColor))]
         private bool isBusy;
 
-        public bool CanSaveSoundFile => !IsBusy && !string.IsNullOrEmpty(SoundFileName);
+        // todo: for now only enable saving sound files on Windows and MacOS
+        public bool CanSaveSoundFile => !IsBusy && !string.IsNullOrEmpty(SoundFileName) && (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX));
 
         public bool CanPlaySound => !IsBusy && !string.IsNullOrEmpty(SoundUrl);
 
@@ -79,10 +81,10 @@ namespace CopyWords.Core.ViewModels
 
             MediaElement mediaElement = (MediaElement)view;
 
-            // Workaround for a bug in MediaElement: 
+            // Workaround for a bug in MediaElement:
             // On MacOS, the app crashes at startup with the runtime exception:
             // "System.MissingMethodException: No parameterless constructor defined for type 'CommunityToolkit.Maui.Views.MediaElement'."
-            // To resolve this, we create the MediaElement manually in the C# file. 
+            // To resolve this, we create the MediaElement manually in the C# file.
             // However, it must be added to the Visual Tree; otherwise, there is no sound.
             // Reference: https://stackoverflow.com/a/75535084
             //MediaElement mediaElement = (MediaElement)control;

@@ -28,7 +28,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
-            var sut = _fixture.Create<SelectDictionaryViewModel>();
+            var sut = new SelectDictionaryViewModel(settingsServiceMock.Object, new Mock<IPopupService>().Object);
             sut.Init();
 
             settingsServiceMock.Verify(x => x.LoadSettings());
@@ -45,7 +45,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
-            var sut = _fixture.Create<SelectDictionaryViewModel>();
+            var sut = new SelectDictionaryViewModel(settingsServiceMock.Object, new Mock<IPopupService>().Object);
             sut.Init();
 
             settingsServiceMock.Verify(x => x.LoadSettings());

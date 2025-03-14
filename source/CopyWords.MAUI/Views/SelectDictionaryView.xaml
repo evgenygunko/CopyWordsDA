@@ -10,19 +10,32 @@
     <Grid Margin="0,0,0,20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Label  Grid.Column="0"
+        <Label
+                Grid.Column="0"
                 VerticalOptions="Center"
                 Margin="0,0,10,0"
                 Text="Dictionary:" />
 
-        <!--<Picker Grid.Column="2"
+        <!-- Picker -->
+        <!-- .NET MAUI converts SVG files to PNG files. Therefore, when adding an SVG file to your .NET MAUI app project, it should be referenced from XAML or C# with a .png extension.-->
+        <Image
+                Grid.Column="1"
+                Source="{Binding SelectedParser.ImageName}"
+                Margin="0,0,10,0"
+                WidthRequest="32"
+                HeightRequest="32" />
+
+        <Picker Grid.Column="2"
                 ItemsSource="{Binding Parsers}"
                 ItemDisplayBinding="{Binding Name}"
-                SelectedItem="{Binding SelectedParser}"/>-->
-        <Border
+                SelectedItem="{Binding SelectedParser}"/>
+
+        <!-- Popup (doesn't work correctly on Android) -->
+        <!--<Border
                 Grid.Column="1"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 5"
@@ -36,7 +49,7 @@
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <!-- .NET MAUI converts SVG files to PNG files. Therefore, when adding an SVG file to your .NET MAUI app project, it should be referenced from XAML or C# with a .png extension.-->
+                --><!-- .NET MAUI converts SVG files to PNG files. Therefore, when adding an SVG file to your .NET MAUI app project, it should be referenced from XAML or C# with a .png extension.--><!--
                 <Image
                     Grid.Column="0"
                     Source="{Binding SelectedParser.ImageName}"
@@ -68,6 +81,6 @@
             <Border.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding SelectDictionaryCommand}" />
             </Border.GestureRecognizers>
-        </Border>
+        </Border>-->
     </Grid>
 </ContentView>
