@@ -19,6 +19,8 @@ public partial class App : Application
         MainWindowViewModel mainWindowViewModel,
         GetUpdateViewModel getUpdateViewModel)
     {
+        UserAppTheme = AppTheme.Light;
+
         _settingsService = settingsService;
         _updateService = updateService;
         _mainWindowViewModel = mainWindowViewModel;

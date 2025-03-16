@@ -144,8 +144,8 @@
         <Setter Property="CornerRadius" Value="12"/>
         <Setter Property="MinimumHeightRequest" Value="20"/>
         <Setter Property="MinimumWidthRequest" Value="20"/>
-        <Setter Property="HeightRequest" Value="48"/>
-        <Setter Property="WidthRequest" Value="48"/>
+        <Setter Property="HeightRequest" Value="44"/>
+        <Setter Property="WidthRequest" Value="44"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">

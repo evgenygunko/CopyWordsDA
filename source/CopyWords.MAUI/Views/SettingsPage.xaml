@@ -36,7 +36,8 @@
             </Grid.ColumnDefinitions>
 
             <!-- Export and Import settings -->
-            <Border Grid.Row="0"
+            <Border
+                Grid.Row="0"
                 Grid.ColumnSpan="3"
                 Stroke="#CCCCCC"
                 StrokeShape="RoundRectangle 10"
@@ -45,17 +46,17 @@
 
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" Text="Export or import settings to a file:" />
+                    <Label Grid.Row="0" Grid.Column="0" Text="Export or import settings to a file:" />
 
-                    <HorizontalStackLayout Grid.Row="1" Margin="0,10,0,0">
+                    <HorizontalStackLayout Grid.Row="0" Grid.Column="1" Margin="10,10,0,0" HorizontalOptions="End">
                         <Button
                             Margin="0,0,10,0"
                             Text="Export"
@@ -94,7 +95,6 @@
                         Grid.Column="1"
                         Grid.Row="1"
                         Margin="10,0,0,0"
-                        BackgroundColor="Gray"
                         Command="{Binding PickAnkiSoundsFolderCommand}">
 
                         <ImageButton.Source>
@@ -142,8 +142,7 @@
                             Grid.Row="1"
                             Grid.Column="3"
                             Margin="10,0,0,0"
-                            Command="{Binding PickFfmpegBinFolderCommand}"
-                            BackgroundColor="Gray">
+                            Command="{Binding PickFfmpegBinFolderCommand}">
 
                         <ImageButton.Source>
                             <FontImageSource
@@ -201,12 +200,11 @@
                     <Entry Grid.Row="2" Grid.ColumnSpan="2" Margin="0,10,0,0" Text="{Binding Mp3gainPath}" IsEnabled="{Binding UseMp3gain}"/>
 
                     <ImageButton
-                    Grid.Row="2"
-                    Grid.Column="3"
-                    Margin="10,0,0,0"
-                    Command="{Binding PickMp3gainPathCommand}"
-                    BackgroundColor="Gray"
-                    IsEnabled="{Binding UseMp3gain}">
+                        Grid.Row="2"
+                        Grid.Column="3"
+                        Margin="10,0,0,0"
+                        Command="{Binding PickMp3gainPathCommand}"
+                        IsEnabled="{Binding UseMp3gain}">
 
                         <ImageButton.Source>
                             <FontImageSource
@@ -238,36 +236,36 @@
                         <CheckBox x:Name="chkUseTranslator" IsChecked="{Binding UseTranslator}" HorizontalOptions="Start" />
                     </HorizontalStackLayout>
 
-                    <Label Margin="20,0,0,0" Text="TranslatorAPI URL:"></Label>
+                    <Label Margin="0,15,0,0" Text="TranslatorAPI URL:"></Label>
                     <Entry
-                        Margin="20,10,0,0"
+                        Margin="0,0,0,10"
                         Text="{Binding TranslatorApiUrl, FallbackValue='http://localhost:7014/api/Translate' }"
                         IsEnabled="{Binding UseTranslator}">
 
                         <Entry.Behaviors>
                             <toolkit:UriValidationBehavior
-                            InvalidStyle="{StaticResource InvalidEntryStyle}"
-                            Flags="ValidateOnValueChanged"
-                            UriKind="Absolute" />
+                                InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                Flags="ValidateOnValueChanged"
+                                UriKind="Absolute" />
                         </Entry.Behaviors>
                     </Entry>
 
-                    <HorizontalStackLayout Margin="20,10,0,0">
+                    <HorizontalStackLayout>
                         <Label
-                        Text="Translate headword"
-                        VerticalOptions="Center"></Label>
+                            Text="Translate headword:"
+                            VerticalOptions="Center"></Label>
                         <CheckBox
-                        IsChecked="{Binding TranslateHeadword}"
-                        HorizontalOptions="Start" />
+                            IsChecked="{Binding TranslateHeadword}"
+                            HorizontalOptions="Start" />
                     </HorizontalStackLayout>
 
-                    <HorizontalStackLayout Margin="20,10,0,0">
+                    <HorizontalStackLayout>
                         <Label
-                        Text="Translate meanings"
-                        VerticalOptions="Center"></Label>
+                            Text="Translate meanings:"
+                            VerticalOptions="Center"></Label>
                         <CheckBox
-                        IsChecked="{Binding TranslateMeanings}"
-                        HorizontalOptions="Start" />
+                            IsChecked="{Binding TranslateMeanings}"
+                            HorizontalOptions="Start" />
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Border>
