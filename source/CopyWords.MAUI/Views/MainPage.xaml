@@ -42,14 +42,18 @@
             <views:SelectDictionaryView Grid.Row="0" Grid.ColumnSpan="2" BindingContext="{Binding Path=SelectDictionaryViewModel}" />
 
             <!-- Lookup word panel -->
-            <Entry Grid.Row="1"
-                   Grid.Column="0"
-                   Margin="0,0,10,0"
-                   Text="{Binding SearchWord}"
-                   ReturnCommand="{Binding LookUpCommand}" />
+            <Entry
+                    x:Name="lookupEntry"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="0,0,10,0"
+                    Text="{Binding SearchWord}"
+                    ReturnCommandParameter="{x:Reference Name=lookupEntry}"
+                    ReturnCommand="{Binding LookUpCommand}" />
             <Button Grid.Row="1"
                     Grid.Column="1"
                     Text="Search"
+                    CommandParameter="{x:Reference Name=lookupEntry}"
                     Command="{Binding LookUpCommand}" />
 
             <!-- Parsed word user control -->

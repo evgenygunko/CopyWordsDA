@@ -30,7 +30,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<MainViewModel>();
             sut.SearchWord = search;
 
-            await sut.LookUpAsync();
+            await sut.LookUpAsync(It.IsAny<ITextInput>(), It.IsAny<CancellationToken>());
 
             sut.IsBusy.Should().BeFalse();
 

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using CommunityToolkit.Maui.Core.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Models;
@@ -61,9 +62,21 @@ namespace CopyWords.Core.ViewModels
         #region Commands
 
         [RelayCommand(CanExecute = nameof(CanExecuteLookUp))]
-        public async Task LookUpAsync()
+        public async Task LookUpAsync(ITextInput entryElement, CancellationToken token)
         {
             IsBusy = true;
+
+            try
+            {
+                if (!OperatingSystem.IsMacCatalyst() && entryElement != null)
+                {
+                    await entryElement.HideKeyboardAsync(token);
+                }
+            }
+            catch (Exception ex)
+            {
+                _ = ex;
+            }
 
             WordModel wordModel = await LookUpWordInDictionaryAsync(SearchWord);
             UpdateUI(wordModel);
@@ -81,7 +94,7 @@ namespace CopyWords.Core.ViewModels
 
         #region Internal Methods
 
-        public async Task GetVariantAsync(string url)
+        internal async Task GetVariantAsync(string url)
         {
             IsBusy = true;
 
