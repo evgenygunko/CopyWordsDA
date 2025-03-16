@@ -74,3 +74,5 @@ spell.json
 samples/framework/docker/MVCRandomAnswerGenerator/containerImage
 .DS_Store
 _dependentPackages/
+
+.idea/

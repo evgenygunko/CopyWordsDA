@@ -4,6 +4,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             xmlns:models="clr-namespace:CopyWords.Core.Models;assembly=CopyWords.Core"
              x:DataType="viewmodels:SelectDictionaryViewModel"
              x:Class="CopyWords.MAUI.Views.SelectDictionaryView">
 
@@ -31,8 +32,8 @@
 
         <Picker Grid.Column="2"
                 ItemsSource="{Binding Parsers}"
-                ItemDisplayBinding="{Binding Name}"
-                SelectedItem="{Binding SelectedParser}"/>
+                ItemDisplayBinding="{Binding Name, x:DataType=models:Parsers}"
+                SelectedItem="{Binding SelectedParser}" />
 
         <!-- Popup (doesn't work correctly on Android) -->
         <!--<Border
