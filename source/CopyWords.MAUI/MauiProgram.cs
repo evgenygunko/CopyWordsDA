@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
+using CommunityToolkit.Maui.Views;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.Core.ViewModels.Popups;
@@ -12,6 +13,10 @@ namespace CopyWords.MAUI;
 
 public static class MauiProgram
 {
+    private static IServiceProvider _serviceProvider = default!;
+
+    public static TService GetService<TService>() => _serviceProvider.GetService<TService>()!;
+
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
@@ -37,6 +42,13 @@ public static class MauiProgram
         builder.Services.AddSingleton(FolderPicker.Default);
         builder.Services.AddSingleton(FilePicker.Default);
 
+        var mediaElement = new MediaElement
+        {
+            ShouldAutoPlay = false,
+            IsVisible = false
+        };
+        builder.Services.AddSingleton(mediaElement);
+
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
         builder.Services.AddSingleton<ILookUpWord, LookUpWord>();
         builder.Services.AddSingleton<IDDOPageParser, DDOPageParser>();
@@ -61,7 +73,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<SelectDictionaryPopupViewModel>();
 
         builder.Services.AddTransientPopup<SelectDictionaryPopup, SelectDictionaryPopupViewModel>();
+        var app = builder.Build();
 
-        return builder.Build();
+        _serviceProvider = app.Services; // store service provider reference
+
+        return app;
     }
 }
