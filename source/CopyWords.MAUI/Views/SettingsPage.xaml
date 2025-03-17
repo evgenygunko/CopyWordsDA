@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CopyWords.MAUI.Views.SettingsPage"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:DataType="viewmodels:SettingsViewModel"
              Title="Settings"
@@ -241,13 +240,6 @@
                         Margin="0,0,0,10"
                         Text="{Binding TranslatorApiUrl, FallbackValue='http://localhost:7014/api/Translate' }"
                         IsEnabled="{Binding UseTranslator}">
-
-                        <Entry.Behaviors>
-                            <toolkit:UriValidationBehavior
-                                InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                Flags="ValidateOnValueChanged"
-                                UriKind="Absolute" />
-                        </Entry.Behaviors>
                     </Entry>
 
                     <HorizontalStackLayout>

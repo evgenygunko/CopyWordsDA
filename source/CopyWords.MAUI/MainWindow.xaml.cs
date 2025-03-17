@@ -10,15 +10,18 @@ namespace CopyWords.MAUI;
 public partial class MainWindow : Window
 {
     private readonly IUpdateService _updateService;
+    private readonly IDialogService _dialogService;
     private readonly GetUpdateViewModel _getUpdateViewModel;
 
     public MainWindow(
         IUpdateService updateService,
+        IDialogService dialogService,
         GetUpdateViewModel getUpdateViewModel)
     {
         InitializeComponent();
 
         _updateService = updateService;
+        _dialogService = dialogService;
         _getUpdateViewModel = getUpdateViewModel;
     }
 
@@ -57,6 +60,13 @@ public partial class MainWindow : Window
 
     private async void ButtonSettings_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("SettingsPage");
+        try
+        {
+            await Shell.Current.GoToAsync("SettingsPage");
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.DisplayAlert("Cannot open Settings Page", $"Exception occurred: " + ex.ToString(), "OK");
+        }
     }
 }
