@@ -2,14 +2,23 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CopyWords.MAUI.Views.SettingsPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             xmlns:validation="clr-namespace:CopyWords.Core.ViewModels.Validation;assembly=CopyWords.Core"
              x:DataType="viewmodels:SettingsViewModel"
              Title="Settings"
              Shell.BackgroundColor="Gray">
 
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding InitCommand}" />
+    </ContentPage.Behaviors>
+
     <ContentPage.Resources>
         <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+        <converters:ShowErrorConverter x:Key="ShowErrorConverter" />
 
         <Style x:Key="InvalidEntryStyle" TargetType="Entry">
             <Setter Property="TextColor" Value="Red" />
@@ -18,8 +27,8 @@
             <Setter Property="Stroke" Value="#CCCCCC" />
             <Setter Property="StrokeShape" Value="RoundRectangle 10" />
             <Setter Property="StrokeThickness" Value="1" />
-            <Setter Property="Margin" Value="0,30,0,0" />
-            <Setter Property="Padding" Value="10,20,10,20" />
+            <Setter Property="Margin" Value="0,20,0,0" />
+            <Setter Property="Padding" Value="10,10,10,10" />
         </Style>
     </ContentPage.Resources>
 
@@ -72,19 +81,20 @@
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="0" Text="Path to Anki media collection:" />
+
                     <Entry
                         Grid.Row="1"
                         Grid.Column="0"
                         Margin="0,10,0,0"
                         Text="{Binding AnkiSoundsFolder}">
                     </Entry>
-
                     <ImageButton
-                        Grid.Column="1"
                         Grid.Row="1"
+                        Grid.Column="1"
                         Margin="10,0,0,0"
                         Command="{Binding PickAnkiSoundsFolderCommand}">
 
@@ -94,6 +104,12 @@
                             Glyph="&#xe2c8;"/>
                         </ImageButton.Source>
                     </ImageButton>
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.ColumnSpan="2"
+                        Text="{Binding ValidationResult, Converter={StaticResource ShowErrorConverter}, ConverterParameter={x:Static validation:SettingsViewModelValidator.AnkiSoundsFolderProperty}}"
+                        TextColor="Red"/>
                 </Grid>
             </Border>
 
@@ -109,6 +125,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0"
@@ -119,7 +136,6 @@
                     </Label>
 
                     <Entry Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Text="{Binding FfmpegBinFolder}" />
-
                     <ImageButton
                             Grid.Row="1"
                             Grid.Column="3"
@@ -132,6 +148,12 @@
                             Glyph="&#xe2c8;" />
                         </ImageButton.Source>
                     </ImageButton>
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.ColumnSpan="3"
+                        Text="{Binding ValidationResult, Converter={StaticResource ShowErrorConverter}, ConverterParameter={x:Static validation:SettingsViewModelValidator.FfmpegBinFolderProperty}}"
+                        TextColor="Red"/>
                 </Grid>
             </Border>
 
@@ -145,6 +167,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
@@ -191,6 +214,12 @@
                             </DataTrigger>
                         </ImageButton.Triggers>
                     </ImageButton>
+
+                    <Label
+                        Grid.Row="3"
+                        Grid.ColumnSpan="3"
+                        Text="{Binding ValidationResult, Converter={StaticResource ShowErrorConverter}, ConverterParameter={x:Static validation:SettingsViewModelValidator.Mp3gainPathProperty}}"
+                        TextColor="Red"/>
                 </Grid>
             </Border>
 
@@ -208,6 +237,10 @@
                         Text="{Binding TranslatorApiUrl, FallbackValue='http://localhost:7014/api/Translate' }"
                         IsEnabled="{Binding UseTranslator}">
                     </Entry>
+
+                    <Label
+                        Text="{Binding ValidationResult, Converter={StaticResource ShowErrorConverter}, ConverterParameter={x:Static validation:SettingsViewModelValidator.TranslatorApiUrlProperty}}"
+                        TextColor="Red"/>
 
                     <HorizontalStackLayout>
                         <Label
@@ -229,25 +262,18 @@
                 </VerticalStackLayout>
             </Border>
 
-            <VerticalStackLayout Grid.Row="5">
+            <HorizontalStackLayout Grid.Row="5"
+                Margin="0,20,0,20"
+                HorizontalOptions="End">
 
-                <Label
-                    Margin="0,10,0,0"
-                    IsVisible="{Binding ValidationErrors, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
-                    Text="{Binding ValidationErrors}"
-                    TextColor="Red"
-                    />
-
-                <HorizontalStackLayout Margin="0,20,0,20" HorizontalOptions="End">
-                    <Button
-                        Text="Save"
-                        Command="{Binding SaveSettingsCommand}"/>
-                    <Button
-                        Margin="10,0,0,0"
-                        Text="Cancel"
-                        Command="{Binding CancelCommand}"/>
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
+                <Button
+                    Text="Save"
+                    Command="{Binding SaveSettingsCommand}"/>
+                <Button
+                    Margin="10,0,0,0"
+                    Text="Cancel"
+                    Command="{Binding CancelCommand}"/>
+            </HorizontalStackLayout>
 
             <Label Grid.Row="6"
                 Text="{Binding About}"

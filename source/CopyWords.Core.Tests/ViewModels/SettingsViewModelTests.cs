@@ -18,8 +18,10 @@ namespace CopyWords.Core.Tests.ViewModels
     {
         private readonly Fixture _fixture = FixtureFactory.CreateFixture();
 
+        #region Tests for Init
+
         [TestMethod]
-        public void Constructor_Should_ReadValuesFromSettingsService()
+        public void Init_Should_ReadValuesFromSettingsService()
         {
             AppSettings appSettings = _fixture.Create<AppSettings>();
 
@@ -28,12 +30,13 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var sut = new SettingsViewModel(
                 settingsServiceMock.Object,
-                new Mock<IDialogService>().Object,
-                new Mock<IShellService>().Object,
-                new Mock<IFileIOService>().Object,
-                new Mock<IFolderPicker>().Object,
-                new Mock<IFilePicker>().Object,
-                new Mock<IValidator<SettingsViewModel>>().Object);
+                Mock.Of<IDialogService>(),
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFolderPicker>(),
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
+            sut.Init();
 
             settingsServiceMock.Verify(x => x.LoadSettings());
 
@@ -46,10 +49,12 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.TranslateHeadword.Should().Be(appSettings.TranslateHeadword);
         }
 
+        #endregion
+
         #region Tests for SaveSettingsAsync
 
         [TestMethod]
-        public async Task SaveSettingsAsync_WhenNoValidationErrors_CallsSettingsService()
+        public async Task SaveSettingsAsync_Should_CallSettingsService()
         {
             string validationErrors = _fixture.Create<string>();
 
@@ -58,28 +63,49 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var sut = new SettingsViewModel(
                 settingsServiceMock.Object,
-                new Mock<IDialogService>().Object,
+                Mock.Of<IDialogService>(),
                 shellServiceMock.Object,
-                new Mock<IFileIOService>().Object,
-                new Mock<IFolderPicker>().Object,
-                new Mock<IFilePicker>().Object,
-                new Mock<IValidator<SettingsViewModel>>().Object);
-
-            sut.ValidationErrors = validationErrors;
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFolderPicker>(),
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
 
             await sut.SaveSettingsAsync();
 
-            sut.ValidationErrors.Should().BeNullOrEmpty();
             settingsServiceMock.Verify(x => x.SaveSettings(It.IsAny<AppSettings>()));
             shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..")));
         }
 
-        [TestMethod]
-        public async Task SaveSettingsAsync_WhenValidationErrors_DoesNotCallSettingsService()
-        {
-            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            Mock<IShellService> shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+        #endregion
 
+        #region Tests for CanSaveSettings
+
+        [TestMethod]
+        public void CanSaveSettings_WhenNoValidationErrors_ReturnsTrue()
+        {
+            var validationResult = _fixture.Create<ValidationResult>();
+            validationResult.Errors.Clear();
+
+            var settingsViewModelValidatorMock = _fixture.Freeze<Mock<IValidator<SettingsViewModel>>>();
+            settingsViewModelValidatorMock.Setup(x => x.ValidateAsync(It.IsAny<SettingsViewModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(validationResult);
+
+            var sut = new SettingsViewModel(
+                Mock.Of<ISettingsService>(x => x.LoadSettings() == new AppSettings()),
+                Mock.Of<IDialogService>(),
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFolderPicker>(),
+                Mock.Of<IFilePicker>(),
+                settingsViewModelValidatorMock.Object);
+
+            bool result = sut.CanSaveSettings();
+
+            result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void CanSaveSettings_WhenThereAreValidationErrors_ReturnsFalse()
+        {
             var validationResult = _fixture.Create<ValidationResult>();
             validationResult.Errors.Clear();
             validationResult.Errors.Add(new ValidationFailure("property1", "property1 cannot be null"));
@@ -88,19 +114,17 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsViewModelValidatorMock.Setup(x => x.ValidateAsync(It.IsAny<SettingsViewModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(validationResult);
 
             var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                new Mock<IDialogService>().Object,
-                shellServiceMock.Object,
-                new Mock<IFileIOService>().Object,
-                new Mock<IFolderPicker>().Object,
-                new Mock<IFilePicker>().Object,
+                Mock.Of<ISettingsService>(x => x.LoadSettings() == new AppSettings()),
+                Mock.Of<IDialogService>(),
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFolderPicker>(),
+                Mock.Of<IFilePicker>(),
                 settingsViewModelValidatorMock.Object);
 
-            await sut.SaveSettingsAsync();
+            bool result = sut.CanSaveSettings();
 
-            sut.ValidationErrors.Should().Be("property1 cannot be null");
-            settingsServiceMock.Verify(x => x.SaveSettings(It.IsAny<AppSettings>()), Times.Never);
-            shellServiceMock.Verify(x => x.GoToAsync(It.IsAny<ShellNavigationState>()), Times.Never);
+            result.Should().BeFalse();
         }
 
         #endregion
@@ -116,20 +140,18 @@ namespace CopyWords.Core.Tests.ViewModels
             FolderPickerResult folderPickerResult = new FolderPickerResult(folder, Exception: new Exception("folder is not selected"));
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var folderPickerMock = _fixture.Freeze<Mock<IFolderPicker>>();
             folderPickerMock.Setup(x => x.PickAsync(It.IsAny<CancellationToken>())).ReturnsAsync(folderPickerResult);
 
             var sut = new SettingsViewModel(
                 settingsServiceMock.Object,
-                dialogServiceMock.Object,
-                shellServiceMock.Object,
-                new Mock<IFileIOService>().Object,
+                Mock.Of<IDialogService>(),
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
                 folderPickerMock.Object,
-                new Mock<IFilePicker>().Object,
-                new Mock<IValidator<SettingsViewModel>>().Object);
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
             await sut.ExportSettingsAsync(default);
 
             settingsServiceMock.Verify(x => x.ExportSettingsAsync(It.IsAny<string>()), Times.Never);
@@ -146,7 +168,6 @@ namespace CopyWords.Core.Tests.ViewModels
             FolderPickerResult folderPickerResult = new FolderPickerResult(folder, Exception: null);
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
             dialogServiceMock.Setup(x => x.DisplayAlert("File already exists", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(overwrite);
@@ -160,11 +181,11 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = new SettingsViewModel(
                 settingsServiceMock.Object,
                 dialogServiceMock.Object,
-                shellServiceMock.Object,
+                Mock.Of<IShellService>(),
                 fileIOServiceMock.Object,
                 folderPickerMock.Object,
-                new Mock<IFilePicker>().Object,
-                new Mock<IValidator<SettingsViewModel>>().Object);
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
             await sut.ExportSettingsAsync(default);
 
             dialogServiceMock.Verify(x => x.DisplayAlert("File already exists", It.IsAny<string>(), "Yes", "No"));
@@ -257,12 +278,12 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var sut = new SettingsViewModel(
                 settingsServiceMock.Object,
-                dialogServiceMock.Object,
-                shellServiceMock.Object,
-                new Mock<IFileIOService>().Object,
-                new Mock<IFolderPicker>().Object,
+                Mock.Of<IDialogService>(),
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFolderPicker>(),
                 filePickerMock.Object,
-                new Mock<IValidator<SettingsViewModel>>().Object);
+                Mock.Of<IValidator<SettingsViewModel>>());
             await sut.ImportSettingsAsync();
 
             settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()), Times.Never);
@@ -305,7 +326,6 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var fileResult = _fixture.Create<FileResult>();
 
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var filePickerMock = _fixture.Freeze<Mock<IFilePicker>>();
@@ -314,11 +334,11 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = new SettingsViewModel(
                 settingsServiceMock.Object,
                 dialogServiceMock.Object,
-                shellServiceMock.Object,
-                new Mock<IFileIOService>().Object,
-                new Mock<IFolderPicker>().Object,
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFolderPicker>(),
                 filePickerMock.Object,
-                new Mock<IValidator<SettingsViewModel>>().Object);
+                Mock.Of<IValidator<SettingsViewModel>>());
             await sut.ImportSettingsAsync();
 
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
@@ -331,7 +351,6 @@ namespace CopyWords.Core.Tests.ViewModels
 
             settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()));
             dialogServiceMock.Verify(x => x.DisplayToast("Settings imported."));
-            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(s => s.Location.ToString() == "..")));
         }
 
         #endregion

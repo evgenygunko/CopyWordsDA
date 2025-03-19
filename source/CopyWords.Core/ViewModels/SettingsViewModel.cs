@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace CopyWords.Core.ViewModels
 {
@@ -38,20 +39,20 @@ namespace CopyWords.Core.ViewModels
             _folderPicker = folderPicker;
             _filePicker = filePicker;
             _settingsViewModelValidator = settingsViewModelValidator;
-
-            AppSettings appSettings = _settingsService.LoadSettings();
-            UpdateUI(appSettings);
         }
 
         #region Properties
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string? ankiSoundsFolder;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string? ffmpegBinFolder;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool useMp3gain;
 
         public bool CanUseMp3gain => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
@@ -59,22 +60,27 @@ namespace CopyWords.Core.ViewModels
         public bool CanUseFfmpeg => RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string? mp3gainPath;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string? translatorApiUrl;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool useTranslator;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool translateHeadword;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool translateMeanings;
 
         [ObservableProperty]
-        private string validationErrors;
+        private ValidationResult? validationResult;
 
         public string About => $"App version: {AppInfo.VersionString} (Build {AppInfo.BuildString}), {RuntimeInformation.FrameworkDescription}";
 
@@ -123,7 +129,6 @@ namespace CopyWords.Core.ViewModels
                     UpdateUI(appSettings);
 
                     await _dialogService.DisplayToast("Settings imported.");
-                    await _shellService.GoToAsync("..");
                 }
                 catch (Exception ex)
                 {
@@ -187,22 +192,9 @@ namespace CopyWords.Core.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanSaveSettings))]
         public async Task SaveSettingsAsync()
         {
-            // Apply the validation and get the result
-            var validation = await _settingsViewModelValidator.ValidateAsync(this);
-            if (validation != null && !validation.IsValid)
-            {
-                // The validation contains error, we stop the process
-                ValidationErrors = string.Join(Environment.NewLine, validation.Errors.Select(x => x.ErrorMessage));
-                return;
-            }
-            else
-            {
-                ValidationErrors = string.Empty;
-            }
-
             AppSettings appSettings = _settingsService.LoadSettings();
 
             appSettings.AnkiSoundsFolder = AnkiSoundsFolder;
@@ -225,6 +217,40 @@ namespace CopyWords.Core.ViewModels
         public async Task CancelAsync()
         {
             await _shellService.GoToAsync("..");
+        }
+
+        [RelayCommand]
+        public void Init()
+        {
+            AppSettings appSettings = _settingsService.LoadSettings();
+            UpdateUI(appSettings);
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal bool CanSaveSettings()
+        {
+            // Apply the validation and get the result
+            ValidationResult = _settingsViewModelValidator.ValidateAsync(this).GetAwaiter().GetResult();
+
+            if (SynchronizationContext.Current == null && TaskScheduler.Current == TaskScheduler.Default)
+            {
+                ValidationResult = _settingsViewModelValidator.ValidateAsync(this).GetAwaiter().GetResult();
+            }
+            else
+            {
+                ValidationResult = Task.Run(() => _settingsViewModelValidator.ValidateAsync(this)).GetAwaiter().GetResult();
+            }
+
+            if (ValidationResult != null && !ValidationResult.IsValid)
+            {
+                // The validation contains errors
+                return false;
+            }
+
+            return true;
         }
 
         #endregion

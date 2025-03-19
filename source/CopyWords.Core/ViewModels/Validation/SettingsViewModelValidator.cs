@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Validator
+﻿// Ignore Spelling: Validator Ffmpeg
 
 using FluentValidation;
 
@@ -6,6 +6,11 @@ namespace CopyWords.Core.ViewModels.Validation
 {
     public class SettingsViewModelValidator : AbstractValidator<SettingsViewModel>
     {
+        public static string AnkiSoundsFolderProperty => nameof(SettingsViewModel.AnkiSoundsFolder);
+        public static string FfmpegBinFolderProperty => nameof(SettingsViewModel.FfmpegBinFolder);
+        public static string Mp3gainPathProperty => nameof(SettingsViewModel.Mp3gainPath);
+        public static string TranslatorApiUrlProperty => nameof(SettingsViewModel.TranslatorApiUrl);
+
         public SettingsViewModelValidator()
         {
             RuleFor(model => model.AnkiSoundsFolder).NotEmpty();

@@ -130,6 +130,9 @@ namespace CopyWords.Core.Tests.ViewModels.Validation
                 Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
+
+            settingsViewModel.Init();
+
             return settingsViewModel;
         }
     }
