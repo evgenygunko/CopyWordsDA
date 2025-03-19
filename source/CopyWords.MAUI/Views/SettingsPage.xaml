@@ -2,18 +2,25 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CopyWords.MAUI.Views.SettingsPage"
+             xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:DataType="viewmodels:SettingsViewModel"
              Title="Settings"
              Shell.BackgroundColor="Gray">
 
     <ContentPage.Resources>
+        <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+
         <Style x:Key="InvalidEntryStyle" TargetType="Entry">
             <Setter Property="TextColor" Value="Red" />
         </Style>
-        <!--<Style x:Key="ValidEntryStyle" TargetType="Entry">
-            <Setter Property="TextColor" Value="Green" />
-        </Style>-->
+        <Style x:Key="BorderStyle" TargetType="Border">
+            <Setter Property="Stroke" Value="#CCCCCC" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 10" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="Margin" Value="0,30,0,0" />
+            <Setter Property="Padding" Value="10,20,10,20" />
+        </Style>
     </ContentPage.Resources>
 
     <ScrollView>
@@ -28,21 +35,8 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
             <!-- Export and Import settings -->
-            <Border
-                Grid.Row="0"
-                Grid.ColumnSpan="3"
-                Stroke="#CCCCCC"
-                StrokeShape="RoundRectangle 10"
-                StrokeThickness="1"
-                Padding="10,20,10,20">
-
+            <Border Grid.Row="0" Style="{StaticResource BorderStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -68,14 +62,7 @@
             </Border>
 
             <!-- Path to Anki media collection -->
-            <Border Grid.Row="1"
-                Grid.ColumnSpan="3"
-                Stroke="#CCCCCC"
-                StrokeShape="RoundRectangle 10"
-                StrokeThickness="1"
-                Margin="0,30,0,0"
-                Padding="10,20,10,20">
-
+            <Border Grid.Row="1" Style="{StaticResource BorderStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -88,7 +75,12 @@
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="0" Text="Path to Anki media collection:" />
-                    <Entry Grid.Column="0" Grid.Row="1" Margin="0,10,0,0" Text="{Binding AnkiSoundsFolder}" />
+                    <Entry
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="0,10,0,0"
+                        Text="{Binding AnkiSoundsFolder}">
+                    </Entry>
 
                     <ImageButton
                         Grid.Column="1"
@@ -106,16 +98,7 @@
             </Border>
 
             <!-- Path to Ffmpeg -->
-            <Border
-                IsVisible="{Binding CanUseFfmpeg}"
-                Grid.Row="2"
-                Grid.ColumnSpan="3"
-                Stroke="#CCCCCC"
-                StrokeShape="RoundRectangle 10"
-                StrokeThickness="1"
-                Margin="0,30,0,0"
-                Padding="10,10,10,20">
-
+            <Border Grid.Row="2" IsVisible="{Binding CanUseFfmpeg}" Style="{StaticResource BorderStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90"></ColumnDefinition>
@@ -153,16 +136,7 @@
             </Border>
 
             <!-- Path to mp3gain -->
-            <Border
-                IsVisible="{Binding CanUseMp3gain}"
-                Grid.Row="3"
-                Grid.ColumnSpan="3"
-                Stroke="#CCCCCC"
-                StrokeShape="RoundRectangle 10"
-                StrokeThickness="1"
-                Margin="0,30,0,0"
-                Padding="10,10,10,20">
-
+            <Border Grid.Row="3" IsVisible="{Binding CanUseMp3gain}" Style="{StaticResource BorderStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90"></ColumnDefinition>
@@ -221,14 +195,7 @@
             </Border>
 
             <!-- Translator settings -->
-            <Border Grid.Row="4"
-                Grid.ColumnSpan="3"
-                Stroke="#CCCCCC"
-                StrokeShape="RoundRectangle 10"
-                StrokeThickness="1"
-                Margin="0,30,0,0"
-                Padding="10,10,10,20">
-
+            <Border Grid.Row="4" Style="{StaticResource BorderStyle}">
                 <VerticalStackLayout>
                     <HorizontalStackLayout>
                         <Label Text="Use translator" VerticalOptions="Center"></Label>
@@ -262,20 +229,29 @@
                 </VerticalStackLayout>
             </Border>
 
-            <Button
-                Grid.Row="5"
-                Grid.Column="1"
-                Margin="0,20,0,30"
-                Text="Save"
-                Command="{Binding SaveSettingsCommand}"/>
-            <Button
-                Grid.Row="5"
-                Grid.Column="2"
-                Margin="10,20,0,30"
-                Text="Cancel"
-                Command="{Binding CancelCommand}"/>
+            <VerticalStackLayout Grid.Row="5">
 
-            <Label Text="{Binding About}" Grid.Row="6" Grid.ColumnSpan="2" VerticalOptions="End"></Label>
+                <Label
+                    Margin="0,10,0,0"
+                    IsVisible="{Binding ValidationErrors, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
+                    Text="{Binding ValidationErrors}"
+                    TextColor="Red"
+                    />
+
+                <HorizontalStackLayout Margin="0,20,0,20" HorizontalOptions="End">
+                    <Button
+                        Text="Save"
+                        Command="{Binding SaveSettingsCommand}"/>
+                    <Button
+                        Margin="10,0,0,0"
+                        Text="Cancel"
+                        Command="{Binding CancelCommand}"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <Label Grid.Row="6"
+                Text="{Binding About}"
+                VerticalOptions="End" />
         </Grid>
     </ScrollView>
 </ContentPage>

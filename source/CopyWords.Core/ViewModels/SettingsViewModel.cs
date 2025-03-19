@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Ffmpeg
+﻿// Ignore Spelling: Ffmpeg Validator
 
 #nullable enable
 using System.Runtime.InteropServices;
@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using FluentValidation;
 
 namespace CopyWords.Core.ViewModels
 {
@@ -19,6 +20,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IFileIOService _fileIOService;
         private readonly IFolderPicker _folderPicker;
         private readonly IFilePicker _filePicker;
+        private readonly IValidator<SettingsViewModel> _settingsViewModelValidator;
 
         public SettingsViewModel(
             ISettingsService settingsService,
@@ -26,7 +28,8 @@ namespace CopyWords.Core.ViewModels
             IShellService shellService,
             IFileIOService fileIOService,
             IFolderPicker folderPicker,
-            IFilePicker filePicker)
+            IFilePicker filePicker,
+            IValidator<SettingsViewModel> settingsViewModelValidator)
         {
             _settingsService = settingsService;
             _dialogService = dialogService;
@@ -34,6 +37,7 @@ namespace CopyWords.Core.ViewModels
             _fileIOService = fileIOService;
             _folderPicker = folderPicker;
             _filePicker = filePicker;
+            _settingsViewModelValidator = settingsViewModelValidator;
 
             AppSettings appSettings = _settingsService.LoadSettings();
             UpdateUI(appSettings);
@@ -42,15 +46,12 @@ namespace CopyWords.Core.ViewModels
         #region Properties
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string? ankiSoundsFolder;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string? ffmpegBinFolder;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool useMp3gain;
 
         public bool CanUseMp3gain => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
@@ -58,39 +59,24 @@ namespace CopyWords.Core.ViewModels
         public bool CanUseFfmpeg => RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string? mp3gainPath;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string? translatorApiUrl;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool useTranslator;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool translateHeadword;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool translateMeanings;
 
+        [ObservableProperty]
+        private string validationErrors;
+
         public string About => $"App version: {AppInfo.VersionString} (Build {AppInfo.BuildString}), {RuntimeInformation.FrameworkDescription}";
-
-        public bool CanSaveSettings
-        {
-            get
-            {
-                if (UseTranslator)
-                {
-                    return Uri.TryCreate(TranslatorApiUrl, UriKind.Absolute, out Uri? _);
-                }
-
-                return true;
-            }
-        }
 
         #endregion
 
@@ -98,6 +84,7 @@ namespace CopyWords.Core.ViewModels
 
         [SupportedOSPlatform("windows")]
         [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("android")]
         [RelayCommand]
         public async Task ExportSettingsAsync(CancellationToken cancellationToken)
         {
@@ -147,6 +134,7 @@ namespace CopyWords.Core.ViewModels
 
         [SupportedOSPlatform("windows")]
         [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("android")]
         [RelayCommand]
         public async Task PickAnkiSoundsFolderAsync(CancellationToken cancellationToken)
         {
@@ -159,6 +147,7 @@ namespace CopyWords.Core.ViewModels
 
         [SupportedOSPlatform("windows")]
         [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("android")]
         [RelayCommand]
         public async Task PickFfmpegBinFolderAsync(CancellationToken cancellationToken)
         {
@@ -198,9 +187,22 @@ namespace CopyWords.Core.ViewModels
             }
         }
 
-        [RelayCommand(CanExecute = nameof(CanSaveSettings))]
+        [RelayCommand]
         public async Task SaveSettingsAsync()
         {
+            // Apply the validation and get the result
+            var validation = await _settingsViewModelValidator.ValidateAsync(this);
+            if (validation != null && !validation.IsValid)
+            {
+                // The validation contains error, we stop the process
+                ValidationErrors = string.Join(Environment.NewLine, validation.Errors.Select(x => x.ErrorMessage));
+                return;
+            }
+            else
+            {
+                ValidationErrors = string.Empty;
+            }
+
             AppSettings appSettings = _settingsService.LoadSettings();
 
             appSettings.AnkiSoundsFolder = AnkiSoundsFolder;

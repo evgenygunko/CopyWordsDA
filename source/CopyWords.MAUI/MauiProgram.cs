@@ -4,9 +4,11 @@ using CommunityToolkit.Maui.Views;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.Core.ViewModels.Popups;
+using CopyWords.Core.ViewModels.Validation;
 using CopyWords.MAUI.Views.Popups;
 using CopyWords.Parsers;
 using CopyWords.Parsers.Services;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 
 namespace CopyWords.MAUI;
@@ -71,6 +73,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<SettingsViewModel>();
         builder.Services.AddSingleton<GetUpdateViewModel>();
         builder.Services.AddSingleton<SelectDictionaryPopupViewModel>();
+
+        builder.Services.AddScoped<IValidator<SettingsViewModel>, SettingsViewModelValidator>();
 
         builder.Services.AddTransientPopup<SelectDictionaryPopup, SelectDictionaryPopupViewModel>();
         var app = builder.Build();
