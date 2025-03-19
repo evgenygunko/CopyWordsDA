@@ -9,10 +9,4 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
-
-    private void ToolbarItem_Clicked(object sender, EventArgs e)
-    {
-        // workaround for layout bugs in MAUI
-        WidthRequest = Width - 1;
-    }
 }

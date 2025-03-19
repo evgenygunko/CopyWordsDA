@@ -50,6 +50,9 @@ namespace CopyWords.Core.ViewModels
         private bool isBusy;
 
         [ObservableProperty]
+        private bool isRefreshing;
+
+        [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(LookUpCommand))]
         private string searchWord;
 
@@ -82,6 +85,17 @@ namespace CopyWords.Core.ViewModels
             UpdateUI(wordModel);
 
             IsBusy = false;
+        }
+
+        [RelayCommand]
+        public async Task RefreshAsync()
+        {
+            IsRefreshing = true;
+
+            WordModel wordModel = await LookUpWordInDictionaryAsync(SearchWord);
+            UpdateUI(wordModel);
+
+            IsRefreshing = false;
         }
 
         [RelayCommand(CanExecute = nameof(CanShowSettingsDialog))]

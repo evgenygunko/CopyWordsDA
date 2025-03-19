@@ -44,6 +44,30 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #endregion
 
+        #region Tests for RefreshAsync
+
+        [TestMethod]
+        public async Task RefreshAsync_Should_CallLookUpWordAsync()
+        {
+            string search = _fixture.Create<string>();
+
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
+            lookUpWordMock.Setup(x => x.CheckThatWordIsValid(It.IsAny<string>())).Returns(() => (true, null)).Verifiable();
+            lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel).Verifiable();
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.SearchWord = search;
+
+            await sut.RefreshAsync();
+
+            sut.IsRefreshing.Should().BeFalse();
+            lookUpWordMock.Verify();
+        }
+
+        #endregion
+
         #region Tests for LookUpWordInDictionaryAsync
 
         [DataTestMethod]
