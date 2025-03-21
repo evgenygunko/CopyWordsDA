@@ -22,11 +22,14 @@ namespace CopyWords.Core.Services
         private const string TemplateGrayText = "<span style=\"color: rgba(0, 0, 0, 0.4)\">{0}</span>";
 
         private readonly ISaveImageFileService _saveImageFileService;
+        private readonly IDeviceInfo _deviceInfo;
 
         public CopySelectedToClipboardService(
-            ISaveImageFileService saveImageFileService)
+            ISaveImageFileService saveImageFileService,
+            IDeviceInfo deviceInfo)
         {
             _saveImageFileService = saveImageFileService;
+            _deviceInfo = deviceInfo;
         }
 
         #region Public Methods
@@ -127,18 +130,26 @@ namespace CopyWords.Core.Services
 
                         if (meaningVM.IsImageChecked && !string.IsNullOrEmpty(meaningVM.ImageUrl))
                         {
-                            // Download image, resize and save to Anki media collection folder
-                            string imageFileName = definitionViewModel.Word;
-                            if (imageIndex > 0)
+                            if (_deviceInfo.Platform == DevicePlatform.Android)
                             {
-                                imageFileName += imageIndex;
+                                // On Android we cannot save files into Android folders, they are protected. We will add a link to the image instead.
+                                backMeaning.Append($"<br><img src=\"{meaningVM.ImageUrl}\">");
                             }
-
-                            bool result = await _saveImageFileService.SaveImageFileAsync(meaningVM.ImageUrl, imageFileName);
-                            if (result)
+                            else
                             {
-                                backMeaning.Append($"<br><img src=\"{imageFileName}.jpg\">");
-                                imageIndex++;
+                                // On Windows and macOS, download the image, resize it, and save it to the Anki media collection folder.
+                                string imageFileName = definitionViewModel.Word;
+                                if (imageIndex > 0)
+                                {
+                                    imageFileName += imageIndex;
+                                }
+
+                                bool result = await _saveImageFileService.SaveImageFileAsync(meaningVM.ImageUrl, imageFileName);
+                                if (result)
+                                {
+                                    backMeaning.Append($"<br><img src=\"{imageFileName}.jpg\">");
+                                    imageIndex++;
+                                }
                             }
                         }
 

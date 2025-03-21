@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Verbum Coche Substantiv Intetkøn Foru Forkortelse Guay Fælleskøn Frontl Bien Adverbium Adjektiv
+﻿// Ignore Spelling: Verbum Coche Substantiv Intetkøn Foru Forkortelse Guay Fælleskøn Frontl Bien Adverbium Adjektiv Online
 
 using System.Collections.ObjectModel;
 using AutoFixture;
@@ -359,6 +359,67 @@ namespace CopyWords.Core.Tests.Services
                 "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><br><br>" +
                 $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><br><br>" +
                 $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">человек, который особенно умел в игре, ремесле и т. д.</span>");
+        }
+
+        [TestMethod]
+        public async Task CompileBackAsync_WhenImageIsSelectedAndNotAndroid_CopiesFileToAnkiCollection()
+        {
+            string? imageUrl = null;
+
+            var definitionVMs = CreateVMForCasa();
+            foreach (var maningVM in definitionVMs[0].ContextViewModels[0].MeaningViewModels)
+            {
+                maningVM.IsImageChecked = true;
+                imageUrl = maningVM.ImageUrl;
+
+                foreach (var exampleVM in maningVM.ExampleViewModels)
+                {
+                    exampleVM.IsChecked = true;
+                }
+            }
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(imageUrl, "casa")).ReturnsAsync(true).Verifiable();
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string result = await sut.CompileBackAsync(definitionVMs[0]);
+
+            result.Should().Be("house (dwelling)<br><img src=\"casa.jpg\">");
+            saveImageFileServiceMock.Verify();
+        }
+
+        [TestMethod]
+        public async Task CompileBackAsync_WhenImageIsSelectedAndAndroid_InsertsUrlToImageInOnlineDictionary()
+        {
+            string? imageUrl = null;
+
+            var definitionVMs = CreateVMForCasa();
+            foreach (var maningVM in definitionVMs[0].ContextViewModels[0].MeaningViewModels)
+            {
+                maningVM.IsImageChecked = true;
+                imageUrl = maningVM.ImageUrl;
+
+                foreach (var exampleVM in maningVM.ExampleViewModels)
+                {
+                    exampleVM.IsChecked = true;
+                }
+            }
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string result = await sut.CompileBackAsync(definitionVMs[0]);
+
+            result.Should().Be($"house (dwelling)<br><img src=\"{imageUrl}\">");
+            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         #endregion
@@ -988,7 +1049,7 @@ namespace CopyWords.Core.Tests.Services
                                 Translation: null,
                                 AlphabeticalPosition: "a",
                                 Tag: null,
-                                ImageUrl: null,
+                                ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/1ccc644c-898c-49b1-be9b-01eee0375a72.jpg",
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Vivimos en una casa con un gran jardín.", Translation: "We live in a house with a big garden.")

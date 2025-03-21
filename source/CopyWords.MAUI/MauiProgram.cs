@@ -43,6 +43,7 @@ public static class MauiProgram
         builder.Services.AddSingleton(Preferences.Default);
         builder.Services.AddSingleton(FolderPicker.Default);
         builder.Services.AddSingleton(FilePicker.Default);
+        builder.Services.AddSingleton(DeviceInfo.Current);
 
         var mediaElement = new MediaElement
         {
