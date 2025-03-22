@@ -1,7 +1,6 @@
 ﻿#nullable enable
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -44,8 +43,7 @@ namespace CopyWords.Core.ViewModels
         [NotifyPropertyChangedFor(nameof(PlaySoundButtonColor))]
         private bool isBusy;
 
-        // todo: for now only enable saving sound files on Windows and MacOS
-        public bool CanSaveSoundFile => !IsBusy && !string.IsNullOrEmpty(SoundFileName) && (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX));
+        public bool CanSaveSoundFile => !IsBusy && !string.IsNullOrEmpty(SoundFileName);
 
         public bool CanPlaySound => !IsBusy && !string.IsNullOrEmpty(SoundUrl);
 
@@ -95,13 +93,13 @@ namespace CopyWords.Core.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanSaveSoundFile))]
-        public async Task SaveSoundFileAsync()
+        public async Task SaveSoundFileAsync(CancellationToken cancellationToken)
         {
             IsBusy = true;
 
             try
             {
-                bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl, SoundFileName);
+                bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl, SoundFileName, cancellationToken);
 
                 if (result)
                 {

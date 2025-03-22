@@ -1,35 +1,52 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using CommunityToolkit.Maui.Storage;
 using FFMpegCore;
 
 namespace CopyWords.Core.Services
 {
     public interface ISaveSoundFileService
     {
-        Task<bool> SaveSoundFileAsync(string url, string soundFileName);
+        Task<bool> SaveSoundFileAsync(string url, string soundFileName, CancellationToken cancellationToken);
     }
 
     public class SaveSoundFileService : SaveFileServiceBase, ISaveSoundFileService
     {
         private readonly IClipboardService _clipboardService;
+        private readonly IDeviceInfo _deviceInfo;
+        private readonly IFileSaver _fileSaver;
 
         public SaveSoundFileService(
             ISettingsService settingsService,
             HttpClient httpClient,
             IDialogService dialogService,
             IClipboardService clipboardService,
-            IFileIOService fileIOService)
+            IFileIOService fileIOService,
+            IDeviceInfo deviceInfo,
+            IFileSaver fileSaver)
             : base(settingsService, httpClient, dialogService, fileIOService)
         {
             _clipboardService = clipboardService;
+            _deviceInfo = deviceInfo;
+            _fileSaver = fileSaver;
         }
 
         #region Public Methods
 
-        public async Task<bool> SaveSoundFileAsync(string url, string soundFileName)
+        [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("android")]
+        public async Task<bool> SaveSoundFileAsync(string url, string soundFileName, CancellationToken cancellationToken)
         {
-            // download file from web into temp folder
+            // on Android show the FileSavePicker and save the file into allowed location, like Downloads
+            if (_deviceInfo.Platform == DevicePlatform.Android)
+            {
+                return await SaveFileWithFileSaverAsync(url, soundFileName, cancellationToken);
+            }
+
+            // On Windows and Mac, download the file and save it to the Anki collection media folder.
+            // First, download the file from the web into a temporary folder.
             string soundFileFullPath = await DownloadFileAsync(url, soundFileName);
             if (string.IsNullOrEmpty(soundFileFullPath))
             {
@@ -55,17 +72,31 @@ namespace CopyWords.Core.Services
                 }
             }
 
-            // save text for Anki into clipboard
-            string clipboardTest = $"[sound:{Path.GetFileNameWithoutExtension(soundFileFullPath)}.mp3]";
-            await _clipboardService.CopyTextToClipboardAsync(clipboardTest);
-
-            // copy file into Anki's sounds folder
+            // copy file into the Anki collection media folder
             if (!await CopyFileToAnkiFolderAsync(soundFileFullPath))
             {
                 return false;
             }
 
+            // save text for Anki into clipboard
+            string clipboardTest = $"[sound:{Path.GetFileNameWithoutExtension(soundFileFullPath)}.mp3]";
+            await _clipboardService.CopyTextToClipboardAsync(clipboardTest);
+
             return true;
+        }
+
+        [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("android")]
+        internal async Task<bool> SaveFileWithFileSaverAsync(string url, string soundFileName, CancellationToken cancellationToken)
+        {
+            using var ctsHttpRequest = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+            using CancellationTokenSource cts = CancellationTokenSource.CreateLinkedTokenSource(ctsHttpRequest.Token, cancellationToken);
+
+            await using var stream = await _httpClient.GetStreamAsync(url, ctsHttpRequest.Token);
+
+            var fileSaverResult = await _fileSaver.SaveAsync(soundFileName, stream, cancellationToken);
+            return fileSaverResult.IsSuccessful;
         }
 
         #endregion
