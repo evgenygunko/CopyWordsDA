@@ -14,6 +14,47 @@ namespace CopyWords.Core.Tests.ViewModels
     {
         private readonly Fixture _fixture = FixtureFactory.CreateFixture();
 
+        #region Tests for InitAsync
+
+        [TestMethod]
+        public async Task InitAsync_WhenInstantTranslationServiceHasText_SetsSearchWordAndRunsLookup()
+        {
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            var lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
+            lookUpWordMock.Setup(x => x.CheckThatWordIsValid(It.IsAny<string>())).Returns(() => (true, null)).Verifiable();
+            lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel).Verifiable();
+
+            var instantTranslationServiceMock = _fixture.Freeze<Mock<IInstantTranslationService>>();
+            instantTranslationServiceMock.Setup(x => x.GetTextAndClear()).Returns("abcdef");
+
+            var sut = _fixture.Create<MainViewModel>();
+            await sut.InitAsync();
+
+            sut.SearchWord.Should().Be("abcdef");
+            lookUpWordMock.Verify();
+        }
+
+        [TestMethod]
+        public async Task InitAsync_WhenInstantTranslationServiceDoesNotHaveText_DoesNotRunLookup()
+        {
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            var lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
+
+            var instantTranslationServiceMock = _fixture.Freeze<Mock<IInstantTranslationService>>();
+            instantTranslationServiceMock.Setup(x => x.GetTextAndClear()).Returns((string?)null);
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.SearchWord = string.Empty;
+            await sut.InitAsync();
+
+            sut.SearchWord.Should().BeEmpty();
+            lookUpWordMock.VerifyNoOtherCalls();
+        }
+
+        #endregion
+
         #region Tests for LookUpAsync
 
         [TestMethod]

@@ -86,7 +86,7 @@
     <MauiIcon Condition="'$(Configuration)' == 'RELEASE'" Include="Resources\AppIcon\appicon.svg" />
 
     <!-- Splash Screen -->
-    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#FAFAFA" BaseSize="128,128" />
 
     <!-- Images -->
     <MauiImage Include="Resources\Images\flag_of_denmark.svg" BaseSize="64,64" />

@@ -15,6 +15,7 @@ namespace CopyWords.Core.ViewModels
         private readonly ICopySelectedToClipboardService _copySelectedToClipboardService;
         private readonly IDialogService _dialogService;
         private readonly IClipboardService _clipboardService;
+        private readonly IInstantTranslationService _instantTranslationService;
 
         private ILookUpWord _lookUpWord;
         private WordViewModel _wordViewModel;
@@ -25,6 +26,7 @@ namespace CopyWords.Core.ViewModels
             ICopySelectedToClipboardService copySelectedToClipboardService,
             IDialogService dialogService,
             IClipboardService clipboardService,
+            IInstantTranslationService instantTranslationService,
             ILookUpWord lookUpWord,
             WordViewModel wordViewModel,
             SelectDictionaryViewModel selectDictionaryViewModel)
@@ -33,6 +35,7 @@ namespace CopyWords.Core.ViewModels
             _copySelectedToClipboardService = copySelectedToClipboardService;
             _dialogService = dialogService;
             _clipboardService = clipboardService;
+            _instantTranslationService = instantTranslationService;
 
             _lookUpWord = lookUpWord;
             _wordViewModel = wordViewModel;
@@ -63,6 +66,17 @@ namespace CopyWords.Core.ViewModels
         #endregion
 
         #region Commands
+
+        [RelayCommand]
+        public async Task InitAsync()
+        {
+            string instantText = _instantTranslationService.GetTextAndClear();
+            if (!string.IsNullOrWhiteSpace(instantText))
+            {
+                SearchWord = instantText;
+                await LookUpAsync(null, CancellationToken.None);
+            }
+        }
 
         [RelayCommand(CanExecute = nameof(CanExecuteLookUp))]
         public async Task LookUpAsync(ITextInput entryElement, CancellationToken token)
