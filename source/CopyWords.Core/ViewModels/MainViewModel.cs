@@ -81,8 +81,6 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanExecuteLookUp))]
         public async Task LookUpAsync(ITextInput entryElement, CancellationToken token)
         {
-            IsBusy = true;
-
             try
             {
                 if (!OperatingSystem.IsMacCatalyst() && entryElement != null)
@@ -95,7 +93,12 @@ namespace CopyWords.Core.ViewModels
                 _ = ex;
             }
 
-            WordModel wordModel = await LookUpWordInDictionaryAsync(SearchWord);
+            WordModel wordModel = new WordModel(SearchWord, null, null, Enumerable.Empty<Definition>(), Enumerable.Empty<Variant>());
+            UpdateUI(wordModel);
+
+            IsBusy = true;
+
+            wordModel = await LookUpWordInDictionaryAsync(SearchWord);
             UpdateUI(wordModel);
 
             IsBusy = false;
