@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             x:DataType="viewmodels:SettingsViewModel"
+             x:Class="CopyWords.MAUI.Views.SettingsViewAndroid">
+
+    <ContentView.Resources>
+        <Style x:Key="Filler" TargetType="BoxView">
+            <Setter Property="Color" Value="#E1E1E1" />
+            <Setter Property="HeightRequest" Value="20" />
+            <Setter Property="Margin" Value="0,10,0,10" />
+        </Style>
+    </ContentView.Resources>
+
+    <VerticalStackLayout>
+
+        <!-- Section "Translations" -->
+        <Label Text="Data" Margin="20,0,10,0" FontSize="Subtitle" />
+        <Grid Margin="20,10,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                <Label Text="Backup" FontAttributes="Bold" />
+                <Label Text="Backup settings locally" FontSize="13" />
+
+                <VerticalStackLayout.Behaviors>
+                    <toolkit:TouchBehavior
+                    DefaultAnimationDuration="250"
+                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                    PressedOpacity="0.6"
+                    PressedScale="0.8"
+                    Command="{Binding ExportSettingsCommand}"/>
+                </VerticalStackLayout.Behaviors>
+            </VerticalStackLayout>
+
+            <Image Grid.Row="0" Grid.Column="1"
+                WidthRequest="36"
+                HeightRequest="36">
+
+                <Image.Source>
+                    <FontImageSource
+                        Color="Gray"
+                        FontFamily="MaterialIconsOutlined-Regular"
+                        Glyph="&#xe2c3;" />
+                </Image.Source>
+            </Image>
+        </Grid>
+
+        <!-- Horizontal line -->
+        <BoxView Color="#E1E1E1" HeightRequest="1" Margin="0,10,0,10" />
+
+        <Grid Margin="20,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                <Label Text="Restore" Margin="0,0,10,0" FontAttributes="Bold" />
+                <Label Text="Restore settings from a previously created backup" Margin="0,0,10,0" FontSize="13" />
+
+                <VerticalStackLayout.Behaviors>
+                    <toolkit:TouchBehavior
+                    DefaultAnimationDuration="250"
+                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                    PressedOpacity="0.6"
+                    PressedScale="0.8"
+                    Command="{Binding ImportSettingsCommand}"/>
+                </VerticalStackLayout.Behaviors>
+            </VerticalStackLayout>
+
+            <Image Grid.Row="0" Grid.Column="1"
+                WidthRequest="36"
+                HeightRequest="36">
+
+                <Image.Source>
+                    <FontImageSource
+                        Color="Gray"
+                        FontFamily="MaterialIconsOutlined-Regular"
+                        Glyph="&#xe2c0;" />
+                </Image.Source>
+            </Image>
+        </Grid>
+
+        <!-- Filler -->
+        <BoxView Style="{StaticResource Filler}" />
+
+        <!-- Section "Translations" -->
+        <Label Text="Translations" Margin="20,0,10,0" FontSize="Subtitle" />
+
+        <Grid Margin="20,10,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold"
+                Text="Use translator"/>
+            <Label Grid.Row="1" Grid.Column="0" FontSize="13"
+                Text="Use the translation app to translate the headword and its meanings"/>
+            <Switch Grid.RowSpan="2" Grid.Column="1" x:Name="chkUseTranslator"
+                IsToggled="{Binding UseTranslator}" />
+        </Grid>
+
+        <!-- Horizontal line -->
+        <BoxView Color="#E1E1E1" HeightRequest="1" Margin="0,10,0,10" />
+
+        <Label Text="TranslatorAPI URL:" Margin="20,0,10,7" FontAttributes="Bold"/>
+        <Entry
+            Margin="20,0,20,0"
+            Text="{Binding TranslatorApiUrl, FallbackValue='http://localhost:7014/api/Translate' }"
+            IsEnabled="{Binding UseTranslator}"
+            Keyboard="Url">
+
+            <Entry.Triggers>
+                <DataTrigger TargetType="Entry" Binding="{Binding IsTranslatorApiUrlValid}" Value="true">
+                    <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                </DataTrigger>
+
+                <DataTrigger TargetType="Entry" Binding="{Binding IsTranslatorApiUrlValid}" Value="false">
+                    <Setter Property="TextColor" Value="Red" />
+                </DataTrigger>
+
+                <DataTrigger TargetType="Entry" Binding="{Binding UseTranslator}" Value="false">
+                    <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
+                </DataTrigger>
+            </Entry.Triggers>
+        </Entry>
+
+        <!-- Horizontal line -->
+        <BoxView Color="#E1E1E1" HeightRequest="1" Margin="0,20,0,10" />
+
+        <Grid Margin="20,10,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold"
+                Text="Translate headword"/>
+            <Label Grid.Row="1" Grid.Column="0" FontSize="13"
+                Text="Translate the headword to English/Russian"/>
+            <Switch Grid.RowSpan="2" Grid.Column="1"
+                IsToggled="{Binding TranslateHeadword}" />
+        </Grid>
+
+        <!-- Horizontal line -->
+        <BoxView Color="#E1E1E1" HeightRequest="1" Margin="0,10,0,10" />
+
+        <Grid Margin="20,10,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold"
+                Text="Translate meanings"/>
+            <Label Grid.Row="1" Grid.Column="0" FontSize="13"
+                Text="Translate the word meanings to English/Russian"/>
+            <Switch Grid.RowSpan="2" Grid.Column="1"
+                IsToggled="{Binding TranslateMeanings}" />
+        </Grid>
+
+        <!-- Filler -->
+        <BoxView Style="{StaticResource Filler}" />
+
+        <!-- Section "Other" -->
+        <Label Text="Other" FontSize="Subtitle" Margin="20,0,10,0" />
+
+        <Label Text="About" Margin="20,10,10,0" FontAttributes="Bold" />
+        <Label Text="{Binding About}" Margin="20,0,10,0" FontSize="13" />
+    </VerticalStackLayout>
+
+</ContentView>

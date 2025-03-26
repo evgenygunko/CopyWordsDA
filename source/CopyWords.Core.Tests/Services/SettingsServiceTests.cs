@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: App
+﻿// Ignore Spelling: App Api
 
 using System.Runtime.InteropServices;
 using AutoFixture;
@@ -145,5 +145,57 @@ namespace CopyWords.Core.Tests.Services
         }
 
         #endregion
+
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void SetUseTranslator_Should_CallPreferencesSet(bool value)
+        {
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+
+            var sut = _fixture.Create<SettingsService>();
+            sut.SetUseTranslator(value);
+
+            preferencesMock.Verify(x => x.Set("UseTranslator", value, It.IsAny<string>()));
+        }
+
+        [TestMethod]
+        public void SetTranslatorApiUrl_Should_CallPreferencesSet()
+        {
+            const string value = "http://localhost:7014/api/Translate";
+
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+
+            var sut = _fixture.Create<SettingsService>();
+            sut.SetTranslatorApiUrl(value);
+
+            preferencesMock.Verify(x => x.Set("TranslatorApiUrl", value, It.IsAny<string>()));
+        }
+
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void SetTranslateHeadword_Should_CallPreferencesSet(bool value)
+        {
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+
+            var sut = _fixture.Create<SettingsService>();
+            sut.SetTranslateHeadword(value);
+
+            preferencesMock.Verify(x => x.Set("TranslateHeadword", value, It.IsAny<string>()));
+        }
+
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void SetTranslateMeanings_Should_CallPreferencesSet(bool value)
+        {
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+
+            var sut = _fixture.Create<SettingsService>();
+            sut.SetTranslateMeanings(value);
+
+            preferencesMock.Verify(x => x.Set("TranslateMeanings", value, It.IsAny<string>()));
+        }
     }
 }

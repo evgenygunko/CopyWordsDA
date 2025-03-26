@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Ffmpeg Validator
 
 #nullable enable
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using CommunityToolkit.Maui.Storage;
@@ -21,7 +22,10 @@ namespace CopyWords.Core.ViewModels
         private readonly IFileIOService _fileIOService;
         private readonly IFolderPicker _folderPicker;
         private readonly IFilePicker _filePicker;
+        private readonly IDeviceInfo _deviceInfo;
         private readonly IValidator<SettingsViewModel> _settingsViewModelValidator;
+
+        private bool _isInitialized;
 
         public SettingsViewModel(
             ISettingsService settingsService,
@@ -30,6 +34,7 @@ namespace CopyWords.Core.ViewModels
             IFileIOService fileIOService,
             IFolderPicker folderPicker,
             IFilePicker filePicker,
+            IDeviceInfo deviceInfo,
             IValidator<SettingsViewModel> settingsViewModelValidator)
         {
             _settingsService = settingsService;
@@ -38,10 +43,13 @@ namespace CopyWords.Core.ViewModels
             _fileIOService = fileIOService;
             _folderPicker = folderPicker;
             _filePicker = filePicker;
+            _deviceInfo = deviceInfo;
             _settingsViewModelValidator = settingsViewModelValidator;
         }
 
         #region Properties
+
+        internal bool CanUpdateIndividualSettings => _deviceInfo.Platform == DevicePlatform.Android;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
@@ -67,17 +75,40 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private string? translatorApiUrl;
 
+        partial void OnTranslatorApiUrlChanged(string? value)
+        {
+            OnTranslatorApiUrlChangedInternal(value);
+        }
+
+        [ObservableProperty]
+        private bool isTranslatorApiUrlValid;
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool useTranslator;
+
+        partial void OnUseTranslatorChanged(bool value)
+        {
+            OnUseTranslatorChangedInternal(value);
+        }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool translateHeadword;
 
+        partial void OnTranslateHeadwordChanged(bool value)
+        {
+            OnTranslateHeadwordChangedInternal(value);
+        }
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool translateMeanings;
+
+        partial void OnTranslateMeaningsChanged(bool value)
+        {
+            OnTranslateMeaningsChangedInternal(value);
+        }
 
         [ObservableProperty]
         private ValidationResult? validationResult;
@@ -224,6 +255,8 @@ namespace CopyWords.Core.ViewModels
         {
             AppSettings appSettings = _settingsService.LoadSettings();
             UpdateUI(appSettings);
+
+            _isInitialized = true;
         }
 
         #endregion
@@ -251,6 +284,49 @@ namespace CopyWords.Core.ViewModels
             }
 
             return true;
+        }
+
+        internal void OnTranslatorApiUrlChangedInternal(string? value)
+        {
+            Uri? outUri;
+            IsTranslatorApiUrlValid = Uri.TryCreate(value, UriKind.Absolute, out outUri)
+                && (outUri.Scheme == Uri.UriSchemeHttp || outUri.Scheme == Uri.UriSchemeHttps);
+
+            if (_isInitialized && CanUpdateIndividualSettings)
+            {
+                if (IsTranslatorApiUrlValid)
+                {
+                    _settingsService.SetTranslatorApiUrl(value);
+                    Debug.WriteLine($"TranslatorApiUrl has changed to {value}");
+                }
+            }
+        }
+
+        internal void OnUseTranslatorChangedInternal(bool value)
+        {
+            if (_isInitialized && CanUpdateIndividualSettings)
+            {
+                _settingsService.SetUseTranslator(value);
+                Debug.WriteLine($"UseTranslator has changed to {value}");
+            }
+        }
+
+        internal void OnTranslateHeadwordChangedInternal(bool value)
+        {
+            if (_isInitialized && CanUpdateIndividualSettings)
+            {
+                _settingsService.SetTranslateHeadword(value);
+                Debug.WriteLine($"TranslateHeadword has changed to {value}");
+            }
+        }
+
+        internal void OnTranslateMeaningsChangedInternal(bool value)
+        {
+            if (_isInitialized && CanUpdateIndividualSettings)
+            {
+                _settingsService.SetTranslateMeanings(value);
+                Debug.WriteLine($"TranslateMeanings has changed to {value}");
+            }
         }
 
         #endregion

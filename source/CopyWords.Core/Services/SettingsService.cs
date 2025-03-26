@@ -16,6 +16,14 @@ namespace CopyWords.Core.Services
         Task<AppSettings> ImportSettingsAsync(string filePath);
 
         Task ExportSettingsAsync(string filePath);
+
+        void SetUseTranslator(bool value);
+
+        void SetTranslatorApiUrl(string? value);
+
+        void SetTranslateHeadword(bool value);
+
+        void SetTranslateMeanings(bool value);
     }
 
     public class SettingsService : ISettingsService
@@ -119,6 +127,14 @@ namespace CopyWords.Core.Services
                 _preferences.Set(settingName, newValue.ToString(CultureInfo.CurrentCulture));
             }
         }
+
+        public void SetUseTranslator(bool value) => _preferences.Set("UseTranslator", value);
+
+        public void SetTranslatorApiUrl(string? value) => _preferences.Set("TranslatorApiUrl", value);
+
+        public void SetTranslateHeadword(bool value) => _preferences.Set("TranslateHeadword", value);
+
+        public void SetTranslateMeanings(bool value) => _preferences.Set("TranslateMeanings", value);
 
         #endregion
     }

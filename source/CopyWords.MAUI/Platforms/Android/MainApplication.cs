@@ -1,4 +1,6 @@
-﻿using Android.App;
+﻿// Ignore Spelling: App
+
+using Android.App;
 using Android.Runtime;
 
 namespace CopyWords.MAUI;

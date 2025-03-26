@@ -156,6 +156,12 @@
     <MauiXaml Update="Views\DefinitionsView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\SettingsViewAndroid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\SettingsViewWindows.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\VariantsView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
