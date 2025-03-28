@@ -710,8 +710,8 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.OnTranslateHeadwordChangedInternal(true);
 
             settingsServiceMock.Verify(x => x.SetTranslateHeadword(It.IsAny<bool>()), Times.Never);
-
         }
+
         #endregion
 
         #region Tests for OnTranslateMeaningsChangedInternal

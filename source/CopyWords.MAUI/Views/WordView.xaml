@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              xmlns:models="clr-namespace:CopyWords.Parsers.Models;assembly=Parsers"
@@ -47,7 +48,7 @@
                 <ImageButton.Source>
                     <FontImageSource
                         FontFamily="MaterialIconsOutlined-Regular"
-                        Glyph="&#xe1c4;"/>
+                        Glyph="{x:Static helpers:MaterialDesignIconFonts.Play_circle}" />
                 </ImageButton.Source>
             </ImageButton>
 
@@ -60,7 +61,7 @@
                 <ImageButton.Source>
                     <FontImageSource
                         FontFamily="MaterialIconsOutlined-Regular"
-                        Glyph="&#xe161;"/>
+                        Glyph="{x:Static helpers:MaterialDesignIconFonts.Save}" />
                 </ImageButton.Source>
             </ImageButton>
         </HorizontalStackLayout>
