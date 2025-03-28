@@ -233,8 +233,8 @@ namespace CopyWords.Core.Tests.ViewModels
 
             dialogServiceMock.Verify(x => x.DisplayAlert("File already exists", It.IsAny<string>(), "Yes", "No"));
             settingsServiceMock.Verify(x => x.ExportSettingsAsync(It.IsAny<string>()));
-            dialogServiceMock.Verify(x => x.DisplayToast(It.Is<string>(s => s.StartsWith("Settings exported to"))));
-            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(s => s.Location.ToString() == "..")));
+            dialogServiceMock.Verify(x => x.DisplayToast(It.Is<string>(s => s.StartsWith("Settings successfully exported to"))));
+            shellServiceMock.VerifyNoOtherCalls();
         }
 
         [SupportedOSPlatform("windows")]
@@ -264,8 +264,8 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.ExportSettingsAsync(default);
 
             settingsServiceMock.Verify(x => x.ExportSettingsAsync(It.IsAny<string>()));
-            dialogServiceMock.Verify(x => x.DisplayToast(It.Is<string>(s => s.StartsWith("Settings exported to"))));
-            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(s => s.Location.ToString() == "..")));
+            dialogServiceMock.Verify(x => x.DisplayToast(It.Is<string>(s => s.StartsWith("Settings successfully exported to"))));
+            shellServiceMock.VerifyNoOtherCalls();
         }
 
         #endregion
@@ -330,13 +330,13 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task ImportSettingsAsync_WhenFileIsSelected_ImportsSettings()
         {
             AppSettings appSettings = _fixture.Create<AppSettings>();
+            var fileResult = _fixture.Create<FileResult>();
 
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.ImportSettingsAsync(It.IsAny<string>())).ReturnsAsync(appSettings);
 
-            var fileResult = _fixture.Create<FileResult>();
-
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
 
             var filePickerMock = _fixture.Freeze<Mock<IFilePicker>>();
             filePickerMock.Setup(x => x.PickAsync(It.IsAny<PickOptions>())).ReturnsAsync(fileResult);
@@ -344,7 +344,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = new SettingsViewModel(
                 settingsServiceMock.Object,
                 dialogServiceMock.Object,
-                Mock.Of<IShellService>(),
+                shellServiceMock.Object,
                 Mock.Of<IFileIOService>(),
                 Mock.Of<IFolderPicker>(),
                 filePickerMock.Object,
@@ -361,7 +361,78 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.TranslateHeadword.Should().Be(appSettings.TranslateHeadword);
 
             settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()));
-            dialogServiceMock.Verify(x => x.DisplayToast("Settings imported."));
+            dialogServiceMock.Verify(x => x.DisplayToast("Settings successfully imported."));
+            shellServiceMock.VerifyNoOtherCalls();
+        }
+
+        #endregion
+
+        #region Tests for EnterTranslatorApiUrlAsync
+
+        [TestMethod]
+        public async Task EnterTranslatorApiUrlAsync_IfUserEnteredValue_SetsTranslatorApiUrl()
+        {
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock.Setup(x => x.DisplayPromptAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<int>(),
+                    Keyboard.Url,
+                    It.IsAny<string>()))
+                .ReturnsAsync("https://google.dk")
+                .Verifiable();
+
+            var sut = new SettingsViewModel(
+                Mock.Of<ISettingsService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFolderPicker>(),
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
+            sut.TranslatorApiUrl = "http://localhost:7014/api/Translate";
+
+            await sut.EnterTranslatorApiUrlAsync();
+
+            sut.TranslatorApiUrl.Should().Be("https://google.dk");
+            dialogServiceMock.Verify();
+        }
+
+        [TestMethod]
+        public async Task EnterTranslatorApiUrlAsync_IfUserDoesNotEnterValue_DoesNotUpdateTranslatorApiUrl()
+        {
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock.Setup(x => x.DisplayPromptAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<int>(),
+                    Keyboard.Url,
+                    It.IsAny<string>()))
+                .ReturnsAsync((string?)null)
+                .Verifiable();
+
+            var sut = new SettingsViewModel(
+                Mock.Of<ISettingsService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFolderPicker>(),
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
+            sut.TranslatorApiUrl = "http://localhost:7014/api/Translate";
+
+            await sut.EnterTranslatorApiUrlAsync();
+
+            sut.TranslatorApiUrl.Should().Be("http://localhost:7014/api/Translate");
+            dialogServiceMock.Verify();
         }
 
         #endregion

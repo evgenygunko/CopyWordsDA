@@ -141,9 +141,7 @@ namespace CopyWords.Core.ViewModels
                 }
 
                 await _settingsService.ExportSettingsAsync(settingFile);
-
-                await _dialogService.DisplayToast($"Settings exported to '{settingFile}'.");
-                await _shellService.GoToAsync("..");
+                await _dialogService.DisplayToast($"Settings successfully exported to '{settingFile}'.");
             }
         }
 
@@ -159,7 +157,7 @@ namespace CopyWords.Core.ViewModels
                     AppSettings appSettings = await _settingsService.ImportSettingsAsync(settingFile);
                     UpdateUI(appSettings);
 
-                    await _dialogService.DisplayToast("Settings imported.");
+                    await _dialogService.DisplayToast("Settings successfully imported.");
                 }
                 catch (Exception ex)
                 {
@@ -257,6 +255,18 @@ namespace CopyWords.Core.ViewModels
             UpdateUI(appSettings);
 
             _isInitialized = true;
+        }
+
+        [RelayCommand]
+        public async Task EnterTranslatorApiUrlAsync()
+        {
+            string result = await _dialogService.DisplayPromptAsync("TranslatorAPI UR", "Please enter the url:", initialValue: TranslatorApiUrl, keyboard: Keyboard.Url);
+
+            // Check that user clicked OK
+            if (!string.IsNullOrEmpty(result))
+            {
+                TranslatorApiUrl = result;
+            }
         }
 
         #endregion

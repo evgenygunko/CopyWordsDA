@@ -26,25 +26,15 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <VerticalStackLayout Grid.Row="0" Grid.Column="0">
-                <Label Text="Backup" FontAttributes="Bold" />
-                <Label Text="Backup settings locally" FontSize="13" />
-
-                <VerticalStackLayout.Behaviors>
-                    <toolkit:TouchBehavior
-                    DefaultAnimationDuration="250"
-                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                    PressedOpacity="0.6"
-                    PressedScale="0.8"
-                    Command="{Binding ExportSettingsCommand}"/>
-                </VerticalStackLayout.Behaviors>
-            </VerticalStackLayout>
+            <Label Grid.Row="0" Grid.Column="0" Text="Backup" FontAttributes="Bold" />
+            <Label Grid.Row="1" Grid.Column="0" Text="Backup settings locally" FontSize="13" />
 
             <Image Grid.Row="0" Grid.Column="1"
-                WidthRequest="36"
-                HeightRequest="36">
+                WidthRequest="32"
+                HeightRequest="32">
 
                 <Image.Source>
                     <FontImageSource
@@ -53,6 +43,15 @@
                         Glyph="&#xe2c3;" />
                 </Image.Source>
             </Image>
+
+            <Grid.Behaviors>
+                <toolkit:TouchBehavior
+                    DefaultAnimationDuration="250"
+                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                    PressedOpacity="0.6"
+                    PressedScale="0.8"
+                    Command="{Binding ExportSettingsCommand}"/>
+            </Grid.Behaviors>
         </Grid>
 
         <!-- Horizontal line -->
@@ -66,25 +65,15 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <VerticalStackLayout Grid.Row="0" Grid.Column="0">
-                <Label Text="Restore" Margin="0,0,10,0" FontAttributes="Bold" />
-                <Label Text="Restore settings from a previously created backup" Margin="0,0,10,0" FontSize="13" />
-
-                <VerticalStackLayout.Behaviors>
-                    <toolkit:TouchBehavior
-                    DefaultAnimationDuration="250"
-                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                    PressedOpacity="0.6"
-                    PressedScale="0.8"
-                    Command="{Binding ImportSettingsCommand}"/>
-                </VerticalStackLayout.Behaviors>
-            </VerticalStackLayout>
+            <Label Grid.Row="0" Grid.Column="0" Text="Restore" Margin="0,0,10,0" FontAttributes="Bold" />
+            <Label Grid.Row="1" Grid.Column="0" Text="Restore settings from a previously created backup" Margin="0,0,10,0" FontSize="13" />
 
             <Image Grid.Row="0" Grid.Column="1"
-                WidthRequest="36"
-                HeightRequest="36">
+                WidthRequest="32"
+                HeightRequest="32">
 
                 <Image.Source>
                     <FontImageSource
@@ -93,6 +82,15 @@
                         Glyph="&#xe2c0;" />
                 </Image.Source>
             </Image>
+
+            <Grid.Behaviors>
+                <toolkit:TouchBehavior
+                    DefaultAnimationDuration="250"
+                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                    PressedOpacity="0.6"
+                    PressedScale="0.8"
+                    Command="{Binding ImportSettingsCommand}"/>
+            </Grid.Behaviors>
         </Grid>
 
         <!-- Filler -->
@@ -124,26 +122,33 @@
         <BoxView Color="#E1E1E1" HeightRequest="1" Margin="0,10,0,10" />
 
         <Label Text="TranslatorAPI URL:" Margin="20,0,10,7" FontAttributes="Bold"/>
-        <Entry
-            Margin="20,0,20,0"
-            Text="{Binding TranslatorApiUrl, FallbackValue='http://localhost:7014/api/Translate' }"
-            IsEnabled="{Binding UseTranslator}"
-            Keyboard="Url">
+        <Label Text="{Binding TranslatorApiUrl, FallbackValue='http://localhost:7014/api/Translate' }"
+                Margin="20,0,20,0"
+                FontSize="13" >
 
-            <Entry.Triggers>
-                <DataTrigger TargetType="Entry" Binding="{Binding IsTranslatorApiUrlValid}" Value="true">
+            <Label.Triggers>
+                <DataTrigger TargetType="Label" Binding="{Binding IsTranslatorApiUrlValid}" Value="true">
                     <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
                 </DataTrigger>
 
-                <DataTrigger TargetType="Entry" Binding="{Binding IsTranslatorApiUrlValid}" Value="false">
+                <DataTrigger TargetType="Label" Binding="{Binding IsTranslatorApiUrlValid}" Value="false">
                     <Setter Property="TextColor" Value="Red" />
                 </DataTrigger>
 
-                <DataTrigger TargetType="Entry" Binding="{Binding UseTranslator}" Value="false">
+                <DataTrigger TargetType="Label" Binding="{Binding UseTranslator}" Value="false">
                     <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
                 </DataTrigger>
-            </Entry.Triggers>
-        </Entry>
+            </Label.Triggers>
+
+            <Label.Behaviors>
+                <toolkit:TouchBehavior
+                    DefaultAnimationDuration="250"
+                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
+                    PressedOpacity="0.6"
+                    PressedScale="0.8"
+                    Command="{Binding EnterTranslatorApiUrlCommand}"/>
+            </Label.Behaviors>
+        </Label>
 
         <!-- Horizontal line -->
         <BoxView Color="#E1E1E1" HeightRequest="1" Margin="0,20,0,10" />
@@ -164,6 +169,7 @@
             <Label Grid.Row="1" Grid.Column="0" FontSize="13"
                 Text="Translate the headword to English/Russian"/>
             <Switch Grid.RowSpan="2" Grid.Column="1"
+                IsEnabled="{Binding UseTranslator}"
                 IsToggled="{Binding TranslateHeadword}" />
         </Grid>
 
@@ -186,6 +192,7 @@
             <Label Grid.Row="1" Grid.Column="0" FontSize="13"
                 Text="Translate the word meanings to English/Russian"/>
             <Switch Grid.RowSpan="2" Grid.Column="1"
+                IsEnabled="{Binding UseTranslator}"
                 IsToggled="{Binding TranslateMeanings}" />
         </Grid>
 
