@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using AutoFixture;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using CopyWords.Parsers.Models;
 using FluentAssertions;
 using Moq;
 
@@ -196,6 +197,34 @@ namespace CopyWords.Core.Tests.Services
             sut.SetTranslateMeanings(value);
 
             preferencesMock.Verify(x => x.Set("TranslateMeanings", value, It.IsAny<string>()));
+        }
+
+        [TestMethod]
+        public void GetSelectedParser_Should_CallPreferencesSet()
+        {
+            const string expectedValue = "Spanish";
+
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns(expectedValue).Verifiable();
+
+            var sut = _fixture.Create<SettingsService>();
+            string result = sut.GetSelectedParser();
+
+            result.Should().Be(expectedValue);
+            preferencesMock.Verify();
+        }
+
+        [TestMethod]
+        public void SetSelectedParser_Should_CallPreferencesSet()
+        {
+            const string value = "Spanish";
+
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+
+            var sut = _fixture.Create<SettingsService>();
+            sut.SetSelectedParser(value);
+
+            preferencesMock.Verify(x => x.Set("SelectedParser", value, It.IsAny<string>()));
         }
     }
 }

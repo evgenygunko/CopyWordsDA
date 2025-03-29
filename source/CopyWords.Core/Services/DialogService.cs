@@ -20,6 +20,13 @@ namespace CopyWords.Core.Services
             int maxLength = -1,
             Keyboard? keyboard = default,
             string initialValue = "");
+
+        Task<string> DisplayActionSheet(
+            string title,
+            string cancel,
+            string destruction,
+            FlowDirection flowDirection,
+            params string[] buttons);
     }
 
     public class DialogService : IDialogService
@@ -51,6 +58,11 @@ namespace CopyWords.Core.Services
             string initialValue = "")
         {
             return await Application.Current!.Windows[0].Page!.DisplayPromptAsync(title, message, accept, cancel, placeholder, maxLength, keyboard, initialValue);
+        }
+
+        public async Task<string> DisplayActionSheet(string title, string cancel, string destruction, FlowDirection flowDirection, params string[] buttons)
+        {
+            return await Application.Current!.Windows[0].Page!.DisplayActionSheet(title, cancel, destruction, flowDirection, buttons);
         }
     }
 }

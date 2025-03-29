@@ -19,7 +19,6 @@ namespace CopyWords.Core.ViewModels
 
         private ILookUpWord _lookUpWord;
         private WordViewModel _wordViewModel;
-        private SelectDictionaryViewModel _selectDictionaryViewModel;
 
         public MainViewModel(
             ISettingsService settingsService,
@@ -28,8 +27,7 @@ namespace CopyWords.Core.ViewModels
             IClipboardService clipboardService,
             IInstantTranslationService instantTranslationService,
             ILookUpWord lookUpWord,
-            WordViewModel wordViewModel,
-            SelectDictionaryViewModel selectDictionaryViewModel)
+            WordViewModel wordViewModel)
         {
             _settingsService = settingsService;
             _copySelectedToClipboardService = copySelectedToClipboardService;
@@ -39,7 +37,6 @@ namespace CopyWords.Core.ViewModels
 
             _lookUpWord = lookUpWord;
             _wordViewModel = wordViewModel;
-            _selectDictionaryViewModel = selectDictionaryViewModel;
 
             searchWord = string.Empty;
         }
@@ -48,14 +45,18 @@ namespace CopyWords.Core.ViewModels
 
         public WordViewModel WordViewModel => _wordViewModel;
 
-        public SelectDictionaryViewModel SelectDictionaryViewModel => _selectDictionaryViewModel;
-
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(LookUpCommand))]
         private bool isBusy;
 
         [ObservableProperty]
         private bool isRefreshing;
+
+        [ObservableProperty]
+        private string dictionaryName = default!;
+
+        [ObservableProperty]
+        private string dictionaryImage = default!;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(LookUpCommand))]
@@ -77,6 +78,20 @@ namespace CopyWords.Core.ViewModels
             {
                 SearchWord = instantText;
                 await LookUpAsync(null, CancellationToken.None);
+            }
+
+            DictionaryName = _settingsService.GetSelectedParser();
+            if (DictionaryName == SourceLanguage.Danish.ToString())
+            {
+                DictionaryImage = "flag_of_denmark.png";
+            }
+            else if (DictionaryName == SourceLanguage.Spanish.ToString())
+            {
+                DictionaryImage = "flag_of_spain.png";
+            }
+            else
+            {
+                throw new NotSupportedException($"Source language '{DictionaryName}' is not supported.");
             }
         }
 
@@ -123,6 +138,35 @@ namespace CopyWords.Core.ViewModels
             await Shell.Current.GoToAsync("SettingsPage");
         }
 
+        [RelayCommand]
+        public async Task SelectDictionaryAsync()
+        {
+            string[] strings = [SourceLanguage.Danish.ToString(), SourceLanguage.Spanish.ToString()];
+            string result = await _dialogService.DisplayActionSheet(title: "Select dictionary", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, strings);
+
+            // Check that user clicked OK
+            // BUG: The action sheet returns "Cancel" on Android.
+            if (!string.IsNullOrEmpty(result) && result != "Cancel")
+            {
+                if (result == SourceLanguage.Danish.ToString())
+                {
+                    DictionaryName = result;
+                    DictionaryImage = "flag_of_denmark.png";
+                }
+                else if (result == SourceLanguage.Spanish.ToString())
+                {
+                    DictionaryName = result;
+                    DictionaryImage = "flag_of_spain.png";
+                }
+                else
+                {
+                    throw new NotSupportedException($"Source language '{result}' selected in the action sheet is not supported.");
+                }
+
+                _settingsService.SetSelectedParser(result);
+            }
+        }
+
         #endregion
 
         #region Internal Methods
@@ -142,7 +186,7 @@ namespace CopyWords.Core.ViewModels
                 }
 
                 wordModel = await _lookUpWord.GetWordByUrlAsync(url,
-                    new Options(_selectDictionaryViewModel.SelectedParser.SourceLanguage, translatorApiURL, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
+                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), translatorApiURL, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
 
                 if (wordModel == null)
                 {
@@ -215,7 +259,7 @@ namespace CopyWords.Core.ViewModels
                     translatorApiURL = appSettings.TranslatorApiUrl;
                 }
                 wordModel = await _lookUpWord.LookUpWordAsync(word,
-                    new Options(_selectDictionaryViewModel.SelectedParser.SourceLanguage, translatorApiURL, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
+                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), translatorApiURL, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
 
                 if (wordModel == null)
                 {

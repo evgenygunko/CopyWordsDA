@@ -265,7 +265,7 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task EnterTranslatorApiUrlAsync()
         {
-            string result = await _dialogService.DisplayPromptAsync("TranslatorAPI UR", "Please enter the url:", initialValue: TranslatorApiUrl ?? string.Empty, keyboard: Keyboard.Url);
+            string result = await _dialogService.DisplayPromptAsync("TranslatorAPI URL", "Please enter the url:", initialValue: TranslatorApiUrl ?? string.Empty, keyboard: Keyboard.Url);
 
             // Check that user clicked OK
             if (!string.IsNullOrEmpty(result))

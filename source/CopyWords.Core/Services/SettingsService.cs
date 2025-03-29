@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using CopyWords.Core.Models;
+using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.Services
 {
@@ -24,6 +25,10 @@ namespace CopyWords.Core.Services
         void SetTranslateHeadword(bool value);
 
         void SetTranslateMeanings(bool value);
+
+        string GetSelectedParser();
+
+        void SetSelectedParser(string value);
     }
 
     public class SettingsService : ISettingsService
@@ -138,6 +143,10 @@ namespace CopyWords.Core.Services
         public void SetTranslateHeadword(bool value) => _preferences.Set("TranslateHeadword", value);
 
         public void SetTranslateMeanings(bool value) => _preferences.Set("TranslateMeanings", value);
+
+        public string GetSelectedParser() => _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
+
+        public void SetSelectedParser(string value) => _preferences.Set("SelectedParser", value);
 
         #endregion
     }
