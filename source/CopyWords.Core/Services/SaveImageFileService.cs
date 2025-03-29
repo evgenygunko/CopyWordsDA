@@ -27,7 +27,7 @@ namespace CopyWords.Core.Services
             string fileName = Path.ChangeExtension(fileNameWithoutExtension, fileExtension);
 
             // download file from web into temp folder
-            string imgFile = await DownloadFileAsync(url, fileName);
+            string? imgFile = await DownloadFileAsync(url, fileName);
             if (string.IsNullOrEmpty(imgFile))
             {
                 return false;

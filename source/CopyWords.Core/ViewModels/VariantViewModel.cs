@@ -6,7 +6,7 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class VariantViewModel : ObservableObject
     {
-        public event EventHandler<string> Clicked;
+        public event EventHandler<string> Clicked = default!;
 
         public VariantViewModel(Variant variant)
         {

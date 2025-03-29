@@ -118,7 +118,7 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             var sut = _fixture.Create<MainViewModel>();
 
-            WordModel result = await sut.LookUpWordInDictionaryAsync(search);
+            WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().BeNull();
         }
@@ -135,7 +135,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var sut = _fixture.Create<MainViewModel>();
 
-            WordModel result = await sut.LookUpWordInDictionaryAsync(search);
+            WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().BeNull();
             dialogServiceMock.Verify(x => x.DisplayAlert("Invalid search term", "too many commas", "OK"));
@@ -154,7 +154,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var sut = _fixture.Create<MainViewModel>();
 
-            WordModel result = await sut.LookUpWordInDictionaryAsync(search);
+            WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().BeNull();
             dialogServiceMock.Verify(x => x.DisplayAlert("Error occurred while searching translations", "exception from unit test", "OK"));
@@ -173,7 +173,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var sut = _fixture.Create<MainViewModel>();
 
-            WordModel result = await sut.LookUpWordInDictionaryAsync(search);
+            WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().BeNull();
             dialogServiceMock.Verify(x => x.DisplayAlert("Cannot find word", $"Could not find a translation for '{search}'", "OK"));
@@ -193,7 +193,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var sut = _fixture.Create<MainViewModel>();
 
-            WordModel result = await sut.LookUpWordInDictionaryAsync(search);
+            WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().Be(wordModel);
             dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);

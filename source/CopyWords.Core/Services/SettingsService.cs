@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: app
+﻿// Ignore Spelling: app Api
 
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -13,7 +13,7 @@ namespace CopyWords.Core.Services
 
         void SaveSettings(AppSettings appSettings);
 
-        Task<AppSettings> ImportSettingsAsync(string filePath);
+        Task<AppSettings?> ImportSettingsAsync(string filePath);
 
         Task ExportSettingsAsync(string filePath);
 
@@ -78,12 +78,15 @@ namespace CopyWords.Core.Services
             _preferences.Set("SelectedParser", appSettings.SelectedParser);
         }
 
-        public async Task<AppSettings> ImportSettingsAsync(string filePath)
+        public async Task<AppSettings?> ImportSettingsAsync(string filePath)
         {
             var json = await _fileIOService.ReadAllTextAsync(filePath);
-            AppSettings appSettings = JsonSerializer.Deserialize<AppSettings>(json);
+            AppSettings? appSettings = JsonSerializer.Deserialize<AppSettings>(json);
 
-            SaveSettings(appSettings);
+            if (appSettings != null)
+            {
+                SaveSettings(appSettings);
+            }
 
             return appSettings;
         }

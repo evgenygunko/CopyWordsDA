@@ -16,9 +16,9 @@ namespace CopyWords.Core.Services
             string message,
             string accept = "OK",
             string cancel = "Cancel",
-            string placeholder = default,
+            string? placeholder = default,
             int maxLength = -1,
-            Keyboard keyboard = default,
+            Keyboard? keyboard = default,
             string initialValue = "");
     }
 
@@ -26,12 +26,12 @@ namespace CopyWords.Core.Services
     {
         public async Task DisplayAlert(string title, string message, string cancel)
         {
-            await Application.Current.Windows[0].Page.DisplayAlert(title, message, cancel);
+            await Application.Current!.Windows[0].Page!.DisplayAlert(title, message, cancel);
         }
 
         public async Task<bool> DisplayAlert(string title, string message, string accept, string cancel)
         {
-            return await Application.Current.Windows[0].Page.DisplayAlert(title, message, accept, cancel);
+            return await Application.Current!.Windows[0].Page!.DisplayAlert(title, message, accept, cancel);
         }
 
         public async Task DisplayToast(string message)
@@ -45,12 +45,12 @@ namespace CopyWords.Core.Services
             string message,
             string accept = "OK",
             string cancel = "Cancel",
-            string placeholder = default,
+            string? placeholder = default,
             int maxLength = -1,
-            Keyboard keyboard = default,
+            Keyboard? keyboard = default,
             string initialValue = "")
         {
-            return await Application.Current.Windows[0].Page.DisplayPromptAsync(title, message, accept, cancel, placeholder, maxLength, keyboard, initialValue);
+            return await Application.Current!.Windows[0].Page!.DisplayPromptAsync(title, message, accept, cancel, placeholder, maxLength, keyboard, initialValue);
         }
     }
 }

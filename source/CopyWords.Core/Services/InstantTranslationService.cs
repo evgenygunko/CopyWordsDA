@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-namespace CopyWords.Core.Services
+﻿namespace CopyWords.Core.Services
 {
     public interface IInstantTranslationService
     {

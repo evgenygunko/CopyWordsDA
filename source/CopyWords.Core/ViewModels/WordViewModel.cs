@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -99,7 +98,7 @@ namespace CopyWords.Core.ViewModels
 
             try
             {
-                bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl, SoundFileName, cancellationToken);
+                bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl!, SoundFileName!, cancellationToken);
 
                 if (result)
                 {

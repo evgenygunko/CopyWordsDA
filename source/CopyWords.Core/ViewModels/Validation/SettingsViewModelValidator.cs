@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Validator Ffmpeg
+﻿// Ignore Spelling: Validator Ffmpeg Api
 
 using FluentValidation;
 
@@ -29,14 +29,14 @@ namespace CopyWords.Core.ViewModels.Validation
                 .WithMessage("'TranslatorAPI URL' must be a valid URL.");
         }
 
-        private static bool LinkMustBeAUri(string link)
+        private static bool LinkMustBeAUri(string? link)
         {
             if (string.IsNullOrWhiteSpace(link))
             {
                 return false;
             }
 
-            Uri outUri;
+            Uri? outUri;
             return Uri.TryCreate(link, UriKind.Absolute, out outUri)
                    && (outUri.Scheme == Uri.UriSchemeHttp || outUri.Scheme == Uri.UriSchemeHttps);
         }

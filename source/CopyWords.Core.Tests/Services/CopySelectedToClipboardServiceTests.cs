@@ -382,7 +382,7 @@ namespace CopyWords.Core.Tests.Services
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
 
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(imageUrl, "casa")).ReturnsAsync(true).Verifiable();
+            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(imageUrl!, "casa")).ReturnsAsync(true).Verifiable();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 

@@ -40,6 +40,8 @@ namespace CopyWords.Core.ViewModels
             _lookUpWord = lookUpWord;
             _wordViewModel = wordViewModel;
             _selectDictionaryViewModel = selectDictionaryViewModel;
+
+            searchWord = string.Empty;
         }
 
         #region Properties
@@ -70,7 +72,7 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task InitAsync()
         {
-            string instantText = _instantTranslationService.GetTextAndClear();
+            string? instantText = _instantTranslationService.GetTextAndClear();
             if (!string.IsNullOrWhiteSpace(instantText))
             {
                 SearchWord = instantText;
@@ -79,7 +81,7 @@ namespace CopyWords.Core.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteLookUp))]
-        public async Task LookUpAsync(ITextInput entryElement, CancellationToken token)
+        public async Task LookUpAsync(ITextInput? entryElement, CancellationToken token)
         {
             try
             {
@@ -93,7 +95,7 @@ namespace CopyWords.Core.ViewModels
                 _ = ex;
             }
 
-            WordModel wordModel = new WordModel(SearchWord, null, null, Enumerable.Empty<Definition>(), Enumerable.Empty<Variant>());
+            WordModel? wordModel = new WordModel(SearchWord, null, null, Enumerable.Empty<Definition>(), Enumerable.Empty<Variant>());
             UpdateUI(wordModel);
 
             IsBusy = true;
@@ -109,7 +111,7 @@ namespace CopyWords.Core.ViewModels
         {
             IsRefreshing = true;
 
-            WordModel wordModel = await LookUpWordInDictionaryAsync(SearchWord);
+            WordModel? wordModel = await LookUpWordInDictionaryAsync(SearchWord);
             UpdateUI(wordModel);
 
             IsRefreshing = false;
@@ -129,10 +131,10 @@ namespace CopyWords.Core.ViewModels
         {
             IsBusy = true;
 
-            WordModel wordModel = null;
+            WordModel? wordModel = null;
             try
             {
-                string translatorApiURL = null;
+                string? translatorApiURL = null;
                 AppSettings appSettings = _settingsService.LoadSettings();
                 if (appSettings.UseTranslator && !string.IsNullOrEmpty(appSettings.TranslatorApiUrl))
                 {
@@ -157,7 +159,7 @@ namespace CopyWords.Core.ViewModels
             IsBusy = false;
         }
 
-        internal void UpdateUI(WordModel wordModel)
+        internal void UpdateUI(WordModel? wordModel)
         {
             IsBusy = true;
 
@@ -189,24 +191,24 @@ namespace CopyWords.Core.ViewModels
             IsBusy = false;
         }
 
-        internal async Task<WordModel> LookUpWordInDictionaryAsync(string word)
+        internal async Task<WordModel?> LookUpWordInDictionaryAsync(string word)
         {
             if (string.IsNullOrEmpty(word))
             {
                 return null;
             }
 
-            (bool isValid, string errorMessage) = _lookUpWord.CheckThatWordIsValid(word);
+            (bool isValid, string? errorMessage) = _lookUpWord.CheckThatWordIsValid(word);
             if (!isValid)
             {
-                await _dialogService.DisplayAlert("Invalid search term", errorMessage, "OK");
+                await _dialogService.DisplayAlert("Invalid search term", errorMessage ?? string.Empty, "OK");
                 return null;
             }
 
-            WordModel wordModel = null;
+            WordModel? wordModel = null;
             try
             {
-                string translatorApiURL = null;
+                string? translatorApiURL = null;
                 AppSettings appSettings = _settingsService.LoadSettings();
                 if (appSettings.UseTranslator && !string.IsNullOrEmpty(appSettings.TranslatorApiUrl))
                 {

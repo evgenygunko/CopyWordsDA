@@ -7,8 +7,8 @@ namespace CopyWords.Core.ViewModels
     {
         public ExampleViewModel(Example example)
         {
-            Original = example?.Original;
-            Translation = example?.Translation;
+            Original = example.Original;
+            Translation = example.Translation ?? string.Empty;
         }
 
         [ObservableProperty]

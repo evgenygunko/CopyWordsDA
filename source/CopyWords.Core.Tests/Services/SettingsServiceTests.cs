@@ -123,14 +123,14 @@ namespace CopyWords.Core.Tests.Services
             fileIOServiceMock.Setup(x => x.ReadAllTextAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(json);
 
             var sut = _fixture.Create<SettingsService>();
-            AppSettings result = await sut.ImportSettingsAsync(file);
+            AppSettings? result = await sut.ImportSettingsAsync(file);
 
             result.Should().NotBeNull();
             fileIOServiceMock.Verify(x => x.ReadAllTextAsync(file, It.IsAny<CancellationToken>()));
 
             // ImportSettingsAsync also saves settings to current preferences storage
-            preferencesMock.Verify(x => x.Set("AnkiSoundsFolder", result.AnkiSoundsFolder, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("FfmpegBinFolder", result.FfmpegBinFolder, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("AnkiSoundsFolder", result!.AnkiSoundsFolder, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("FfmpegBinFolder", result!.FfmpegBinFolder, It.IsAny<string>()));
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

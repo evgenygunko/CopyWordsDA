@@ -1,6 +1,5 @@
 ﻿// Ignore Spelling: popup
 
-#nullable enable
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Maui.Core;

@@ -12,15 +12,15 @@ namespace CopyWords.Core.Models
 
         public double MainWindowYPos { get; set; }
 
-        public string AnkiSoundsFolder { get; set; }
+        public string AnkiSoundsFolder { get; set; } = string.Empty;
 
-        public string FfmpegBinFolder { get; set; }
+        public string FfmpegBinFolder { get; set; } = string.Empty;
 
-        public string Mp3gainPath { get; set; }
+        public string Mp3gainPath { get; set; } = string.Empty;
 
         public bool UseMp3gain { get; set; }
 
-        public string TranslatorApiUrl { get; set; }
+        public string TranslatorApiUrl { get; set; } = string.Empty;
 
         public bool UseTranslator { get; set; }
 
@@ -28,6 +28,6 @@ namespace CopyWords.Core.Models
 
         public bool TranslateHeadword { get; set; }
 
-        public string SelectedParser { get; set; }
+        public string SelectedParser { get; set; } = string.Empty;
     }
 }

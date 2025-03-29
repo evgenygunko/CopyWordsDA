@@ -101,7 +101,7 @@ namespace CopyWords.Core.Services
                 foreach (var meaningVM in contextVM.MeaningViewModels)
                 {
                     // The meaning is the same for all examples - so find first example which is selected
-                    ExampleViewModel exampleVM = meaningVM.ExampleViewModels.FirstOrDefault(x => x.IsChecked);
+                    ExampleViewModel? exampleVM = meaningVM.ExampleViewModels.FirstOrDefault(x => x.IsChecked);
                     if (exampleVM != null)
                     {
                         var backMeaning = new StringBuilder();

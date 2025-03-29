@@ -9,10 +9,10 @@ namespace CopyWords.Core.ViewModels
         public MeaningViewModel(Meaning meaning)
         {
             Original = meaning.Original;
-            Translation = meaning.Translation;
+            Translation = meaning.Translation ?? string.Empty;
             AlphabeticalPosition = meaning.AlphabeticalPosition;
-            tag = meaning.Tag;
-            ImageUrl = meaning.ImageUrl;
+            tag = meaning.Tag ?? string.Empty;
+            ImageUrl = meaning.ImageUrl ?? string.Empty;
 
             ExampleViewModels.Clear();
             foreach (var example in meaning.Examples)

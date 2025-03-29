@@ -8,7 +8,7 @@ namespace CopyWords.Core.ViewModels
     {
         public ContextViewModel(Context context)
         {
-            ContextEN = context?.ContextEN;
+            ContextEN = context.ContextEN;
             Position = context.Position;
 
             MeaningViewModels.Clear();

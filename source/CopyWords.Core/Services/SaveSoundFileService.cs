@@ -47,7 +47,7 @@ namespace CopyWords.Core.Services
 
             // On Windows and Mac, download the file and save it to the Anki collection media folder.
             // First, download the file from the web into a temporary folder.
-            string soundFileFullPath = await DownloadFileAsync(url, soundFileName);
+            string? soundFileFullPath = await DownloadFileAsync(url, soundFileName);
             if (string.IsNullOrEmpty(soundFileFullPath))
             {
                 return false;
@@ -103,12 +103,12 @@ namespace CopyWords.Core.Services
 
         #region Private Methods
 
-        private async Task<string> TranscodeToMp3Async(string mp4File)
+        private async Task<string?> TranscodeToMp3Async(string mp4File)
         {
             Debug.Assert(File.Exists(mp4File));
 
             string soundName = Path.GetFileNameWithoutExtension(mp4File);
-            string destFileFullPath = Path.Combine(Path.GetDirectoryName(mp4File), $"{soundName}.mp3");
+            string destFileFullPath = Path.Combine(Path.GetDirectoryName(mp4File)!, $"{soundName}.mp3");
 
             string ffmpegBinFolder = _settingsService.LoadSettings().FfmpegBinFolder;
             if (!Directory.Exists(ffmpegBinFolder))
@@ -152,9 +152,9 @@ namespace CopyWords.Core.Services
             {
                 // Start the process with the info we specified.
                 // Call WaitForExit and then the using statement will close.
-                using (Process exeProcess = Process.Start(startInfo))
+                using (Process? exeProcess = Process.Start(startInfo))
                 {
-                    exeProcess.WaitForExit();
+                    exeProcess?.WaitForExit();
                 }
             }
             catch (Exception ex)

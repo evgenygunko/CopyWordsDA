@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System.Text.Json;
+﻿using System.Text.Json;
 using CopyWords.Core.Models;
 
 namespace CopyWords.Core.Services

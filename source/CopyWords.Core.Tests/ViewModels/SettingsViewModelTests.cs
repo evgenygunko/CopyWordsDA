@@ -378,7 +378,7 @@ namespace CopyWords.Core.Tests.ViewModels
                     It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>(),
-                    It.IsAny<string>(),
+                    It.IsAny<string?>(),
                     It.IsAny<int>(),
                     Keyboard.Url,
                     It.IsAny<string>()))
@@ -411,11 +411,11 @@ namespace CopyWords.Core.Tests.ViewModels
                     It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>(),
-                    It.IsAny<string>(),
+                    It.IsAny<string?>(),
                     It.IsAny<int>(),
                     Keyboard.Url,
                     It.IsAny<string>()))
-                .ReturnsAsync((string?)null)
+                .ReturnsAsync((string)null!)
                 .Verifiable();
 
             var sut = new SettingsViewModel(
@@ -553,7 +553,6 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.OnUseTranslatorChangedInternal(true);
 
             settingsServiceMock.Verify(x => x.SetUseTranslator(It.IsAny<bool>()), Times.Never);
-
         }
 
         #endregion
@@ -641,7 +640,6 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.OnTranslatorApiUrlChangedInternal(null);
 
             settingsServiceMock.Verify(x => x.SetTranslatorApiUrl(It.IsAny<string?>()), Times.Never);
-
         }
 
         #endregion
@@ -778,7 +776,6 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.OnTranslateMeaningsChangedInternal(true);
 
             settingsServiceMock.Verify(x => x.SetTranslateMeanings(It.IsAny<bool>()), Times.Never);
-
         }
 
         #endregion

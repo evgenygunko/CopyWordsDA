@@ -20,6 +20,13 @@ namespace CopyWords.Core.ViewModels
             _updateService = updateService;
             _shellService = shellService;
             _dialogService = dialogService;
+
+            whatIsNew = string.Empty;
+            updateDescription = string.Empty;
+            currentVersion = string.Empty;
+            latestVersion = string.Empty;
+            errorMessage = string.Empty;
+            downloadUrl = string.Empty;
         }
 
         [ObservableProperty]

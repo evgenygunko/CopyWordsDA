@@ -1,6 +1,5 @@
-﻿// Ignore Spelling: Ffmpeg Validator
+﻿// Ignore Spelling: Ffmpeg Validator Api
 
-#nullable enable
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -154,7 +153,13 @@ namespace CopyWords.Core.ViewModels
             {
                 try
                 {
-                    AppSettings appSettings = await _settingsService.ImportSettingsAsync(settingFile);
+                    AppSettings? appSettings = await _settingsService.ImportSettingsAsync(settingFile);
+                    if (appSettings == null)
+                    {
+                        await _dialogService.DisplayAlert("Cannot import setting", $"Cannot import settings from the file '{settingFile}'. The format is incorrect", "OK");
+                        return;
+                    }
+
                     UpdateUI(appSettings);
 
                     await _dialogService.DisplayToast("Settings successfully imported.");
@@ -226,12 +231,12 @@ namespace CopyWords.Core.ViewModels
         {
             AppSettings appSettings = _settingsService.LoadSettings();
 
-            appSettings.AnkiSoundsFolder = AnkiSoundsFolder;
-            appSettings.FfmpegBinFolder = FfmpegBinFolder;
+            appSettings.AnkiSoundsFolder = AnkiSoundsFolder ?? string.Empty;
+            appSettings.FfmpegBinFolder = FfmpegBinFolder ?? string.Empty;
             appSettings.UseMp3gain = UseMp3gain;
-            appSettings.Mp3gainPath = Mp3gainPath;
+            appSettings.Mp3gainPath = Mp3gainPath ?? string.Empty;
             appSettings.UseTranslator = UseTranslator;
-            appSettings.TranslatorApiUrl = TranslatorApiUrl;
+            appSettings.TranslatorApiUrl = TranslatorApiUrl ?? string.Empty;
             appSettings.TranslateMeanings = TranslateMeanings;
             appSettings.TranslateHeadword = TranslateHeadword;
 
@@ -260,7 +265,7 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task EnterTranslatorApiUrlAsync()
         {
-            string result = await _dialogService.DisplayPromptAsync("TranslatorAPI UR", "Please enter the url:", initialValue: TranslatorApiUrl, keyboard: Keyboard.Url);
+            string result = await _dialogService.DisplayPromptAsync("TranslatorAPI UR", "Please enter the url:", initialValue: TranslatorApiUrl ?? string.Empty, keyboard: Keyboard.Url);
 
             // Check that user clicked OK
             if (!string.IsNullOrEmpty(result))

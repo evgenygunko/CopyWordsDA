@@ -21,9 +21,9 @@ namespace CopyWords.Core.Services
             _fileIOService = fileIOService;
         }
 
-        protected async Task<string> DownloadFileAsync(string url, string fileName)
+        protected async Task<string?> DownloadFileAsync(string url, string fileName)
         {
-            Uri fileUri;
+            Uri? fileUri;
             if (!Uri.TryCreate(url, UriKind.Absolute, out fileUri))
             {
                 await _dialogService.DisplayAlert("Cannot download file", $"URL for file '{url}' is invalid.", "OK");
