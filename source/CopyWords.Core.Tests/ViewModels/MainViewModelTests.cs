@@ -351,8 +351,8 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
             dialogServiceMock.Setup(x => x.DisplayActionSheet(
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
+                    "Select dictionary:",
+                    "Cancel",
                     It.IsAny<string>(),
                     It.IsAny<FlowDirection>(),
                     It.IsAny<string[]>()))
@@ -376,8 +376,8 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
             dialogServiceMock.Setup(x => x.DisplayActionSheet(
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
+                    "Select dictionary:",
+                    "Cancel",
                     It.IsAny<string>(),
                     It.IsAny<FlowDirection>(),
                     It.IsAny<string[]>()))

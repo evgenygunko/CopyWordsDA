@@ -11,14 +11,15 @@
         <local:AppShell />
     </Window.Page>
 
-    <Window.TitleBar>
+    <!-- For now show toolbar in the AppShell, it has Select Dictionary and Settings buttons. -->
+    <!--<Window.TitleBar>
         <TitleBar x:Name="titleBar"
                   Title="{Binding Title}"
                   Subtitle="{Binding Subtitle}"
                   HeightRequest="48">
 
             <TitleBar.Content>
-                <!-- Show Settings dialog -->
+                --><!-- Show Settings dialog --><!--
                 <ImageButton
                         HorizontalOptions="End"
                         WidthRequest="40"
@@ -36,5 +37,5 @@
                 </ImageButton>
             </TitleBar.Content>
         </TitleBar>
-    </Window.TitleBar>
+    </Window.TitleBar>-->
 </Window>

@@ -142,10 +142,9 @@ namespace CopyWords.Core.ViewModels
         public async Task SelectDictionaryAsync()
         {
             string[] strings = [SourceLanguage.Danish.ToString(), SourceLanguage.Spanish.ToString()];
-            string result = await _dialogService.DisplayActionSheet(title: "Select dictionary", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, strings);
+            string result = await _dialogService.DisplayActionSheet(title: "Select dictionary:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, strings);
 
-            // Check that user clicked OK
-            // BUG: The action sheet returns "Cancel" on Android.
+            // The action sheet returns the button that user pressed, so it can also be "Cancel"
             if (!string.IsNullOrEmpty(result) && result != "Cancel")
             {
                 if (result == SourceLanguage.Danish.ToString())
