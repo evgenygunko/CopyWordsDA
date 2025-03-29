@@ -38,30 +38,37 @@
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
+                <!-- Lookup word -->
+                <OnPlatform x:TypeArguments="View">
+                    <On Platform="Android">
+                        <Border Grid.Row="0"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 10,10,10,10">
 
-                <!-- Lookup word panel -->
-                <Entry
-                    x:Name="lookupEntry"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="0,0,10,0"
-                    Text="{Binding SearchWord}"
-                    ReturnCommandParameter="{x:Reference Name=lookupEntry}"
-                    ReturnCommand="{Binding LookUpCommand}" />
-                <Button Grid.Row="0"
-                    Grid.Column="1"
-                    Text="Search"
-                    CommandParameter="{x:Reference Name=lookupEntry}"
-                    Command="{Binding LookUpCommand}" />
+                            <SearchBar
+                                x:Name="SearchBarLookupWordAndroid"
+                                Placeholder="Search word"
+                                Text="{Binding SearchWord}"
+                                SearchCommand="{Binding LookUpCommand}"
+                                SearchCommandParameter="{x:Reference SearchBarLookupWordAndroid}"
+                                StyleClass="SearchBarNoUnderline" />
+                        </Border>
+                    </On>
+                    <On Platform="WinUI, MacCatalyst">
+                        <SearchBar
+                                x:Name="SearchBarLookupWordDesktop"
+                                Placeholder="Search word"
+                                Text="{Binding SearchWord}"
+                                SearchCommand="{Binding LookUpCommand}"
+                                SearchCommandParameter="{x:Reference SearchBarLookupWordDesktop}"
+                                StyleClass="SearchBarNoUnderline" />
+                    </On>
+                </OnPlatform>
 
                 <!-- Parsed word user control -->
-                <views:WordView Grid.Row="1" Grid.ColumnSpan="2" BindingContext="{Binding Path=WordViewModel}" />
+                <views:WordView Grid.Row="1" BindingContext="{Binding Path=WordViewModel}" />
 
-                <ActivityIndicator Grid.Row="1" Grid.ColumnSpan="2" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
+                <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
             </Grid>
         </ScrollView>
     </RefreshView>

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using CommunityToolkit.Maui.Core.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Models;
@@ -47,6 +46,7 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(LookUpCommand))]
+        [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
         private bool isBusy;
 
         [ObservableProperty]
@@ -62,7 +62,7 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(LookUpCommand))]
         private string searchWord;
 
-        public bool CanExecuteLookUp => !IsBusy && !string.IsNullOrWhiteSpace(SearchWord);
+        public bool CanRefresh => !IsBusy;
 
         public bool CanShowSettingsDialog => !IsBusy;
 
@@ -81,28 +81,26 @@ namespace CopyWords.Core.ViewModels
             }
 
             DictionaryName = _settingsService.GetSelectedParser();
-            if (DictionaryName == SourceLanguage.Danish.ToString())
-            {
-                DictionaryImage = "flag_of_denmark.png";
-            }
-            else if (DictionaryName == SourceLanguage.Spanish.ToString())
-            {
-                DictionaryImage = "flag_of_spain.png";
-            }
-            else
-            {
-                throw new NotSupportedException($"Source language '{DictionaryName}' is not supported.");
-            }
+            UpdateDictionaryImage(DictionaryName);
         }
 
-        [RelayCommand(CanExecute = nameof(CanExecuteLookUp))]
-        public async Task LookUpAsync(ITextInput? entryElement, CancellationToken token)
+        [RelayCommand]
+        public async Task LookUpAsync(ITextInput? searchBarElement, CancellationToken token)
         {
+            if (IsBusy)
+            {
+                return;
+            }
+
             try
             {
-                if (!OperatingSystem.IsMacCatalyst() && entryElement != null)
+                SearchBar? searchBar = searchBarElement as SearchBar;
+                if (searchBar != null)
                 {
-                    await entryElement.HideKeyboardAsync(token);
+                    if (searchBar.IsSoftInputShowing())
+                    {
+                        await searchBar.HideSoftInputAsync(token);
+                    }
                 }
             }
             catch (Exception ex)
@@ -121,7 +119,7 @@ namespace CopyWords.Core.ViewModels
             IsBusy = false;
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanRefresh))]
         public async Task RefreshAsync()
         {
             IsRefreshing = true;
@@ -147,20 +145,8 @@ namespace CopyWords.Core.ViewModels
             // The action sheet returns the button that user pressed, so it can also be "Cancel"
             if (!string.IsNullOrEmpty(result) && result != "Cancel")
             {
-                if (result == SourceLanguage.Danish.ToString())
-                {
-                    DictionaryName = result;
-                    DictionaryImage = "flag_of_denmark.png";
-                }
-                else if (result == SourceLanguage.Spanish.ToString())
-                {
-                    DictionaryName = result;
-                    DictionaryImage = "flag_of_spain.png";
-                }
-                else
-                {
-                    throw new NotSupportedException($"Source language '{result}' selected in the action sheet is not supported.");
-                }
+                DictionaryName = result;
+                UpdateDictionaryImage(result);
 
                 _settingsService.SetSelectedParser(result);
             }
@@ -272,6 +258,26 @@ namespace CopyWords.Core.ViewModels
             }
 
             return wordModel;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void UpdateDictionaryImage(string language)
+        {
+            if (language == SourceLanguage.Danish.ToString())
+            {
+                DictionaryImage = "flag_of_denmark.png";
+            }
+            else if (language == SourceLanguage.Spanish.ToString())
+            {
+                DictionaryImage = "flag_of_spain.png";
+            }
+            else
+            {
+                throw new NotSupportedException($"Source language '{language}' selected in the action sheet is not supported.");
+            }
         }
 
         #endregion

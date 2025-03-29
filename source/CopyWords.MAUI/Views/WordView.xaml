@@ -22,11 +22,8 @@
         <!-- Word variants -->
         <views:VariantsView Grid.Row="0" />
 
-        <!-- Horizontal line -->
-        <BoxView Grid.Row="1" Color="LightGray"  HeightRequest="1" Margin="0,15,0,10" />
-
         <!-- Sound -->
-        <HorizontalStackLayout Grid.Row="2" Spacing="5" x:Name="stackSound">
+        <HorizontalStackLayout Grid.Row="2" Spacing="5" Margin="0,5,0,0" x:Name="stackSound">
             <!-- Workaround for a bug in MediaElement:
                 On MacOS, the app crashes at startup with the runtime exception:
                 "System.MissingMethodException: No parameterless constructor defined for type 'CommunityToolkit.Maui.Views.MediaElement'."
