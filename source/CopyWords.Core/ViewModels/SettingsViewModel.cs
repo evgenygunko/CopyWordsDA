@@ -3,6 +3,8 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using System.Text;
+using System.Text.Json;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -19,9 +21,9 @@ namespace CopyWords.Core.ViewModels
         private readonly IDialogService _dialogService;
         private readonly IShellService _shellService;
         private readonly IFileIOService _fileIOService;
-        private readonly IFolderPicker _folderPicker;
         private readonly IFilePicker _filePicker;
         private readonly IDeviceInfo _deviceInfo;
+        private readonly IFileSaver _fileSaver;
         private readonly IValidator<SettingsViewModel> _settingsViewModelValidator;
 
         private bool _isInitialized;
@@ -31,18 +33,18 @@ namespace CopyWords.Core.ViewModels
             IDialogService dialogService,
             IShellService shellService,
             IFileIOService fileIOService,
-            IFolderPicker folderPicker,
             IFilePicker filePicker,
             IDeviceInfo deviceInfo,
+            IFileSaver fileSaver,
             IValidator<SettingsViewModel> settingsViewModelValidator)
         {
             _settingsService = settingsService;
             _dialogService = dialogService;
             _shellService = shellService;
             _fileIOService = fileIOService;
-            _folderPicker = folderPicker;
             _filePicker = filePicker;
             _deviceInfo = deviceInfo;
+            _fileSaver = fileSaver;
             _settingsViewModelValidator = settingsViewModelValidator;
         }
 
@@ -124,23 +126,17 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task ExportSettingsAsync(CancellationToken cancellationToken)
         {
-            var result = await _folderPicker.PickAsync(cancellationToken);
-            if (result.IsSuccessful)
+            // Load all settings but update with values that the user changed
+            AppSettings appSettings = _settingsService.LoadSettings();
+            UpdateAppSettingsWithCurrentValues(appSettings);
+
+            string json = JsonSerializer.Serialize(appSettings);
+            using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+
+            FileSaverResult fileSaveResult = await _fileSaver.SaveAsync("CopyWords_Settings.json", memoryStream, cancellationToken);
+            if (fileSaveResult.IsSuccessful)
             {
-                string settingFileFolder = result.Folder.Path;
-                string settingFile = Path.Combine(settingFileFolder, "CopyWords_Settings.json");
-
-                if (_fileIOService.FileExists(settingFile))
-                {
-                    bool answer = await _dialogService.DisplayAlert("File already exists", $"File '{Path.GetFileName(settingFile)}' already exists. Overwrite?", "Yes", "No");
-                    if (!answer)
-                    {
-                        return;
-                    }
-                }
-
-                await _settingsService.ExportSettingsAsync(settingFile);
-                await _dialogService.DisplayToast($"Settings successfully exported to '{settingFile}'.");
+                await _dialogService.DisplayToast($"Settings successfully exported to '{fileSaveResult.FilePath}'.");
             }
         }
 
@@ -230,15 +226,7 @@ namespace CopyWords.Core.ViewModels
         public async Task SaveSettingsAsync()
         {
             AppSettings appSettings = _settingsService.LoadSettings();
-
-            appSettings.AnkiSoundsFolder = AnkiSoundsFolder ?? string.Empty;
-            appSettings.FfmpegBinFolder = FfmpegBinFolder ?? string.Empty;
-            appSettings.UseMp3gain = UseMp3gain;
-            appSettings.Mp3gainPath = Mp3gainPath ?? string.Empty;
-            appSettings.UseTranslator = UseTranslator;
-            appSettings.TranslatorApiUrl = TranslatorApiUrl ?? string.Empty;
-            appSettings.TranslateMeanings = TranslateMeanings;
-            appSettings.TranslateHeadword = TranslateHeadword;
+            UpdateAppSettingsWithCurrentValues(appSettings);
 
             _settingsService.SaveSettings(appSettings);
 
@@ -366,7 +354,7 @@ namespace CopyWords.Core.ViewModels
                         { DevicePlatform.MacCatalyst, new[] { "json" } }, // UTType values
                     });
 
-                options = new()
+                options = new PickOptions()
                 {
                     PickerTitle = "Please select path to settings file",
                     FileTypes = customFileType,
@@ -402,6 +390,18 @@ namespace CopyWords.Core.ViewModels
             TranslatorApiUrl = appSettings.TranslatorApiUrl;
             TranslateMeanings = appSettings.TranslateMeanings;
             TranslateHeadword = appSettings.TranslateHeadword;
+        }
+
+        private void UpdateAppSettingsWithCurrentValues(AppSettings appSettings)
+        {
+            appSettings.AnkiSoundsFolder = AnkiSoundsFolder ?? string.Empty;
+            appSettings.FfmpegBinFolder = FfmpegBinFolder ?? string.Empty;
+            appSettings.Mp3gainPath = Mp3gainPath ?? string.Empty;
+            appSettings.UseMp3gain = UseMp3gain;
+            appSettings.UseTranslator = UseTranslator;
+            appSettings.TranslatorApiUrl = TranslatorApiUrl ?? string.Empty;
+            appSettings.TranslateMeanings = TranslateMeanings;
+            appSettings.TranslateHeadword = TranslateHeadword;
         }
 
         #endregion

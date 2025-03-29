@@ -127,9 +127,9 @@ namespace CopyWords.Core.Tests.ViewModels.Validation
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             settingsViewModel.Init();

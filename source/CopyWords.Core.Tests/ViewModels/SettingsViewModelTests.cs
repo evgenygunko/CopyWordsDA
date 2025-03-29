@@ -33,9 +33,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
             sut.Init();
 
@@ -67,9 +67,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 shellServiceMock.Object,
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             await sut.SaveSettingsAsync();
@@ -96,9 +96,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(),
+                Mock.Of<IFileSaver>(),
                 settingsViewModelValidatorMock.Object);
 
             bool result = sut.CanSaveSettings();
@@ -121,9 +121,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(),
+                Mock.Of<IFileSaver>(),
                 settingsViewModelValidatorMock.Object);
 
             bool result = sut.CanSaveSettings();
@@ -138,134 +138,65 @@ namespace CopyWords.Core.Tests.ViewModels
         [SupportedOSPlatform("windows")]
         [SupportedOSPlatform("maccatalyst14.0")]
         [TestMethod]
-        public async Task ExportSettingsAsync_WhenFolderIsNotSelected_DoesNotExportSettings()
+        public async Task ExportSettingsAsync_WhenFileIsNotSelected_DoesNotExportSettings()
         {
-            var folder = _fixture.Create<CommunityToolkit.Maui.Core.Primitives.Folder>();
-            FolderPickerResult folderPickerResult = new FolderPickerResult(folder, Exception: new Exception("folder is not selected"));
+            FileSaverResult fileSaverResult = new FileSaverResult(FilePath: null, Exception: new Exception("folder is not selected"));
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
 
-            var folderPickerMock = _fixture.Freeze<Mock<IFolderPicker>>();
-            folderPickerMock.Setup(x => x.PickAsync(It.IsAny<CancellationToken>())).ReturnsAsync(folderPickerResult);
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFileIOService>(),
-                folderPickerMock.Object,
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-            await sut.ExportSettingsAsync(default);
-
-            settingsServiceMock.Verify(x => x.ExportSettingsAsync(It.IsAny<string>()), Times.Never);
-        }
-
-        [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst14.0")]
-        [TestMethod]
-        public async Task ExportSettingsAsync_WhenFileExistsAndNoOverwrite_DoesNotExportSettings()
-        {
-            const bool overwrite = false;
-
-            var folder = _fixture.Create<CommunityToolkit.Maui.Core.Primitives.Folder>();
-            FolderPickerResult folderPickerResult = new FolderPickerResult(folder, Exception: null);
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
+            fileSaverMock.Setup(x => x.SaveAsync("CopyWords_Settings.json", It.IsAny<MemoryStream>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(fileSaverResult)
+                .Verifiable();
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-            dialogServiceMock.Setup(x => x.DisplayAlert("File already exists", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(overwrite);
-
-            var folderPickerMock = _fixture.Freeze<Mock<IFolderPicker>>();
-            folderPickerMock.Setup(x => x.PickAsync(It.IsAny<CancellationToken>())).ReturnsAsync(folderPickerResult);
-
-            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
 
             var sut = new SettingsViewModel(
                 settingsServiceMock.Object,
                 dialogServiceMock.Object,
                 Mock.Of<IShellService>(),
-                fileIOServiceMock.Object,
-                folderPickerMock.Object,
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-            await sut.ExportSettingsAsync(default);
-
-            dialogServiceMock.Verify(x => x.DisplayAlert("File already exists", It.IsAny<string>(), "Yes", "No"));
-            settingsServiceMock.Verify(x => x.ExportSettingsAsync(It.IsAny<string>()), Times.Never);
-        }
-
-        [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst14.0")]
-        [TestMethod]
-        public async Task ExportSettingsAsync_WhenFileExistsAndOverwrite_ExportsSettings()
-        {
-            const bool overwrite = true;
-
-            var folder = _fixture.Create<CommunityToolkit.Maui.Core.Primitives.Folder>();
-            FolderPickerResult folderPickerResult = new FolderPickerResult(folder, Exception: null);
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-            dialogServiceMock.Setup(x => x.DisplayAlert("File already exists", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(overwrite);
-
-            var folderPickerMock = _fixture.Freeze<Mock<IFolderPicker>>();
-            folderPickerMock.Setup(x => x.PickAsync(It.IsAny<CancellationToken>())).ReturnsAsync(folderPickerResult);
-
-            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                dialogServiceMock.Object,
-                shellServiceMock.Object,
-                fileIOServiceMock.Object,
-                folderPickerMock.Object,
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-            await sut.ExportSettingsAsync(default);
-
-            dialogServiceMock.Verify(x => x.DisplayAlert("File already exists", It.IsAny<string>(), "Yes", "No"));
-            settingsServiceMock.Verify(x => x.ExportSettingsAsync(It.IsAny<string>()));
-            dialogServiceMock.Verify(x => x.DisplayToast(It.Is<string>(s => s.StartsWith("Settings successfully exported to"))));
-            shellServiceMock.VerifyNoOtherCalls();
-        }
-
-        [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst14.0")]
-        [TestMethod]
-        public async Task ExportSettingsAsync_WhenUserSelectsFolder_ExportsSettingsToAFile()
-        {
-            var folder = _fixture.Create<CommunityToolkit.Maui.Core.Primitives.Folder>();
-            FolderPickerResult folderPickerResult = new FolderPickerResult(folder, Exception: null);
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-
-            var folderPickerMock = _fixture.Freeze<Mock<IFolderPicker>>();
-            folderPickerMock.Setup(x => x.PickAsync(It.IsAny<CancellationToken>())).ReturnsAsync(folderPickerResult);
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                dialogServiceMock.Object,
-                shellServiceMock.Object,
                 Mock.Of<IFileIOService>(),
-                folderPickerMock.Object,
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(),
+                fileSaverMock.Object,
                 Mock.Of<IValidator<SettingsViewModel>>());
             await sut.ExportSettingsAsync(default);
 
-            settingsServiceMock.Verify(x => x.ExportSettingsAsync(It.IsAny<string>()));
+            settingsServiceMock.Verify(x => x.LoadSettings());
+            fileSaverMock.Verify();
+            dialogServiceMock.VerifyNoOtherCalls();
+        }
+
+        [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst14.0")]
+        [TestMethod]
+        public async Task ExportSettingsAsync_WhenFileIsSelected_ExportsSettings()
+        {
+            FileSaverResult fileSaverResult = new FileSaverResult(FilePath: _fixture.Create<string>(), Exception: null);
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+
+            var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
+            fileSaverMock.Setup(x => x.SaveAsync("CopyWords_Settings.json", It.IsAny<MemoryStream>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(fileSaverResult)
+                .Verifiable();
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = new SettingsViewModel(
+                settingsServiceMock.Object,
+                dialogServiceMock.Object,
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IDeviceInfo>(),
+                fileSaverMock.Object,
+                Mock.Of<IValidator<SettingsViewModel>>());
+            await sut.ExportSettingsAsync(default);
+
+            settingsServiceMock.Verify(x => x.LoadSettings());
+            fileSaverMock.Verify();
             dialogServiceMock.Verify(x => x.DisplayToast(It.Is<string>(s => s.StartsWith("Settings successfully exported to"))));
-            shellServiceMock.VerifyNoOtherCalls();
         }
 
         #endregion
@@ -289,9 +220,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 filePickerMock.Object,
                 Mock.Of<IDeviceInfo>(),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
             await sut.ImportSettingsAsync();
 
@@ -317,9 +248,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 dialogServiceMock.Object,
                 shellServiceMock.Object,
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 filePickerMock.Object,
                 Mock.Of<IDeviceInfo>(),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
             await sut.ImportSettingsAsync();
 
@@ -346,9 +277,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 dialogServiceMock.Object,
                 shellServiceMock.Object,
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 filePickerMock.Object,
                 Mock.Of<IDeviceInfo>(),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
             await sut.ImportSettingsAsync();
 
@@ -390,9 +321,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 dialogServiceMock.Object,
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
             sut.TranslatorApiUrl = "http://localhost:7014/api/Translate";
 
@@ -423,9 +354,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 dialogServiceMock.Object,
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
             sut.TranslatorApiUrl = "http://localhost:7014/api/Translate";
 
@@ -447,9 +378,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.CanUpdateIndividualSettings.Should().BeTrue();
@@ -463,9 +394,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.CanUpdateIndividualSettings.Should().BeFalse();
@@ -479,9 +410,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.MacCatalyst),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.CanUpdateIndividualSettings.Should().BeFalse();
@@ -503,9 +434,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.Init();
@@ -524,9 +455,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.OnUseTranslatorChangedInternal(true);
@@ -544,9 +475,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.Init();
@@ -569,9 +500,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.Init();
@@ -590,9 +521,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.Init();
@@ -611,9 +542,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.OnTranslatorApiUrlChangedInternal(null);
@@ -631,9 +562,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.Init();
@@ -658,9 +589,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.Init();
@@ -679,9 +610,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.OnTranslateHeadwordChangedInternal(true);
@@ -699,9 +630,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.Init();
@@ -726,9 +657,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.Init();
@@ -747,9 +678,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.OnTranslateMeaningsChangedInternal(true);
@@ -767,9 +698,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
                 Mock.Of<IFileIOService>(),
-                Mock.Of<IFolderPicker>(),
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
+                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.Init();
