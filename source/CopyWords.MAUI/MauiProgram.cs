@@ -60,12 +60,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<IClipboardService, ClipboardService>();
         builder.Services.AddSingleton<ITranslationsService, TranslationsService>();
         builder.Services.AddSingleton<IInstantTranslationService, InstantTranslationService>();
+        builder.Services.AddSingleton<ISaveImageFileService, SaveImageFileService>();
 
-        builder.Services.AddHttpClient<ISaveSoundFileService, SaveSoundFileService>();
-        builder.Services.AddHttpClient<ISaveImageFileService, SaveImageFileService>();
         builder.Services.AddHttpClient<IFileDownloader, FileDownloader>();
         builder.Services.AddHttpClient<ITranslatorAPIClient, TranslatorAPIClient>();
         builder.Services.AddHttpClient<IUpdateService, UpdateService>();
+        builder.Services.AddHttpClient<ISaveSoundFileService, SaveSoundFileService>();
+        builder.Services.AddHttpClient<IFileDownloaderService, FileDownloaderService>();
 
         builder.Services.AddSingleton<MainWindowViewModel>();
         builder.Services.AddSingleton<MainViewModel>();

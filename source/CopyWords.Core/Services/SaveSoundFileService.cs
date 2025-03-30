@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// Ignore Spelling: Downloader
+
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using CommunityToolkit.Maui.Storage;
@@ -11,25 +13,33 @@ namespace CopyWords.Core.Services
         Task<bool> SaveSoundFileAsync(string url, string soundFileName, CancellationToken cancellationToken);
     }
 
-    public class SaveSoundFileService : SaveFileServiceBase, ISaveSoundFileService
+    public class SaveSoundFileService : ISaveSoundFileService
     {
+        private readonly HttpClient _httpClient;
+        private readonly ISettingsService _settingsService;
+        private readonly IDialogService _dialogService;
         private readonly IClipboardService _clipboardService;
         private readonly IDeviceInfo _deviceInfo;
         private readonly IFileSaver _fileSaver;
+        private readonly IFileDownloaderService _fileDownloaderService;
 
         public SaveSoundFileService(
-            ISettingsService settingsService,
             HttpClient httpClient,
+            ISettingsService settingsService,
             IDialogService dialogService,
             IClipboardService clipboardService,
             IFileIOService fileIOService,
             IDeviceInfo deviceInfo,
-            IFileSaver fileSaver)
-            : base(settingsService, httpClient, dialogService, fileIOService)
+            IFileSaver fileSaver,
+            IFileDownloaderService fileDownloaderService)
         {
+            _httpClient = httpClient;
+            _settingsService = settingsService;
+            _dialogService = dialogService;
             _clipboardService = clipboardService;
             _deviceInfo = deviceInfo;
             _fileSaver = fileSaver;
+            _fileDownloaderService = fileDownloaderService;
         }
 
         #region Public Methods
@@ -47,7 +57,7 @@ namespace CopyWords.Core.Services
 
             // On Windows and Mac, download the file and save it to the Anki collection media folder.
             // First, download the file from the web into a temporary folder.
-            string? soundFileFullPath = await DownloadFileAsync(url, soundFileName);
+            string? soundFileFullPath = await _fileDownloaderService.DownloadFileAsync(url, soundFileName);
             if (string.IsNullOrEmpty(soundFileFullPath))
             {
                 return false;
@@ -72,18 +82,23 @@ namespace CopyWords.Core.Services
                 }
             }
 
+            // Put the text for Anki into the clipboard. We do this before attempting to save the actual file.
+            // If the file already exists and the user chooses not to overwrite it, the text will still be available in the clipboard.
+            string clipboardTest = $"[sound:{Path.GetFileNameWithoutExtension(soundFileFullPath)}.mp3]";
+            await _clipboardService.CopyTextToClipboardAsync(clipboardTest);
+
             // copy file into the Anki collection media folder
-            if (!await CopyFileToAnkiFolderAsync(soundFileFullPath))
+            if (!await _fileDownloaderService.CopyFileToAnkiFolderAsync(soundFileFullPath))
             {
                 return false;
             }
 
-            // save text for Anki into clipboard
-            string clipboardTest = $"[sound:{Path.GetFileNameWithoutExtension(soundFileFullPath)}.mp3]";
-            await _clipboardService.CopyTextToClipboardAsync(clipboardTest);
-
             return true;
         }
+
+        #endregion
+
+        #region Internal Methods
 
         [SupportedOSPlatform("windows")]
         [SupportedOSPlatform("maccatalyst14.0")]

@@ -1,27 +1,36 @@
-﻿using System.Diagnostics;
+﻿// Ignore Spelling: Downloader
+
+using System.Diagnostics;
 
 namespace CopyWords.Core.Services
 {
-    public abstract class SaveFileServiceBase
+    public interface IFileDownloaderService
     {
-        protected readonly ISettingsService _settingsService;
-        protected readonly HttpClient _httpClient;
-        protected readonly IDialogService _dialogService;
-        private readonly IFileIOService _fileIOService;
+        Task<string?> DownloadFileAsync(string url, string fileName);
 
-        protected SaveFileServiceBase(
-            ISettingsService settingsService,
+        Task<bool> CopyFileToAnkiFolderAsync(string sourceFile);
+    }
+
+    public class FileDownloaderService : IFileDownloaderService
+    {
+        private readonly HttpClient _httpClient;
+        private readonly IDialogService _dialogService;
+        private readonly IFileIOService _fileIOService;
+        private readonly ISettingsService _settingsService;
+
+        public FileDownloaderService(
             HttpClient httpClient,
             IDialogService dialogService,
-            IFileIOService fileIOService)
+            IFileIOService fileIOService,
+            ISettingsService settingsService)
         {
-            _settingsService = settingsService;
             _httpClient = httpClient;
             _dialogService = dialogService;
             _fileIOService = fileIOService;
+            _settingsService = settingsService;
         }
 
-        protected async Task<string?> DownloadFileAsync(string url, string fileName)
+        public async Task<string?> DownloadFileAsync(string url, string fileName)
         {
             Uri? fileUri;
             if (!Uri.TryCreate(url, UriKind.Absolute, out fileUri))
@@ -38,11 +47,11 @@ namespace CopyWords.Core.Services
                 if (result.IsSuccessStatusCode)
                 {
                     byte[] fileBytes = await result.Content.ReadAsByteArrayAsync();
-                    await File.WriteAllBytesAsync(destFileFullPath, fileBytes);
+                    await _fileIOService.WriteAllBytesAsync(destFileFullPath, fileBytes);
                 }
             }
 
-            if (!File.Exists(destFileFullPath))
+            if (!_fileIOService.FileExists(destFileFullPath))
             {
                 await _dialogService.DisplayAlert("Cannot download file", $"Cannot find file in a temp folder '{destFileFullPath}'. It probably hasn't been downloaded.", "OK");
                 return null;
@@ -51,7 +60,7 @@ namespace CopyWords.Core.Services
             return destFileFullPath;
         }
 
-        protected internal async Task<bool> CopyFileToAnkiFolderAsync(string sourceFile)
+        public async Task<bool> CopyFileToAnkiFolderAsync(string sourceFile)
         {
             Debug.Assert(_fileIOService.FileExists(sourceFile));
 
@@ -73,7 +82,7 @@ namespace CopyWords.Core.Services
                 }
             }
 
-            File.Copy(sourceFile, destinationFile, true);
+            _fileIOService.CopyFile(sourceFile, destinationFile, true);
 
             return true;
         }

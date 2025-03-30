@@ -1,4 +1,6 @@
-﻿using SixLabors.ImageSharp;
+﻿// Ignore Spelling: Downloader
+
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 
 namespace CopyWords.Core.Services
@@ -8,16 +10,17 @@ namespace CopyWords.Core.Services
         Task<bool> SaveImageFileAsync(string url, string fileNameWithoutExtension);
     }
 
-    public class SaveImageFileService : SaveFileServiceBase, ISaveImageFileService
+    public class SaveImageFileService : ISaveImageFileService
     {
+        private readonly IFileDownloaderService _fileDownloaderService;
+
         public SaveImageFileService(
-            ISettingsService settingsService,
-            HttpClient httpClient,
-            IDialogService dialogService,
-            IFileIOService fileIOService)
-            : base(settingsService, httpClient, dialogService, fileIOService)
+            IFileDownloaderService fileDownloaderService)
         {
+            _fileDownloaderService = fileDownloaderService;
         }
+
+        internal bool IsUnitTest { get; set; }
 
         #region Public Methods
 
@@ -27,7 +30,7 @@ namespace CopyWords.Core.Services
             string fileName = Path.ChangeExtension(fileNameWithoutExtension, fileExtension);
 
             // download file from web into temp folder
-            string? imgFile = await DownloadFileAsync(url, fileName);
+            string? imgFile = await _fileDownloaderService.DownloadFileAsync(url, fileName);
             if (string.IsNullOrEmpty(imgFile))
             {
                 return false;
@@ -37,9 +40,7 @@ namespace CopyWords.Core.Services
             string jpgFile = await ResizeFileAsync(imgFile);
 
             // copy file into Anki's sounds folder
-            await CopyFileToAnkiFolderAsync(jpgFile);
-
-            return true;
+            return await _fileDownloaderService.CopyFileToAnkiFolderAsync(jpgFile);
         }
 
         #endregion
@@ -48,13 +49,19 @@ namespace CopyWords.Core.Services
 
         private async Task<string> ResizeFileAsync(string imgFile)
         {
+            // This library doesn't have interfaces, so skip this method when running in test context.
+            if (IsUnitTest)
+            {
+                return imgFile;
+            }
+
             string jpgFile = Path.ChangeExtension(imgFile, "jpg");
 
             using (SixLabors.ImageSharp.Image image = await SixLabors.ImageSharp.Image.LoadAsync(imgFile))
             {
                 if (image.Size.Width > 150 || image.Size.Height > 150)
                 {
-                    // We want to keep aspect ratio. 
+                    // We want to keep aspect ratio.
                     // From documentation: If you pass 0 as any of the values for width and height dimensions,
                     // ImageSharp will automatically determine the correct opposite dimensions size to preserve the original aspect ratio.
                     int newWidth;
