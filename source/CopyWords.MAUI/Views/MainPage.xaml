@@ -56,6 +56,7 @@
                     </On>
                     <On Platform="WinUI, MacCatalyst">
                         <SearchBar
+                                Grid.Row="0"
                                 x:Name="SearchBarLookupWordDesktop"
                                 Placeholder="Search word"
                                 Text="{Binding SearchWord}"
@@ -68,7 +69,7 @@
                 <!-- Parsed word user control -->
                 <views:WordView Grid.Row="1" BindingContext="{Binding Path=WordViewModel}" />
 
-                <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
+                <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
             </Grid>
         </ScrollView>
     </RefreshView>

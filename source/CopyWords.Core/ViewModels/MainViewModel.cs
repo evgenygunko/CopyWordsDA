@@ -47,9 +47,13 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(LookUpCommand))]
         [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
+        [NotifyCanExecuteChangedFor(nameof(SelectDictionaryCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ShowSettingsDialogCommand))]
         private bool isBusy;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SelectDictionaryCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ShowSettingsDialogCommand))]
         private bool isRefreshing;
 
         [ObservableProperty]
@@ -64,7 +68,9 @@ namespace CopyWords.Core.ViewModels
 
         public bool CanRefresh => !IsBusy;
 
-        public bool CanShowSettingsDialog => !IsBusy;
+        public bool CanShowSettingsDialog => !IsBusy && !IsRefreshing;
+
+        public bool CanSelectDictionary => !IsBusy && !IsRefreshing;
 
         #endregion
 
@@ -119,7 +125,11 @@ namespace CopyWords.Core.ViewModels
             IsBusy = false;
         }
 
+#if ANDROID
         [RelayCommand(CanExecute = nameof(CanRefresh))]
+#else
+        [RelayCommand]
+#endif
         public async Task RefreshAsync()
         {
             IsRefreshing = true;
@@ -136,7 +146,7 @@ namespace CopyWords.Core.ViewModels
             await Shell.Current.GoToAsync("SettingsPage");
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanSelectDictionary))]
         public async Task SelectDictionaryAsync()
         {
             string[] strings = [SourceLanguage.Danish.ToString(), SourceLanguage.Spanish.ToString()];

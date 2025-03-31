@@ -13,17 +13,16 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <ActivityIndicator Grid.RowSpan="7" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
+        <ActivityIndicator Grid.RowSpan="4" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
 
         <!-- Word variants -->
         <views:VariantsView Grid.Row="0" />
 
         <!-- Sound -->
-        <HorizontalStackLayout Grid.Row="2" Spacing="5" Margin="0,5,0,0" x:Name="stackSound">
+        <HorizontalStackLayout Grid.Row="1" Spacing="5" Margin="0,5,0,0" x:Name="stackSound">
             <!-- Workaround for a bug in MediaElement:
                 On MacOS, the app crashes at startup with the runtime exception:
                 "System.MissingMethodException: No parameterless constructor defined for type 'CommunityToolkit.Maui.Views.MediaElement'."
@@ -64,9 +63,9 @@
         </HorizontalStackLayout>
 
         <!-- Horizontal line -->
-        <BoxView Grid.Row="3" Color="LightGray"  HeightRequest="1" Margin="0,10,0,0" />
+        <BoxView Grid.Row="2" Color="LightGray"  HeightRequest="1" Margin="0,10,0,0" />
 
         <!-- Definitions -->
-        <views:DefinitionsView Grid.Row="4" />
+        <views:DefinitionsView Grid.Row="3" />
     </Grid>
 </ContentView>
