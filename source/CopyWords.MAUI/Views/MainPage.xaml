@@ -9,13 +9,6 @@
              x:Class="CopyWords.MAUI.Views.MainPage"
              Shell.BackgroundColor="Gray">
 
-    <ContentPage.Padding>
-        <OnPlatform x:TypeArguments="Thickness">
-            <On Platform="Android" Value="10,20,10,10" />
-            <On Platform="WinUI, MacCatalyst" Value="15,20,15,10" />
-        </OnPlatform>
-    </ContentPage.Padding>
-
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
             EventName="Appearing"
@@ -40,6 +33,13 @@
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
         <ScrollView VerticalOptions="FillAndExpand">
             <Grid>
+                <Grid.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="Android" Value="15,15,15,0" />
+                        <On Platform="WinUI, MacCatalyst" Value="20" />
+                    </OnPlatform>
+                </Grid.Margin>
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
@@ -55,6 +55,7 @@
                             <SearchBar
                                 x:Name="SearchBarLookupWordAndroid"
                                 Placeholder="Search word"
+                                BackgroundColor="#F4F2FC"
                                 Text="{Binding SearchWord}"
                                 SearchCommand="{Binding LookUpCommand}"
                                 SearchCommandParameter="{x:Reference SearchBarLookupWordAndroid}"
@@ -66,6 +67,7 @@
                                 Grid.Row="0"
                                 x:Name="SearchBarLookupWordDesktop"
                                 Placeholder="Search word"
+                                BackgroundColor="#F4F2FC"
                                 Text="{Binding SearchWord}"
                                 SearchCommand="{Binding LookUpCommand}"
                                 SearchCommandParameter="{x:Reference SearchBarLookupWordDesktop}"

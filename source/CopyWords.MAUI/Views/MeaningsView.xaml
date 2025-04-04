@@ -73,7 +73,7 @@
                     </Grid>
 
                     <!--Examples -->
-                    <views:ExamplesView Margin="9,0,0,10" />
+                    <views:ExamplesView Margin="9,0,0,17" />
                 </VerticalStackLayout>
             </DataTemplate>
         </ResourceDictionary>

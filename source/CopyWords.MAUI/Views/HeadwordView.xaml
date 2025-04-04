@@ -48,7 +48,6 @@
                     </DataTrigger>
                     <DataTrigger TargetType="Label" Binding="{Binding IsRussianTranslationChecked}" Value="true">
                         <Setter Property="BackgroundColor" Value="{StaticResource SelectedItemColor}" />
-                        <Setter Property="FontSize" Value="18" />
                     </DataTrigger>
                 </Label.Triggers>
             </Label>
@@ -71,7 +70,6 @@
                     </DataTrigger>
                     <DataTrigger TargetType="Label" Binding="{Binding IsEnglishTranslationChecked}" Value="true">
                         <Setter Property="BackgroundColor" Value="{StaticResource SelectedItemColor}" />
-                        <Setter Property="FontSize" Value="18" />
                     </DataTrigger>
                 </Label.Triggers>
             </Label>
