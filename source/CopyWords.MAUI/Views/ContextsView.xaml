@@ -20,10 +20,10 @@
                     </HorizontalStackLayout>
 
                     <!--Meanings -->
-                    <views:MeaningsView Margin="15,0,0,0" />
+                    <views:MeaningsView Margin="10,0,0,0" />
 
                     <!-- Horizontal line -->
-                    <BoxView Color="LightGray" HeightRequest="1" Margin="0,15,0,15"/>
+                    <BoxView Color="LightGray" HeightRequest="1" Margin="0,10,0,10"/>
                 </VerticalStackLayout>
             </DataTemplate>
 

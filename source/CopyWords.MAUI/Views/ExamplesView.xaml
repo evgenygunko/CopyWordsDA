@@ -34,7 +34,6 @@
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="true">
                                 <Setter Property="BackgroundColor" Value="{StaticResource SelectedItemColor}" />
-                                <Setter Property="FontSize" Value="18" />
                             </DataTrigger>
 
                             <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="false">

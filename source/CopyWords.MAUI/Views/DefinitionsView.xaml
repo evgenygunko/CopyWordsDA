@@ -16,7 +16,7 @@
             <DataTemplate x:Key="definitionsTemplate"
                           x:DataType="viewmodels:DefinitionViewModel">
                 <!-- Definitions -->
-                <VerticalStackLayout Padding="10,10,10,0">
+                <VerticalStackLayout>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"></RowDefinition>
@@ -28,13 +28,12 @@
                         </Grid.RowDefinitions>
 
                         <!-- Headword -->
-                        <VerticalStackLayout Grid.Row="0" VerticalOptions="Center">
+                        <VerticalStackLayout Grid.Row="0" Margin="0,10,0,0" VerticalOptions="Center">
                             <Label FontSize="Subtitle" Text="{Binding HeadwordViewModel.Original, FallbackValue='afeitar'}" />
                             <Label TextColor="Gray" Text="{Binding PartOfSpeech, FallbackValue='transitive verb'}" />
                         </VerticalStackLayout>
 
                         <!-- Box with headword and its translations -->
-
                         <StackLayout
                                     IsVisible="{Binding HeadwordViewModel.English, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
                                     Grid.Row="1"
@@ -98,7 +97,7 @@
                         <BoxView Grid.Row="4" Color="LightGray" HeightRequest="1" Margin="0,20,0,0" />
 
                         <!-- Contexts -->
-                        <views:ContextsView Grid.Row="5" Margin="0,10,0,0" />
+                        <views:ContextsView Grid.Row="5" Margin="0,15,0,0" />
                     </Grid>
                 </VerticalStackLayout>
             </DataTemplate>
