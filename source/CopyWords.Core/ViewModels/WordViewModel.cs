@@ -61,6 +61,7 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(CopyFrontCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyBackCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyExamplesCommand))]
+        [NotifyCanExecuteChangedFor(nameof(OpenCopyMenuCommand))]
         private bool canCopyFront;
 
         [ObservableProperty]
@@ -152,8 +153,26 @@ namespace CopyWords.Core.ViewModels
         public async Task OpenCopyMenuAsync()
         {
             // This command is used to open the context menu for copying.
-            string[] strings = ["Front", "Back", "Part of speech", "Endings", "Examples"];
-            string result = await _dialogService.DisplayActionSheet(title: "Select field to copy:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, strings);
+            List<string> options = new List<string>();
+            if (CanCopyFront)
+            {
+                options.Add("Front");
+                options.Add("Back");
+            }
+            if (CanCopyPartOfSpeech)
+            {
+                options.Add("Part of speech");
+            }
+            if (CanCopyEndings)
+            {
+                options.Add("Endings");
+            }
+            if (CanCopyFront)
+            {
+                options.Add("Examples");
+            }
+
+            string result = await _dialogService.DisplayActionSheet(title: "Select field to copy:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, options.ToArray());
 
             // The action sheet returns the button that user pressed, so it can also be "Cancel"
             if (!string.IsNullOrEmpty(result) && result != "Cancel")

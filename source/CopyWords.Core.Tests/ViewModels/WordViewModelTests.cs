@@ -211,6 +211,150 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #endregion
 
+        #region Tests for OpenCopyMenuAsync
+
+        [TestMethod]
+        public async Task OpenCopyMenuAsync_WhenFrontIsSelected_CallsCopyFrontAsync()
+        {
+            string text = _fixture.Create<string>();
+
+            var dialogServiceMock = new Mock<IDialogService>();
+            dialogServiceMock
+                .Setup(x => x.DisplayActionSheet("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Front", "Back", "Examples"))
+                .ReturnsAsync("Front")
+                .Verifiable();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(text);
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<ISettingsService>());
+            sut.CanCopyFront = true;
+
+            await sut.OpenCopyMenuAsync();
+
+            dialogServiceMock.Verify();
+            dialogServiceMock.Verify(x => x.DisplayToast("Front copied"));
+        }
+
+        [TestMethod]
+        public async Task OpenCopyMenuAsync_WhenBackIsSelected_CallsCopyBackAsync()
+        {
+            string text = _fixture.Create<string>();
+
+            var dialogServiceMock = new Mock<IDialogService>();
+            dialogServiceMock
+                .Setup(x => x.DisplayActionSheet("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Front", "Back", "Examples"))
+                .ReturnsAsync("Back")
+                .Verifiable();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(text);
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<ISettingsService>());
+            sut.CanCopyFront = true;
+
+            await sut.OpenCopyMenuAsync();
+
+            dialogServiceMock.Verify();
+            dialogServiceMock.Verify(x => x.DisplayToast("Back copied"));
+        }
+
+        [TestMethod]
+        public async Task OpenCopyMenuAsync_WhenPartOfSpeechIsSelected_CallsCopyPartOfSpeechAsync()
+        {
+            string text = _fixture.Create<string>();
+
+            var dialogServiceMock = new Mock<IDialogService>();
+            dialogServiceMock
+                .Setup(x => x.DisplayActionSheet("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Part of speech"))
+                .ReturnsAsync("Part of speech")
+                .Verifiable();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeechAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(text);
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<ISettingsService>());
+            sut.CanCopyPartOfSpeech = true;
+
+            await sut.OpenCopyMenuAsync();
+
+            dialogServiceMock.Verify();
+            dialogServiceMock.Verify(x => x.DisplayToast("Word type copied"));
+        }
+
+        [TestMethod]
+        public async Task OpenCopyMenuAsync_WhenEndingsIsSelected_CallsCopyEndingsAsync()
+        {
+            string text = _fixture.Create<string>();
+
+            var dialogServiceMock = new Mock<IDialogService>();
+            dialogServiceMock
+                .Setup(x => x.DisplayActionSheet("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Endings"))
+                .ReturnsAsync("Endings")
+                .Verifiable();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndingsAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(text);
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<ISettingsService>());
+            sut.CanCopyEndings = true;
+
+            await sut.OpenCopyMenuAsync();
+
+            dialogServiceMock.Verify();
+            dialogServiceMock.Verify(x => x.DisplayToast("Endings copied"));
+        }
+
+        [TestMethod]
+        public async Task OpenCopyMenuAsync_WhenExamplesIsSelected_CallsCopyExamplesAsync()
+        {
+            string text = _fixture.Create<string>();
+
+            var dialogServiceMock = new Mock<IDialogService>();
+            dialogServiceMock
+                .Setup(x => x.DisplayActionSheet("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Front", "Back", "Examples"))
+                .ReturnsAsync("Examples")
+                .Verifiable();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamplesAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(text);
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<ISettingsService>());
+            sut.CanCopyFront = true;
+
+            await sut.OpenCopyMenuAsync();
+
+            dialogServiceMock.Verify();
+            dialogServiceMock.Verify(x => x.DisplayToast("Examples copied"));
+        }
+
+        #endregion
+
         #region Tests for UpdateUI
 
         [TestMethod]
