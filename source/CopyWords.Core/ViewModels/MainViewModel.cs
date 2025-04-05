@@ -11,9 +11,7 @@ namespace CopyWords.Core.ViewModels
     public partial class MainViewModel : ObservableObject
     {
         private readonly ISettingsService _settingsService;
-        private readonly ICopySelectedToClipboardService _copySelectedToClipboardService;
         private readonly IDialogService _dialogService;
-        private readonly IClipboardService _clipboardService;
         private readonly IInstantTranslationService _instantTranslationService;
 
         private ILookUpWord _lookUpWord;
@@ -21,17 +19,13 @@ namespace CopyWords.Core.ViewModels
 
         public MainViewModel(
             ISettingsService settingsService,
-            ICopySelectedToClipboardService copySelectedToClipboardService,
             IDialogService dialogService,
-            IClipboardService clipboardService,
             IInstantTranslationService instantTranslationService,
             ILookUpWord lookUpWord,
             WordViewModel wordViewModel)
         {
             _settingsService = settingsService;
-            _copySelectedToClipboardService = copySelectedToClipboardService;
             _dialogService = dialogService;
-            _clipboardService = clipboardService;
             _instantTranslationService = instantTranslationService;
 
             _lookUpWord = lookUpWord;
@@ -79,6 +73,11 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task InitAsync()
         {
+            if (IsBusy)
+            {
+                return;
+            }
+
             string? instantText = _instantTranslationService.GetTextAndClear();
             if (!string.IsNullOrWhiteSpace(instantText))
             {
@@ -93,11 +92,6 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task LookUpAsync(ITextInput? searchBarElement, CancellationToken token)
         {
-            if (IsBusy)
-            {
-                return;
-            }
-
             try
             {
                 SearchBar? searchBar = searchBarElement as SearchBar;
@@ -114,7 +108,7 @@ namespace CopyWords.Core.ViewModels
                 _ = ex;
             }
 
-            WordModel? wordModel = new WordModel(SearchWord, null, null, Enumerable.Empty<Definition>(), Enumerable.Empty<Variant>());
+            WordModel? wordModel = new WordModel(string.Empty, null, null, Enumerable.Empty<Definition>(), Enumerable.Empty<Variant>());
             UpdateUI(wordModel);
 
             IsBusy = true;
@@ -210,7 +204,7 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.DefinitionViewModels.Clear();
                 foreach (var definition in wordModel.Definitions)
                 {
-                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(wordModel.Word, definition, _copySelectedToClipboardService, _dialogService, _clipboardService, _settingsService));
+                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(wordModel.Word, definition, _settingsService));
                 }
 
                 _wordViewModel.Variants.Clear();
@@ -225,6 +219,8 @@ namespace CopyWords.Core.ViewModels
 
                     _wordViewModel.Variants.Add(variantVM);
                 }
+
+                _wordViewModel.UpdateUI();
             }
 
             IsBusy = false;

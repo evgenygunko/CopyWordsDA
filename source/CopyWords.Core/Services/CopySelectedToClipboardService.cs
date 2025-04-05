@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Text;
 using CopyWords.Core.ViewModels;
 
@@ -6,15 +7,15 @@ namespace CopyWords.Core.Services
 {
     public interface ICopySelectedToClipboardService
     {
-        Task<string> CompileFrontAsync(DefinitionViewModel definitionViewModel);
+        Task<string> CompileFrontAsync(ObservableCollection<DefinitionViewModel> definitionViewModels);
 
-        Task<string> CompileBackAsync(DefinitionViewModel definitionViewModel);
+        Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionViewModels);
 
-        Task<string> CompilePartOfSpeechAsync(DefinitionViewModel definitionViewModel);
+        Task<string> CompilePartOfSpeechAsync(ObservableCollection<DefinitionViewModel> definitionViewModels);
 
-        Task<string> CompileEndingsAsync(DefinitionViewModel definitionViewModel);
+        Task<string> CompileEndingsAsync(ObservableCollection<DefinitionViewModel> definitionViewModels);
 
-        Task<string> CompileExamplesAsync(DefinitionViewModel definitionViewModel);
+        Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> definitionViewModels);
     }
 
     public class CopySelectedToClipboardService : ICopySelectedToClipboardService
@@ -34,8 +35,10 @@ namespace CopyWords.Core.Services
 
         #region Public Methods
 
-        public Task<string> CompileFrontAsync(DefinitionViewModel definitionViewModel)
+        public Task<string> CompileFrontAsync(ObservableCollection<DefinitionViewModel> definitionViewModels)
         {
+            // find the first definition view model which has any example selected
+            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedExamples(definitionViewModels);
             if (definitionViewModel == null)
             {
                 return Task.FromResult(string.Empty);
@@ -83,8 +86,10 @@ namespace CopyWords.Core.Services
             return Task.FromResult(front);
         }
 
-        public async Task<string> CompileBackAsync(DefinitionViewModel definitionViewModel)
+        public async Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionViewModels)
         {
+            // find the first definition view model which has any example selected
+            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedExamples(definitionViewModels);
             if (definitionViewModel == null)
             {
                 return string.Empty;
@@ -205,13 +210,40 @@ namespace CopyWords.Core.Services
             return text;
         }
 
-        public Task<string> CompilePartOfSpeechAsync(DefinitionViewModel definitionViewModel) => Task.FromResult(definitionViewModel.PartOfSpeech);
-
-        public Task<string> CompileEndingsAsync(DefinitionViewModel definitionViewModel) => Task.FromResult(definitionViewModel.Endings);
-
-        public Task<string> CompileExamplesAsync(DefinitionViewModel definitionViewModel)
+        public Task<string> CompilePartOfSpeechAsync(ObservableCollection<DefinitionViewModel> definitionViewModels)
         {
-            var selectedExampleVMs = definitionViewModel.ContextViewModels
+            // find the first definition view model which has any example selected
+            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedExamples(definitionViewModels);
+            if (definitionViewModel == null)
+            {
+                return Task.FromResult(string.Empty);
+            }
+
+            return Task.FromResult(definitionViewModel.PartOfSpeech);
+        }
+
+        public Task<string> CompileEndingsAsync(ObservableCollection<DefinitionViewModel> definitionViewModels)
+        {
+            // find the first definition view model which has any example selected
+            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedExamples(definitionViewModels);
+            if (definitionViewModel == null)
+            {
+                return Task.FromResult(string.Empty);
+            }
+
+            return Task.FromResult(definitionViewModel.Endings);
+        }
+
+        public Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> definitionViewModels)
+        {
+            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedExamples(definitionViewModels);
+            if (definitionViewModel == null)
+            {
+                return Task.FromResult(string.Empty);
+            }
+
+            var selectedExampleVMs = definitionViewModel
+                .ContextViewModels
                 .SelectMany(x => x.MeaningViewModels)
                 .SelectMany(x => x.ExampleViewModels)
                 .Where(x => x.IsChecked)
@@ -250,5 +282,20 @@ namespace CopyWords.Core.Services
         }
 
         #endregion
+
+        private static DefinitionViewModel? FindDefinitionViewModelWithSelectedExamples(ObservableCollection<DefinitionViewModel> definitionViewModels)
+        {
+            var viewMoledsWithSelectedExamples = definitionViewModels.Where(x => x.ContextViewModels.Any(y => y.MeaningViewModels.Any(z => z.ExampleViewModels.Any(a => a.IsChecked))));
+            if (!viewMoledsWithSelectedExamples.Any())
+            {
+                return null;
+            }
+            else if (viewMoledsWithSelectedExamples.Count() > 1)
+            {
+                throw new Exception("More than one definition has selected examples. This is not supported.");
+            }
+
+            return viewMoledsWithSelectedExamples.First();
+        }
     }
 }

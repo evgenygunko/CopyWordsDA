@@ -1,4 +1,6 @@
-﻿using AutoFixture;
+﻿using System.Collections.ObjectModel;
+using AutoFixture;
+using CopyWords.Core.Exceptions;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using FluentAssertions;
@@ -9,7 +11,18 @@ namespace CopyWords.Core.Tests.ViewModels
     [TestClass]
     public class WordViewModelTests
     {
-        private readonly Fixture _fixture = FixtureFactory.CreateFixture();
+        private Fixture _fixture = default!;
+
+        private Mock<Func<ObservableCollection<DefinitionViewModel>, Task<string>>> _func = default!;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _fixture = FixtureFactory.CreateFixture();
+
+            _func = new Mock<Func<ObservableCollection<DefinitionViewModel>, Task<string>>>();
+            _func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<DefinitionViewModel>>())).Returns((ObservableCollection<DefinitionViewModel> vms) => Task.FromResult(vms.First().Word));
+        }
 
         #region Tests for CanSaveSoundFile
 
@@ -95,6 +108,172 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.IsBusy.Should().BeFalse();
             saveSoundFileServiceMock.Verify();
             dialogServiceMock.Verify(x => x.DisplayAlert("Cannot save sound file", It.IsAny<string>(), "OK"));
+        }
+
+        #endregion
+
+        #region Tests for CompileAndCopyToClipboard
+
+        [TestMethod]
+        public async Task CompileAndCopyToClipboard_WhenTextIsCopied_DisplaysToast()
+        {
+            DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
+
+            Mock<IClipboardService> clipboardServiceMock = new Mock<IClipboardService>();
+            Mock<IDialogService> dialogServiceMock = new Mock<IDialogService>();
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                clipboardServiceMock.Object,
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<ISettingsService>());
+            sut.DefinitionViewModels.Add(definitionViewModel);
+
+            await sut.CompileAndCopyToClipboard("front", _func.Object);
+
+            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(definitionViewModel.Word));
+            dialogServiceMock.Verify(x => x.DisplayToast("Front copied"));
+        }
+
+        [TestMethod]
+        public async Task CompileAndCopyToClipboard_WhenWordIsNotCopied_DisplaysWarning()
+        {
+            DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
+            definitionViewModel.Word = string.Empty;
+
+            Mock<IClipboardService> clipboardServiceMock = new Mock<IClipboardService>();
+            Mock<IDialogService> dialogServiceMock = new Mock<IDialogService>();
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                clipboardServiceMock.Object,
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<ISettingsService>());
+            sut.DefinitionViewModels.Add(definitionViewModel);
+
+            await sut.CompileAndCopyToClipboard("front", _func.Object);
+
+            clipboardServiceMock.VerifyNoOtherCalls();
+            dialogServiceMock.Verify(x => x.DisplayAlert("Text not copied", "Please select at least one example", "OK"));
+        }
+
+        [TestMethod]
+        public async Task CompileAndCopyToClipboard_WhenPrepareWordForCopyingExceptionThrown_ShowsWarning()
+        {
+            DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
+            definitionViewModel.Word = string.Empty;
+
+            Mock<IClipboardService> clipboardServiceMock = new Mock<IClipboardService>();
+            Mock<IDialogService> dialogServiceMock = new Mock<IDialogService>();
+
+            _func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ThrowsAsync(new PrepareWordForCopyingException("exception from unit tests"));
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                clipboardServiceMock.Object,
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<ISettingsService>());
+            sut.DefinitionViewModels.Add(definitionViewModel);
+
+            await sut.CompileAndCopyToClipboard("front", _func.Object);
+
+            clipboardServiceMock.VerifyNoOtherCalls();
+            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot copy front", "exception from unit tests", "OK"));
+        }
+
+        [TestMethod]
+        public async Task CompileAndCopyToClipboard_WhenExceptionThrown_ShowsWarning()
+        {
+            DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
+            definitionViewModel.Word = string.Empty;
+
+            Mock<IClipboardService> clipboardServiceMock = new Mock<IClipboardService>();
+            Mock<IDialogService> dialogServiceMock = new Mock<IDialogService>();
+
+            _func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ThrowsAsync(new Exception("exception from unit tests"));
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                clipboardServiceMock.Object,
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<ISettingsService>());
+            sut.DefinitionViewModels.Add(definitionViewModel);
+
+            await sut.CompileAndCopyToClipboard("front", _func.Object);
+
+            clipboardServiceMock.VerifyNoOtherCalls();
+            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot copy front", "Error occurred while trying to copy front: exception from unit tests", "OK"));
+        }
+
+        #endregion
+
+        #region Tests for UpdateUI
+
+        [TestMethod]
+        public void UpdateUI_WhenThereIsAtLeastOneDefinitionVM_SetsCanCopyFrontToTrue()
+        {
+            DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                Mock.Of<IDialogService>(),
+                Mock.Of<IClipboardService>(),
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<ISettingsService>());
+            sut.CanCopyFront.Should().BeFalse();
+
+            sut.DefinitionViewModels.Add(definitionViewModel);
+            sut.UpdateUI();
+
+            sut.CanCopyFront.Should().BeTrue();
+        }
+
+        [DataTestMethod]
+        [DataRow("test", true)]
+        [DataRow("", false)]
+        public void UpdateUI_WhenThereIsAtLeastOnePartOfSpeech_SetsCanCopyPartOfSpeechToTrue(string partOfSpeech, bool expected)
+        {
+            DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
+            definitionViewModel.PartOfSpeech = partOfSpeech;
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                Mock.Of<IDialogService>(),
+                Mock.Of<IClipboardService>(),
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<ISettingsService>());
+            sut.CanCopyPartOfSpeech.Should().BeFalse();
+
+            sut.DefinitionViewModels.Add(definitionViewModel);
+            sut.UpdateUI();
+
+            sut.CanCopyPartOfSpeech.Should().Be(expected);
+        }
+
+        [DataTestMethod]
+        [DataRow("test", true)]
+        [DataRow("", false)]
+        public void UpdateUI_WhenThereIsAtLeastOneEnding_SetsCanCopyEndingsToTrue(string ending, bool expected)
+        {
+            DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
+            definitionViewModel.Endings = ending;
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                Mock.Of<IDialogService>(),
+                Mock.Of<IClipboardService>(),
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<ISettingsService>());
+            sut.CanCopyEndings.Should().BeFalse();
+
+            sut.DefinitionViewModels.Add(definitionViewModel);
+            sut.UpdateUI();
+
+            sut.CanCopyEndings.Should().Be(expected);
         }
 
         #endregion

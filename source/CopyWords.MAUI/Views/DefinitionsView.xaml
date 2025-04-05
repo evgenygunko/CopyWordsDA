@@ -26,150 +26,22 @@
                             <RowDefinition Height="auto"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
-                            <RowDefinition Height="auto"></RowDefinition>
                         </Grid.RowDefinitions>
 
-                        <!-- Copy front, copy back, copy endings, and copy examples buttons -->
-                        <FlexLayout Grid.Row="0"
-                                Margin="0,15,0,0"
-                                Direction="Row"
-                                Wrap="Wrap"
-                                AlignItems="Start">
-
-                            <buttons:SfButton
-                                    Margin="0,0,2,2"
-                                    WidthRequest="{OnPlatform 85, Android=60}"
-                                    ToolTipProperties.Text="Copy text for the Anki 'Front' field"
-                                    BackgroundColor="{Binding CopyFrontButtonColor}"
-                                    Command="{Binding CopyFrontCommand}">
-
-                                <buttons:SfButton.Content>
-                                    <DataTemplate>
-                                        <HorizontalStackLayout>
-                                            <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
-                                                <Image.Source>
-                                                    <FontImageSource
-                                                        FontFamily="MaterialIconsOutlined-Regular"
-                                                        Glyph="{x:Static helpers:MaterialDesignIconFonts.Content_copy}" />
-                                                </Image.Source>
-                                            </Image>
-
-                                            <Label Text="Front" VerticalOptions="Center" TextColor="White" />
-                                        </HorizontalStackLayout>
-                                    </DataTemplate>
-                                </buttons:SfButton.Content>
-                            </buttons:SfButton>
-
-                            <buttons:SfButton
-                                    Margin="0,0,2,2"
-                                    WidthRequest="{OnPlatform 85, Android=60}"
-                                    ToolTipProperties.Text="Copy text for the Anki 'Back' field"
-                                    BackgroundColor="{Binding CopyBackButtonColor}"
-                                    Command="{Binding CopyBackCommand}">
-
-                                <buttons:SfButton.Content>
-                                    <DataTemplate>
-                                        <HorizontalStackLayout>
-                                            <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
-                                                <Image.Source>
-                                                    <FontImageSource
-                                                        FontFamily="MaterialIconsOutlined-Regular"
-                                                        Glyph="{x:Static helpers:MaterialDesignIconFonts.Content_copy}" />
-                                                </Image.Source>
-                                            </Image>
-
-                                            <Label Text="Back" VerticalOptions="Center" TextColor="White" />
-                                        </HorizontalStackLayout>
-                                    </DataTemplate>
-                                </buttons:SfButton.Content>
-                            </buttons:SfButton>
-
-                            <buttons:SfButton
-                                    Margin="0,0,2,2"
-                                    WidthRequest="{OnPlatform 85, Android=60}"
-                                    ToolTipProperties.Text="Copy text for the Anki 'PartOfSpeech' field"
-                                    BackgroundColor="{Binding CopyPartOfSpeechButtonColor}"
-                                    Command="{Binding CopyPartOfSpeechCommand}">
-
-                                <buttons:SfButton.Content>
-                                    <DataTemplate>
-                                        <HorizontalStackLayout>
-                                            <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
-                                                <Image.Source>
-                                                    <FontImageSource
-                                                        FontFamily="MaterialIconsOutlined-Regular"
-                                                        Glyph="{x:Static helpers:MaterialDesignIconFonts.Content_copy}" />
-                                                </Image.Source>
-                                            </Image>
-
-                                            <Label Text="Type" VerticalOptions="Center" TextColor="White" />
-                                        </HorizontalStackLayout>
-                                    </DataTemplate>
-                                </buttons:SfButton.Content>
-                            </buttons:SfButton>
-
-                            <buttons:SfButton
-                                    Margin="0,0,2,2"
-                                    WidthRequest="{OnPlatform 100, Android=60}"
-                                    ToolTipProperties.Text="Copy text for the Anki 'Forms' field"
-                                    BackgroundColor="{Binding CopyEndingsButtonColor}"
-                                    Command="{Binding CopyEndingsCommand}">
-
-                                <buttons:SfButton.Content>
-                                    <DataTemplate>
-                                        <HorizontalStackLayout>
-                                            <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
-                                                <Image.Source>
-                                                    <FontImageSource
-                                                        FontFamily="MaterialIconsOutlined-Regular"
-                                                        Glyph="{x:Static helpers:MaterialDesignIconFonts.Content_copy}" />
-                                                </Image.Source>
-                                            </Image>
-
-                                            <Label Text="Endings" VerticalOptions="Center" TextColor="White" />
-                                        </HorizontalStackLayout>
-                                    </DataTemplate>
-                                </buttons:SfButton.Content>
-                            </buttons:SfButton>
-
-                            <buttons:SfButton
-                                    WidthRequest="{OnPlatform 110, Android=60}"
-                                    ToolTipProperties.Text="Copy text for the Anki 'Example' field"
-                                    BackgroundColor="{Binding CopyExamplesButtonColor}"
-                                    Command="{Binding CopyExamplesCommand}">
-
-                                <buttons:SfButton.Content>
-                                    <DataTemplate>
-                                        <HorizontalStackLayout>
-                                            <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
-                                                <Image.Source>
-                                                    <FontImageSource
-                                                        FontFamily="MaterialIconsOutlined-Regular"
-                                                        Glyph="{x:Static helpers:MaterialDesignIconFonts.Content_copy}" />
-                                                </Image.Source>
-                                            </Image>
-
-                                            <Label Text="Examples" VerticalOptions="Center" TextColor="White" />
-                                        </HorizontalStackLayout>
-                                    </DataTemplate>
-                                </buttons:SfButton.Content>
-                            </buttons:SfButton>
-                        </FlexLayout>
-
                         <!-- Headword -->
-                        <VerticalStackLayout Grid.Row="1" Margin="0,10,0,0" VerticalOptions="Center">
+                        <VerticalStackLayout Grid.Row="0" Margin="0,10,0,0" VerticalOptions="Center">
                             <Label FontSize="Subtitle" Text="{Binding HeadwordViewModel.Original, FallbackValue='afeitar'}" />
                             <Label TextColor="Gray" Text="{Binding PartOfSpeech, FallbackValue='transitive verb'}" />
                         </VerticalStackLayout>
 
                         <!-- Block with headword and its translations -->
-                        <views:HeadwordView Grid.Row="2"
+                        <views:HeadwordView Grid.Row="1"
                                 IsVisible="{Binding HeadwordViewModel.English, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
                                 BindingContext="{Binding Path=HeadwordViewModel}"
                                 Margin="0,5,0,0" />
 
                         <!-- Endings -->
-                        <HorizontalStackLayout Grid.Row="3"
+                        <HorizontalStackLayout Grid.Row="2"
                                     IsVisible="{Binding Endings, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
 
                             <Border
@@ -183,10 +55,10 @@
                         </HorizontalStackLayout>
 
                         <!-- Horizontal line -->
-                        <BoxView Grid.Row="4" Color="LightGray" HeightRequest="1" Margin="0,10,0,0" />
+                        <BoxView Grid.Row="3" Color="LightGray" HeightRequest="1" Margin="0,10,0,0" />
 
                         <!-- Contexts -->
-                        <views:ContextsView Grid.Row="5" Margin="0,15,0,0" />
+                        <views:ContextsView Grid.Row="4" Margin="0,15,0,0" />
                     </Grid>
                 </VerticalStackLayout>
             </DataTemplate>

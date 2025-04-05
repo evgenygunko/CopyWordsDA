@@ -17,6 +17,22 @@ namespace CopyWords.Core.Tests.ViewModels
         #region Tests for InitAsync
 
         [TestMethod]
+        public async Task InitAsync_WhenIsBusyTrue_DoesNotRunLookup()
+        {
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            var lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = true;
+            await sut.InitAsync();
+
+            lookUpWordMock.VerifyNoOtherCalls();
+            settingsServiceMock.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
         public async Task InitAsync_WhenInstantTranslationServiceHasText_SetsSearchWordAndRunsLookup()
         {
             WordModel wordModel = _fixture.Create<WordModel>();
@@ -33,6 +49,7 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
 
             var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
             await sut.InitAsync();
 
             sut.SearchWord.Should().Be("abcdef");
@@ -51,6 +68,7 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
 
             var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
             sut.SearchWord = string.Empty;
             await sut.InitAsync();
 
@@ -67,6 +85,7 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(sourceLanguage.ToString());
 
             var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
             await sut.InitAsync();
 
             sut.DictionaryName.Should().Be(sourceLanguage.ToString());
@@ -92,6 +111,7 @@ namespace CopyWords.Core.Tests.ViewModels
             lookUpWordMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
             var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
             sut.SearchWord = search;
 
             await sut.LookUpAsync(It.IsAny<ITextInput>(), It.IsAny<CancellationToken>());
