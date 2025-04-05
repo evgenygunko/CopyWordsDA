@@ -201,10 +201,16 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
                 _wordViewModel.SoundFileName = wordModel.SoundFileName;
 
+                SourceLanguage sourceLanguage;
+                if (!Enum.TryParse<SourceLanguage>(_settingsService.GetSelectedParser(), out sourceLanguage))
+                {
+                    sourceLanguage = SourceLanguage.Danish;
+                }
+
                 _wordViewModel.DefinitionViewModels.Clear();
                 foreach (var definition in wordModel.Definitions)
                 {
-                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(wordModel.Word, definition, _settingsService));
+                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(definition, sourceLanguage));
                 }
 
                 _wordViewModel.Variants.Clear();

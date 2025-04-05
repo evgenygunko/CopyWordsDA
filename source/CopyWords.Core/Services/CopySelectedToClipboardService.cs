@@ -45,7 +45,7 @@ namespace CopyWords.Core.Services
                 return Task.FromResult(string.Empty);
             }
 
-            string word = definitionViewModel.Word;
+            string word = definitionViewModel.HeadwordViewModel.Original!;
             string partOfSpeech = definitionViewModel.PartOfSpeech;
 
             string front = word;
@@ -68,14 +68,14 @@ namespace CopyWords.Core.Services
                         front = $"at {front}";
                     }
 
-                    // Spanish
+                    // Spanish - replace eventual definite articles with indefinite
                     if (partOfSpeech.Equals("MASCULINE NOUN", StringComparison.OrdinalIgnoreCase))
                     {
-                        front = $"un {word}";
+                        front = $"un {word.Replace("el ", "")}";
                     }
                     if (partOfSpeech.Equals("FEMININE NOUN", StringComparison.OrdinalIgnoreCase))
                     {
-                        front = $"una {word}";
+                        front = $"una {word.Replace("la ", "")}";
                     }
                     if (partOfSpeech.Equals("MASCULINE OR FEMININE NOUN", StringComparison.OrdinalIgnoreCase))
                     {
@@ -144,7 +144,9 @@ namespace CopyWords.Core.Services
                             else
                             {
                                 // On Windows and macOS, download the image, resize it, and save it to the Anki media collection folder.
-                                string imageFileName = definitionViewModel.Word;
+                                string imageFileName = definitionViewModel.HeadwordViewModel.Original!
+                                    .Replace("la ", "")
+                                    .Replace("el ", "");
                                 if (imageIndex > 0)
                                 {
                                     imageFileName += imageIndex;

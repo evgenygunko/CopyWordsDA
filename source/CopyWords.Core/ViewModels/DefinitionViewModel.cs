@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CopyWords.Core.Services;
 using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.ViewModels
@@ -8,18 +7,9 @@ namespace CopyWords.Core.ViewModels
     public partial class DefinitionViewModel : ObservableObject
     {
         public DefinitionViewModel(
-            string word,
             Definition definition,
-            ISettingsService settingsService)
+            SourceLanguage sourceLanguage)
         {
-            Word = word;
-
-            SourceLanguage sourceLanguage;
-            if (!Enum.TryParse<SourceLanguage>(settingsService.GetSelectedParser(), out sourceLanguage))
-            {
-                sourceLanguage = SourceLanguage.Danish;
-            }
-
             HeadwordViewModel = new HeadwordViewModel(definition.Headword, sourceLanguage);
 
             PartOfSpeech = definition.PartOfSpeech;
@@ -33,9 +23,6 @@ namespace CopyWords.Core.ViewModels
         }
 
         #region Properties
-
-        [ObservableProperty]
-        private string word;
 
         [ObservableProperty]
         private HeadwordViewModel headwordViewModel;

@@ -14,17 +14,7 @@ namespace CopyWords.Core.Tests.Services
     [TestClass]
     public class CopySelectedToClipboardServiceTests
     {
-        private Fixture _fixture = default!;
-
-        private Mock<ISettingsService> _settingsServiceMock = default!;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            _fixture = FixtureFactory.CreateFixture();
-
-            _settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-        }
+        private readonly Fixture _fixture = FixtureFactory.CreateFixture();
 
         #region Tests for CompileFrontAsync
 
@@ -732,9 +722,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "grillspyd",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -765,9 +754,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "underholdning",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -800,9 +788,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "kigge",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -845,9 +832,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "høj",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -898,9 +884,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "ligeud",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -932,9 +917,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "i forb. med",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -985,9 +969,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "haj",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -1057,9 +1040,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "coche",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1093,9 +1075,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "casa",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Danish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1143,9 +1124,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "bien",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1189,9 +1169,8 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
             var definitionVM1 = new DefinitionViewModel(
-                "guay",
                 definition1,
-                _settingsServiceMock.Object);
+                SourceLanguage.Spanish);
 
             var definition2 = new Definition(new Headword("guay", null, null), PartOfSpeech: "ADJECTIVE", Endings: "",
                 new List<Context>
@@ -1225,9 +1204,8 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
             var definitionVM2 = new DefinitionViewModel(
-                "guay",
                 definition2,
-                _settingsServiceMock.Object);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1295,9 +1273,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "luce",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1331,9 +1308,8 @@ namespace CopyWords.Core.Tests.Services
             );
 
             var definitionVM = new DefinitionViewModel(
-                "saltamontes",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1389,9 +1365,8 @@ namespace CopyWords.Core.Tests.Services
                 }
             );
             var definitionVM = new DefinitionViewModel(
-                "veneno",
                 definition,
-                _settingsServiceMock.Object);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {

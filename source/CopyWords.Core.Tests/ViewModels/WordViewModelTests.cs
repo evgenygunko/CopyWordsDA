@@ -21,7 +21,9 @@ namespace CopyWords.Core.Tests.ViewModels
             _fixture = FixtureFactory.CreateFixture();
 
             _func = new Mock<Func<ObservableCollection<DefinitionViewModel>, Task<string>>>();
-            _func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<DefinitionViewModel>>())).Returns((ObservableCollection<DefinitionViewModel> vms) => Task.FromResult(vms.First().Word));
+            _func
+                .Setup(x => x.Invoke(It.IsAny<ObservableCollection<DefinitionViewModel>>()))
+                .Returns((ObservableCollection<DefinitionViewModel> vms) => Task.FromResult(vms.First().HeadwordViewModel.Original!));
         }
 
         #region Tests for CanSaveSoundFile
@@ -131,7 +133,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
-            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(definitionViewModel.Word));
+            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(definitionViewModel.HeadwordViewModel.Original!));
             dialogServiceMock.Verify(x => x.DisplayToast("Front copied"));
         }
 
@@ -139,7 +141,7 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task CompileAndCopyToClipboard_WhenWordIsNotCopied_DisplaysWarning()
         {
             DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
-            definitionViewModel.Word = string.Empty;
+            definitionViewModel.HeadwordViewModel.Original = string.Empty;
 
             Mock<IClipboardService> clipboardServiceMock = new Mock<IClipboardService>();
             Mock<IDialogService> dialogServiceMock = new Mock<IDialogService>();
@@ -158,10 +160,10 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task CompileAndCopyToClipboard_WhenPrepareWordForCopyingExceptionThrown_ShowsWarning()
+        public async Task CompileAndCopyToClipboard_WhenExamplesFromSeveralDefinitionsSelectedExceptionThrown_ShowsWarning()
         {
             DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
-            definitionViewModel.Word = string.Empty;
+            definitionViewModel.HeadwordViewModel.Original = string.Empty;
 
             Mock<IClipboardService> clipboardServiceMock = new Mock<IClipboardService>();
             Mock<IDialogService> dialogServiceMock = new Mock<IDialogService>();
@@ -185,7 +187,7 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task CompileAndCopyToClipboard_WhenExceptionThrown_ShowsWarning()
         {
             DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
-            definitionViewModel.Word = string.Empty;
+            definitionViewModel.HeadwordViewModel.Original = string.Empty;
 
             Mock<IClipboardService> clipboardServiceMock = new Mock<IClipboardService>();
             Mock<IDialogService> dialogServiceMock = new Mock<IDialogService>();
