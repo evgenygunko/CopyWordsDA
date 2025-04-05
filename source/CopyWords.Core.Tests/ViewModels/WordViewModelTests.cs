@@ -126,8 +126,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 clipboardServiceMock.Object,
-                Mock.Of<ICopySelectedToClipboardService>(),
-                Mock.Of<ISettingsService>());
+                Mock.Of<ICopySelectedToClipboardService>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -149,8 +148,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 clipboardServiceMock.Object,
-                Mock.Of<ICopySelectedToClipboardService>(),
-                Mock.Of<ISettingsService>());
+                Mock.Of<ICopySelectedToClipboardService>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -168,14 +166,13 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<IClipboardService> clipboardServiceMock = new Mock<IClipboardService>();
             Mock<IDialogService> dialogServiceMock = new Mock<IDialogService>();
 
-            _func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ThrowsAsync(new PrepareWordForCopyingException("exception from unit tests"));
+            _func.Setup(x => x.Invoke(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ThrowsAsync(new ExamplesFromSeveralDefinitionsSelectedException("exception from unit tests"));
 
             WordViewModel sut = new WordViewModel(
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 clipboardServiceMock.Object,
-                Mock.Of<ICopySelectedToClipboardService>(),
-                Mock.Of<ISettingsService>());
+                Mock.Of<ICopySelectedToClipboardService>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -199,8 +196,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 clipboardServiceMock.Object,
-                Mock.Of<ICopySelectedToClipboardService>(),
-                Mock.Of<ISettingsService>());
+                Mock.Of<ICopySelectedToClipboardService>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -231,8 +227,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 Mock.Of<IClipboardService>(),
-                copySelectedToClipboardServiceMock.Object,
-                Mock.Of<ISettingsService>());
+                copySelectedToClipboardServiceMock.Object);
             sut.CanCopyFront = true;
 
             await sut.OpenCopyMenuAsync();
@@ -259,8 +254,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 Mock.Of<IClipboardService>(),
-                copySelectedToClipboardServiceMock.Object,
-                Mock.Of<ISettingsService>());
+                copySelectedToClipboardServiceMock.Object);
             sut.CanCopyFront = true;
 
             await sut.OpenCopyMenuAsync();
@@ -287,8 +281,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 Mock.Of<IClipboardService>(),
-                copySelectedToClipboardServiceMock.Object,
-                Mock.Of<ISettingsService>());
+                copySelectedToClipboardServiceMock.Object);
             sut.CanCopyPartOfSpeech = true;
 
             await sut.OpenCopyMenuAsync();
@@ -315,8 +308,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 Mock.Of<IClipboardService>(),
-                copySelectedToClipboardServiceMock.Object,
-                Mock.Of<ISettingsService>());
+                copySelectedToClipboardServiceMock.Object);
             sut.CanCopyEndings = true;
 
             await sut.OpenCopyMenuAsync();
@@ -343,8 +335,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 Mock.Of<IClipboardService>(),
-                copySelectedToClipboardServiceMock.Object,
-                Mock.Of<ISettingsService>());
+                copySelectedToClipboardServiceMock.Object);
             sut.CanCopyFront = true;
 
             await sut.OpenCopyMenuAsync();
@@ -366,8 +357,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 Mock.Of<IDialogService>(),
                 Mock.Of<IClipboardService>(),
-                Mock.Of<ICopySelectedToClipboardService>(),
-                Mock.Of<ISettingsService>());
+                Mock.Of<ICopySelectedToClipboardService>());
             sut.CanCopyFront.Should().BeFalse();
 
             sut.DefinitionViewModels.Add(definitionViewModel);
@@ -388,8 +378,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 Mock.Of<IDialogService>(),
                 Mock.Of<IClipboardService>(),
-                Mock.Of<ICopySelectedToClipboardService>(),
-                Mock.Of<ISettingsService>());
+                Mock.Of<ICopySelectedToClipboardService>());
             sut.CanCopyPartOfSpeech.Should().BeFalse();
 
             sut.DefinitionViewModels.Add(definitionViewModel);
@@ -410,8 +399,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 Mock.Of<IDialogService>(),
                 Mock.Of<IClipboardService>(),
-                Mock.Of<ICopySelectedToClipboardService>(),
-                Mock.Of<ISettingsService>());
+                Mock.Of<ICopySelectedToClipboardService>());
             sut.CanCopyEndings.Should().BeFalse();
 
             sut.DefinitionViewModels.Add(definitionViewModel);

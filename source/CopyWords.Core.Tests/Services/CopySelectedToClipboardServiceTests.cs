@@ -2,6 +2,7 @@
 
 using System.Collections.ObjectModel;
 using AutoFixture;
+using CopyWords.Core.Exceptions;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.Parsers.Models;
@@ -121,6 +122,20 @@ namespace CopyWords.Core.Tests.Services
         #endregion
 
         #region Spanish
+
+        [TestMethod]
+        public async Task CompileFrontAsync_ExamplesFromSeveralDefinitionsSelected_ThrowsException()
+        {
+            var definitionVMs = CreateVMForGuay();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVMs[1].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            await sut.Invoking(x => x.CompileFrontAsync(definitionVMs))
+                .Should().ThrowAsync<ExamplesFromSeveralDefinitionsSelectedException>()
+                .WithMessage("You’ve selected examples from multiple definitions. Please choose examples from only one.");
+        }
 
         [TestMethod]
         public async Task CompileFrontAsync_ForCocheWhenOneExampleSelected_ReturnsOneFrontMeaning()

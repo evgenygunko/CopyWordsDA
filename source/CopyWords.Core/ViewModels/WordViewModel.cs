@@ -15,20 +15,17 @@ namespace CopyWords.Core.ViewModels
         private readonly IDialogService _dialogService;
         private readonly IClipboardService _clipboardService;
         private readonly ICopySelectedToClipboardService _copySelectedToClipboardService;
-        private readonly ISettingsService _settingsService;
 
         public WordViewModel(
             ISaveSoundFileService saveSoundFileService,
             IDialogService dialogService,
             IClipboardService clipboardService,
-            ICopySelectedToClipboardService copySelectedToClipboardService,
-            ISettingsService settingsService)
+            ICopySelectedToClipboardService copySelectedToClipboardService)
         {
             _saveSoundFileService = saveSoundFileService;
             _dialogService = dialogService;
             _clipboardService = clipboardService;
             _copySelectedToClipboardService = copySelectedToClipboardService;
-            _settingsService = settingsService;
         }
 
         #region Properties
@@ -279,7 +276,7 @@ namespace CopyWords.Core.ViewModels
                     await _dialogService.DisplayAlert("Text not copied", "Please select at least one example", "OK");
                 }
             }
-            catch (PrepareWordForCopyingException ex)
+            catch (ExamplesFromSeveralDefinitionsSelectedException ex)
             {
                 await _dialogService.DisplayAlert($"Cannot copy {wordPartName}", ex.Message, "OK");
             }

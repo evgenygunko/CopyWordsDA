@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
+using CopyWords.Core.Exceptions;
 using CopyWords.Core.ViewModels;
 
 namespace CopyWords.Core.Services
@@ -292,7 +293,7 @@ namespace CopyWords.Core.Services
             }
             else if (viewMoledsWithSelectedExamples.Count() > 1)
             {
-                throw new Exception("More than one definition has selected examples. This is not supported.");
+                throw new ExamplesFromSeveralDefinitionsSelectedException("You’ve selected examples from multiple definitions. Please choose examples from only one.");
             }
 
             return viewMoledsWithSelectedExamples.First();

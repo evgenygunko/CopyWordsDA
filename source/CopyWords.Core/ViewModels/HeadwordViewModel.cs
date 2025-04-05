@@ -1,19 +1,20 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CopyWords.Core.Models;
-using CopyWords.Core.Services;
 using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.ViewModels
 {
     public partial class HeadwordViewModel : ObservableObject
     {
-        private readonly ISettingsService _settingsService;
-
-        public HeadwordViewModel(Headword headword, ISettingsService settingsService)
+        public HeadwordViewModel(Headword headword, SourceLanguage sourceLanguage)
         {
-            _settingsService = settingsService;
+            Original = headword?.Original;
 
-            Update(headword);
+            // Make first letter lower case, it looks better
+            English = FirstLetterToLower(headword?.English);
+            Russian = FirstLetterToLower(headword?.Russian);
+
+            // SpanishDict already return English translations, no need to show what the Translator app returned.
+            ShowEnglishTranslation = sourceLanguage != SourceLanguage.Spanish;
         }
 
         [ObservableProperty]
@@ -33,25 +34,6 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         private bool showEnglishTranslation;
-
-        public void Update(Headword headword)
-        {
-            Original = headword?.Original;
-
-            // Make first letter lower case, it looks better
-            English = FirstLetterToLower(headword?.English);
-            Russian = FirstLetterToLower(headword?.Russian);
-
-            AppSettings appSettings = _settingsService.LoadSettings();
-            if (appSettings.SelectedParser == SourceLanguage.Spanish.ToString())
-            {
-                ShowEnglishTranslation = false;
-            }
-            else
-            {
-                ShowEnglishTranslation = true;
-            }
-        }
 
         internal static string? FirstLetterToLower(string? input)
         {

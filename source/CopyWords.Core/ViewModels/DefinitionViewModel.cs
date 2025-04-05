@@ -13,7 +13,14 @@ namespace CopyWords.Core.ViewModels
             ISettingsService settingsService)
         {
             Word = word;
-            HeadwordViewModel = new HeadwordViewModel(definition.Headword, settingsService);
+
+            SourceLanguage sourceLanguage;
+            if (!Enum.TryParse<SourceLanguage>(settingsService.GetSelectedParser(), out sourceLanguage))
+            {
+                sourceLanguage = SourceLanguage.Danish;
+            }
+
+            HeadwordViewModel = new HeadwordViewModel(definition.Headword, sourceLanguage);
 
             PartOfSpeech = definition.PartOfSpeech;
             Endings = definition.Endings;

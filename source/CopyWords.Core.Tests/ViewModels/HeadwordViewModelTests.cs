@@ -13,15 +13,14 @@ namespace CopyWords.Core.Tests.ViewModels
     {
         private readonly Fixture _fixture = FixtureFactory.CreateFixture();
 
-        #region Tests for Update
+        #region Tests for Constructor
 
         [TestMethod]
-        public void Update_Should_UpdateProperties()
+        public void Constructor_Should_UpdateProperties()
         {
             var headword = new Headword("Grillspyd", "Kebabs", "Шашлыки");
 
-            var sut = _fixture.Create<HeadwordViewModel>();
-            sut.Update(headword);
+            var sut = new HeadwordViewModel(headword, SourceLanguage.Danish);
 
             sut.Original.Should().Be("Grillspyd");
 
@@ -41,8 +40,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var ssettingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             ssettingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
-            var sut = _fixture.Create<HeadwordViewModel>();
-            sut.Update(headword);
+            var sut = new HeadwordViewModel(headword, SourceLanguage.Spanish);
 
             sut.ShowEnglishTranslation.Should().BeFalse();
         }
@@ -58,8 +56,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var ssettingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             ssettingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
-            var sut = _fixture.Create<HeadwordViewModel>();
-            sut.Update(headword);
+            var sut = new HeadwordViewModel(headword, SourceLanguage.Danish);
 
             sut.ShowEnglishTranslation.Should().BeTrue();
         }
