@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.ViewModels;
 
@@ -144,9 +145,7 @@ namespace CopyWords.Core.Services
                             else
                             {
                                 // On Windows and macOS, download the image, resize it, and save it to the Anki media collection folder.
-                                string imageFileName = definitionViewModel.HeadwordViewModel.Original!
-                                    .Replace("la ", "")
-                                    .Replace("el ", "");
+                                string imageFileName = GetImageFileNameWithoutExtension(definitionViewModel.HeadwordViewModel.Original!);
                                 if (imageIndex > 0)
                                 {
                                     imageFileName += imageIndex;
@@ -282,6 +281,27 @@ namespace CopyWords.Core.Services
             }
 
             return Task.FromResult(sb.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal static string GetImageFileNameWithoutExtension(string headword)
+        {
+            // Find and return the first match of the pattern "el <word>, la <word>"
+            const string pattern = @"el\s+(\w+),\s+la\s+\w+";
+            Match match = Regex.Match(headword, pattern, RegexOptions.IgnoreCase);
+
+            // If a match is found, return the captured group
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+
+            return headword
+                .Replace("la ", "")
+                .Replace("el ", "");
         }
 
         #endregion

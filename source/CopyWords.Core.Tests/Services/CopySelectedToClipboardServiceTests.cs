@@ -694,6 +694,28 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
+        #region Tests for GetImageFileNameWithoutExtension
+
+        [TestMethod]
+        public void GetImageFileNameWithoutExtension_Should_ReplaceElAtStart()
+        {
+            CopySelectedToClipboardService.GetImageFileNameWithoutExtension("el alfiler").Should().Be("alfiler");
+        }
+
+        [TestMethod]
+        public void GetImageFileNameWithoutExtension_Should_ReplaceLaAtStart()
+        {
+            CopySelectedToClipboardService.GetImageFileNameWithoutExtension("la casa").Should().Be("casa");
+        }
+
+        [TestMethod]
+        public void GetImageFileNameWithoutExtension_WhenMasculineAndFeminineMeanings_ReturnsOnlyMasculine()
+        {
+            CopySelectedToClipboardService.GetImageFileNameWithoutExtension("el camionero, la camionera").Should().Be("camionero");
+        }
+
+        #endregion
+
         #region Private Methods
 
         #region Danish
