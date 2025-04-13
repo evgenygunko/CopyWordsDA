@@ -36,8 +36,9 @@
 
                         <!-- Block with headword and its translations -->
                         <views:HeadwordView Grid.Row="1"
-                                IsVisible="{Binding HeadwordViewModel.English, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
+                                IsVisible="{Binding English, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
                                 BindingContext="{Binding Path=HeadwordViewModel}"
+                                x:DataType="viewmodels:HeadwordViewModel"
                                 Margin="0,5,0,0" />
 
                         <!-- Endings -->

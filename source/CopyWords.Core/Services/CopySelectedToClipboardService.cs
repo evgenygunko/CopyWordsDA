@@ -40,7 +40,7 @@ namespace CopyWords.Core.Services
         public Task<string> CompileFrontAsync(ObservableCollection<DefinitionViewModel> definitionViewModels)
         {
             // find the first definition view model which has any example selected
-            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedExamples(definitionViewModels);
+            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionViewModels);
             if (definitionViewModel == null)
             {
                 return Task.FromResult(string.Empty);
@@ -91,7 +91,7 @@ namespace CopyWords.Core.Services
         public async Task<string> CompileBackAsync(ObservableCollection<DefinitionViewModel> definitionViewModels)
         {
             // find the first definition view model which has any example selected
-            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedExamples(definitionViewModels);
+            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionViewModels);
             if (definitionViewModel == null)
             {
                 return string.Empty;
@@ -215,7 +215,7 @@ namespace CopyWords.Core.Services
         public Task<string> CompilePartOfSpeechAsync(ObservableCollection<DefinitionViewModel> definitionViewModels)
         {
             // find the first definition view model which has any example selected
-            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedExamples(definitionViewModels);
+            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionViewModels);
             if (definitionViewModel == null)
             {
                 return Task.FromResult(string.Empty);
@@ -227,7 +227,7 @@ namespace CopyWords.Core.Services
         public Task<string> CompileEndingsAsync(ObservableCollection<DefinitionViewModel> definitionViewModels)
         {
             // find the first definition view model which has any example selected
-            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedExamples(definitionViewModels);
+            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionViewModels);
             if (definitionViewModel == null)
             {
                 return Task.FromResult(string.Empty);
@@ -238,7 +238,7 @@ namespace CopyWords.Core.Services
 
         public Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> definitionViewModels)
         {
-            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedExamples(definitionViewModels);
+            DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionViewModels);
             if (definitionViewModel == null)
             {
                 return Task.FromResult(string.Empty);
@@ -287,6 +287,45 @@ namespace CopyWords.Core.Services
 
         #region Internal Methods
 
+        internal DefinitionViewModel? FindDefinitionViewModelWithSelectedHeadwordOrExamples(ObservableCollection<DefinitionViewModel> definitionViewModels)
+        {
+            DefinitionViewModel? definitionViewModel = null;
+
+            // Find the view model that has a headword selected.
+            var viewModelsWithSelectedHeadwords = definitionViewModels.Where(x => x.HeadwordViewModel.IsEnglishTranslationChecked || x.HeadwordViewModel.IsRussianTranslationChecked);
+            if (viewModelsWithSelectedHeadwords.Count() > 1)
+            {
+                throw new ExamplesFromSeveralDefinitionsSelectedException("You’ve selected headwords from multiple definitions. Please choose headwords from only one.");
+            }
+
+            if (viewModelsWithSelectedHeadwords.Count() == 1)
+            {
+                definitionViewModel = viewModelsWithSelectedHeadwords.First();
+
+                // We found the only view model which has selected a headword. Now verify that other definitions don't have any examples selected.
+                var viewModelsWithSelectedExamplesInOtherDefinitions = definitionViewModels.Where(x => x != definitionViewModel
+                    && x.ContextViewModels.Any(y => y.MeaningViewModels.Any(z => z.ExampleViewModels.Any(a => a.IsChecked))));
+                if (viewModelsWithSelectedExamplesInOtherDefinitions.Count() > 0)
+                {
+                    throw new ExamplesFromSeveralDefinitionsSelectedException(
+                        "You’ve selected examples from definitions other than the one with the selected headword. Please choose examples and a headword from the same definition.");
+                }
+            }
+
+            // No headwords is selected, find the definition view model that has any example selected.
+            var viewModelsWithSelectedExamples = definitionViewModels.Where(x => x.ContextViewModels.Any(y => y.MeaningViewModels.Any(z => z.ExampleViewModels.Any(a => a.IsChecked))));
+            if (viewModelsWithSelectedExamples.Count() == 1)
+            {
+                definitionViewModel = viewModelsWithSelectedExamples.First();
+            }
+            else if (viewModelsWithSelectedExamples.Count() > 1)
+            {
+                throw new ExamplesFromSeveralDefinitionsSelectedException("You’ve selected examples from multiple definitions. Please choose examples from only one.");
+            }
+
+            return definitionViewModel;
+        }
+
         internal static string GetImageFileNameWithoutExtension(string headword)
         {
             // Find and return the first match of the pattern "el <word>, la <word>"
@@ -305,20 +344,5 @@ namespace CopyWords.Core.Services
         }
 
         #endregion
-
-        private static DefinitionViewModel? FindDefinitionViewModelWithSelectedExamples(ObservableCollection<DefinitionViewModel> definitionViewModels)
-        {
-            var viewMoledsWithSelectedExamples = definitionViewModels.Where(x => x.ContextViewModels.Any(y => y.MeaningViewModels.Any(z => z.ExampleViewModels.Any(a => a.IsChecked))));
-            if (!viewMoledsWithSelectedExamples.Any())
-            {
-                return null;
-            }
-            else if (viewMoledsWithSelectedExamples.Count() > 1)
-            {
-                throw new ExamplesFromSeveralDefinitionsSelectedException("You’ve selected examples from multiple definitions. Please choose examples from only one.");
-            }
-
-            return viewMoledsWithSelectedExamples.First();
-        }
     }
 }

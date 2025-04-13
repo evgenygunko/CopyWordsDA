@@ -716,6 +716,95 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
+        #region Tests for FindDefinitionViewModelWithSelectedHeadwordOrExamples
+
+        [TestMethod]
+        public void FindDefinitionViewModelWithSelectedHeadwordOrExamples_WhenNoHeadwordsOrExamplesSelected_ReturnsNull()
+        {
+            var definitionVMs = CreateVMForGuay();
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+            sut.FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionVMs)
+                .Should().BeNull();
+        }
+
+        [TestMethod]
+        public void FindDefinitionViewModelWithSelectedHeadwordOrExamples_WhenHeadwordsFromDifferentDefinitionsSelected_ThrowsExamplesFromSeveralDefinitionsSelectedException()
+        {
+            var definitionVMs = CreateVMForGuay();
+            definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = true;
+            definitionVMs[1].HeadwordViewModel.IsRussianTranslationChecked = true;
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+            sut.Invoking(x => x.FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionVMs))
+                .Should().Throw<ExamplesFromSeveralDefinitionsSelectedException>()
+                .WithMessage("You’ve selected headwords from multiple definitions. Please choose headwords from only one.");
+        }
+
+        [TestMethod]
+        public void FindDefinitionViewModelWithSelectedHeadwordOrExamples_WhenExamplesFromDifferentDefinitionsSelected_ThrowsExamplesFromSeveralDefinitionsSelectedException()
+        {
+            var definitionVMs = CreateVMForGuay();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVMs[1].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+            sut.Invoking(x => x.FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionVMs))
+                .Should().Throw<ExamplesFromSeveralDefinitionsSelectedException>()
+                .WithMessage("You’ve selected examples from multiple definitions. Please choose examples from only one.");
+        }
+
+        [TestMethod]
+        public void FindDefinitionViewModelWithSelectedHeadwordOrExamples_WhenHeadwordSelectedAndExamplesFromAnotherDefinitionSelected_ThrowsExamplesFromSeveralDefinitionsSelectedException()
+        {
+            var definitionVMs = CreateVMForGuay();
+            definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = true;
+            definitionVMs[1].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+            sut.Invoking(x => x.FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionVMs))
+                .Should().Throw<ExamplesFromSeveralDefinitionsSelectedException>()
+                .WithMessage("You’ve selected examples from definitions other than the one with the selected headword. Please choose examples and a headword from the same definition.");
+        }
+
+        [TestMethod]
+        public void FindDefinitionViewModelWithSelectedHeadwordOrExamples_WhenOneHeadwordSelected_ReturnsDefinitionViewModel()
+        {
+            var definitionVMs = CreateVMForGuay();
+            definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = true;
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+            sut.FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionVMs)
+                .Should().Be(definitionVMs[0]);
+        }
+
+        [TestMethod]
+        public void FindDefinitionViewModelWithSelectedHeadwordOrExamples_WhenExamplesFromOneDefinitionSelected_ReturnsDefinitionViewModel()
+        {
+            var definitionVMs = CreateVMForGuay();
+            definitionVMs[1].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVMs[1].ContextViewModels[0].MeaningViewModels[1].ExampleViewModels[0].IsChecked = true;
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+            sut.FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionVMs)
+                .Should().Be(definitionVMs[1]);
+        }
+
+        [TestMethod]
+        public void FindDefinitionViewModelWithSelectedHeadwordOrExamples_WhenHeadwordAndExamplesFromOneDefinitionSelected_ReturnsDefinitionViewModel()
+        {
+            var definitionVMs = CreateVMForGuay();
+            definitionVMs[1].HeadwordViewModel.IsEnglishTranslationChecked = true;
+            definitionVMs[1].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVMs[1].ContextViewModels[0].MeaningViewModels[1].ExampleViewModels[0].IsChecked = true;
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+            sut.FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionVMs)
+                .Should().Be(definitionVMs[1]);
+        }
+
+        #endregion
+
         #region Private Methods
 
         #region Danish
