@@ -65,11 +65,17 @@ namespace CopyWords.Parsers.Services
             }
 
             var translationInput = new Models.Translations.Input.TranslationInput(
-                Version: "1",
+                Version: "2",
                 SourceLanguage: sourceLanguage.ToString(),
                 DestinationLanguages: DestinationLanguages,
-                Headword: headwordToTranslate,
-                Meanings: meaningsToTranslate);
+                Definitions: [
+                    new Models.Translations.Input.Definition(
+                        id: 1,
+                        Headword: headwordToTranslate,
+                        Meanings: meaningsToTranslate
+                    )
+                ]);
+
             return translationInput;
         }
 
@@ -93,7 +99,7 @@ namespace CopyWords.Parsers.Services
                         string? translationRU = null;
                         if (translateMeanings)
                         {
-                            translationRU = translationOutput.Meanings.FirstOrDefault(m => m.id == i)?.MeaningTranslations.FirstOrDefault(mt => mt.Language == LanguageRU)?.Text;
+                            translationRU = translationOutput.Definitions.First().Meanings.FirstOrDefault(m => m.id == i)?.MeaningTranslations.FirstOrDefault(mt => mt.Language == LanguageRU)?.Text;
                         }
                         else
                         {
@@ -143,10 +149,10 @@ namespace CopyWords.Parsers.Services
 
             if (translateHeadword)
             {
-                IEnumerable<string>? translationVariantsEN = translationOutput.Headword.FirstOrDefault(x => x.Language == LanguageEN)?.HeadwordTranslations;
+                IEnumerable<string>? translationVariantsEN = translationOutput.Definitions.First().Headword.FirstOrDefault(x => x.Language == LanguageEN)?.HeadwordTranslations;
                 translationsEN = string.Join(", ", translationVariantsEN ?? []);
 
-                IEnumerable<string>? translationVariantsRU = translationOutput.Headword.FirstOrDefault(x => x.Language == LanguageRU)?.HeadwordTranslations;
+                IEnumerable<string>? translationVariantsRU = translationOutput.Definitions.First().Headword.FirstOrDefault(x => x.Language == LanguageRU)?.HeadwordTranslations;
                 translationsRU = string.Join(", ", translationVariantsRU ?? []);
             }
             else

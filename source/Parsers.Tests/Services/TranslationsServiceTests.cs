@@ -43,23 +43,24 @@ namespace CopyWords.Parsers.Tests.Services
             Models.Translations.Input.TranslationInput result = sut.CreateTranslationInputFromWordModel(sourceLanguage, wordModel);
 
             result.Should().NotBeNull();
-            result.Version.Should().Be("1");
+            result.Version.Should().Be("2");
             result.SourceLanguage.Should().Be(sourceLanguage.ToString());
             result.DestinationLanguages.Should().HaveCount(2);
 
             Definition firstDefinition = wordModel.Definitions.First();
             Meaning firstMeaning = firstDefinition.Contexts.First().Meanings.First();
 
-            result.Headword.Text.Should().Be(wordModel.Word);
-            result.Headword.Meaning.Should().Be(firstMeaning.Original);
-            result.Headword.PartOfSpeech.Should().Be(firstDefinition.PartOfSpeech);
-            result.Headword.Examples.Should().HaveCount(firstMeaning.Examples.Count());
+            Models.Translations.Input.Definition outputDefinition = result.Definitions.First();
+            outputDefinition.Headword.Text.Should().Be(wordModel.Word);
+            outputDefinition.Headword.Meaning.Should().Be(firstMeaning.Original);
+            outputDefinition.Headword.PartOfSpeech.Should().Be(firstDefinition.PartOfSpeech);
+            outputDefinition.Headword.Examples.Should().HaveCount(firstMeaning.Examples.Count());
 
-            result.Meanings.Should().HaveCount(wordModel.Definitions.Sum(d => d.Contexts.Sum(c => c.Meanings.Count())));
-            result.Meanings.Select(m => m.Text).Should().Contain(firstMeaning.Original);
-            result.Meanings.First(m => m.Text == firstMeaning.Original).Examples.Should().HaveCount(firstMeaning.Examples.Count());
-            result.Meanings.First().id.Should().Be(0);
-            result.Meanings.Last().id.Should().Be(result.Meanings.Count() - 1);
+            outputDefinition.Meanings.Should().HaveCount(wordModel.Definitions.Sum(d => d.Contexts.Sum(c => c.Meanings.Count())));
+            outputDefinition.Meanings.Select(m => m.Text).Should().Contain(firstMeaning.Original);
+            outputDefinition.Meanings.First(m => m.Text == firstMeaning.Original).Examples.Should().HaveCount(firstMeaning.Examples.Count());
+            outputDefinition.Meanings.First().id.Should().Be(0);
+            outputDefinition.Meanings.Last().id.Should().Be(outputDefinition.Meanings.Count() - 1);
         }
 
         #endregion
@@ -148,8 +149,13 @@ namespace CopyWords.Parsers.Tests.Services
             }
 
             var translationOutput = new Models.Translations.Output.TranslationOutput(
-                Headword: outputHeadwords.ToArray(),
-                Meanings: outputMeanings.ToArray());
+                [
+                    new Models.Translations.Output.DefinitionTranslations(
+                        id: 0,
+                        Headword: outputHeadwords.ToArray(),
+                        Meanings: outputMeanings.ToArray())
+                ]
+            );
 
             // Act
             var sut = _fixture.Create<TranslationsService>();
@@ -170,10 +176,12 @@ namespace CopyWords.Parsers.Tests.Services
 
                 // Check headword
                 definition.Headword.Original.Should().Be(originalDefinition.Headword.Original);
-                translationOutput.Headword
+
+                var outputDefinition = translationOutput.Definitions.First();
+                outputDefinition.Headword
                     .SelectMany(headword => headword.HeadwordTranslations)
                     .Should().Contain(definition.Headword.English);
-                translationOutput.Headword
+                outputDefinition.Headword
                     .SelectMany(headword => headword.HeadwordTranslations)
                     .Should().Contain(definition.Headword.Russian);
 
@@ -199,7 +207,7 @@ namespace CopyWords.Parsers.Tests.Services
                         meaning.Original.Should().Be(originalMeaning.Original);
 
                         // the most interesting part
-                        translationOutput.Meanings
+                        outputDefinition.Meanings
                             .SelectMany(meaning => meaning.MeaningTranslations)
                             .Where(mt => mt.Language == "ru")
                             .Select(mt => mt.Text)
@@ -259,8 +267,13 @@ namespace CopyWords.Parsers.Tests.Services
             }
 
             var translationOutput = new Models.Translations.Output.TranslationOutput(
-                Headword: outputHeadwords.ToArray(),
-                Meanings: outputMeanings.ToArray());
+                [
+                    new Models.Translations.Output.DefinitionTranslations(
+                        id: 0,
+                        Headword: outputHeadwords.ToArray(),
+                        Meanings: outputMeanings.ToArray())
+                ]
+            );
 
             // Act
             var sut = _fixture.Create<TranslationsService>();
