@@ -38,43 +38,42 @@ namespace CopyWords.Parsers.Services
 
         internal Models.Translations.Input.TranslationInput CreateTranslationInputFromWordModel(SourceLanguage sourceLanguage, WordModel wordModel)
         {
-            Definition firstDefinition = wordModel.Definitions.First();
-            Meaning firstMeaning = firstDefinition.Contexts.First().Meanings.First();
-
-            var headwordToTranslate = new Models.Translations.Input.Headword(
-                Text: wordModel.Word,
-                Meaning: firstMeaning.Original ?? "",
-                PartOfSpeech: firstDefinition.PartOfSpeech,
-                Examples: firstMeaning.Examples.Select(e => e.Original));
-
-            var meaningsToTranslate = new List<Models.Translations.Input.Meaning>();
-            int i = 0;
+            var inputDefinitions = new List<Models.Translations.Input.Definition>();
 
             foreach (var definition in wordModel.Definitions)
             {
+                var inputMeanings = new List<Models.Translations.Input.Meaning>();
+
+                Meaning firstMeaning = definition.Contexts.First().Meanings.First();
+
+                var headwordToTranslate = new Models.Translations.Input.Headword(
+                    Text: definition.Headword.Original,
+                    Meaning: firstMeaning.Original ?? "",
+                    PartOfSpeech: definition.PartOfSpeech,
+                    Examples: firstMeaning.Examples.Select(e => e.Original));
+
                 foreach (var context in definition.Contexts)
                 {
                     foreach (var meaning in context.Meanings)
                     {
-                        meaningsToTranslate.Add(new Models.Translations.Input.Meaning(
-                            id: i++,
+                        inputMeanings.Add(new Models.Translations.Input.Meaning(
+                            id: inputMeanings.Count + 1,
                             Text: meaning.Original,
                             Examples: meaning.Examples.Select(e => e.Original)));
                     }
                 }
+
+                inputDefinitions.Add(new Models.Translations.Input.Definition(
+                    id: inputDefinitions.Count + 1,
+                    Headword: headwordToTranslate,
+                    Meanings: inputMeanings));
             }
 
             var translationInput = new Models.Translations.Input.TranslationInput(
                 Version: "2",
                 SourceLanguage: sourceLanguage.ToString(),
                 DestinationLanguages: DestinationLanguages,
-                Definitions: [
-                    new Models.Translations.Input.Definition(
-                        id: 1,
-                        Headword: headwordToTranslate,
-                        Meanings: meaningsToTranslate
-                    )
-                ]);
+                Definitions: inputDefinitions);
 
             return translationInput;
         }
@@ -86,20 +85,24 @@ namespace CopyWords.Parsers.Services
             Models.Translations.Output.TranslationOutput translationOutput)
         {
             var definitionsWithTranslations = new List<Definition>();
-            int i = 0;
+            int definitionIndex = 1;
 
             foreach (var originalDefinition in wordModel.Definitions)
             {
+                Models.Translations.Output.DefinitionTranslations translationDefinition = translationOutput.Definitions.First(d => d.id == definitionIndex);
+
                 var contextsWithTranslations = new List<Context>();
                 foreach (var originalContext in originalDefinition.Contexts)
                 {
                     var meaningsWithTranslations = new List<Meaning>();
+                    int meaningIndex = 1;
+
                     foreach (var originalMeaning in originalContext.Meanings)
                     {
                         string? translationRU = null;
                         if (translateMeanings)
                         {
-                            translationRU = translationOutput.Definitions.First().Meanings.FirstOrDefault(m => m.id == i)?.MeaningTranslations.FirstOrDefault(mt => mt.Language == LanguageRU)?.Text;
+                            translationRU = translationDefinition.Meanings.FirstOrDefault(m => m.id == meaningIndex)?.MeaningTranslations.FirstOrDefault(mt => mt.Language == LanguageRU)?.Text;
                         }
                         else
                         {
@@ -114,7 +117,7 @@ namespace CopyWords.Parsers.Services
                             ImageUrl: originalMeaning.ImageUrl,
                             Examples: originalMeaning.Examples));
 
-                        i++;
+                        meaningIndex++;
                     }
 
                     contextsWithTranslations.Add(new Context(
@@ -124,10 +127,12 @@ namespace CopyWords.Parsers.Services
                 }
 
                 definitionsWithTranslations.Add(new Definition(
-                    Headword: CreateHeadWordWithTranslations(translateHeadword: translateHeadword, originalDefinition.Headword, translationOutput),
+                    Headword: CreateHeadWordWithTranslations(translateHeadword: translateHeadword, originalDefinition.Headword, translationDefinition),
                     PartOfSpeech: originalDefinition.PartOfSpeech,
                     Endings: originalDefinition.Endings,
                     Contexts: contextsWithTranslations));
+
+                definitionIndex++;
             }
 
             WordModel wordModelWithTranslations = new WordModel(
@@ -142,17 +147,17 @@ namespace CopyWords.Parsers.Services
         private Headword CreateHeadWordWithTranslations(
             bool translateHeadword,
             Headword headwordOriginal,
-            Models.Translations.Output.TranslationOutput translationOutput)
+            Models.Translations.Output.DefinitionTranslations outputDefinition)
         {
             string? translationsEN;
             string? translationsRU;
 
             if (translateHeadword)
             {
-                IEnumerable<string>? translationVariantsEN = translationOutput.Definitions.First().Headword.FirstOrDefault(x => x.Language == LanguageEN)?.HeadwordTranslations;
+                IEnumerable<string>? translationVariantsEN = outputDefinition.Headword.FirstOrDefault(x => x.Language == LanguageEN)?.HeadwordTranslations;
                 translationsEN = string.Join(", ", translationVariantsEN ?? []);
 
-                IEnumerable<string>? translationVariantsRU = translationOutput.Definitions.First().Headword.FirstOrDefault(x => x.Language == LanguageRU)?.HeadwordTranslations;
+                IEnumerable<string>? translationVariantsRU = outputDefinition.Headword.FirstOrDefault(x => x.Language == LanguageRU)?.HeadwordTranslations;
                 translationsRU = string.Join(", ", translationVariantsRU ?? []);
             }
             else
