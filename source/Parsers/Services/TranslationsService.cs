@@ -42,8 +42,6 @@ namespace CopyWords.Parsers.Services
 
             foreach (var definition in wordModel.Definitions)
             {
-                var inputMeanings = new List<Models.Translations.Input.Meaning>();
-
                 Meaning firstMeaning = definition.Contexts.First().Meanings.First();
 
                 var headwordToTranslate = new Models.Translations.Input.Headword(
@@ -52,8 +50,11 @@ namespace CopyWords.Parsers.Services
                     PartOfSpeech: definition.PartOfSpeech,
                     Examples: firstMeaning.Examples.Select(e => e.Original));
 
+                var contextsToTranslate = new List<Models.Translations.Input.Context>();
                 foreach (var context in definition.Contexts)
                 {
+                    var inputMeanings = new List<Models.Translations.Input.Meaning>();
+
                     foreach (var meaning in context.Meanings)
                     {
                         inputMeanings.Add(new Models.Translations.Input.Meaning(
@@ -61,12 +62,17 @@ namespace CopyWords.Parsers.Services
                             Text: meaning.Original,
                             Examples: meaning.Examples.Select(e => e.Original)));
                     }
+
+                    contextsToTranslate.Add(new Models.Translations.Input.Context(
+                        id: contextsToTranslate.Count + 1,
+                        ContextEN: context.ContextEN,
+                        Meanings: inputMeanings));
                 }
 
                 inputDefinitions.Add(new Models.Translations.Input.Definition(
                     id: inputDefinitions.Count + 1,
                     Headword: headwordToTranslate,
-                    Meanings: inputMeanings));
+                    Contexts: contextsToTranslate));
             }
 
             var translationInput = new Models.Translations.Input.TranslationInput(
@@ -85,24 +91,26 @@ namespace CopyWords.Parsers.Services
             Models.Translations.Output.TranslationOutput translationOutput)
         {
             var definitionsWithTranslations = new List<Definition>();
-            int definitionIndex = 1;
 
             foreach (var originalDefinition in wordModel.Definitions)
             {
-                Models.Translations.Output.DefinitionTranslations translationDefinition = translationOutput.Definitions.First(d => d.id == definitionIndex);
+                Models.Translations.Output.DefinitionTranslations translationDefinition = translationOutput.Definitions.First(d => d.id == definitionsWithTranslations.Count + 1);
 
                 var contextsWithTranslations = new List<Context>();
+
                 foreach (var originalContext in originalDefinition.Contexts)
                 {
+                    Models.Translations.Output.Context translationContext = translationDefinition.Contexts.First(d => d.id == contextsWithTranslations.Count + 1);
+
                     var meaningsWithTranslations = new List<Meaning>();
-                    int meaningIndex = 1;
 
                     foreach (var originalMeaning in originalContext.Meanings)
                     {
                         string? translationRU = null;
                         if (translateMeanings)
                         {
-                            translationRU = translationDefinition.Meanings.FirstOrDefault(m => m.id == meaningIndex)?.MeaningTranslations.FirstOrDefault(mt => mt.Language == LanguageRU)?.Text;
+                            translationRU = translationContext.Meanings.FirstOrDefault(m => m.id == meaningsWithTranslations.Count + 1)?
+                                .MeaningTranslations.FirstOrDefault(mt => mt.Language == LanguageRU)?.Text;
                         }
                         else
                         {
@@ -116,8 +124,6 @@ namespace CopyWords.Parsers.Services
                             Tag: originalMeaning.Tag,
                             ImageUrl: originalMeaning.ImageUrl,
                             Examples: originalMeaning.Examples));
-
-                        meaningIndex++;
                     }
 
                     contextsWithTranslations.Add(new Context(
@@ -131,8 +137,6 @@ namespace CopyWords.Parsers.Services
                     PartOfSpeech: originalDefinition.PartOfSpeech,
                     Endings: originalDefinition.Endings,
                     Contexts: contextsWithTranslations));
-
-                definitionIndex++;
             }
 
             WordModel wordModelWithTranslations = new WordModel(

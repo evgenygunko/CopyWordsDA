@@ -53,24 +53,38 @@ namespace CopyWords.Parsers.Tests.Services
                 // Headword is taken from the first meaning
                 Meaning firstMeaning = definition.Contexts.First().Meanings.First();
 
-                Models.Translations.Input.Definition outputDefinition = result.Definitions.First(x => x.id == definitionIndex);
-                outputDefinition.Headword.Text.Should().Be(definition.Headword.Original);
-                outputDefinition.Headword.Meaning.Should().Be(firstMeaning.Original);
-                outputDefinition.Headword.PartOfSpeech.Should().Be(definition.PartOfSpeech);
-                outputDefinition.Headword.Examples.Should().HaveCount(firstMeaning.Examples.Count());
+                Models.Translations.Input.Definition inputDefinition = result.Definitions.First(x => x.id == definitionIndex);
+                inputDefinition.Headword.Text.Should().Be(definition.Headword.Original);
+                inputDefinition.Headword.Meaning.Should().Be(firstMeaning.Original);
+                inputDefinition.Headword.PartOfSpeech.Should().Be(definition.PartOfSpeech);
+                inputDefinition.Headword.Examples.Should().HaveCount(firstMeaning.Examples.Count());
 
-                outputDefinition.Meanings.Should().HaveCount(definition.Contexts.Sum(c => c.Meanings.Count()));
-                outputDefinition.Meanings.Select(m => m.Text).Should().Contain(firstMeaning.Original);
-                outputDefinition.Meanings.First(m => m.Text == firstMeaning.Original).Examples.Should().HaveCount(firstMeaning.Examples.Count());
-                outputDefinition.Meanings.First().id.Should().Be(1);
-                outputDefinition.Meanings.Last().id.Should().Be(outputDefinition.Meanings.Count());
+                inputDefinition.Contexts.Should().HaveCount(definition.Contexts.Count());
+
+                int contextIndex = 1;
+                foreach (Context context in definition.Contexts)
+                {
+                    Models.Translations.Input.Context inputContext = inputDefinition.Contexts.First(x => x.id == contextIndex);
+                    inputContext.Meanings.Should().HaveCount(context.Meanings.Count());
+
+                    Models.Translations.Input.Meaning firstInputMeaning = inputContext.Meanings.First();
+                    Meaning firstMeaningInContext = context.Meanings.First();
+
+                    firstInputMeaning.Text.Should().Be(firstMeaningInContext.Original);
+                    firstInputMeaning.Examples.Should().HaveCount(firstMeaningInContext.Examples.Count());
+                    firstInputMeaning.id.Should().Be(1);
+
+                    inputContext.Meanings.Last().id.Should().Be(inputContext.Meanings.Count());
+
+                    contextIndex++;
+                }
 
                 definitionIndex++;
             }
         }
 
         [TestMethod]
-        public void CreateTranslationInputFromWordModel_ForAfeitar_AddsTwoDefinitionsToTranslationInput()
+        public void CreateTranslationInputFromWordModel_ForAfeitar_Adds2DefinitionsToTranslationInput()
         {
             SourceLanguage sourceLanguage = SourceLanguage.Spanish;
             WordModel wordModel = CreateWordModelForAefitar();
@@ -86,6 +100,7 @@ namespace CopyWords.Parsers.Tests.Services
             result.Definitions.Should().HaveCount(2);
 
             Models.Translations.Input.Definition inputDefinition;
+            Models.Translations.Input.Context inputContext;
             Models.Translations.Input.Meaning inputMeaning;
 
             /***********************************************************************/
@@ -98,8 +113,9 @@ namespace CopyWords.Parsers.Tests.Services
             inputDefinition.Headword.PartOfSpeech.Should().Be("transitive verb");
             inputDefinition.Headword.Examples.Should().HaveCount(1);
 
-            inputDefinition.Meanings.Should().HaveCount(1);
-            inputMeaning = inputDefinition.Meanings.First();
+            inputContext = inputDefinition.Contexts.First();
+            inputContext.Meanings.Should().HaveCount(1);
+            inputMeaning = inputContext.Meanings.First();
             inputMeaning.id.Should().Be(1);
             inputMeaning.Text.Should().Be("to shave");
             inputMeaning.Examples.Should().HaveCount(1);
@@ -115,12 +131,88 @@ namespace CopyWords.Parsers.Tests.Services
             inputDefinition.Headword.PartOfSpeech.Should().Be("reflexive verb");
             inputDefinition.Headword.Examples.Should().HaveCount(1);
 
-            inputDefinition.Meanings.Should().HaveCount(1);
-            inputMeaning = inputDefinition.Meanings.First();
+            inputContext = inputDefinition.Contexts.First();
+            inputContext.Meanings.Should().HaveCount(1);
+            inputMeaning = inputContext.Meanings.First();
             inputMeaning.id.Should().Be(1);
             inputMeaning.Text.Should().Be("to shave");
             inputMeaning.Examples.Should().HaveCount(1);
             inputMeaning.Examples.First().Should().Be("¿Con qué frecuencia te afeitas la barba?");
+        }
+
+        [TestMethod]
+        public void CreateTranslationInputFromWordModel_ForCoche_Adds4ContextsToTranslationInput()
+        {
+            SourceLanguage sourceLanguage = SourceLanguage.Spanish;
+            WordModel wordModel = CreateWordModelForCoche();
+
+            var sut = _fixture.Create<TranslationsService>();
+            Models.Translations.Input.TranslationInput result = sut.CreateTranslationInputFromWordModel(sourceLanguage, wordModel);
+
+            result.Should().NotBeNull();
+            result.Version.Should().Be("2");
+            result.SourceLanguage.Should().Be(sourceLanguage.ToString());
+            result.DestinationLanguages.Should().HaveCount(2);
+
+            result.Definitions.Should().HaveCount(1);
+
+            Models.Translations.Input.Definition inputDefinition = result.Definitions.First();
+            inputDefinition.id.Should().Be(1);
+            inputDefinition.Headword.Text.Should().Be("el coche");
+            inputDefinition.Headword.Meaning.Should().Be("car");
+            inputDefinition.Headword.PartOfSpeech.Should().Be("masculine noun");
+            inputDefinition.Headword.Examples.Should().HaveCount(1);
+
+            Models.Translations.Input.Context inputContext;
+            Models.Translations.Input.Meaning inputMeaning;
+
+            /***********************************************************************/
+            // Context 1
+            /***********************************************************************/
+            inputContext = inputDefinition.Contexts.First();
+            inputContext.ContextEN.Should().Be("(vehicle)");
+            inputContext.Meanings.Should().HaveCount(1);
+            inputMeaning = inputContext.Meanings.First();
+            inputMeaning.id.Should().Be(1);
+            inputMeaning.Text.Should().Be("car");
+            inputMeaning.Examples.Should().HaveCount(1);
+            inputMeaning.Examples.First().Should().Be("Mi coche no prende porque tiene una falla en el motor.");
+
+            /***********************************************************************/
+            // Context 2
+            /***********************************************************************/
+            inputContext = inputDefinition.Contexts.Skip(1).First();
+            inputContext.ContextEN.Should().Be("(vehicle led by horses)");
+            inputContext.Meanings.Should().HaveCount(1);
+            inputMeaning = inputContext.Meanings.First();
+            inputMeaning.id.Should().Be(1);
+            inputMeaning.Text.Should().Be("carriage");
+            inputMeaning.Examples.Should().HaveCount(1);
+            inputMeaning.Examples.First().Should().Be("Los monarcas llegaron en un coche elegante.");
+
+            /***********************************************************************/
+            // Context 3
+            /***********************************************************************/
+            inputContext = inputDefinition.Contexts.Skip(2).First();
+            inputContext.ContextEN.Should().Be("(train car)");
+            inputContext.Meanings.Should().HaveCount(1);
+            inputMeaning = inputContext.Meanings.First();
+            inputMeaning.id.Should().Be(1);
+            inputMeaning.Text.Should().Be("car");
+            inputMeaning.Examples.Should().HaveCount(1);
+            inputMeaning.Examples.First().Should().Be("Tu mamá y yo vamos a pasar al coche comedor para almorzar.");
+
+            /***********************************************************************/
+            // Context 4
+            /***********************************************************************/
+            inputContext = inputDefinition.Contexts.Skip(3).First();
+            inputContext.ContextEN.Should().Be("(for babies)");
+            inputContext.Meanings.Should().HaveCount(1);
+            inputMeaning = inputContext.Meanings.First();
+            inputMeaning.id.Should().Be(1);
+            inputMeaning.Text.Should().Be("stroller");
+            inputMeaning.Examples.Should().HaveCount(1);
+            inputMeaning.Examples.First().Should().Be("La niñita no se quería subir al coche. Quería ir caminando.");
         }
 
         #endregion
@@ -416,7 +508,7 @@ namespace CopyWords.Parsers.Tests.Services
         }
 
         [TestMethod]
-        public void CreateWordModelFromTranslationOutput_ForAfeitar_ReturnsTwoDefinitions()
+        public void CreateWordModelFromTranslationOutput_ForAfeitar_Returns2Definitions()
         {
             // Arrange
             WordModel originalWordModel = CreateWordModelForAefitar();
@@ -429,14 +521,19 @@ namespace CopyWords.Parsers.Tests.Services
                             new Models.Translations.Output.Headword(Language: "ru", HeadwordTranslations: [ "брить" ]),
                             new Models.Translations.Output.Headword(Language: "en", HeadwordTranslations: [ "to shave" ]),
                         ],
-                        Meanings: [
-                            new Models.Translations.Output.Meaning(
+                        Contexts: [
+                            new Models.Translations.Output.Context(
                                 id: 1,
-                                MeaningTranslations: [
-                                    new Models.Translations.Output.MeaningTranslation(Language: "ru", Text: "брить"),
-                                    new Models.Translations.Output.MeaningTranslation(Language: "en", Text: "to shave (to remove hair)"),
+                                Meanings: [
+                                    new Models.Translations.Output.Meaning(
+                                        id: 1,
+                                        MeaningTranslations: [
+                                            new Models.Translations.Output.MeaningTranslation(Language: "ru", Text: "брить"),
+                                            new Models.Translations.Output.MeaningTranslation(Language: "en", Text: "to shave (to remove hair)"),
+                                        ]
+                                    )
                                 ]
-                            ),
+                            )
                         ]
                     ),
                     new Models.Translations.Output.DefinitionTranslations(
@@ -445,14 +542,19 @@ namespace CopyWords.Parsers.Tests.Services
                             new Models.Translations.Output.Headword(Language: "ru", HeadwordTranslations: [ "брить себя" ]),
                             new Models.Translations.Output.Headword(Language: "en", HeadwordTranslations: [ "to shave oneself", "to shave" ]),
                         ],
-                        Meanings: [
-                            new Models.Translations.Output.Meaning(
+                        Contexts: [
+                            new Models.Translations.Output.Context(
                                 id: 1,
-                                MeaningTranslations: [
-                                    new Models.Translations.Output.MeaningTranslation(Language: "ru", Text: "бриться (бриться самому)"),
-                                    new Models.Translations.Output.MeaningTranslation(Language: "en", Text: "to shave (to shave oneself)"),
+                                Meanings: [
+                                    new Models.Translations.Output.Meaning(
+                                        id: 1,
+                                        MeaningTranslations: [
+                                            new Models.Translations.Output.MeaningTranslation(Language: "ru", Text: "бриться (бриться самому)"),
+                                            new Models.Translations.Output.MeaningTranslation(Language: "en", Text: "to shave (to shave oneself)"),
+                                        ]
+                                    )
                                 ]
-                            ),
+                            )
                         ]
                     )
                 ]
@@ -528,6 +630,158 @@ namespace CopyWords.Parsers.Tests.Services
             meaning.Examples.First().Translation.Should().BeNull();
         }
 
+        [TestMethod]
+        public void CreateWordModelFromTranslationOutput_ForCoche_Returns4Contexts()
+        {
+            // Arrange
+            WordModel originalWordModel = CreateWordModelForCoche();
+
+            var translationOutput = new Models.Translations.Output.TranslationOutput(
+                [
+                    new Models.Translations.Output.DefinitionTranslations(
+                        id: 1,
+                        Headword: [
+                            new Models.Translations.Output.Headword(Language: "ru", HeadwordTranslations: [ "автомобиль" ]),
+                            new Models.Translations.Output.Headword(Language: "en", HeadwordTranslations: [ "car" ]),
+                        ],
+                        Contexts: [
+                            new Models.Translations.Output.Context(
+                                id: 1,
+                                Meanings: [
+                                    new Models.Translations.Output.Meaning(
+                                        id: 1,
+                                        MeaningTranslations: [
+                                            new Models.Translations.Output.MeaningTranslation(Language: "ru", Text: "автомобиль"),
+                                            new Models.Translations.Output.MeaningTranslation(Language: "en", Text: "car"),
+                                        ]
+                                    )
+                                ]
+                            ),
+                            new Models.Translations.Output.Context(
+                                id: 2,
+                                Meanings: [
+                                    new Models.Translations.Output.Meaning(
+                                        id: 1,
+                                        MeaningTranslations: [
+                                            new Models.Translations.Output.MeaningTranslation(Language: "ru", Text: "повозка"),
+                                            new Models.Translations.Output.MeaningTranslation(Language: "en", Text: "carriage"),
+                                        ]
+                                    )
+                                ]
+                            ),
+                            new Models.Translations.Output.Context(
+                                id: 3,
+                                Meanings: [
+                                    new Models.Translations.Output.Meaning(
+                                        id: 1,
+                                        MeaningTranslations: [
+                                            new Models.Translations.Output.MeaningTranslation(Language: "ru", Text: "вагон"),
+                                            new Models.Translations.Output.MeaningTranslation(Language: "en", Text: "car"),
+                                        ]
+                                    )
+                                ]
+                            ),
+                            new Models.Translations.Output.Context(
+                                id: 4,
+                                Meanings: [
+                                    new Models.Translations.Output.Meaning(
+                                        id: 1,
+                                        MeaningTranslations: [
+                                            new Models.Translations.Output.MeaningTranslation(Language: "ru", Text: "коляска"),
+                                            new Models.Translations.Output.MeaningTranslation(Language: "en", Text: "stroller"),
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
+            );
+
+            // Act
+            var sut = _fixture.Create<TranslationsService>();
+            WordModel result = sut.CreateWordModelFromTranslationOutput(translateHeadword: true, translateMeanings: true, originalWordModel, translationOutput);
+
+            // Assert
+            result.Definitions.Should().HaveCount(1);
+
+            Definition definition = result.Definitions.First();
+
+            /***********************************************************************/
+            // Afeitar
+            /***********************************************************************/
+            definition.PartOfSpeech.Should().Be("masculine noun");
+            definition.Endings.Should().BeEmpty();
+
+            // Check headword
+            definition.Headword.Original.Should().Be("el coche");
+            definition.Headword.Russian.Should().Be("автомобиль");
+            definition.Headword.English.Should().Be("car");
+
+            // Check contexts
+            definition.Contexts.Should().HaveCount(4);
+
+            /***********************************************************************/
+            // Context 1
+            /***********************************************************************/
+            Context context = definition.Contexts.First();
+            context.Position.Should().Be("1");
+            context.ContextEN.Should().Be("(vehicle)");
+            context.Meanings.Should().HaveCount(1);
+            Meaning meaning = context.Meanings.First();
+            meaning.Original.Should().Be("car");
+            meaning.Translation.Should().Be("автомобиль");
+            meaning.AlphabeticalPosition.Should().Be("a.");
+            meaning.Examples.Should().HaveCount(1);
+            meaning.Examples.First().Original.Should().Be("Mi coche no prende porque tiene una falla en el motor.");
+            meaning.Examples.First().Translation.Should().BeNull();
+
+            /***********************************************************************/
+            // Context 2
+            /***********************************************************************/
+            context = definition.Contexts.Skip(1).First();
+            context.Position.Should().Be("2");
+            context.ContextEN.Should().Be("(vehicle led by horses)");
+            context.Meanings.Should().HaveCount(1);
+            meaning = context.Meanings.First();
+            meaning.Original.Should().Be("carriage");
+            meaning.Translation.Should().Be("повозка");
+            meaning.AlphabeticalPosition.Should().Be("a.");
+            meaning.Examples.Should().HaveCount(1);
+            meaning.Examples.First().Original.Should().Be("Los monarcas llegaron en un coche elegante.");
+            meaning.Examples.First().Translation.Should().BeNull();
+
+            /***********************************************************************/
+            // Context 3
+            /***********************************************************************/
+            context = definition.Contexts.Skip(2).First();
+            context.Position.Should().Be("3");
+            context.ContextEN.Should().Be("(train car)");
+            context.Meanings.Should().HaveCount(1);
+            meaning = context.Meanings.First();
+            meaning.Original.Should().Be("car");
+            meaning.Translation.Should().Be("вагон");
+            meaning.AlphabeticalPosition.Should().Be("a.");
+            meaning.Examples.Should().HaveCount(1);
+            meaning.Examples.First().Original.Should().Be("Tu mamá y yo vamos a pasar al coche comedor para almorzar.");
+            meaning.Examples.First().Translation.Should().BeNull();
+
+            /***********************************************************************/
+            // Context 4
+            /***********************************************************************/
+            context = definition.Contexts.Skip(3).First();
+            context.Position.Should().Be("4");
+            context.ContextEN.Should().Be("(for babies)");
+            context.Meanings.Should().HaveCount(1);
+            meaning = context.Meanings.First();
+            meaning.Original.Should().Be("stroller");
+            meaning.Translation.Should().Be("коляска");
+            meaning.AlphabeticalPosition.Should().Be("a.");
+            meaning.Examples.Should().HaveCount(1);
+            meaning.Examples.First().Original.Should().Be("La niñita no se quería subir al coche. Quería ir caminando.");
+            meaning.Examples.First().Translation.Should().BeNull();
+        }
+
         #endregion
 
         #region Private Methods
@@ -588,6 +842,79 @@ namespace CopyWords.Parsers.Tests.Services
             return wordModel;
         }
 
+        private WordModel CreateWordModelForCoche()
+        {
+            WordModel wordModel = new WordModel(
+                Word: "el coche",
+                SoundUrl: _fixture.Create<Uri>().ToString(),
+                SoundFileName: _fixture.Create<string>(),
+                Definitions: new[]
+                {
+                    new Definition(
+                        Headword: new Headword(Original: "el coche", English: null, Russian: null),
+                        PartOfSpeech: "masculine noun",
+                        Endings: "",
+                        Contexts: [
+                            new Context(
+                                ContextEN: "(vehicle)",
+                                Position: "1",
+                                Meanings: [
+                                    new Meaning(
+                                        Original: "car",
+                                        Translation: null,
+                                        AlphabeticalPosition: "a.",
+                                        Tag: null,
+                                        ImageUrl: null,
+                                        Examples: [ new Example(Original: "Mi coche no prende porque tiene una falla en el motor.", Translation: null) ]
+                                    )
+                                ]),
+                            new Context(
+                                ContextEN: "(vehicle led by horses)",
+                                Position: "2",
+                                Meanings: [
+                                    new Meaning(
+                                        Original: "carriage",
+                                        Translation: null,
+                                        AlphabeticalPosition: "a.",
+                                        Tag: null,
+                                        ImageUrl: null,
+                                        Examples: [ new Example(Original: "Los monarcas llegaron en un coche elegante.", Translation: null) ]
+                                    )
+                                ]),
+                            new Context(
+                                ContextEN: "(train car)",
+                                Position: "3",
+                                Meanings: [
+                                    new Meaning(
+                                        Original: "car",
+                                        Translation: null,
+                                        AlphabeticalPosition: "a.",
+                                        Tag: null,
+                                        ImageUrl: null,
+                                        Examples: [ new Example(Original: "Tu mamá y yo vamos a pasar al coche comedor para almorzar.", Translation: null) ]
+                                    )
+                                ]),
+                            new Context(
+                                ContextEN: "(for babies)",
+                                Position: "4",
+                                Meanings: [
+                                    new Meaning(
+                                        Original: "stroller",
+                                        Translation: null,
+                                        AlphabeticalPosition: "a.",
+                                        Tag: null,
+                                        ImageUrl: null,
+                                        Examples: [ new Example(Original: "La niñita no se quería subir al coche. Quería ir caminando.", Translation: null) ]
+                                    )
+                                ])
+                        ]
+                    )
+                },
+                Variations: Enumerable.Empty<Variant>());
+
+            return wordModel;
+        }
+
         private Models.Translations.Output.TranslationOutput CreateOutputWithOneDefinition()
         {
             var translationOutput = new Models.Translations.Output.TranslationOutput(
@@ -598,12 +925,17 @@ namespace CopyWords.Parsers.Tests.Services
                             new Models.Translations.Output.Headword(Language: "en", HeadwordTranslations: [_fixture.Create<string>()]),
                             new Models.Translations.Output.Headword(Language: "ru", HeadwordTranslations: [_fixture.Create<string>()])
                         ],
-                        Meanings: [
-                            new Models.Translations.Output.Meaning(
-                                id: 0,
-                                MeaningTranslations: [
-                                    new Models.Translations.Output.MeaningTranslation(Language: "en", Text: _fixture.Create<string>()),
-                                    new Models.Translations.Output.MeaningTranslation(Language: "ru", Text: _fixture.Create<string>())
+                        Contexts: [
+                            new Models.Translations.Output.Context(
+                                id: 1,
+                                Meanings: [
+                                    new Models.Translations.Output.Meaning(
+                                        id: 0,
+                                        MeaningTranslations: [
+                                            new Models.Translations.Output.MeaningTranslation(Language: "en", Text: _fixture.Create<string>()),
+                                            new Models.Translations.Output.MeaningTranslation(Language: "ru", Text: _fixture.Create<string>())
+                                        ]
+                                    )
                                 ]
                             )
                         ]
