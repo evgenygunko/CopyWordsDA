@@ -99,7 +99,6 @@ namespace CopyWords.Core.Services
 
             List<string> backMeanings = new();
             int imageIndex = 0;
-            bool translateMeanings = false;
 
             foreach (var contextVM in definitionViewModel.ContextViewModels)
             {
@@ -132,7 +131,6 @@ namespace CopyWords.Core.Services
                         {
                             backMeaning.Append("<br>");
                             backMeaning.AppendFormat(TemplateGrayText, meaningVM.Translation);
-                            translateMeanings |= true;
                         }
 
                         if (meaningVM.IsImageChecked && !string.IsNullOrEmpty(meaningVM.ImageUrl))
@@ -188,19 +186,13 @@ namespace CopyWords.Core.Services
             {
                 if (count > 1)
                 {
-                    sb.Append($"{i}.&nbsp;");
+                    sb.Append($"{i++}.&nbsp;");
                 }
 
                 // Run some cleanup - e.g. when both translation and context have the same word and we glue them, remove duplicates
                 sb.Append(backMeaning.Replace("(colloquial) (colloquial)", "(colloquial)", StringComparison.CurrentCulture));
 
-                if (i < count)
-                {
-                    // If the translations are selected, add an additional <br> tag so that the meanings look visually better separated.
-                    sb.Append(translateMeanings ? "<br><br>" : "<br>");
-                }
-
-                i++;
+                sb.Append("<br>");
             }
 
             string text = sb.ToString();

@@ -75,11 +75,8 @@ namespace CopyWords.Core.Services
 
             if (_fileIOService.FileExists(destinationFile))
             {
-                bool answer = await _dialogService.DisplayAlert("File already exists", $"File '{Path.GetFileName(sourceFile)}' already exists. Overwrite?", "Yes", "No");
-                if (!answer)
-                {
-                    return false;
-                }
+                await _dialogService.DisplayAlert("File already exists", $"File '{Path.GetFileName(sourceFile)}' already exists. Overwrite?", "Yes", "No");
+                return true;
             }
 
             _fileIOService.CopyFile(sourceFile, destinationFile, true);

@@ -150,7 +150,8 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<FileDownloaderService>();
             bool result = await sut.CopyFileToAnkiFolderAsync(sourceFile);
 
-            result.Should().BeFalse();
+            // We want to return true, because the file already exists and so we can create a link to it in the back card
+            result.Should().BeTrue();
 
             settingsServiceMock.Verify(x => x.LoadSettings());
             dialogServiceMock.Verify(x => x.DisplayAlert("File already exists", It.IsAny<string>(), "Yes", "No"));
