@@ -3,23 +3,23 @@
     public record TranslationInput(
         string Version,
         string SourceLanguage,
-        IEnumerable<string> DestinationLanguages,
+        string DestinationLanguage,
         IEnumerable<Definition> Definitions);
 
     public record Definition(
         int id,
+        string PartOfSpeech,
         Headword Headword,
         IEnumerable<Context> Contexts);
 
     public record Context(
         int id,
-        string ContextEN,
+        string ContextString,
         IEnumerable<Meaning> Meanings);
 
     public record Headword(
         string Text,
         string Meaning,
-        string PartOfSpeech,
         IEnumerable<string> Examples);
 
     public record Meaning(
