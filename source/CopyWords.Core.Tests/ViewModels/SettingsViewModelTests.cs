@@ -710,5 +710,73 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         #endregion
+
+        #region Tests for OnCopyTranslatedMeaningsChangedInternal
+
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void OnCopyTranslatedMeaningsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+
+            var sut = new SettingsViewModel(
+                settingsServiceMock.Object,
+                Mock.Of<IDialogService>(),
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
+
+            sut.Init();
+            sut.OnCopyTranslatedMeaningsChangedInternal(value);
+
+            settingsServiceMock.Verify(x => x.SetCopyTranslatedMeanings(value));
+        }
+
+        [TestMethod]
+        public void OnCopyTranslatedMeaningsChangedInternal_WhenNotInitialized_DoesNotCallsSettingsService()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+
+            var sut = new SettingsViewModel(
+                settingsServiceMock.Object,
+                Mock.Of<IDialogService>(),
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
+
+            sut.OnCopyTranslatedMeaningsChangedInternal(true);
+
+            settingsServiceMock.Verify(x => x.SetCopyTranslatedMeanings(It.IsAny<bool>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void OnCopyTranslatedMeaningsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+
+            var sut = new SettingsViewModel(
+                settingsServiceMock.Object,
+                Mock.Of<IDialogService>(),
+                Mock.Of<IShellService>(),
+                Mock.Of<IFileIOService>(),
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
+                Mock.Of<IFileSaver>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
+
+            sut.Init();
+            sut.OnCopyTranslatedMeaningsChangedInternal(true);
+
+            settingsServiceMock.Verify(x => x.SetCopyTranslatedMeanings(It.IsAny<bool>()), Times.Never);
+        }
+
+        #endregion
     }
 }

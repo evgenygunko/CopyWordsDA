@@ -24,7 +24,7 @@
         </Style>
     </ContentView.Resources>
 
-    <Grid Padding="20">
+    <Grid Padding="20,0,20,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
@@ -248,6 +248,15 @@
                             VerticalOptions="Center"></Label>
                     <CheckBox
                             IsChecked="{Binding TranslateMeanings}"
+                            HorizontalOptions="Start" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label
+                            Text="Copy translated meanings:"
+                            VerticalOptions="Center"></Label>
+                    <CheckBox
+                            IsChecked="{Binding CopyTranslatedMeanings}"
                             HorizontalOptions="Start" />
                 </HorizontalStackLayout>
             </VerticalStackLayout>

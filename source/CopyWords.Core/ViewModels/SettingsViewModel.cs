@@ -112,6 +112,15 @@ namespace CopyWords.Core.ViewModels
         }
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
+        private bool copyTranslatedMeanings;
+
+        partial void OnCopyTranslatedMeaningsChanged(bool value)
+        {
+            OnCopyTranslatedMeaningsChangedInternal(value);
+        }
+
+        [ObservableProperty]
         private ValidationResult? validationResult;
 
         public string About => $"App version: {AppInfo.VersionString} (Build {AppInfo.BuildString}), {RuntimeInformation.FrameworkDescription}";
@@ -332,6 +341,15 @@ namespace CopyWords.Core.ViewModels
             }
         }
 
+        internal void OnCopyTranslatedMeaningsChangedInternal(bool value)
+        {
+            if (_isInitialized && CanUpdateIndividualSettings)
+            {
+                _settingsService.SetCopyTranslatedMeanings(value);
+                Debug.WriteLine($"CopyTranslatedMeanings has changed to {value}");
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -390,6 +408,7 @@ namespace CopyWords.Core.ViewModels
             TranslatorApiUrl = appSettings.TranslatorApiUrl;
             TranslateMeanings = appSettings.TranslateMeanings;
             TranslateHeadword = appSettings.TranslateHeadword;
+            CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
         }
 
         private void UpdateAppSettingsWithCurrentValues(AppSettings appSettings)
@@ -402,6 +421,7 @@ namespace CopyWords.Core.ViewModels
             appSettings.TranslatorApiUrl = TranslatorApiUrl ?? string.Empty;
             appSettings.TranslateMeanings = TranslateMeanings;
             appSettings.TranslateHeadword = TranslateHeadword;
+            appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
         }
 
         #endregion

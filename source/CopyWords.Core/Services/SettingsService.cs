@@ -26,6 +26,8 @@ namespace CopyWords.Core.Services
 
         void SetTranslateMeanings(bool value);
 
+        void SetCopyTranslatedMeanings(bool value);
+
         string GetSelectedParser();
 
         void SetSelectedParser(string value);
@@ -58,8 +60,9 @@ namespace CopyWords.Core.Services
             appSettings.UseMp3gain = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && _preferences.Get<bool>("UseMp3gain", false);
             appSettings.UseTranslator = _preferences.Get<bool>("UseTranslator", false);
             appSettings.TranslatorApiUrl = _preferences.Get("TranslatorApiUrl", string.Empty);
-            appSettings.TranslateMeanings = _preferences.Get<bool>("TranslateMeanings", true);
             appSettings.TranslateHeadword = _preferences.Get<bool>("TranslateHeadword", true);
+            appSettings.TranslateMeanings = _preferences.Get<bool>("TranslateMeanings", true);
+            appSettings.CopyTranslatedMeanings = _preferences.Get<bool>("CopyTranslatedMeanings", true);
             appSettings.SelectedParser = _preferences.Get("SelectedParser", string.Empty);
 
             return appSettings;
@@ -80,6 +83,7 @@ namespace CopyWords.Core.Services
             _preferences.Set("TranslatorApiUrl", appSettings.TranslatorApiUrl);
             _preferences.Set("TranslateMeanings", appSettings.TranslateMeanings);
             _preferences.Set("TranslateHeadword", appSettings.TranslateHeadword);
+            _preferences.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings);
             _preferences.Set("SelectedParser", appSettings.SelectedParser);
         }
 
@@ -103,6 +107,20 @@ namespace CopyWords.Core.Services
 
             await _fileIOService.WriteAllTextAsync(filePath, json);
         }
+
+        public void SetUseTranslator(bool value) => _preferences.Set("UseTranslator", value);
+
+        public void SetTranslatorApiUrl(string? value) => _preferences.Set("TranslatorApiUrl", value);
+
+        public void SetTranslateHeadword(bool value) => _preferences.Set("TranslateHeadword", value);
+
+        public void SetTranslateMeanings(bool value) => _preferences.Set("TranslateMeanings", value);
+
+        public void SetCopyTranslatedMeanings(bool value) => _preferences.Set("CopyTranslatedMeanings", value);
+
+        public string GetSelectedParser() => _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
+
+        public void SetSelectedParser(string value) => _preferences.Set("SelectedParser", value);
 
         #region Private Methods
 
@@ -135,18 +153,6 @@ namespace CopyWords.Core.Services
                 _preferences.Set(settingName, newValue.ToString(CultureInfo.CurrentCulture));
             }
         }
-
-        public void SetUseTranslator(bool value) => _preferences.Set("UseTranslator", value);
-
-        public void SetTranslatorApiUrl(string? value) => _preferences.Set("TranslatorApiUrl", value);
-
-        public void SetTranslateHeadword(bool value) => _preferences.Set("TranslateHeadword", value);
-
-        public void SetTranslateMeanings(bool value) => _preferences.Set("TranslateMeanings", value);
-
-        public string GetSelectedParser() => _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
-
-        public void SetSelectedParser(string value) => _preferences.Set("SelectedParser", value);
 
         #endregion
     }

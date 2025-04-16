@@ -43,6 +43,9 @@ namespace CopyWords.Core.Tests.Services
 
             preferencesMock.Verify(x => x.Get("UseTranslator", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("TranslatorApiUrl", It.IsAny<string>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("TranslateHeadword", It.IsAny<bool>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("TranslateMeanings", It.IsAny<bool>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
         }
 
@@ -71,6 +74,9 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("UseMp3gain", appSettings.UseMp3gain, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("UseTranslator", appSettings.UseTranslator, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("TranslatorApiUrl", appSettings.TranslatorApiUrl, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("TranslateHeadword", appSettings.TranslateHeadword, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("TranslateMeanings", appSettings.TranslateMeanings, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("SelectedParser", appSettings.SelectedParser, It.IsAny<string>()));
         }
 
@@ -197,6 +203,19 @@ namespace CopyWords.Core.Tests.Services
             sut.SetTranslateMeanings(value);
 
             preferencesMock.Verify(x => x.Set("TranslateMeanings", value, It.IsAny<string>()));
+        }
+
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void SetCopyTranslatedMeanings_Should_CallPreferencesSet(bool value)
+        {
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+
+            var sut = _fixture.Create<SettingsService>();
+            sut.SetCopyTranslatedMeanings(value);
+
+            preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", value, It.IsAny<string>()));
         }
 
         [TestMethod]

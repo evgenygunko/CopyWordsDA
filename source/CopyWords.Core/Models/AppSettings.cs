@@ -28,6 +28,8 @@ namespace CopyWords.Core.Models
 
         public bool TranslateHeadword { get; set; }
 
+        public bool CopyTranslatedMeanings { get; set; }
+
         public string SelectedParser { get; set; } = string.Empty;
     }
 }

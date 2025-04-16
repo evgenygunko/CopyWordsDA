@@ -26,13 +26,16 @@ namespace CopyWords.Core.Services
 
         private readonly ISaveImageFileService _saveImageFileService;
         private readonly IDeviceInfo _deviceInfo;
+        private readonly ISettingsService _settingsService;
 
         public CopySelectedToClipboardService(
             ISaveImageFileService saveImageFileService,
-            IDeviceInfo deviceInfo)
+            IDeviceInfo deviceInfo,
+            ISettingsService settingsService)
         {
             _saveImageFileService = saveImageFileService;
             _deviceInfo = deviceInfo;
+            _settingsService = settingsService;
         }
 
         #region Public Methods
@@ -126,8 +129,8 @@ namespace CopyWords.Core.Services
                             backMeaning.Insert(0, $"<span style=\"color:#404040; background-color:#eaeff2; border:1px solid #CCCCCC; margin-right:10px; font-size: 80%;\">{meaningVM.Tag}</span>");
                         }
 
-                        // If translation for the meaning exists, add it to the new line
-                        if (!string.IsNullOrEmpty(meaningVM.Translation))
+                        // If translation for the meaning exists and the checkbox "copy translated meanings" enabled, add it to the new line
+                        if (!string.IsNullOrEmpty(meaningVM.Translation) && _settingsService.LoadSettings().CopyTranslatedMeanings)
                         {
                             backMeaning.Append("<br>");
                             backMeaning.AppendFormat(TemplateGrayText, meaningVM.Translation);

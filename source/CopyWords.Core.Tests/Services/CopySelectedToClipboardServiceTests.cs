@@ -3,6 +3,7 @@
 using System.Collections.ObjectModel;
 using AutoFixture;
 using CopyWords.Core.Exceptions;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.Parsers.Models;
@@ -254,6 +255,12 @@ namespace CopyWords.Core.Tests.Services
                 }
             }
 
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.CopyTranslatedMeanings = true;
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
             string result = await sut.CompileBackAsync(definitionVMs);
@@ -287,6 +294,12 @@ namespace CopyWords.Core.Tests.Services
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
             definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = false;
 
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.CopyTranslatedMeanings = true;
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
             string result = await sut.CompileBackAsync(definitionVMs);
@@ -304,6 +317,12 @@ namespace CopyWords.Core.Tests.Services
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = false;
             definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = true;
+
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.CopyTranslatedMeanings = true;
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
@@ -323,6 +342,12 @@ namespace CopyWords.Core.Tests.Services
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
             definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = true;
 
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.CopyTranslatedMeanings = true;
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
             string result = await sut.CompileBackAsync(definitionVMs);
@@ -335,12 +360,42 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
+        public async Task CompileBackAsync_WhenCopyTranslatedMeaningsIsFalse_DoesNotCopyTranslationForMeaningsToResult()
+        {
+            var definitionVMs = CreateVMForGrillspyd();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = true;
+            definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = true;
+
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.CopyTranslatedMeanings = false;
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string result = await sut.CompileBackAsync(definitionVMs);
+
+            result.Should().Be(
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>" +
+                "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
+        }
+
+        [TestMethod]
         public async Task CompileBackAsync_WhenOneExampleIsSelected_DoesNotAddNumbers()
         {
             var definitionVMs = CreateVMForGrillspyd();
             definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVMs[0].HeadwordViewModel.IsRussianTranslationChecked = false;
             definitionVMs[0].HeadwordViewModel.IsEnglishTranslationChecked = false;
+
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.CopyTranslatedMeanings = true;
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
@@ -362,6 +417,12 @@ namespace CopyWords.Core.Tests.Services
                     exampleVM.IsChecked = true;
                 }
             }
+
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.CopyTranslatedMeanings = true;
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
