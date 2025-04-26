@@ -58,7 +58,7 @@ namespace CopyWords.Parsers
             return elements;
         }
 
-        public HtmlNode FindElementById(string id)
+        public HtmlNode? FindElementById(string id)
         {
             if (_htmlDocument == null)
             {

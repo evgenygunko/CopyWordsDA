@@ -214,7 +214,7 @@ namespace CopyWords.Parsers
         {
             string? tag = null;
 
-            var definitionIndentDiv = divDefinition.SelectNodes("ancestor::div[@class='definitionIndent']").FirstOrDefault();
+            var definitionIndentDiv = divDefinition.SelectNodes("ancestor::div[@class='definitionIndent']")?.FirstOrDefault();
             if (definitionIndentDiv != null)
             {
                 var firstTag = definitionIndentDiv.SelectNodes("./div/span/span[@class='stempelNoBorder']")?.FirstOrDefault();
@@ -234,7 +234,7 @@ namespace CopyWords.Parsers
         {
             List<string> examples = new List<string>();
 
-            var definitionIndentDiv = divDefinition.SelectNodes("ancestor::div[@class='definitionIndent']").FirstOrDefault();
+            var definitionIndentDiv = divDefinition.SelectNodes("ancestor::div[@class='definitionIndent']")?.FirstOrDefault();
 
             if (definitionIndentDiv != null)
             {
@@ -277,7 +277,7 @@ namespace CopyWords.Parsers
         {
             var div = FindElementById("opslagsordBox_expanded");
 
-            var searchResultBoxDiv = div.SelectSingleNode("./div/div[contains(@class, 'searchResultBox')]");
+            var searchResultBoxDiv = div?.SelectSingleNode("./div/div[contains(@class, 'searchResultBox')]");
             if (searchResultBoxDiv == null)
             {
                 throw new PageParserException("Cannot find a div element with CSS class 'searchResultBox'");

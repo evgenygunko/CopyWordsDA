@@ -31,7 +31,7 @@ namespace CopyWords.Parsers
         {
             WordJsonModel? wordObj = null;
 
-            IEnumerable<HtmlNode> scripts = FindScripts(htmlPage);
+            var scripts = FindScripts(htmlPage);
 
             if (scripts != null)
             {
@@ -225,7 +225,7 @@ namespace CopyWords.Parsers
 
         #region Private Methods
 
-        private static HtmlNodeCollection FindScripts(string htmlPage)
+        private static HtmlNodeCollection? FindScripts(string htmlPage)
         {
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(htmlPage);
