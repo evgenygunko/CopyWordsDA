@@ -15,17 +15,20 @@ namespace CopyWords.Core.ViewModels
         private readonly IDialogService _dialogService;
         private readonly IClipboardService _clipboardService;
         private readonly ICopySelectedToClipboardService _copySelectedToClipboardService;
+        private readonly IShare _share;
 
         public WordViewModel(
             ISaveSoundFileService saveSoundFileService,
             IDialogService dialogService,
             IClipboardService clipboardService,
-            ICopySelectedToClipboardService copySelectedToClipboardService)
+            ICopySelectedToClipboardService copySelectedToClipboardService,
+            IShare share)
         {
             _saveSoundFileService = saveSoundFileService;
             _dialogService = dialogService;
             _clipboardService = clipboardService;
             _copySelectedToClipboardService = copySelectedToClipboardService;
+            _share = share;
         }
 
         #region Properties
@@ -59,6 +62,7 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(CopyBackCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyExamplesCommand))]
         [NotifyCanExecuteChangedFor(nameof(OpenCopyMenuCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ShareCommand))]
         private bool canCopyFront;
 
         [ObservableProperty]
@@ -199,6 +203,38 @@ namespace CopyWords.Core.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
+        public async Task ShareAsync()
+        {
+            try
+            {
+                string textToShare = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModels);
+                if (!string.IsNullOrEmpty(textToShare))
+                {
+                    string translations = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModels);
+
+                    await _share.RequestAsync(new ShareTextRequest
+                    {
+                        Subject = textToShare,  // In AnkiDroid it will be extras.getString(Intent.EXTRA_SUBJECT) and will go to the first edit box
+                        Text = translations,    // In AnkiDroid it will be extras.getString(Intent.EXTRA_TEXT) and will go to the second edit box
+                        Title = "Share Translations",
+                    });
+                }
+                else
+                {
+                    await _dialogService.DisplayAlert("Oops!", "You need to select at least one example before sharing.", "OK");
+                }
+            }
+            catch (ExamplesFromSeveralDefinitionsSelectedException ex)
+            {
+                await _dialogService.DisplayAlert($"Cannot share the word", ex.Message, "OK");
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.DisplayAlert($"Cannot share the word", $"Error occurred while trying to share the word: " + ex.Message, "OK");
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task CopyFrontAsync()
         {
             await CompileAndCopyToClipboard("front", _copySelectedToClipboardService.CompileFrontAsync);
@@ -263,7 +299,6 @@ namespace CopyWords.Core.ViewModels
         {
             try
             {
-                //string textToCopy = await action(this);
                 string textToCopy = await action(DefinitionViewModels);
 
                 if (!string.IsNullOrEmpty(textToCopy))

@@ -45,6 +45,7 @@ public static class MauiProgram
         builder.Services.AddSingleton(FilePicker.Default);
         builder.Services.AddSingleton(DeviceInfo.Current);
         builder.Services.AddSingleton(FileSaver.Default);
+        builder.Services.AddSingleton(Share.Default);
 
         var mediaElement = new MediaElement
         {

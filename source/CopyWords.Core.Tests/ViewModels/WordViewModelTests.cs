@@ -128,7 +128,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 clipboardServiceMock.Object,
-                Mock.Of<ICopySelectedToClipboardService>());
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<IShare>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -150,7 +151,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 clipboardServiceMock.Object,
-                Mock.Of<ICopySelectedToClipboardService>());
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<IShare>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -174,7 +176,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 clipboardServiceMock.Object,
-                Mock.Of<ICopySelectedToClipboardService>());
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<IShare>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -198,7 +201,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 clipboardServiceMock.Object,
-                Mock.Of<ICopySelectedToClipboardService>());
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<IShare>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -229,7 +233,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 Mock.Of<IClipboardService>(),
-                copySelectedToClipboardServiceMock.Object);
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<IShare>());
             sut.CanCopyFront = true;
 
             await sut.OpenCopyMenuAsync();
@@ -256,7 +261,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 Mock.Of<IClipboardService>(),
-                copySelectedToClipboardServiceMock.Object);
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<IShare>());
             sut.CanCopyFront = true;
 
             await sut.OpenCopyMenuAsync();
@@ -283,7 +289,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 Mock.Of<IClipboardService>(),
-                copySelectedToClipboardServiceMock.Object);
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<IShare>());
             sut.CanCopyPartOfSpeech = true;
 
             await sut.OpenCopyMenuAsync();
@@ -310,7 +317,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 Mock.Of<IClipboardService>(),
-                copySelectedToClipboardServiceMock.Object);
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<IShare>());
             sut.CanCopyEndings = true;
 
             await sut.OpenCopyMenuAsync();
@@ -337,13 +345,150 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 dialogServiceMock.Object,
                 Mock.Of<IClipboardService>(),
-                copySelectedToClipboardServiceMock.Object);
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<IShare>());
             sut.CanCopyFront = true;
 
             await sut.OpenCopyMenuAsync();
 
             dialogServiceMock.Verify();
             dialogServiceMock.Verify(x => x.DisplayToast("Examples copied"));
+        }
+
+        #endregion
+
+        #region Tests for ShareAsync
+
+        [TestMethod]
+        public async Task ShareAsync_WhenCanCompileFrontCard_CallsShareRequestAsync()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+
+            var sharedTextRequests = new List<ShareTextRequest>();
+
+            var shareMock = _fixture.Freeze<Mock<IShare>>();
+            shareMock.Setup(x => x.RequestAsync(Capture.In(sharedTextRequests)));
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(back);
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                Mock.Of<IDialogService>(),
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                shareMock.Object);
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.ShareAsync();
+
+            // Assert
+            shareMock.Verify(x => x.RequestAsync(It.IsAny<ShareTextRequest>()));
+
+            sharedTextRequests[0].Subject.Should().Be(front);
+            sharedTextRequests[0].Text.Should().Be(back);
+            sharedTextRequests[0].Title.Should().Be("Share Translations");
+
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>()));
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>()));
+        }
+
+        [TestMethod]
+        public async Task ShareAsync_WhenCannotCompileFrontCard_ShowsAlert()
+        {
+            // Arrange
+            string front = string.Empty;
+            string back = _fixture.Create<string>();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(back);
+
+            var dialogServiceMock = new Mock<IDialogService>();
+            var shareMock = _fixture.Freeze<Mock<IShare>>();
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                shareMock.Object);
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.ShareAsync();
+
+            // Assert
+            shareMock.Verify(x => x.RequestAsync(It.IsAny<ShareTextRequest>()), Times.Never);
+            dialogServiceMock.Verify(x => x.DisplayAlert("Oops!", "You need to select at least one example before sharing.", "OK"));
+        }
+
+        [TestMethod]
+        public async Task ShareAsync_WhenExamplesFromSeveralDefinitionsSelectedExceptionIsThrown_ShowsAlert()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(back);
+
+            var dialogServiceMock = new Mock<IDialogService>();
+
+            var shareMock = _fixture.Freeze<Mock<IShare>>();
+            shareMock.Setup(x => x.RequestAsync(It.IsAny<ShareTextRequest>()))
+                .ThrowsAsync(new ExamplesFromSeveralDefinitionsSelectedException("please select examples from one definition!"));
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                shareMock.Object);
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.ShareAsync();
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot share the word", "please select examples from one definition!", "OK"));
+        }
+
+        [TestMethod]
+        public async Task ShareAsync_WhenExceptionIsThrown_ShowsAlert()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(back);
+
+            var dialogServiceMock = new Mock<IDialogService>();
+
+            var shareMock = _fixture.Freeze<Mock<IShare>>();
+            shareMock.Setup(x => x.RequestAsync(It.IsAny<ShareTextRequest>()))
+                .ThrowsAsync(new Exception("exception from unit test"));
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                shareMock.Object);
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.ShareAsync();
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot share the word", "Error occurred while trying to share the word: exception from unit test", "OK"));
         }
 
         #endregion
@@ -359,7 +504,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 Mock.Of<IDialogService>(),
                 Mock.Of<IClipboardService>(),
-                Mock.Of<ICopySelectedToClipboardService>());
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<IShare>());
             sut.CanCopyFront.Should().BeFalse();
 
             sut.DefinitionViewModels.Add(definitionViewModel);
@@ -380,7 +526,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 Mock.Of<IDialogService>(),
                 Mock.Of<IClipboardService>(),
-                Mock.Of<ICopySelectedToClipboardService>());
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<IShare>());
             sut.CanCopyPartOfSpeech.Should().BeFalse();
 
             sut.DefinitionViewModels.Add(definitionViewModel);
@@ -401,7 +548,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<ISaveSoundFileService>(),
                 Mock.Of<IDialogService>(),
                 Mock.Of<IClipboardService>(),
-                Mock.Of<ICopySelectedToClipboardService>());
+                Mock.Of<ICopySelectedToClipboardService>(),
+                Mock.Of<IShare>());
             sut.CanCopyEndings.Should().BeFalse();
 
             sut.DefinitionViewModels.Add(definitionViewModel);

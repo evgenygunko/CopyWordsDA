@@ -46,6 +46,7 @@
                         Wrap="Wrap"
                         AlignItems="Start">
 
+                    <!-- Play sound -->
                     <buttons:SfButton
                             Margin="0,0,2,2"
                             WidthRequest="44" HeightRequest="44"
@@ -71,6 +72,7 @@
                         </buttons:SfButton.Content>
                     </buttons:SfButton>
 
+                    <!-- Save sound file -->
                     <buttons:SfButton
                             Margin="0,0,6,2"
                             WidthRequest="44" HeightRequest="44"
@@ -95,6 +97,7 @@
                         </buttons:SfButton.Content>
                     </buttons:SfButton>
 
+                    <!-- Copy content -->
                     <buttons:SfButton
                             Margin="0,0,2,2"
                             HorizontalOptions="Start"
@@ -118,6 +121,31 @@
                             </DataTemplate>
                         </buttons:SfButton.Content>
                     </buttons:SfButton>
+
+                    <!-- Share -->
+                    <buttons:SfButton
+                            Margin="4,0,2,2"
+                            WidthRequest="44" HeightRequest="44"
+                            ToolTipProperties.Text="Share word"
+                            BackgroundColor="{Binding CopyFrontButtonColor}"
+                            Command="{Binding ShareCommand}">
+
+                        <buttons:SfButton.Content>
+                            <DataTemplate>
+                                <HorizontalStackLayout HorizontalOptions="Center">
+                                    <Image
+                                            WidthRequest="{OnPlatform 24, Android=36}"
+                                            HeightRequest="{OnPlatform 24, Android=36}">
+                                        <Image.Source>
+                                            <FontImageSource
+                                                FontFamily="MaterialIconsOutlined-Regular"
+                                                Glyph="{x:Static helpers:MaterialDesignIconFonts.Share}" />
+                                        </Image.Source>
+                                    </Image>
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </buttons:SfButton.Content>
+                    </buttons:SfButton>
                 </FlexLayout>
             </On>
             <On Platform="WinUI, MacCatalyst">
@@ -129,6 +157,7 @@
                         Wrap="Wrap"
                         AlignItems="Start">
 
+                    <!-- Play sound -->
                     <buttons:SfButton
                             Margin="0,0,2,2"
                             WidthRequest="44" HeightRequest="44"
@@ -154,6 +183,7 @@
                         </buttons:SfButton.Content>
                     </buttons:SfButton>
 
+                    <!-- Save sound file -->
                     <buttons:SfButton
                             Margin="0,0,6,2"
                             WidthRequest="44" HeightRequest="44"
@@ -178,6 +208,7 @@
                         </buttons:SfButton.Content>
                     </buttons:SfButton>
 
+                    <!-- Copy Front -->
                     <buttons:SfButton
                             Margin="0,0,2,2"
                             WidthRequest="{OnPlatform 80, Android=60}"
@@ -202,6 +233,7 @@
                         </buttons:SfButton.Content>
                     </buttons:SfButton>
 
+                    <!-- Copy Back -->
                     <buttons:SfButton
                             Margin="0,0,2,2"
                             WidthRequest="{OnPlatform 80, Android=60}"
@@ -226,6 +258,7 @@
                         </buttons:SfButton.Content>
                     </buttons:SfButton>
 
+                    <!-- Copy Part of speech -->
                     <buttons:SfButton
                             Margin="0,0,2,2"
                             WidthRequest="{OnPlatform 80, Android=60}"
@@ -250,6 +283,7 @@
                         </buttons:SfButton.Content>
                     </buttons:SfButton>
 
+                    <!-- Copy Endings -->
                     <buttons:SfButton
                             Margin="0,0,2,2"
                             WidthRequest="{OnPlatform 98, Android=60}"
@@ -274,6 +308,7 @@
                         </buttons:SfButton.Content>
                     </buttons:SfButton>
 
+                    <!-- Copy Examples -->
                     <buttons:SfButton
                             WidthRequest="{OnPlatform 108, Android=60}"
                             ToolTipProperties.Text="Copy text for the Anki 'Example' field"
