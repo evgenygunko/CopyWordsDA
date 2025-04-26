@@ -20,7 +20,6 @@ namespace CopyWords.Core.ViewModels
         private readonly ISettingsService _settingsService;
         private readonly IDialogService _dialogService;
         private readonly IShellService _shellService;
-        private readonly IFileIOService _fileIOService;
         private readonly IFilePicker _filePicker;
         private readonly IDeviceInfo _deviceInfo;
         private readonly IFileSaver _fileSaver;
@@ -32,7 +31,6 @@ namespace CopyWords.Core.ViewModels
             ISettingsService settingsService,
             IDialogService dialogService,
             IShellService shellService,
-            IFileIOService fileIOService,
             IFilePicker filePicker,
             IDeviceInfo deviceInfo,
             IFileSaver fileSaver,
@@ -41,7 +39,6 @@ namespace CopyWords.Core.ViewModels
             _settingsService = settingsService;
             _dialogService = dialogService;
             _shellService = shellService;
-            _fileIOService = fileIOService;
             _filePicker = filePicker;
             _deviceInfo = deviceInfo;
             _fileSaver = fileSaver;
