@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: App
 
+using System.Runtime.Versioning;
 using Android.App;
 using Android.Runtime;
 
@@ -13,6 +14,7 @@ public class MainApplication : MauiApplication
     {
     }
 
+    [SupportedOSPlatform("android26.0")]
     protected override MauiApp CreateMauiApp()
     {
         // Remove SearchBar control underline

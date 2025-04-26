@@ -17,9 +17,9 @@
 
     <VerticalStackLayout>
 
-        <!-- Section "Translations" -->
+        <!-- Section "Backup" -->
         <Label Text="Data" Margin="20,0,10,0" FontSize="Subtitle" />
-        <Grid Margin="20,10,10,0">
+        <Grid Margin="20,10,10,0" x:Name="gridExportSettings">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="45"></ColumnDefinition>
@@ -51,6 +51,7 @@
                     DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
                     PressedOpacity="0.6"
                     PressedScale="0.8"
+                    BindingContext="{Binding Path=BindingContext, Source={x:Reference gridExportSettings}, x:DataType=Grid}"
                     Command="{Binding ExportSettingsCommand}"/>
             </Grid.Behaviors>
         </Grid>
@@ -58,7 +59,7 @@
         <!-- Horizontal line -->
         <BoxView Color="#E1E1E1" HeightRequest="1" Margin="0,10,0,10" />
 
-        <Grid Margin="20,0,10,0">
+        <Grid Margin="20,0,10,0" x:Name="gridImportSettings">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="45"></ColumnDefinition>
@@ -90,6 +91,7 @@
                     DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
                     PressedOpacity="0.6"
                     PressedScale="0.8"
+                    BindingContext="{Binding Path=BindingContext, Source={x:Reference gridImportSettings}, x:DataType=Grid}"
                     Command="{Binding ImportSettingsCommand}"/>
             </Grid.Behaviors>
         </Grid>
@@ -123,7 +125,7 @@
         <BoxView Color="#E1E1E1" HeightRequest="1" Margin="0,10,0,10" />
 
         <Label Text="TranslatorAPI URL:" Margin="20,0,10,7" FontAttributes="Bold"/>
-        <Grid Margin="20,0,10,0">
+        <Grid Margin="20,0,10,0" x:Name="gridTranslatorAppUrl">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="45"></ColumnDefinition>
@@ -170,6 +172,7 @@
                     DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
                     PressedOpacity="0.6"
                     PressedScale="0.8"
+                    BindingContext="{Binding Path=BindingContext, Source={x:Reference gridTranslatorAppUrl}, x:DataType=Grid}"
                     Command="{Binding EnterTranslatorApiUrlCommand}"/>
             </Grid.Behaviors>
         </Grid>

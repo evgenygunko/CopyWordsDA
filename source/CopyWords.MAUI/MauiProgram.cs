@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui;
+﻿using System.Runtime.Versioning;
+using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Maui.Views;
 using CopyWords.Core.Services;
@@ -18,6 +19,9 @@ public static class MauiProgram
 
     public static TService GetService<TService>() => _serviceProvider.GetService<TService>()!;
 
+    [SupportedOSPlatform("windows10.0.17763")]
+    [SupportedOSPlatform("maccatalyst15.0")]
+    [SupportedOSPlatform("android26.0")]
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();

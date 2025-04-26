@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using System.Runtime.Versioning;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
@@ -7,8 +8,10 @@ using CopyWords.Core.Services;
 
 namespace CopyWords.MAUI;
 
+[SupportedOSPlatform("android26.0")]
 [Activity(
         Theme = "@style/Maui.SplashTheme",
+        ResizeableActivity = true,
         MainLauncher = true,
         LaunchMode = LaunchMode.SingleInstance,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density,
@@ -22,9 +25,7 @@ public class MainActivity : MauiAppCompatActivity
     {
         base.OnCreate(savedInstanceState);
 
-#pragma warning disable CA1416 // Validate platform compatibility
         string? selectedText = this.Intent?.GetStringExtra(Intent.ExtraProcessText)?.ToString();
-#pragma warning restore CA1416 // Validate platform compatibility
 
         if (!string.IsNullOrEmpty(selectedText))
         {

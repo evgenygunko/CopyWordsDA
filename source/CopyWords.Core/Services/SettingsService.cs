@@ -63,7 +63,7 @@ namespace CopyWords.Core.Services
             appSettings.TranslateHeadword = _preferences.Get<bool>("TranslateHeadword", true);
             appSettings.TranslateMeanings = _preferences.Get<bool>("TranslateMeanings", true);
             appSettings.CopyTranslatedMeanings = _preferences.Get<bool>("CopyTranslatedMeanings", true);
-            appSettings.SelectedParser = _preferences.Get("SelectedParser", string.Empty);
+            appSettings.SelectedParser = _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
 
             return appSettings;
         }

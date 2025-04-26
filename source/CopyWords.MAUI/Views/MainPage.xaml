@@ -7,10 +7,12 @@
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:DataType="viewmodels:MainViewModel"
              x:Class="CopyWords.MAUI.Views.MainPage"
+             x:Name="contentPageMainPage"
              Shell.BackgroundColor="Gray">
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageMainPage}, x:DataType=views:MainPage}"
             EventName="Appearing"
             Command="{Binding InitCommand}" />
     </ContentPage.Behaviors>

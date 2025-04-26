@@ -6,12 +6,14 @@
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:DataType="viewmodels:SettingsViewModel"
+             x:Name="contentPageSettingsPage"
              Title="Settings"
              Shell.BackgroundColor="Gray">
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
             EventName="Appearing"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageSettingsPage}, x:DataType=views:SettingsPage}"
             Command="{Binding InitCommand}" />
     </ContentPage.Behaviors>
 
