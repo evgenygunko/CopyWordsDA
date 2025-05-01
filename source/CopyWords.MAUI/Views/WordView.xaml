@@ -134,8 +134,8 @@
                             <DataTemplate>
                                 <HorizontalStackLayout HorizontalOptions="Center">
                                     <Image
-                                            WidthRequest="{OnPlatform 24, Android=36}"
-                                            HeightRequest="{OnPlatform 24, Android=36}">
+                                            WidthRequest="{OnPlatform 24, Android=30}"
+                                            HeightRequest="{OnPlatform 24, Android=30}">
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"

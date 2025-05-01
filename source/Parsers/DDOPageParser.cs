@@ -98,12 +98,25 @@ namespace CopyWords.Parsers
                         string[] meanings = spanEndings.InnerHtml.Split("<span class=\"dividerDouble\">&#160;</span>");
                         foreach (string meaning in meanings)
                         {
-                            endings += meaning.Replace("<span class=\"diskret\">", "")
-                                .Replace("</span>", "");
-                            endings += "||";
+                            var match = Regex.Match(meaning, @"<span[^>]*>(.*?)<\/span>(.*)", RegexOptions.Singleline);
+
+                            if (match.Success)
+                            {
+                                string insideSpan = match.Groups[1].Value.Trim();
+                                string afterSpan = match.Groups[2].Value.Trim();
+
+                                endings += insideSpan + " " + afterSpan;
+                            }
+                            else
+                            {
+                                endings += meaning.Trim();
+                            }
+
+                            endings += " || ";
                         }
 
-                        endings = endings.TrimEnd("||".ToCharArray());
+                        endings = endings.TrimEnd(' ', '|');
+
                     }
                     else
                     {

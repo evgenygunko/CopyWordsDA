@@ -246,6 +246,18 @@ namespace CopyWords.Parsers.Tests
             endings.Should().Be("betydning 1: -ten, -ter, -terne || betydning 2: -ten, -te, -tene");
         }
 
+        [TestMethod]
+        public void ParseEndings_ForBestemt_ReturnsEndings()
+        {
+            string content = GetSimpleHTMLPage("bestemt.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string endings = parser.ParseEndings();
+            endings.Should().Be("-, -e || superlativ -est");
+        }
+
         #endregion
 
         #region Tests for ParsePronunciation
