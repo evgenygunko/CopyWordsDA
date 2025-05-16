@@ -3,6 +3,7 @@
 # top-most EditorConfig file
 root = true
 
+# All files
 [*]
 indent_style = space
 indent_size = 4
@@ -10,6 +11,9 @@ end_of_line = crlf
 charset = utf-8
 trim_trailing_whitespace = false
 insert_final_newline = false
+
+[*.{yml,yaml}]
+end_of_line = lf
 
 # C# and Visual Basic files
 [*.{cs,vb}]

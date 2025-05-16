@@ -32,3 +32,14 @@ stages:
           - template: /.azuredevops/templates/jobs/job-sync-with-github.yml
             parameters:
                 repository: CopyWordsDA
+
+    #********************************************************************************
+    # Publish apps to Github releases
+    #********************************************************************************
+    - stage: Publish_To_Github
+      displayName: 'Publish apps to Github as a draft release'
+      dependsOn: Sync_With_Github
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+
+      jobs:
+          - template: /.azuredevops/templates/jobs/job-publish-to-github.yml

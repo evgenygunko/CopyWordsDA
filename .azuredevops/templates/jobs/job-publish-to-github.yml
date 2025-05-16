@@ -1,0 +1,36 @@
+jobs:
+    #********************************************************************************
+    # Downloads build artifacts from the container and publish to Github releases.
+    #********************************************************************************
+    - job: Publish_To_Github_Releases
+      timeoutInMinutes: 10
+      pool:
+          vmImage: 'ubuntu-latest'
+
+      steps:
+          - checkout: none
+
+          - task: DownloadBuildArtifacts@1
+            displayName: 'Download build artifacts'
+            inputs:
+                buildType: 'current'
+                # uncomment to download artifacts from a specific build
+                # buildType: 'specific'
+                # project: 'CopyWords'
+                # pipeline: 'CopyWordsDA-CI'
+                # buildVersionToDownload: 'specific'
+                # buildId: '1250'
+                downloadType: 'specific'
+                artifactName: 'drop'
+                downloadPath: '$(Build.ArtifactStagingDirectory)'
+
+          - task: marcelo-formentao.github-tools.github-release-publish-task.GitHubReleasePublish@1
+            displayName: 'Create GitHub Release'
+            inputs:
+                githubEndpoint: 'github connection 1'
+                githubRepository: evgenygunko/CopyWordsDA
+                githubReleaseNotes: '$(Release.ReleaseDescription)'
+                githubReleaseAsset: |
+                    $(Build.ArtifactStagingDirectory)/**/*.msix
+                    $(Build.ArtifactStagingDirectory)/**/cert.cer
+                    $(Build.ArtifactStagingDirectory)/**/*.apk
