@@ -1,0 +1,30 @@
+steps:
+    - task: DownloadSecureFile@1
+      displayName: '[Android] Download keystore file'
+      name: keystore
+      inputs:
+          secureFile: '$(KeyStore-FileName)'
+
+    - task: CmdLine@2
+      displayName: '[Android] Move Keystore to Working Directory'
+      inputs:
+          script: |
+              mv $(keystore.secureFilePath) $(System.DefaultWorkingDirectory)
+
+    - task: DotNetCoreCLI@2
+      displayName: '[Android] dotnet publish: CopyWords.MAUI.csproj'
+      inputs:
+          command: 'publish'
+          publishWebProjects: false
+          projects: '**/CopyWords.MAUI.csproj'
+          arguments: '-c:$(BUILD_CONFIGURATION) -f $(FRAMEWORK_ANDROID) /p:AndroidSigningKeyPass=$(KeyStore-Password) /p:AndroidSigningStorePass=$(KeyStore-Password) /p:AndroidSigningKeyStore=$(System.DefaultWorkingDirectory)\\$(KeyStore-FileName) /p:AndroidSigningKeyAlias=$(KeyStore-Alias) /p:AndroidKeyStore=true'
+          zipAfterPublish: false
+
+    - task: CopyFiles@2
+      displayName: '[Android] Copy APK and AAB to artifact staging directory'
+      inputs:
+          Contents: |
+              **\*Signed.apk
+              **\*Signed.aab
+          TargetFolder: '$(Build.ArtifactStagingDirectory)/android'
+          flattenFolders: true

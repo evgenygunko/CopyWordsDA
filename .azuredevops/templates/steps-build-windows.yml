@@ -43,7 +43,7 @@ steps:
       inputs:
           command: 'test'
           projects: '**/*Tests.csproj'
-          arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+          arguments: '--configuration $(BUILD_CONFIGURATION) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
           publishTestResults: true
 
     # On MacOS building a release configuration hangs (due to a bug in donet?), so we only run publish task on Windows
@@ -53,7 +53,7 @@ steps:
           command: 'publish'
           publishWebProjects: false
           projects: '**/CopyWords.MAUI.csproj'
-          arguments: '-c:$(buildConfiguration) -f net9.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64'
+          arguments: '-c:$(BUILD_CONFIGURATION) -f $(FRAMEWORK_WINDOWS) -p:RuntimeIdentifierOverride=win10-x64'
           zipAfterPublish: false
       condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
 
@@ -63,6 +63,6 @@ steps:
           SourceFolder: './source/CopyWords.MAUI/bin/'
           Contents: |
               **/CopyWords*.msix
-          TargetFolder: '$(build.artifactstagingdirectory)'
+          TargetFolder: '$(build.artifactstagingdirectory)/windows'
           flattenFolders: true
       condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))

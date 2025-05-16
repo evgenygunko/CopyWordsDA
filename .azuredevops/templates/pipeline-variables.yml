@@ -1,0 +1,22 @@
+variables:
+    - group: AccessTokens
+    - group: Windows
+    - group: Android
+
+    - name: 'DOTNET_VERSION'
+      value: '9.0.x'
+
+    - name: 'FRAMEWORK_WINDOWS'
+      value: 'net9.0-windows10.0.19041.0'
+
+    - name: 'FRAMEWORK_ANDROID'
+      value: 'net9.0-android'
+
+    - name: 'BUILD_CONFIGURATION'
+      value: 'Release'
+
+    - name: 'major'
+      value: '0'
+
+    - name: 'minor'
+      value: '1'
