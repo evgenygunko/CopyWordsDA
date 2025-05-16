@@ -43,3 +43,14 @@ stages:
 
       jobs:
           - template: /.azuredevops/templates/jobs/job-publish-to-github.yml
+
+    #********************************************************************************
+    # Publish Android app to Firebase
+    #********************************************************************************
+    - stage: Publish_To_Github
+      displayName: 'Publish Android app to Firebase'
+      dependsOn: Publish_To_Github
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+
+      jobs:
+          - template: /.azuredevops/templates/jobs/job-publish-to-firebase.yml

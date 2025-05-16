@@ -1,0 +1,60 @@
+jobs:
+    #********************************************************************************
+    # Downloads build artifacts from the container and publish to Github releases.
+    #********************************************************************************
+    - job: Publish_To_Firebase
+      timeoutInMinutes: 10
+      pool:
+          vmImage: 'ubuntu-latest'
+
+      steps:
+          - checkout: none
+
+            # uncomment to download artifacts from the current build
+          - task: DownloadBuildArtifacts@1
+            displayName: 'Download build artifacts'
+            inputs:
+                buildType: 'current'
+                downloadType: 'specific'
+                artifactName: 'drop'
+                downloadPath: '$(Build.ArtifactStagingDirectory)'
+
+          # uncomment to download artifacts from a specific build
+          #   - task: DownloadBuildArtifacts@1
+          #     displayName: 'Download build artifacts'
+          #     inputs:
+          #         buildType: 'specific'
+          #         project: 'CopyWords'
+          #         pipeline: 'CopyWordsDA-CI'
+          #         buildVersionToDownload: 'specific'
+          #         buildId: '1250'
+          #         downloadType: 'specific'
+          #         artifactName: 'drop'
+          #         downloadPath: '$(Build.ArtifactStagingDirectory)'
+
+          - task: CmdLine@2
+            displayName: 'Download Firebase service account credentials'
+            inputs:
+                script: |
+                    echo "$(GOOGLE_APPLICATION_CREDENTIALS)" | base64 --decode > $(Build.ArtifactStagingDirectory)/service-account.json
+
+          #   - task: UseNode@1
+          #     inputs:
+          #         version: '22.x' # string. Version. Default: 10.x.
+
+          - script: |
+                npm install -g firebase-tools
+            displayName: 'npm install firebase-tools'
+
+          - script: |
+                cd $(Build.ArtifactStagingDirectory)/drop/android
+                echo Current directory:
+                pwd
+
+                echo Setting GOOGLE_APPLICATION_CREDENTIALS environment variable...
+                export GOOGLE_APPLICATION_CREDENTIALS="$(Build.ArtifactStagingDirectory)/service-account.json"
+
+                echo Running 'firebase deployment command:'
+                echo firebase appdistribution:distribute com.companyname.copywords.maui-Signed.apk --app $(Firebase-AppId) --release-notes "$(Build.BuildNumber)" --testers "$(Firebase-Testers)"
+                firebase appdistribution:distribute com.companyname.copywords.maui-Signed.apk --app $(Firebase-AppId) --release-notes "$(Build.BuildNumber)" --testers "$(Firebase-Testers)"
+            displayName: 'Deploy the app to Firebase'

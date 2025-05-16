@@ -10,19 +10,27 @@ jobs:
       steps:
           - checkout: none
 
+            # uncomment to download artifacts from the current build
           - task: DownloadBuildArtifacts@1
             displayName: 'Download build artifacts'
             inputs:
                 buildType: 'current'
-                # uncomment to download artifacts from a specific build
-                # buildType: 'specific'
-                # project: 'CopyWords'
-                # pipeline: 'CopyWordsDA-CI'
-                # buildVersionToDownload: 'specific'
-                # buildId: '1250'
                 downloadType: 'specific'
                 artifactName: 'drop'
                 downloadPath: '$(Build.ArtifactStagingDirectory)'
+
+          # uncomment to download artifacts from a specific build
+          #   - task: DownloadBuildArtifacts@1
+          #     displayName: 'Download build artifacts'
+          #     inputs:
+          #         buildType: 'specific'
+          #         project: 'CopyWords'
+          #         pipeline: 'CopyWordsDA-CI'
+          #         buildVersionToDownload: 'specific'
+          #         buildId: '1250'
+          #         downloadType: 'specific'
+          #         artifactName: 'drop'
+          #         downloadPath: '$(Build.ArtifactStagingDirectory)'
 
           - task: marcelo-formentao.github-tools.github-release-publish-task.GitHubReleasePublish@1
             displayName: 'Create GitHub Release'
