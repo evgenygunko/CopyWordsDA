@@ -1,8 +1,4 @@
 variables:
-    - group: AccessTokens
-    - group: Windows
-    - group: Android
-
     - name: 'DOTNET_VERSION'
       value: '9.0.x'
 

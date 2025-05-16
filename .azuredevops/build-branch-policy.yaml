@@ -1,0 +1,37 @@
+trigger: none
+
+pool:
+    vmImage: windows-latest
+
+    # Uncomment to run on on-prem agent
+    #name: Default
+
+variables:
+    - template: templates/pipeline-variables.yml
+
+steps:
+    - script: yarn install
+      displayName: 'yarn install'
+
+    - script: yarn prettier:check
+      displayName: 'Check prettier adherence'
+
+    # On a private agent we don't need this
+    - task: UseDotNet@2
+      inputs:
+          packageType: 'sdk'
+          version: '$(DOTNET_VERSION)'
+      condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
+
+    # On a private agent we don't need this
+    - script: dotnet workload install maui
+      displayName: 'Install .NET MAUI Workload'
+      condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet test'
+      inputs:
+          command: 'test'
+          projects: '**/*Tests.csproj'
+          arguments: '--configuration $(BUILD_CONFIGURATION) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+          publishTestResults: true

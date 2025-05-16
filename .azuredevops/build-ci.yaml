@@ -10,6 +10,10 @@ pool:
     #name: Default
 
 variables:
+    - group: AccessTokens
+    - group: Windows
+    - group: Android
+
     - template: templates/pipeline-variables.yml
 
 stages:
