@@ -37,7 +37,7 @@ jobs:
             inputs:
                 githubEndpoint: 'github connection 1'
                 githubRepository: evgenygunko/CopyWordsDA
-                githubReleaseNotes: '$(ReleaseNotes)'
+                githubReleaseNotes: '${{ parameters.ReleaseNotes }}'
                 githubReleaseAsset: |
                     $(Build.ArtifactStagingDirectory)/**/*.msix
                     $(Build.ArtifactStagingDirectory)/**/cert.cer

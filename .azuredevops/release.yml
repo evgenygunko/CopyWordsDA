@@ -24,24 +24,11 @@ stages:
           - template: /.azuredevops/templates/jobs/job-build-apps.yml
 
     #********************************************************************************
-    # Sync source code with Github
-    #********************************************************************************
-    - stage: Sync_With_Github
-      displayName: 'Sync source code with Github'
-      dependsOn: Build
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-
-      jobs:
-          - template: /.azuredevops/templates/jobs/job-sync-with-github.yml
-            parameters:
-                repository: CopyWordsDA
-
-    #********************************************************************************
     # Publish apps to Github releases
     #********************************************************************************
     - stage: Publish_To_Github
       displayName: 'Publish apps to Github as a draft release'
-      dependsOn: Sync_With_Github
+      dependsOn: Build
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
       jobs:
@@ -52,7 +39,7 @@ stages:
     #********************************************************************************
     - stage: Publish_To_Firebase
       displayName: 'Publish Android app to Firebase'
-      dependsOn: Publish_To_Github
+      dependsOn: Build
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
       jobs:

@@ -1,0 +1,22 @@
+trigger:
+    branches:
+        include:
+            - master
+
+variables:
+    - group: AccessTokens
+
+    - template: templates/pipeline-variables.yml
+
+stages:
+    #********************************************************************************
+    # Sync source code with Github
+    #********************************************************************************
+    - stage: Sync_With_Github
+      displayName: 'Sync source code with Github'
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+
+      jobs:
+          - template: /.azuredevops/templates/jobs/job-sync-with-github.yml
+            parameters:
+                repository: CopyWordsDA
