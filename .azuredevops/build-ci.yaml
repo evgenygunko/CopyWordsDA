@@ -39,91 +39,25 @@ stages:
                 - script: yarn prettier:check
                   displayName: 'Check prettier adherence'
 
-                # # On a private agant we don't need this
-                # - task: UseDotNet@2
-                #   inputs:
-                #       packageType: 'sdk'
-                #       version: '8.0.x' # Specify .NET SDK version as needed
-                #   condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
-
-                # # On a private agant we don't need this
-                # - script: dotnet workload install maui
-                #   displayName: 'Install .NET MAUI Workload'
-                #   condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
-
-                - task: DownloadSecureFile@1
-                  displayName: '[Windows] Download code signing certificate'
+                # On a private agent we don't need this
+                - task: UseDotNet@2
                   inputs:
-                      secureFile: 'cert.pfx'
-                  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
+                      packageType: 'sdk'
+                      version: '9.0.x' # Specify .NET SDK version as needed
+                  condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
 
-                # On a private agant we don't need this
-                - task: PowerShell@2
-                  displayName: '[Windows] Install Signing Certficiate'
-                  inputs:
-                      targetType: 'inline'
-                      script: |
-                          $password = "$(SIGNING_CERTIFICATE_PASSWORD)" | ConvertTo-SecureString -Force -AsPlainText
-                          Import-PfxCertificate -FilePath "$(Agent.TempDirectory)/cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password $password
-                  condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'), eq(variables['Agent.OS'], 'Windows_NT'))
+                # On a private agent we don't need this
+                - script: dotnet workload install maui
+                  displayName: 'Install .NET MAUI Workload'
+                  condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
 
-                - task: PowerShell@2
-                  displayName: '[Windows] Convert .pfx to .cer'
-                  inputs:
-                      targetType: 'inline'
-                      script: |
-                          # Define paths
-                          $pfxPath = "$(Agent.TempDirectory)/cert.pfx"
-                          $cerPath = "$(Build.ArtifactStagingDirectory)/cert.cer"
-
-                          # Secure password conversion
-                          $password = "$(SIGNING_CERTIFICATE_PASSWORD)" | ConvertTo-SecureString -Force -AsPlainText
-
-                          # Load the .pfx file and export as .cer
-                          $certificate = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
-                          $certificate.Import($pfxPath, $password, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
-
-                          # Export the .cer file
-                          $cerBytes = $certificate.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
-                          [System.IO.File]::WriteAllBytes($cerPath, $cerBytes)
-
-                          Write-Output "Certificate exported to $cerPath"
-                  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
-
-                - task: DotNetCoreCLI@2
-                  displayName: 'dotnet test'
-                  inputs:
-                      command: 'test'
-                      projects: '**/*Tests.csproj'
-                      arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
-                      publishTestResults: true
-
-                # On MacOS building a release configuration hangs (due to a bug in donet?), so we only run publish task on Windows
-                - task: DotNetCoreCLI@2
-                  displayName: '[Windows] dotnet publish: CopyWords.MAUI.csproj'
-                  inputs:
-                      command: 'publish'
-                      publishWebProjects: false
-                      projects: '**/CopyWords.MAUI.csproj'
-                      arguments: '-c:$(buildConfiguration) -f net9.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64'
-                      zipAfterPublish: false
-                  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
-
-                - task: CopyFiles@2
-                  displayName: '[Windows] Copy build output to artifact staging directory'
-                  inputs:
-                      SourceFolder: './source/CopyWords.MAUI/bin/'
-                      Contents: |
-                          **/CopyWords*.msix
-                      TargetFolder: '$(build.artifactstagingdirectory)'
-                      flattenFolders: true
-                  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
+                - template: templates/steps-build-windows.yml
 
                 - task: PublishBuildArtifacts@1
                   displayName: 'Publish Artifact: drop'
                   inputs:
                       PathtoPublish: '$(build.artifactstagingdirectory)'
 
-    - template: /.azuredevops/templates/stages-sync-with-github.yaml
+    - template: /.azuredevops/templates/stages-sync-with-github.yml
       parameters:
           repository: CopyWordsDA
