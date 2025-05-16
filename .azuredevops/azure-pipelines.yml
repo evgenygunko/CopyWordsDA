@@ -1,0 +1,34 @@
+trigger:
+    branches:
+        include:
+            - master
+
+variables:
+    - group: AccessTokens
+    - group: Windows
+    - group: Android
+
+    - template: templates/pipeline-variables.yml
+
+stages:
+    #********************************************************************************
+    # Build the app
+    #********************************************************************************
+    - stage: Build
+      displayName: 'Build Windows and Android apps'
+
+      jobs:
+          - template: /.azuredevops/templates/jobs/job-build-apps.yml
+
+    #********************************************************************************
+    # Sync source code with Github
+    #********************************************************************************
+    - stage: Sync_With_Github
+      displayName: 'Sync source code with Github'
+      dependsOn: Build
+      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+
+      jobs:
+          - template: /.azuredevops/templates/jobs/job-sync-with-github.yml
+            parameters:
+                repository: CopyWordsDA
