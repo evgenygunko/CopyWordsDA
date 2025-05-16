@@ -1,7 +1,10 @@
-trigger:
-    branches:
-        include:
-            - master
+trigger: none
+
+parameters:
+    - name: ReleaseNotes
+      displayName: 'Release Notes'
+      type: string
+      default: '<Release Notes>'
 
 variables:
     - group: AccessTokens
@@ -47,7 +50,7 @@ stages:
     #********************************************************************************
     # Publish Android app to Firebase
     #********************************************************************************
-    - stage: Publish_To_Github
+    - stage: Publish_To_Firebase
       displayName: 'Publish Android app to Firebase'
       dependsOn: Publish_To_Github
       condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
