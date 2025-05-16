@@ -55,6 +55,6 @@ jobs:
                 export GOOGLE_APPLICATION_CREDENTIALS="$(Build.ArtifactStagingDirectory)/service-account.json"
 
                 echo Running 'firebase deployment command:'
-                echo firebase appdistribution:distribute com.companyname.copywords.maui-Signed.apk --app $(Firebase-AppId) --release-notes "${{ parameters.ReleaseNotes }}" --testers "$(Firebase-Testers)"
-                firebase appdistribution:distribute com.companyname.copywords.maui-Signed.apk --app $(Firebase-AppId) --release-notes "${{ parameters.ReleaseNotes }}" --testers "$(Firebase-Testers)"
+                echo firebase appdistribution:distribute com.companyname.copywords.maui-Signed.apk --app $(Firebase-AppId) --release-notes "$(ReleaseNotesVar)" --testers "$(Firebase-Testers)"
+                firebase appdistribution:distribute com.companyname.copywords.maui-Signed.apk --app $(Firebase-AppId) --release-notes "$(ReleaseNotesVar)" --testers "$(Firebase-Testers)"
             displayName: 'Deploy the app to Firebase'

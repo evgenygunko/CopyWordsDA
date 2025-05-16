@@ -13,6 +13,9 @@ variables:
 
     - template: templates/pipeline-variables.yml
 
+    - name: 'ReleaseNotesVar'
+      value: ${{ parameters.ReleaseNotes }}
+
 stages:
     #********************************************************************************
     # Build the app
