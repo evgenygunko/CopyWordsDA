@@ -71,27 +71,6 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private string? translatorApiUrl;
-
-        partial void OnTranslatorApiUrlChanged(string? value)
-        {
-            OnTranslatorApiUrlChangedInternal(value);
-        }
-
-        [ObservableProperty]
-        private bool isTranslatorApiUrlValid;
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private bool useTranslator;
-
-        partial void OnUseTranslatorChanged(bool value)
-        {
-            OnUseTranslatorChangedInternal(value);
-        }
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool translateHeadword;
 
         partial void OnTranslateHeadwordChanged(bool value)
@@ -256,18 +235,6 @@ namespace CopyWords.Core.ViewModels
             _isInitialized = true;
         }
 
-        [RelayCommand]
-        public async Task EnterTranslatorApiUrlAsync()
-        {
-            string result = await _dialogService.DisplayPromptAsync("TranslatorAPI URL", "Please enter the url:", initialValue: TranslatorApiUrl ?? string.Empty, keyboard: Keyboard.Url);
-
-            // Check that user clicked OK
-            if (!string.IsNullOrEmpty(result))
-            {
-                TranslatorApiUrl = result;
-            }
-        }
-
         #endregion
 
         #region Internal Methods
@@ -293,31 +260,6 @@ namespace CopyWords.Core.ViewModels
             }
 
             return true;
-        }
-
-        internal void OnTranslatorApiUrlChangedInternal(string? value)
-        {
-            Uri? outUri;
-            IsTranslatorApiUrlValid = Uri.TryCreate(value, UriKind.Absolute, out outUri)
-                && (outUri.Scheme == Uri.UriSchemeHttp || outUri.Scheme == Uri.UriSchemeHttps);
-
-            if (_isInitialized && CanUpdateIndividualSettings)
-            {
-                if (IsTranslatorApiUrlValid)
-                {
-                    _settingsService.SetTranslatorApiUrl(value);
-                    Debug.WriteLine($"TranslatorApiUrl has changed to {value}");
-                }
-            }
-        }
-
-        internal void OnUseTranslatorChangedInternal(bool value)
-        {
-            if (_isInitialized && CanUpdateIndividualSettings)
-            {
-                _settingsService.SetUseTranslator(value);
-                Debug.WriteLine($"UseTranslator has changed to {value}");
-            }
         }
 
         internal void OnTranslateHeadwordChangedInternal(bool value)
@@ -401,8 +343,6 @@ namespace CopyWords.Core.ViewModels
             UseMp3gain = appSettings.UseMp3gain;
             Mp3gainPath = appSettings.Mp3gainPath;
 
-            UseTranslator = appSettings.UseTranslator;
-            TranslatorApiUrl = appSettings.TranslatorApiUrl;
             TranslateMeanings = appSettings.TranslateMeanings;
             TranslateHeadword = appSettings.TranslateHeadword;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
@@ -414,8 +354,6 @@ namespace CopyWords.Core.ViewModels
             appSettings.FfmpegBinFolder = FfmpegBinFolder ?? string.Empty;
             appSettings.Mp3gainPath = Mp3gainPath ?? string.Empty;
             appSettings.UseMp3gain = UseMp3gain;
-            appSettings.UseTranslator = UseTranslator;
-            appSettings.TranslatorApiUrl = TranslatorApiUrl ?? string.Empty;
             appSettings.TranslateMeanings = TranslateMeanings;
             appSettings.TranslateHeadword = TranslateHeadword;
             appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;

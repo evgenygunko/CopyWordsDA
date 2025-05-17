@@ -10,6 +10,7 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
+        private readonly IGlobalSettings _globalSettings;
         private readonly ISettingsService _settingsService;
         private readonly IDialogService _dialogService;
         private readonly IInstantTranslationService _instantTranslationService;
@@ -18,12 +19,14 @@ namespace CopyWords.Core.ViewModels
         private WordViewModel _wordViewModel;
 
         public MainViewModel(
+            IGlobalSettings globalSettings,
             ISettingsService settingsService,
             IDialogService dialogService,
             IInstantTranslationService instantTranslationService,
             ILookUpWord lookUpWord,
             WordViewModel wordViewModel)
         {
+            _globalSettings = globalSettings;
             _settingsService = settingsService;
             _dialogService = dialogService;
             _instantTranslationService = instantTranslationService;
@@ -167,15 +170,10 @@ namespace CopyWords.Core.ViewModels
             WordModel? wordModel = null;
             try
             {
-                string? translatorApiURL = null;
                 AppSettings appSettings = _settingsService.LoadSettings();
-                if (appSettings.UseTranslator && !string.IsNullOrEmpty(appSettings.TranslatorApiUrl))
-                {
-                    translatorApiURL = appSettings.TranslatorApiUrl;
-                }
 
                 wordModel = await _lookUpWord.GetWordByUrlAsync(url,
-                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), translatorApiURL, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
+                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
 
                 if (wordModel == null)
                 {
@@ -249,14 +247,10 @@ namespace CopyWords.Core.ViewModels
             WordModel? wordModel = null;
             try
             {
-                string? translatorApiURL = null;
                 AppSettings appSettings = _settingsService.LoadSettings();
-                if (appSettings.UseTranslator && !string.IsNullOrEmpty(appSettings.TranslatorApiUrl))
-                {
-                    translatorApiURL = appSettings.TranslatorApiUrl;
-                }
+
                 wordModel = await _lookUpWord.LookUpWordAsync(word,
-                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), translatorApiURL, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
+                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
 
                 if (wordModel == null)
                 {

@@ -20,10 +20,6 @@ namespace CopyWords.Core.Models
 
         public bool UseMp3gain { get; set; }
 
-        public string TranslatorApiUrl { get; set; } = string.Empty;
-
-        public bool UseTranslator { get; set; }
-
         public bool TranslateMeanings { get; set; }
 
         public bool TranslateHeadword { get; set; }

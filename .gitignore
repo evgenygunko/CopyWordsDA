@@ -76,3 +76,6 @@ samples/framework/docker/MVCRandomAnswerGenerator/containerImage
 _dependentPackages/
 
 .idea/
+
+# Local settings for the app
+**/appsettings.Local.json

@@ -116,7 +116,6 @@ namespace CopyWords.Parsers
                         }
 
                         endings = endings.TrimEnd(' ', '|');
-
                     }
                     else
                     {

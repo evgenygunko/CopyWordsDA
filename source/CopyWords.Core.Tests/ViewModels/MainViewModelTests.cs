@@ -260,8 +260,8 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task LookUpWordInDictionaryAsync_Should_PassTranslatorAPIUrlToLookup()
         {
+            string translatorApiUrl = _fixture.Create<Uri>().ToString();
             AppSettings appSettings = _fixture.Create<AppSettings>();
-            appSettings.UseTranslator = true;
             appSettings.SelectedParser = SourceLanguage.Danish.ToString();
 
             string search = _fixture.Create<string>();
@@ -269,6 +269,9 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+
+            Mock<IGlobalSettings> globalSettingsMock = _fixture.Freeze<Mock<IGlobalSettings>>();
+            globalSettingsMock.Setup(x => x.TranslatorApiUrl).Returns(translatorApiUrl);
 
             Mock<ILookUpWord> lookUpWordMock = _fixture.Freeze<Mock<ILookUpWord>>();
             lookUpWordMock.Setup(x => x.CheckThatWordIsValid(It.IsAny<string>())).Returns(() => (true, null));
@@ -278,7 +281,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             _ = await sut.LookUpWordInDictionaryAsync(search);
 
-            lookUpWordMock.Verify(x => x.LookUpWordAsync(search, It.Is<Options>(opt => opt.TranslatorApiURL == appSettings.TranslatorApiUrl)));
+            lookUpWordMock.Verify(x => x.LookUpWordAsync(search, It.Is<Options>(opt => opt.TranslatorApiURL == translatorApiUrl)));
         }
 
         #endregion

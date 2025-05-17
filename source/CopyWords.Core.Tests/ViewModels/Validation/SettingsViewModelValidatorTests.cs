@@ -22,8 +22,6 @@ namespace CopyWords.Core.Tests.ViewModels.Validation
         public void Validate_WhenAllRequiredFieldsHaveValues_ReturnsTrue()
         {
             var appSettings = _fixture.Create<AppSettings>();
-            appSettings.UseTranslator = true;
-            appSettings.TranslatorApiUrl = _fixture.Create<Uri>().ToString();
 
             SettingsViewModel settingsViewModel = CreateSettingsViewModel(appSettings);
 
@@ -37,7 +35,6 @@ namespace CopyWords.Core.Tests.ViewModels.Validation
         public void Validate_WhenAnkiSoundsFolderIsEmpty_ReturnsFalse()
         {
             var appSettings = _fixture.Create<AppSettings>();
-            appSettings.UseTranslator = false;
             appSettings.AnkiSoundsFolder = string.Empty;
 
             SettingsViewModel settingsViewModel = CreateSettingsViewModel(appSettings);
@@ -54,7 +51,6 @@ namespace CopyWords.Core.Tests.ViewModels.Validation
         public void Validate_WhenFfmpegBinFolderIsEmpty_ReturnsFalse()
         {
             var appSettings = _fixture.Create<AppSettings>();
-            appSettings.UseTranslator = false;
             appSettings.FfmpegBinFolder = string.Empty;
 
             SettingsViewModel settingsViewModel = CreateSettingsViewModel(appSettings);
@@ -71,7 +67,6 @@ namespace CopyWords.Core.Tests.ViewModels.Validation
         public void Validate_WhenUseMPGainAndMp3gainPathIsEmpty_ReturnsFalse()
         {
             var appSettings = _fixture.Create<AppSettings>();
-            appSettings.UseTranslator = false;
             appSettings.UseMp3gain = true;
             appSettings.Mp3gainPath = string.Empty;
 
@@ -83,38 +78,6 @@ namespace CopyWords.Core.Tests.ViewModels.Validation
             result.IsValid.Should().BeFalse();
             result.Errors.Should().HaveCount(1);
             result.Errors.First().ErrorMessage.Should().Be("'Path to mp3gain' must not be empty.");
-        }
-
-        [TestMethod]
-        public void Validate_WhenUseTranslatorIsTrueAndTranslatorApiUrlIsNotAValidUrl_ReturnsFalse()
-        {
-            var appSettings = _fixture.Create<AppSettings>();
-            appSettings.UseTranslator = true;
-            appSettings.TranslatorApiUrl = "abcdef";
-
-            SettingsViewModel settingsViewModel = CreateSettingsViewModel(appSettings);
-
-            var sut = _fixture.Create<SettingsViewModelValidator>();
-            ValidationResult result = sut.Validate(settingsViewModel);
-
-            result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1);
-            result.Errors.First().ErrorMessage.Should().Be("'TranslatorAPI URL' must be a valid URL.");
-        }
-
-        [TestMethod]
-        public void Validate_WhenUseTranslatorIsFalseAndTranslatorApiUrlIsNotAValidUrl_ReturnsTrue()
-        {
-            var appSettings = _fixture.Create<AppSettings>();
-            appSettings.UseTranslator = false;
-            appSettings.TranslatorApiUrl = "abcdef";
-
-            SettingsViewModel settingsViewModel = CreateSettingsViewModel(appSettings);
-
-            var sut = _fixture.Create<SettingsViewModelValidator>();
-            ValidationResult result = sut.Validate(settingsViewModel);
-
-            result.IsValid.Should().BeTrue(result.Errors.FirstOrDefault()?.ErrorMessage);
         }
 
         private SettingsViewModel CreateSettingsViewModel(AppSettings appSettings)

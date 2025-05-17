@@ -43,8 +43,6 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
             sut.UseMp3gain.Should().Be(appSettings.UseMp3gain);
             sut.Mp3gainPath.Should().Be(appSettings.Mp3gainPath);
-            sut.UseTranslator.Should().Be(appSettings.UseTranslator);
-            sut.TranslatorApiUrl.Should().Be(appSettings.TranslatorApiUrl);
             sut.TranslateMeanings.Should().Be(appSettings.TranslateMeanings);
             sut.TranslateHeadword.Should().Be(appSettings.TranslateHeadword);
         }
@@ -277,82 +275,12 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
             sut.UseMp3gain.Should().Be(appSettings.UseMp3gain);
             sut.Mp3gainPath.Should().Be(appSettings.Mp3gainPath);
-            sut.UseTranslator.Should().Be(appSettings.UseTranslator);
-            sut.TranslatorApiUrl.Should().Be(appSettings.TranslatorApiUrl);
             sut.TranslateMeanings.Should().Be(appSettings.TranslateMeanings);
             sut.TranslateHeadword.Should().Be(appSettings.TranslateHeadword);
 
             settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()));
             dialogServiceMock.Verify(x => x.DisplayToast("Settings successfully imported."));
             shellServiceMock.VerifyNoOtherCalls();
-        }
-
-        #endregion
-
-        #region Tests for EnterTranslatorApiUrlAsync
-
-        [TestMethod]
-        public async Task EnterTranslatorApiUrlAsync_IfUserEnteredValue_SetsTranslatorApiUrl()
-        {
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-            dialogServiceMock.Setup(x => x.DisplayPromptAsync(
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string?>(),
-                    It.IsAny<int>(),
-                    Keyboard.Url,
-                    It.IsAny<string>()))
-                .ReturnsAsync("https://google.dk")
-                .Verifiable();
-
-            var sut = new SettingsViewModel(
-                Mock.Of<ISettingsService>(),
-                dialogServiceMock.Object,
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-            sut.TranslatorApiUrl = "http://localhost:7014/api/Translate";
-
-            await sut.EnterTranslatorApiUrlAsync();
-
-            sut.TranslatorApiUrl.Should().Be("https://google.dk");
-            dialogServiceMock.Verify();
-        }
-
-        [TestMethod]
-        public async Task EnterTranslatorApiUrlAsync_IfUserDoesNotEnterValue_DoesNotUpdateTranslatorApiUrl()
-        {
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-            dialogServiceMock.Setup(x => x.DisplayPromptAsync(
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string?>(),
-                    It.IsAny<int>(),
-                    Keyboard.Url,
-                    It.IsAny<string>()))
-                .ReturnsAsync((string)null!)
-                .Verifiable();
-
-            var sut = new SettingsViewModel(
-                Mock.Of<ISettingsService>(),
-                dialogServiceMock.Object,
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-            sut.TranslatorApiUrl = "http://localhost:7014/api/Translate";
-
-            await sut.EnterTranslatorApiUrlAsync();
-
-            sut.TranslatorApiUrl.Should().Be("http://localhost:7014/api/Translate");
-            dialogServiceMock.Verify();
         }
 
         #endregion
@@ -402,154 +330,6 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.CanUpdateIndividualSettings.Should().BeFalse();
-        }
-
-        #endregion
-
-        #region Tests for OnUseTranslatorChangedInternal
-
-        [DataTestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
-        public void OnUseTranslatorChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
-        {
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-
-            sut.Init();
-            sut.OnUseTranslatorChangedInternal(value);
-
-            settingsServiceMock.Verify(x => x.SetUseTranslator(value));
-        }
-
-        [TestMethod]
-        public void OnUseTranslatorChangedInternal_WhenNotInitialized_DoesNotCallsSettingsService()
-        {
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-
-            sut.OnUseTranslatorChangedInternal(true);
-
-            settingsServiceMock.Verify(x => x.SetUseTranslator(It.IsAny<bool>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void OnUseTranslatorChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
-        {
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-
-            sut.Init();
-            sut.OnUseTranslatorChangedInternal(true);
-
-            settingsServiceMock.Verify(x => x.SetUseTranslator(It.IsAny<bool>()), Times.Never);
-        }
-
-        #endregion
-
-        #region Tests for OnTranslatorApiUrlChangedInternal
-
-        [TestMethod]
-        public void OnTranslatorApiUrlChangedInternal_WhenTranslatorApiUrlIsValid_CallsSettingsService()
-        {
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-
-            sut.Init();
-            sut.OnTranslatorApiUrlChangedInternal("http://localhost:7014/api/Translate");
-
-            settingsServiceMock.Verify(x => x.SetTranslatorApiUrl("http://localhost:7014/api/Translate"));
-        }
-
-        [TestMethod]
-        public void OnTranslatorApiUrlChangedInternal_WhenTranslatorApiUrlIsNoValid_DoesNotCallsSettingsService()
-        {
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-
-            sut.Init();
-            sut.OnTranslatorApiUrlChangedInternal("abcdef");
-
-            settingsServiceMock.Verify(x => x.SetTranslatorApiUrl(It.IsAny<string?>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void OnTranslatorApiUrlChangedInternal_WhenNotInitialized_DoesNotCallsSettingsService()
-        {
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-
-            sut.OnTranslatorApiUrlChangedInternal(null);
-
-            settingsServiceMock.Verify(x => x.SetTranslatorApiUrl(It.IsAny<string?>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void OnTranslatorApiUrlChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
-        {
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-
-            sut.Init();
-            sut.OnTranslatorApiUrlChangedInternal(null);
-
-            settingsServiceMock.Verify(x => x.SetTranslatorApiUrl(It.IsAny<string?>()), Times.Never);
         }
 
         #endregion

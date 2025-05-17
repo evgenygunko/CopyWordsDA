@@ -114,89 +114,10 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold"
-                Text="Use translator"/>
-            <Label Grid.Row="1" Grid.Column="0" FontSize="13"
-                Text="Use the translation app to translate the headword and its meanings"/>
-            <Switch Grid.RowSpan="2" Grid.Column="1" x:Name="chkUseTranslator"
-                IsToggled="{Binding UseTranslator}" />
-        </Grid>
-
-        <!-- Horizontal line -->
-        <BoxView Color="#E1E1E1" HeightRequest="1" Margin="0,10,0,10" />
-
-        <Label Text="TranslatorAPI URL:" Margin="20,0,10,7" FontAttributes="Bold"/>
-        <Grid Margin="20,0,10,0" x:Name="gridTranslatorAppUrl">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="45"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <Label Grid.Row="0" Grid.Column="0"
-                Text="{Binding TranslatorApiUrl, FallbackValue='http://localhost:7014/api/Translate' }"
-                FontSize="13" >
-
-                <Label.Triggers>
-                    <DataTrigger TargetType="Label" Binding="{Binding IsTranslatorApiUrlValid}" Value="true">
-                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
-                    </DataTrigger>
-
-                    <DataTrigger TargetType="Label" Binding="{Binding IsTranslatorApiUrlValid}" Value="false">
-                        <Setter Property="TextColor" Value="Red" />
-                    </DataTrigger>
-
-                    <DataTrigger TargetType="Label" Binding="{Binding UseTranslator}" Value="false">
-                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
-                    </DataTrigger>
-                </Label.Triggers>
-            </Label>
-
-            <Image Grid.Row="0" Grid.Column="1"
-                WidthRequest="28"
-                HeightRequest="28">
-
-                <Image.Source>
-                    <FontImageSource
-                        Color="Gray"
-                        FontFamily="MaterialIconsOutlined-Regular"
-                        Glyph="{x:Static helpers:MaterialDesignIconFonts.Edit}" />
-                </Image.Source>
-            </Image>
-
-            <Grid.Behaviors>
-                <toolkit:TouchBehavior
-                    DefaultAnimationDuration="250"
-                    DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
-                    PressedOpacity="0.6"
-                    PressedScale="0.8"
-                    BindingContext="{Binding Path=BindingContext, Source={x:Reference gridTranslatorAppUrl}, x:DataType=Grid}"
-                    Command="{Binding EnterTranslatorApiUrlCommand}"/>
-            </Grid.Behaviors>
-        </Grid>
-
-        <!-- Horizontal line -->
-        <BoxView Color="#E1E1E1" HeightRequest="1" Margin="0,20,0,10" />
-
-        <Grid Margin="20,10,10,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="45"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold"
                 Text="Translate headword"/>
             <Label Grid.Row="1" Grid.Column="0" FontSize="13"
                 Text="Translate the headword to English/Russian"/>
             <Switch Grid.RowSpan="2" Grid.Column="1"
-                IsEnabled="{Binding UseTranslator}"
                 IsToggled="{Binding TranslateHeadword}" />
         </Grid>
 
@@ -219,7 +140,6 @@
             <Label Grid.Row="1" Grid.Column="0" FontSize="13"
                 Text="Translate the word meanings to Russian"/>
             <Switch Grid.RowSpan="2" Grid.Column="1"
-                IsEnabled="{Binding UseTranslator}"
                 IsToggled="{Binding TranslateMeanings}" />
         </Grid>
 
@@ -242,7 +162,6 @@
             <Label Grid.Row="1" Grid.Column="0" FontSize="13"
                 Text="Include translated meanings when copying text for the back card"/>
             <Switch Grid.RowSpan="2" Grid.Column="1"
-                IsEnabled="{Binding UseTranslator}"
                 IsToggled="{Binding CopyTranslatedMeanings}" />
         </Grid>
 

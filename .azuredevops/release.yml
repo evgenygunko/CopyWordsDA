@@ -10,6 +10,7 @@ variables:
     - group: AccessTokens
     - group: Windows
     - group: Android
+    - group: TranslatorApp
 
     - template: templates/pipeline-variables.yml
 

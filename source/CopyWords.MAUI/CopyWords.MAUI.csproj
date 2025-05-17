@@ -163,4 +163,12 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
   </ItemGroup>
+
+<ItemGroup>
+    <EmbeddedResource Include="appsettings.json" />
+
+    <EmbeddedResource Include="appsettings.*.json">
+      <DependentUpon>appsettings.json</DependentUpon>
+    </EmbeddedResource>
+</ItemGroup>
 </Project>

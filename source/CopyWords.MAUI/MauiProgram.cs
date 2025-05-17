@@ -1,7 +1,9 @@
-﻿using System.Runtime.Versioning;
+﻿using System.Reflection;
+using System.Runtime.Versioning;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Maui.Views;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.Core.ViewModels.Validation;
@@ -83,10 +85,44 @@ public static class MauiProgram
 
         builder.Services.AddScoped<IValidator<SettingsViewModel>, SettingsViewModelValidator>();
 
+        GlobalSettings globalSettings = ReadGlobalSettings();
+        builder.Services.AddSingleton<IGlobalSettings>(globalSettings);
+
         var app = builder.Build();
 
         _serviceProvider = app.Services; // store service provider reference
 
         return app;
+    }
+
+    private static GlobalSettings ReadGlobalSettings()
+    {
+        GlobalSettings? globalSettings = null;
+
+        var a = Assembly.GetExecutingAssembly();
+
+        using var streamLocalFile = a.GetManifestResourceStream("CopyWords.MAUI.appsettings.Local.json");
+        if (streamLocalFile != null)
+        {
+            streamLocalFile.Position = 0;
+            globalSettings = System.Text.Json.JsonSerializer.Deserialize<GlobalSettings>(streamLocalFile);
+        }
+
+        if (globalSettings == null)
+        {
+            using var stream = a.GetManifestResourceStream("CopyWords.MAUI.appsettings.json");
+            if (stream != null)
+            {
+                stream.Position = 0;
+                globalSettings = System.Text.Json.JsonSerializer.Deserialize<GlobalSettings>(stream);
+            }
+        }
+
+        if (globalSettings == null)
+        {
+            throw new Exception("Cannot deserialize CopyWords.MAUI.appsettings.json.");
+        }
+
+        return globalSettings;
     }
 }

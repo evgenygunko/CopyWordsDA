@@ -18,10 +18,6 @@ namespace CopyWords.Core.Services
 
         Task ExportSettingsAsync(string filePath);
 
-        void SetUseTranslator(bool value);
-
-        void SetTranslatorApiUrl(string? value);
-
         void SetTranslateHeadword(bool value);
 
         void SetTranslateMeanings(bool value);
@@ -58,8 +54,6 @@ namespace CopyWords.Core.Services
             appSettings.FfmpegBinFolder = GetFfmpegBinFolder();
             appSettings.Mp3gainPath = _preferences.Get("Mp3gainPath", string.Empty);
             appSettings.UseMp3gain = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && _preferences.Get<bool>("UseMp3gain", false);
-            appSettings.UseTranslator = _preferences.Get<bool>("UseTranslator", false);
-            appSettings.TranslatorApiUrl = _preferences.Get("TranslatorApiUrl", string.Empty);
             appSettings.TranslateHeadword = _preferences.Get<bool>("TranslateHeadword", true);
             appSettings.TranslateMeanings = _preferences.Get<bool>("TranslateMeanings", true);
             appSettings.CopyTranslatedMeanings = _preferences.Get<bool>("CopyTranslatedMeanings", true);
@@ -79,8 +73,6 @@ namespace CopyWords.Core.Services
             _preferences.Set("FfmpegBinFolder", appSettings.FfmpegBinFolder);
             _preferences.Set("Mp3gainPath", appSettings.Mp3gainPath);
             _preferences.Set("UseMp3gain", appSettings.UseMp3gain);
-            _preferences.Set("UseTranslator", appSettings.UseTranslator);
-            _preferences.Set("TranslatorApiUrl", appSettings.TranslatorApiUrl);
             _preferences.Set("TranslateMeanings", appSettings.TranslateMeanings);
             _preferences.Set("TranslateHeadword", appSettings.TranslateHeadword);
             _preferences.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings);
@@ -107,10 +99,6 @@ namespace CopyWords.Core.Services
 
             await _fileIOService.WriteAllTextAsync(filePath, json);
         }
-
-        public void SetUseTranslator(bool value) => _preferences.Set("UseTranslator", value);
-
-        public void SetTranslatorApiUrl(string? value) => _preferences.Set("TranslatorApiUrl", value);
 
         public void SetTranslateHeadword(bool value) => _preferences.Set("TranslateHeadword", value);
 

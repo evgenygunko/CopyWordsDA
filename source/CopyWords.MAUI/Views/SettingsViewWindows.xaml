@@ -218,22 +218,6 @@
         <Border Grid.Row="4" Style="{StaticResource BorderStyle}">
             <VerticalStackLayout>
                 <HorizontalStackLayout>
-                    <Label Text="Use translator" VerticalOptions="Center"></Label>
-                    <CheckBox x:Name="chkUseTranslator" IsChecked="{Binding UseTranslator}" HorizontalOptions="Start" />
-                </HorizontalStackLayout>
-
-                <Label Margin="0,15,0,0" Text="TranslatorAPI URL:"></Label>
-                <Entry
-                        Margin="0,0,0,10"
-                        Text="{Binding TranslatorApiUrl, FallbackValue='http://localhost:7014/api/Translate' }"
-                        IsEnabled="{Binding UseTranslator}">
-                </Entry>
-
-                <Label
-                        Text="{Binding ValidationResult, Converter={StaticResource ShowErrorConverter}, ConverterParameter={x:Static validation:SettingsViewModelValidator.TranslatorApiUrlProperty}}"
-                        TextColor="Red"/>
-
-                <HorizontalStackLayout>
                     <Label
                             Text="Translate headword:"
                             VerticalOptions="Center"></Label>
