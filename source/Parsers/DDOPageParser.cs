@@ -98,21 +98,29 @@ namespace CopyWords.Parsers
                         string[] meanings = spanEndings.InnerHtml.Split("<span class=\"dividerDouble\">&#160;</span>");
                         foreach (string meaning in meanings)
                         {
-                            var match = Regex.Match(meaning, @"<span[^>]*>(.*?)<\/span>(.*)", RegexOptions.Singleline);
+                            string cleanResult = string.Empty;
 
-                            if (match.Success)
+                            // 1. Handle: <span class="diskret">eller</span> <span class="diskret">(...)</span>
+                            // Replace: "<span class="diskret">eller</span> <span class="diskret">TEXT</span>" with "|| TEXT"
+                            const string patternEller = @"<span class=""diskret"">eller</span>\s*<span class=""diskret"">(.*?)</span>";
+                            const string replacement = "|| $1";
+                            cleanResult = Regex.Replace(meaning, patternEller, replacement, RegexOptions.Singleline);
+
+                            // Pattern explanation:
+                            // <span class="diskret"> — opening span with class diskret
+                            // (.*?) — capture group 1: inner text inside span (non-greedy)
+                            // </span> — closing span
+                            // ([^<]*) — capture group 2: any text after closing span that is NOT a tag (stops before next '<')
+                            const string pattern = @"<span class=""diskret"">(.*?)</span>([^<]*)";
+
+                            // Replace with group 1 + group 2 (trimmed)
+                            cleanResult = Regex.Replace(cleanResult, pattern, m => $"{m.Groups[1].Value.Trim()} {m.Groups[2].Value.Trim()}".Trim(), RegexOptions.Singleline);
+
+                            endings += cleanResult.Trim();
+                            if (endings.Length > 0 && !endings.EndsWith("||"))
                             {
-                                string insideSpan = match.Groups[1].Value.Trim();
-                                string afterSpan = match.Groups[2].Value.Trim();
-
-                                endings += insideSpan + " " + afterSpan;
+                                endings += " || ";
                             }
-                            else
-                            {
-                                endings += meaning.Trim();
-                            }
-
-                            endings += " || ";
                         }
 
                         endings = endings.TrimEnd(' ', '|');

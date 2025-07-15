@@ -258,6 +258,18 @@ namespace CopyWords.Parsers.Tests
             endings.Should().Be("-, -e || superlativ -est");
         }
 
+        [TestMethod]
+        public void ParseEndings_ForØge_ReturnsEndings()
+        {
+            string content = GetSimpleHTMLPage("øge.html");
+
+            DDOPageParser parser = new DDOPageParser();
+            parser.LoadHtml(content);
+
+            string endings = parser.ParseEndings();
+            endings.Should().Be("-r, -de || (i betydning 2, uofficielt) øgte, -t || (i betydning 2, uofficielt) øgt");
+        }
+
         #endregion
 
         #region Tests for ParsePronunciation
