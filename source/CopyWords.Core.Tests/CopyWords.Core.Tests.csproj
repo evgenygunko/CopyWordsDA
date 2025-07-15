@@ -39,4 +39,10 @@
     <ProjectReference Include="..\CopyWords.Core\CopyWords.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestData\GetLatestRelease.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

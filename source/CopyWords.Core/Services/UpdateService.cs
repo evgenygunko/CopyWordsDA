@@ -40,10 +40,15 @@ namespace CopyWords.Core.Services
             {
                 foreach (var asset in assets.EnumerateArray())
                 {
-                    if (asset.TryGetProperty("browser_download_url", out JsonElement urlElement))
+                    if (asset.TryGetProperty("browser_download_url", out JsonElement urlElement)
+                        && asset.TryGetProperty("name", out JsonElement nameElement))
                     {
-                        downloadUrl = urlElement.GetString() ?? "";
-                        break;
+                        string assetName = nameElement.GetString() ?? "";
+                        if (assetName.EndsWith(".msix", StringComparison.OrdinalIgnoreCase))
+                        {
+                            downloadUrl = urlElement.GetString() ?? "";
+                            break;
+                        }
                     }
                 }
             }

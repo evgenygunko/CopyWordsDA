@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Reflection;
 using CopyWords.Core.Models;
 using FluentAssertions;
 using Moq;
@@ -68,6 +69,39 @@ namespace CopyWords.Core.Services.Tests
             // Act & Assert
             _ = sut.Invoking(x => x.GetLatestReleaseVersionAsync())
                 .Should().ThrowAsync<HttpRequestException>();
+        }
+
+        [TestMethod]
+        public async Task GetLatestReleaseVersionAsync_Should_ParseReleaseInfoFromJson()
+        {
+            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+            string jsonFilePath = Path.Combine(path, "TestData", "GetLatestRelease.json");
+            string jsonResponse = File.ReadAllText(jsonFilePath);
+
+            var handlerMock = new Mock<HttpMessageHandler>();
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+                )
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(jsonResponse),
+                });
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            var sut = new UpdateService(httpClient);
+
+            // Act
+            ReleaseInfo result = await sut.GetLatestReleaseVersionAsync();
+
+            // Assert
+            result.LatestVersion.Should().Be("0.1.1298.0");
+            result.Description.Should().Be("Inject TranslatorAPIUrl into the app so that it doesn't need to be configured in the settings.");
+            result.DownloadUrl.Should().Be("https://github.com/evgenygunko/CopyWordsDA/releases/download/v0.1.1298.0/CopyWords.MAUI_0.1.1298.0_x64.msix");
         }
 
         #endregion
