@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 
@@ -250,9 +251,14 @@ namespace CopyWords.Core.ViewModels
                     await _dialogService.DisplayAlert("Cannot find word", $"Could not find a translation for '{word}'", "OK");
                 }
             }
+            catch (InvalidInputException ex)
+            {
+                await _dialogService.DisplayAlert("Search input is invalid", ex.Message, "OK");
+                return null;
+            }
             catch (Exception ex)
             {
-                await _dialogService.DisplayAlert("Error occurred while searching translations", ex.Message, "OK");
+                await _dialogService.DisplayAlert("An error occurred while searching for translations", ex.Message, "OK");
                 return null;
             }
 

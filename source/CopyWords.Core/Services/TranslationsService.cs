@@ -63,6 +63,12 @@ namespace CopyWords.Core.Services
                 return await response.Content.ReadFromJsonAsync<WordModel>();
             }
 
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                string errorContent = await response.Content.ReadAsStringAsync();
+                throw new InvalidInputException(errorContent);
+            }
+
             throw new ServerErrorException($"Server returned error code '{response.StatusCode}' when requesting URL '{url}'.");
         }
     }

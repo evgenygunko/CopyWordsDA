@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
@@ -165,21 +166,26 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void LookUpWordInDictionaryAsync_WhenSearchIsInvalid_DisplaysAlerts()
+        public async Task LookUpWordInDictionaryAsync_WhenSearchIsInvalid_DisplaysAlerts()
         {
-            /*string search = _fixture.Create<string>();
+            string search = _fixture.Create<string>();
 
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>()))
+                .ThrowsAsync(new InvalidInputException("too many commas"));
 
             var sut = _fixture.Create<MainViewModel>();
 
             WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().BeNull();
-            dialogServiceMock.Verify(x => x.DisplayAlert("Invalid search term", "too many commas", "OK"));*/
-            Assert.Inconclusive("This test needs to be implemented with proper validation logic for search terms.");
+            dialogServiceMock.Verify(x => x.DisplayAlert("Search input is invalid", "too many commas", "OK"));
         }
 
         [TestMethod]
@@ -201,7 +207,7 @@ namespace CopyWords.Core.Tests.ViewModels
             WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().BeNull();
-            dialogServiceMock.Verify(x => x.DisplayAlert("Error occurred while searching translations", "exception from unit test", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlert("An error occurred while searching for translations", "exception from unit test", "OK"));
         }
 
         [TestMethod]
