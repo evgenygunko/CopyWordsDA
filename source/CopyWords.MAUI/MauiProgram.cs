@@ -7,8 +7,6 @@ using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.Core.ViewModels.Validation;
-using CopyWords.Parsers;
-using CopyWords.Parsers.Services;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
@@ -61,18 +59,13 @@ public static class MauiProgram
         builder.Services.AddSingleton(mediaElement);
 
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
-        builder.Services.AddSingleton<ILookUpWord, LookUpWord>();
-        builder.Services.AddSingleton<IDDOPageParser, DDOPageParser>();
-        builder.Services.AddSingleton<ISpanishDictPageParser, SpanishDictPageParser>();
         builder.Services.AddSingleton<ICopySelectedToClipboardService, CopySelectedToClipboardService>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
         builder.Services.AddSingleton<IClipboardService, ClipboardService>();
-        builder.Services.AddSingleton<ITranslationsService, TranslationsService>();
+        builder.Services.AddSingleton<Core.Services.ITranslationsService, Core.Services.TranslationsService>();
         builder.Services.AddSingleton<IInstantTranslationService, InstantTranslationService>();
         builder.Services.AddSingleton<ISaveImageFileService, SaveImageFileService>();
 
-        builder.Services.AddHttpClient<IFileDownloader, FileDownloader>();
-        builder.Services.AddHttpClient<ITranslatorAPIClient, TranslatorAPIClient>();
         builder.Services.AddHttpClient<IUpdateService, UpdateService>();
         builder.Services.AddHttpClient<ISaveSoundFileService, SaveSoundFileService>();
         builder.Services.AddHttpClient<IFileDownloaderService, FileDownloaderService>();

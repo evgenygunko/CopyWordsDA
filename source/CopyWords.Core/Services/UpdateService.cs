@@ -25,7 +25,7 @@ namespace CopyWords.Core.Services
         {
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("request");
 
-            var response = await _httpClient.GetAsync(LatestReleaseUrl);
+            var response = await _httpClient.GetAsync(LatestReleaseUrl, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
             response.EnsureSuccessStatusCode();
 
             var jsonResponse = await response.Content.ReadAsStringAsync();

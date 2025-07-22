@@ -119,7 +119,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CopyWords.Core\CopyWords.Core.csproj" />
-    <ProjectReference Include="..\Parsers\Parsers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

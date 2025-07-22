@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
-using CopyWords.Parsers;
 using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.ViewModels
@@ -14,8 +13,8 @@ namespace CopyWords.Core.ViewModels
         private readonly ISettingsService _settingsService;
         private readonly IDialogService _dialogService;
         private readonly IInstantTranslationService _instantTranslationService;
+        private readonly ITranslationsService _translationsService;
 
-        private ILookUpWord _lookUpWord;
         private WordViewModel _wordViewModel;
 
         public MainViewModel(
@@ -23,15 +22,14 @@ namespace CopyWords.Core.ViewModels
             ISettingsService settingsService,
             IDialogService dialogService,
             IInstantTranslationService instantTranslationService,
-            ILookUpWord lookUpWord,
+            ITranslationsService translationsService,
             WordViewModel wordViewModel)
         {
             _globalSettings = globalSettings;
             _settingsService = settingsService;
             _dialogService = dialogService;
             _instantTranslationService = instantTranslationService;
-
-            _lookUpWord = lookUpWord;
+            _translationsService = translationsService;
             _wordViewModel = wordViewModel;
 
             searchWord = string.Empty;
@@ -170,7 +168,8 @@ namespace CopyWords.Core.ViewModels
             WordModel? wordModel = null;
             try
             {
-                AppSettings appSettings = _settingsService.LoadSettings();
+                // todo: create a new endpoint in TranslationsApp to get word by URL
+                /*AppSettings appSettings = _settingsService.LoadSettings();
 
                 wordModel = await _lookUpWord.GetWordByUrlAsync(url,
                     new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
@@ -178,7 +177,9 @@ namespace CopyWords.Core.ViewModels
                 if (wordModel == null)
                 {
                     await _dialogService.DisplayAlert("Cannot find word", $"Could not parse the word by URL '{url}'", "OK");
-                }
+                }*/
+                _ = url; // Placeholder for the actual implementation
+                await _dialogService.DisplayAlert("Not implemented", "Requesting a word variant is not implemented yet", "OK");
             }
             catch (Exception ex)
             {
@@ -237,19 +238,12 @@ namespace CopyWords.Core.ViewModels
                 return null;
             }
 
-            (bool isValid, string? errorMessage) = _lookUpWord.CheckThatWordIsValid(word);
-            if (!isValid)
-            {
-                await _dialogService.DisplayAlert("Invalid search term", errorMessage ?? string.Empty, "OK");
-                return null;
-            }
-
             WordModel? wordModel = null;
             try
             {
                 AppSettings appSettings = _settingsService.LoadSettings();
 
-                wordModel = await _lookUpWord.LookUpWordAsync(word,
+                wordModel = await _translationsService.LookUpWordAsync(word,
                     new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
 
                 if (wordModel == null)
