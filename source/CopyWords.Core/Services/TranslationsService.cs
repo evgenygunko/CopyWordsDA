@@ -1,8 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text;
+using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
-using CopyWords.Parsers.Exceptions;
-using CopyWords.Parsers.Models;
 using Newtonsoft.Json;
 
 namespace CopyWords.Core.Services

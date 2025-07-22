@@ -1,4 +1,4 @@
-﻿namespace CopyWords.Parsers.Models
+﻿namespace CopyWords.Core.Models
 {
     public enum SourceLanguage
     {

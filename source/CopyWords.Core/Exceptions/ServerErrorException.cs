@@ -1,4 +1,4 @@
-﻿namespace CopyWords.Parsers.Exceptions
+﻿namespace CopyWords.Core.Exceptions
 {
     public class ServerErrorException : Exception
     {

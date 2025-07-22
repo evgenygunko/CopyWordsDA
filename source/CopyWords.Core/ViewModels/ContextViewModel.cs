@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CopyWords.Parsers.Models;
+using CopyWords.Core.Models;
 
 namespace CopyWords.Core.ViewModels
 {

@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
+using CopyWords.Core.Models;
 using CopyWords.Core.ViewModels;
-using CopyWords.Parsers.Models;
 using FluentAssertions;
 
 namespace CopyWords.Core.Tests.ViewModels
