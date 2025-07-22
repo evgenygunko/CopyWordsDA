@@ -165,27 +165,7 @@ namespace CopyWords.Core.ViewModels
         {
             IsBusy = true;
 
-            WordModel? wordModel = null;
-            try
-            {
-                // todo: create a new endpoint in TranslationsApp to get word by URL
-                /*AppSettings appSettings = _settingsService.LoadSettings();
-
-                wordModel = await _lookUpWord.GetWordByUrlAsync(url,
-                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
-
-                if (wordModel == null)
-                {
-                    await _dialogService.DisplayAlert("Cannot find word", $"Could not parse the word by URL '{url}'", "OK");
-                }*/
-                _ = url; // Placeholder for the actual implementation
-                await _dialogService.DisplayAlert("Not implemented", "Requesting a word variant is not implemented yet", "OK");
-            }
-            catch (Exception ex)
-            {
-                await _dialogService.DisplayAlert("Error occurred while parsing the word", ex.Message, "OK");
-            }
-
+            WordModel? wordModel = await LookUpWordInDictionaryAsync(url);
             UpdateUI(wordModel);
 
             IsBusy = false;
@@ -231,9 +211,9 @@ namespace CopyWords.Core.ViewModels
             IsBusy = false;
         }
 
-        internal async Task<WordModel?> LookUpWordInDictionaryAsync(string word)
+        internal async Task<WordModel?> LookUpWordInDictionaryAsync(string searchTerm)
         {
-            if (string.IsNullOrEmpty(word))
+            if (string.IsNullOrEmpty(searchTerm))
             {
                 return null;
             }
@@ -243,12 +223,12 @@ namespace CopyWords.Core.ViewModels
             {
                 AppSettings appSettings = _settingsService.LoadSettings();
 
-                wordModel = await _translationsService.LookUpWordAsync(word,
+                wordModel = await _translationsService.LookUpWordAsync(searchTerm,
                     new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
 
                 if (wordModel == null)
                 {
-                    await _dialogService.DisplayAlert("Cannot find word", $"Could not find a translation for '{word}'", "OK");
+                    await _dialogService.DisplayAlert("Cannot find word", $"Could not find a translation for '{searchTerm}'", "OK");
                 }
             }
             catch (InvalidInputException ex)

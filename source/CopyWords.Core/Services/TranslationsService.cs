@@ -68,6 +68,10 @@ namespace CopyWords.Core.Services
                 string errorContent = await response.Content.ReadAsStringAsync();
                 throw new InvalidInputException(errorContent);
             }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
 
             throw new ServerErrorException($"Server returned error code '{response.StatusCode}' when requesting URL '{url}'.");
         }

@@ -18,7 +18,7 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for LookUpWordAsync
 
         [TestMethod]
-        public async Task LookUpWordAsync_OnSuccess_ReturnsWordModel()
+        public async Task LookUpWordAsync_WhenSuccess_ReturnsWordModel()
         {
             var wordModel = _fixture.Create<WordModel>();
             var json = JsonConvert.SerializeObject(wordModel);
@@ -66,7 +66,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task LookUpWordAsync_OnBadRequest_ThrowsInvalidInputException()
+        public async Task LookUpWordAsync_WhenBadRequest_ThrowsInvalidInputException()
         {
             var errorMsg = "Bad input error message";
             var httpClient = CreateMockHttpClient(HttpStatusCode.BadRequest, errorMsg);
@@ -79,7 +79,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task LookUpWordAsync_OnOtherErrors_ThrowsServerErrorException()
+        public async Task LookUpWordAsync_WhenOtherErrors_ThrowsServerErrorException()
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
             var sut = new TranslationsService(httpClient);
@@ -95,7 +95,7 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for TranslateAsync
 
         [TestMethod]
-        public async Task TranslateAsync_OnSuccess_ReturnsWordModel()
+        public async Task TranslateAsync_WhenSuccess_ReturnsWordModel()
         {
             var wordModel = _fixture.Create<WordModel>();
             var json = JsonConvert.SerializeObject(wordModel);
@@ -110,7 +110,19 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task TranslateAsync_OnBadRequest_ThrowsInvalidInputException()
+        public async Task TranslateAsync_WhenNotFound_ReturnsNull()
+        {
+            var errorMsg = "not found";
+            var httpClient = CreateMockHttpClient(HttpStatusCode.NotFound, errorMsg);
+            var sut = new TranslationsService(httpClient);
+
+            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<TranslationInput>());
+
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenBadRequest_ThrowsInvalidInputException()
         {
             var errorMsg = "Bad input error message";
             var httpClient = CreateMockHttpClient(HttpStatusCode.BadRequest, errorMsg);
@@ -122,7 +134,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task TranslateAsync_OnOtherErrors_ThrowsServerErrorException()
+        public async Task TranslateAsync_WhenOtherErrors_ThrowsServerErrorException()
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
             var sut = new TranslationsService(httpClient);

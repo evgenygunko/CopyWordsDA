@@ -286,9 +286,9 @@ namespace CopyWords.Core.Tests.ViewModels
         #region Tests for GetVariantAsync
 
         [TestMethod]
-        public void GetVariantAsync_WhenExceptionThrown_DisplaysAlerts()
+        public async Task GetVariantAsync_WhenExceptionThrown_DisplaysAlerts()
         {
-            /*string url = _fixture.Create<string>();
+            string url = _fixture.Create<string>();
 
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
@@ -297,20 +297,19 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
-            translationsServiceMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>(), It.IsAny<Options>())).ThrowsAsync(new Exception("exception from unit test"));
+            translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ThrowsAsync(new Exception("exception from unit test"));
 
             var sut = _fixture.Create<MainViewModel>();
 
             await sut.GetVariantAsync(url);
 
-            dialogServiceMock.Verify(x => x.DisplayAlert("Error occurred while parsing the word", "exception from unit test", "OK"));*/
-            Assert.Inconclusive("This test needs to be implemented with proper exception handling logic for URL parsing.");
+            dialogServiceMock.Verify(x => x.DisplayAlert("An error occurred while searching for translations", "exception from unit test", "OK"));
         }
 
         [TestMethod]
-        public void GetVariantAsync_WhenSearchReturnsNull_DisplaysAlert()
+        public async Task GetVariantAsync_WhenSearchReturnsNull_DisplaysAlert()
         {
-            /*string url = _fixture.Create<string>();
+            string url = _fixture.Create<string>();
 
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
@@ -319,20 +318,19 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
-            translationsServiceMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync((WordModel?)null);
+            translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync((WordModel?)null);
 
             var sut = _fixture.Create<MainViewModel>();
 
             await sut.GetVariantAsync(url);
 
-            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot find word", $"Could not parse the word by URL '{url}'", "OK"));*/
-            Assert.Inconclusive("This test needs to be implemented with proper validation logic for URL parsing.");
+            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot find word", $"Could not find a translation for '{url}'", "OK"));
         }
 
         [TestMethod]
-        public void GetVariantAsync_WhenSearchIsSuccessful_UpdatesUI()
+        public async Task GetVariantAsync_WhenSearchIsSuccessful_UpdatesUI()
         {
-            /*string url = _fixture.Create<string>();
+            string url = _fixture.Create<string>();
             WordModel wordModel = _fixture.Create<WordModel>();
 
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
@@ -342,7 +340,7 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
-            translationsServiceMock.Setup(x => x.GetWordByUrlAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
+            translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
             var sut = _fixture.Create<MainViewModel>();
 
@@ -357,8 +355,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.WordViewModel.DefinitionViewModels.Should().HaveCount(wordModel.Definitions.Count());
             sut.WordViewModel.Variants.Should().HaveCount(wordModel.Variations.Count());
 
-            dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);*/
-            Assert.Inconclusive("This test needs to be implemented with proper logic for getting word variants.");
+            dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         #endregion
