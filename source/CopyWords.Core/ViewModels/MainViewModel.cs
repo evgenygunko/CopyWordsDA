@@ -189,7 +189,7 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.DefinitionViewModels.Clear();
                 foreach (var definition in wordModel.Definitions)
                 {
-                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(definition, sourceLanguage));
+                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(definition, sourceLanguage, _settingsService.GetShowTranslatedMeanings()));
                 }
 
                 _wordViewModel.Variants.Clear();
@@ -224,7 +224,7 @@ namespace CopyWords.Core.ViewModels
                 AppSettings appSettings = _settingsService.LoadSettings();
 
                 wordModel = await _translationsService.LookUpWordAsync(searchTerm,
-                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl, appSettings.TranslateHeadword, appSettings.TranslateMeanings));
+                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl));
 
                 if (wordModel == null)
                 {

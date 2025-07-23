@@ -43,8 +43,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
             sut.UseMp3gain.Should().Be(appSettings.UseMp3gain);
             sut.Mp3gainPath.Should().Be(appSettings.Mp3gainPath);
-            sut.TranslateMeanings.Should().Be(appSettings.TranslateMeanings);
-            sut.TranslateHeadword.Should().Be(appSettings.TranslateHeadword);
+            sut.ShowTranslatedMeanings.Should().Be(appSettings.ShowTranslatedMeanings);
         }
 
         #endregion
@@ -275,8 +274,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
             sut.UseMp3gain.Should().Be(appSettings.UseMp3gain);
             sut.Mp3gainPath.Should().Be(appSettings.Mp3gainPath);
-            sut.TranslateMeanings.Should().Be(appSettings.TranslateMeanings);
-            sut.TranslateHeadword.Should().Be(appSettings.TranslateHeadword);
+            sut.ShowTranslatedMeanings.Should().Be(appSettings.ShowTranslatedMeanings);
 
             settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()));
             dialogServiceMock.Verify(x => x.DisplayToast("Settings successfully imported."));
@@ -334,12 +332,12 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #endregion
 
-        #region Tests for OnTranslateHeadwordChangedInternal
+        #region Tests for OnShowTranslatedMeaningsChangedInternal
 
         [DataTestMethod]
         [DataRow(true)]
         [DataRow(false)]
-        public void OnTranslateHeadwordChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
+        public void OnShowTranslatedMeaningsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
 
@@ -353,13 +351,13 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.Init();
-            sut.OnTranslateHeadwordChangedInternal(value);
+            sut.OnShowTranslatedMeaningsChangedInternal(value);
 
-            settingsServiceMock.Verify(x => x.SetTranslateHeadword(value));
+            settingsServiceMock.Verify(x => x.SetShowTranslatedMeanings(value));
         }
 
         [TestMethod]
-        public void OnTranslateHeadwordChangedInternal_WhenNotInitialized_DoesNotCallsSettingsService()
+        public void OnShowTranslatedMeaningsChangedInternal_WhenNotInitialized_DoesNotCallsSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
 
@@ -372,13 +370,13 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>());
 
-            sut.OnTranslateHeadwordChangedInternal(true);
+            sut.OnShowTranslatedMeaningsChangedInternal(true);
 
-            settingsServiceMock.Verify(x => x.SetTranslateHeadword(It.IsAny<bool>()), Times.Never);
+            settingsServiceMock.Verify(x => x.SetShowTranslatedMeanings(It.IsAny<bool>()), Times.Never);
         }
 
         [TestMethod]
-        public void OnTranslateHeadwordChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
+        public void OnShowTranslatedMeaningsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
 
@@ -392,74 +390,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.Init();
-            sut.OnTranslateHeadwordChangedInternal(true);
+            sut.OnShowTranslatedMeaningsChangedInternal(true);
 
-            settingsServiceMock.Verify(x => x.SetTranslateHeadword(It.IsAny<bool>()), Times.Never);
-        }
-
-        #endregion
-
-        #region Tests for OnTranslateMeaningsChangedInternal
-
-        [DataTestMethod]
-        [DataRow(true)]
-        [DataRow(false)]
-        public void OnTranslateMeaningsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
-        {
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-
-            sut.Init();
-            sut.OnTranslateMeaningsChangedInternal(value);
-
-            settingsServiceMock.Verify(x => x.SetTranslateMeanings(value));
-        }
-
-        [TestMethod]
-        public void OnTranslateMeaningsChangedInternal_WhenNotInitialized_DoesNotCallsSettingsService()
-        {
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-
-            sut.OnTranslateMeaningsChangedInternal(true);
-
-            settingsServiceMock.Verify(x => x.SetTranslateMeanings(It.IsAny<bool>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void OnTranslateMeaningsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
-        {
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
-
-            sut.Init();
-            sut.OnTranslateMeaningsChangedInternal(true);
-
-            settingsServiceMock.Verify(x => x.SetTranslateMeanings(It.IsAny<bool>()), Times.Never);
+            settingsServiceMock.Verify(x => x.SetShowTranslatedMeanings(It.IsAny<bool>()), Times.Never);
         }
 
         #endregion

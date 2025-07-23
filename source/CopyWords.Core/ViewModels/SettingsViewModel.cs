@@ -71,20 +71,11 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private bool translateHeadword;
+        private bool showTranslatedMeanings;
 
-        partial void OnTranslateHeadwordChanged(bool value)
+        partial void OnShowTranslatedMeaningsChanged(bool value)
         {
-            OnTranslateHeadwordChangedInternal(value);
-        }
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private bool translateMeanings;
-
-        partial void OnTranslateMeaningsChanged(bool value)
-        {
-            OnTranslateMeaningsChangedInternal(value);
+            OnShowTranslatedMeaningsChangedInternal(value);
         }
 
         [ObservableProperty]
@@ -262,21 +253,12 @@ namespace CopyWords.Core.ViewModels
             return true;
         }
 
-        internal void OnTranslateHeadwordChangedInternal(bool value)
+        internal void OnShowTranslatedMeaningsChangedInternal(bool value)
         {
             if (_isInitialized && CanUpdateIndividualSettings)
             {
-                _settingsService.SetTranslateHeadword(value);
-                Debug.WriteLine($"TranslateHeadword has changed to {value}");
-            }
-        }
-
-        internal void OnTranslateMeaningsChangedInternal(bool value)
-        {
-            if (_isInitialized && CanUpdateIndividualSettings)
-            {
-                _settingsService.SetTranslateMeanings(value);
-                Debug.WriteLine($"TranslateMeanings has changed to {value}");
+                _settingsService.SetShowTranslatedMeanings(value);
+                Debug.WriteLine($"ShowTranslatedMeanings has changed to {value}");
             }
         }
 
@@ -343,8 +325,7 @@ namespace CopyWords.Core.ViewModels
             UseMp3gain = appSettings.UseMp3gain;
             Mp3gainPath = appSettings.Mp3gainPath;
 
-            TranslateMeanings = appSettings.TranslateMeanings;
-            TranslateHeadword = appSettings.TranslateHeadword;
+            ShowTranslatedMeanings = appSettings.ShowTranslatedMeanings;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
         }
 
@@ -354,8 +335,7 @@ namespace CopyWords.Core.ViewModels
             appSettings.FfmpegBinFolder = FfmpegBinFolder ?? string.Empty;
             appSettings.Mp3gainPath = Mp3gainPath ?? string.Empty;
             appSettings.UseMp3gain = UseMp3gain;
-            appSettings.TranslateMeanings = TranslateMeanings;
-            appSettings.TranslateHeadword = TranslateHeadword;
+            appSettings.ShowTranslatedMeanings = ShowTranslatedMeanings;
             appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
         }
 

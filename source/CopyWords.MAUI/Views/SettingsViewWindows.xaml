@@ -219,19 +219,10 @@
             <VerticalStackLayout>
                 <HorizontalStackLayout>
                     <Label
-                            Text="Translate headword:"
+                            Text="Show translated meanings:"
                             VerticalOptions="Center"></Label>
                     <CheckBox
-                            IsChecked="{Binding TranslateHeadword}"
-                            HorizontalOptions="Start" />
-                </HorizontalStackLayout>
-
-                <HorizontalStackLayout>
-                    <Label
-                            Text="Translate meanings:"
-                            VerticalOptions="Center"></Label>
-                    <CheckBox
-                            IsChecked="{Binding TranslateMeanings}"
+                            IsChecked="{Binding ShowTranslatedMeanings}"
                             HorizontalOptions="Start" />
                 </HorizontalStackLayout>
 

@@ -24,7 +24,7 @@ namespace CopyWords.Core.Tests.Services
             var json = JsonConvert.SerializeObject(wordModel);
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
 
-            var options = new Options(SourceLanguage.Danish, "http://fake-url", true, true);
+            var options = new Options(SourceLanguage.Danish, "http://fake-url");
 
             var sut = new TranslationsService(httpClient);
             var result = await sut.LookUpWordAsync("testword", options);
@@ -38,7 +38,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
             var sut = new TranslationsService(httpClient);
-            var options = new Options(SourceLanguage.Danish, "http://fake-url", true, true);
+            var options = new Options(SourceLanguage.Danish, "http://fake-url");
 
             await Assert.ThrowsExceptionAsync<ArgumentException>(() => sut.LookUpWordAsync(null!, options));
             await Assert.ThrowsExceptionAsync<ArgumentException>(() => sut.LookUpWordAsync("", options));
@@ -58,8 +58,8 @@ namespace CopyWords.Core.Tests.Services
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
             var sut = new TranslationsService(httpClient);
-            var optionsNull = new Options(SourceLanguage.Danish, null, true, true);
-            var optionsEmpty = new Options(SourceLanguage.Danish, "", true, true);
+            var optionsNull = new Options(SourceLanguage.Danish, null!);
+            var optionsEmpty = new Options(SourceLanguage.Danish, "");
 
             await Assert.ThrowsExceptionAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", optionsNull));
             await Assert.ThrowsExceptionAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", optionsEmpty));
@@ -71,7 +71,7 @@ namespace CopyWords.Core.Tests.Services
             var errorMsg = "Bad input error message";
             var httpClient = CreateMockHttpClient(HttpStatusCode.BadRequest, errorMsg);
             var sut = new TranslationsService(httpClient);
-            var options = new Options(SourceLanguage.Danish, "http://fake-url", true, true);
+            var options = new Options(SourceLanguage.Danish, "http://fake-url");
 
             var act = async () => await sut.LookUpWordAsync("testword", options);
             await act.Should().ThrowAsync<InvalidInputException>()
@@ -83,7 +83,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
             var sut = new TranslationsService(httpClient);
-            var options = new Options(SourceLanguage.Danish, "http://fake-url", true, true);
+            var options = new Options(SourceLanguage.Danish, "http://fake-url");
 
             var act = async () => await sut.LookUpWordAsync("testword", options);
             await act.Should().ThrowAsync<ServerErrorException>()
