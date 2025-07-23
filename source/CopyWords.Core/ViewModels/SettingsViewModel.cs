@@ -71,15 +71,6 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private bool showTranslatedMeanings;
-
-        partial void OnShowTranslatedMeaningsChanged(bool value)
-        {
-            OnShowTranslatedMeaningsChangedInternal(value);
-        }
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool copyTranslatedMeanings;
 
         partial void OnCopyTranslatedMeaningsChanged(bool value)
@@ -253,15 +244,6 @@ namespace CopyWords.Core.ViewModels
             return true;
         }
 
-        internal void OnShowTranslatedMeaningsChangedInternal(bool value)
-        {
-            if (_isInitialized && CanUpdateIndividualSettings)
-            {
-                _settingsService.SetShowTranslatedMeanings(value);
-                Debug.WriteLine($"ShowTranslatedMeanings has changed to {value}");
-            }
-        }
-
         internal void OnCopyTranslatedMeaningsChangedInternal(bool value)
         {
             if (_isInitialized && CanUpdateIndividualSettings)
@@ -325,7 +307,6 @@ namespace CopyWords.Core.ViewModels
             UseMp3gain = appSettings.UseMp3gain;
             Mp3gainPath = appSettings.Mp3gainPath;
 
-            ShowTranslatedMeanings = appSettings.ShowTranslatedMeanings;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
         }
 
@@ -335,7 +316,6 @@ namespace CopyWords.Core.ViewModels
             appSettings.FfmpegBinFolder = FfmpegBinFolder ?? string.Empty;
             appSettings.Mp3gainPath = Mp3gainPath ?? string.Empty;
             appSettings.UseMp3gain = UseMp3gain;
-            appSettings.ShowTranslatedMeanings = ShowTranslatedMeanings;
             appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
         }
 

@@ -6,7 +6,7 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class DefinitionViewModel : ObservableObject
     {
-        public DefinitionViewModel(Definition definition, SourceLanguage sourceLanguage, bool showTranslatedMeanings)
+        public DefinitionViewModel(Definition definition, SourceLanguage sourceLanguage)
         {
             HeadwordViewModel = new HeadwordViewModel(definition.Headword, sourceLanguage);
 
@@ -16,7 +16,7 @@ namespace CopyWords.Core.ViewModels
             ContextViewModels.Clear();
             foreach (var context in definition.Contexts)
             {
-                ContextViewModels.Add(new ContextViewModel(context, showTranslatedMeanings));
+                ContextViewModels.Add(new ContextViewModel(context));
             }
         }
 

@@ -17,10 +17,6 @@ namespace CopyWords.Core.Services
 
         Task ExportSettingsAsync(string filePath);
 
-        bool GetShowTranslatedMeanings();
-
-        void SetShowTranslatedMeanings(bool value);
-
         void SetCopyTranslatedMeanings(bool value);
 
         string GetSelectedParser();
@@ -53,7 +49,6 @@ namespace CopyWords.Core.Services
             appSettings.FfmpegBinFolder = GetFfmpegBinFolder();
             appSettings.Mp3gainPath = _preferences.Get("Mp3gainPath", string.Empty);
             appSettings.UseMp3gain = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && _preferences.Get<bool>("UseMp3gain", false);
-            appSettings.ShowTranslatedMeanings = _preferences.Get<bool>("ShowTranslatedMeanings", true);
             appSettings.CopyTranslatedMeanings = _preferences.Get<bool>("CopyTranslatedMeanings", true);
             appSettings.SelectedParser = _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
 
@@ -71,7 +66,6 @@ namespace CopyWords.Core.Services
             _preferences.Set("FfmpegBinFolder", appSettings.FfmpegBinFolder);
             _preferences.Set("Mp3gainPath", appSettings.Mp3gainPath);
             _preferences.Set("UseMp3gain", appSettings.UseMp3gain);
-            _preferences.Set("ShowTranslatedMeanings", appSettings.ShowTranslatedMeanings);
             _preferences.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings);
             _preferences.Set("SelectedParser", appSettings.SelectedParser);
         }
@@ -96,10 +90,6 @@ namespace CopyWords.Core.Services
 
             await _fileIOService.WriteAllTextAsync(filePath, json);
         }
-
-        public bool GetShowTranslatedMeanings() => _preferences.Get("ShowTranslatedMeanings", true);
-
-        public void SetShowTranslatedMeanings(bool value) => _preferences.Set("ShowTranslatedMeanings", value);
 
         public void SetCopyTranslatedMeanings(bool value) => _preferences.Set("CopyTranslatedMeanings", value);
 

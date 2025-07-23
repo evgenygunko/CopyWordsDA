@@ -894,8 +894,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Danish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -927,8 +926,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Danish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -962,8 +960,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Danish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -1007,8 +1004,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Danish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -1060,8 +1056,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Danish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -1094,8 +1089,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Danish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -1147,8 +1141,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Danish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Danish);
 
             return new ObservableCollection<DefinitionViewModel>()
             {
@@ -1219,8 +1212,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Spanish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1255,8 +1247,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Danish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Danish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1305,8 +1296,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Spanish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1351,8 +1341,7 @@ namespace CopyWords.Core.Tests.Services
             );
             var definitionVM1 = new DefinitionViewModel(
                 definition1,
-                SourceLanguage.Spanish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Spanish);
 
             var definition2 = new Definition(new Headword("guay", null, null), PartOfSpeech: "ADJECTIVE", Endings: "",
                 new List<Context>
@@ -1387,8 +1376,7 @@ namespace CopyWords.Core.Tests.Services
             );
             var definitionVM2 = new DefinitionViewModel(
                 definition2,
-                SourceLanguage.Spanish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1457,8 +1445,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Spanish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1493,8 +1480,7 @@ namespace CopyWords.Core.Tests.Services
 
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Spanish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {
@@ -1551,8 +1537,7 @@ namespace CopyWords.Core.Tests.Services
             );
             var definitionVM = new DefinitionViewModel(
                 definition,
-                SourceLanguage.Spanish,
-                showTranslatedMeanings: true);
+                SourceLanguage.Spanish);
 
             var definitionVMs = new ObservableCollection<DefinitionViewModel>()
             {

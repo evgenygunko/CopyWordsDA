@@ -189,7 +189,7 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.DefinitionViewModels.Clear();
                 foreach (var definition in wordModel.Definitions)
                 {
-                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(definition, sourceLanguage, _settingsService.GetShowTranslatedMeanings()));
+                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(definition, sourceLanguage));
                 }
 
                 _wordViewModel.Variants.Clear();

@@ -6,19 +6,11 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class MeaningViewModel : ObservableObject
     {
-        public MeaningViewModel(Meaning meaning, bool showTranslatedMeanings)
+        public MeaningViewModel(Meaning meaning)
         {
             Original = meaning.Original;
 
-            if (showTranslatedMeanings && !string.IsNullOrEmpty(meaning.Translation))
-            {
-                Translation = meaning.Translation;
-            }
-            else
-            {
-                Translation = string.Empty;
-            }
-
+            Translation = meaning.Translation ?? string.Empty;
             AlphabeticalPosition = meaning.AlphabeticalPosition;
             tag = meaning.Tag ?? string.Empty;
             ImageUrl = meaning.ImageUrl ?? string.Empty;
