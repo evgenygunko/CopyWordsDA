@@ -10,7 +10,7 @@ jobs:
       steps:
           - checkout: none
 
-            # uncomment to download artifacts from the current build
+          # uncomment to download artifacts from the current build
           - task: DownloadBuildArtifacts@1
             displayName: 'Download build artifacts'
             inputs:
@@ -25,12 +25,18 @@ jobs:
           #     inputs:
           #         buildType: 'specific'
           #         project: 'CopyWords'
-          #         pipeline: 'CopyWordsDA-CI'
+          #         pipeline: 'CopyWordsDA - Release to Github and Firebase'
           #         buildVersionToDownload: 'specific'
-          #         buildId: '1250'
+          #         buildId: '1344'
           #         downloadType: 'specific'
           #         artifactName: 'drop'
           #         downloadPath: '$(Build.ArtifactStagingDirectory)'
+
+          - script: |
+                echo 'The "ReleaseNotesVar" variable contains double quotes, which are not allowed."'
+                exit 1
+            displayName: 'Verify Release Notes'
+            condition: contains(variables.ReleaseNotesVar, '"')
 
           - task: CmdLine@2
             displayName: 'Download Firebase service account credentials'
@@ -54,7 +60,7 @@ jobs:
                 echo Setting GOOGLE_APPLICATION_CREDENTIALS environment variable...
                 export GOOGLE_APPLICATION_CREDENTIALS="$(Build.ArtifactStagingDirectory)/service-account.json"
 
-                echo Running 'firebase deployment command:'
+                echo Running firebase deployment command:
                 echo firebase appdistribution:distribute com.companyname.copywords.maui-Signed.apk --app $(Firebase-AppId) --release-notes "$(ReleaseNotesVar)" --testers "$(Firebase-Testers)"
                 firebase appdistribution:distribute com.companyname.copywords.maui-Signed.apk --app $(Firebase-AppId) --release-notes "$(ReleaseNotesVar)" --testers "$(Firebase-Testers)"
             displayName: 'Deploy the app to Firebase'

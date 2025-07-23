@@ -2,7 +2,7 @@ trigger: none
 
 parameters:
     - name: ReleaseNotes
-      displayName: 'Release Notes'
+      displayName: 'Release Notes (DO NOT USE DOUBLE QUOTES!)'
       type: string
       default: '<Release Notes>'
 
