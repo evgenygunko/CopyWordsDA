@@ -87,7 +87,7 @@ namespace CopyWords.Core.Tests.Services
 
             var act = async () => await sut.LookUpWordAsync("testword", options);
             await act.Should().ThrowAsync<ServerErrorException>()
-                .WithMessage("Server returned error code 'InternalServerError' when requesting URL 'http://fake-url'.");
+                .WithMessage("The server returned the error 'InternalServerError'.");
         }
 
         #endregion
@@ -141,7 +141,7 @@ namespace CopyWords.Core.Tests.Services
 
             var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<TranslationInput>());
             await act.Should().ThrowAsync<ServerErrorException>()
-                .WithMessage("Server returned error code 'InternalServerError' when requesting URL 'http://fake-url'.");
+                .WithMessage("The server returned the error 'InternalServerError'.");
         }
 
         #endregion

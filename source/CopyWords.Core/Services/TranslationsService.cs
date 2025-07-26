@@ -54,7 +54,7 @@ namespace CopyWords.Core.Services
             string jsonRequest = JsonConvert.SerializeObject(input);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
-            // The Translation app is calling OpenAI API, so it can take time to return result.
+            // The Translator app is calling OpenAI API, so it can take time to return result.
             using CancellationTokenSource cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
             using HttpResponseMessage response = await _httpClient.PostAsync(url, content, cts.Token);
 
@@ -73,7 +73,7 @@ namespace CopyWords.Core.Services
                 return null;
             }
 
-            throw new ServerErrorException($"Server returned error code '{response.StatusCode}' when requesting URL '{url}'.");
+            throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
         }
     }
 }
