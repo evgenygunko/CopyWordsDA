@@ -16,7 +16,7 @@ namespace CopyWords.Core.ViewModels
             ContextViewModels.Clear();
             foreach (var context in definition.Contexts)
             {
-                ContextViewModels.Add(new ContextViewModel(context));
+                ContextViewModels.Add(new ContextViewModel(context, sourceLanguage));
             }
         }
 

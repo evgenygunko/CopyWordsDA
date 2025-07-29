@@ -35,16 +35,15 @@
                         <Label Grid.Row="0" Grid.Column="1" Text=". &#6158;" />
 
                         <!-- If Translation is defined, show Translation below the Original -->
-                        <Label Grid.Row="0" Grid.Column="2"
-                               IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}"/>
-                                    <Span Text="{x:Static system:Environment.NewLine}"/>
-                                    <Span Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="Gray" />
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="2"
+                                IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
+
+                            <Label Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}"
+                                   Margin="0,0,0,4"/>
+                            <Label Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="Gray" />
+
+                        </VerticalStackLayout>
+
                         <!-- If Translation is not defined, only show Original meaning -->
                         <Label Grid.Row="0" Grid.Column="2"
                                IsVisible="{Binding Translation, Converter={StaticResource IsStringNullOrWhiteSpaceConverter}}"
@@ -73,7 +72,7 @@
                     </Grid>
 
                     <!--Examples -->
-                    <views:ExamplesView Margin="9,0,0,17" />
+                    <views:ExamplesView Margin="{Binding ExamplesMargin}" />
                 </VerticalStackLayout>
             </DataTemplate>
         </ResourceDictionary>

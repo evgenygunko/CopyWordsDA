@@ -6,7 +6,7 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class MeaningViewModel : ObservableObject
     {
-        public MeaningViewModel(Meaning meaning)
+        public MeaningViewModel(Meaning meaning, SourceLanguage sourceLanguage)
         {
             Original = meaning.Original;
 
@@ -19,6 +19,16 @@ namespace CopyWords.Core.ViewModels
             foreach (var example in meaning.Examples)
             {
                 ExampleViewModels.Add(new ExampleViewModel(example));
+            }
+
+            if (sourceLanguage == SourceLanguage.Spanish)
+            {
+                examplesMargin = new Thickness(9, 5, 0, 10);
+            }
+            else
+            {
+                examplesMargin = new Thickness(9, 5, 0, 20);
+
             }
         }
 
@@ -39,6 +49,9 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         private bool isImageChecked;
+
+        [ObservableProperty]
+        private Thickness examplesMargin;
 
         public ObservableCollection<ExampleViewModel> ExampleViewModels { get; } = new();
     }
