@@ -15,7 +15,7 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             Definition definition = _fixture.Create<Definition>();
 
-            var sut = new DefinitionViewModel(definition, SourceLanguage.Spanish);
+            var sut = new DefinitionViewModel(definition, SourceLanguage.Spanish, true);
 
             sut.HeadwordViewModel.Should().NotBeNull();
             sut.HeadwordViewModel.Original.Should().Be(definition.Headword.Original);

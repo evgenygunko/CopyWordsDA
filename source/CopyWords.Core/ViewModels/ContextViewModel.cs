@@ -6,7 +6,10 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class ContextViewModel : ObservableObject
     {
-        public ContextViewModel(Context context, SourceLanguage sourceLanguage)
+        public ContextViewModel(
+            Context context,
+            SourceLanguage sourceLanguage,
+            bool showCopyButtons)
         {
             ContextEN = context.ContextEN;
             Position = context.Position;
@@ -14,7 +17,7 @@ namespace CopyWords.Core.ViewModels
             MeaningViewModels.Clear();
             foreach (var meanings in context.Meanings)
             {
-                MeaningViewModels.Add(new MeaningViewModel(meanings, sourceLanguage));
+                MeaningViewModels.Add(new MeaningViewModel(meanings, sourceLanguage, showCopyButtons));
             }
         }
 

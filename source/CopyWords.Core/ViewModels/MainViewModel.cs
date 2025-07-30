@@ -186,10 +186,13 @@ namespace CopyWords.Core.ViewModels
                     sourceLanguage = SourceLanguage.Danish;
                 }
 
+                // todo: read from SettingsService
+                bool showCopyButtons = true;
+
                 _wordViewModel.DefinitionViewModels.Clear();
                 foreach (var definition in wordModel.Definitions)
                 {
-                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(definition, sourceLanguage));
+                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(definition, sourceLanguage, showCopyButtons));
                 }
 
                 _wordViewModel.Variants.Clear();
@@ -205,6 +208,7 @@ namespace CopyWords.Core.ViewModels
                     _wordViewModel.Variants.Add(variantVM);
                 }
 
+                _wordViewModel.ShowCopyButtons = showCopyButtons;
                 _wordViewModel.UpdateUI();
             }
 

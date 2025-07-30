@@ -6,7 +6,10 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class MeaningViewModel : ObservableObject
     {
-        public MeaningViewModel(Meaning meaning, SourceLanguage sourceLanguage)
+        public MeaningViewModel(
+            Meaning meaning,
+            SourceLanguage sourceLanguage,
+            bool showCopyButtons)
         {
             Original = meaning.Original;
 
@@ -18,7 +21,7 @@ namespace CopyWords.Core.ViewModels
             ExampleViewModels.Clear();
             foreach (var example in meaning.Examples)
             {
-                ExampleViewModels.Add(new ExampleViewModel(example));
+                ExampleViewModels.Add(new ExampleViewModel(example, showCopyButtons));
             }
 
             if (sourceLanguage == SourceLanguage.Spanish)
@@ -28,7 +31,6 @@ namespace CopyWords.Core.ViewModels
             else
             {
                 examplesMargin = new Thickness(9, 5, 0, 20);
-
             }
         }
 

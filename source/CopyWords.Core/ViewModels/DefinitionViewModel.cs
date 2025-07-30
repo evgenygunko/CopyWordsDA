@@ -6,9 +6,12 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class DefinitionViewModel : ObservableObject
     {
-        public DefinitionViewModel(Definition definition, SourceLanguage sourceLanguage)
+        public DefinitionViewModel(
+            Definition definition,
+            SourceLanguage sourceLanguage,
+            bool showCopyButtons)
         {
-            HeadwordViewModel = new HeadwordViewModel(definition.Headword, sourceLanguage);
+            HeadwordViewModel = new HeadwordViewModel(definition.Headword, sourceLanguage, showCopyButtons);
 
             PartOfSpeech = definition.PartOfSpeech;
             Endings = definition.Endings;
@@ -16,7 +19,7 @@ namespace CopyWords.Core.ViewModels
             ContextViewModels.Clear();
             foreach (var context in definition.Contexts)
             {
-                ContextViewModels.Add(new ContextViewModel(context, sourceLanguage));
+                ContextViewModels.Add(new ContextViewModel(context, sourceLanguage, showCopyButtons));
             }
         }
 

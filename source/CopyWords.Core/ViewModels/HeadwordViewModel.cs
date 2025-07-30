@@ -5,7 +5,10 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class HeadwordViewModel : ObservableObject
     {
-        public HeadwordViewModel(Headword headword, SourceLanguage sourceLanguage)
+        public HeadwordViewModel(
+            Headword headword,
+            SourceLanguage sourceLanguage,
+            bool showCopyButtons)
         {
             Original = headword?.Original;
 
@@ -15,6 +18,16 @@ namespace CopyWords.Core.ViewModels
 
             // SpanishDict already return English translations, no need to show what the Translator app returned.
             ShowEnglishTranslation = sourceLanguage != SourceLanguage.Spanish;
+            ShowCopyButtons = showCopyButtons;
+
+            if (showCopyButtons)
+            {
+                borderPadding = new Thickness(0);
+            }
+            else
+            {
+                borderPadding = new Thickness(5, 3, 5, 5);
+            }
         }
 
         [ObservableProperty]
@@ -34,6 +47,12 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         private bool showEnglishTranslation;
+
+        [ObservableProperty]
+        private bool showCopyButtons;
+
+        [ObservableProperty]
+        private Thickness borderPadding;
 
         internal static string? FirstLetterToLower(string? input)
         {

@@ -5,7 +5,6 @@
              xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
-             xmlns:models="clr-namespace:CopyWords.Parsers.Models;assembly=Parsers"
              x:DataType="viewmodels:HeadwordViewModel"
              x:Class="CopyWords.MAUI.Views.HeadwordView">
 
@@ -14,17 +13,19 @@
             <!-- Workaround for a crash on Mac: type IsStringNotNullOrWhiteSpaceConverter cannot be found -->
             <!--<toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />-->
             <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </ContentView.Resources>
 
     <Border
             BackgroundColor="{StaticResource TranslationBoxColor}"
             Stroke="#CCCCCC"
-            StrokeThickness="1">
+            StrokeThickness="1"
+            Padding="{Binding BorderPadding}">
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="35"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
@@ -34,7 +35,9 @@
             </Grid.RowDefinitions>
 
             <!-- Russian -->
-            <CheckBox Grid.Row="0" Grid.Column="0" x:Name="checkBoxRU" IsChecked="{Binding IsRussianTranslationChecked}" />
+            <CheckBox Grid.Row="0" Grid.Column="0" x:Name="checkBoxRU"
+                        IsVisible="{Binding ShowCopyButtons}"
+                        IsChecked="{Binding IsRussianTranslationChecked}" />
             <Label Grid.Row="0" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center">
                 <Label.FormattedText>
                     <FormattedString>
@@ -54,10 +57,10 @@
 
             <!-- English -->
             <CheckBox Grid.Row="1" Grid.Column="0" x:Name="checkBoxEN"
-                      IsChecked="{Binding IsEnglishTranslationChecked}"
-                      IsVisible="{Binding ShowEnglishTranslation}"/>
+                        IsChecked="{Binding IsEnglishTranslationChecked}"
+                        IsVisible="{Binding ShowCopyButtons}"/>
             <Label Grid.Row="1" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center"
-                      IsVisible="{Binding ShowEnglishTranslation}">
+                        IsVisible="{Binding ShowEnglishTranslation}">
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="{Binding English, FallbackValue='shark'}"/>

@@ -14,22 +14,35 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #region Tests for Constructor
 
-        [TestMethod]
-        public void Constructor_Should_UpdateProperties()
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void Constructor_Should_UpdateProperties(bool showCopyButtons)
         {
             var headword = new Headword("Grillspyd", "Kebabs", "Шашлыки");
 
-            var sut = new HeadwordViewModel(headword, SourceLanguage.Danish);
+            var sut = new HeadwordViewModel(headword, SourceLanguage.Danish, showCopyButtons);
 
             sut.Original.Should().Be("Grillspyd");
 
             // we also make first letter lower case
             sut.English.Should().Be("kebabs");
             sut.Russian.Should().Be("шашлыки");
+
+            sut.ShowCopyButtons.Should().Be(showCopyButtons);
+
+            if (showCopyButtons)
+            {
+                sut.BorderPadding.Should().BeEquivalentTo(new Thickness(0));
+            }
+            else
+            {
+                sut.BorderPadding.Should().BeEquivalentTo(new Thickness(5, 3, 5, 5));
+            }
         }
 
         [TestMethod]
-        public void Update_WhenSpanishDisctionarySelectes_SetsShowEnglishTranslationToFalse()
+        public void Update_WhenSpanishDictionarySelected_SetsShowEnglishTranslationToFalse()
         {
             var headword = new Headword("Casa", "House", "Дом");
 
@@ -39,13 +52,13 @@ namespace CopyWords.Core.Tests.ViewModels
             var ssettingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             ssettingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
-            var sut = new HeadwordViewModel(headword, SourceLanguage.Spanish);
+            var sut = new HeadwordViewModel(headword, SourceLanguage.Spanish, true);
 
             sut.ShowEnglishTranslation.Should().BeFalse();
         }
 
         [TestMethod]
-        public void Update_WhenDanishDisctionarySelectes_SetsShowEnglishTranslationToTrue()
+        public void Update_WhenDanishDictionarySelected_SetsShowEnglishTranslationToTrue()
         {
             var headword = new Headword("Grillspyd", "Kebabs", "Шашлыки");
 
@@ -55,7 +68,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var ssettingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             ssettingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
-            var sut = new HeadwordViewModel(headword, SourceLanguage.Danish);
+            var sut = new HeadwordViewModel(headword, SourceLanguage.Danish, true);
 
             sut.ShowEnglishTranslation.Should().BeTrue();
         }

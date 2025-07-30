@@ -73,6 +73,9 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(CopyEndingsCommand))]
         private bool canCopyEndings;
 
+        [ObservableProperty]
+        private bool showCopyButtons;
+
         public Color PlaySoundButtonColor => GetButtonColor(CanPlaySound);
 
         public Color SaveSoundButtonColor => GetButtonColor(CanSaveSoundFile);

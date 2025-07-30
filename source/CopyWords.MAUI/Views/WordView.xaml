@@ -5,7 +5,6 @@
              xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
-             xmlns:models="clr-namespace:CopyWords.Parsers.Models;assembly=Parsers"
              x:DataType="viewmodels:WordViewModel"
              x:Class="CopyWords.MAUI.Views.WordView">
 
@@ -103,7 +102,8 @@
                             HorizontalOptions="Start"
                             WidthRequest="85"
                             BackgroundColor="{Binding CopyFrontButtonColor}"
-                            Command="{Binding OpenCopyMenuCommand}">
+                            Command="{Binding OpenCopyMenuCommand}"
+                            IsVisible="{Binding ShowCopyButtons}">
 
                         <buttons:SfButton.Content>
                             <DataTemplate>
@@ -128,7 +128,8 @@
                             WidthRequest="44" HeightRequest="44"
                             ToolTipProperties.Text="Share word"
                             BackgroundColor="{Binding CopyFrontButtonColor}"
-                            Command="{Binding ShareCommand}">
+                            Command="{Binding ShareCommand}"
+                            IsVisible="{Binding ShowCopyButtons}">
 
                         <buttons:SfButton.Content>
                             <DataTemplate>
@@ -189,7 +190,8 @@
                             WidthRequest="44" HeightRequest="44"
                             ToolTipProperties.Text="Save sound file"
                             BackgroundColor="{Binding SaveSoundButtonColor}"
-                            Command="{Binding SaveSoundFileCommand}">
+                            Command="{Binding SaveSoundFileCommand}"
+                            IsVisible="{Binding ShowCopyButtons}">
 
                         <buttons:SfButton.Content>
                             <DataTemplate>
@@ -214,7 +216,8 @@
                             WidthRequest="{OnPlatform 80, Android=60}"
                             ToolTipProperties.Text="Copy text for the Anki 'Front' field"
                             BackgroundColor="{Binding CopyFrontButtonColor}"
-                            Command="{Binding CopyFrontCommand}">
+                            Command="{Binding CopyFrontCommand}"
+                            IsVisible="{Binding ShowCopyButtons}">
 
                         <buttons:SfButton.Content>
                             <DataTemplate>
@@ -239,7 +242,8 @@
                             WidthRequest="{OnPlatform 80, Android=60}"
                             ToolTipProperties.Text="Copy text for the Anki 'Back' field"
                             BackgroundColor="{Binding CopyBackButtonColor}"
-                            Command="{Binding CopyBackCommand}">
+                            Command="{Binding CopyBackCommand}"
+                            IsVisible="{Binding ShowCopyButtons}">
 
                         <buttons:SfButton.Content>
                             <DataTemplate>
@@ -264,7 +268,8 @@
                             WidthRequest="{OnPlatform 80, Android=60}"
                             ToolTipProperties.Text="Copy text for the Anki 'PartOfSpeech' field"
                             BackgroundColor="{Binding CopyPartOfSpeechButtonColor}"
-                            Command="{Binding CopyPartOfSpeechCommand}">
+                            Command="{Binding CopyPartOfSpeechCommand}"
+                            IsVisible="{Binding ShowCopyButtons}">
 
                         <buttons:SfButton.Content>
                             <DataTemplate>
@@ -289,7 +294,8 @@
                             WidthRequest="{OnPlatform 98, Android=60}"
                             ToolTipProperties.Text="Copy text for the Anki 'Forms' field"
                             BackgroundColor="{Binding CopyEndingsButtonColor}"
-                            Command="{Binding CopyEndingsCommand}">
+                            Command="{Binding CopyEndingsCommand}"
+                            IsVisible="{Binding ShowCopyButtons}">
 
                         <buttons:SfButton.Content>
                             <DataTemplate>
@@ -313,7 +319,8 @@
                             WidthRequest="{OnPlatform 108, Android=60}"
                             ToolTipProperties.Text="Copy text for the Anki 'Example' field"
                             BackgroundColor="{Binding CopyExamplesButtonColor}"
-                            Command="{Binding CopyExamplesCommand}">
+                            Command="{Binding CopyExamplesCommand}"
+                            IsVisible="{Binding ShowCopyButtons}">
 
                         <buttons:SfButton.Content>
                             <DataTemplate>
