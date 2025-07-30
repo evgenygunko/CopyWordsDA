@@ -186,8 +186,7 @@ namespace CopyWords.Core.ViewModels
                     sourceLanguage = SourceLanguage.Danish;
                 }
 
-                // todo: read from SettingsService
-                bool showCopyButtons = true;
+                bool showCopyButtons = _settingsService.GetShowCopyButtons();
 
                 _wordViewModel.DefinitionViewModels.Clear();
                 foreach (var definition in wordModel.Definitions)

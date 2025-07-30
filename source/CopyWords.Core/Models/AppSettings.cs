@@ -20,6 +20,8 @@ namespace CopyWords.Core.Models
 
         public bool UseMp3gain { get; set; }
 
+        public bool ShowCopyButtons { get; set; }
+
         public bool CopyTranslatedMeanings { get; set; }
 
         public string SelectedParser { get; set; } = string.Empty;

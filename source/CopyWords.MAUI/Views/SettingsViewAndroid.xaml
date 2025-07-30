@@ -99,10 +99,10 @@
         <!-- Filler -->
         <BoxView Style="{StaticResource Filler}" />
 
-        <!-- Section "Translations" -->
-        <Label Text="Translations" Margin="20,0,10,0" FontSize="Subtitle" />
+        <!-- Section "Dictionary mode" -->
+        <Label Text="Dictionary mode" Margin="20,0,10,0" FontSize="Subtitle" />
 
-        <Grid Margin="20,10,10,0">
+        <Grid Margin="20,0,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="45"></ColumnDefinition>
@@ -110,14 +110,37 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0"
+                   FontSize="13"
+                   VerticalOptions="Center"
+                   Text="Show copy buttons"/>
+            <Switch Grid.Row="0" Grid.Column="1"
+                IsToggled="{Binding ShowCopyButtons}" />
+        </Grid>
+
+        <!-- Filler -->
+        <BoxView Style="{StaticResource Filler}" />
+
+        <!-- Section "Translations" -->
+        <Label Text="Translations" Margin="20,0,10,0" FontSize="Subtitle" />
+
+        <Grid Margin="20,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" FontAttributes="Bold"
-                Text="Copy translated meanings"/>
-            <Label Grid.Row="1" Grid.Column="0" FontSize="13"
-                Text="Include translated meanings when copying to the back of the card"/>
-            <Switch Grid.RowSpan="2" Grid.Column="1"
+            <Label Grid.Row="0" Grid.Column="0"
+                   FontSize="13"
+                   VerticalOptions="Center"
+                   Text="Include translated meanings when copying to the back of the card"/>
+            <Switch Grid.Row="0" Grid.Column="1"
                 IsToggled="{Binding CopyTranslatedMeanings}" />
         </Grid>
 

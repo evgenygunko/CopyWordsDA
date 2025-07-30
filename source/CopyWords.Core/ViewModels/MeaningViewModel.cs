@@ -24,6 +24,8 @@ namespace CopyWords.Core.ViewModels
                 ExampleViewModels.Add(new ExampleViewModel(example, showCopyButtons));
             }
 
+            ShowCopyButtons = showCopyButtons;
+
             if (sourceLanguage == SourceLanguage.Spanish)
             {
                 examplesMargin = new Thickness(9, 5, 0, 10);
@@ -51,6 +53,9 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         private bool isImageChecked;
+
+        [ObservableProperty]
+        private bool showCopyButtons;
 
         [ObservableProperty]
         private Thickness examplesMargin;

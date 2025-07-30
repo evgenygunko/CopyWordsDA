@@ -36,7 +36,7 @@
 
             <!-- Russian -->
             <CheckBox Grid.Row="0" Grid.Column="0" x:Name="checkBoxRU"
-                        IsVisible="{Binding ShowCopyButtons}"
+                        IsVisible="{Binding CanCheckRussianTranslation}"
                         IsChecked="{Binding IsRussianTranslationChecked}" />
             <Label Grid.Row="0" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center">
                 <Label.FormattedText>
@@ -58,7 +58,7 @@
             <!-- English -->
             <CheckBox Grid.Row="1" Grid.Column="0" x:Name="checkBoxEN"
                         IsChecked="{Binding IsEnglishTranslationChecked}"
-                        IsVisible="{Binding ShowCopyButtons}"/>
+                        IsVisible="{Binding CanCheckEnglishTranslation}"/>
             <Label Grid.Row="1" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center"
                         IsVisible="{Binding ShowEnglishTranslation}">
                 <Label.FormattedText>

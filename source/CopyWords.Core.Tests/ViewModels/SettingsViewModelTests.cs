@@ -43,6 +43,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
             sut.UseMp3gain.Should().Be(appSettings.UseMp3gain);
             sut.Mp3gainPath.Should().Be(appSettings.Mp3gainPath);
+            sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);
             sut.CopyTranslatedMeanings.Should().Be(appSettings.CopyTranslatedMeanings);
         }
 
@@ -274,6 +275,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
             sut.UseMp3gain.Should().Be(appSettings.UseMp3gain);
             sut.Mp3gainPath.Should().Be(appSettings.Mp3gainPath);
+            sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);
             sut.CopyTranslatedMeanings.Should().Be(appSettings.CopyTranslatedMeanings);
 
             settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()));
@@ -328,6 +330,71 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IValidator<SettingsViewModel>>());
 
             sut.CanUpdateIndividualSettings.Should().BeFalse();
+        }
+
+        #endregion
+
+        #region Tests for OnShowCopyButtonsChangedInternal
+
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void OnShowCopyButtonsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+
+            var sut = new SettingsViewModel(
+                settingsServiceMock.Object,
+                Mock.Of<IDialogService>(),
+                Mock.Of<IShellService>(),
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
+
+            sut.Init();
+            sut.OnShowCopyButtonsChangedInternal(value);
+
+            settingsServiceMock.Verify(x => x.SetShowCopyButtons(value));
+        }
+
+        [TestMethod]
+        public void OnShowCopyButtonsChangedInternal_WhenNotInitialized_DoesNotCallsSettingsService()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+
+            var sut = new SettingsViewModel(
+                settingsServiceMock.Object,
+                Mock.Of<IDialogService>(),
+                Mock.Of<IShellService>(),
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
+                Mock.Of<IFileSaver>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
+
+            sut.OnShowCopyButtonsChangedInternal(true);
+
+            settingsServiceMock.Verify(x => x.SetShowCopyButtons(It.IsAny<bool>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void OnShowCopyButtonsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+
+            var sut = new SettingsViewModel(
+                settingsServiceMock.Object,
+                Mock.Of<IDialogService>(),
+                Mock.Of<IShellService>(),
+                Mock.Of<IFilePicker>(),
+                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
+                Mock.Of<IFileSaver>(),
+                Mock.Of<IValidator<SettingsViewModel>>());
+
+            sut.Init();
+            sut.OnShowCopyButtonsChangedInternal(true);
+
+            settingsServiceMock.Verify(x => x.SetShowCopyButtons(It.IsAny<bool>()), Times.Never);
         }
 
         #endregion

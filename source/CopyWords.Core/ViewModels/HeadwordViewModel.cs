@@ -18,7 +18,9 @@ namespace CopyWords.Core.ViewModels
 
             // SpanishDict already return English translations, no need to show what the Translator app returned.
             ShowEnglishTranslation = sourceLanguage != SourceLanguage.Spanish;
-            ShowCopyButtons = showCopyButtons;
+
+            CanCheckRussianTranslation = showCopyButtons;
+            CanCheckEnglishTranslation = showCopyButtons && ShowEnglishTranslation;
 
             if (showCopyButtons)
             {
@@ -49,7 +51,10 @@ namespace CopyWords.Core.ViewModels
         private bool showEnglishTranslation;
 
         [ObservableProperty]
-        private bool showCopyButtons;
+        private bool canCheckRussianTranslation;
+
+        [ObservableProperty]
+        private bool canCheckEnglishTranslation;
 
         [ObservableProperty]
         private Thickness borderPadding;

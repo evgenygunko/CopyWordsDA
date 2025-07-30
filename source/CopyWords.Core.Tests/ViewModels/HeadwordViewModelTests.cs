@@ -17,7 +17,7 @@ namespace CopyWords.Core.Tests.ViewModels
         [DataTestMethod]
         [DataRow(true)]
         [DataRow(false)]
-        public void Constructor_Should_UpdateProperties(bool showCopyButtons)
+        public void Constructor_WhenDanishDictionarySelected_UpdateProperties(bool showCopyButtons)
         {
             var headword = new Headword("Grillspyd", "Kebabs", "Шашлыки");
 
@@ -29,7 +29,10 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.English.Should().Be("kebabs");
             sut.Russian.Should().Be("шашлыки");
 
-            sut.ShowCopyButtons.Should().Be(showCopyButtons);
+            sut.ShowEnglishTranslation.Should().BeTrue();
+
+            sut.CanCheckRussianTranslation.Should().Be(showCopyButtons);
+            sut.CanCheckEnglishTranslation.Should().Be(showCopyButtons);
 
             if (showCopyButtons)
             {
@@ -41,8 +44,10 @@ namespace CopyWords.Core.Tests.ViewModels
             }
         }
 
-        [TestMethod]
-        public void Update_WhenSpanishDictionarySelected_SetsShowEnglishTranslationToFalse()
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void Constructor_WhenSpanishDictionarySelected_UpdateProperties(bool showCopyButtons)
         {
             var headword = new Headword("Casa", "House", "Дом");
 
@@ -52,25 +57,14 @@ namespace CopyWords.Core.Tests.ViewModels
             var ssettingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             ssettingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
-            var sut = new HeadwordViewModel(headword, SourceLanguage.Spanish, true);
+            var sut = new HeadwordViewModel(headword, SourceLanguage.Spanish, showCopyButtons);
 
             sut.ShowEnglishTranslation.Should().BeFalse();
-        }
 
-        [TestMethod]
-        public void Update_WhenDanishDictionarySelected_SetsShowEnglishTranslationToTrue()
-        {
-            var headword = new Headword("Grillspyd", "Kebabs", "Шашлыки");
+            sut.CanCheckRussianTranslation.Should().Be(showCopyButtons);
 
-            AppSettings appSettings = _fixture.Create<AppSettings>();
-            appSettings.SelectedParser = SourceLanguage.Danish.ToString();
-
-            var ssettingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            ssettingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
-
-            var sut = new HeadwordViewModel(headword, SourceLanguage.Danish, true);
-
-            sut.ShowEnglishTranslation.Should().BeTrue();
+            // English translation is not shown for SpanishDict, so we don't chow the checkbox either
+            sut.CanCheckEnglishTranslation.Should().BeFalse();
         }
 
         #endregion

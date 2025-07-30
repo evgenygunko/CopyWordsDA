@@ -71,6 +71,15 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
+        private bool showCopyButtons;
+
+        partial void OnShowCopyButtonsChanged(bool value)
+        {
+            OnShowCopyButtonsChangedInternal(value);
+        }
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         private bool copyTranslatedMeanings;
 
         partial void OnCopyTranslatedMeaningsChanged(bool value)
@@ -253,6 +262,15 @@ namespace CopyWords.Core.ViewModels
             }
         }
 
+        internal void OnShowCopyButtonsChangedInternal(bool value)
+        {
+            if (_isInitialized && CanUpdateIndividualSettings)
+            {
+                _settingsService.SetShowCopyButtons(value);
+                Debug.WriteLine($"ShowCopyButtons has changed to {value}");
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -307,6 +325,7 @@ namespace CopyWords.Core.ViewModels
             UseMp3gain = appSettings.UseMp3gain;
             Mp3gainPath = appSettings.Mp3gainPath;
 
+            ShowCopyButtons = appSettings.ShowCopyButtons;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
         }
 
@@ -316,6 +335,7 @@ namespace CopyWords.Core.ViewModels
             appSettings.FfmpegBinFolder = FfmpegBinFolder ?? string.Empty;
             appSettings.Mp3gainPath = Mp3gainPath ?? string.Empty;
             appSettings.UseMp3gain = UseMp3gain;
+            appSettings.ShowCopyButtons = ShowCopyButtons;
             appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
         }
 

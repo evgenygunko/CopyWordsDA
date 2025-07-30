@@ -40,6 +40,7 @@ namespace CopyWords.Core.Tests.Services
                 preferencesMock.Verify(x => x.Get("UseMp3gain", It.IsAny<bool>(), It.IsAny<string>()));
             }
 
+            preferencesMock.Verify(x => x.Get("ShowCopyButtons", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
         }
@@ -67,6 +68,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("FfmpegBinFolder", appSettings.FfmpegBinFolder, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("Mp3gainPath", appSettings.Mp3gainPath, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("UseMp3gain", appSettings.UseMp3gain, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("ShowCopyButtons", appSettings.ShowCopyButtons, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("SelectedParser", appSettings.SelectedParser, It.IsAny<string>()));
         }
@@ -98,6 +100,7 @@ namespace CopyWords.Core.Tests.Services
                 preferencesMock.Verify(x => x.Get("UseMp3gain", false, It.IsAny<string>()));
             }
 
+            preferencesMock.Verify(x => x.Get("ShowCopyButtons", false, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", true, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
         }
@@ -132,11 +135,40 @@ namespace CopyWords.Core.Tests.Services
                 preferencesMock.Verify(x => x.Set("UseMp3gain", false, It.IsAny<string>()));
             }
 
+            preferencesMock.Verify(x => x.Set("ShowCopyButtons", false, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", false, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
         }
 
         #endregion
+
+        [TestMethod]
+        public void GetShowCopyButtons_Should_CallPreferencesSet()
+        {
+            const bool expectedValue = true;
+
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            preferencesMock.Setup(x => x.Get("ShowCopyButtons", false, null)).Returns(expectedValue).Verifiable();
+
+            var sut = _fixture.Create<SettingsService>();
+            bool result = sut.GetShowCopyButtons();
+
+            result.Should().Be(expectedValue);
+            preferencesMock.Verify();
+        }
+
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void SetShowCopyButtons_Should_CallPreferencesSet(bool value)
+        {
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+
+            var sut = _fixture.Create<SettingsService>();
+            sut.SetShowCopyButtons(value);
+
+            preferencesMock.Verify(x => x.Set("ShowCopyButtons", value, It.IsAny<string>()));
+        }
 
         [DataTestMethod]
         [DataRow(true)]
