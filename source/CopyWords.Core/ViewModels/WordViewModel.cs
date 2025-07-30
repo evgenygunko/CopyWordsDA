@@ -9,7 +9,20 @@ using CopyWords.Core.Services;
 
 namespace CopyWords.Core.ViewModels
 {
-    public partial class WordViewModel : ObservableObject
+    public interface IWordViewModel
+    {
+        string? SoundUrl { get; set; }
+        string? SoundFileName { get; set; }
+        bool ShowCopyButtons { get; set; }
+
+        void UpdateUI();
+        void ClearDefinitions();
+        void ClearVariants();
+        void AddDefinition(DefinitionViewModel definition);
+        void AddVariant(VariantViewModel variant);
+    }
+
+    public partial class WordViewModel : ObservableObject, IWordViewModel
     {
         private readonly ISaveSoundFileService _saveSoundFileService;
         private readonly IDialogService _dialogService;
@@ -269,9 +282,9 @@ namespace CopyWords.Core.ViewModels
 
         #endregion
 
-        #region Internal methods
+        #region Public Methods
 
-        internal void UpdateUI()
+        public void UpdateUI()
         {
             CanCopyFront = DefinitionViewModels.Any();
 
@@ -297,6 +310,18 @@ namespace CopyWords.Core.ViewModels
             }
             CanCopyEndings = canCopyEndings;
         }
+
+        public void ClearDefinitions() => DefinitionViewModels.Clear();
+
+        public void ClearVariants() => Variants.Clear();
+
+        public void AddDefinition(DefinitionViewModel definition) => DefinitionViewModels.Add(definition);
+
+        public void AddVariant(VariantViewModel variant) => Variants.Add(variant);
+
+        #endregion
+
+        #region Internal methods
 
         internal async Task CompileAndCopyToClipboard(string wordPartName, Func<ObservableCollection<DefinitionViewModel>, Task<string>> action)
         {

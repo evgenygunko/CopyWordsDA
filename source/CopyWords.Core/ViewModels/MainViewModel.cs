@@ -15,7 +15,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IInstantTranslationService _instantTranslationService;
         private readonly ITranslationsService _translationsService;
 
-        private WordViewModel _wordViewModel;
+        private IWordViewModel _wordViewModel;
 
         public MainViewModel(
             IGlobalSettings globalSettings,
@@ -23,7 +23,7 @@ namespace CopyWords.Core.ViewModels
             IDialogService dialogService,
             IInstantTranslationService instantTranslationService,
             ITranslationsService translationsService,
-            WordViewModel wordViewModel)
+            IWordViewModel wordViewModel)
         {
             _globalSettings = globalSettings;
             _settingsService = settingsService;
@@ -37,7 +37,7 @@ namespace CopyWords.Core.ViewModels
 
         #region Properties
 
-        public WordViewModel WordViewModel => _wordViewModel;
+        public IWordViewModel WordViewModel => _wordViewModel;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(LookUpCommand))]
@@ -84,6 +84,11 @@ namespace CopyWords.Core.ViewModels
             {
                 SearchWord = instantText;
                 await LookUpAsync(null, CancellationToken.None);
+            }
+            else
+            {
+                WordModel? wordModel = new WordModel(string.Empty, null, null, Enumerable.Empty<Definition>(), Enumerable.Empty<Variant>());
+                UpdateUI(wordModel);
             }
 
             DictionaryName = _settingsService.GetSelectedParser();
@@ -188,13 +193,13 @@ namespace CopyWords.Core.ViewModels
 
                 bool showCopyButtons = _settingsService.GetShowCopyButtons();
 
-                _wordViewModel.DefinitionViewModels.Clear();
+                _wordViewModel.ClearDefinitions();
                 foreach (var definition in wordModel.Definitions)
                 {
-                    _wordViewModel.DefinitionViewModels.Add(new DefinitionViewModel(definition, sourceLanguage, showCopyButtons));
+                    _wordViewModel.AddDefinition(new DefinitionViewModel(definition, sourceLanguage, showCopyButtons));
                 }
 
-                _wordViewModel.Variants.Clear();
+                _wordViewModel.ClearVariants();
                 foreach (var variant in wordModel.Variations)
                 {
                     var variantVM = new VariantViewModel(variant);
@@ -204,7 +209,7 @@ namespace CopyWords.Core.ViewModels
                         await GetVariantAsync(url);
                     };
 
-                    _wordViewModel.Variants.Add(variantVM);
+                    _wordViewModel.AddVariant(variantVM);
                 }
 
                 _wordViewModel.ShowCopyButtons = showCopyButtons;

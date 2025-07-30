@@ -32,13 +32,16 @@ namespace CopyWords.Core.Services
     {
         private readonly IPreferences _preferences;
         private readonly IFileIOService _fileIOService;
+        private readonly IDeviceInfo _deviceInfo;
 
         public SettingsService(
             IPreferences preferences,
-            IFileIOService fileIOService)
+            IFileIOService fileIOService,
+            IDeviceInfo deviceInfo)
         {
             _preferences = preferences;
             _fileIOService = fileIOService;
+            _deviceInfo = deviceInfo;
         }
 
         public AppSettings LoadSettings()
@@ -53,7 +56,11 @@ namespace CopyWords.Core.Services
             appSettings.FfmpegBinFolder = GetFfmpegBinFolder();
             appSettings.Mp3gainPath = _preferences.Get("Mp3gainPath", string.Empty);
             appSettings.UseMp3gain = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && _preferences.Get<bool>("UseMp3gain", false);
-            appSettings.ShowCopyButtons = _preferences.Get<bool>("ShowCopyButtons", false);
+
+            // On mobile by default show the app in a "dictionary" mode, without copy buttons.
+            bool showCopyButtonsDefaultValue = _deviceInfo.Platform != DevicePlatform.Android;
+            appSettings.ShowCopyButtons = _preferences.Get<bool>("ShowCopyButtons", showCopyButtonsDefaultValue);
+
             appSettings.CopyTranslatedMeanings = _preferences.Get<bool>("CopyTranslatedMeanings", true);
             appSettings.SelectedParser = _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
 
@@ -97,7 +104,12 @@ namespace CopyWords.Core.Services
             await _fileIOService.WriteAllTextAsync(filePath, json);
         }
 
-        public bool GetShowCopyButtons() => _preferences.Get("ShowCopyButtons", false);
+        public bool GetShowCopyButtons()
+        {
+            // On mobile by default show the app in a "dictionary" mode, without copy buttons.
+            bool showCopyButtonsDefaultValue = _deviceInfo.Platform != DevicePlatform.Android;
+            return _preferences.Get<bool>("ShowCopyButtons", showCopyButtonsDefaultValue);
+        }
 
         public void SetShowCopyButtons(bool value) => _preferences.Set("ShowCopyButtons", value);
 

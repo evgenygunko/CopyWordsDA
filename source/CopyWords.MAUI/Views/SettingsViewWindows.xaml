@@ -219,6 +219,15 @@
             <VerticalStackLayout>
                 <HorizontalStackLayout>
                     <Label
+                            Text="Show copy buttons:"
+                            VerticalOptions="Center"></Label>
+                    <CheckBox
+                            IsChecked="{Binding ShowCopyButtons}"
+                            HorizontalOptions="Start" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label
                             Text="Copy translated meanings:"
                             VerticalOptions="Center"></Label>
                     <CheckBox

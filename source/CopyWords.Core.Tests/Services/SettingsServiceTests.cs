@@ -82,6 +82,9 @@ namespace CopyWords.Core.Tests.Services
         {
             string file = _fixture.Create<string>();
 
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
             var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
 
@@ -100,7 +103,7 @@ namespace CopyWords.Core.Tests.Services
                 preferencesMock.Verify(x => x.Get("UseMp3gain", false, It.IsAny<string>()));
             }
 
-            preferencesMock.Verify(x => x.Get("ShowCopyButtons", false, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("ShowCopyButtons", true, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", true, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
         }
@@ -142,13 +145,38 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
-        [TestMethod]
-        public void GetShowCopyButtons_Should_CallPreferencesSet()
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void GetShowCopyButtons_OnAndroid_CallPreferencesWithDefaultValueFalse(bool expectedValue)
         {
-            const bool expectedValue = true;
+            const bool defaultValue = false;
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
 
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            preferencesMock.Setup(x => x.Get("ShowCopyButtons", false, null)).Returns(expectedValue).Verifiable();
+            preferencesMock.Setup(x => x.Get("ShowCopyButtons", defaultValue, null)).Returns(expectedValue).Verifiable();
+
+            var sut = _fixture.Create<SettingsService>();
+            bool result = sut.GetShowCopyButtons();
+
+            result.Should().Be(expectedValue);
+            preferencesMock.Verify();
+        }
+
+        [DataTestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void GetShowCopyButtons_OnDesktop_CallPreferencesWithDefaultValueTrue(bool expectedValue)
+        {
+            const bool defaultValue = true;
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            preferencesMock.Setup(x => x.Get("ShowCopyButtons", defaultValue, null)).Returns(expectedValue).Verifiable();
 
             var sut = _fixture.Create<SettingsService>();
             bool result = sut.GetShowCopyButtons();

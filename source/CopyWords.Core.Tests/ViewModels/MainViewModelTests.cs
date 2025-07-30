@@ -65,6 +65,8 @@ namespace CopyWords.Core.Tests.ViewModels
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
 
+            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
+
             var sut = _fixture.Create<MainViewModel>();
             sut.IsBusy = false;
             sut.SearchWord = string.Empty;
@@ -72,6 +74,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             sut.SearchWord.Should().BeEmpty();
             translationsServiceMock.VerifyNoOtherCalls();
+            wordViewModelMock.Verify(x => x.UpdateUI());
         }
 
         [DataTestMethod]
@@ -97,6 +100,7 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task LookUpAsync_Should_SetWordViewModelProperty()
         {
+            // Arrange
             string search = _fixture.Create<string>();
             WordModel wordModel = _fixture.Create<WordModel>();
 
@@ -107,20 +111,26 @@ namespace CopyWords.Core.Tests.ViewModels
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
+            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
+
+            // Act
             var sut = _fixture.Create<MainViewModel>();
             sut.IsBusy = false;
             sut.SearchWord = search;
 
             await sut.LookUpAsync(It.IsAny<ITextInput>(), It.IsAny<CancellationToken>());
 
+            // Assert
             sut.IsBusy.Should().BeFalse();
 
-            sut.WordViewModel.Should().NotBeNull();
-            sut.WordViewModel.SoundUrl.Should().Be(wordModel.SoundUrl);
-            sut.WordViewModel.SoundFileName.Should().Be(wordModel.SoundFileName);
+            wordViewModelMock.VerifySet(x => x.SoundUrl = wordModel.SoundUrl);
+            wordViewModelMock.VerifySet(x => x.SoundFileName = wordModel.SoundFileName);
 
-            sut.WordViewModel.DefinitionViewModels.Should().HaveCount(wordModel.Definitions.Count());
-            sut.WordViewModel.Variants.Should().HaveCount(wordModel.Variations.Count());
+            wordViewModelMock.Verify(x => x.ClearDefinitions());
+            wordViewModelMock.Verify(x => x.AddDefinition(It.IsAny<DefinitionViewModel>()), Times.Exactly(wordModel.Definitions.Count()));
+
+            wordViewModelMock.Verify(x => x.ClearVariants());
+            wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variations.Count()));
         }
 
         #endregion
@@ -330,30 +340,39 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task GetVariantAsync_WhenSearchIsSuccessful_UpdatesUI()
         {
+            // Arrange
             string url = _fixture.Create<string>();
             WordModel wordModel = _fixture.Create<WordModel>();
+            bool showCopyButtons = _fixture.Create<bool>();
 
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+            settingsServiceMock.Setup(x => x.GetShowCopyButtons()).Returns(showCopyButtons);
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
-            var sut = _fixture.Create<MainViewModel>();
+            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
 
+            // Act
+            var sut = _fixture.Create<MainViewModel>();
             await sut.GetVariantAsync(url);
 
+            // Assert
             sut.IsBusy.Should().BeFalse();
 
-            sut.WordViewModel.Should().NotBeNull();
-            sut.WordViewModel.SoundUrl.Should().Be(wordModel.SoundUrl);
-            sut.WordViewModel.SoundFileName.Should().Be(wordModel.SoundFileName);
+            wordViewModelMock.VerifySet(x => x.SoundUrl = wordModel.SoundUrl);
+            wordViewModelMock.VerifySet(x => x.SoundFileName = wordModel.SoundFileName);
+            wordViewModelMock.VerifySet(x => x.ShowCopyButtons = showCopyButtons);
 
-            sut.WordViewModel.DefinitionViewModels.Should().HaveCount(wordModel.Definitions.Count());
-            sut.WordViewModel.Variants.Should().HaveCount(wordModel.Variations.Count());
+            wordViewModelMock.Verify(x => x.ClearDefinitions());
+            wordViewModelMock.Verify(x => x.AddDefinition(It.IsAny<DefinitionViewModel>()), Times.Exactly(wordModel.Definitions.Count()));
+
+            wordViewModelMock.Verify(x => x.ClearVariants());
+            wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variations.Count()));
 
             dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }

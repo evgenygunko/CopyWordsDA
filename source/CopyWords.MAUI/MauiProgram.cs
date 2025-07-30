@@ -62,7 +62,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ICopySelectedToClipboardService, CopySelectedToClipboardService>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
         builder.Services.AddSingleton<IClipboardService, ClipboardService>();
-        builder.Services.AddSingleton<Core.Services.ITranslationsService, Core.Services.TranslationsService>();
+        builder.Services.AddSingleton<ITranslationsService, TranslationsService>();
         builder.Services.AddSingleton<IInstantTranslationService, InstantTranslationService>();
         builder.Services.AddSingleton<ISaveImageFileService, SaveImageFileService>();
 
@@ -72,7 +72,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<MainWindowViewModel>();
         builder.Services.AddSingleton<MainViewModel>();
-        builder.Services.AddSingleton<WordViewModel>();
+        builder.Services.AddSingleton<IWordViewModel, WordViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
         builder.Services.AddSingleton<GetUpdateViewModel>();
 
