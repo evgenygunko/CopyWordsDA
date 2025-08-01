@@ -77,7 +77,7 @@ namespace CopyWords.Core.Tests.ViewModels
             wordViewModelMock.Verify(x => x.UpdateUI());
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(SourceLanguage.Danish, "flag_of_denmark.png")]
         [DataRow(SourceLanguage.Spanish, "flag_of_spain.png")]
         public async Task InitAsync_Should_SetSelectedDictionary(SourceLanguage sourceLanguage, string imageName)
@@ -163,7 +163,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #region Tests for LookUpWordInDictionaryAsync
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(null)]
         [DataRow("")]
         public async Task LookUpWordInDictionaryAsync_WhenSearchWordIsNullOrEmpty_ReturnsNull(string search)
@@ -381,7 +381,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #region Tests for SelectDictionaryAsync
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(SourceLanguage.Danish, "flag_of_denmark.png")]
         [DataRow(SourceLanguage.Spanish, "flag_of_spain.png")]
         public async Task SelectDictionaryAsync_WhenUserSelectsDictionary_UpdatesSelectedDictionary(SourceLanguage sourceLanguage, string imageName)

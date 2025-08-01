@@ -145,7 +145,7 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void GetShowCopyButtons_OnAndroid_CallPreferencesWithDefaultValueFalse(bool expectedValue)
@@ -165,7 +165,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify();
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void GetShowCopyButtons_OnDesktop_CallPreferencesWithDefaultValueTrue(bool expectedValue)
@@ -185,7 +185,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify();
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void SetShowCopyButtons_Should_CallPreferencesSet(bool value)
@@ -198,7 +198,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("ShowCopyButtons", value, It.IsAny<string>()));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void SetCopyTranslatedMeanings_Should_CallPreferencesSet(bool value)

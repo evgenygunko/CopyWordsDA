@@ -14,7 +14,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #region Tests for Constructor
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void Constructor_WhenDanishDictionarySelected_UpdateProperties(bool showCopyButtons)
@@ -44,7 +44,7 @@ namespace CopyWords.Core.Tests.ViewModels
             }
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void Constructor_WhenSpanishDictionarySelected_UpdateProperties(bool showCopyButtons)
@@ -71,7 +71,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #region Tests for FirstLetterToLower
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(null)]
         [DataRow("")]
         public void FirstLetterToLower_WhenInputIsNullOrEmpty_ReturnsAsIs(string input)
@@ -79,7 +79,7 @@ namespace CopyWords.Core.Tests.ViewModels
             HeadwordViewModel.FirstLetterToLower(input).Should().Be(input);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("акула")]
         [DataRow("shark")]
         public void FirstLetterToLower_WhenFirstLetterIsLowerCase_ReturnsAsIs(string input)

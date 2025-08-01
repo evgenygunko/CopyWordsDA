@@ -514,7 +514,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.CanCopyFront.Should().BeTrue();
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("test", true)]
         [DataRow("", false)]
         public void UpdateUI_WhenThereIsAtLeastOnePartOfSpeech_SetsCanCopyPartOfSpeechToTrue(string partOfSpeech, bool expected)
@@ -536,7 +536,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.CanCopyPartOfSpeech.Should().Be(expected);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("test", true)]
         [DataRow("", false)]
         public void UpdateUI_WhenThereIsAtLeastOneEnding_SetsCanCopyEndingsToTrue(string ending, bool expected)

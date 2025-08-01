@@ -40,8 +40,8 @@ namespace CopyWords.Core.Tests.Services
             var sut = new TranslationsService(httpClient);
             var options = new Options(SourceLanguage.Danish, "http://fake-url");
 
-            await Assert.ThrowsExceptionAsync<ArgumentException>(() => sut.LookUpWordAsync(null!, options));
-            await Assert.ThrowsExceptionAsync<ArgumentException>(() => sut.LookUpWordAsync("", options));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync(null!, options));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("", options));
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
             var sut = new TranslationsService(httpClient);
 
-            await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => sut.LookUpWordAsync("testword", null!));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(() => sut.LookUpWordAsync("testword", null!));
         }
 
         [TestMethod]
@@ -61,8 +61,8 @@ namespace CopyWords.Core.Tests.Services
             var optionsNull = new Options(SourceLanguage.Danish, null!);
             var optionsEmpty = new Options(SourceLanguage.Danish, "");
 
-            await Assert.ThrowsExceptionAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", optionsNull));
-            await Assert.ThrowsExceptionAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", optionsEmpty));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", optionsNull));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", optionsEmpty));
         }
 
         [TestMethod]

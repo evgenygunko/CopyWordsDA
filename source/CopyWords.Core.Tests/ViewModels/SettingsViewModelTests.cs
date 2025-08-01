@@ -336,7 +336,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #region Tests for OnShowCopyButtonsChangedInternal
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void OnShowCopyButtonsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
@@ -401,7 +401,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #region Tests for OnCopyTranslatedMeaningsChangedInternal
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void OnCopyTranslatedMeaningsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
