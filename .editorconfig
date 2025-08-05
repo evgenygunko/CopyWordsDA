@@ -22,6 +22,12 @@ charset = utf-8-bom
 # IDE0052: Remove unread private members
 dotnet_diagnostic.IDE0052.severity = warning
 
+# IDE0090: Simplify new expression
+dotnet_diagnostic.IDE0090.severity = none
+
+# IDE0290: Use primary constructor
+dotnet_diagnostic.IDE0290.severity = none
+
 # Code quality analyzers
 dotnet_analyzer_diagnostic.category-Security.severity = error
 dotnet_code_quality.ca1802.api_surface = private, internal

@@ -27,6 +27,6 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         public partial string Position { get; set; }
 
-        public ObservableCollection<MeaningViewModel> MeaningViewModels { get; } = new();
+        public ObservableCollection<MeaningViewModel> MeaningViewModels { get; } = [];
     }
 }

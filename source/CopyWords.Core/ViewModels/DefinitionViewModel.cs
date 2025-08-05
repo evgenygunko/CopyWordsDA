@@ -38,7 +38,7 @@ namespace CopyWords.Core.ViewModels
 
         #region Commands
 
-        public ObservableCollection<ContextViewModel> ContextViewModels { get; } = new();
+        public ObservableCollection<ContextViewModel> ContextViewModels { get; } = [];
 
         #endregion
     }

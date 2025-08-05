@@ -15,7 +15,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IInstantTranslationService _instantTranslationService;
         private readonly ITranslationsService _translationsService;
 
-        private IWordViewModel _wordViewModel;
+        private readonly IWordViewModel _wordViewModel;
 
         public MainViewModel(
             IGlobalSettings globalSettings,
@@ -86,7 +86,7 @@ namespace CopyWords.Core.ViewModels
             }
             else
             {
-                WordModel? wordModel = new WordModel(string.Empty, null, null, Enumerable.Empty<Definition>(), Enumerable.Empty<Variant>());
+                WordModel? wordModel = new WordModel(string.Empty, null, null, [], []);
                 UpdateUI(wordModel);
             }
 
@@ -99,8 +99,7 @@ namespace CopyWords.Core.ViewModels
         {
             try
             {
-                SearchBar? searchBar = searchBarElement as SearchBar;
-                if (searchBar != null)
+                if (searchBarElement is SearchBar searchBar)
                 {
                     if (searchBar.IsSoftInputShowing())
                     {
@@ -113,7 +112,7 @@ namespace CopyWords.Core.ViewModels
                 _ = ex;
             }
 
-            WordModel? wordModel = new WordModel(string.Empty, null, null, Enumerable.Empty<Definition>(), Enumerable.Empty<Variant>());
+            WordModel? wordModel = new WordModel(string.Empty, null, null, [], []);
             UpdateUI(wordModel);
 
             IsBusy = true;
@@ -148,7 +147,7 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanSelectDictionary))]
         public async Task SelectDictionaryAsync()
         {
-            string[] strings = [SourceLanguage.Danish.ToString(), SourceLanguage.Spanish.ToString()];
+            string[] strings = [nameof(SourceLanguage.Danish), nameof(SourceLanguage.Spanish)];
             string result = await _dialogService.DisplayActionSheet(title: "Select dictionary:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, strings);
 
             // The action sheet returns the button that user pressed, so it can also be "Cancel"
@@ -225,7 +224,7 @@ namespace CopyWords.Core.ViewModels
                 return null;
             }
 
-            WordModel? wordModel = null;
+            WordModel? wordModel;
             try
             {
                 AppSettings appSettings = _settingsService.LoadSettings();
@@ -258,11 +257,11 @@ namespace CopyWords.Core.ViewModels
 
         private void UpdateDictionaryImage(string language)
         {
-            if (language == SourceLanguage.Danish.ToString())
+            if (language == nameof(SourceLanguage.Danish))
             {
                 DictionaryImage = "flag_of_denmark.png";
             }
-            else if (language == SourceLanguage.Spanish.ToString())
+            else if (language == nameof(SourceLanguage.Spanish))
             {
                 DictionaryImage = "flag_of_spain.png";
             }

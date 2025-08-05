@@ -244,7 +244,7 @@ namespace CopyWords.Core.ViewModels
                 ValidationResult = Task.Run(() => _settingsViewModelValidator.ValidateAsync(this)).GetAwaiter().GetResult();
             }
 
-            if (ValidationResult != null && !ValidationResult.IsValid)
+            if (ValidationResult?.IsValid == false)
             {
                 // The validation contains errors
                 return false;

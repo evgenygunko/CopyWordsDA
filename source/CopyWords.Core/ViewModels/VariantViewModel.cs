@@ -23,11 +23,7 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public void SelectVariant()
         {
-            var eventHandler = Clicked;
-            if (eventHandler != null)
-            {
-                eventHandler(this, Url);
-            }
+            Clicked?.Invoke(this, Url);
         }
     }
 }

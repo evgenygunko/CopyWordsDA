@@ -46,9 +46,9 @@ namespace CopyWords.Core.ViewModels
 
         #region Properties
 
-        public ObservableCollection<VariantViewModel> Variants { get; } = new();
+        public ObservableCollection<VariantViewModel> Variants { get; } = [];
 
-        public ObservableCollection<DefinitionViewModel> DefinitionViewModels { get; } = new();
+        public ObservableCollection<DefinitionViewModel> DefinitionViewModels { get; } = [];
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PlaySoundCommand))]
@@ -170,7 +170,7 @@ namespace CopyWords.Core.ViewModels
         public async Task OpenCopyMenuAsync()
         {
             // This command is used to open the context menu for copying.
-            List<string> options = new List<string>();
+            var options = new List<string>();
             if (CanCopyFront)
             {
                 options.Add("Front");
@@ -242,11 +242,11 @@ namespace CopyWords.Core.ViewModels
             }
             catch (ExamplesFromSeveralDefinitionsSelectedException ex)
             {
-                await _dialogService.DisplayAlert($"Cannot share the word", ex.Message, "OK");
+                await _dialogService.DisplayAlert("Cannot share the word", ex.Message, "OK");
             }
             catch (Exception ex)
             {
-                await _dialogService.DisplayAlert($"Cannot share the word", $"Error occurred while trying to share the word: " + ex.Message, "OK");
+                await _dialogService.DisplayAlert("Cannot share the word", "Error occurred while trying to share the word: " + ex.Message, "OK");
             }
         }
 
@@ -332,7 +332,7 @@ namespace CopyWords.Core.ViewModels
                 if (!string.IsNullOrEmpty(textToCopy))
                 {
                     await _clipboardService.CopyTextToClipboardAsync(textToCopy);
-                    await _dialogService.DisplayToast(string.Concat(wordPartName[0].ToString().ToUpper(CultureInfo.CurrentCulture), wordPartName.AsSpan(1), " copied"));
+                    await _dialogService.DisplayToast($"{wordPartName[0].ToString().ToUpper(CultureInfo.CurrentCulture)}{wordPartName.AsSpan(1)} copied");
                 }
                 else
                 {

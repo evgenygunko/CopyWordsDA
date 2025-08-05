@@ -60,6 +60,6 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         public partial Thickness ExamplesMargin { get; set; }
 
-        public ObservableCollection<ExampleViewModel> ExampleViewModels { get; } = new();
+        public ObservableCollection<ExampleViewModel> ExampleViewModels { get; } = [];
     }
 }

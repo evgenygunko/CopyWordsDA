@@ -18,8 +18,6 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task InitAsync_WhenIsBusyTrue_DoesNotRunLookup()
         {
-            WordModel wordModel = _fixture.Create<WordModel>();
-
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
 
@@ -43,8 +41,8 @@ namespace CopyWords.Core.Tests.ViewModels
             instantTranslationServiceMock.Setup(x => x.GetTextAndClear()).Returns("abcdef");
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var sut = _fixture.Create<MainViewModel>();
             sut.IsBusy = false;
@@ -63,7 +61,7 @@ namespace CopyWords.Core.Tests.ViewModels
             instantTranslationServiceMock.Setup(x => x.GetTextAndClear()).Returns((string?)null);
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
 
             var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
 
@@ -105,8 +103,8 @@ namespace CopyWords.Core.Tests.ViewModels
             WordModel wordModel = _fixture.Create<WordModel>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
@@ -144,8 +142,8 @@ namespace CopyWords.Core.Tests.ViewModels
             WordModel wordModel = _fixture.Create<WordModel>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel).Verifiable();
@@ -183,8 +181,8 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>()))
@@ -206,8 +204,8 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ThrowsAsync(new Exception("exception from unit test"));
@@ -228,8 +226,8 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync((WordModel?)null);
@@ -251,8 +249,8 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
@@ -270,7 +268,7 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             string translatorApiUrl = _fixture.Create<Uri>().ToString();
             AppSettings appSettings = _fixture.Create<AppSettings>();
-            appSettings.SelectedParser = SourceLanguage.Danish.ToString();
+            appSettings.SelectedParser = nameof(SourceLanguage.Danish);
 
             string search = _fixture.Create<string>();
             WordModel wordModel = _fixture.Create<WordModel>();
@@ -303,8 +301,8 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ThrowsAsync(new Exception("exception from unit test"));
@@ -324,8 +322,8 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync((WordModel?)null);
@@ -348,8 +346,8 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = SourceLanguage.Danish.ToString() });
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
             settingsServiceMock.Setup(x => x.GetShowCopyButtons()).Returns(showCopyButtons);
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
