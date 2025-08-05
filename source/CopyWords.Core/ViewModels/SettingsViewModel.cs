@@ -51,15 +51,15 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private string? ankiSoundsFolder;
+        public partial string? AnkiSoundsFolder { get; set; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private string? ffmpegBinFolder;
+        public partial string? FfmpegBinFolder { get; set; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private bool useMp3gain;
+        public partial bool UseMp3gain { get; set; }
 
         public bool CanUseMp3gain => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
@@ -67,11 +67,11 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private string? mp3gainPath;
+        public partial string? Mp3gainPath { get; set; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private bool showCopyButtons;
+        public partial bool ShowCopyButtons { get; set; }
 
         partial void OnShowCopyButtonsChanged(bool value)
         {
@@ -80,7 +80,7 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        private bool copyTranslatedMeanings;
+        public partial bool CopyTranslatedMeanings { get; set; }
 
         partial void OnCopyTranslatedMeaningsChanged(bool value)
         {
@@ -88,7 +88,7 @@ namespace CopyWords.Core.ViewModels
         }
 
         [ObservableProperty]
-        private ValidationResult? validationResult;
+        public partial ValidationResult? ValidationResult { get; set; }
 
         public string About => $"App version: {AppInfo.VersionString} (Build {AppInfo.BuildString}), {RuntimeInformation.FrameworkDescription}";
 

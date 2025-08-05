@@ -15,10 +15,10 @@ namespace CopyWords.Core.ViewModels
         }
 
         [ObservableProperty]
-        private string word;
+        public partial string Word { get; set; }
 
         [ObservableProperty]
-        private string url;
+        public partial string Url { get; set; }
 
         [RelayCommand]
         public void SelectVariant()

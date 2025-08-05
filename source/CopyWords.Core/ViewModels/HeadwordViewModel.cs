@@ -24,40 +24,40 @@ namespace CopyWords.Core.ViewModels
 
             if (showCopyButtons)
             {
-                borderPadding = new Thickness(0);
+                BorderPadding = new Thickness(0);
             }
             else
             {
-                borderPadding = new Thickness(5, 3, 5, 5);
+                BorderPadding = new Thickness(5, 3, 5, 5);
             }
         }
 
         [ObservableProperty]
-        public string? original;
+        public partial string? Original { get; set; }
 
         [ObservableProperty]
-        private string? english;
+        public partial string? English { get; set; }
 
         [ObservableProperty]
-        private string? russian;
+        public partial string? Russian { get; set; }
 
         [ObservableProperty]
-        private bool isEnglishTranslationChecked;
+        public partial bool IsEnglishTranslationChecked { get; set; }
 
         [ObservableProperty]
-        private bool isRussianTranslationChecked;
+        public partial bool IsRussianTranslationChecked { get; set; }
 
         [ObservableProperty]
-        private bool showEnglishTranslation;
+        public partial bool ShowEnglishTranslation { get; set; }
 
         [ObservableProperty]
-        private bool canCheckRussianTranslation;
+        public partial bool CanCheckRussianTranslation { get; set; }
 
         [ObservableProperty]
-        private bool canCheckEnglishTranslation;
+        public partial bool CanCheckEnglishTranslation { get; set; }
 
         [ObservableProperty]
-        private Thickness borderPadding;
+        public partial Thickness BorderPadding { get; set; }
 
         internal static string? FirstLetterToLower(string? input)
         {

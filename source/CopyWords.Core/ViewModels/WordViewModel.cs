@@ -53,18 +53,18 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PlaySoundCommand))]
         [NotifyPropertyChangedFor(nameof(PlaySoundButtonColor))]
-        private string? soundUrl;
+        public partial string? SoundUrl { get; set; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSoundFileCommand))]
         [NotifyPropertyChangedFor(nameof(SaveSoundButtonColor))]
-        private string? soundFileName;
+        public partial string? SoundFileName { get; set; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PlaySoundCommand))]
         [NotifyCanExecuteChangedFor(nameof(SaveSoundFileCommand))]
         [NotifyPropertyChangedFor(nameof(PlaySoundButtonColor))]
-        private bool isBusy;
+        public partial bool IsBusy { get; set; }
 
         public bool CanSaveSoundFile => !IsBusy && !string.IsNullOrEmpty(SoundFileName);
 
@@ -76,18 +76,18 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(CopyExamplesCommand))]
         [NotifyCanExecuteChangedFor(nameof(OpenCopyMenuCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShareCommand))]
-        private bool canCopyFront;
+        public partial bool CanCopyFront { get; set; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(CopyPartOfSpeechCommand))]
-        private bool canCopyPartOfSpeech;
+        public partial bool CanCopyPartOfSpeech { get; set; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(CopyEndingsCommand))]
-        private bool canCopyEndings;
+        public partial bool CanCopyEndings { get; set; }
 
         [ObservableProperty]
-        private bool showCopyButtons;
+        public partial bool ShowCopyButtons { get; set; }
 
         public Color PlaySoundButtonColor => GetButtonColor(CanPlaySound);
 

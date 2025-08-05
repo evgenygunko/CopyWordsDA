@@ -15,7 +15,7 @@ namespace CopyWords.Core.ViewModels
 
             Translation = meaning.Translation ?? string.Empty;
             AlphabeticalPosition = meaning.AlphabeticalPosition;
-            tag = meaning.Tag ?? string.Empty;
+            Tag = meaning.Tag ?? string.Empty;
             ImageUrl = meaning.ImageUrl ?? string.Empty;
 
             ExampleViewModels.Clear();
@@ -28,37 +28,37 @@ namespace CopyWords.Core.ViewModels
 
             if (sourceLanguage == SourceLanguage.Spanish)
             {
-                examplesMargin = new Thickness(9, 5, 0, 10);
+                ExamplesMargin = new Thickness(9, 5, 0, 10);
             }
             else
             {
-                examplesMargin = new Thickness(9, 5, 0, 20);
+                ExamplesMargin = new Thickness(9, 5, 0, 20);
             }
         }
 
         [ObservableProperty]
-        private string original;
+        public partial string Original { get; set; }
 
         [ObservableProperty]
-        private string translation;
+        public partial string Translation { get; set; }
 
         [ObservableProperty]
-        private string alphabeticalPosition;
+        public partial string AlphabeticalPosition { get; set; }
 
         [ObservableProperty]
-        private string tag;
+        public partial string Tag { get; set; }
 
         [ObservableProperty]
-        private string imageUrl;
+        public partial string ImageUrl { get; set; }
 
         [ObservableProperty]
-        private bool isImageChecked;
+        public partial bool IsImageChecked { get; set; }
 
         [ObservableProperty]
-        private bool showCopyButtons;
+        public partial bool ShowCopyButtons { get; set; }
 
         [ObservableProperty]
-        private Thickness examplesMargin;
+        public partial Thickness ExamplesMargin { get; set; }
 
         public ObservableCollection<ExampleViewModel> ExampleViewModels { get; } = new();
     }

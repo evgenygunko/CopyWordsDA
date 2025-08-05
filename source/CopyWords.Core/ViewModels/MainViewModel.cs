@@ -31,8 +31,7 @@ namespace CopyWords.Core.ViewModels
             _instantTranslationService = instantTranslationService;
             _translationsService = translationsService;
             _wordViewModel = wordViewModel;
-
-            searchWord = string.Empty;
+            SearchWord = string.Empty;
         }
 
         #region Properties
@@ -44,22 +43,22 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
         [NotifyCanExecuteChangedFor(nameof(SelectDictionaryCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShowSettingsDialogCommand))]
-        private bool isBusy;
+        public partial bool IsBusy { get; set; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SelectDictionaryCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShowSettingsDialogCommand))]
-        private bool isRefreshing;
+        public partial bool IsRefreshing { get; set; }
 
         [ObservableProperty]
-        private string dictionaryName = default!;
+        public partial string DictionaryName { get; set; } = default!;
 
         [ObservableProperty]
-        private string dictionaryImage = default!;
+        public partial string DictionaryImage { get; set; } = default!;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(LookUpCommand))]
-        private string searchWord;
+        public partial string SearchWord { get; set; }
 
         public bool CanRefresh => !IsBusy;
 

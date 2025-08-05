@@ -13,10 +13,10 @@ namespace CopyWords.Core.ViewModels
         #region Properties
 
         [ObservableProperty]
-        private string title;
+        public partial string Title { get; set; }
 
         [ObservableProperty]
-        private string subtitle;
+        public partial string Subtitle { get; set; }
 
         #endregion
     }

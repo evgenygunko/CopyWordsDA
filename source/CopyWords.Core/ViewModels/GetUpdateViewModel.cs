@@ -20,32 +20,31 @@ namespace CopyWords.Core.ViewModels
             _updateService = updateService;
             _shellService = shellService;
             _dialogService = dialogService;
-
-            whatIsNew = string.Empty;
-            updateDescription = string.Empty;
-            currentVersion = string.Empty;
-            latestVersion = string.Empty;
-            errorMessage = string.Empty;
-            downloadUrl = string.Empty;
+            WhatIsNew = string.Empty;
+            UpdateDescription = string.Empty;
+            CurrentVersion = string.Empty;
+            LatestVersion = string.Empty;
+            ErrorMessage = string.Empty;
+            DownloadUrl = string.Empty;
         }
 
         [ObservableProperty]
-        private string whatIsNew;
+        public partial string WhatIsNew { get; set; }
 
         [ObservableProperty]
-        private string updateDescription;
+        public partial string UpdateDescription { get; set; }
 
         [ObservableProperty]
-        private string currentVersion;
+        public partial string CurrentVersion { get; set; }
 
         [ObservableProperty]
-        private string latestVersion;
+        public partial string LatestVersion { get; set; }
 
         [ObservableProperty]
-        private string errorMessage;
+        public partial string ErrorMessage { get; set; }
 
         [ObservableProperty]
-        private string downloadUrl;
+        public partial string DownloadUrl { get; set; }
 
         [RelayCommand]
         public async Task GetLatestReleaseAsync()

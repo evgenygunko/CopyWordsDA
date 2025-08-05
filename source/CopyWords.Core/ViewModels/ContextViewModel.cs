@@ -22,10 +22,10 @@ namespace CopyWords.Core.ViewModels
         }
 
         [ObservableProperty]
-        private string contextEN;
+        public partial string ContextEN { get; set; }
 
         [ObservableProperty]
-        private string position;
+        public partial string Position { get; set; }
 
         public ObservableCollection<MeaningViewModel> MeaningViewModels { get; } = new();
     }

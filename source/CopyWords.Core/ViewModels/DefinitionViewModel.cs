@@ -26,13 +26,13 @@ namespace CopyWords.Core.ViewModels
         #region Properties
 
         [ObservableProperty]
-        private HeadwordViewModel headwordViewModel;
+        public partial HeadwordViewModel HeadwordViewModel { get; set; }
 
         [ObservableProperty]
-        private string partOfSpeech;
+        public partial string PartOfSpeech { get; set; }
 
         [ObservableProperty]
-        private string endings;
+        public partial string Endings { get; set; }
 
         #endregion
 

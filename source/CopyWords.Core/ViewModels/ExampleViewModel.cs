@@ -13,15 +13,15 @@ namespace CopyWords.Core.ViewModels
         }
 
         [ObservableProperty]
-        private string original;
+        public partial string Original { get; set; }
 
         [ObservableProperty]
-        private string translation;
+        public partial string Translation { get; set; }
 
         [ObservableProperty]
-        private bool isChecked;
+        public partial bool IsChecked { get; set; }
 
         [ObservableProperty]
-        private bool showCopyButtons;
+        public partial bool ShowCopyButtons { get; set; }
     }
 }
