@@ -7,22 +7,18 @@ namespace CopyWords.Core.ViewModels
     {
         public event EventHandler<string> Clicked = default!;
 
-        public PreviousWordViewModel(string word, string url)
+        public PreviousWordViewModel(string word)
         {
             Word = word;
-            Url = url;
         }
 
         [ObservableProperty]
         public partial string Word { get; set; }
 
-        [ObservableProperty]
-        public partial string Url { get; set; }
-
         [RelayCommand]
         public void SelectPreviousWord()
         {
-            Clicked?.Invoke(this, Url);
+            Clicked?.Invoke(this, Word);
         }
     }
 }

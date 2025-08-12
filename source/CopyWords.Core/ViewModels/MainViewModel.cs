@@ -78,6 +78,7 @@ namespace CopyWords.Core.ViewModels
                 return;
             }
 
+            // Check if the app was called from a context menu on Android (or from History page) and set the search word accordingly
             string? instantText = _instantTranslationService.GetTextAndClear();
             if (!string.IsNullOrWhiteSpace(instantText))
             {

@@ -27,6 +27,28 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
+        public void Init_WhenPreviousWordViewModel_CallsInstantTranslationService()
+        {
+            const string dictionary = "da";
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(dictionary);
+            settingsServiceMock.Setup(x => x.LoadHistory(dictionary)).Returns(["haj"]);
+
+            var instantTranslationServiceMock = _fixture.Freeze<Mock<IInstantTranslationService>>();
+            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+
+            var sut = _fixture.Create<HistoryPageViewModel>();
+            sut.Init();
+
+            PreviousWordViewModel previousWordViewModel = sut.PreviousWords[0];
+            previousWordViewModel.SelectPreviousWord();
+
+            instantTranslationServiceMock.Verify(x => x.SetText("haj"));
+            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..")));
+        }
+
+        [TestMethod]
         public async Task ClearHistoryAsync_Should_CallSettingsService()
         {
             const string dictionary = "da";
@@ -35,7 +57,7 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(dictionary);
 
             var sut = _fixture.Create<HistoryPageViewModel>();
-            sut.PreviousWords.Add(new PreviousWordViewModel("haj", "https://example.com/haj"));
+            sut.PreviousWords.Add(new PreviousWordViewModel("haj"));
             sut.PreviousWords.Should().HaveCount(1);
 
             await sut.ClearHistoryAsync();
