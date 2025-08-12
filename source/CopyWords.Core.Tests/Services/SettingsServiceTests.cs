@@ -238,5 +238,25 @@ namespace CopyWords.Core.Tests.Services
 
             preferencesMock.Verify(x => x.Set("SelectedParser", value, It.IsAny<string>()));
         }
+
+        [TestMethod]
+        public void LoadHistory_Should_ReturnHardCodedData()
+        {
+            // todo: change the test when the method is implemented
+            var sut = _fixture.Create<SettingsService>();
+            IEnumerable<string> result = sut.LoadHistory(It.IsAny<string>());
+
+            result.Should().HaveCount(3);
+        }
+
+        [TestMethod]
+        public void ClearHistory_Should_CallPreferencesSet()
+        {
+            // todo: change the test when the method is implemented
+            var sut = _fixture.Create<SettingsService>();
+
+            sut.Invoking(x => x.ClearHistory(It.IsAny<string>()))
+                .Should().Throw<NotImplementedException>();
+        }
     }
 }

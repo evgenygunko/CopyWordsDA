@@ -74,6 +74,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<MainViewModel>();
         builder.Services.AddSingleton<IWordViewModel, WordViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
+        builder.Services.AddSingleton<HistoryPageViewModel>();
         builder.Services.AddSingleton<GetUpdateViewModel>();
 
         builder.Services.AddScoped<IValidator<SettingsViewModel>, SettingsViewModelValidator>();

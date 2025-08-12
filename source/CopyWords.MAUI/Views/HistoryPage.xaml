@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="CopyWords.MAUI.Views.HistoryPage"
+             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             x:DataType="viewmodels:HistoryPageViewModel"
+             x:Name="contentPageHistoryPage"
+             Title="History">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageHistoryPage}, x:DataType=views:HistoryPage}"
+            Command="{Binding InitCommand}" />
+    </ContentPage.Behaviors>
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!-- List of previous words which support click events -->
+        <views:PreviousWordsView Grid.Row="0" />
+
+        <HorizontalStackLayout Grid.Row="1"
+                Margin="0,20,20,20"
+                HorizontalOptions="End">
+
+            <Button
+                    Text="Clear"
+                    Command="{Binding ClearHistoryCommand}"/>
+            <Button
+                    Margin="10,0,0,0"
+                    Text="Cancel"
+                    Command="{Binding CancelCommand}"/>
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

@@ -138,6 +138,12 @@ namespace CopyWords.Core.ViewModels
             IsRefreshing = false;
         }
 
+        [RelayCommand]
+        public async Task ShowHistory()
+        {
+            await Shell.Current.GoToAsync("HistoryPage");
+        }
+
         [RelayCommand(CanExecute = nameof(CanShowSettingsDialog))]
         public async Task ShowSettingsDialog()
         {

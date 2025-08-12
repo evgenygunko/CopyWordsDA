@@ -23,6 +23,14 @@
                 Text="{Binding DictionaryName}"
                 IconImageSource="{Binding DictionaryImage}"/>
 
+        <ToolbarItem Command="{Binding ShowHistoryCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialIconsOutlined-Regular"
+                    Glyph="{x:Static helpers:MaterialDesignIconFonts.History}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+
         <ToolbarItem Command="{Binding ShowSettingsDialogCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource
@@ -33,7 +41,7 @@
     </ContentPage.ToolbarItems>
 
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
-        <ScrollView VerticalOptions="FillAndExpand">
+        <ScrollView VerticalOptions="Fill">
             <Grid>
                 <Grid.Margin>
                     <OnPlatform x:TypeArguments="Thickness">
@@ -80,7 +88,7 @@
                 <!-- Parsed word user control -->
                 <views:WordView Grid.Row="1" BindingContext="{Binding Path=WordViewModel}" />
 
-                <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
+                <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsBusy}" VerticalOptions="Center" HorizontalOptions="Center" />
             </Grid>
         </ScrollView>
     </RefreshView>

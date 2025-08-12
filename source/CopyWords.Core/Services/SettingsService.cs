@@ -26,6 +26,10 @@ namespace CopyWords.Core.Services
         string GetSelectedParser();
 
         void SetSelectedParser(string value);
+
+        IEnumerable<string> LoadHistory(string dictionary);
+
+        void ClearHistory(string dictionary);
     }
 
     public class SettingsService : ISettingsService
@@ -118,6 +122,13 @@ namespace CopyWords.Core.Services
         public string GetSelectedParser() => _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
 
         public void SetSelectedParser(string value) => _preferences.Set("SelectedParser", value);
+
+        public IEnumerable<string> LoadHistory(string dictionary)
+        {
+            return ["haj", "vindstød", "frodig"];
+        }
+
+        public void ClearHistory(string dictionary) => throw new NotImplementedException();
 
         #region Private Methods
 
