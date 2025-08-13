@@ -5,9 +5,11 @@
              x:Class="CopyWords.MAUI.Views.HistoryPage"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
              x:DataType="viewmodels:HistoryPageViewModel"
              x:Name="contentPageHistoryPage"
-             Title="History">
+             Title="History"
+             Shell.BackgroundColor="Gray">
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
@@ -16,17 +18,28 @@
             Command="{Binding InitCommand}" />
     </ContentPage.Behaviors>
 
-
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- List of previous words which support click events -->
-        <views:PreviousWordsView Grid.Row="0" />
+        <!-- Content Area with Words -->
+        <ScrollView Grid.Row="0" Padding="20">
+            <Border Padding="20,16"
+                    Margin="0,4"
+                    Stroke="LightGray"
+                    StrokeThickness="0.5">
 
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12" />
+                </Border.StrokeShape>
+
+                <views:PreviousWordsView />
+            </Border>
+        </ScrollView>
+
+        <!-- Bottom Buttons -->
         <HorizontalStackLayout Grid.Row="1"
                 Margin="0,20,20,20"
                 HorizontalOptions="End">
