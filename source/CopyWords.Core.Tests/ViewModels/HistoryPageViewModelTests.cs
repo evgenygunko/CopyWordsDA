@@ -14,11 +14,8 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public void Init_Should_FillPreviousWords()
         {
-            const string dictionary = "da";
-
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(dictionary);
-            settingsServiceMock.Setup(x => x.LoadHistory(dictionary)).Returns(["haj", "fisk"]);
+            settingsServiceMock.Setup(x => x.LoadHistory()).Returns(["haj", "fisk"]);
 
             var sut = _fixture.Create<HistoryPageViewModel>();
             sut.Init();
@@ -29,11 +26,8 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public void Init_WhenPreviousWordViewModel_CallsInstantTranslationService()
         {
-            const string dictionary = "da";
-
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(dictionary);
-            settingsServiceMock.Setup(x => x.LoadHistory(dictionary)).Returns(["haj"]);
+            settingsServiceMock.Setup(x => x.LoadHistory()).Returns(["haj"]);
 
             var instantTranslationServiceMock = _fixture.Freeze<Mock<IInstantTranslationService>>();
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
@@ -51,10 +45,7 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task ClearHistoryAsync_Should_CallSettingsService()
         {
-            const string dictionary = "da";
-
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(dictionary);
 
             var sut = _fixture.Create<HistoryPageViewModel>();
             sut.PreviousWords.Add(new PreviousWordViewModel("haj"));
@@ -63,7 +54,7 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.ClearHistoryAsync();
 
             sut.PreviousWords.Should().HaveCount(0);
-            settingsServiceMock.Verify(x => x.ClearHistory(dictionary));
+            settingsServiceMock.Verify(x => x.ClearHistory());
         }
 
         [TestMethod]

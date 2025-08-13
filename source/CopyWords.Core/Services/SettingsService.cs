@@ -27,9 +27,11 @@ namespace CopyWords.Core.Services
 
         void SetSelectedParser(string value);
 
-        IEnumerable<string> LoadHistory(string dictionary);
+        void AddToHistory(string value);
 
-        void ClearHistory(string dictionary);
+        IEnumerable<string> LoadHistory();
+
+        void ClearHistory();
     }
 
     public class SettingsService : ISettingsService
@@ -123,14 +125,62 @@ namespace CopyWords.Core.Services
 
         public void SetSelectedParser(string value) => _preferences.Set("SelectedParser", value);
 
-        public IEnumerable<string> LoadHistory(string dictionary)
+        public void AddToHistory(string word)
         {
-            return ["haj", "vindstød", "frodig"];
+            if (string.IsNullOrWhiteSpace(word))
+            {
+                return;
+            }
+
+            string historyKey = GetHistoryKey();
+
+            // Load existing history from preferences as semicolon-separated string
+            string existingHistory = _preferences.Get(historyKey, string.Empty);
+            List<string> history = LoadHistory().ToList();
+
+            // Remove the word if it already exists to avoid duplicates and move to front
+            history.Remove(word);
+
+            // Add the new word to the beginning of the list
+            history.Insert(0, word);
+
+            // If the list contains more than 15 entries, purge the oldest
+            if (history.Count > 15)
+            {
+                history = history.Take(15).ToList();
+            }
+
+            // Save back to preferences as semicolon-separated string
+            string updatedHistory = string.Join(";", history);
+            _preferences.Set(historyKey, updatedHistory);
         }
 
-        public void ClearHistory(string dictionary) => throw new NotImplementedException();
+        public IEnumerable<string> LoadHistory()
+        {
+            string historyKey = GetHistoryKey();
+            string existingHistory = _preferences.Get(historyKey, string.Empty);
+
+            if (string.IsNullOrEmpty(existingHistory))
+            {
+                return [];
+            }
+
+            return existingHistory.Split(';', StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        public void ClearHistory()
+        {
+            string historyKey = GetHistoryKey();
+            _preferences.Remove(historyKey);
+        }
 
         #region Private Methods
+
+        private string GetHistoryKey()
+        {
+            string dictionary = GetSelectedParser();
+            return $"History_{dictionary}";
+        }
 
         private string GetFfmpegBinFolder()
         {

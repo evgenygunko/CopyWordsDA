@@ -240,23 +240,42 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public void LoadHistory_Should_ReturnHardCodedData()
+        public void LoadHistory_Should_ReturnEmptyCollectionWhenNoHistory()
         {
-            // todo: change the test when the method is implemented
-            var sut = _fixture.Create<SettingsService>();
-            IEnumerable<string> result = sut.LoadHistory(It.IsAny<string>());
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns("Danish");
+            preferencesMock.Setup(x => x.Get("History_Danish", string.Empty, null)).Returns(string.Empty);
 
-            result.Should().HaveCount(3);
+            var sut = _fixture.Create<SettingsService>();
+            IEnumerable<string> result = sut.LoadHistory();
+
+            result.Should().BeEmpty();
         }
 
         [TestMethod]
-        public void ClearHistory_Should_CallPreferencesSet()
+        public void LoadHistory_Should_ReturnHistoryItems()
         {
-            // todo: change the test when the method is implemented
-            var sut = _fixture.Create<SettingsService>();
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns("Danish");
+            preferencesMock.Setup(x => x.Get("History_Danish", string.Empty, null)).Returns("word1;word2;word3");
 
-            sut.Invoking(x => x.ClearHistory(It.IsAny<string>()))
-                .Should().Throw<NotImplementedException>();
+            var sut = _fixture.Create<SettingsService>();
+            IEnumerable<string> result = sut.LoadHistory();
+
+            result.Should().HaveCount(3);
+            result.Should().Equal("word1", "word2", "word3");
+        }
+
+        [TestMethod]
+        public void ClearHistory_Should_CallPreferencesRemove()
+        {
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns("Danish");
+
+            var sut = _fixture.Create<SettingsService>();
+            sut.ClearHistory();
+
+            preferencesMock.Verify(x => x.Remove("History_Danish", It.IsAny<string>()));
         }
     }
 }

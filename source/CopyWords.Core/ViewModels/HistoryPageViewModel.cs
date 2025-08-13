@@ -32,8 +32,7 @@ namespace CopyWords.Core.ViewModels
         {
             PreviousWords.Clear();
 
-            string dictionary = _settingsService.GetSelectedParser();
-            foreach (string item in _settingsService.LoadHistory(dictionary))
+            foreach (string item in _settingsService.LoadHistory())
             {
                 var previousWordViewModelVM = new PreviousWordViewModel(item);
                 previousWordViewModelVM.Clicked += async (sender, word) =>
@@ -58,8 +57,7 @@ namespace CopyWords.Core.ViewModels
             {
                 PreviousWords.Clear();
 
-                string dictionary = _settingsService.GetSelectedParser();
-                _settingsService.ClearHistory(dictionary);
+                _settingsService.ClearHistory();
             }
             catch (Exception ex)
             {

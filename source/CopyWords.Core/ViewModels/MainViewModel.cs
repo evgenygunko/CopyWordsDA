@@ -43,11 +43,13 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
         [NotifyCanExecuteChangedFor(nameof(SelectDictionaryCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShowSettingsDialogCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ShowHistoryCommand))]
         public partial bool IsBusy { get; set; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SelectDictionaryCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShowSettingsDialogCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ShowHistoryCommand))]
         public partial bool IsRefreshing { get; set; }
 
         [ObservableProperty]
@@ -65,6 +67,8 @@ namespace CopyWords.Core.ViewModels
         public bool CanShowSettingsDialog => !IsBusy && !IsRefreshing;
 
         public bool CanSelectDictionary => !IsBusy && !IsRefreshing;
+
+        public bool CanOpenHistory => !IsBusy && !IsRefreshing;
 
         #endregion
 
@@ -139,7 +143,7 @@ namespace CopyWords.Core.ViewModels
             IsRefreshing = false;
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanOpenHistory))]
         public async Task ShowHistory()
         {
             await Shell.Current.GoToAsync("HistoryPage");
@@ -219,6 +223,8 @@ namespace CopyWords.Core.ViewModels
 
                 _wordViewModel.ShowCopyButtons = showCopyButtons;
                 _wordViewModel.UpdateUI();
+
+                _settingsService.AddToHistory(wordModel.Word);
             }
 
             IsBusy = false;

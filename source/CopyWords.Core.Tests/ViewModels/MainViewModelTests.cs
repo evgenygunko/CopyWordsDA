@@ -435,5 +435,22 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         #endregion
+
+        #region Tests for UpdateUI
+
+        [TestMethod]
+        public void UpdateUI_Should_CallAddToHistory()
+        {
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.UpdateUI(wordModel);
+
+            settingsServiceMock.Verify(x => x.AddToHistory(wordModel.Word));
+        }
+
+        #endregion
     }
 }
