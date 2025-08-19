@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -29,6 +30,8 @@ namespace CopyWords.Core.ViewModels
         private readonly IClipboardService _clipboardService;
         private readonly ICopySelectedToClipboardService _copySelectedToClipboardService;
         private readonly IShare _share;
+
+        private string _soundUrl = string.Empty;
 
         public WordViewModel(
             ISaveSoundFileService saveSoundFileService,
@@ -118,28 +121,40 @@ namespace CopyWords.Core.ViewModels
 
             IsBusy = true;
 
-            Debug.WriteLine("Will play " + SoundUrl);
-
-            var stackSound = (HorizontalStackLayout)control;
-            IView? view = stackSound.Children.SingleOrDefault(x => x.GetType() == typeof(MediaElement));
-
-            if (view is not MediaElement)
+            MediaElement mediaElement = (MediaElement)control;
+            if (SoundUrl != _soundUrl)
             {
-                await _dialogService.DisplayAlert("Cannot play sound file", "Cannot find MediaElement control in the view", "OK");
-                return;
+                mediaElement.Source = MediaSource.FromUri(SoundUrl);
+
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                // Wait for the media element to be ready playing - but give up after 5 seconds
+                while (stopwatch.ElapsedMilliseconds < 5000 &&
+                    !(mediaElement.CurrentState == MediaElementState.Stopped || mediaElement.CurrentState == MediaElementState.Paused))
+                {
+                    Debug.WriteLine($"Waiting for media element to load, current state: {mediaElement.CurrentState}");
+                    await Task.Delay(200);
+                }
+                stopwatch.Stop();
+
+                Debug.WriteLine($"Will play '{SoundUrl}', current state: {mediaElement.CurrentState}");
+                mediaElement.Play();
             }
-
-            MediaElement mediaElement = (MediaElement)view;
-
-            // Workaround for a bug in MediaElement:
-            // On MacOS, the app crashes at startup with the runtime exception:
-            // "System.MissingMethodException: No parameterless constructor defined for type 'CommunityToolkit.Maui.Views.MediaElement'."
-            // To resolve this, we create the MediaElement manually in the C# file.
-            // However, it must be added to the Visual Tree; otherwise, there is no sound.
-            // Reference: https://stackoverflow.com/a/75535084
-            //MediaElement mediaElement = (MediaElement)control;
-            mediaElement.Source = MediaSource.FromUri(SoundUrl);
-            mediaElement.Play();
+            else
+            {
+                Debug.WriteLine($"Will play '{SoundUrl}', current state: {mediaElement.CurrentState}");
+#if ANDROID
+                // On Android calling "Play" again doesn't do anything - we will change the position in current media instead, which will trigger play automatically.
+                await mediaElement.SeekTo(TimeSpan.Zero, new CancellationTokenSource(TimeSpan.FromSeconds(3)).Token);
+#else
+                // On Windows calling "Play" again will restart the sound.
+                if (mediaElement.CurrentState == MediaElementState.Paused)
+                {
+                    mediaElement.Stop();
+                }
+                mediaElement.Play();
+#endif
+            }
+            _soundUrl = SoundUrl;
 
             IsBusy = false;
         }

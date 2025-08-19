@@ -2,7 +2,6 @@
 using System.Runtime.Versioning;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
-using CommunityToolkit.Maui.Views;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
@@ -50,13 +49,6 @@ public static class MauiProgram
         builder.Services.AddSingleton(DeviceInfo.Current);
         builder.Services.AddSingleton(FileSaver.Default);
         builder.Services.AddSingleton(Share.Default);
-
-        var mediaElement = new MediaElement
-        {
-            ShouldAutoPlay = false,
-            IsVisible = false
-        };
-        builder.Services.AddSingleton(mediaElement);
 
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
         builder.Services.AddSingleton<ICopySelectedToClipboardService, CopySelectedToClipboardService>();

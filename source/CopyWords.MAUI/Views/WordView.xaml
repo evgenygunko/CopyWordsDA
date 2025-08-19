@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
              xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
@@ -16,25 +17,13 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <ActivityIndicator Grid.RowSpan="4" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
+        <ActivityIndicator Grid.RowSpan="4" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="Center" />
 
         <!-- Word variants -->
         <views:VariantsView Grid.Row="0" />
 
-        <!-- Sound -->
-        <HorizontalStackLayout Grid.Row="1" x:Name="stackSound">
-            <!-- Workaround for a bug in MediaElement:
-                On MacOS, the app crashes at startup with the runtime exception:
-                "System.MissingMethodException: No parameterless constructor defined for type 'CommunityToolkit.Maui.Views.MediaElement'."
-                To resolve this, we create the MediaElement manually in the C# file.
-                However, it must be added to the Visual Tree; otherwise, there is no sound.
-                Reference: https://stackoverflow.com/a/75535084
-            -->
-            <!--<toolkit:MediaElement x:Name="mediaElement" IsVisible="true" ShouldAutoPlay="false" />-->
-            <!--<Button BackgroundColor="{Binding PlaySoundButtonColor}"
-                    Command="{Binding PlaySoundCommand}"
-                    CommandParameter="{Binding Source={x:Reference mediaElement}, x:DataType=MediaElement}" >-->
-        </HorizontalStackLayout>
+        <!-- Media control -->
+        <toolkit:MediaElement Grid.Row="1" x:Name="mediaElement" IsVisible="False" ShouldAutoPlay="false" />
 
         <OnPlatform x:TypeArguments="View">
             <On Platform="Android">
@@ -52,7 +41,7 @@
                             ToolTipProperties.Text="Play sound"
                             BackgroundColor="{Binding PlaySoundButtonColor}"
                             Command="{Binding PlaySoundCommand}"
-                            CommandParameter="{Binding Source={x:Reference stackSound}, x:DataType=HorizontalStackLayout}">
+                            CommandParameter="{Binding Source={x:Reference mediaElement}, x:DataType=toolkit:MediaElement}">
 
                         <buttons:SfButton.Content>
                             <DataTemplate>
@@ -165,7 +154,7 @@
                             ToolTipProperties.Text="Play sound"
                             BackgroundColor="{Binding PlaySoundButtonColor}"
                             Command="{Binding PlaySoundCommand}"
-                            CommandParameter="{Binding Source={x:Reference stackSound}, x:DataType=HorizontalStackLayout}">
+                            CommandParameter="{Binding Source={x:Reference mediaElement}, x:DataType=toolkit:MediaElement}">
 
                         <buttons:SfButton.Content>
                             <DataTemplate>

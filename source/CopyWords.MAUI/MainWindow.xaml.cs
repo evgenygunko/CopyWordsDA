@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
-using CommunityToolkit.Maui.Views;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
 using CopyWords.MAUI.Views;
@@ -47,15 +46,6 @@ public partial class MainWindow : Window
                 BindingContext = _getUpdateViewModel
             });
         }
-    }
-
-    protected override void OnDestroying()
-    {
-        base.OnDestroying();
-
-        // fix to a crash on Windows when closing the app: https://github.com/CommunityToolkit/Maui/issues/962
-        var mediaElement = MauiProgram.GetService<MediaElement>();
-        mediaElement?.Handler?.DisconnectHandler();
     }
 
     private async void ButtonSettings_Clicked(object sender, EventArgs e)
