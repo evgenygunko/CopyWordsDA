@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -126,18 +125,18 @@ namespace CopyWords.Core.ViewModels
             {
                 mediaElement.Source = MediaSource.FromUri(SoundUrl);
 
-                Stopwatch stopwatch = Stopwatch.StartNew();
-                // Wait for the media element to be ready playing - but give up after 5 seconds
-                while (stopwatch.ElapsedMilliseconds < 5000 &&
-                    !(mediaElement.CurrentState == MediaElementState.Stopped || mediaElement.CurrentState == MediaElementState.Paused))
-                {
-                    Debug.WriteLine($"Waiting for media element to load, current state: {mediaElement.CurrentState}");
-                    await Task.Delay(200);
-                }
-                stopwatch.Stop();
-
                 Debug.WriteLine($"Will play '{SoundUrl}', current state: {mediaElement.CurrentState}");
                 mediaElement.Play();
+
+#if WINDOWS
+                if (!string.IsNullOrEmpty(_soundUrl))
+                {
+                    // There is a strange bug on Windows when Media element would try to play the old sound even when the source has changed.
+                    // The sound would be silent though. So we call Play method again, this time it will play the new sound.
+                    await Task.Delay(200);
+                    mediaElement.Play();
+                }
+#endif
             }
             else
             {
@@ -146,11 +145,7 @@ namespace CopyWords.Core.ViewModels
                 // On Android calling "Play" again doesn't do anything - we will change the position in current media instead, which will trigger play automatically.
                 await mediaElement.SeekTo(TimeSpan.Zero, new CancellationTokenSource(TimeSpan.FromSeconds(3)).Token);
 #else
-                // On Windows calling "Play" again will restart the sound.
-                if (mediaElement.CurrentState == MediaElementState.Paused)
-                {
-                    mediaElement.Stop();
-                }
+                // However on Windows calling "SeekTo" doesn't play sound - we need to call "Play".
                 mediaElement.Play();
 #endif
             }
