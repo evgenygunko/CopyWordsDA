@@ -14,6 +14,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IDialogService _dialogService;
         private readonly IInstantTranslationService _instantTranslationService;
         private readonly ITranslationsService _translationsService;
+        private readonly ISuggestionsService _suggestionsService;
 
         private readonly IWordViewModel _wordViewModel;
 
@@ -23,6 +24,7 @@ namespace CopyWords.Core.ViewModels
             IDialogService dialogService,
             IInstantTranslationService instantTranslationService,
             ITranslationsService translationsService,
+            ISuggestionsService suggestionsService,
             IWordViewModel wordViewModel)
         {
             _globalSettings = globalSettings;
@@ -30,7 +32,9 @@ namespace CopyWords.Core.ViewModels
             _dialogService = dialogService;
             _instantTranslationService = instantTranslationService;
             _translationsService = translationsService;
+            _suggestionsService = suggestionsService;
             _wordViewModel = wordViewModel;
+
             SearchWord = string.Empty;
         }
 
@@ -87,7 +91,7 @@ namespace CopyWords.Core.ViewModels
             if (!string.IsNullOrWhiteSpace(instantText))
             {
                 SearchWord = instantText;
-                await LookUpAsync(null, CancellationToken.None);
+                await LookUpAsync();
             }
             else
             {
@@ -100,23 +104,9 @@ namespace CopyWords.Core.ViewModels
         }
 
         [RelayCommand]
-        public async Task LookUpAsync(ITextInput? searchBarElement, CancellationToken token)
+        public async Task LookUpAsync()
         {
-            try
-            {
-                if (searchBarElement is SearchBar searchBar)
-                {
-                    if (searchBar.IsSoftInputShowing())
-                    {
-                        await searchBar.HideSoftInputAsync(token);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _ = ex;
-            }
-
+            // Clear previous word while we are waiting for the new one
             WordModel? wordModel = new WordModel(string.Empty, null, null, [], []);
             UpdateUI(wordModel);
 
@@ -169,6 +159,41 @@ namespace CopyWords.Core.ViewModels
 
                 _settingsService.SetSelectedParser(result);
             }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public async Task<List<string>> GetSuggestionsAsync(string inputText, CancellationToken cancellationToken)
+        {
+            // This method is called from the autocomplete control on every key press: CustomAsyncFilter.
+            if (string.IsNullOrWhiteSpace(inputText))
+            {
+                return new List<string>();
+            }
+
+            List<string> suggestions = new List<string>();
+
+            SourceLanguage sourceLanguage;
+            if (Enum.TryParse<SourceLanguage>(_settingsService.GetSelectedParser(), out sourceLanguage))
+            {
+                if (sourceLanguage == SourceLanguage.Danish)
+                {
+                    suggestions = (await _suggestionsService.GetDanishWordsSuggestionsAsync(inputText, cancellationToken)).ToList();
+                }
+                else if (sourceLanguage == SourceLanguage.Spanish)
+                {
+                    suggestions = (await _suggestionsService.GetSpanishWordsSuggestionsAsync(inputText, cancellationToken)).ToList();
+                }
+            }
+
+#if ANDROID
+            // On Android we have a keyboard open, so show only 6 elements so that they fit the screen above the keyboard.
+            return suggestions.Take(6).ToList();
+#else
+            return suggestions;
+#endif
         }
 
         #endregion

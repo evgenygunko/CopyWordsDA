@@ -19,7 +19,8 @@ public partial class App : Application
         IUpdateService updateService,
         IDialogService dialogService,
         MainWindowViewModel mainWindowViewModel,
-        GetUpdateViewModel getUpdateViewModel)
+        GetUpdateViewModel getUpdateViewModel,
+        IGlobalSettings globalSettings)
     {
         UserAppTheme = AppTheme.Light;
 
@@ -28,6 +29,8 @@ public partial class App : Application
         _dialogService = dialogService;
         _mainWindowViewModel = mainWindowViewModel;
         _getUpdateViewModel = getUpdateViewModel;
+
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(globalSettings.SyncfusionLicenseKey);
 
         InitializeComponent();
     }

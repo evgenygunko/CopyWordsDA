@@ -8,6 +8,7 @@ using CopyWords.Core.ViewModels;
 using CopyWords.Core.ViewModels.Validation;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 
 namespace CopyWords.MAUI;
@@ -27,6 +28,7 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .ConfigureSyncfusionToolkit()
+            .ConfigureSyncfusionCore()
             .UseMauiCommunityToolkit()
             .UseMauiCommunityToolkitMediaElement()
             .ConfigureFonts(fonts =>
@@ -54,13 +56,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<ICopySelectedToClipboardService, CopySelectedToClipboardService>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
         builder.Services.AddSingleton<IClipboardService, ClipboardService>();
-        builder.Services.AddSingleton<ITranslationsService, TranslationsService>();
         builder.Services.AddSingleton<IInstantTranslationService, InstantTranslationService>();
         builder.Services.AddSingleton<ISaveImageFileService, SaveImageFileService>();
 
+        builder.Services.AddHttpClient<ITranslationsService, TranslationsService>();
         builder.Services.AddHttpClient<IUpdateService, UpdateService>();
         builder.Services.AddHttpClient<ISaveSoundFileService, SaveSoundFileService>();
         builder.Services.AddHttpClient<IFileDownloaderService, FileDownloaderService>();
+        builder.Services.AddHttpClient<ISuggestionsService, SuggestionsService>();
 
         builder.Services.AddSingleton<MainWindowViewModel>();
         builder.Services.AddSingleton<MainViewModel>();

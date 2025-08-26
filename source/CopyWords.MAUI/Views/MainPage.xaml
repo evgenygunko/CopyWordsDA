@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             xmlns:behaviors="clr-namespace:CopyWords.MAUI.Behaviors"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:DataType="viewmodels:MainViewModel"
              x:Class="CopyWords.MAUI.Views.MainPage"
@@ -56,34 +58,34 @@
                 </Grid.RowDefinitions>
 
                 <!-- Lookup word -->
-                <OnPlatform x:TypeArguments="View">
-                    <On Platform="Android">
-                        <Border Grid.Row="0"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 10,10,10,10">
+                <Border Grid.Row="0"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 10,10,10,10">
 
-                            <SearchBar
-                                x:Name="SearchBarLookupWordAndroid"
-                                Placeholder="Search word"
-                                BackgroundColor="#F4F2FC"
-                                Text="{Binding SearchWord}"
-                                SearchCommand="{Binding LookUpCommand}"
-                                SearchCommandParameter="{x:Reference SearchBarLookupWordAndroid}"
-                                StyleClass="SearchBarNoUnderline" />
-                        </Border>
-                    </On>
-                    <On Platform="WinUI, MacCatalyst">
-                        <SearchBar
-                                Grid.Row="0"
-                                x:Name="SearchBarLookupWordDesktop"
-                                Placeholder="Search word"
-                                BackgroundColor="#F4F2FC"
-                                Text="{Binding SearchWord}"
-                                SearchCommand="{Binding LookUpCommand}"
-                                SearchCommandParameter="{x:Reference SearchBarLookupWordDesktop}"
-                                StyleClass="SearchBarNoUnderline" />
-                    </On>
-                </OnPlatform>
+                    <editors:SfAutocomplete
+                            x:Name="autocomplete"
+                            BackgroundColor="#F4F2FC"
+                            ShowBorder="False"
+                            FontSize="14"
+                            SelectionTextHighlightColor="{StaticResource Gray400}"
+                            SelectedDropDownItemBackground ="Transparent"
+                            Text="{Binding SearchWord, Mode=TwoWay}"
+                            TextSearchMode="Contains"
+                            NoResultsFoundText=""
+                            ReturnCommand="{Binding LookUpCommand}">
+
+                        <editors:SfAutocomplete.FilterBehavior>
+                            <behaviors:CustomAsyncFilter/>
+                        </editors:SfAutocomplete.FilterBehavior>
+
+                        <editors:SfAutocomplete.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                                EventName="SelectionChanged"
+                                BindingContext="{Binding Path=BindingContext, Source={x:Reference autocomplete}, x:DataType=editors:SfAutocomplete}"
+                                Command="{Binding LookUpCommand}"/>
+                        </editors:SfAutocomplete.Behaviors>
+                    </editors:SfAutocomplete>
+                </Border>
 
                 <!-- Parsed word user control -->
                 <views:WordView Grid.Row="1" BindingContext="{Binding Path=WordViewModel}" />

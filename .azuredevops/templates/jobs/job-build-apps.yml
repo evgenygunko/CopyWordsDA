@@ -22,15 +22,19 @@ jobs:
                 filePath: './.build/UpdateVersion.ps1'
 
           - task: PowerShell@2
-            displayName: 'Update TranslatorApiUrl in appsettings.json'
+            displayName: 'Update secrets in appsettings.json'
             inputs:
                 targetType: 'inline'
                 script: |
                     $file = "$(Build.SourcesDirectory)\source\CopyWords.MAUI\appsettings.json"
-                    (Get-Content $file) -replace '"TranslatorApiUrl":\s*""', '"TranslatorApiUrl": "$(TranslatorApiUrl)"' | Set-Content $file
-                    Write-Host "Updated appsettings.json:"
-                    Get-Content "$(Build.SourcesDirectory)\source\CopyWords.MAUI\appsettings.json"
 
+                    (Get-Content $file) `
+                        -replace '"TranslatorApiUrl":\s*""', '"TranslatorApiUrl": "$(TranslatorApiUrl)"' `
+                        -replace '"SyncfusionLicenseKey":\s*""', '"SyncfusionLicenseKey": "$(SyncfusionLicenseKey)"' |
+                        Set-Content $file
+
+                    Write-Host "Updated appsettings.json:"
+                    Get-Content $file
           - script: yarn install
             displayName: 'yarn install'
 
