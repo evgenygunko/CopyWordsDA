@@ -18,6 +18,8 @@ namespace CopyWords.Core.Services
         Task<string> CompileEndingsAsync(ObservableCollection<DefinitionViewModel> definitionViewModels);
 
         Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> definitionViewModels);
+
+        string CompileHeadword(ObservableCollection<DefinitionViewModel> definitionViewModels);
     }
 
     public class CopySelectedToClipboardService : ICopySelectedToClipboardService
@@ -276,6 +278,34 @@ namespace CopyWords.Core.Services
             }
 
             return Task.FromResult(sb.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
+        }
+
+        public string CompileHeadword(ObservableCollection<DefinitionViewModel> definitionViewModels)
+        {
+            DefinitionViewModel? definitionViewModel = definitionViewModels.FirstOrDefault();
+            if (definitionViewModel == null)
+            {
+                return string.Empty;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(definitionViewModel.HeadwordViewModel.Original!);
+
+            var headwordVM = definitionViewModel.HeadwordViewModel;
+
+            // In dictionary mode just add translations without formatting
+            if (!string.IsNullOrEmpty(headwordVM.Russian))
+            {
+                sb.AppendLine(headwordVM.Russian);
+            }
+            if (!string.IsNullOrEmpty(headwordVM.English))
+            {
+                sb.AppendLine(headwordVM.English);
+            }
+
+            // Trim any trailing new lines
+            return sb.ToString()
+                .TrimEnd(Environment.NewLine.ToCharArray());
         }
 
         #endregion

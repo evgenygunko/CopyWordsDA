@@ -117,8 +117,7 @@
                             WidthRequest="44" HeightRequest="44"
                             ToolTipProperties.Text="Share word"
                             BackgroundColor="{Binding CopyFrontButtonColor}"
-                            Command="{Binding ShareCommand}"
-                            IsVisible="{Binding ShowCopyButtons}">
+                            Command="{Binding ShareCommand}">
 
                         <buttons:SfButton.Content>
                             <DataTemplate>

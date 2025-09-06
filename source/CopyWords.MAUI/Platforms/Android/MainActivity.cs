@@ -18,7 +18,12 @@ namespace CopyWords.MAUI;
         Exported = true)]
 [IntentFilter(
         [Intent.ActionProcessText, Intent.CategoryDefault],
-        DataMimeType = "text/plain")]
+        DataMimeType = "text/plain",
+#if DEBUG
+        Label = "CopyWords (debug)")]
+#else
+        Label = "CopyWords")]
+#endif
 public class MainActivity : MauiAppCompatActivity
 {
     protected override void OnCreate(Bundle? savedInstanceState)

@@ -233,22 +233,33 @@ namespace CopyWords.Core.ViewModels
         {
             try
             {
-                string textToShare = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModels);
-                if (!string.IsNullOrEmpty(textToShare))
-                {
-                    string translations = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModels);
+                string subjectToShare;
+                string textToShare;
 
-                    await _share.RequestAsync(new ShareTextRequest
+                if (ShowCopyButtons)
+                {
+                    subjectToShare = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModels);
+                    if (string.IsNullOrEmpty(subjectToShare))
                     {
-                        Subject = textToShare,  // In AnkiDroid it will be extras.getString(Intent.EXTRA_SUBJECT) and will go to the first edit box
-                        Text = translations,    // In AnkiDroid it will be extras.getString(Intent.EXTRA_TEXT) and will go to the second edit box
-                        Title = "Share Translations",
-                    });
+                        await _dialogService.DisplayAlert("Oops!", "You need to select at least one example before sharing.", "OK");
+                        return;
+                    }
+
+                    textToShare = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModels);
                 }
                 else
                 {
-                    await _dialogService.DisplayAlert("Oops!", "You need to select at least one example before sharing.", "OK");
+                    // If copy buttons are not shown, share the headword and its translations.
+                    subjectToShare = _copySelectedToClipboardService.CompileHeadword(DefinitionViewModels);
+                    textToShare = subjectToShare;
                 }
+
+                await _share.RequestAsync(new ShareTextRequest
+                {
+                    Subject = subjectToShare,  // In AnkiDroid it will be extras.getString(Intent.EXTRA_SUBJECT) and will go to the first edit box
+                    Text = textToShare,    // In AnkiDroid it will be extras.getString(Intent.EXTRA_TEXT) and will go to the second edit box
+                    Title = "Share Translations",
+                });
             }
             catch (ExamplesFromSeveralDefinitionsSelectedException ex)
             {

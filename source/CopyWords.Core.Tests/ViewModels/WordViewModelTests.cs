@@ -360,7 +360,7 @@ namespace CopyWords.Core.Tests.ViewModels
         #region Tests for ShareAsync
 
         [TestMethod]
-        public async Task ShareAsync_WhenCanCompileFrontCard_CallsShareRequestAsync()
+        public async Task ShareAsync_WhenCopyButtonsShownAndCanCompileFrontCard_CallsShareRequestAsync()
         {
             // Arrange
             string front = _fixture.Create<string>();
@@ -382,6 +382,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 copySelectedToClipboardServiceMock.Object,
                 shareMock.Object);
             sut.CanCopyFront = true;
+            sut.ShowCopyButtons = true;
 
             // Act
             await sut.ShareAsync();
@@ -395,6 +396,42 @@ namespace CopyWords.Core.Tests.ViewModels
 
             copySelectedToClipboardServiceMock.Verify(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>()));
             copySelectedToClipboardServiceMock.Verify(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>()));
+        }
+
+        [TestMethod]
+        public async Task ShareAsync_WhenCopyButtonsHidden_CallsShareRequestAsync()
+        {
+            // Arrange
+            string textToShare = _fixture.Create<string>();
+
+            var sharedTextRequests = new List<ShareTextRequest>();
+
+            var shareMock = _fixture.Freeze<Mock<IShare>>();
+            shareMock.Setup(x => x.RequestAsync(Capture.In(sharedTextRequests)));
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileHeadword(It.IsAny<ObservableCollection<DefinitionViewModel>>())).Returns(textToShare);
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                Mock.Of<IDialogService>(),
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                shareMock.Object);
+            sut.CanCopyFront = true;
+            sut.ShowCopyButtons = false;
+
+            // Act
+            await sut.ShareAsync();
+
+            // Assert
+            shareMock.Verify(x => x.RequestAsync(It.IsAny<ShareTextRequest>()));
+
+            sharedTextRequests[0].Subject.Should().Be(textToShare);
+            sharedTextRequests[0].Text.Should().Be(textToShare);
+            sharedTextRequests[0].Title.Should().Be("Share Translations");
+
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileHeadword(It.IsAny<ObservableCollection<DefinitionViewModel>>()));
         }
 
         [TestMethod]
@@ -418,6 +455,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 copySelectedToClipboardServiceMock.Object,
                 shareMock.Object);
             sut.CanCopyFront = true;
+            sut.ShowCopyButtons = true;
 
             // Act
             await sut.ShareAsync();
@@ -451,6 +489,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 copySelectedToClipboardServiceMock.Object,
                 shareMock.Object);
             sut.CanCopyFront = true;
+            sut.ShowCopyButtons = true;
 
             // Act
             await sut.ShareAsync();
@@ -483,6 +522,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 copySelectedToClipboardServiceMock.Object,
                 shareMock.Object);
             sut.CanCopyFront = true;
+            sut.ShowCopyButtons = true;
 
             // Act
             await sut.ShareAsync();

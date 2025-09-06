@@ -754,6 +754,21 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
+        #region Tests for CompileHeadword
+
+        [TestMethod]
+        public void CompileHeadword_Should_ReturnHeadwordAndItsTranslationsForFirstDefinition()
+        {
+            var definitionVMs = CreateVMForGrillspyd();
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+            string result = sut.CompileHeadword(definitionVMs);
+
+            result.Should().Be("grillspyd" + Environment.NewLine + "шашлыки" + Environment.NewLine + "kebabs");
+        }
+
+        #endregion
+
         #region Tests for GetImageFileNameWithoutExtension
 
         [TestMethod]
