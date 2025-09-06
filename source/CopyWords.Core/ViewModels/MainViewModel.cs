@@ -86,6 +86,9 @@ namespace CopyWords.Core.ViewModels
                 return;
             }
 
+            DictionaryName = _settingsService.GetSelectedParser();
+            UpdateDictionaryImage(DictionaryName);
+
             // Check if the app was called from a context menu on Android (or from History page) and set the search word accordingly
             string? instantText = _instantTranslationService.GetTextAndClear();
             if (!string.IsNullOrWhiteSpace(instantText))
@@ -95,19 +98,16 @@ namespace CopyWords.Core.ViewModels
             }
             else
             {
-                WordModel? wordModel = new WordModel(string.Empty, null, null, [], []);
+                WordModel? wordModel = new WordModel(string.Empty, GetSourceLanguage(), null, null, [], []);
                 UpdateUI(wordModel);
             }
-
-            DictionaryName = _settingsService.GetSelectedParser();
-            UpdateDictionaryImage(DictionaryName);
         }
 
         [RelayCommand]
         public async Task LookUpAsync()
         {
             // Clear previous word while we are waiting for the new one
-            WordModel? wordModel = new WordModel(string.Empty, null, null, [], []);
+            WordModel? wordModel = new WordModel(string.Empty, GetSourceLanguage(), null, null, [], []);
             UpdateUI(wordModel);
 
             IsBusy = true;
@@ -219,18 +219,12 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
                 _wordViewModel.SoundFileName = wordModel.SoundFileName;
 
-                SourceLanguage sourceLanguage;
-                if (!Enum.TryParse<SourceLanguage>(_settingsService.GetSelectedParser(), out sourceLanguage))
-                {
-                    sourceLanguage = SourceLanguage.Danish;
-                }
-
                 bool showCopyButtons = _settingsService.GetShowCopyButtons();
 
                 _wordViewModel.ClearDefinitions();
                 foreach (var definition in wordModel.Definitions)
                 {
-                    _wordViewModel.AddDefinition(new DefinitionViewModel(definition, sourceLanguage, showCopyButtons));
+                    _wordViewModel.AddDefinition(new DefinitionViewModel(definition, wordModel.SourceLanguage, showCopyButtons));
                 }
 
                 _wordViewModel.ClearVariants();
@@ -250,6 +244,10 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.UpdateUI();
 
                 _settingsService.AddToHistory(wordModel.Word);
+
+                _settingsService.SetSelectedParser(wordModel.SourceLanguage.ToString());
+                DictionaryName = wordModel.SourceLanguage.ToString();
+                UpdateDictionaryImage(DictionaryName);
             }
 
             IsBusy = false;
@@ -307,6 +305,16 @@ namespace CopyWords.Core.ViewModels
             {
                 throw new NotSupportedException($"Source language '{language}' selected in the action sheet is not supported.");
             }
+        }
+
+        private SourceLanguage GetSourceLanguage()
+        {
+            SourceLanguage sourceLanguage;
+            if (!Enum.TryParse<SourceLanguage>(_settingsService.GetSelectedParser(), out sourceLanguage))
+            {
+                sourceLanguage = SourceLanguage.Danish;
+            }
+            return sourceLanguage;
         }
 
         #endregion

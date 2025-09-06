@@ -37,19 +37,18 @@ namespace CopyWords.Core.Services
                 throw new ArgumentException("Translator API URL cannot be null or empty");
             }
 
-            var translationInput = new TranslationInput(
-                Version: "1",
+            var input = new LookUpWordRequest(
+                Text: wordToLookUp,
                 SourceLanguage: options.SourceLang.ToString(),
                 DestinationLanguage: "Russian",
-                Definitions: [],
-                Text: wordToLookUp);
+                Version: "1");
 
-            WordModel? wordModel = await TranslateAsync(options.TranslatorApiURL, translationInput);
+            WordModel? wordModel = await TranslateAsync(options.TranslatorApiURL, input);
 
             return wordModel;
         }
 
-        internal async Task<WordModel?> TranslateAsync(string url, TranslationInput input)
+        internal async Task<WordModel?> TranslateAsync(string url, LookUpWordRequest input)
         {
             string jsonRequest = JsonConvert.SerializeObject(input);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");

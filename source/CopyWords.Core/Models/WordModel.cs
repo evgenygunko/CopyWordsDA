@@ -2,6 +2,7 @@
 {
     public record WordModel(
         string Word,
+        SourceLanguage SourceLanguage,
         string? SoundUrl,
         string? SoundFileName,
         IEnumerable<Definition> Definitions,

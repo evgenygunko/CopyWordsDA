@@ -595,6 +595,24 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Verify(x => x.AddToHistory(wordModel.Word));
         }
 
+        [TestMethod]
+        [DataRow(SourceLanguage.Danish)]
+        [DataRow(SourceLanguage.Spanish)]
+        public void UpdateUI_UpdatesDictionary_WithSourceLanguageFromReturnedModel(SourceLanguage sourceLanguageInModel)
+        {
+            WordModel wordModel = _fixture.Create<WordModel>();
+            wordModel = wordModel with { SourceLanguage = sourceLanguageInModel };
+            wordModel.SourceLanguage.Should().Be(sourceLanguageInModel);
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.UpdateUI(wordModel);
+
+            sut.DictionaryName.Should().Be(sourceLanguageInModel.ToString());
+            settingsServiceMock.Verify(x => x.SetSelectedParser(sourceLanguageInModel.ToString()));
+        }
+
         #endregion
     }
 }

@@ -103,7 +103,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
             var sut = new TranslationsService(httpClient);
 
-            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<TranslationInput>());
+            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>());
 
             result.Should().NotBeNull();
             result!.Word.Should().Be(wordModel.Word);
@@ -116,7 +116,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.NotFound, errorMsg);
             var sut = new TranslationsService(httpClient);
 
-            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<TranslationInput>());
+            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>());
 
             result.Should().BeNull();
         }
@@ -128,7 +128,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.BadRequest, errorMsg);
             var sut = new TranslationsService(httpClient);
 
-            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<TranslationInput>());
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>());
             await act.Should().ThrowAsync<InvalidInputException>()
                 .WithMessage(errorMsg);
         }
@@ -139,7 +139,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
             var sut = new TranslationsService(httpClient);
 
-            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<TranslationInput>());
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>());
             await act.Should().ThrowAsync<ServerErrorException>()
                 .WithMessage("The server returned the error 'InternalServerError'.");
         }
