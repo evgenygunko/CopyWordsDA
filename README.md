@@ -1,117 +1,109 @@
 # CopyWords
 
-CopyWords is a helper tool for adding new Danish or Spanish words to the [Anki](http://ankisrs.net/) flashcard system.
+CopyWords is a simple dictionary app for looking up Danish or Spanish words.
+It provides quick access to translations, pronunciation, and sound files - all in one place.
+
+While CopyWords was originally created to help with [Anki](http://ankisrs.net/) flashcards, the **dictionary mode** makes it useful even if you only want to look up words and hear how they sound.
+
+If you’re interested in using CopyWords together with Anki, see the [Copy Mode documentation](./README_COPY_MODE.md).
+
+---
 
 ## Features
 
-- **Anki integration**
-  The Anki card template has been customized to include extra details about each word, such as its transcription, audio file, and more. CopyWords makes creating new cards easier by automatically looking up words in online dictionaries and extracting their components. With the **"Copy text"** buttons, users can copy specific information to the clipboard and paste it directly into the Anki editor.
-
 - **Dictionary mode**
-  CopyWords can also be used as a simple online dictionary. In this mode, all buttons are hidden except **"play sound"** and **"save sound"**, making it useful for quick lookups with translations from Danish or Spanish.
+  - Look up Danish or Spanish words in online dictionaries
+  - View translations and definitions
+  - Play or save sound files for pronunciation practice
 
-## Technology
+- **Copy words mode**
+  - CopyWords integrates with a companion web service to translate headlines and definitions.
+    See the [Translations project](https://github.com/evgenygunko/Translations/tree/master).
 
-CopyWords is built with [Microsoft .NET MAUI](https://learn.microsoft.com/en-us/dotnet/maui/what-is-maui) and currently runs on both Windows and Android.
+---
+
+## How to Use
+
+### Dictionary mode
+
+1. Select the source language (Danish or Spanish).
+2. Type a word (or part of it) in the **Search** box.
+3. Click the **Search** button.
+4. Use the **Play sound** or **Save sound** buttons if audio is available.
+
+<div>Danish dictionary:</div>
+
+![Dictionary mode Danish](./img/CopyWords_Android_DA.png)
+
+<div>Spanish dictionary:</div>
+
+![Dictionary mode Spanish](./img/CopyWords_Android_ES.png)
+
+---
 
 ## Installation
 
 ### Android
 
-Download apk file from [Releases ](https://github.com/evgenygunko/CopyWordsDA/releases) and install.
+You can install CopyWords on Android by downloading the APK file from the [Releases](https://github.com/evgenygunko/CopyWordsDA/releases) page.
+
+1. Download the latest `CopyWords.apk` file to your device.
+2. On your Android device, open the **Downloads** folder (or the location where you saved the file).
+3. Tap the APK file to begin installation.
+4. If prompted, allow installation from **Unknown Sources** (this may appear as “Allow from this source” in your device’s settings).
+5. Follow the on-screen instructions to complete installation.
+
+After installation, you will see the **CopyWords** app icon in your app drawer and can launch it directly.
 
 ### Windows
 
-To install a MAUI app you need to add a code signing certificate [(*.cer file)](https://github.com/evgenygunko/CopyWordsDA/releases) used for singing the app into the trusted certificates store.
+To install a .NET MAUI app on Windows, you need to add the provided code signing certificate to the trusted certificates store.
 
-See this answer https://stackoverflow.com/a/75940629
-1. Open the Certificate, MyApp.cer, by double-clicking.
-2. Click on Install Certificate
-3. In the Certificate Import Wizard window,
-   - Select Local Machine and click Next
-   - Select Place all certificates in the following store
-   - Browse and select Trusted Root Certification Authorities
-   - Click Next and take defaults. After this you should see a pop-up stating that "The import was successful."
+See [this answer](https://stackoverflow.com/a/75940629) for details.
 
-You now can proceed to side-load install the .NET MAUI app.
+1. Open the certificate file (`MyApp.cer`) by double-clicking it.
+2. Click **Install Certificate**.
+3. In the **Certificate Import Wizard**:
+   - Select **Local Machine** and click **Next**
+   - Select **Place all certificates in the following store**
+   - Browse and select **Trusted Root Certification Authorities**
+   - Click **Next** and accept defaults
 
-## How to Use
+After this, you should see:
+**"The import was successful."**
 
-## Dictionary mode
-1. Select the source language.
-2. Type a word (or part of it) in the Search box and click the **Search** button.
+You can then side-load the CopyWords app.
 
-![Dictionary mode](./img/CopyWords_Android.png)
-
-### Copy mode
-
-1. Select the source language.
-2. Type a word (or part of it) in the Search box and click the **Search** button.
-3. If the word exists in the online dictionary, it will be parsed and presented within the tool.
-4. Use the **Copy** buttons to copy the relevant text into the clipboard and paste it into the Anki card editor.
-
-**Note:** The screenshot is taken on Windows, as it is easier to copy different parts of a word there.
-On Android, you can also copy the **front** and **back** fields.
-
-![Copy word parts into Anki](./img/Copy_word_parts.png)
-
-## Sound Functionality
-
-- The **Play sound** button downloads an MP3 file (if available) and plays it.
-- The **Save sound** button normalizes the sound file (adjusting its volume) and saves it to Anki's media collection folder.Normalizing the sound requires a tool called mp3Gain and is optional.
-
-## Translations
-
-CopyWords integrates with a companion web application to provide translations for headlines and definitions.
-The service is available in the [Translations](https://github.com/evgenygunko/Translations/tree/master) repository.
+---
 
 ## Settings
 
-The settings dialog can be accessed by clicking the **Settings** button in the app bar.
+The settings dialog can be opened by clicking the **Settings** button in the app bar.
 
-![Settings](./img/CopyWords_settings.png)
+![Settings](./img/CopyWords_settings_Android.png)
 
-- **Export**: Exports current settings as a json file.
-- **Import**: Imports settings from a json file.
-- **Path to Anki Media Collection**: Specifies the path to Anki's media collection folder for the current user. This folder contains the media files displayed or played on Anki cards.
-- **Path to FFMpeg**: Specifies the path to the [ffmpeg](https://www.ffmpeg.org/) utility, which is used to convert audio files from video formats to MP3.
-- **Path to MP3Gain**: Specifies the path to the [mp3gain](http://mp3gain.sourceforge.net/) utility, which is used to normalize the sound volume of MP3 files. Using this tool is optional.
-- **Show copy buttons**: selects copy or dictionary mode.
+- **Export**: Save settings as a JSON file.
+- **Import**: Load settings from a JSON file.
+- **Show copy buttons**: Switches the app between **dictionary mode** and **copy mode**.
+- **Include translated meanings when copying to the back of the card** *(only relevant for Copy Mode)*: Copies both the translated text and the original meaning.
 
-## Card Templates (if you decide to use it for adding Anki cards)
+---
+## Technology
 
-Anki card templates can be customized but unfortunately, they cannot be exported directly. Templates are saved with a "deck," which is a set of cards the user wants to learn. Users can add new cards with new words to their collection, making learning and memorization more efficient.
+CopyWords is built with [Microsoft .NET MAUI](https://learn.microsoft.com/en-us/dotnet/maui/what-is-maui) and runs on both Windows and Android.
 
-1. Open Anki, click Tools -> Manage Note Types -> Add. Add a name for your new note type.
-2. Select your note type and click "Fields". Add the following fields:
-   - Front
-   - Back
-   - PartOfSpeech
-   - Forms
-   - Example
-   - Sound
-   - MyHint
-   - Transcription
-   - Synonymer
+---
 
-![Fields](./img/Note_type_fields.png)
+## Translations
 
-3. Click cards and add Forward and Reverse cards:
+CopyWords provides translations for headlines and definitions through a companion web application.
+This service uses an OpenAI language model (LLM) to generate translations.
 
-    **Forward Card Template**
-    The word in the foreign language is shown, and you need to guess the translation.
-  - [front.html](./card_templates/Forward_card_front_template.html)
-    ![Forward card front](./img/Forward_card_front_template.png)
-  - [back.html](./card_templates/Forward_card_back_template.html)
-    ![Forward card back](./img/Forward_card_back_template.png)
-  - [styling.css](./card_templates/Forward_card_styling.css)
-    ![Forward card styling](./img/Forward_card_styling.png)
+> ⚠️ Note: Translations may not always be accurate. They are produced by an algorithm, not by humans.
 
-    **Reverse Card Template**
-    The translation is shown, and you need to type the word in the foreign language.
-  - [front.html](./card_templates/Reverse_card_front_template.html)
-    ![Reverse card front](./img/Reverse_card_front_template.png)
-  - [back.html](./card_templates/Reverse_card_back_template.html)
-    ![Reverse card back](./img/Reverse_card_back_template.png)
-  - [styling.css](./card_templates/Reverse_card_styling.css)
-    ![Reverse card styling](./img/Reverse_card_styling.png)
+---
+
+## More Information
+
+- [Copy Mode & Anki Integration](./README_COPY_MODE.md)
+- [Card Templates for Anki](./README_COPY_MODE.md#card-templates)
