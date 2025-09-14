@@ -13,6 +13,50 @@ namespace CopyWords.Core.Tests.ViewModels
     {
         private readonly Fixture _fixture = FixtureFactory.CreateFixture();
 
+        #region Properties
+
+        [TestMethod]
+        public void CanNavigateBack_WhenNavigationHistoryIsEmpty_ReturnsFalse()
+        {
+            var sut = _fixture.Create<MainViewModel>();
+            sut.CanNavigateBack.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void CanNavigateBack_WhenNavigationHistoryHasOneItemEqualToSearchWord_ReturnsFalse()
+        {
+            var sut = _fixture.Create<MainViewModel>();
+            sut.NavigationHistory.Push("test");
+            sut.SearchWord = "test";
+
+            sut.CanNavigateBack.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void CanNavigateBack_WhenNavigationHistoryHasOneItemDifferentFromSearchWord_ReturnsTrue()
+        {
+            var sut = _fixture.Create<MainViewModel>();
+            sut.NavigationHistory.Push("test1");
+            sut.SearchWord = "test2";
+
+            sut.CanNavigateBack.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void CanNavigateBack_WhenNavigationHistoryHasMoreThanOneItem_ReturnsTrue()
+        {
+            var sut = _fixture.Create<MainViewModel>();
+            sut.NavigationHistory.Push("test1");
+            sut.NavigationHistory.Push("test2");
+            sut.SearchWord = "test2";
+
+            sut.CanNavigateBack.Should().BeTrue();
+        }
+
+        #endregion
+
+        #region #region Commands
+
         #region Tests for InitAsync
 
         [TestMethod]
@@ -129,6 +173,38 @@ namespace CopyWords.Core.Tests.ViewModels
 
             wordViewModelMock.Verify(x => x.ClearVariants());
             wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variations.Count()));
+
+            sut.NavigationHistory.Should().HaveCount(1);
+        }
+
+        [TestMethod]
+        public async Task LookUpAsync_Should_NotAddDuplicatesToNavigationHistory()
+        {
+            // Arrange
+            string search = _fixture.Create<string>();
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
+
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
+
+            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
+
+            // Act
+            var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
+            sut.SearchWord = search;
+
+            await sut.LookUpAsync();
+            await sut.LookUpAsync();
+            await sut.LookUpAsync();
+
+            // Assert
+            translationsServiceMock.Verify(x => x.LookUpWordAsync(search, It.IsAny<Options>()), Times.Exactly(3));
+            sut.NavigationHistory.Should().HaveCount(1);
         }
 
         #endregion
@@ -580,6 +656,87 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #endregion
 
+        #endregion
+
+        #region Public Methods
+
+        [TestMethod]
+        public async Task NavigateBackAsync_WhenCanNavigateBackIsFalse_ReturnsFalse()
+        {
+            var sut = _fixture.Create<MainViewModel>();
+            bool result = await sut.NavigateBackAsync();
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public async Task NavigateBackAsync_WhenDoesNotHaveItemDifferentFromSearchWord_ReturnsFalse()
+        {
+            var sut = _fixture.Create<MainViewModel>();
+            sut.NavigationHistory.Push("test1");
+            sut.SearchWord = "test1";
+
+            bool result = await sut.NavigateBackAsync();
+
+            result.Should().BeFalse();
+            sut.NavigationHistory.Should().HaveCount(1);
+        }
+
+        [TestMethod]
+        public async Task NavigateBackAsync_WhenPreviousItemDifferentFromSearchWord_ReturnsTrue()
+        {
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
+
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.NavigationHistory.Push("test1");
+            sut.NavigationHistory.Push("test2");
+            sut.SearchWord = "test2";
+
+            bool result = await sut.NavigateBackAsync();
+
+            result.Should().BeTrue();
+            sut.SearchWord.Should().Be("test1");
+            sut.NavigationHistory.Should().HaveCount(1);
+
+            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", It.IsAny<Options>()));
+        }
+
+        [TestMethod]
+        public async Task NavigateBackAsync_WhenCurrentItemDifferentFromSearchWord_ReturnsTrue()
+        {
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
+
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.NavigationHistory.Push("test1");
+            sut.SearchWord = "test2";
+
+            bool result = await sut.NavigateBackAsync();
+
+            result.Should().BeTrue();
+            sut.SearchWord.Should().Be("test1");
+            sut.NavigationHistory.Should().HaveCount(1);
+
+            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", It.IsAny<Options>()));
+        }
+
+        #endregion
+
+        #region Internal Methods
+
         #region Tests for UpdateUI
 
         [TestMethod]
@@ -612,6 +769,8 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.DictionaryName.Should().Be(sourceLanguageInModel.ToString());
             settingsServiceMock.Verify(x => x.SetSelectedParser(sourceLanguageInModel.ToString()));
         }
+
+        #endregion
 
         #endregion
     }

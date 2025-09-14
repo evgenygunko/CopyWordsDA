@@ -18,6 +18,9 @@ namespace CopyWords.Core.ViewModels
 
         private readonly IWordViewModel _wordViewModel;
 
+        // Add navigation history stack
+        public readonly Stack<string> NavigationHistory = new Stack<string>();
+
         public MainViewModel(
             IGlobalSettings globalSettings,
             ISettingsService settingsService,
@@ -74,6 +77,9 @@ namespace CopyWords.Core.ViewModels
 
         public bool CanOpenHistory => !IsBusy && !IsRefreshing;
 
+        // Add property to check if back navigation is possible
+        public bool CanNavigateBack => NavigationHistory.Count > 1 || (NavigationHistory.Count == 1 && NavigationHistory.Peek() != SearchWord);
+
         #endregion
 
         #region Commands
@@ -114,6 +120,16 @@ namespace CopyWords.Core.ViewModels
 
             wordModel = await LookUpWordInDictionaryAsync(SearchWord);
             UpdateUI(wordModel);
+
+            // Add current search word to navigation history
+            if (wordModel != null)
+            {
+                // Don't add the same word twice in a row
+                if (NavigationHistory.Count == 0 || NavigationHistory.Peek() != wordModel.Word)
+                {
+                    NavigationHistory.Push(wordModel.Word);
+                }
+            }
 
             IsBusy = false;
         }
@@ -164,6 +180,39 @@ namespace CopyWords.Core.ViewModels
         #endregion
 
         #region Public Methods
+
+        // Add method for back navigation
+        public async Task<bool> NavigateBackAsync()
+        {
+            if (!CanNavigateBack)
+            {
+                return false;
+            }
+
+            string previousWord = string.Empty;
+            while (NavigationHistory.Count > 0)
+            {
+                // Get the previous word from history
+                previousWord = NavigationHistory.Pop();
+                if (SearchWord != previousWord)
+                {
+                    break;
+                }
+
+                previousWord = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(previousWord))
+            {
+                return false;
+            }
+
+            // Update the search word and perform lookup
+            SearchWord = previousWord;
+            await LookUpAsync();
+
+            return true;
+        }
 
         public async Task<List<string>> GetSuggestionsAsync(string inputText, CancellationToken cancellationToken)
         {
