@@ -15,11 +15,9 @@ namespace CopyWords.Core.ViewModels
         private readonly IInstantTranslationService _instantTranslationService;
         private readonly ITranslationsService _translationsService;
         private readonly ISuggestionsService _suggestionsService;
+        private readonly INavigationHistory _navigationHistory;
 
         private readonly IWordViewModel _wordViewModel;
-
-        // Add navigation history stack
-        public readonly Stack<string> NavigationHistory = new Stack<string>();
 
         public MainViewModel(
             IGlobalSettings globalSettings,
@@ -28,6 +26,7 @@ namespace CopyWords.Core.ViewModels
             IInstantTranslationService instantTranslationService,
             ITranslationsService translationsService,
             ISuggestionsService suggestionsService,
+            INavigationHistory navigationHistory,
             IWordViewModel wordViewModel)
         {
             _globalSettings = globalSettings;
@@ -36,6 +35,7 @@ namespace CopyWords.Core.ViewModels
             _instantTranslationService = instantTranslationService;
             _translationsService = translationsService;
             _suggestionsService = suggestionsService;
+            _navigationHistory = navigationHistory;
             _wordViewModel = wordViewModel;
 
             SearchWord = string.Empty;
@@ -67,6 +67,7 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(LookUpCommand))]
+        [NotifyCanExecuteChangedFor(nameof(NavigateBackCommand))]
         public partial string SearchWord { get; set; }
 
         public bool CanRefresh => !IsBusy;
@@ -77,8 +78,7 @@ namespace CopyWords.Core.ViewModels
 
         public bool CanOpenHistory => !IsBusy && !IsRefreshing;
 
-        // Add property to check if back navigation is possible
-        public bool CanNavigateBack => NavigationHistory.Count > 1 || (NavigationHistory.Count == 1 && NavigationHistory.Peek() != SearchWord);
+        public bool CanNavigateBack => _navigationHistory.CanNavigateBack(SearchWord);
 
         #endregion
 
@@ -94,6 +94,9 @@ namespace CopyWords.Core.ViewModels
 
             DictionaryName = _settingsService.GetSelectedParser();
             UpdateDictionaryImage(DictionaryName);
+
+            _navigationHistory.Clear();
+            NotifyNavigationStateChanged();
 
             // Check if the app was called from a context menu on Android (or from History page) and set the search word accordingly
             string? instantText = _instantTranslationService.GetTextAndClear();
@@ -124,11 +127,8 @@ namespace CopyWords.Core.ViewModels
             // Add current search word to navigation history
             if (wordModel != null)
             {
-                // Don't add the same word twice in a row
-                if (NavigationHistory.Count == 0 || NavigationHistory.Peek() != wordModel.Word)
-                {
-                    NavigationHistory.Push(wordModel.Word);
-                }
+                _navigationHistory.Push(wordModel.Word, wordModel.SourceLanguage.ToString());
+                NotifyNavigationStateChanged();
             }
 
             IsBusy = false;
@@ -177,11 +177,7 @@ namespace CopyWords.Core.ViewModels
             }
         }
 
-        #endregion
-
-        #region Public Methods
-
-        // Add method for back navigation
+        [RelayCommand(CanExecute = nameof(CanNavigateBack))]
         public async Task<bool> NavigateBackAsync()
         {
             if (!CanNavigateBack)
@@ -189,30 +185,38 @@ namespace CopyWords.Core.ViewModels
                 return false;
             }
 
-            string previousWord = string.Empty;
-            while (NavigationHistory.Count > 0)
+            NavigationEntry? previousEntry = null;
+            while (_navigationHistory.Count > 0)
             {
                 // Get the previous word from history
-                previousWord = NavigationHistory.Pop();
-                if (SearchWord != previousWord)
+                previousEntry = _navigationHistory.Pop();
+                NotifyNavigationStateChanged();
+
+                if (SearchWord != previousEntry.Value.Word)
                 {
                     break;
                 }
 
-                previousWord = string.Empty;
+                previousEntry = null;
             }
 
-            if (string.IsNullOrEmpty(previousWord))
+            if (previousEntry is null)
             {
                 return false;
             }
 
             // Update the search word and perform lookup
-            SearchWord = previousWord;
+            SearchWord = previousEntry.Value.Word;
+            _settingsService.SetSelectedParser(previousEntry.Value.Dictionary);
+
             await LookUpAsync();
 
             return true;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public async Task<List<string>> GetSuggestionsAsync(string inputText, CancellationToken cancellationToken)
         {
@@ -339,6 +343,11 @@ namespace CopyWords.Core.ViewModels
         #endregion
 
         #region Private Methods
+
+        private void NotifyNavigationStateChanged()
+        {
+            NavigateBackCommand.NotifyCanExecuteChanged();
+        }
 
         private void UpdateDictionaryImage(string language)
         {

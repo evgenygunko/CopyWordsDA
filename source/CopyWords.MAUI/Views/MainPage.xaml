@@ -20,6 +20,15 @@
     </ContentPage.Behaviors>
 
     <ContentPage.ToolbarItems>
+        <!-- We will add this button in the code behind file only on Windows -->
+        <!--<ToolbarItem Command="{Binding NavigateBackCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialIconsOutlined-Regular"
+                    Glyph="{x:Static helpers:MaterialDesignIconFonts.Arrow_back}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>-->
+
         <ToolbarItem
                 Command="{Binding SelectDictionaryCommand}"
                 Text="{Binding DictionaryName}"

@@ -58,6 +58,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IClipboardService, ClipboardService>();
         builder.Services.AddSingleton<IInstantTranslationService, InstantTranslationService>();
         builder.Services.AddSingleton<ISaveImageFileService, SaveImageFileService>();
+        builder.Services.AddSingleton<INavigationHistory, NavigationHistory>();
 
         builder.Services.AddHttpClient<ITranslationsService, TranslationsService>();
         builder.Services.AddHttpClient<IUpdateService, UpdateService>();

@@ -16,41 +16,18 @@ namespace CopyWords.Core.Tests.ViewModels
         #region Properties
 
         [TestMethod]
-        public void CanNavigateBack_WhenNavigationHistoryIsEmpty_ReturnsFalse()
+        [DataRow(true)]
+        [DataRow(false)]
+        public void CanNavigateBack_Should_CallNavigationHistory(bool value)
         {
-            var sut = _fixture.Create<MainViewModel>();
-            sut.CanNavigateBack.Should().BeFalse();
-        }
+            var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
+            navigationHistoryMock.Setup(x => x.CanNavigateBack(It.IsAny<string>())).Returns(value);
 
-        [TestMethod]
-        public void CanNavigateBack_WhenNavigationHistoryHasOneItemEqualToSearchWord_ReturnsFalse()
-        {
             var sut = _fixture.Create<MainViewModel>();
-            sut.NavigationHistory.Push("test");
             sut.SearchWord = "test";
+            sut.CanNavigateBack.Should().Be(value);
 
-            sut.CanNavigateBack.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void CanNavigateBack_WhenNavigationHistoryHasOneItemDifferentFromSearchWord_ReturnsTrue()
-        {
-            var sut = _fixture.Create<MainViewModel>();
-            sut.NavigationHistory.Push("test1");
-            sut.SearchWord = "test2";
-
-            sut.CanNavigateBack.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void CanNavigateBack_WhenNavigationHistoryHasMoreThanOneItem_ReturnsTrue()
-        {
-            var sut = _fixture.Create<MainViewModel>();
-            sut.NavigationHistory.Push("test1");
-            sut.NavigationHistory.Push("test2");
-            sut.SearchWord = "test2";
-
-            sut.CanNavigateBack.Should().BeTrue();
+            navigationHistoryMock.Verify(x => x.CanNavigateBack("test"));
         }
 
         #endregion
@@ -144,7 +121,7 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             // Arrange
             string search = _fixture.Create<string>();
-            WordModel wordModel = _fixture.Create<WordModel>();
+            WordModel wordModel = _fixture.Create<WordModel>() with { SourceLanguage = SourceLanguage.Danish };
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
@@ -153,6 +130,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
+            var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
             var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
 
             // Act
@@ -174,37 +152,7 @@ namespace CopyWords.Core.Tests.ViewModels
             wordViewModelMock.Verify(x => x.ClearVariants());
             wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variations.Count()));
 
-            sut.NavigationHistory.Should().HaveCount(1);
-        }
-
-        [TestMethod]
-        public async Task LookUpAsync_Should_NotAddDuplicatesToNavigationHistory()
-        {
-            // Arrange
-            string search = _fixture.Create<string>();
-            WordModel wordModel = _fixture.Create<WordModel>();
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
-
-            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
-            translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
-
-            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
-
-            // Act
-            var sut = _fixture.Create<MainViewModel>();
-            sut.IsBusy = false;
-            sut.SearchWord = search;
-
-            await sut.LookUpAsync();
-            await sut.LookUpAsync();
-            await sut.LookUpAsync();
-
-            // Assert
-            translationsServiceMock.Verify(x => x.LookUpWordAsync(search, It.IsAny<Options>()), Times.Exactly(3));
-            sut.NavigationHistory.Should().HaveCount(1);
+            navigationHistoryMock.Verify(x => x.Push(wordModel.Word, wordModel.SourceLanguage.ToString()));
         }
 
         #endregion
@@ -672,14 +620,20 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task NavigateBackAsync_WhenDoesNotHaveItemDifferentFromSearchWord_ReturnsFalse()
         {
+            var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
+            navigationHistoryMock.Setup(x => x.CanNavigateBack(It.IsAny<string>())).Returns(true);
+            navigationHistoryMock.Setup(x => x.Pop()).Returns(new NavigationEntry("test1", "dict1"));
+            navigationHistoryMock.SetupSequence(x => x.Count)
+                .Returns(1)
+                .Returns(0);
+
             var sut = _fixture.Create<MainViewModel>();
-            sut.NavigationHistory.Push("test1");
             sut.SearchWord = "test1";
 
             bool result = await sut.NavigateBackAsync();
 
             result.Should().BeFalse();
-            sut.NavigationHistory.Should().HaveCount(1);
+            navigationHistoryMock.Verify(x => x.Pop(), Times.Exactly(1));
         }
 
         [TestMethod]
@@ -694,18 +648,26 @@ namespace CopyWords.Core.Tests.ViewModels
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
+            var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
+            navigationHistoryMock.Setup(x => x.CanNavigateBack(It.IsAny<string>())).Returns(true);
+            navigationHistoryMock.SetupSequence(x => x.Pop())
+                .Returns(new NavigationEntry("test2", "dict1"))
+                .Returns(new NavigationEntry("test1", "dict1"));
+            navigationHistoryMock.SetupSequence(x => x.Count)
+                .Returns(2)
+                .Returns(1);
+
             var sut = _fixture.Create<MainViewModel>();
-            sut.NavigationHistory.Push("test1");
-            sut.NavigationHistory.Push("test2");
             sut.SearchWord = "test2";
 
             bool result = await sut.NavigateBackAsync();
 
             result.Should().BeTrue();
             sut.SearchWord.Should().Be("test1");
-            sut.NavigationHistory.Should().HaveCount(1);
 
+            navigationHistoryMock.Verify(x => x.Pop(), Times.Exactly(2));
             translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", It.IsAny<Options>()));
+            settingsServiceMock.Verify(x => x.SetSelectedParser("dict1"));
         }
 
         [TestMethod]
@@ -720,17 +682,24 @@ namespace CopyWords.Core.Tests.ViewModels
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
+            var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
+            navigationHistoryMock.Setup(x => x.CanNavigateBack(It.IsAny<string>())).Returns(true);
+            navigationHistoryMock.Setup(x => x.Pop()).Returns(new NavigationEntry("test1", "dict1"));
+            navigationHistoryMock.SetupSequence(x => x.Count)
+                .Returns(1)
+                .Returns(0);
+
             var sut = _fixture.Create<MainViewModel>();
-            sut.NavigationHistory.Push("test1");
             sut.SearchWord = "test2";
 
             bool result = await sut.NavigateBackAsync();
 
             result.Should().BeTrue();
             sut.SearchWord.Should().Be("test1");
-            sut.NavigationHistory.Should().HaveCount(1);
 
             translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", It.IsAny<Options>()));
+            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", It.IsAny<Options>()));
+            settingsServiceMock.Verify(x => x.SetSelectedParser("dict1"));
         }
 
         #endregion
