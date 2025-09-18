@@ -21,13 +21,13 @@ namespace CopyWords.Core.Tests.ViewModels
         public void CanNavigateBack_Should_CallNavigationHistory(bool value)
         {
             var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
-            navigationHistoryMock.Setup(x => x.CanNavigateBack(It.IsAny<string>())).Returns(value);
+            navigationHistoryMock.SetupGet(x => x.CanNavigateBack).Returns(value);
 
             var sut = _fixture.Create<MainViewModel>();
             sut.SearchWord = "test";
             sut.CanNavigateBack.Should().Be(value);
 
-            navigationHistoryMock.Verify(x => x.CanNavigateBack("test"));
+            navigationHistoryMock.Verify(x => x.CanNavigateBack);
         }
 
         #endregion
@@ -153,6 +153,7 @@ namespace CopyWords.Core.Tests.ViewModels
             wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variations.Count()));
 
             navigationHistoryMock.Verify(x => x.Push(wordModel.Word, wordModel.SourceLanguage.ToString()));
+            settingsServiceMock.Verify(x => x.AddToHistory(wordModel.Word));
         }
 
         #endregion
@@ -621,7 +622,7 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task NavigateBackAsync_WhenDoesNotHaveItemDifferentFromSearchWord_ReturnsFalse()
         {
             var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
-            navigationHistoryMock.Setup(x => x.CanNavigateBack(It.IsAny<string>())).Returns(true);
+            navigationHistoryMock.SetupGet(x => x.CanNavigateBack).Returns(true);
             navigationHistoryMock.Setup(x => x.Pop()).Returns(new NavigationEntry("test1", "dict1"));
             navigationHistoryMock.SetupSequence(x => x.Count)
                 .Returns(1)
@@ -649,7 +650,7 @@ namespace CopyWords.Core.Tests.ViewModels
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
             var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
-            navigationHistoryMock.Setup(x => x.CanNavigateBack(It.IsAny<string>())).Returns(true);
+            navigationHistoryMock.SetupGet(x => x.CanNavigateBack).Returns(true);
             navigationHistoryMock.SetupSequence(x => x.Pop())
                 .Returns(new NavigationEntry("test2", "dict1"))
                 .Returns(new NavigationEntry("test1", "dict1"));
@@ -683,7 +684,7 @@ namespace CopyWords.Core.Tests.ViewModels
             translationsServiceMock.Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>())).ReturnsAsync(wordModel);
 
             var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
-            navigationHistoryMock.Setup(x => x.CanNavigateBack(It.IsAny<string>())).Returns(true);
+            navigationHistoryMock.SetupGet(x => x.CanNavigateBack).Returns(true);
             navigationHistoryMock.Setup(x => x.Pop()).Returns(new NavigationEntry("test1", "dict1"));
             navigationHistoryMock.SetupSequence(x => x.Count)
                 .Returns(1)
@@ -707,19 +708,6 @@ namespace CopyWords.Core.Tests.ViewModels
         #region Internal Methods
 
         #region Tests for UpdateUI
-
-        [TestMethod]
-        public void UpdateUI_Should_CallAddToHistory()
-        {
-            WordModel wordModel = _fixture.Create<WordModel>();
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var sut = _fixture.Create<MainViewModel>();
-            sut.UpdateUI(wordModel);
-
-            settingsServiceMock.Verify(x => x.AddToHistory(wordModel.Word));
-        }
 
         [TestMethod]
         [DataRow(SourceLanguage.Danish)]

@@ -105,85 +105,34 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for CanNavigateBack
 
         [TestMethod]
-        public void CanNavigateBack_WhenEmpty_ShouldReturnFalse()
+        public void CanNavigateBack_WhenEmpty_ReturnsFalse()
         {
-            const string searchWord = "testword";
-
             var sut = _fixture.Create<NavigationHistory>();
-            bool result = sut.CanNavigateBack(searchWord);
-
-            result.Should().BeFalse();
+            sut.CanNavigateBack.Should().BeFalse();
         }
 
         [TestMethod]
-        public void CanNavigateBack_WhenOneItemSameAsSearchWord_ShouldReturnFalse()
+        public void CanNavigateBack_WhenOneItem_ReturnsFalse()
         {
             const string searchWord = "testword";
 
             var sut = _fixture.Create<NavigationHistory>();
             sut.Push(searchWord, "dictionary");
 
-            bool result = sut.CanNavigateBack(searchWord);
-
-            result.Should().BeFalse();
+            sut.CanNavigateBack.Should().BeFalse();
         }
 
         [TestMethod]
-        public void CanNavigateBack_WhenOneItemDifferentFromSearchWord_ShouldReturnTrue()
-        {
-            const string existingWord = "existingword";
-            const string searchWord = "searchword";
-
-            var sut = _fixture.Create<NavigationHistory>();
-            sut.Push(existingWord, "dictionary");
-
-            bool result = sut.CanNavigateBack(searchWord);
-
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void CanNavigateBack_WhenMultipleItems_ShouldReturnTrue()
+        public void CanNavigateBack_WhenMultipleItems_ReturnsTrue()
         {
             const string word1 = "word1";
             const string word2 = "word2";
-            const string searchWord = "searchword";
 
             var sut = _fixture.Create<NavigationHistory>();
             sut.Push(word1, "dictionary");
             sut.Push(word2, "dictionary");
 
-            bool result = sut.CanNavigateBack(searchWord);
-
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void CanNavigateBack_WhenMultipleItemsLastSameAsSearchWord_ShouldReturnTrue()
-        {
-            const string word1 = "word1";
-            const string searchWord = "searchword";
-
-            var sut = _fixture.Create<NavigationHistory>();
-            sut.Push(word1, "dictionary");
-            sut.Push(searchWord, "dictionary");
-
-            bool result = sut.CanNavigateBack(searchWord);
-
-            result.Should().BeTrue();
-        }
-
-        [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        public void CanNavigateBack_WhenSearchWordIsNullOrEmpty_ShouldHandleGracefully(string searchWord)
-        {
-            var sut = _fixture.Create<NavigationHistory>();
-            sut.Push("word1", "dictionary");
-
-            bool result = sut.CanNavigateBack(searchWord);
-
-            result.Should().BeTrue();
+            sut.CanNavigateBack.Should().BeTrue();
         }
 
         #endregion

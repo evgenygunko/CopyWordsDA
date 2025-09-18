@@ -6,7 +6,7 @@
     {
         int Count { get; }
 
-        bool CanNavigateBack(string searchWord);
+        bool CanNavigateBack { get; }
 
         void Push(string word, string dictionary);
 
@@ -21,10 +21,7 @@
 
         public int Count => _navigationHistoryStack.Count;
 
-        public bool CanNavigateBack(string searchWord)
-        {
-            return _navigationHistoryStack.Count > 1 || (_navigationHistoryStack.Count == 1 && _navigationHistoryStack.Peek().Word != searchWord);
-        }
+        public bool CanNavigateBack => _navigationHistoryStack.Count > 1;
 
         public void Push(string word, string dictionary)
         {

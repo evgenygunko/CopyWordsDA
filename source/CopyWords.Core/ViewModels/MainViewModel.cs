@@ -78,7 +78,7 @@ namespace CopyWords.Core.ViewModels
 
         public bool CanOpenHistory => !IsBusy && !IsRefreshing;
 
-        public bool CanNavigateBack => _navigationHistory.CanNavigateBack(SearchWord);
+        public bool CanNavigateBack => _navigationHistory.CanNavigateBack;
 
         #endregion
 
@@ -99,17 +99,9 @@ namespace CopyWords.Core.ViewModels
             NotifyNavigationStateChanged();
 
             // Check if the app was called from a context menu on Android (or from History page) and set the search word accordingly
-            string? instantText = _instantTranslationService.GetTextAndClear();
-            if (!string.IsNullOrWhiteSpace(instantText))
-            {
-                SearchWord = instantText;
-                await LookUpAsync();
-            }
-            else
-            {
-                WordModel? wordModel = new WordModel(string.Empty, GetSourceLanguage(), null, null, [], []);
-                UpdateUI(wordModel);
-            }
+            string instantText = _instantTranslationService.GetTextAndClear() ?? string.Empty;
+            SearchWord = instantText;
+            await LookUpAsync();
         }
 
         [RelayCommand]
@@ -127,6 +119,8 @@ namespace CopyWords.Core.ViewModels
             // Add current search word to navigation history
             if (wordModel != null)
             {
+                _settingsService.AddToHistory(wordModel.Word);
+
                 _navigationHistory.Push(wordModel.Word, wordModel.SourceLanguage.ToString());
                 NotifyNavigationStateChanged();
             }
@@ -295,8 +289,6 @@ namespace CopyWords.Core.ViewModels
 
                 _wordViewModel.ShowCopyButtons = showCopyButtons;
                 _wordViewModel.UpdateUI();
-
-                _settingsService.AddToHistory(wordModel.Word);
 
                 _settingsService.SetSelectedParser(wordModel.SourceLanguage.ToString());
                 DictionaryName = wordModel.SourceLanguage.ToString();
