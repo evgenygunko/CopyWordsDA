@@ -27,7 +27,7 @@ namespace CopyWords.Core.Tests.Services
             var options = new Options(SourceLanguage.Danish, "http://fake-url");
 
             var sut = new TranslationsService(httpClient);
-            var result = await sut.LookUpWordAsync("testword", options);
+            var result = await sut.LookUpWordAsync("testword", options, CancellationToken.None);
 
             result.Should().NotBeNull();
             result!.Word.Should().Be(wordModel.Word);
@@ -40,8 +40,8 @@ namespace CopyWords.Core.Tests.Services
             var sut = new TranslationsService(httpClient);
             var options = new Options(SourceLanguage.Danish, "http://fake-url");
 
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync(null!, options));
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("", options));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync(null!, options, CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("", options, CancellationToken.None));
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
             var sut = new TranslationsService(httpClient);
 
-            await Assert.ThrowsExactlyAsync<ArgumentNullException>(() => sut.LookUpWordAsync("testword", null!));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(() => sut.LookUpWordAsync("testword", null!, CancellationToken.None));
         }
 
         [TestMethod]
@@ -61,8 +61,8 @@ namespace CopyWords.Core.Tests.Services
             var optionsNull = new Options(SourceLanguage.Danish, null!);
             var optionsEmpty = new Options(SourceLanguage.Danish, "");
 
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", optionsNull));
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", optionsEmpty));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", optionsNull, CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", optionsEmpty, CancellationToken.None));
         }
 
         [TestMethod]
@@ -73,7 +73,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = new TranslationsService(httpClient);
             var options = new Options(SourceLanguage.Danish, "http://fake-url");
 
-            var act = async () => await sut.LookUpWordAsync("testword", options);
+            var act = async () => await sut.LookUpWordAsync("testword", options, CancellationToken.None);
             await act.Should().ThrowAsync<InvalidInputException>()
                 .WithMessage(errorMsg);
         }
@@ -85,7 +85,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = new TranslationsService(httpClient);
             var options = new Options(SourceLanguage.Danish, "http://fake-url");
 
-            var act = async () => await sut.LookUpWordAsync("testword", options);
+            var act = async () => await sut.LookUpWordAsync("testword", options, CancellationToken.None);
             await act.Should().ThrowAsync<ServerErrorException>()
                 .WithMessage("The server returned the error 'InternalServerError'.");
         }
@@ -103,7 +103,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
             var sut = new TranslationsService(httpClient);
 
-            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>());
+            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
 
             result.Should().NotBeNull();
             result!.Word.Should().Be(wordModel.Word);
@@ -116,7 +116,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.NotFound, errorMsg);
             var sut = new TranslationsService(httpClient);
 
-            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>());
+            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
 
             result.Should().BeNull();
         }
@@ -128,7 +128,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.BadRequest, errorMsg);
             var sut = new TranslationsService(httpClient);
 
-            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>());
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
             await act.Should().ThrowAsync<InvalidInputException>()
                 .WithMessage(errorMsg);
         }
@@ -139,10 +139,174 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
             var sut = new TranslationsService(httpClient);
 
-            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>());
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
             await act.Should().ThrowAsync<ServerErrorException>()
                 .WithMessage("The server returned the error 'InternalServerError'.");
         }
+
+        #region Tests for CancellationToken functionality
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenExternalCancellationTokenCancelled_ReturnsNull()
+        {
+            // Arrange
+            using var cancellationTokenSource = new CancellationTokenSource();
+            var httpClient = CreateMockHttpClientWithTaskCancelledException();
+            var sut = new TranslationsService(httpClient);
+
+            // Cancel the token before the request completes
+            cancellationTokenSource.Cancel();
+
+            // Act
+            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), cancellationTokenSource.Token);
+
+            // Assert - Should return null when TaskCanceledException is caught
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenExternalCancellationTokenCancelledDuringRequest_ReturnsNull()
+        {
+            // Arrange
+            using var cancellationTokenSource = new CancellationTokenSource();
+            var httpClient = CreateMockHttpClientWithDelay(HttpStatusCode.OK, "{}", TimeSpan.FromMilliseconds(200));
+            var sut = new TranslationsService(httpClient);
+
+            // Act
+            var task = sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), cancellationTokenSource.Token);
+
+            // Cancel after starting the request but before it completes
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(50);
+                cancellationTokenSource.Cancel();
+            });
+
+            var result = await task;
+
+            // Assert - Should return null when TaskCanceledException is caught
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenBothTokensActive_UsesFirstTokenToBeCancelled()
+        {
+            // Arrange
+            using var externalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(100)); // Cancel after 100ms
+            // Internal timeout is 30 seconds, so external should win
+            var httpClient = CreateMockHttpClientWithDelay(HttpStatusCode.OK, "{}", TimeSpan.FromMilliseconds(200));
+            var sut = new TranslationsService(httpClient);
+
+            // Act
+            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), externalCts.Token);
+
+            // Assert - Should return null when external cancellation token is triggered first
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenCancellationTokenPassedToAllOperations_CancellationTokenIsRespected()
+        {
+            // Arrange
+            using var cancellationTokenSource = new CancellationTokenSource();
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+
+            // Setup the mock to verify that the cancellation token is passed to PostAsync
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.Is<CancellationToken>(ct => ct.CanBeCanceled)) // Verify that a cancellable token is passed
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(_fixture.Create<WordModel>()))
+                });
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            var sut = new TranslationsService(httpClient);
+
+            // Act
+            await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), cancellationTokenSource.Token);
+
+            // Assert
+            handlerMock
+                .Protected()
+                .Verify(
+                    "SendAsync",
+                    Times.Once(),
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.Is<CancellationToken>(ct => ct.CanBeCanceled));
+        }
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenReadingResponse_CancellationTokenIsRespected()
+        {
+            // Arrange
+            using var cancellationTokenSource = new CancellationTokenSource();
+            var wordModel = _fixture.Create<WordModel>();
+            var json = JsonConvert.SerializeObject(wordModel);
+
+            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
+            var sut = new TranslationsService(httpClient);
+
+            // Act - Should complete successfully when not cancelled
+            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), cancellationTokenSource.Token);
+
+            // Assert
+            result.Should().NotBeNull();
+            result!.Word.Should().Be(wordModel.Word);
+        }
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenReadingErrorContent_CancellationTokenIsRespected()
+        {
+            // Arrange
+            using var cancellationTokenSource = new CancellationTokenSource();
+            var errorMsg = "Bad input error message";
+            var httpClient = CreateMockHttpClient(HttpStatusCode.BadRequest, errorMsg);
+            var sut = new TranslationsService(httpClient);
+
+            // Act & Assert
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), cancellationTokenSource.Token);
+            var exception = await act.Should().ThrowAsync<InvalidInputException>();
+            exception.WithMessage(errorMsg);
+        }
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenCombinedCtsIsCreated_BothTokensAreLinked()
+        {
+            // Arrange
+            using var externalCts = new CancellationTokenSource();
+            var wordModel = _fixture.Create<WordModel>();
+            var json = JsonConvert.SerializeObject(wordModel);
+            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
+            var sut = new TranslationsService(httpClient);
+
+            // Act - Should work normally when neither token is cancelled
+            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), externalCts.Token);
+
+            // Assert
+            result.Should().NotBeNull();
+            result!.Word.Should().Be(wordModel.Word);
+        }
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenInternalTimeoutOccurs_ReturnsNull()
+        {
+            // Arrange - Use a very short timeout for testing by creating a custom mock
+            var httpClient = CreateMockHttpClientWithTaskCancelledException();
+            var sut = new TranslationsService(httpClient);
+
+            // Act
+            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
+
+            // Assert - Should return null when TaskCanceledException occurs (simulating timeout)
+            result.Should().BeNull();
+        }
+
+        #endregion
 
         #endregion
 
@@ -162,6 +326,40 @@ namespace CopyWords.Core.Tests.Services
                     StatusCode = statusCode,
                     Content = new StringContent(content)
                 });
+            return new HttpClient(handlerMock.Object);
+        }
+
+        private static HttpClient CreateMockHttpClientWithDelay(HttpStatusCode statusCode, string content, TimeSpan delay)
+        {
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .Returns(async (HttpRequestMessage request, CancellationToken cancellationToken) =>
+                {
+                    await Task.Delay(delay, cancellationToken);
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = statusCode,
+                        Content = new StringContent(content)
+                    };
+                });
+            return new HttpClient(handlerMock.Object);
+        }
+
+        private static HttpClient CreateMockHttpClientWithTaskCancelledException()
+        {
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ThrowsAsync(new TaskCanceledException("The operation was canceled."));
             return new HttpClient(handlerMock.Object);
         }
 

@@ -8,7 +8,7 @@ namespace CopyWords.Core.Services
 {
     public interface ITranslationsService
     {
-        Task<WordModel?> LookUpWordAsync(string wordToLookUp, Options options);
+        Task<WordModel?> LookUpWordAsync(string wordToLookUp, Options options, CancellationToken cancellationToken);
     }
 
     public class TranslationsService : ITranslationsService
@@ -20,7 +20,7 @@ namespace CopyWords.Core.Services
             _httpClient = httpClient;
         }
 
-        public async Task<WordModel?> LookUpWordAsync(string wordToLookUp, Options options)
+        public async Task<WordModel?> LookUpWordAsync(string wordToLookUp, Options options, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(wordToLookUp))
             {
@@ -43,36 +43,44 @@ namespace CopyWords.Core.Services
                 DestinationLanguage: "Russian",
                 Version: "1");
 
-            WordModel? wordModel = await TranslateAsync(options.TranslatorApiURL, input);
-
+            WordModel? wordModel = await TranslateAsync(options.TranslatorApiURL, input, cancellationToken);
             return wordModel;
         }
 
-        internal async Task<WordModel?> TranslateAsync(string url, LookUpWordRequest input)
+        internal async Task<WordModel?> TranslateAsync(string url, LookUpWordRequest input, CancellationToken cancellationToken)
         {
             string jsonRequest = JsonConvert.SerializeObject(input);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
             // The Translator app is calling OpenAI API, so it can take time to return result.
-            using CancellationTokenSource cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-            using HttpResponseMessage response = await _httpClient.PostAsync(url, content, cts.Token);
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            using var combinedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, cancellationToken);
 
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return await response.Content.ReadFromJsonAsync<WordModel>();
-            }
+                using HttpResponseMessage response = await _httpClient.PostAsync(url, content, combinedCts.Token);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-            {
-                string errorContent = await response.Content.ReadAsStringAsync();
-                throw new InvalidInputException(errorContent);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<WordModel>(combinedCts.Token);
+                }
+
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    string errorContent = await response.Content.ReadAsStringAsync(combinedCts.Token);
+                    throw new InvalidInputException(errorContent);
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
             }
-            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            catch (TaskCanceledException)
             {
                 return null;
             }
-
-            throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
         }
     }
 }

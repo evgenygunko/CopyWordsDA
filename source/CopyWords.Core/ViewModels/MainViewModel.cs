@@ -311,7 +311,8 @@ namespace CopyWords.Core.ViewModels
                 AppSettings appSettings = _settingsService.LoadSettings();
 
                 wordModel = await _translationsService.LookUpWordAsync(searchTerm,
-                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl));
+                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl),
+                    CancellationToken.None);
 
                 if (wordModel == null)
                 {
