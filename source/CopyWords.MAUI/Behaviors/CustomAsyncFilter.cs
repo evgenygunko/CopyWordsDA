@@ -10,14 +10,14 @@ namespace CopyWords.MAUI.Behaviors
 
         public async Task<object?> GetMatchingItemsAsync(SfAutocomplete source, AutocompleteFilterInfo filterInfo)
         {
-            if (this._cancellationTokenSource != null)
+            if (_cancellationTokenSource != null)
             {
-                this._cancellationTokenSource.Cancel();
-                this._cancellationTokenSource.Dispose();
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Dispose();
             }
 
-            this._cancellationTokenSource = new CancellationTokenSource();
-            CancellationToken token = this._cancellationTokenSource.Token;
+            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken token = _cancellationTokenSource.Token;
 
             var vm = source.BindingContext as MainViewModel;
             if (vm != null)

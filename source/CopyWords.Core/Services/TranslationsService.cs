@@ -56,31 +56,24 @@ namespace CopyWords.Core.Services
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
             using var combinedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, cancellationToken);
 
-            try
+            using HttpResponseMessage response = await _httpClient.PostAsync(url, content, combinedCts.Token);
+
+            if (response.IsSuccessStatusCode)
             {
-                using HttpResponseMessage response = await _httpClient.PostAsync(url, content, combinedCts.Token);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadFromJsonAsync<WordModel>(combinedCts.Token);
-                }
-
-                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                {
-                    string errorContent = await response.Content.ReadAsStringAsync(combinedCts.Token);
-                    throw new InvalidInputException(errorContent);
-                }
-                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    return null;
-                }
-
-                throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
+                return await response.Content.ReadFromJsonAsync<WordModel>(combinedCts.Token);
             }
-            catch (TaskCanceledException)
+
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                string errorContent = await response.Content.ReadAsStringAsync(combinedCts.Token);
+                throw new InvalidInputException(errorContent);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 return null;
             }
+
+            throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
         }
     }
 }

@@ -19,6 +19,9 @@ namespace CopyWords.Core.ViewModels
 
         private readonly IWordViewModel _wordViewModel;
 
+        // Add cancellation token source to cancel ongoing operations during dispose
+        private CancellationTokenSource _cancellationTokenSource = new();
+
         public MainViewModel(
             IGlobalSettings globalSettings,
             ISettingsService settingsService,
@@ -91,6 +94,14 @@ namespace CopyWords.Core.ViewModels
             {
                 return;
             }
+
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Dispose();
+            }
+
+            _cancellationTokenSource = new CancellationTokenSource();
 
             DictionaryName = _settingsService.GetSelectedParser();
             UpdateDictionaryImage(DictionaryName);
@@ -220,6 +231,8 @@ namespace CopyWords.Core.ViewModels
                 return new List<string>();
             }
 
+            using var combinedCts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
+
             List<string> suggestions = new List<string>();
 
             SourceLanguage sourceLanguage;
@@ -227,11 +240,11 @@ namespace CopyWords.Core.ViewModels
             {
                 if (sourceLanguage == SourceLanguage.Danish)
                 {
-                    suggestions = (await _suggestionsService.GetDanishWordsSuggestionsAsync(inputText, cancellationToken)).ToList();
+                    suggestions = (await _suggestionsService.GetDanishWordsSuggestionsAsync(inputText, combinedCts.Token)).ToList();
                 }
                 else if (sourceLanguage == SourceLanguage.Spanish)
                 {
-                    suggestions = (await _suggestionsService.GetSpanishWordsSuggestionsAsync(inputText, cancellationToken)).ToList();
+                    suggestions = (await _suggestionsService.GetSpanishWordsSuggestionsAsync(inputText, combinedCts.Token)).ToList();
                 }
             }
 
@@ -242,6 +255,8 @@ namespace CopyWords.Core.ViewModels
             return suggestions;
 #endif
         }
+
+        public void CancelHttpRequests() => _cancellationTokenSource.Cancel();
 
         #endregion
 
@@ -312,12 +327,16 @@ namespace CopyWords.Core.ViewModels
 
                 wordModel = await _translationsService.LookUpWordAsync(searchTerm,
                     new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl),
-                    CancellationToken.None);
+                    _cancellationTokenSource.Token);
 
                 if (wordModel == null)
                 {
                     await _dialogService.DisplayAlert("Cannot find word", $"Could not find a translation for '{searchTerm}'", "OK");
                 }
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
             }
             catch (InvalidInputException ex)
             {

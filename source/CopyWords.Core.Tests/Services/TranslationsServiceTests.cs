@@ -158,10 +158,8 @@ namespace CopyWords.Core.Tests.Services
             cancellationTokenSource.Cancel();
 
             // Act
-            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), cancellationTokenSource.Token);
-
-            // Assert - Should return null when TaskCanceledException is caught
-            result.Should().BeNull();
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), cancellationTokenSource.Token);
+            await act.Should().ThrowAsync<TaskCanceledException>();
         }
 
         [TestMethod]
@@ -182,10 +180,8 @@ namespace CopyWords.Core.Tests.Services
                 cancellationTokenSource.Cancel();
             });
 
-            var result = await task;
-
-            // Assert - Should return null when TaskCanceledException is caught
-            result.Should().BeNull();
+            var act = async () => await task;
+            await act.Should().ThrowAsync<TaskCanceledException>();
         }
 
         [TestMethod]
@@ -198,10 +194,8 @@ namespace CopyWords.Core.Tests.Services
             var sut = new TranslationsService(httpClient);
 
             // Act
-            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), externalCts.Token);
-
-            // Assert - Should return null when external cancellation token is triggered first
-            result.Should().BeNull();
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), externalCts.Token);
+            await act.Should().ThrowAsync<TaskCanceledException>();
         }
 
         [TestMethod]
@@ -300,10 +294,8 @@ namespace CopyWords.Core.Tests.Services
             var sut = new TranslationsService(httpClient);
 
             // Act
-            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
-
-            // Assert - Should return null when TaskCanceledException occurs (simulating timeout)
-            result.Should().BeNull();
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
+            await act.Should().ThrowAsync<TaskCanceledException>();
         }
 
         #endregion

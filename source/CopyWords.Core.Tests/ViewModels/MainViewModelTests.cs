@@ -207,6 +207,30 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
+        public async Task LookUpWordInDictionaryAsync_WhenTaskCanceledException_ReturnsNull()
+        {
+            string search = _fixture.Create<string>();
+
+            Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
+
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<Options>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new TaskCanceledException("exception from unit test"));
+
+            var sut = _fixture.Create<MainViewModel>();
+
+            WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
+
+            result.Should().BeNull();
+            dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
         public async Task LookUpWordInDictionaryAsync_WhenSearchIsInvalid_DisplaysAlerts()
         {
             string search = _fixture.Create<string>();
@@ -589,8 +613,10 @@ namespace CopyWords.Core.Tests.ViewModels
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
 
+            var tokens = new List<CancellationToken>();
+
             var suggestionsServiceMock = _fixture.Freeze<Mock<ISuggestionsService>>();
-            suggestionsServiceMock.Setup(x => x.GetDanishWordsSuggestionsAsync(inputText, cancellationTokenSource.Token))
+            suggestionsServiceMock.Setup(x => x.GetDanishWordsSuggestionsAsync(inputText, Capture.In(tokens)))
                 .ReturnsAsync(new[] { "test" })
                 .Verifiable();
 
@@ -600,6 +626,8 @@ namespace CopyWords.Core.Tests.ViewModels
             var result = await sut.GetSuggestionsAsync(inputText, cancellationTokenSource.Token);
 
             // Assert
+            var token = tokens.Single();
+            token.IsCancellationRequested.Should().BeTrue();
             suggestionsServiceMock.Verify();
         }
 

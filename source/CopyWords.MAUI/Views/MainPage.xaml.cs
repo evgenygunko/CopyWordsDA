@@ -17,6 +17,11 @@ public partial class MainPage : ContentPage
         // There is no "Visible" property on ToolbarItem, so we need to create and add it conditionally, see https://stackoverflow.com/a/74424283
         CreateWindowsToolbarItems();
 #endif
+
+        Unloaded += (_, e) =>
+        {
+            vm.CancelHttpRequests();
+        };
     }
 
 #if WINDOWS
