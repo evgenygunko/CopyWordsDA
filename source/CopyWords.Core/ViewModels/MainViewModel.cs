@@ -60,6 +60,7 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(SelectDictionaryCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShowSettingsDialogCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShowHistoryCommand))]
+        [NotifyCanExecuteChangedFor(nameof(NavigateBackCommand))]
         public partial bool IsRefreshing { get; set; }
 
         [ObservableProperty]
@@ -81,7 +82,7 @@ namespace CopyWords.Core.ViewModels
 
         public bool CanOpenHistory => !IsBusy && !IsRefreshing;
 
-        public bool CanNavigateBack => _navigationHistory.CanNavigateBack;
+        public bool CanNavigateBack => !IsBusy && !IsRefreshing && _navigationHistory.CanNavigateBack;
 
         #endregion
 

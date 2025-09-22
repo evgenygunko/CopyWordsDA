@@ -24,6 +24,8 @@ namespace CopyWords.Core.Tests.ViewModels
             navigationHistoryMock.SetupGet(x => x.CanNavigateBack).Returns(value);
 
             var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
+            sut.IsRefreshing = false;
             sut.SearchWord = "test";
             sut.CanNavigateBack.Should().Be(value);
 
@@ -680,6 +682,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 .Returns(0);
 
             var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
+            sut.IsRefreshing = false;
             sut.SearchWord = "test1";
 
             bool result = await sut.NavigateBackAsync();
@@ -712,6 +716,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 .Returns(1);
 
             var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
+            sut.IsRefreshing = false;
             sut.SearchWord = "test2";
 
             bool result = await sut.NavigateBackAsync();
@@ -746,6 +752,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 .Returns(0);
 
             var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
+            sut.IsRefreshing = false;
             sut.SearchWord = "test2";
 
             bool result = await sut.NavigateBackAsync();

@@ -12,6 +12,12 @@
              x:Name="contentPageMainPage"
              Shell.BackgroundColor="Gray">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
             BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageMainPage}, x:DataType=views:MainPage}"
@@ -82,6 +88,7 @@
                             Text="{Binding SearchWord, Mode=TwoWay}"
                             TextSearchMode="Contains"
                             NoResultsFoundText=""
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                             ReturnCommand="{Binding LookUpCommand}">
 
                         <editors:SfAutocomplete.FilterBehavior>
