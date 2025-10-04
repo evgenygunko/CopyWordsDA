@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// Ignore Spelling: snackbar
+
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Exceptions;
@@ -16,6 +18,7 @@ namespace CopyWords.Core.ViewModels
         private readonly ITranslationsService _translationsService;
         private readonly ISuggestionsService _suggestionsService;
         private readonly INavigationHistory _navigationHistory;
+        private readonly IConnectivityService _connectivityService;
 
         private readonly IWordViewModel _wordViewModel;
 
@@ -30,6 +33,7 @@ namespace CopyWords.Core.ViewModels
             ITranslationsService translationsService,
             ISuggestionsService suggestionsService,
             INavigationHistory navigationHistory,
+            IConnectivityService connectivityService,
             IWordViewModel wordViewModel)
         {
             _globalSettings = globalSettings;
@@ -39,6 +43,13 @@ namespace CopyWords.Core.ViewModels
             _translationsService = translationsService;
             _suggestionsService = suggestionsService;
             _navigationHistory = navigationHistory;
+
+            _connectivityService = connectivityService;
+            _connectivityService.ConnectivityChanged += async (object? sender, ConnectivityChangedEventArgs e) =>
+            {
+                await _connectivityService.UpdateConnectivitySnackbarAsync(e.NetworkAccess == NetworkAccess.Internet, _cancellationTokenSource.Token);
+            };
+
             _wordViewModel = wordViewModel;
 
             SearchWord = string.Empty;
@@ -109,6 +120,12 @@ namespace CopyWords.Core.ViewModels
 
             _navigationHistory.Clear();
             NotifyNavigationStateChanged();
+
+            _connectivityService.Initialize();
+            if (!_connectivityService.TestConnection())
+            {
+                await _connectivityService.UpdateConnectivitySnackbarAsync(false, _cancellationTokenSource.Token);
+            }
 
             // Check if the app was called from a context menu on Android (or from History page) and set the search word accordingly
             string instantText = _instantTranslationService.GetTextAndClear() ?? string.Empty;
@@ -327,7 +344,7 @@ namespace CopyWords.Core.ViewModels
                 AppSettings appSettings = _settingsService.LoadSettings();
 
                 wordModel = await _translationsService.LookUpWordAsync(searchTerm,
-                    new Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl),
+                    new Models.Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorApiUrl),
                     _cancellationTokenSource.Token);
 
                 if (wordModel == null)

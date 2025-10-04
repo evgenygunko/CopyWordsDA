@@ -45,6 +45,7 @@ public static class MauiProgram
         // Proxies for .net classes which don't have interfaces
         builder.Services.AddSingleton<IShellService, ShellService>();
         builder.Services.AddSingleton<IFileIOService, FileIOService>();
+        builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
         builder.Services.AddSingleton(Preferences.Default);
         builder.Services.AddSingleton(FolderPicker.Default);
         builder.Services.AddSingleton(FilePicker.Default);
@@ -55,6 +56,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
         builder.Services.AddSingleton<ICopySelectedToClipboardService, CopySelectedToClipboardService>();
         builder.Services.AddSingleton<IDialogService, DialogService>();
+        builder.Services.AddSingleton<ISnackbarService, SnackbarService>();
         builder.Services.AddSingleton<IClipboardService, ClipboardService>();
         builder.Services.AddSingleton<IInstantTranslationService, InstantTranslationService>();
         builder.Services.AddSingleton<ISaveImageFileService, SaveImageFileService>();
