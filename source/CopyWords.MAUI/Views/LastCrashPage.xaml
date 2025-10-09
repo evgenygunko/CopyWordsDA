@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             x:DataType="viewmodels:LastCrashViewModel"
+             x:Class="CopyWords.MAUI.Views.LastCrashPage"
+             x:Name="contentPageLastCrashPage"
+             Title="App Crash Report"
+             BackgroundColor="{AppThemeBinding Light={StaticResource AppBackgroundLightColor}, Dark={StaticResource AppBackgroundDarkColor}}">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageLastCrashPage}, x:DataType=views:LastCrashPage}"
+            Command="{Binding GetCrashDumpInfoCommand}" />
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Margin="20">
+
+            <!-- Header Section with Icon -->
+            <VerticalStackLayout Spacing="16">
+                <!-- Warning Symbol -->
+                <Label Text="⚠"
+                           FontSize="32"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+
+                <!-- Title -->
+                <Label Text="Application Crash Detected"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
+
+                <!-- Subtitle -->
+                <Label Text="The application encountered an unexpected error during the last session"
+                           FontSize="14"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"
+                           HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <!-- Crash Details Card -->
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="20"
+                    Margin="0,0,0,0">
+                <VerticalStackLayout Spacing="16">
+
+                    <!-- Section Header -->
+                    <Label Text="Crash Information"
+                           FontSize="16"
+                           FontAttributes="Bold" />
+
+                    <!-- Crash Time -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="Crash Time"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+
+                            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                                    Stroke="Transparent"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="12"
+                                    Margin="0,0,0,0">
+
+                                <Label Text="{Binding CrashTime}"
+                                       FontSize="13"
+                                       FontFamily="Courier"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                                       LineBreakMode="WordWrap" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Separator -->
+                    <BoxView HeightRequest="1"
+                             BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" />
+
+                    <!-- Error Message -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="Error Details"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+                            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                                    Stroke="Transparent"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="12"
+                                    Margin="0,0,0,0">
+
+                                <Label Text="{Binding ErrorMessage}"
+                                       FontSize="13"
+                                       FontFamily="Courier"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                                       LineBreakMode="WordWrap" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Separator -->
+                    <BoxView HeightRequest="1"
+                             BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" />
+
+                    <!-- Stack Trace -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="Stack Trace"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+
+                            <!-- Stack Trace -->
+                            <ScrollView MaximumHeightRequest="300">
+                                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                                        Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                                        StrokeShape="RoundRectangle 8"
+                                        Padding="16"
+                                        Margin="0,0,0,0">
+
+                                    <VerticalStackLayout>
+
+                                        <Label Text="{Binding ExceptionName}"
+                                               FontSize="11"
+                                               FontFamily="Courier"
+                                               TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
+                                               LineBreakMode="WordWrap" />
+
+                                        <Label Text="{Binding StackTrace}"
+                                               FontSize="11"
+                                               FontFamily="Courier"
+                                               TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
+                                               LineBreakMode="WordWrap" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </ScrollView>
+                        </VerticalStackLayout>
+                    </Grid>
+
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Action Buttons -->
+            <Grid HorizontalOptions="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Text="Continue"
+                    Command="{Binding CloseDialogCommand}" />
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
