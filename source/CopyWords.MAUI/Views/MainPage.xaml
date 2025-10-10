@@ -37,8 +37,15 @@
 
         <ToolbarItem
                 Command="{Binding SelectDictionaryCommand}"
-                Text="{Binding DictionaryName}"
-                IconImageSource="{Binding DictionaryImage}"/>
+                Text="{Binding DictionaryName}">
+            <ToolbarItem.IconImageSource>
+                <OnPlatform x:TypeArguments="ImageSource">
+                    <On Platform="Android, WinUI">
+                        <FileImageSource File="{Binding DictionaryImage}" />
+                    </On>
+                </OnPlatform>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
 
         <ToolbarItem Command="{Binding ShowHistoryCommand}">
             <ToolbarItem.IconImageSource>

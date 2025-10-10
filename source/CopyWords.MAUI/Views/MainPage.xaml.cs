@@ -21,7 +21,6 @@ public partial class MainPage : ContentPage
         Unloaded += (_, e) =>
         {
             vm.CancelHttpRequests();
-            throw new Exception("Unloaded event triggered, cancelling HTTP requests");
         };
     }
 

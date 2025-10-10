@@ -64,9 +64,11 @@
     <Title>CopyWords.MAUI</Title>
     <DefaultLanguage>en</DefaultLanguage>
   </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-maccatalyst|AnyCPU'">
     <CreatePackage>false</CreatePackage>
-    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink> 
+    <_MauiForceXamlCForDebug>true</_MauiForceXamlCForDebug>
   </PropertyGroup>
 
   <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release'">
@@ -77,6 +79,10 @@
   <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
       <RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
   </PropertyGroup>
+
+	<ItemGroup>
+		<TrimmerRootAssembly Include="CommunityToolkit.Maui" RootMode="All" />
+	</ItemGroup>
 
   <ItemGroup>
     <!-- App Icon -->

@@ -33,7 +33,14 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Row="0" Grid.Column="0" Text="{Binding AlphabeticalPosition, FallbackValue='AlphabeticalPosition'}" />
-                        <Label Grid.Row="0" Grid.Column="1" Text=". &#6158;" />
+                        <Label Grid.Row="0" Grid.Column="1">
+                            <Label.Text>
+                                <OnPlatform x:TypeArguments="x:String">
+                                    <On Platform="MacCatalyst" Value=". " />
+                                    <On Platform="WinUI,Android,iOS" Value=". &#6158;" />
+                                </OnPlatform>
+                            </Label.Text>
+                        </Label>
 
                         <!-- If Translation is defined, show Translation below the Original -->
                         <VerticalStackLayout Grid.Row="0" Grid.Column="2"
