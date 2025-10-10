@@ -73,7 +73,6 @@
 
                                 <Label Text="{Binding CrashTime}"
                                        FontSize="13"
-                                       FontFamily="Courier"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
                                        LineBreakMode="WordWrap" />
                             </Border>
@@ -100,7 +99,6 @@
 
                                 <Label Text="{Binding ErrorMessage}"
                                        FontSize="13"
-                                       FontFamily="Courier"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
                                        LineBreakMode="WordWrap" />
                             </Border>
@@ -132,13 +130,11 @@
 
                                         <Label Text="{Binding ExceptionName}"
                                                FontSize="11"
-                                               FontFamily="Courier"
                                                TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
                                                LineBreakMode="WordWrap" />
 
                                         <Label Text="{Binding StackTrace}"
                                                FontSize="11"
-                                               FontFamily="Courier"
                                                TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
                                                LineBreakMode="WordWrap" />
                                     </VerticalStackLayout>
@@ -152,21 +148,22 @@
             </Border>
 
             <!-- Action Buttons -->
-            <Grid HorizontalOptions="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
+            <HorizontalStackLayout HorizontalOptions="End">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="5"
+                    Text="Send report"
+                    Command="{Binding SendEmailCommand}" />
 
                 <Button
                     Grid.Row="0"
                     Grid.Column="1"
+                    Margin="10,5,0,5"
                     Text="Continue"
                     Command="{Binding CloseDialogCommand}" />
-            </Grid>
+            </HorizontalStackLayout>
 
         </VerticalStackLayout>
     </ScrollView>

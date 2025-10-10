@@ -19,9 +19,10 @@ namespace CopyWords.Core.Tests.ViewModels
             // Arrange
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
 
             // Act
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object);
+            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
 
             // Assert
             sut.ExceptionName.Should().Be(string.Empty);
@@ -50,8 +51,9 @@ namespace CopyWords.Core.Tests.ViewModels
             preferencesMock.Setup(x => x.Get("LastCrashStackTrace", It.IsAny<string>(), It.IsAny<string>())).Returns(testStackTrace);
 
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
 
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object);
+            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
 
             // Act
             sut.GetCrashDumpInfo();
@@ -83,8 +85,9 @@ namespace CopyWords.Core.Tests.ViewModels
             preferencesMock.Setup(x => x.Get("LastCrashStackTrace", It.IsAny<string>(), It.IsAny<string>())).Returns((string)null!);
 
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
 
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object);
+            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
 
             // Act
             sut.GetCrashDumpInfo();
@@ -107,8 +110,9 @@ namespace CopyWords.Core.Tests.ViewModels
             preferencesMock.Setup(x => x.Get("LastCrashTime", It.IsAny<long>(), It.IsAny<string>())).Returns(testCrashTime);
 
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
 
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object);
+            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
 
             // Act
             sut.GetCrashDumpInfo();
@@ -127,8 +131,9 @@ namespace CopyWords.Core.Tests.ViewModels
             // Arrange
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
 
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object);
+            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
 
             // Act
             await sut.CloseDialogAsync();
@@ -143,8 +148,9 @@ namespace CopyWords.Core.Tests.ViewModels
             // Arrange
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
 
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object);
+            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
 
             // Act
             await sut.CloseDialogAsync();
@@ -159,6 +165,7 @@ namespace CopyWords.Core.Tests.ViewModels
             // Arrange
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
 
             var callOrder = new List<string>();
 
@@ -169,7 +176,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 .Callback(() => callOrder.Add("PopModal"))
                 .Returns(Task.CompletedTask);
 
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object);
+            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
 
             // Act
             await sut.CloseDialogAsync();
@@ -178,6 +185,58 @@ namespace CopyWords.Core.Tests.ViewModels
             callOrder.Should().HaveCount(2);
             callOrder[0].Should().Be("SetPreference");
             callOrder[1].Should().Be("PopModal");
+        }
+
+        #endregion
+
+        #region SendEmailAsync Command Tests
+
+        [TestMethod]
+        public async Task SendEmailAsync_Should_CallEmailServiceWithCrashDetails()
+        {
+            // Arrange
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
+
+            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
+
+            // Set up test data
+            sut.CrashTime = "2023-01-01 12:00:00";
+            sut.ExceptionName = "System.ArgumentNullException";
+            sut.ErrorMessage = "Value cannot be null. (Parameter 'value')";
+            sut.StackTrace = "   at TestClass.TestMethod() in TestFile.cs:line 42";
+
+            // Act
+            await sut.SendEmailAsync();
+
+            // Assert
+            emailServiceMock.Verify(x => x.ComposeAsync(
+                "CopyWords Application Crash Report",
+                It.Is<string>(body =>
+                    body.Contains("2023-01-01 12:00:00") &&
+                    body.Contains("System.ArgumentNullException") &&
+                    body.Contains("Value cannot be null. (Parameter 'value')") &&
+                    body.Contains("   at TestClass.TestMethod() in TestFile.cs:line 42")),
+                null), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SendEmailAsync_Should_HandleEmailNotSupportedException()
+        {
+            // Arrange
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
+
+            emailServiceMock.Setup(x => x.ComposeAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<List<string>>()))
+                .ThrowsAsync(new NotSupportedException("Email is not supported on this device"));
+
+            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
+
+            // Act & Assert - Should not throw exception
+            var act = async () => await sut.SendEmailAsync();
+            await act.Should().NotThrowAsync();
         }
 
         #endregion

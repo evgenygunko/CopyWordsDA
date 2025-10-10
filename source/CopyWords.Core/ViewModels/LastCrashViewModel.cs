@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Services;
 
@@ -8,13 +9,16 @@ namespace CopyWords.Core.ViewModels
     {
         private readonly IPreferences _preferences;
         private readonly IShellService _shellService;
+        private readonly IEmailService _emailService;
 
         public LastCrashViewModel(
             IPreferences preferences,
-            IShellService shellService)
+            IShellService shellService,
+            IEmailService emailService)
         {
             _preferences = preferences;
             _shellService = shellService;
+            _emailService = emailService;
 
             ExceptionName = string.Empty;
             ErrorMessage = string.Empty;
@@ -44,6 +48,41 @@ namespace CopyWords.Core.ViewModels
             ExceptionName = _preferences.Get("LastCrashException", string.Empty);
             ErrorMessage = _preferences.Get("LastCrashMessage", string.Empty);
             StackTrace = _preferences.Get("LastCrashStackTrace", string.Empty);
+        }
+
+        [RelayCommand]
+        public async Task SendEmailAsync()
+        {
+            try
+            {
+                string subject = "CopyWords Application Crash Report";
+
+                string body = $"""
+                    Dear Support Team,
+
+                    The CopyWords application has crashed. Here are the details:
+
+                    Crash Time: {CrashTime}
+                    Exception Type: {ExceptionName}
+                    Error Message: {ErrorMessage}
+
+                    Stack Trace:
+                    {StackTrace}
+
+                    Please investigate this issue.
+
+                    Best regards,
+                    CopyWords User
+                    """;
+
+                await _emailService.ComposeAsync(subject, body);
+            }
+            catch (Exception)
+            {
+                // Handle other exceptions - silently fail as this is a non-critical feature
+                // Users can still manually report crashes through other means
+                Debug.WriteLine("Failed to open email client.");
+            }
         }
 
         [RelayCommand]

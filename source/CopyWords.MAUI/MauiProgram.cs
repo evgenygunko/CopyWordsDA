@@ -46,6 +46,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IShellService, ShellService>();
         builder.Services.AddSingleton<IFileIOService, FileIOService>();
         builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
+        builder.Services.AddSingleton<IEmailService, EmailService>();
         builder.Services.AddSingleton(Preferences.Default);
         builder.Services.AddSingleton(FolderPicker.Default);
         builder.Services.AddSingleton(FilePicker.Default);
