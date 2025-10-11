@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.Versioning;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
@@ -25,6 +26,7 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         GlobalSettings globalSettings = ReadGlobalSettings();
+        Debug.Assert(!string.IsNullOrEmpty(globalSettings.SentryDsn), "Sentry DSN is not configured in appsettings.");
 
         var builder = MauiApp.CreateBuilder();
         builder
