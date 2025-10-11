@@ -30,7 +30,8 @@ jobs:
 
                     (Get-Content $file) `
                         -replace '"TranslatorApiUrl":\s*""', '"TranslatorApiUrl": "$(TranslatorApiUrl)"' `
-                        -replace '"SyncfusionLicenseKey":\s*""', '"SyncfusionLicenseKey": "$(SyncfusionLicenseKey)"' |
+                        -replace '"SyncfusionLicenseKey":\s*""', '"SyncfusionLicenseKey": "$(SyncfusionLicenseKey)"' `
+                        -replace '"SentryDsn":\s*""', '"SentryDsn": "$(SentryDsn)"' |
                         Set-Content $file
 
                     Write-Host "Updated appsettings.json:"

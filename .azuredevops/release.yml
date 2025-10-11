@@ -33,7 +33,7 @@ stages:
     - stage: Publish_To_Github
       displayName: 'Publish apps to Github as a draft release'
       dependsOn: Build
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+      condition: succeeded()
 
       jobs:
           - template: /.azuredevops/templates/jobs/job-publish-to-github.yml
@@ -44,7 +44,7 @@ stages:
     - stage: Publish_To_Firebase
       displayName: 'Publish Android app to Firebase'
       dependsOn: Build
-      condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+      condition: succeeded()
 
       jobs:
           - template: /.azuredevops/templates/jobs/job-publish-to-firebase.yml

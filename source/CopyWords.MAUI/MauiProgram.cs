@@ -24,6 +24,8 @@ public static class MauiProgram
     [SupportedOSPlatform("android26.0")]
     public static MauiApp CreateMauiApp()
     {
+        GlobalSettings globalSettings = ReadGlobalSettings();
+
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
@@ -31,6 +33,19 @@ public static class MauiProgram
             .ConfigureSyncfusionCore()
             .UseMauiCommunityToolkit()
             .UseMauiCommunityToolkitMediaElement()
+            .UseSentry(options =>
+            {
+                // The DSN is the only required setting.
+                options.Dsn = globalSettings.SentryDsn;
+
+                // Use debug mode if you want to see what the SDK is doing.
+                // Debug messages are written to stdout with Console.Writeline,
+                // and are viewable in your IDE's debug console or with 'adb logcat', etc.
+                // This option is not recommended when deploying your application.
+                options.Debug = true;
+
+                // Other Sentry options can be set here.
+            })
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -62,6 +77,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IInstantTranslationService, InstantTranslationService>();
         builder.Services.AddSingleton<ISaveImageFileService, SaveImageFileService>();
         builder.Services.AddSingleton<INavigationHistory, NavigationHistory>();
+        builder.Services.AddSingleton<IGlobalSettings>(globalSettings);
 
         builder.Services.AddHttpClient<ITranslationsService, TranslationsService>();
         builder.Services.AddHttpClient<IUpdateService, UpdateService>();
@@ -78,9 +94,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<LastCrashViewModel>();
 
         builder.Services.AddScoped<IValidator<SettingsViewModel>, SettingsViewModelValidator>();
-
-        GlobalSettings globalSettings = ReadGlobalSettings();
-        builder.Services.AddSingleton<IGlobalSettings>(globalSettings);
 
         var app = builder.Build();
 

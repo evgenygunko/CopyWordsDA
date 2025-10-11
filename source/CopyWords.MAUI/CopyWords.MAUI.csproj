@@ -117,6 +117,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.9" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
+    <PackageReference Include="Sentry.Maui" Version="5.16.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
     <PackageReference Include="Syncfusion.Licensing" Version="31.1.23" />
     <PackageReference Include="Syncfusion.Maui.Inputs" Version="31.1.23" />

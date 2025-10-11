@@ -7,6 +7,8 @@ namespace CopyWords.Core.Models
         string TranslatorApiUrl { get; set; }
 
         string SyncfusionLicenseKey { get; set; }
+
+        string SentryDsn { get; set; }
     }
 
     public class GlobalSettings : IGlobalSettings
@@ -14,5 +16,7 @@ namespace CopyWords.Core.Models
         public string TranslatorApiUrl { get; set; } = null!;
 
         public string SyncfusionLicenseKey { get; set; } = null!;
+
+        public string SentryDsn { get; set; } = null!;
     }
 }
