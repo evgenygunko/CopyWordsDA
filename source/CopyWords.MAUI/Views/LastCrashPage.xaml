@@ -4,6 +4,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
              x:DataType="viewmodels:LastCrashViewModel"
              x:Class="CopyWords.MAUI.Views.LastCrashPage"
              x:Name="contentPageLastCrashPage"
@@ -87,10 +88,26 @@
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
 
                         <VerticalStackLayout Grid.Column="1" Spacing="4">
-                            <Label Text="Error Details"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="Error Details"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                                       VerticalOptions="Center" />
+
+                                <ImageButton BackgroundColor="Transparent"
+                                            WidthRequest="44"
+                                            HeightRequest="44"
+                                            Command="{Binding CopyErrorMessageCommand}">
+                                    <ImageButton.Source>
+                                        <FontImageSource
+                                            Color="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                                            FontFamily="MaterialIconsOutlined-Regular"
+                                            Glyph="{x:Static helpers:MaterialDesignIconFonts.Content_copy}" />
+                                    </ImageButton.Source>
+                                </ImageButton>
+                            </HorizontalStackLayout>
+
                             <Border BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
                                     Stroke="Transparent"
                                     StrokeShape="RoundRectangle 8"
@@ -113,10 +130,24 @@
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
 
                         <VerticalStackLayout Grid.Column="1" Spacing="4">
-                            <Label Text="Stack Trace"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="Stack Trace"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                                       VerticalOptions="Center" />
+                                <ImageButton BackgroundColor="Transparent"
+                                            WidthRequest="44"
+                                            HeightRequest="44"
+                                            Command="{Binding CopyStackTraceCommand}">
+                                    <ImageButton.Source>
+                                        <FontImageSource
+                                            Color="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                                            FontFamily="MaterialIconsOutlined-Regular"
+                                            Glyph="{x:Static helpers:MaterialDesignIconFonts.Content_copy}" />
+                                    </ImageButton.Source>
+                                </ImageButton>
+                            </HorizontalStackLayout>
 
                             <!-- Stack Trace -->
                             <ScrollView MaximumHeightRequest="300">
@@ -126,18 +157,18 @@
                                         Padding="16"
                                         Margin="0,0,0,0">
 
-                                    <VerticalStackLayout>
+                                <VerticalStackLayout>
 
-                                        <Label Text="{Binding ExceptionName}"
-                                               FontSize="11"
-                                               TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
-                                               LineBreakMode="WordWrap" />
+                                    <Label Text="{Binding ExceptionName}"
+                                           FontSize="11"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
+                                           LineBreakMode="WordWrap" />
 
-                                        <Label Text="{Binding StackTrace}"
-                                               FontSize="11"
-                                               TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
-                                               LineBreakMode="WordWrap" />
-                                    </VerticalStackLayout>
+                                    <Label Text="{Binding StackTrace}"
+                                           FontSize="11"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
+                                           LineBreakMode="WordWrap" />
+                                </VerticalStackLayout>
                                 </Border>
                             </ScrollView>
                         </VerticalStackLayout>

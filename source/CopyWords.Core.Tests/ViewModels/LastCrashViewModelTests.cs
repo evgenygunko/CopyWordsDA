@@ -20,9 +20,11 @@ namespace CopyWords.Core.Tests.ViewModels
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
             var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
+            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             // Act
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
+            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object, clipboardServiceMock.Object, dialogServiceMock.Object);
 
             // Assert
             sut.ExceptionName.Should().Be(string.Empty);
@@ -50,10 +52,7 @@ namespace CopyWords.Core.Tests.ViewModels
             preferencesMock.Setup(x => x.Get("LastCrashMessage", It.IsAny<string>(), It.IsAny<string>())).Returns(testErrorMessage);
             preferencesMock.Setup(x => x.Get("LastCrashStackTrace", It.IsAny<string>(), It.IsAny<string>())).Returns(testStackTrace);
 
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
-
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
+            var sut = _fixture.Create<LastCrashViewModel>();
 
             // Act
             sut.GetCrashDumpInfo();
@@ -84,10 +83,7 @@ namespace CopyWords.Core.Tests.ViewModels
             preferencesMock.Setup(x => x.Get("LastCrashMessage", It.IsAny<string>(), It.IsAny<string>())).Returns((string)null!);
             preferencesMock.Setup(x => x.Get("LastCrashStackTrace", It.IsAny<string>(), It.IsAny<string>())).Returns((string)null!);
 
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
-
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
+            var sut = _fixture.Create<LastCrashViewModel>();
 
             // Act
             sut.GetCrashDumpInfo();
@@ -109,10 +105,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
             preferencesMock.Setup(x => x.Get("LastCrashTime", It.IsAny<long>(), It.IsAny<string>())).Returns(testCrashTime);
 
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
-
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
+            var sut = _fixture.Create<LastCrashViewModel>();
 
             // Act
             sut.GetCrashDumpInfo();
@@ -130,10 +123,8 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             // Arrange
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
 
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
+            var sut = _fixture.Create<LastCrashViewModel>();
 
             // Act
             await sut.CloseDialogAsync();
@@ -146,11 +137,9 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task CloseDialogAsync_Should_CallPopModalAsync()
         {
             // Arrange
-            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
 
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
+            var sut = _fixture.Create<LastCrashViewModel>();
 
             // Act
             await sut.CloseDialogAsync();
@@ -163,20 +152,18 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task CloseDialogAsync_Should_SetPreferenceBeforeClosingModal()
         {
             // Arrange
-            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-            var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
-
             var callOrder = new List<string>();
 
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
             preferencesMock.Setup(x => x.Set(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>()))
                 .Callback(() => callOrder.Add("SetPreference"));
 
+            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
             shellServiceMock.Setup(x => x.PopModalAsync())
                 .Callback(() => callOrder.Add("PopModal"))
                 .Returns(Task.CompletedTask);
 
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
+            var sut = _fixture.Create<LastCrashViewModel>();
 
             // Act
             await sut.CloseDialogAsync();
@@ -195,11 +182,9 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task SendEmailAsync_Should_CallEmailServiceWithCrashDetails()
         {
             // Arrange
-            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
             var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
 
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
+            var sut = _fixture.Create<LastCrashViewModel>();
 
             // Set up test data
             sut.CrashTime = "2023-01-01 12:00:00";
@@ -225,18 +210,59 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task SendEmailAsync_Should_HandleEmailNotSupportedException()
         {
             // Arrange
-            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
             var emailServiceMock = _fixture.Freeze<Mock<IEmailService>>();
-
             emailServiceMock.Setup(x => x.ComposeAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<List<string>>()))
                 .ThrowsAsync(new NotSupportedException("Email is not supported on this device"));
 
-            var sut = new LastCrashViewModel(preferencesMock.Object, shellServiceMock.Object, emailServiceMock.Object);
+            var sut = _fixture.Create<LastCrashViewModel>();
 
             // Act & Assert - Should not throw exception
             var act = async () => await sut.SendEmailAsync();
             await act.Should().NotThrowAsync();
+        }
+
+        #endregion
+
+        #region CopyErrorMessageAsync Command Tests
+
+        [TestMethod]
+        public async Task CopyErrorMessageAsync_Should_CopyErrorMessageToClipboard()
+        {
+            // Arrange
+            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = _fixture.Create<LastCrashViewModel>();
+            sut.ErrorMessage = "Test error message";
+
+            // Act
+            await sut.CopyErrorMessageAsync();
+
+            // Assert
+            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync("Test error message"), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayToast("Error message copied to clipboard"), Times.Once);
+        }
+
+        #endregion
+
+        #region CopyStackTraceAsync Command Tests
+
+        [TestMethod]
+        public async Task CopyStackTraceAsync_Should_CopyStackTraceToClipboard()
+        {
+            // Arrange
+            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = _fixture.Create<LastCrashViewModel>();
+            sut.StackTrace = "Test stack trace";
+
+            // Act
+            await sut.CopyStackTraceAsync();
+
+            // Assert
+            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync("Test stack trace"), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayToast("Stack trace copied to clipboard"), Times.Once);
         }
 
         #endregion

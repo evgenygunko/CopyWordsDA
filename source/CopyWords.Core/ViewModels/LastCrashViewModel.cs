@@ -10,20 +10,26 @@ namespace CopyWords.Core.ViewModels
         private readonly IPreferences _preferences;
         private readonly IShellService _shellService;
         private readonly IEmailService _emailService;
+        private readonly IClipboardService _clipboardService;
+        private readonly IDialogService _dialogService;
 
         public LastCrashViewModel(
             IPreferences preferences,
             IShellService shellService,
-            IEmailService emailService)
+            IEmailService emailService,
+            IClipboardService clipboardService,
+            IDialogService dialogService)
         {
             _preferences = preferences;
             _shellService = shellService;
             _emailService = emailService;
+            _clipboardService = clipboardService;
 
             ExceptionName = string.Empty;
             ErrorMessage = string.Empty;
             CrashTime = string.Empty;
             StackTrace = string.Empty;
+            _dialogService = dialogService;
         }
 
         [ObservableProperty]
@@ -83,6 +89,20 @@ namespace CopyWords.Core.ViewModels
                 // Users can still manually report crashes through other means
                 Debug.WriteLine("Failed to open email client.");
             }
+        }
+
+        [RelayCommand]
+        public async Task CopyErrorMessageAsync()
+        {
+            await _clipboardService.CopyTextToClipboardAsync(ErrorMessage);
+            await _dialogService.DisplayToast("Error message copied to clipboard");
+        }
+
+        [RelayCommand]
+        public async Task CopyStackTraceAsync()
+        {
+            await _clipboardService.CopyTextToClipboardAsync(StackTrace);
+            await _dialogService.DisplayToast("Stack trace copied to clipboard");
         }
 
         [RelayCommand]
