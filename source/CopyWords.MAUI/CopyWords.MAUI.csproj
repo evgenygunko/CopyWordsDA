@@ -1,7 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <!-- Default target frameworks for non-Windows platforms (macOS/Linux) -->
     <TargetFrameworks>net9.0-maccatalyst;net9.0-android</TargetFrameworks>
+
+    <!-- On Windows, exclude MacCatalyst and include Windows platform -->
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net9.0-android;net9.0-windows10.0.19041.0</TargetFrameworks>
 
     <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
     <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
@@ -60,14 +64,13 @@
     <NoWarn>1701;1702;CS1573;CS1591;CA1501;CA1724;XC0045</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
     <Title>CopyWords.MAUI</Title>
     <DefaultLanguage>en</DefaultLanguage>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-maccatalyst|AnyCPU'">
     <CreatePackage>false</CreatePackage>
-    <MtouchLink>SdkOnly</MtouchLink> 
+    <MtouchLink>SdkOnly</MtouchLink>
     <_MauiForceXamlCForDebug>true</_MauiForceXamlCForDebug>
   </PropertyGroup>
 
@@ -110,19 +113,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FFMpegCore" Version="5.2.0" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.110" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="12.2.0" />
-    <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="6.1.2" />
+    <PackageReference Include="FFMpegCore" Version="5.4.0" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="12.3.0" />
+    <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="6.1.3" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
-    <PackageReference Include="Sentry.Maui" Version="5.16.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
-    <PackageReference Include="Syncfusion.Licensing" Version="31.1.23" />
-    <PackageReference Include="Syncfusion.Maui.Inputs" Version="31.1.23" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.10" />
+    <PackageReference Include="Sentry.Maui" Version="5.16.2" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <PackageReference Include="Syncfusion.Licensing" Version="31.2.5" />
+    <PackageReference Include="Syncfusion.Maui.Inputs" Version="31.2.5" />
     <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.7" />
-    <PackageReference Include="System.Text.Json" Version="9.0.9" />
+    <PackageReference Include="System.Text.Json" Version="9.0.10" />
   </ItemGroup>
 
   <ItemGroup>
