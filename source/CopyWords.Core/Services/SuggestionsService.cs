@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
-using CopyWords.Core.Exceptions;
 using System.Text.Json;
+using CopyWords.Core.Exceptions;
+using CopyWords.Core.Models;
 
 namespace CopyWords.Core.Services
 {
@@ -14,10 +15,14 @@ namespace CopyWords.Core.Services
     public class SuggestionsService : ISuggestionsService
     {
         private readonly HttpClient _httpClient;
+        private readonly IBuildConfiguration _buildConfiguration;
 
-        public SuggestionsService(HttpClient httpClient)
+        public SuggestionsService(
+            HttpClient httpClient,
+            IBuildConfiguration buildConfiguration)
         {
             _httpClient = httpClient;
+            _buildConfiguration = buildConfiguration;
         }
 
         public async Task<IEnumerable<string>> GetDanishWordsSuggestionsAsync(string inputText, CancellationToken cancellationToken)
@@ -39,15 +44,22 @@ namespace CopyWords.Core.Services
                         return suggestions;
                     }
 
-                    throw new ServerErrorException("The server returned a successful status code but the response content was null.");
+                    if (_buildConfiguration.IsDebug)
+                    {
+                        throw new ServerErrorException("The server returned a successful status code but the response content was null.");
+                    }
                 }
 
-                throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
+                if (_buildConfiguration.IsDebug)
+                {
+                    throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
+                }
             }
             catch (TaskCanceledException)
             {
-                return Enumerable.Empty<string>();
             }
+
+            return Enumerable.Empty<string>();
         }
 
         public async Task<IEnumerable<string>> GetSpanishWordsSuggestionsAsync(string inputText, CancellationToken cancellationToken)
@@ -76,15 +88,23 @@ namespace CopyWords.Core.Services
                         }
                         return suggestions;
                     }
-                    throw new ServerErrorException("The server returned a successful status code but the response content was invalid or missing 'results'.");
+
+                    if (_buildConfiguration.IsDebug)
+                    {
+                        throw new ServerErrorException("The server returned a successful status code but the response content was invalid or missing 'results'.");
+                    }
                 }
 
-                throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
+                if (_buildConfiguration.IsDebug)
+                {
+                    throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
+                }
             }
             catch (TaskCanceledException)
             {
-                return Enumerable.Empty<string>();
             }
+
+            return Enumerable.Empty<string>();
         }
     }
 }

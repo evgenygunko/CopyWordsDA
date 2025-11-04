@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using CopyWords.Core.Exceptions;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using FluentAssertions;
 using Moq;
@@ -23,7 +24,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
 
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
             var result = await sut.GetDanishWordsSuggestionsAsync("h", CancellationToken.None);
 
             // Assert
@@ -37,8 +38,11 @@ namespace CopyWords.Core.Tests.Services
             // Arrange
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "null");
 
+            var buildConfigurationMock = new Mock<IBuildConfiguration>();
+            buildConfigurationMock.SetupGet(bc => bc.IsDebug).Returns(true);
+
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, buildConfigurationMock.Object);
             var act = async () => await sut.GetDanishWordsSuggestionsAsync("h", CancellationToken.None);
 
             // Assert
@@ -52,8 +56,11 @@ namespace CopyWords.Core.Tests.Services
             // Arrange
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
 
+            var buildConfigurationMock = new Mock<IBuildConfiguration>();
+            buildConfigurationMock.SetupGet(bc => bc.IsDebug).Returns(true);
+
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, buildConfigurationMock.Object);
             var act = async () => await sut.GetDanishWordsSuggestionsAsync("h", CancellationToken.None);
 
             // Assert
@@ -77,7 +84,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = new HttpClient(handlerMock.Object);
 
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
             var result = await sut.GetDanishWordsSuggestionsAsync("h", CancellationToken.None);
 
             // Assert
@@ -95,7 +102,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
 
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
             var result = await sut.GetDanishWordsSuggestionsAsync("xyz", CancellationToken.None);
 
             // Assert
@@ -131,7 +138,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = new HttpClient(handlerMock.Object);
 
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
             await sut.GetDanishWordsSuggestionsAsync("hello world", CancellationToken.None);
 
             // Assert
@@ -154,7 +161,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
 
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
             var result = await sut.GetSpanishWordsSuggestionsAsync("h", CancellationToken.None);
 
             // Assert
@@ -171,8 +178,11 @@ namespace CopyWords.Core.Tests.Services
 
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
 
+            var buildConfigurationMock = new Mock<IBuildConfiguration>();
+            buildConfigurationMock.SetupGet(bc => bc.IsDebug).Returns(true);
+
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, buildConfigurationMock.Object);
             var act = async () => await sut.GetSpanishWordsSuggestionsAsync("h", CancellationToken.None);
 
             // Assert
@@ -189,8 +199,11 @@ namespace CopyWords.Core.Tests.Services
 
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
 
+            var buildConfigurationMock = new Mock<IBuildConfiguration>();
+            buildConfigurationMock.SetupGet(bc => bc.IsDebug).Returns(true);
+
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, buildConfigurationMock.Object);
             var act = async () => await sut.GetSpanishWordsSuggestionsAsync("h", CancellationToken.None);
 
             // Assert
@@ -206,7 +219,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
 
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
             var result = await sut.GetSpanishWordsSuggestionsAsync("h", CancellationToken.None);
 
             // Assert
@@ -220,8 +233,11 @@ namespace CopyWords.Core.Tests.Services
             // Arrange
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
 
+            var buildConfigurationMock = new Mock<IBuildConfiguration>();
+            buildConfigurationMock.SetupGet(bc => bc.IsDebug).Returns(true);
+
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, buildConfigurationMock.Object);
             var act = async () => await sut.GetSpanishWordsSuggestionsAsync("h", CancellationToken.None);
 
             // Assert
@@ -245,7 +261,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = new HttpClient(handlerMock.Object);
 
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
             var result = await sut.GetSpanishWordsSuggestionsAsync("h", CancellationToken.None);
 
             // Assert
@@ -263,7 +279,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
 
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
             var result = await sut.GetSpanishWordsSuggestionsAsync("xyz", CancellationToken.None);
 
             // Assert
@@ -299,7 +315,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = new HttpClient(handlerMock.Object);
 
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
             await sut.GetSpanishWordsSuggestionsAsync("hello world", CancellationToken.None);
 
             // Assert
@@ -338,7 +354,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = new HttpClient(handlerMock.Object);
 
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
             await sut.GetDanishWordsSuggestionsAsync("test", CancellationToken.None);
 
             // Assert
@@ -374,7 +390,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = new HttpClient(handlerMock.Object);
 
             // Act
-            var sut = new SuggestionsService(httpClient);
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
             await sut.GetSpanishWordsSuggestionsAsync("test", CancellationToken.None);
 
             // Assert
