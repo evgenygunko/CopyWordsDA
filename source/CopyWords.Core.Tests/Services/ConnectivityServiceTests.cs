@@ -133,6 +133,32 @@ namespace CopyWords.Core.Tests.Services
                 It.IsAny<SnackbarOptions>()), Times.Once);
         }
 
+        [TestMethod]
+        public async Task UpdateConnectivitySnackbar_WhenCancellationTokenIsCancelled_DoesNotCallSnackbarMethods()
+        {
+            // Arrange
+            var sut = new ConnectivityService(_deviceInfoMock.Object, _snackbarServiceMock.Object);
+
+            // First call to initialize the snackbars
+            await sut.UpdateConnectivitySnackbarAsync(false, CancellationToken.None);
+
+            // Reset mock invocations to start fresh
+            _snackbarNoConnectionMock.Reset();
+            _snackbarConnectionRestoredMock.Reset();
+
+            var cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            // Act
+            await sut.UpdateConnectivitySnackbarAsync(true, cts.Token);
+
+            // Assert - No snackbar methods should be called when token is cancelled
+            _snackbarNoConnectionMock.Verify(x => x.Dismiss(It.IsAny<CancellationToken>()), Times.Never);
+            _snackbarNoConnectionMock.Verify(x => x.Show(It.IsAny<CancellationToken>()), Times.Never);
+            _snackbarConnectionRestoredMock.Verify(x => x.Dismiss(It.IsAny<CancellationToken>()), Times.Never);
+            _snackbarConnectionRestoredMock.Verify(x => x.Show(It.IsAny<CancellationToken>()), Times.Never);
+        }
+
         #endregion
     }
 }

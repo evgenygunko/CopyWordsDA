@@ -158,6 +158,11 @@ namespace CopyWords.Core.Services
                 _snackbarConnectionRestored = _snackbarService.Make(message: text, action: null, actionButtonText, duration, snackbarOptions);
             }
 
+            if (token.IsCancellationRequested)
+            {
+                return;
+            }
+
             if (hasConnection)
             {
                 Debug.WriteLine("Internet access is available.");
