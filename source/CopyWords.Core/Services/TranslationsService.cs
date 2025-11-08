@@ -41,7 +41,7 @@ namespace CopyWords.Core.Services
                 Text: wordToLookUp,
                 SourceLanguage: options.SourceLang.ToString(),
                 DestinationLanguage: "Russian",
-                Version: "1");
+                Version: "2");
 
             WordModel? wordModel = await TranslateAsync(options.TranslatorApiURL, input, cancellationToken);
             return wordModel;
