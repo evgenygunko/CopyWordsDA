@@ -22,6 +22,7 @@ namespace CopyWords.Core.Services
         private readonly IDeviceInfo _deviceInfo;
         private readonly IFileSaver _fileSaver;
         private readonly IFileDownloaderService _fileDownloaderService;
+        private readonly ILaunchDarklyService _launchDarklyService;
 
         public SaveSoundFileService(
             HttpClient httpClient,
@@ -31,7 +32,8 @@ namespace CopyWords.Core.Services
             IFileIOService fileIOService,
             IDeviceInfo deviceInfo,
             IFileSaver fileSaver,
-            IFileDownloaderService fileDownloaderService)
+            IFileDownloaderService fileDownloaderService,
+            ILaunchDarklyService launchDarklyService)
         {
             _httpClient = httpClient;
             _settingsService = settingsService;
@@ -40,6 +42,7 @@ namespace CopyWords.Core.Services
             _deviceInfo = deviceInfo;
             _fileSaver = fileSaver;
             _fileDownloaderService = fileDownloaderService;
+            _launchDarklyService = launchDarklyService;
         }
 
         #region Public Methods
@@ -49,6 +52,8 @@ namespace CopyWords.Core.Services
         [SupportedOSPlatform("android")]
         public async Task<bool> SaveSoundFileAsync(string url, string soundFileName, CancellationToken cancellationToken)
         {
+            bool downloadSoundFromTranslationAppFlag = _launchDarklyService.GetBooleanFlag("download-sound-from-translation-app", false);
+
             // on Android show the FileSavePicker and save the file into allowed location, like Downloads
             if (_deviceInfo.Platform == DevicePlatform.Android)
             {

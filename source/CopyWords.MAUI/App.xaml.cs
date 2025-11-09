@@ -15,6 +15,8 @@ public partial class App : Application
     private readonly MainWindowViewModel _mainWindowViewModel;
     private readonly GetUpdateViewModel _getUpdateViewModel;
     private readonly LastCrashViewModel _lastCrashViewModel;
+    private readonly IGlobalSettings _globalSettings;
+    private readonly ILaunchDarklyService _launchDarklyService;
 
     public App(
         ISettingsService settingsService,
@@ -24,7 +26,8 @@ public partial class App : Application
         MainWindowViewModel mainWindowViewModel,
         GetUpdateViewModel getUpdateViewModel,
         LastCrashViewModel lastCrashViewModel,
-        IGlobalSettings globalSettings)
+        IGlobalSettings globalSettings,
+        ILaunchDarklyService launchDarklyService)
     {
         UserAppTheme = AppTheme.Light;
 
@@ -35,6 +38,8 @@ public partial class App : Application
         _mainWindowViewModel = mainWindowViewModel;
         _getUpdateViewModel = getUpdateViewModel;
         _lastCrashViewModel = lastCrashViewModel;
+        _globalSettings = globalSettings;
+        _launchDarklyService = launchDarklyService;
 
         Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(globalSettings.SyncfusionLicenseKey);
 
@@ -45,7 +50,7 @@ public partial class App : Application
     {
         AppSettings appSettings = _settingsService.LoadSettings();
 
-        Window window = new MainWindow(_updateService, _dialogService, _preferences, _getUpdateViewModel, _lastCrashViewModel)
+        Window window = new MainWindow(_updateService, _dialogService, _preferences, _globalSettings, _launchDarklyService, _getUpdateViewModel, _lastCrashViewModel)
         {
             BindingContext = _mainWindowViewModel,
             Width = appSettings.MainWindowWidth,

@@ -76,6 +76,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IDialogService, DialogService>();
         builder.Services.AddSingleton<ISnackbarService, SnackbarService>();
         builder.Services.AddSingleton<IClipboardService, ClipboardService>();
+        builder.Services.AddSingleton<ILaunchDarklyService, LaunchDarklyService>();
         builder.Services.AddSingleton<IInstantTranslationService, InstantTranslationService>();
         builder.Services.AddSingleton<ISaveImageFileService, SaveImageFileService>();
         builder.Services.AddSingleton<INavigationHistory, NavigationHistory>();

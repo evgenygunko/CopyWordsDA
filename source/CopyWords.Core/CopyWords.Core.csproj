@@ -27,6 +27,7 @@
   <ItemGroup>
     <PackageReference Include="FFMpegCore" Version="5.4.0" />
     <PackageReference Include="FluentValidation" Version="12.1.0" />
+    <PackageReference Include="LaunchDarkly.ClientSdk" Version="5.5.4" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
     <PackageReference Include="CommunityToolkit.Maui" Version="12.3.0" />
     <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="6.1.3" />

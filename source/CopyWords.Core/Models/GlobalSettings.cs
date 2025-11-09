@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Syncfusion Api
+﻿// Ignore Spelling: Syncfusion Api Dsn
 
 namespace CopyWords.Core.Models
 {
@@ -9,6 +9,10 @@ namespace CopyWords.Core.Models
         string SyncfusionLicenseKey { get; set; }
 
         string SentryDsn { get; set; }
+
+        string LaunchDarklyMobileKey { get; set; }
+
+        string LaunchDarklyMemberId { get; set; }
     }
 
     public class GlobalSettings : IGlobalSettings
@@ -18,5 +22,9 @@ namespace CopyWords.Core.Models
         public string SyncfusionLicenseKey { get; set; } = null!;
 
         public string SentryDsn { get; set; } = null!;
+
+        public string LaunchDarklyMobileKey { get; set; } = null!;
+
+        public string LaunchDarklyMemberId { get; set; } = null!;
     }
 }
