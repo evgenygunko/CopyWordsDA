@@ -4,7 +4,9 @@ namespace CopyWords.Core.Models
 {
     public interface IGlobalSettings
     {
-        string TranslatorApiUrl { get; set; }
+        string TranslatorAppUrl { get; set; }
+
+        string TranslatorAppRequestCode { get; set; }
 
         string SyncfusionLicenseKey { get; set; }
 
@@ -17,7 +19,9 @@ namespace CopyWords.Core.Models
 
     public class GlobalSettings : IGlobalSettings
     {
-        public string TranslatorApiUrl { get; set; } = null!;
+        public string TranslatorAppUrl { get; set; } = null!;
+
+        public string TranslatorAppRequestCode { get; set; } = null!;
 
         public string SyncfusionLicenseKey { get; set; } = null!;
 

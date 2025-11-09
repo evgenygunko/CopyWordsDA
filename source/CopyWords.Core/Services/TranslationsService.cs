@@ -32,10 +32,13 @@ namespace CopyWords.Core.Services
                 throw new ArgumentNullException(nameof(options), "Options cannot be null.");
             }
 
-            if (string.IsNullOrEmpty(options.TranslatorApiURL))
+            if (string.IsNullOrEmpty(options.TranslatorAppURL))
             {
-                throw new ArgumentException("Translator API URL cannot be null or empty");
+                throw new ArgumentException("TranslatorApp URL cannot be null or empty");
             }
+
+            // Construct full URL by appending the API path and code
+            string lookupUrl = $"{options.TranslatorAppURL.TrimEnd('/')}/api/LookUpWord?code={options.TranslatorAppRequestCode}";
 
             var input = new LookUpWordRequest(
                 Text: wordToLookUp,
@@ -43,7 +46,7 @@ namespace CopyWords.Core.Services
                 DestinationLanguage: "Russian",
                 Version: "2");
 
-            WordModel? wordModel = await TranslateAsync(options.TranslatorApiURL, input, cancellationToken);
+            WordModel? wordModel = await TranslateAsync(lookupUrl, input, cancellationToken);
             return wordModel;
         }
 
