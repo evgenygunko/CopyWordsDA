@@ -11,7 +11,6 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
-        private readonly IGlobalSettings _globalSettings;
         private readonly ISettingsService _settingsService;
         private readonly IDialogService _dialogService;
         private readonly IInstantTranslationService _instantTranslationService;
@@ -26,7 +25,6 @@ namespace CopyWords.Core.ViewModels
         private CancellationTokenSource _cancellationTokenSource = new();
 
         public MainViewModel(
-            IGlobalSettings globalSettings,
             ISettingsService settingsService,
             IDialogService dialogService,
             IInstantTranslationService instantTranslationService,
@@ -36,7 +34,6 @@ namespace CopyWords.Core.ViewModels
             IConnectivityService connectivityService,
             IWordViewModel wordViewModel)
         {
-            _globalSettings = globalSettings;
             _settingsService = settingsService;
             _dialogService = dialogService;
             _instantTranslationService = instantTranslationService;
@@ -343,10 +340,7 @@ namespace CopyWords.Core.ViewModels
             {
                 AppSettings appSettings = _settingsService.LoadSettings();
 
-                wordModel = await _translationsService.LookUpWordAsync(searchTerm,
-                    new Models.Options(Enum.Parse<SourceLanguage>(appSettings.SelectedParser), _globalSettings.TranslatorAppUrl, _globalSettings.TranslatorAppRequestCode),
-                    _cancellationTokenSource.Token);
-
+                wordModel = await _translationsService.LookUpWordAsync(searchTerm, appSettings.SelectedParser, _cancellationTokenSource.Token);
                 if (wordModel == null)
                 {
                     await _dialogService.DisplayAlert("Cannot find word", $"Could not find a translation for '{searchTerm}'", "OK");

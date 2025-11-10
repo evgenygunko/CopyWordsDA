@@ -8,41 +8,40 @@ namespace CopyWords.Core.Services
 {
     public interface ITranslationsService
     {
-        Task<WordModel?> LookUpWordAsync(string wordToLookUp, Options options, CancellationToken cancellationToken);
+        Task<WordModel?> LookUpWordAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken);
     }
 
     public class TranslationsService : ITranslationsService
     {
         private readonly HttpClient _httpClient;
+        private readonly IGlobalSettings _globalSettings;
 
-        public TranslationsService(HttpClient httpClient)
+        public TranslationsService(
+            HttpClient httpClient,
+            IGlobalSettings globalSettings)
         {
             _httpClient = httpClient;
+            _globalSettings = globalSettings;
         }
 
-        public async Task<WordModel?> LookUpWordAsync(string wordToLookUp, Options options, CancellationToken cancellationToken)
+        public async Task<WordModel?> LookUpWordAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(wordToLookUp))
             {
                 throw new ArgumentException("Word to look up cannot be null or empty.", nameof(wordToLookUp));
             }
 
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options), "Options cannot be null.");
-            }
-
-            if (string.IsNullOrEmpty(options.TranslatorAppURL))
+            if (string.IsNullOrEmpty(_globalSettings.TranslatorAppUrl))
             {
                 throw new ArgumentException("TranslatorApp URL cannot be null or empty");
             }
 
             // Construct full URL by appending the API path and code
-            string lookupUrl = $"{options.TranslatorAppURL.TrimEnd('/')}/api/LookUpWord?code={options.TranslatorAppRequestCode}";
+            string lookupUrl = $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/LookUpWord?code={_globalSettings.TranslatorAppRequestCode}";
 
             var input = new LookUpWordRequest(
                 Text: wordToLookUp,
-                SourceLanguage: options.SourceLang.ToString(),
+                SourceLanguage: sourceLanguage,
                 DestinationLanguage: "Russian",
                 Version: "2");
 
