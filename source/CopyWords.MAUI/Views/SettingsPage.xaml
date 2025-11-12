@@ -22,8 +22,11 @@
             <On Platform="Android">
                 <views:SettingsViewAndroid />
             </On>
-            <On Platform="WinUI, MacCatalyst">
+            <On Platform="WinUI">
                 <views:SettingsViewWindows />
+            </On>
+            <On Platform="MacCatalyst">
+                <views:SettingsViewMacCatalyst />
             </On>
         </OnPlatform>
     </ScrollView>

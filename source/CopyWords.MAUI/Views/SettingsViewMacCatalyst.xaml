@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
+             xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
+             xmlns:validation="clr-namespace:CopyWords.Core.ViewModels.Validation;assembly=CopyWords.Core"
+             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
+             x:DataType="viewmodels:SettingsViewModel"
+             x:Class="CopyWords.MAUI.Views.SettingsViewMacCatalyst">
+
+    <ContentView.Resources>
+        <Color x:Key="AccentColor">#6C3EFA</Color>
+        <Color x:Key="AccentColorFaded">#EFE6FF</Color>
+        <Color x:Key="CardBackgroundColor">#FFFFFF</Color>
+        <Color x:Key="PageBackgroundColor">#F4F4F8</Color>
+
+        <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+        <converters:ShowErrorConverter x:Key="ShowErrorConverter" />
+
+        <Style x:Key="CardBorderStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}" />
+            <Setter Property="Padding" Value="22,20" />
+            <Setter Property="Margin" Value="0,14,0,0" />
+            <Setter Property="StrokeThickness" Value="0" />
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="18" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow Brush="#1A000000" Radius="16" Offset="0,6" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="InputBorderStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#FDFDFE" />
+            <Setter Property="Stroke" Value="#E0E0E5" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="14" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ValidationLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="#D64545" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="0,6,0,0" />
+        </Style>
+
+        <Style x:Key="SectionCaptionStyle" TargetType="Label">
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextColor" Value="#1E1E1E" />
+        </Style>
+
+        <Style x:Key="HelperTextStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="TextColor" Value="#636773" />
+        </Style>
+    </ContentView.Resources>
+
+    <Grid BackgroundColor="{StaticResource PageBackgroundColor}" Padding="36,26,36,40">
+        <VerticalStackLayout Spacing="18">
+            <!-- Data export / import -->
+            <Border Style="{StaticResource CardBorderStyle}">
+                <Grid RowSpacing="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Text="Export or import settings" Style="{StaticResource SectionCaptionStyle}" />
+                    <Label Grid.Row="1" Text="Save your preferences or bring them from another device." Style="{StaticResource HelperTextStyle}" />
+
+                    <HorizontalStackLayout Grid.Row="2" Spacing="12" Margin="0,6,0,0" HorizontalOptions="End">
+                        <Button Text="Export" Command="{Binding ExportSettingsCommand}" />
+                        <Button Text="Import" Command="{Binding ImportSettingsCommand}" />
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Path to Anki media collection -->
+            <Border Style="{StaticResource CardBorderStyle}">
+                <Grid RowSpacing="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Text="Path to Anki media collection" Style="{StaticResource SectionCaptionStyle}" />
+                    <Label Grid.Row="1" Text="Pick the folder that contains your audio files." Style="{StaticResource HelperTextStyle}" />
+
+                    <Grid Grid.Row="2" ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource InputBorderStyle}" VerticalOptions="Center">
+                            <Entry Text="{Binding AnkiSoundsFolder}"
+                                   Margin="14,6"
+                                   BackgroundColor="Transparent"
+                                   FontSize="14" />
+                        </Border>
+
+                        <Border Grid.Column="1" Style="{StaticResource InputBorderStyle}" BackgroundColor="{StaticResource AccentColor}" WidthRequest="48" HeightRequest="48">
+                            <ImageButton BackgroundColor="Transparent"
+                                         Command="{Binding PickAnkiSoundsFolderCommand}">
+                                <ImageButton.Source>
+                                    <FontImageSource
+                                        Color="White"
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static helpers:MaterialDesignIconFonts.Folder_open}" />
+                                </ImageButton.Source>
+                            </ImageButton>
+                        </Border>
+                    </Grid>
+
+                    <Label Grid.Row="3"
+                           Style="{StaticResource ValidationLabelStyle}"
+                           Text="{Binding ValidationResult, Converter={StaticResource ShowErrorConverter}, ConverterParameter={x:Static validation:SettingsViewModelValidator.AnkiSoundsFolderProperty}}"
+                           IsVisible="{Binding Source={RelativeSource Self}, Path=Text, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}" />
+                </Grid>
+            </Border>
+
+            <!-- Path to Ffmpeg -->
+            <Border Style="{StaticResource CardBorderStyle}" IsVisible="{Binding CanUseFfmpeg}">
+                <Grid RowSpacing="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Text="Path to Ffmpeg" Style="{StaticResource SectionCaptionStyle}" />
+                    <Label Grid.Row="1"
+                           Text="Point to the folder that contains the ffmpeg binary (try 'which ffmpeg')."
+                           Style="{StaticResource HelperTextStyle}"
+                           ToolTipProperties.Text="Run 'which ffmpeg' on MacOS or 'Get-Command ffmpeg' on Windows" />
+
+                    <Grid Grid.Row="2" ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource InputBorderStyle}" VerticalOptions="Center">
+                            <Entry Text="{Binding FfmpegBinFolder}" Margin="14,6" BackgroundColor="Transparent" FontSize="14" />
+                        </Border>
+
+                        <Border Grid.Column="1" Style="{StaticResource InputBorderStyle}" BackgroundColor="{StaticResource AccentColor}" WidthRequest="48" HeightRequest="48">
+                            <ImageButton BackgroundColor="Transparent"
+                                         Command="{Binding PickFfmpegBinFolderCommand}">
+                                <ImageButton.Source>
+                                    <FontImageSource
+                                        Color="White"
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static helpers:MaterialDesignIconFonts.Folder_open}" />
+                                </ImageButton.Source>
+                            </ImageButton>
+                        </Border>
+                    </Grid>
+
+                    <Label Grid.Row="3"
+                           Style="{StaticResource ValidationLabelStyle}"
+                           Text="{Binding ValidationResult, Converter={StaticResource ShowErrorConverter}, ConverterParameter={x:Static validation:SettingsViewModelValidator.FfmpegBinFolderProperty}}"
+                           IsVisible="{Binding Source={RelativeSource Self}, Path=Text, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}" />
+                </Grid>
+            </Border>
+
+            <!-- Path to mp3gain -->
+            <Border Style="{StaticResource CardBorderStyle}" IsVisible="{Binding CanUseMp3gain}">
+                <Grid RowSpacing="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <HorizontalStackLayout Grid.Row="0" Spacing="12">
+                        <Label Text="Use mp3gain" Style="{StaticResource SectionCaptionStyle}" VerticalOptions="Center" />
+                        <CheckBox IsChecked="{Binding UseMp3gain}" IsEnabled="{Binding CanUseMp3gain}" />
+                    </HorizontalStackLayout>
+
+                    <Label Grid.Row="1"
+                           Text="Normalize volume for generated audio files (requires mp3gain 1.3.4)."
+                           Style="{StaticResource HelperTextStyle}" />
+
+                    <Label Grid.Row="2"
+                           Text="Path to mp3gain"
+                           Style="{StaticResource HelperTextStyle}"
+                           ToolTipProperties.Text="Download mp3gain with unicode support (v1.3.4): https://sourceforge.net/projects/mp3gain/files/MP3Gain-Windows%20(Beta)/1.3.4/">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding UseMp3gain}" Value="false">
+                                <Setter Property="TextColor" Value="#C9C9D3" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+
+                    <Grid Grid.Row="3" ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource InputBorderStyle}" VerticalOptions="Center">
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding UseMp3gain}" Value="false">
+                                    <Setter Property="Opacity" Value="0.6" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <Entry Text="{Binding Mp3gainPath}" Margin="14,6" BackgroundColor="Transparent" FontSize="14" IsEnabled="{Binding UseMp3gain}" />
+                        </Border>
+
+                        <Border Grid.Column="1" Style="{StaticResource InputBorderStyle}" BackgroundColor="{StaticResource AccentColor}" WidthRequest="48" HeightRequest="48">
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding UseMp3gain}" Value="false">
+                                    <Setter Property="BackgroundColor" Value="#E4E4ED" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <ImageButton BackgroundColor="Transparent"
+                                         Command="{Binding PickMp3gainPathCommand}"
+                                         IsEnabled="{Binding UseMp3gain}">
+                                <ImageButton.Source>
+                                    <FontImageSource
+                                        Color="White"
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static helpers:MaterialDesignIconFonts.Folder_open}" />
+                                </ImageButton.Source>
+                            </ImageButton>
+                        </Border>
+                    </Grid>
+
+                    <Label Grid.Row="4"
+                           Style="{StaticResource ValidationLabelStyle}"
+                           Text="{Binding ValidationResult, Converter={StaticResource ShowErrorConverter}, ConverterParameter={x:Static validation:SettingsViewModelValidator.Mp3gainPathProperty}}"
+                           IsVisible="{Binding Source={RelativeSource Self}, Path=Text, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}" />
+                </Grid>
+            </Border>
+
+            <!-- Translator settings -->
+            <Border Style="{StaticResource CardBorderStyle}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Translator options" Style="{StaticResource SectionCaptionStyle}" />
+
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Show copy buttons" Style="{StaticResource HelperTextStyle}" VerticalOptions="Center" />
+                        <CheckBox Grid.Column="1" IsChecked="{Binding ShowCopyButtons}" />
+                    </Grid>
+
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Copy translated meanings" Style="{StaticResource HelperTextStyle}" VerticalOptions="Center" />
+                        <CheckBox Grid.Column="1" IsChecked="{Binding CopyTranslatedMeanings}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Actions -->
+            <HorizontalStackLayout HorizontalOptions="End" Spacing="12" Margin="0,12,0,0">
+                <Button Text="Save" Command="{Binding SaveSettingsCommand}" />
+                <Button Text="Cancel" Command="{Binding CancelCommand}" />
+            </HorizontalStackLayout>
+
+            <Label Text="{Binding About}" FontSize="12" TextColor="#6E6E73" HorizontalOptions="Start" Margin="4,10,0,0" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>
