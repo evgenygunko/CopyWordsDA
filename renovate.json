@@ -1,0 +1,104 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:recommended"],
+    "platformCommit": "enabled",
+    "dependencyDashboard": true,
+    "dependencyDashboardTitle": "🤖 Renovate Dependency Dashboard",
+    "hostRules": [
+        {
+            "hostType": "nuget",
+            "matchHost": "https://api.nuget.org"
+        }
+    ],
+    "enabledManagers": ["nuget", "npm", "dockerfile"],
+    "packageRules": [
+        {
+            "description": "Group all NuGet package updates together",
+            "matchManagers": ["nuget"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "groupName": "NuGet dependencies (non-major)",
+            "groupSlug": "nuget-dependencies"
+        },
+        {
+            "description": "Separate major NuGet updates",
+            "matchManagers": ["nuget"],
+            "matchUpdateTypes": ["major"],
+            "groupName": "NuGet dependencies (major)",
+            "groupSlug": "nuget-major",
+            "labels": ["major-update", "nuget"]
+        },
+        {
+            "description": "Group all npm package updates together",
+            "matchManagers": ["npm"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "groupName": "npm dependencies (non-major)",
+            "groupSlug": "npm-dependencies"
+        },
+        {
+            "description": "Separate major npm updates",
+            "matchManagers": ["npm"],
+            "matchUpdateTypes": ["major"],
+            "groupName": "npm dependencies (major)",
+            "groupSlug": "npm-major",
+            "labels": ["major-update", "npm"]
+        },
+        {
+            "description": "Automerge minor and patch updates for npm devDependencies",
+            "matchManagers": ["npm"],
+            "matchDepTypes": ["devDependencies"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "automerge": true,
+            "automergeType": "pr"
+        },
+        {
+            "description": "Group Prettier and related tools",
+            "matchPackageNames": ["prettier", "pretty-quick"],
+            "groupName": "Prettier",
+            "automerge": true
+        },
+        {
+            "description": "Group .NET test packages",
+            "matchManagers": ["nuget"],
+            "matchPackagePatterns": ["^xunit", "^NUnit", "^MSTest", "^coverlet"],
+            "groupName": "Test dependencies"
+        },
+        {
+            "description": "Group Microsoft packages",
+            "matchManagers": ["nuget"],
+            "matchPackagePatterns": ["^Microsoft\\."],
+            "groupName": "Microsoft dependencies",
+            "groupSlug": "microsoft-deps"
+        },
+        {
+            "description": "Update Dockerfile base images",
+            "matchManagers": ["dockerfile"],
+            "enabled": true,
+            "groupName": "Docker base images"
+        }
+    ],
+    "labels": ["dependencies", "renovate"],
+    "assignees": [],
+    "reviewers": ["evgeny.gunko@gmail.com"],
+    "prConcurrentLimit": 5,
+    "prCreation": "immediate",
+    "prHourlyLimit": 0,
+    "rangeStrategy": "bump",
+    "semanticCommits": "enabled",
+    "commitMessagePrefix": "chore(deps):",
+    "commitMessageAction": "update",
+    "commitMessageTopic": "{{depName}}",
+    "commitMessageExtra": "to {{newVersion}}",
+    "vulnerabilityAlerts": {
+        "enabled": true,
+        "labels": ["security", "priority-high"],
+        "assignees": []
+    },
+    "lockFileMaintenance": {
+        "enabled": true,
+        "schedule": ["before 6am on Monday"],
+        "commitMessageAction": "refresh lockfile"
+    },
+    "timezone": "UTC",
+    "azureAutoComplete": false,
+    "azureWorkItemId": 0
+}
