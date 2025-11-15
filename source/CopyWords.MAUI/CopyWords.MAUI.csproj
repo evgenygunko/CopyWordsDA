@@ -1,63 +1,49 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!-- Default target frameworks for non-Windows platforms (macOS/Linux) -->
-    <TargetFrameworks>net9.0-maccatalyst;net9.0-android</TargetFrameworks>
-
+    <TargetFrameworks>net10.0-maccatalyst;net10.0-android</TargetFrameworks>
     <!-- On Windows, exclude MacCatalyst and include Windows platform -->
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net9.0-android;net9.0-windows10.0.19041.0</TargetFrameworks>
-
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net10.0-android;net10.0-windows10.0.19041.0</TargetFrameworks>
     <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-    <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
-
+    <!-- <TargetFrameworks>$(TargetFrameworks);net10.0-tizen</TargetFrameworks> -->
     <!-- Note for MacCatalyst:
     The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
     When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
     The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
     either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
     <!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
-
     <OutputType>Exe</OutputType>
     <RootNamespace>CopyWords.MAUI</RootNamespace>
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
     <!-- Display name -->
     <ApplicationTitle>CopyWords</ApplicationTitle>
-
     <!-- App Identifier -->
     <ApplicationId>com.companyname.copywords.maui</ApplicationId>
     <ApplicationIdGuid>236EB894-5837-4869-8977-4ACF61BDD5CE</ApplicationIdGuid>
-
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
-
     <!-- Affect file info on Windows -->
     <FileVersion>1.0.10</FileVersion>
-
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
-    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-
     <!-- https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/data-binding/compiled-bindings?view=net-maui-9.0&preserve-view=true#compile-bindings-that-define-the-source-property -->
     <MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-ios|AnyCPU'">
     <CreatePackage>false</CreatePackage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-
     <!-- Try to use a different guid for the unpackaged app, otherwise it won't run if a release version is installed from Github. -->
     <ApplicationId>com.companyname.copywords.maui_unpackaged</ApplicationId>
     <ApplicationIdGuid>8B3600EB-E6AD-4B34-94F9-CAB2540E8547</ApplicationIdGuid>
-
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors>$(WarningsAsErrors);XC0022;XC0023</WarningsAsErrors>
@@ -67,43 +53,34 @@
     <Title>CopyWords.MAUI</Title>
     <DefaultLanguage>en</DefaultLanguage>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-maccatalyst|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-maccatalyst|AnyCPU'">
     <CreatePackage>false</CreatePackage>
     <MtouchLink>SdkOnly</MtouchLink>
     <_MauiForceXamlCForDebug>true</_MauiForceXamlCForDebug>
   </PropertyGroup>
-
   <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release'">
     <AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
     <PackageCertificateThumbprint>69C9470BA743C3219B9F2D3A56D0D0F38B45BBDF</PackageCertificateThumbprint>
   </PropertyGroup>
-
   <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
-      <RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
+    <RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
   </PropertyGroup>
-
-	<ItemGroup>
-		<TrimmerRootAssembly Include="CommunityToolkit.Maui" RootMode="All" />
-	</ItemGroup>
-
+  <ItemGroup>
+    <TrimmerRootAssembly Include="CommunityToolkit.Maui" RootMode="All" />
+  </ItemGroup>
   <ItemGroup>
     <!-- App Icon -->
     <!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
     <MauiIcon Condition="'$(Configuration)' == 'DEBUG'" Include="Resources\AppIcon\AppIconDebug\appicon.png" BaseSize="400,400" />
     <MauiIcon Condition="'$(Configuration)' == 'RELEASE'" Include="Resources\AppIcon\appicon.svg" />
-
     <!-- Splash Screen -->
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#FAFAFA" BaseSize="128,128" />
-
     <!-- Images -->
     <MauiImage Include="Resources\Images\flag_of_denmark.svg" BaseSize="64,64" />
     <MauiImage Include="Resources\Images\flag_of_spain.svg" BaseSize="64,64" />
     <MauiImage Include="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
-
     <!-- Custom Fonts -->
     <MauiFont Include="Resources\Fonts\*" />
-
     <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
@@ -111,27 +88,28 @@
     <None Remove="Resources\Fonts\MaterialIcons-Regular.ttf" />
     <None Remove="Resources\Fonts\MaterialIconsOutlined-Regular.otf" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="FFMpegCore" Version="5.4.0" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="12.3.0" />
-    <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="6.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.10" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="13.0.0" />
+    <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="7.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.11" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.11" />
     <PackageReference Include="Sentry.Maui" Version="5.16.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
     <PackageReference Include="Syncfusion.Licensing" Version="31.2.10" />
     <PackageReference Include="Syncfusion.Maui.Inputs" Version="31.2.10" />
     <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.7" />
-    <PackageReference Include="System.Text.Json" Version="9.0.11" />
+    <!-- Explicit AndroidX package references to resolve version conflicts -->
+    <PackageReference Include="Xamarin.AndroidX.Lifecycle.Common" Version="2.9.2.1" Condition="$(TargetFramework.Contains('android'))" />
+    <PackageReference Include="Xamarin.AndroidX.Lifecycle.Common.Java8" Version="2.9.2.1" Condition="$(TargetFramework.Contains('android'))" />
+    <PackageReference Include="Xamarin.AndroidX.Lifecycle.Runtime" Version="2.9.2.1" Condition="$(TargetFramework.Contains('android'))" />
+    <PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData.Core" Version="2.9.2.1" Condition="$(TargetFramework.Contains('android'))" />
+    <PackageReference Include="Xamarin.AndroidX.Lifecycle.Runtime.Android" Version="2.9.2.1" Condition="$(TargetFramework.Contains('android'))" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\CopyWords.Core\CopyWords.Core.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <MauiXaml Update="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -185,12 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
   </ItemGroup>
-
-<ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="appsettings.json" />
-
     <EmbeddedResource Include="appsettings.*.json">
       <DependentUpon>appsettings.json</DependentUpon>
     </EmbeddedResource>
-</ItemGroup>
+  </ItemGroup>
 </Project>

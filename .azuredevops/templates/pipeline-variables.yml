@@ -1,12 +1,12 @@
 variables:
     - name: 'DOTNET_VERSION'
-      value: '9.0.x'
+      value: '10.0.x'
 
     - name: 'FRAMEWORK_WINDOWS'
-      value: 'net9.0-windows10.0.19041.0'
+      value: 'net10.0-windows10.0.19041.0'
 
     - name: 'FRAMEWORK_ANDROID'
-      value: 'net9.0-android'
+      value: 'net10.0-android'
 
     - name: 'BUILD_CONFIGURATION'
       value: 'Release'
