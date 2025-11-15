@@ -74,6 +74,12 @@
             "matchManagers": ["dockerfile"],
             "enabled": true,
             "groupName": "Docker base images"
+        },
+        {
+            "description": "Exclude FluentAssertions from updates",
+            "matchManagers": ["nuget"],
+            "matchPackageNames": ["FluentAssertions"],
+            "enabled": false
         }
     ],
     "labels": ["dependencies", "renovate"],
