@@ -30,6 +30,7 @@ jobs:
 
                     (Get-Content $file) `
                         -replace '"TranslatorAppUrl":\s*""', '"TranslatorAppUrl": "$(TranslatorAppUrl)"' `
+                        -replace '"TranslatorAppRequestCode":\s*""', '"TranslatorAppRequestCode": "$(TranslatorAppRequestCode)"' `
                         -replace '"SyncfusionLicenseKey":\s*""', '"SyncfusionLicenseKey": "$(SyncfusionLicenseKey)"' `
                         -replace '"SentryDsn":\s*""', '"SentryDsn": "$(SentryDsn)"' `
                         -replace '"LaunchDarklyMobileKey":\s*""', '"LaunchDarklyMobileKey": "$(LaunchDarklyMobileKey)"' `

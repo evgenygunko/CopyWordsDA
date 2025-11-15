@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="exclusion.dic" />
+  </Folder>
+  <Project Path="source\CopyWords.MAUI\CopyWords.MAUI.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+  <Project Path="source\CopyWords.Core\CopyWords.Core.csproj" />
+  <Project Path="source\CopyWords.Core.Tests\CopyWords.Core.Tests.csproj" />
+</Solution>
