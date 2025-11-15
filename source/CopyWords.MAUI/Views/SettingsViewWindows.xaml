@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/maui/global"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
-             xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
              xmlns:validation="clr-namespace:CopyWords.Core.ViewModels.Validation;assembly=CopyWords.Core"
-             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
-             x:DataType="viewmodels:SettingsViewModel"
+             x:DataType="SettingsViewModel"
              x:Class="CopyWords.MAUI.Views.SettingsViewWindows">
 
     <ContentView.Resources>
-        <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
-        <converters:ShowErrorConverter x:Key="ShowErrorConverter" />
+        <MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+        <ShowErrorConverter x:Key="ShowErrorConverter" />
 
         <Style x:Key="InvalidEntryStyle" TargetType="Entry">
             <Setter Property="TextColor" Value="Red" />
@@ -92,7 +89,7 @@
                     <ImageButton.Source>
                         <FontImageSource
                             FontFamily="MaterialIconsOutlined-Regular"
-                            Glyph="{x:Static helpers:MaterialDesignIconFonts.Folder_open}"/>
+                            Glyph="{x:Static MaterialDesignIconFonts.Folder_open}"/>
                     </ImageButton.Source>
                 </ImageButton>
 
@@ -136,7 +133,7 @@
                     <ImageButton.Source>
                         <FontImageSource
                             FontFamily="MaterialIconsOutlined-Regular"
-                            Glyph="{x:Static helpers:MaterialDesignIconFonts.Folder_open}" />
+                            Glyph="{x:Static MaterialDesignIconFonts.Folder_open}" />
                     </ImageButton.Source>
                 </ImageButton>
 
@@ -196,7 +193,7 @@
                     <ImageButton.Source>
                         <FontImageSource
                             FontFamily="MaterialIconsOutlined-Regular"
-                            Glyph="{x:Static helpers:MaterialDesignIconFonts.Folder_open}"/>
+                            Glyph="{x:Static MaterialDesignIconFonts.Folder_open}"/>
                     </ImageButton.Source>
 
                     <ImageButton.Triggers>
@@ -219,7 +216,7 @@
             <VerticalStackLayout>
                 <HorizontalStackLayout>
                     <Label
-                            Text="Show copy buttons:"
+                            Text="Show copy "
                             VerticalOptions="Center"></Label>
                     <CheckBox
                             IsChecked="{Binding ShowCopyButtons}"

@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/maui/global"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
-             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
-             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:Class="CopyWords.MAUI.Views.GetUpdatePage"
-             x:DataType="viewmodels:GetUpdateViewModel"
+             x:DataType="GetUpdateViewModel"
              x:Name="contentPageGetUpdatePage"
              Title="Update avaliable">
 
     <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior
+        <EventToCommandBehavior
             EventName="Appearing"
-            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageGetUpdatePage}, x:DataType=views:GetUpdatePage}"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageGetUpdatePage}, x:DataType=GetUpdatePage}"
             Command="{Binding GetLatestReleaseCommand}" />
     </ContentPage.Behaviors>
 
     <ContentPage.Resources>
         <!-- Workaround for a crash on Mac: type IsStringNotNullOrWhiteSpaceConverter cannot be found -->
         <!--<toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />-->
-        <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
-        <converters:MyIsStringNullOrWhiteSpaceConverter x:Key="IsStringNullOrWhiteSpaceConverter" />
+        <MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+        <MyIsStringNullOrWhiteSpaceConverter x:Key="IsStringNullOrWhiteSpaceConverter" />
     </ContentPage.Resources>
 
     <VerticalStackLayout VerticalOptions="Center">

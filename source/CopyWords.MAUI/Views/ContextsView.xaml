@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/maui/global"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
-             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:templateSelector="clr-namespace:CopyWords.MAUI.Helpers"
              x:Class="CopyWords.MAUI.Views.ContextsView">
 
@@ -10,7 +8,7 @@
         <ResourceDictionary>
             <!-- For SpanishDict -->
             <DataTemplate x:Key="contextsTemplate"
-                          x:DataType="viewmodels:ContextViewModel">
+                          x:DataType="ContextViewModel">
                 <!-- Context -->
                 <VerticalStackLayout VerticalOptions="Center">
                     <HorizontalStackLayout>
@@ -27,7 +25,7 @@
                     </HorizontalStackLayout>
 
                     <!--Meanings -->
-                    <views:MeaningsView Margin="10,0,0,0" />
+                    <MeaningsView Margin="10,0,0,0" />
 
                     <!-- Horizontal line -->
                     <BoxView Color="LightGray" HeightRequest="1" Margin="0,10,0,10"/>
@@ -36,10 +34,10 @@
 
             <!-- For DDO -->
             <DataTemplate x:Key="meaningsTemplate"
-                          x:DataType="viewmodels:ContextViewModel">
+                          x:DataType="ContextViewModel">
 
                 <!--Meanings -->
-                <views:MeaningsView />
+                <MeaningsView />
             </DataTemplate>
 
             <templateSelector:ContextTemplateSelector x:Key="contextTemplateSelector"
@@ -50,7 +48,7 @@
     </ContentView.Resources>
 
     <StackLayout>
-        <CollectionView x:DataType="viewmodels:DefinitionViewModel"
+        <CollectionView x:DataType="DefinitionViewModel"
                         ItemsSource="{Binding ContextViewModels}"
                         ItemTemplate="{StaticResource contextTemplateSelector}" />
     </StackLayout>

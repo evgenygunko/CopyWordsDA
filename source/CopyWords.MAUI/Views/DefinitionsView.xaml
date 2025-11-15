@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/maui/global"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
-             xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
-             xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
-             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
-             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
              x:Class="CopyWords.MAUI.Views.DefinitionsView">
 
     <ContentView.Resources>
         <ResourceDictionary>
             <!-- Workaround for a crash on Mac: type IsStringNotNullOrWhiteSpaceConverter cannot be found -->
             <!--<toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />-->
-            <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+            <MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
 
             <DataTemplate x:Key="definitionsTemplate"
-                          x:DataType="viewmodels:DefinitionViewModel">
+                          x:DataType="DefinitionViewModel">
                 <!-- Definitions -->
                 <VerticalStackLayout>
                     <Grid>
@@ -35,10 +29,10 @@
                         </VerticalStackLayout>
 
                         <!-- Block with headword and its translations -->
-                        <views:HeadwordView Grid.Row="1"
+                        <HeadwordView Grid.Row="1"
                                 IsVisible="{Binding English, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
                                 BindingContext="{Binding Path=HeadwordViewModel}"
-                                x:DataType="viewmodels:HeadwordViewModel"
+                                x:DataType="HeadwordViewModel"
                                 Margin="0,5,0,0" />
 
                         <!-- Endings -->
@@ -59,7 +53,7 @@
                         <BoxView Grid.Row="3" Color="LightGray" HeightRequest="1" Margin="0,10,0,0" />
 
                         <!-- Contexts -->
-                        <views:ContextsView Grid.Row="4" Margin="0,15,0,0" />
+                        <ContextsView Grid.Row="4" Margin="0,15,0,0" />
                     </Grid>
                 </VerticalStackLayout>
             </DataTemplate>
@@ -67,7 +61,7 @@
     </ContentView.Resources>
 
     <VerticalStackLayout
-            x:DataType="viewmodels:WordViewModel"
+            x:DataType="WordViewModel"
             BindableLayout.ItemsSource="{Binding DefinitionViewModels}"
             BindableLayout.ItemTemplate="{StaticResource definitionsTemplate}" />
 

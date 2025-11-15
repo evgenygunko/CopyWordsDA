@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/maui/global"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:converters="clr-namespace:CopyWords.MAUI.Converters"
-             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
-             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
-             x:DataType="viewmodels:HeadwordViewModel"
+             x:DataType="HeadwordViewModel"
              x:Class="CopyWords.MAUI.Views.HeadwordView">
 
     <ContentView.Resources>
         <ResourceDictionary>
             <!-- Workaround for a crash on Mac: type IsStringNotNullOrWhiteSpaceConverter cannot be found -->
             <!--<toolkit:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />-->
-            <converters:MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
-            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
+            <InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </ContentView.Resources>
 

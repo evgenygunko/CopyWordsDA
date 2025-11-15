@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/maui/global"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
-             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
-             xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
-             x:DataType="viewmodels:LastCrashViewModel"
+             x:DataType="LastCrashViewModel"
              x:Class="CopyWords.MAUI.Views.LastCrashPage"
              x:Name="contentPageLastCrashPage"
              Title="App Crash Report"
              BackgroundColor="{AppThemeBinding Light={StaticResource AppBackgroundLightColor}, Dark={StaticResource AppBackgroundDarkColor}}">
 
     <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior
+        <EventToCommandBehavior
             EventName="Appearing"
-            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageLastCrashPage}, x:DataType=views:LastCrashPage}"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageLastCrashPage}, x:DataType=LastCrashPage}"
             Command="{Binding GetCrashDumpInfoCommand}" />
     </ContentPage.Behaviors>
 
@@ -103,7 +99,7 @@
                                         <FontImageSource
                                             Color="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
                                             FontFamily="MaterialIconsOutlined-Regular"
-                                            Glyph="{x:Static helpers:MaterialDesignIconFonts.Content_copy}" />
+                                            Glyph="{x:Static MaterialDesignIconFonts.Content_copy}" />
                                     </ImageButton.Source>
                                 </ImageButton>
                             </HorizontalStackLayout>
@@ -144,7 +140,7 @@
                                         <FontImageSource
                                             Color="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
                                             FontFamily="MaterialIconsOutlined-Regular"
-                                            Glyph="{x:Static helpers:MaterialDesignIconFonts.Content_copy}" />
+                                            Glyph="{x:Static MaterialDesignIconFonts.Content_copy}" />
                                     </ImageButton.Source>
                                 </ImageButton>
                             </HorizontalStackLayout>

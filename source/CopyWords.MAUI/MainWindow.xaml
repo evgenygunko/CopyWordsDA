@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Window xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<Window xmlns="http://schemas.microsoft.com/dotnet/maui/global"
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-        xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
         xmlns:local="clr-namespace:CopyWords.MAUI"
-        xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
-        x:DataType="viewmodels:MainWindowViewModel"
+        x:DataType="MainWindowViewModel"
         x:Class="CopyWords.MAUI.MainWindow">
 
     <Window.Page>
@@ -31,7 +29,7 @@
                     <ImageButton.Source>
                         <FontImageSource
                                 FontFamily="MaterialIconsOutlined-Regular"
-                                Glyph="{x:Static helpers:MaterialDesignIconFonts.Settings}"
+                                Glyph="{x:Static MaterialDesignIconFonts.Settings}"
                                 Size="26" />
                     </ImageButton.Source>
                 </ImageButton>

@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/maui/global"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CopyWords.MAUI.Views.SettingsPage"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
-             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
-             x:DataType="viewmodels:SettingsViewModel"
+             x:DataType="SettingsViewModel"
              x:Name="contentPageSettingsPage"
              Title="Settings"
              Shell.BackgroundColor="Gray">
 
     <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior
+        <EventToCommandBehavior
             EventName="Appearing"
-            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageSettingsPage}, x:DataType=views:SettingsPage}"
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageSettingsPage}, x:DataType=SettingsPage}"
             Command="{Binding InitCommand}" />
     </ContentPage.Behaviors>
 
     <ScrollView>
         <OnPlatform x:TypeArguments="View">
             <On Platform="Android">
-                <views:SettingsViewAndroid />
+                <SettingsViewAndroid />
             </On>
             <On Platform="WinUI">
-                <views:SettingsViewWindows />
+                <SettingsViewWindows />
             </On>
             <On Platform="MacCatalyst">
-                <views:SettingsViewMacCatalyst />
+                <SettingsViewMacCatalyst />
             </On>
         </OnPlatform>
     </ScrollView>

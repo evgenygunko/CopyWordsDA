@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="CopyWords.MAUI.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:CopyWords.MAUI.Views"
-    xmlns:local="clr-namespace:CopyWords.MAUI"
-    xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
-    x:DataType="viewmodels:ShellViewModel"
-    Shell.FlyoutBehavior="Disabled"
-    Shell.NavBarIsVisible="{Binding ShowNavBar}">
+<Shell xmlns="http://schemas.microsoft.com/dotnet/maui/global"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       x:DataType="ShellViewModel"
+       x:Class="CopyWords.MAUI.AppShell"
+       Shell.FlyoutBehavior="Disabled"
+       Shell.NavBarIsVisible="{Binding ShowNavBar}">
 
     <Shell.BindingContext>
-        <viewmodels:ShellViewModel />
+        <ShellViewModel />
     </Shell.BindingContext>
 
     <ShellContent
         Title="CopyWords"
-        ContentTemplate="{DataTemplate views:MainPage}"
+        ContentTemplate="{DataTemplate MainPage}"
         Route="MainPage" />
 
 </Shell>

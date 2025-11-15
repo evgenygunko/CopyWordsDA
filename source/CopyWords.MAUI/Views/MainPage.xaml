@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/maui/global"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:helpers="clr-namespace:CopyWords.MAUI.Helpers"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
-             xmlns:views="clr-namespace:CopyWords.MAUI.Views"
              xmlns:behaviors="clr-namespace:CopyWords.MAUI.Behaviors"
-             xmlns:viewmodels="clr-namespace:CopyWords.Core.ViewModels;assembly=CopyWords.Core"
-             x:DataType="viewmodels:MainViewModel"
+             x:DataType="MainViewModel"
              x:Class="CopyWords.MAUI.Views.MainPage"
              x:Name="contentPageMainPage"
              Shell.BackgroundColor="Gray">
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior
-            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageMainPage}, x:DataType=views:MainPage}"
+        <EventToCommandBehavior
+            BindingContext="{Binding Path=BindingContext, Source={x:Reference contentPageMainPage}, x:DataType=MainPage}"
             EventName="Appearing"
             Command="{Binding InitCommand}" />
     </ContentPage.Behaviors>
@@ -31,7 +27,7 @@
             <ToolbarItem.IconImageSource>
                 <FontImageSource
                     FontFamily="MaterialIconsOutlined-Regular"
-                    Glyph="{x:Static helpers:MaterialDesignIconFonts.Arrow_back}"/>
+                    Glyph="{x:Static MaterialDesignIconFonts.Arrow_back}"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>-->
 
@@ -51,7 +47,7 @@
             <ToolbarItem.IconImageSource>
                 <FontImageSource
                     FontFamily="MaterialIconsOutlined-Regular"
-                    Glyph="{x:Static helpers:MaterialDesignIconFonts.History}"/>
+                    Glyph="{x:Static MaterialDesignIconFonts.History}"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
 
@@ -59,7 +55,7 @@
             <ToolbarItem.IconImageSource>
                 <FontImageSource
                     FontFamily="MaterialIconsOutlined-Regular"
-                    Glyph="{x:Static helpers:MaterialDesignIconFonts.Settings}"/>
+                    Glyph="{x:Static MaterialDesignIconFonts.Settings}"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
@@ -103,7 +99,7 @@
                         </editors:SfAutocomplete.FilterBehavior>
 
                         <editors:SfAutocomplete.Behaviors>
-                            <toolkit:EventToCommandBehavior
+                            <EventToCommandBehavior
                                 EventName="SelectionChanged"
                                 BindingContext="{Binding Path=BindingContext, Source={x:Reference autocomplete}, x:DataType=editors:SfAutocomplete}"
                                 Command="{Binding LookUpCommand}"/>
@@ -112,7 +108,7 @@
                 </Border>
 
                 <!-- Parsed word user control -->
-                <views:WordView Grid.Row="1" BindingContext="{Binding Path=WordViewModel}" />
+                <WordView Grid.Row="1" BindingContext="{Binding Path=WordViewModel}" />
 
                 <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsBusy}" VerticalOptions="Center" HorizontalOptions="Center" />
             </Grid>
