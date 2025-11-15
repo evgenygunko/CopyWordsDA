@@ -97,7 +97,7 @@ namespace CopyWords.Core.ViewModels
         #region Commands
 
         [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("maccatalyst15.0")]
         [SupportedOSPlatform("android")]
         [RelayCommand]
         public async Task ExportSettingsAsync(CancellationToken cancellationToken)
@@ -144,7 +144,7 @@ namespace CopyWords.Core.ViewModels
         }
 
         [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("maccatalyst15.0")]
         [SupportedOSPlatform("android")]
         [RelayCommand]
         public async Task PickAnkiSoundsFolderAsync(CancellationToken cancellationToken)
@@ -157,7 +157,7 @@ namespace CopyWords.Core.ViewModels
         }
 
         [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("maccatalyst15.0")]
         [SupportedOSPlatform("android")]
         [RelayCommand]
         public async Task PickFfmpegBinFolderAsync(CancellationToken cancellationToken)

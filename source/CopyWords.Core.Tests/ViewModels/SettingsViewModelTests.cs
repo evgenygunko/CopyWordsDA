@@ -130,7 +130,7 @@ namespace CopyWords.Core.Tests.ViewModels
         #region Tests for ExportSettingsAsync
 
         [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("maccatalyst15.0")]
         [TestMethod]
         public async Task ExportSettingsAsync_WhenFileIsNotSelected_DoesNotExportSettings()
         {
@@ -161,7 +161,7 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("maccatalyst15.0")]
         [TestMethod]
         public async Task ExportSettingsAsync_WhenFileIsSelected_ExportsSettings()
         {

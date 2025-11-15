@@ -48,7 +48,7 @@ namespace CopyWords.Core.Services
         #region Public Methods
 
         [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("maccatalyst15.0")]
         [SupportedOSPlatform("android")]
         public async Task<bool> SaveSoundFileAsync(string url, string soundFileName, CancellationToken cancellationToken)
         {
@@ -106,7 +106,7 @@ namespace CopyWords.Core.Services
         #region Internal Methods
 
         [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst14.0")]
+        [SupportedOSPlatform("maccatalyst15.0")]
         [SupportedOSPlatform("android")]
         internal async Task<bool> SaveFileWithFileSaverAsync(string url, string soundFileName, CancellationToken cancellationToken)
         {

@@ -53,7 +53,7 @@ steps:
           command: 'publish'
           publishWebProjects: false
           projects: '**/CopyWords.MAUI.csproj'
-          arguments: '-c:$(BUILD_CONFIGURATION) -f $(FRAMEWORK_WINDOWS) -p:RuntimeIdentifierOverride=win10-x64'
+          arguments: '-c:$(BUILD_CONFIGURATION) -f $(FRAMEWORK_WINDOWS) -p:RuntimeIdentifierOverride=win-x64'
           zipAfterPublish: false
       condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
 
