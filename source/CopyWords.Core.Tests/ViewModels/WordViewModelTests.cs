@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using AutoFixture;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Services;
@@ -109,7 +109,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             sut.IsBusy.Should().BeFalse();
             saveSoundFileServiceMock.Verify();
-            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot save sound file", It.IsAny<string>(), "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot save sound file", It.IsAny<string>(), "OK"));
         }
 
         #endregion
@@ -158,7 +158,7 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
             clipboardServiceMock.VerifyNoOtherCalls();
-            dialogServiceMock.Verify(x => x.DisplayAlert("Text not copied", "Please select at least one example", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Text not copied", "Please select at least one example", "OK"));
         }
 
         [TestMethod]
@@ -183,7 +183,7 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
             clipboardServiceMock.VerifyNoOtherCalls();
-            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot copy front", "exception from unit tests", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot copy front", "exception from unit tests", "OK"));
         }
 
         [TestMethod]
@@ -208,7 +208,7 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.CompileAndCopyToClipboard("front", _func.Object);
 
             clipboardServiceMock.VerifyNoOtherCalls();
-            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot copy front", "Error occurred while trying to copy front: exception from unit tests", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot copy front", "Error occurred while trying to copy front: exception from unit tests", "OK"));
         }
 
         #endregion
@@ -222,7 +222,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock
-                .Setup(x => x.DisplayActionSheet("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Front", "Back", "Examples"))
+                .Setup(x => x.DisplayActionSheetAsync("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Front", "Back", "Examples"))
                 .ReturnsAsync("Front")
                 .Verifiable();
 
@@ -250,7 +250,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock
-                .Setup(x => x.DisplayActionSheet("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Front", "Back", "Examples"))
+                .Setup(x => x.DisplayActionSheetAsync("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Front", "Back", "Examples"))
                 .ReturnsAsync("Back")
                 .Verifiable();
 
@@ -278,7 +278,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock
-                .Setup(x => x.DisplayActionSheet("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Part of speech"))
+                .Setup(x => x.DisplayActionSheetAsync("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Part of speech"))
                 .ReturnsAsync("Part of speech")
                 .Verifiable();
 
@@ -306,7 +306,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock
-                .Setup(x => x.DisplayActionSheet("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Endings"))
+                .Setup(x => x.DisplayActionSheetAsync("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Endings"))
                 .ReturnsAsync("Endings")
                 .Verifiable();
 
@@ -334,7 +334,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var dialogServiceMock = new Mock<IDialogService>();
             dialogServiceMock
-                .Setup(x => x.DisplayActionSheet("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Front", "Back", "Examples"))
+                .Setup(x => x.DisplayActionSheetAsync("Select field to copy:", "Cancel", (string)null!, FlowDirection.LeftToRight, "Front", "Back", "Examples"))
                 .ReturnsAsync("Examples")
                 .Verifiable();
 
@@ -462,7 +462,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             // Assert
             shareMock.Verify(x => x.RequestAsync(It.IsAny<ShareTextRequest>()), Times.Never);
-            dialogServiceMock.Verify(x => x.DisplayAlert("Oops!", "You need to select at least one example before sharing.", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Oops!", "You need to select at least one example before sharing.", "OK"));
         }
 
         [TestMethod]
@@ -495,7 +495,7 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.ShareAsync();
 
             // Assert
-            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot share the word", "please select examples from one definition!", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot share the word", "please select examples from one definition!", "OK"));
         }
 
         [TestMethod]
@@ -528,7 +528,7 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.ShareAsync();
 
             // Assert
-            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot share the word", "Error occurred while trying to share the word: exception from unit test", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot share the word", "Error occurred while trying to share the word: exception from unit test", "OK"));
         }
 
         #endregion

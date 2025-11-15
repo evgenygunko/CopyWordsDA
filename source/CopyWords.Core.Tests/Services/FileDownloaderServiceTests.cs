@@ -26,7 +26,7 @@ namespace CopyWords.Core.Tests.Services
             string? result = await sut.DownloadFileAsync(It.IsAny<string>(), It.IsAny<string>());
 
             result.Should().BeNull();
-            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot download file", It.IsAny<string>(), "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot download file", It.IsAny<string>(), "OK"));
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@ namespace CopyWords.Core.Tests.Services
             string? result = await sut.DownloadFileAsync(url, fileName);
 
             result.Should().BeNull();
-            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot download file", It.IsAny<string>(), "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot download file", It.IsAny<string>(), "OK"));
         }
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace CopyWords.Core.Tests.Services
             result.Should().BeFalse();
 
             settingsServiceMock.Verify(x => x.LoadSettings());
-            dialogServiceMock.Verify(x => x.DisplayAlert("Path to Anki folder is incorrect", "Cannot find path to Anki folder 'abc'. Please update it in Settings.", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Path to Anki folder is incorrect", "Cannot find path to Anki folder 'abc'. Please update it in Settings.", "OK"));
         }
 
         [TestMethod]
@@ -141,7 +141,7 @@ namespace CopyWords.Core.Tests.Services
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings).Verifiable();
 
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-            dialogServiceMock.Setup(x => x.DisplayAlert("File already exists", It.IsAny<string>(), "Yes", "No"))
+            dialogServiceMock.Setup(x => x.DisplayAlertAsync("File already exists", It.IsAny<string>(), "Yes", "No"))
                 .ReturnsAsync(overwriteFile)
                 .Verifiable();
 
@@ -174,7 +174,7 @@ namespace CopyWords.Core.Tests.Services
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings).Verifiable();
 
             Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-            dialogServiceMock.Setup(x => x.DisplayAlert("File already exists", It.IsAny<string>(), "Yes", "No"))
+            dialogServiceMock.Setup(x => x.DisplayAlertAsync("File already exists", It.IsAny<string>(), "Yes", "No"))
                 .ReturnsAsync(overwriteFile)
                 .Verifiable();
 

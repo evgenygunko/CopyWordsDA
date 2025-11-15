@@ -61,7 +61,7 @@ namespace CopyWords.Core.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.DisplayAlert("Cannot clear history", $"Cannot clear history. Error: {ex}", "OK");
+                await _dialogService.DisplayAlertAsync("Cannot clear history", $"Cannot clear history. Error: {ex}", "OK");
             }
         }
 

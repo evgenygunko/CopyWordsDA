@@ -244,7 +244,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IValidator<SettingsViewModel>>());
             await sut.ImportSettingsAsync();
 
-            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot import setting", It.IsAny<string>(), "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot import setting", It.IsAny<string>(), "OK"));
         }
 
         [TestMethod]

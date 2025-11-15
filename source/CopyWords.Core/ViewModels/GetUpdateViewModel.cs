@@ -75,7 +75,7 @@ namespace CopyWords.Core.ViewModels
             try
             {
                 await Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
-                await _dialogService.DisplayAlert("Download update", "After downloading the update, close this program and click on the downloaded file.", "OK");
+                await _dialogService.DisplayAlertAsync("Download update", "After downloading the update, close this program and click on the downloaded file.", "OK");
             }
             catch (Exception ex)
             {

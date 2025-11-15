@@ -133,7 +133,7 @@ namespace CopyWords.Core.Services
             string ffmpegBinFolder = _settingsService.LoadSettings().FfmpegBinFolder;
             if (!Directory.Exists(ffmpegBinFolder))
             {
-                await _dialogService.DisplayAlert("Cannot find ffmpeg bin folder", $"Cannot find ffmpeg bin folder '{ffmpegBinFolder}'. Please update it in Settings.", "OK");
+                await _dialogService.DisplayAlertAsync("Cannot find ffmpeg bin folder", $"Cannot find ffmpeg bin folder '{ffmpegBinFolder}'. Please update it in Settings.", "OK");
                 return null;
             }
 
@@ -151,7 +151,7 @@ namespace CopyWords.Core.Services
             string mp3gainPath = _settingsService.LoadSettings().Mp3gainPath;
             if (!File.Exists(mp3gainPath))
             {
-                await _dialogService.DisplayAlert("Cannot find path to mp3gain", $"Cannot find mp3gain by '{mp3gainPath}'. Please update it in Settings.", "OK");
+                await _dialogService.DisplayAlertAsync("Cannot find path to mp3gain", $"Cannot find mp3gain by '{mp3gainPath}'. Please update it in Settings.", "OK");
                 return false;
             }
 
@@ -179,7 +179,7 @@ namespace CopyWords.Core.Services
             }
             catch (Exception ex)
             {
-                await _dialogService.DisplayAlert("Cannot normalize mp3 file", ex.Message, "OK");
+                await _dialogService.DisplayAlertAsync("Cannot normalize mp3 file", ex.Message, "OK");
                 return false;
             }
 

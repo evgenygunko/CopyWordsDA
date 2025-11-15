@@ -35,7 +35,7 @@ namespace CopyWords.Core.Services
             Uri? fileUri;
             if (!Uri.TryCreate(url, UriKind.Absolute, out fileUri))
             {
-                await _dialogService.DisplayAlert("Cannot download file", $"URL for file '{url}' is invalid.", "OK");
+                await _dialogService.DisplayAlertAsync("Cannot download file", $"URL for file '{url}' is invalid.", "OK");
                 return null;
             }
 
@@ -53,7 +53,7 @@ namespace CopyWords.Core.Services
 
             if (!_fileIOService.FileExists(destFileFullPath))
             {
-                await _dialogService.DisplayAlert("Cannot download file", $"Cannot find file in a temp folder '{destFileFullPath}'. It probably hasn't been downloaded.", "OK");
+                await _dialogService.DisplayAlertAsync("Cannot download file", $"Cannot find file in a temp folder '{destFileFullPath}'. It probably hasn't been downloaded.", "OK");
                 return null;
             }
 
@@ -67,7 +67,7 @@ namespace CopyWords.Core.Services
             string ankiSoundsFolder = _settingsService.LoadSettings().AnkiSoundsFolder;
             if (!_fileIOService.DirectoryExists(ankiSoundsFolder))
             {
-                await _dialogService.DisplayAlert("Path to Anki folder is incorrect", $"Cannot find path to Anki folder '{ankiSoundsFolder}'. Please update it in Settings.", "OK");
+                await _dialogService.DisplayAlertAsync("Path to Anki folder is incorrect", $"Cannot find path to Anki folder '{ankiSoundsFolder}'. Please update it in Settings.", "OK");
                 return false;
             }
 
@@ -75,7 +75,7 @@ namespace CopyWords.Core.Services
 
             if (_fileIOService.FileExists(destinationFile))
             {
-                bool answer = await _dialogService.DisplayAlert("File already exists", $"File '{Path.GetFileName(sourceFile)}' already exists. Overwrite?", "Yes", "No");
+                bool answer = await _dialogService.DisplayAlertAsync("File already exists", $"File '{Path.GetFileName(sourceFile)}' already exists. Overwrite?", "Yes", "No");
                 if (!answer)
                 {
                     // User doesn't want to overwrite the file, so we can skip the copy. But the file already exists, so we return true.

@@ -115,7 +115,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            await _dialogService.DisplayAlert("Cannot open Settings Page", $"Exception occurred: " + ex.ToString(), "OK");
+            await _dialogService.DisplayAlertAsync("Cannot open Settings Page", $"Exception occurred: " + ex.ToString(), "OK");
         }
     }
 }

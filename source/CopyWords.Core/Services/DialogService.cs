@@ -5,9 +5,9 @@ namespace CopyWords.Core.Services
 {
     public interface IDialogService
     {
-        Task DisplayAlert(string title, string message, string cancel);
+        Task DisplayAlertAsync(string title, string message, string cancel);
 
-        Task<bool> DisplayAlert(string title, string message, string accept, string cancel);
+        Task<bool> DisplayAlertAsync(string title, string message, string accept, string cancel);
 
         Task DisplayToast(string message);
 
@@ -21,7 +21,7 @@ namespace CopyWords.Core.Services
             Keyboard? keyboard = default,
             string initialValue = "");
 
-        Task<string> DisplayActionSheet(
+        Task<string> DisplayActionSheetAsync(
             string title,
             string cancel,
             string destruction,
@@ -31,14 +31,14 @@ namespace CopyWords.Core.Services
 
     public class DialogService : IDialogService
     {
-        public async Task DisplayAlert(string title, string message, string cancel)
+        public async Task DisplayAlertAsync(string title, string message, string cancel)
         {
-            await Application.Current!.Windows[0].Page!.DisplayAlert(title, message, cancel);
+            await Application.Current!.Windows[0].Page!.DisplayAlertAsync(title, message, cancel);
         }
 
-        public async Task<bool> DisplayAlert(string title, string message, string accept, string cancel)
+        public async Task<bool> DisplayAlertAsync(string title, string message, string accept, string cancel)
         {
-            return await Application.Current!.Windows[0].Page!.DisplayAlert(title, message, accept, cancel);
+            return await Application.Current!.Windows[0].Page!.DisplayAlertAsync(title, message, accept, cancel);
         }
 
         public async Task DisplayToast(string message)
@@ -60,9 +60,9 @@ namespace CopyWords.Core.Services
             return await Application.Current!.Windows[0].Page!.DisplayPromptAsync(title, message, accept, cancel, placeholder, maxLength, keyboard, initialValue);
         }
 
-        public async Task<string> DisplayActionSheet(string title, string cancel, string destruction, FlowDirection flowDirection, params string[] buttons)
+        public async Task<string> DisplayActionSheetAsync(string title, string cancel, string destruction, FlowDirection flowDirection, params string[] buttons)
         {
-            return await Application.Current!.Windows[0].Page!.DisplayActionSheet(title, cancel, destruction, flowDirection, buttons);
+            return await Application.Current!.Windows[0].Page!.DisplayActionSheetAsync(title, cancel, destruction, flowDirection, buttons);
         }
     }
 }

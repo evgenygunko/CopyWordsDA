@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: snackbar Snackbars
+// Ignore Spelling: snackbar Snackbars
 
 using AutoFixture;
 using CopyWords.Core.Exceptions;
@@ -267,7 +267,7 @@ namespace CopyWords.Core.Tests.ViewModels
             WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().BeNull();
-            dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -291,7 +291,7 @@ namespace CopyWords.Core.Tests.ViewModels
             WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().BeNull();
-            dialogServiceMock.Verify(x => x.DisplayAlert("Search input is invalid", "too many commas", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Search input is invalid", "too many commas", "OK"));
         }
 
         [TestMethod]
@@ -315,7 +315,7 @@ namespace CopyWords.Core.Tests.ViewModels
             WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().BeNull();
-            dialogServiceMock.Verify(x => x.DisplayAlert("An error occurred while searching for translations", "exception from unit test", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("An error occurred while searching for translations", "exception from unit test", "OK"));
         }
 
         [TestMethod]
@@ -339,7 +339,7 @@ namespace CopyWords.Core.Tests.ViewModels
             WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().BeNull();
-            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot find word", $"Could not find a translation for '{search}'", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{search}'", "OK"));
         }
 
         [TestMethod]
@@ -364,7 +364,7 @@ namespace CopyWords.Core.Tests.ViewModels
             WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().Be(wordModel);
-            dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -419,7 +419,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             await sut.GetVariantAsync(url);
 
-            dialogServiceMock.Verify(x => x.DisplayAlert("An error occurred while searching for translations", "exception from unit test", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("An error occurred while searching for translations", "exception from unit test", "OK"));
         }
 
         [TestMethod]
@@ -442,7 +442,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             await sut.GetVariantAsync(url);
 
-            dialogServiceMock.Verify(x => x.DisplayAlert("Cannot find word", $"Could not find a translation for '{url}'", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{url}'", "OK"));
         }
 
         [TestMethod]
@@ -484,7 +484,7 @@ namespace CopyWords.Core.Tests.ViewModels
             wordViewModelMock.Verify(x => x.ClearVariants());
             wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variations.Count()));
 
-            dialogServiceMock.Verify(x => x.DisplayAlert(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         #endregion
@@ -499,7 +499,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-            dialogServiceMock.Setup(x => x.DisplayActionSheet(
+            dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
                     "Select dictionary:",
                     "Cancel",
                     It.IsAny<string>(),
@@ -524,7 +524,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-            dialogServiceMock.Setup(x => x.DisplayActionSheet(
+            dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
                     "Select dictionary:",
                     "Cancel",
                     It.IsAny<string>(),

@@ -114,7 +114,7 @@ namespace CopyWords.Core.ViewModels
         {
             if (string.IsNullOrEmpty(SoundUrl))
             {
-                await _dialogService.DisplayAlert("Cannot play sound file", "Cannot play sound file, SoundUrl is null or empty", "OK");
+                await _dialogService.DisplayAlertAsync("Cannot play sound file", "Cannot play sound file, SoundUrl is null or empty", "OK");
                 return;
             }
 
@@ -170,7 +170,7 @@ namespace CopyWords.Core.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogService.DisplayAlert("Cannot save sound file", "Error occurred while trying to save sound file: " + ex.Message, "OK");
+                await _dialogService.DisplayAlertAsync("Cannot save sound file", "Error occurred while trying to save sound file: " + ex.Message, "OK");
             }
 
             IsBusy = false;
@@ -199,7 +199,7 @@ namespace CopyWords.Core.ViewModels
                 options.Add("Examples");
             }
 
-            string result = await _dialogService.DisplayActionSheet(title: "Select field to copy:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, options.ToArray());
+            string result = await _dialogService.DisplayActionSheetAsync(title: "Select field to copy:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, options.ToArray());
 
             // The action sheet returns the button that user pressed, so it can also be "Cancel"
             if (!string.IsNullOrEmpty(result) && result != "Cancel")
@@ -222,7 +222,7 @@ namespace CopyWords.Core.ViewModels
                         await CopyExamplesAsync();
                         break;
                     default:
-                        await _dialogService.DisplayAlert("Error", "Unknown action", "OK");
+                        await _dialogService.DisplayAlertAsync("Error", "Unknown action", "OK");
                         break;
                 }
             }
@@ -241,7 +241,7 @@ namespace CopyWords.Core.ViewModels
                     subjectToShare = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModels);
                     if (string.IsNullOrEmpty(subjectToShare))
                     {
-                        await _dialogService.DisplayAlert("Oops!", "You need to select at least one example before sharing.", "OK");
+                        await _dialogService.DisplayAlertAsync("Oops!", "You need to select at least one example before sharing.", "OK");
                         return;
                     }
 
@@ -263,11 +263,11 @@ namespace CopyWords.Core.ViewModels
             }
             catch (ExamplesFromSeveralDefinitionsSelectedException ex)
             {
-                await _dialogService.DisplayAlert("Cannot share the word", ex.Message, "OK");
+                await _dialogService.DisplayAlertAsync("Cannot share the word", ex.Message, "OK");
             }
             catch (Exception ex)
             {
-                await _dialogService.DisplayAlert("Cannot share the word", "Error occurred while trying to share the word: " + ex.Message, "OK");
+                await _dialogService.DisplayAlertAsync("Cannot share the word", "Error occurred while trying to share the word: " + ex.Message, "OK");
             }
         }
 
@@ -357,16 +357,16 @@ namespace CopyWords.Core.ViewModels
                 }
                 else
                 {
-                    await _dialogService.DisplayAlert("Text not copied", "Please select at least one example", "OK");
+                    await _dialogService.DisplayAlertAsync("Text not copied", "Please select at least one example", "OK");
                 }
             }
             catch (ExamplesFromSeveralDefinitionsSelectedException ex)
             {
-                await _dialogService.DisplayAlert($"Cannot copy {wordPartName}", ex.Message, "OK");
+                await _dialogService.DisplayAlertAsync($"Cannot copy {wordPartName}", ex.Message, "OK");
             }
             catch (Exception ex)
             {
-                await _dialogService.DisplayAlert($"Cannot copy {wordPartName}", $"Error occurred while trying to copy {wordPartName}: " + ex.Message, "OK");
+                await _dialogService.DisplayAlertAsync($"Cannot copy {wordPartName}", $"Error occurred while trying to copy {wordPartName}: " + ex.Message, "OK");
             }
         }
 

@@ -185,7 +185,7 @@ namespace CopyWords.Core.ViewModels
         public async Task SelectDictionaryAsync()
         {
             string[] strings = [nameof(SourceLanguage.Danish), nameof(SourceLanguage.Spanish)];
-            string result = await _dialogService.DisplayActionSheet(title: "Select dictionary:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, strings);
+            string result = await _dialogService.DisplayActionSheetAsync(title: "Select dictionary:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, strings);
 
             // The action sheet returns the button that user pressed, so it can also be "Cancel"
             if (!string.IsNullOrEmpty(result) && result != "Cancel")
@@ -343,7 +343,7 @@ namespace CopyWords.Core.ViewModels
                 wordModel = await _translationsService.LookUpWordAsync(searchTerm, appSettings.SelectedParser, _cancellationTokenSource.Token);
                 if (wordModel == null)
                 {
-                    await _dialogService.DisplayAlert("Cannot find word", $"Could not find a translation for '{searchTerm}'", "OK");
+                    await _dialogService.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{searchTerm}'", "OK");
                 }
             }
             catch (TaskCanceledException)
@@ -352,12 +352,12 @@ namespace CopyWords.Core.ViewModels
             }
             catch (InvalidInputException ex)
             {
-                await _dialogService.DisplayAlert("Search input is invalid", ex.Message, "OK");
+                await _dialogService.DisplayAlertAsync("Search input is invalid", ex.Message, "OK");
                 return null;
             }
             catch (Exception ex)
             {
-                await _dialogService.DisplayAlert("An error occurred while searching for translations", ex.Message, "OK");
+                await _dialogService.DisplayAlertAsync("An error occurred while searching for translations", ex.Message, "OK");
                 return null;
             }
 

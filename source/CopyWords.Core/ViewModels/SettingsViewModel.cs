@@ -128,7 +128,7 @@ namespace CopyWords.Core.ViewModels
                     AppSettings? appSettings = await _settingsService.ImportSettingsAsync(settingFile);
                     if (appSettings == null)
                     {
-                        await _dialogService.DisplayAlert("Cannot import setting", $"Cannot import settings from the file '{settingFile}'. The format is incorrect", "OK");
+                        await _dialogService.DisplayAlertAsync("Cannot import setting", $"Cannot import settings from the file '{settingFile}'. The format is incorrect", "OK");
                         return;
                     }
 
@@ -138,7 +138,7 @@ namespace CopyWords.Core.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    await _dialogService.DisplayAlert("Cannot import setting", $"Cannot import settings from the file '{settingFile}'. Error: {ex}", "OK");
+                    await _dialogService.DisplayAlertAsync("Cannot import setting", $"Cannot import settings from the file '{settingFile}'. Error: {ex}", "OK");
                 }
             }
         }
