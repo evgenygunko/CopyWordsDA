@@ -8,18 +8,7 @@
             "name": ".NET MAUI",
             "type": "maui",
             "request": "launch",
-            "preLaunchTask": "dotnet: build"
+            "preLaunchTask": "maui: build"
         }
-        // {
-        //     "name": ".NET MAUI (Windows)",
-        //     "type": "coreclr",
-        //     "request": "launch",
-        //     "preLaunchTask": "maui: Build",
-        //     "program": "${workspaceFolder}/source/CopyWords.MAUI/bin/Debug/net10.0-windows10.0.19041.0/win-x64/CopyWords.MAUI.exe",
-        //     "args": [],
-        //     "cwd": "${workspaceFolder}/source/CopyWords.MAUI",
-        //     "stopAtEntry": false,
-        //     "console": "internalConsole"
-        // }
     ]
 }

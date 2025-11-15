@@ -18,6 +18,20 @@
             }
         },
         {
+            "label": "maui: build",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${workspaceFolder}/CopyWordsDA.slnx",
+                "/p:WindowsPackageType=None"
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": "build"
+        },
+        {
             "label": "dotnet: test",
             "type": "shell",
             "command": "dotnet",
