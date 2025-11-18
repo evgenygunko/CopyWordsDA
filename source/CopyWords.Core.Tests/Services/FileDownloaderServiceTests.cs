@@ -2,11 +2,14 @@
 
 using System.Net;
 using AutoFixture;
+using CommunityToolkit.Maui.Storage;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;
+
+#pragma warning disable CA1416 // Validate platform compatibility
 
 namespace CopyWords.Core.Tests.Services
 {
@@ -23,9 +26,9 @@ namespace CopyWords.Core.Tests.Services
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var sut = _fixture.Create<FileDownloaderService>();
-            string? result = await sut.DownloadFileAsync(It.IsAny<string>(), It.IsAny<string>());
+            bool result = await sut.DownloadFileAsync(It.IsAny<string>(), It.IsAny<string>());
 
-            result.Should().BeNull();
+            result.Should().BeFalse();
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot download file", It.IsAny<string>(), "OK"));
         }
 
@@ -33,7 +36,7 @@ namespace CopyWords.Core.Tests.Services
         public async Task DownloadFileAsync_WhenCouldNotSaveTempFile_ReturnsFalse()
         {
             string url = _fixture.Create<Uri>().ToString();
-            const string fileName = "sound.mp3";
+            string filePath = Path.Combine(Path.GetTempPath(), "sound.mp3");
 
             var handlerMock = new Mock<HttpMessageHandler>();
             handlerMock
@@ -57,10 +60,11 @@ namespace CopyWords.Core.Tests.Services
                 httpClient,
                 dialogServiceMock.Object,
                 Mock.Of<IFileIOService>(),
-                Mock.Of<ISettingsService>());
-            string? result = await sut.DownloadFileAsync(url, fileName);
+                Mock.Of<ISettingsService>(),
+                Mock.Of<IFileSaver>());
+            bool result = await sut.DownloadFileAsync(url, filePath);
 
-            result.Should().BeNull();
+            result.Should().BeFalse();
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot download file", It.IsAny<string>(), "OK"));
         }
 
@@ -68,7 +72,7 @@ namespace CopyWords.Core.Tests.Services
         public async Task DownloadFileAsync_WhenFileIsDownloaded_ReturnsTrue()
         {
             string url = _fixture.Create<Uri>().ToString();
-            const string fileName = "sound.mp3";
+            string filePath = Path.Combine(Path.GetTempPath(), "sound.mp3");
 
             var handlerMock = new Mock<HttpMessageHandler>();
             handlerMock
@@ -92,10 +96,11 @@ namespace CopyWords.Core.Tests.Services
                 httpClient,
                 dialogServiceMock.Object,
                 Mock.Of<IFileIOService>(x => x.FileExists(It.IsAny<string?>()) == true),
-                Mock.Of<ISettingsService>());
-            string? result = await sut.DownloadFileAsync(url, fileName);
+                Mock.Of<ISettingsService>(),
+                Mock.Of<IFileSaver>());
+            bool result = await sut.DownloadFileAsync(url, filePath);
 
-            result.Should().NotBeNull();
+            result.Should().BeTrue();
             dialogServiceMock.VerifyNoOtherCalls();
         }
 
@@ -193,6 +198,48 @@ namespace CopyWords.Core.Tests.Services
             settingsServiceMock.Verify();
             dialogServiceMock.Verify();
             fileIOServiceMock.Verify(x => x.CopyFile(sourceFile, It.IsAny<string>(), true));
+        }
+
+        #endregion
+
+        #region Tests for SaveFileWithFileSaverAsync
+
+        [TestMethod]
+        public async Task SaveFileWithFileSaverAsync_Should_CallFileSaver()
+        {
+            string url = _fixture.Create<Uri>().ToString();
+            string soundFileName = _fixture.Create<string>();
+
+            var fileSaverResult = new FileSaverResult(_fixture.Create<string>(), null);
+            fileSaverResult.IsSuccessful.Should().BeTrue();
+
+            var handlerMock = new Mock<HttpMessageHandler>();
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+                )
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("abc"),
+                });
+
+            var httpClient = new HttpClient(handlerMock.Object);
+
+            var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
+            fileSaverMock.Setup(x => x.SaveAsync(soundFileName, It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(fileSaverResult)
+                .Verifiable();
+
+            _fixture.Register(() => httpClient);
+            var sut = _fixture.Create<FileDownloaderService>();
+            bool result = await sut.SaveFileWithFileSaverAsync(url, soundFileName, It.IsAny<CancellationToken>());
+
+            result.Should().BeTrue();
+            fileSaverMock.Verify();
         }
 
         #endregion

@@ -3,7 +3,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using CommunityToolkit.Maui.Storage;
 using FFMpegCore;
 
 namespace CopyWords.Core.Services
@@ -15,32 +14,26 @@ namespace CopyWords.Core.Services
 
     public class SaveSoundFileService : ISaveSoundFileService
     {
-        private readonly HttpClient _httpClient;
         private readonly ISettingsService _settingsService;
         private readonly IDialogService _dialogService;
         private readonly IClipboardService _clipboardService;
         private readonly IDeviceInfo _deviceInfo;
-        private readonly IFileSaver _fileSaver;
         private readonly IFileDownloaderService _fileDownloaderService;
         private readonly ILaunchDarklyService _launchDarklyService;
 
         public SaveSoundFileService(
-            HttpClient httpClient,
             ISettingsService settingsService,
             IDialogService dialogService,
             IClipboardService clipboardService,
             IFileIOService fileIOService,
             IDeviceInfo deviceInfo,
-            IFileSaver fileSaver,
             IFileDownloaderService fileDownloaderService,
             ILaunchDarklyService launchDarklyService)
         {
-            _httpClient = httpClient;
             _settingsService = settingsService;
             _dialogService = dialogService;
             _clipboardService = clipboardService;
             _deviceInfo = deviceInfo;
-            _fileSaver = fileSaver;
             _fileDownloaderService = fileDownloaderService;
             _launchDarklyService = launchDarklyService;
         }
@@ -57,13 +50,14 @@ namespace CopyWords.Core.Services
             // on Android show the FileSavePicker and save the file into allowed location, like Downloads
             if (_deviceInfo.Platform == DevicePlatform.Android)
             {
-                return await SaveFileWithFileSaverAsync(url, soundFileName, cancellationToken);
+                return await _fileDownloaderService.SaveFileWithFileSaverAsync(url, soundFileName, cancellationToken);
             }
 
             // On Windows and Mac, download the file and save it to the Anki collection media folder.
             // First, download the file from the web into a temporary folder.
-            string? soundFileFullPath = await _fileDownloaderService.DownloadFileAsync(url, soundFileName);
-            if (string.IsNullOrEmpty(soundFileFullPath))
+            string soundFileFullPath = Path.Combine(Path.GetTempPath(), soundFileName);
+            bool downloadSucceeded = await _fileDownloaderService.DownloadFileAsync(url, soundFileFullPath);
+            if (!downloadSucceeded)
             {
                 return false;
             }
@@ -99,24 +93,6 @@ namespace CopyWords.Core.Services
             }
 
             return true;
-        }
-
-        #endregion
-
-        #region Internal Methods
-
-        [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst15.0")]
-        [SupportedOSPlatform("android")]
-        internal async Task<bool> SaveFileWithFileSaverAsync(string url, string soundFileName, CancellationToken cancellationToken)
-        {
-            using var ctsHttpRequest = new CancellationTokenSource(TimeSpan.FromSeconds(15));
-            using CancellationTokenSource cts = CancellationTokenSource.CreateLinkedTokenSource(ctsHttpRequest.Token, cancellationToken);
-
-            await using var stream = await _httpClient.GetStreamAsync(url, ctsHttpRequest.Token);
-
-            var fileSaverResult = await _fileSaver.SaveAsync(soundFileName, stream, cancellationToken);
-            return fileSaverResult.IsSuccessful;
         }
 
         #endregion

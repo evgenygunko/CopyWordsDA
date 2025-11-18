@@ -13,23 +13,40 @@ namespace CopyWords.Core.Tests.Services
         [TestMethod]
         public async Task SaveImageFileAsync_Should_CallCopyFileToAnkiFolderAsync()
         {
-            string filePath = _fixture.Create<string>();
+            const string url = "https://example.com/image.png";
+            string fileNameWithoutExtension = _fixture.Create<string>();
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
-            fileDownloaderServiceMock.Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(filePath)
-                .Verifiable();
-            fileDownloaderServiceMock.Setup(x => x.CopyFileToAnkiFolderAsync(It.IsAny<string>()))
-                .ReturnsAsync(true)
-                .Verifiable();
+            fileDownloaderServiceMock.Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
+            fileDownloaderServiceMock.Setup(x => x.CopyFileToAnkiFolderAsync(It.IsAny<string>())).ReturnsAsync(true);
 
             var sut = _fixture.Create<SaveImageFileService>();
             sut.IsUnitTest = true;
 
-            bool result = await sut.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>());
+            bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
 
             result.Should().BeTrue();
-            fileDownloaderServiceMock.Verify();
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(url, It.Is<string>(s => s.EndsWith($"{fileNameWithoutExtension}.png"))));
+            fileDownloaderServiceMock.Verify(x => x.CopyFileToAnkiFolderAsync(It.Is<string>(s => s.EndsWith($"{fileNameWithoutExtension}.png"))));
+        }
+
+        [TestMethod]
+        public async Task SaveImageFileAsync_WhenCannotDownloadFile_ReturnsFalse()
+        {
+            const string url = "https://example.com/image.png";
+            string fileNameWithoutExtension = _fixture.Create<string>();
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock.Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
+
+            var sut = _fixture.Create<SaveImageFileService>();
+            sut.IsUnitTest = true;
+
+            bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
+
+            result.Should().BeFalse();
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(url, It.Is<string>(s => s.EndsWith($"{fileNameWithoutExtension}.png"))));
+            fileDownloaderServiceMock.Verify(x => x.CopyFileToAnkiFolderAsync(It.IsAny<string>()), Times.Never);
         }
     }
 }

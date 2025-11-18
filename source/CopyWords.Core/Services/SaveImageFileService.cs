@@ -30,8 +30,9 @@ namespace CopyWords.Core.Services
             string fileName = Path.ChangeExtension(fileNameWithoutExtension, fileExtension);
 
             // download file from web into temp folder
-            string? imgFile = await _fileDownloaderService.DownloadFileAsync(url, fileName);
-            if (string.IsNullOrEmpty(imgFile))
+            string imgFile = Path.Combine(Path.GetTempPath(), fileName);
+            bool downloadSucceeded = await _fileDownloaderService.DownloadFileAsync(url, imgFile);
+            if (!downloadSucceeded)
             {
                 return false;
             }
