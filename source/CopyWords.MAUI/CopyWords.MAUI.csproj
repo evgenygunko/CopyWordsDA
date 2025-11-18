@@ -115,7 +115,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Sentry.Maui" Version="5.16.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
-    <PackageReference Include="Syncfusion.Licensing" Version="31.2.10" />
+    <PackageReference Include="Syncfusion.Licensing" Version="31.2.12" />
     <PackageReference Include="Syncfusion.Maui.Inputs" Version="31.2.10" />
     <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.7" />
     <!-- Explicit AndroidX package references to resolve version conflicts -->
