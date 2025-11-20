@@ -1,4 +1,6 @@
-﻿namespace CopyWords.Core.Services
+﻿// Ignore Spelling: dest
+
+namespace CopyWords.Core.Services
 {
     public interface IFileIOService
     {
@@ -13,6 +15,8 @@
         Task WriteAllTextAsync(string path, string contents, CancellationToken cancellationToken = default);
 
         Task WriteAllBytesAsync(string path, byte[] bytes, CancellationToken cancellationToken = default);
+
+        Task CopyToAsync(Stream sourceStream, string destinationFile, CancellationToken cancellationToken = default);
     }
 
     public class FileIOService : IFileIOService
@@ -34,5 +38,10 @@
 
         public async Task WriteAllBytesAsync(string path, byte[] bytes, CancellationToken cancellationToken = default)
             => await File.WriteAllBytesAsync(path, bytes, cancellationToken);
+        public async Task CopyToAsync(Stream sourceStream, string destinationFile, CancellationToken cancellationToken = default)
+        {
+            using var fileStream = new FileStream(destinationFile, FileMode.Create, FileAccess.Write, FileShare.None);
+            await sourceStream.CopyToAsync(fileStream, cancellationToken);
+        }
     }
 }

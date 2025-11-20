@@ -47,49 +47,71 @@ namespace CopyWords.Core.Services
         {
             bool downloadSoundFromTranslationAppFlag = _launchDarklyService.GetBooleanFlag("download-sound-from-translation-app", false);
 
-            // on Android show the FileSavePicker and save the file into allowed location, like Downloads
-            if (_deviceInfo.Platform == DevicePlatform.Android)
+            if (downloadSoundFromTranslationAppFlag)
             {
-                return await _fileDownloaderService.SaveFileWithFileSaverAsync(url, soundFileName, cancellationToken);
-            }
+                // todo: pass the word from the viewmodel instead of extracting it from the file name
+                string word = Path.GetFileNameWithoutExtension(soundFileName);
 
-            // On Windows and Mac, download the file and save it to the Anki collection media folder.
-            // First, download the file from the web into a temporary folder.
-            string soundFileFullPath = Path.Combine(Path.GetTempPath(), soundFileName);
-            bool downloadSucceeded = await _fileDownloaderService.DownloadFileAsync(url, soundFileFullPath);
-            if (!downloadSucceeded)
-            {
-                return false;
-            }
+                // on Android show the FileSavePicker and save the file into allowed location, like Downloads
+                if (_deviceInfo.Platform == DevicePlatform.Android)
+                {
+                    return await _fileDownloaderService.DownloadSoundFileAndSaveWithFileSaverAsync(url, word, cancellationToken);
+                }
 
-            string extension = Path.GetExtension(soundFileFullPath);
-            if (string.Equals(extension, ".mp4", StringComparison.InvariantCultureIgnoreCase))
+                // Put the text for Anki into the clipboard. We do this before attempting to save the actual file.
+                // If the file already exists and the user chooses not to overwrite it, the text will still be available in the clipboard.
+                string clipboardTest = $"[sound:{word}.mp3]";
+                await _clipboardService.CopyTextToClipboardAsync(clipboardTest);
+
+                // On Windows and Mac, download the file and save it directly to the Anki collection media folder.
+                return await _fileDownloaderService.DownloadSoundFileAsync(url, word, cancellationToken);
+            }
+            else
             {
-                // transcode mp4 to mp3
-                soundFileFullPath = await TranscodeToMp3Async(soundFileFullPath);
-                if (string.IsNullOrEmpty(soundFileFullPath))
+                // on Android show the FileSavePicker and save the file into allowed location, like Downloads
+                if (_deviceInfo.Platform == DevicePlatform.Android)
+                {
+                    return await _fileDownloaderService.SaveFileWithFileSaverAsync(url, soundFileName, cancellationToken);
+                }
+
+                // On Windows and Mac, download the file and save it to the Anki collection media folder.
+                // First, download the file from the web into a temporary folder.
+                string? soundFileFullPath = Path.Combine(Path.GetTempPath(), soundFileName);
+                bool downloadSucceeded = await _fileDownloaderService.DownloadFileAsync(url, soundFileFullPath);
+                if (!downloadSucceeded)
                 {
                     return false;
                 }
-            }
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                if (_settingsService.LoadSettings().UseMp3gain && !await CallMp3gainAsync(soundFileFullPath))
+                string extension = Path.GetExtension(soundFileFullPath);
+                if (string.Equals(extension, ".mp4", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    // transcode mp4 to mp3
+                    soundFileFullPath = await TranscodeToMp3Async(soundFileFullPath);
+                    if (string.IsNullOrEmpty(soundFileFullPath))
+                    {
+                        return false;
+                    }
+                }
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    if (_settingsService.LoadSettings().UseMp3gain && !await CallMp3gainAsync(soundFileFullPath))
+                    {
+                        return false;
+                    }
+                }
+
+                // Put the text for Anki into the clipboard. We do this before attempting to save the actual file.
+                // If the file already exists and the user chooses not to overwrite it, the text will still be available in the clipboard.
+                string clipboardTest = $"[sound:{Path.GetFileNameWithoutExtension(soundFileFullPath)}.mp3]";
+                await _clipboardService.CopyTextToClipboardAsync(clipboardTest);
+
+                // copy file into the Anki collection media folder
+                if (!await _fileDownloaderService.CopyFileToAnkiFolderAsync(soundFileFullPath))
                 {
                     return false;
                 }
-            }
-
-            // Put the text for Anki into the clipboard. We do this before attempting to save the actual file.
-            // If the file already exists and the user chooses not to overwrite it, the text will still be available in the clipboard.
-            string clipboardTest = $"[sound:{Path.GetFileNameWithoutExtension(soundFileFullPath)}.mp3]";
-            await _clipboardService.CopyTextToClipboardAsync(clipboardTest);
-
-            // copy file into the Anki collection media folder
-            if (!await _fileDownloaderService.CopyFileToAnkiFolderAsync(soundFileFullPath))
-            {
-                return false;
             }
 
             return true;

@@ -2,7 +2,11 @@
 
 using System.Diagnostics;
 using System.Runtime.Versioning;
+using System.Text;
 using CommunityToolkit.Maui.Storage;
+using CopyWords.Core.Exceptions;
+using CopyWords.Core.Models;
+using Newtonsoft.Json;
 
 namespace CopyWords.Core.Services
 {
@@ -13,6 +17,10 @@ namespace CopyWords.Core.Services
         Task<bool> CopyFileToAnkiFolderAsync(string sourceFile);
 
         Task<bool> SaveFileWithFileSaverAsync(string url, string soundFileName, CancellationToken cancellationToken);
+
+        Task<bool> DownloadSoundFileAsync(string soundUrl, string word, CancellationToken cancellationToken);
+
+        Task<bool> DownloadSoundFileAndSaveWithFileSaverAsync(string soundUrl, string word, CancellationToken cancellationToken);
     }
 
     public class FileDownloaderService : IFileDownloaderService
@@ -22,19 +30,22 @@ namespace CopyWords.Core.Services
         private readonly IFileIOService _fileIOService;
         private readonly ISettingsService _settingsService;
         private readonly IFileSaver _fileSaver;
+        private readonly IGlobalSettings _globalSettings;
 
         public FileDownloaderService(
             HttpClient httpClient,
             IDialogService dialogService,
             IFileIOService fileIOService,
             ISettingsService settingsService,
-            IFileSaver fileSaver)
+            IFileSaver fileSaver,
+            IGlobalSettings globalSettings)
         {
             _httpClient = httpClient;
             _dialogService = dialogService;
             _fileIOService = fileIOService;
             _settingsService = settingsService;
             _fileSaver = fileSaver;
+            _globalSettings = globalSettings;
         }
 
         public async Task<bool> DownloadFileAsync(string url, string filePath)
@@ -114,5 +125,72 @@ namespace CopyWords.Core.Services
             var fileSaverResult = await _fileSaver.SaveAsync(soundFileName, stream, cancellationToken);
             return fileSaverResult.IsSuccessful;
         }
+
+        public async Task<bool> DownloadSoundFileAsync(string soundUrl, string word, CancellationToken cancellationToken)
+        {
+            string ankiSoundsFolder = _settingsService.LoadSettings().AnkiSoundsFolder;
+            if (!_fileIOService.DirectoryExists(ankiSoundsFolder))
+            {
+                await _dialogService.DisplayAlertAsync("Path to Anki folder is incorrect", $"Cannot find path to Anki folder '{ankiSoundsFolder}'. Please update it in Settings.", "OK");
+                return false;
+            }
+
+            using Stream stream = await DownloadNormalizedSoundFile(soundUrl, word, cancellationToken);
+
+            string fileName = $"{word}.mp3";
+            string destinationFile = Path.Combine(ankiSoundsFolder, fileName);
+            if (_fileIOService.FileExists(destinationFile))
+            {
+                bool answer = await _dialogService.DisplayAlertAsync("File already exists", $"File '{fileName}' already exists. Overwrite?", "Yes", "No");
+                if (!answer)
+                {
+                    // User doesn't want to overwrite the file, so we can skip the download. But the file already exists, so we return true.
+                    return true;
+                }
+            }
+
+            await _fileIOService.CopyToAsync(stream, destinationFile, cancellationToken);
+            return true;
+        }
+
+        [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst15.0")]
+        [SupportedOSPlatform("android")]
+        public async Task<bool> DownloadSoundFileAndSaveWithFileSaverAsync(string soundUrl, string word, CancellationToken cancellationToken)
+        {
+            using Stream stream = await DownloadNormalizedSoundFile(soundUrl, word, cancellationToken);
+
+            var fileSaverResult = await _fileSaver.SaveAsync($"{word}.mp3", stream, cancellationToken);
+            return fileSaverResult.IsSuccessful;
+        }
+
+        #region Private Methods
+
+        private async Task<Stream> DownloadNormalizedSoundFile(string soundUrl, string word, CancellationToken cancellationToken)
+        {
+            string normalizeSoundUrl = $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/NormalizeSound?code={_globalSettings.TranslatorAppRequestCode}";
+
+            var input = new NormalizeSoundRequest(
+                SoundUrl: soundUrl,
+                Word: word,
+                Version: "1");
+
+            string jsonRequest = JsonConvert.SerializeObject(input);
+            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            using var combinedCts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+            using CancellationTokenSource cts = CancellationTokenSource.CreateLinkedTokenSource(combinedCts.Token, cancellationToken);
+
+            HttpResponseMessage response = await _httpClient.PostAsync(normalizeSoundUrl, content, combinedCts.Token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
+            }
+
+            return await response.Content.ReadAsStreamAsync(combinedCts.Token);
+        }
+
+        #endregion
     }
 }
