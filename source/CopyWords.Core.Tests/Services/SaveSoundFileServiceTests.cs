@@ -1,6 +1,8 @@
 ﻿// Ignore Spelling: Downloader
 
 using AutoFixture;
+using CommunityToolkit.Maui.Storage;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using FluentAssertions;
 using Moq;
@@ -17,47 +19,24 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for SaveSoundFileAsync
 
         [TestMethod]
-        public async Task SaveSoundFileAsync_WhenLDFlagIsOffAndCannotCopyFileToAnkiFolder_ShouldStillCopyToClipboard()
+        public async Task SaveSoundFileAsync_WhenOnAndroid_CallsDownloadSoundFileAndSaveWithFileSaverAsync()
         {
             // Arrange
-            _fixture.EnableDownloadSoundFromTranslationApp(false);
-
             string url = _fixture.Create<Uri>().ToString();
-            string soundFileName = _fixture.Create<string>();
-            string filePath = Path.Combine(Path.GetTempPath(), soundFileName);
-
-            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
-            fileDownloaderServiceMock.Setup(x => x.DownloadFileAsync(url, filePath))
-                .ReturnsAsync(true);
-
-            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
-
-            // Act
-            var sut = _fixture.Create<SaveSoundFileService>();
-            bool result = await sut.SaveSoundFileAsync(url, soundFileName, It.IsAny<CancellationToken>());
-
-            // Assert
-            result.Should().BeFalse();
-            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync($"[sound:{Path.GetFileNameWithoutExtension(filePath)}.mp3]"));
-        }
-
-        [TestMethod]
-        public async Task SaveSoundFileAsync_WhenLDFlagIsOffAndOnAndroid_CallsFileDownloaderService()
-        {
-            // Arrange
-            _fixture.EnableDownloadSoundFromTranslationApp(false);
-
-            string url = _fixture.Create<Uri>().ToString();
-            string soundFileName = _fixture.Create<string>();
-            string filePath = _fixture.Create<string>();
-
-            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
-            fileDownloaderServiceMock.Setup(x => x.SaveFileWithFileSaverAsync(url, soundFileName, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(true)
-                .Verifiable();
+            const string soundFileName = "sound_file.mp3";
 
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
+
+            var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
+            fileSaverMock
+                .Setup(x => x.SaveAsync(It.IsAny<string>(), It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new FileSaverResult("test_path", null));
 
             var sut = _fixture.Create<SaveSoundFileService>();
 
@@ -66,101 +45,358 @@ namespace CopyWords.Core.Tests.Services
 
             // Assert
             result.Should().BeTrue();
-            fileDownloaderServiceMock.Verify();
+            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, "sound_file", It.IsAny<CancellationToken>()), Times.Once);
+            fileSaverMock.Verify(x => x.SaveAsync("sound_file.mp3", It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
-        public async Task SaveSoundFileAsync_WhenLDFlagIsOffAndOnWindows_CallsFileDownloaderService()
+        public async Task SaveSoundFileAsync_WhenOnWindows_CallsDownloadSoundFileAndCopyToAnkiFolderAsync()
         {
             // Arrange
-            _fixture.EnableDownloadSoundFromTranslationApp(false);
-
             string url = _fixture.Create<Uri>().ToString();
             const string soundFileName = "sound_file.mp3";
-
-            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
 
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
 
-            var sut = _fixture.Create<SaveSoundFileService>();
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings
+            {
+                AnkiSoundsFolder = @"C:\Anki\Sounds"
+            });
 
-            // Act
-            _ = await sut.SaveSoundFileAsync(url, soundFileName, CancellationToken.None);
-
-            // Assert
-            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(url, It.Is<string>(s => s.EndsWith(soundFileName))));
-        }
-
-        [TestMethod]
-        public async Task SaveSoundFileAsync_WhenLDFlagIsOnAndCannotCopyFileToAnkiFolder_ShouldStillCopyToClipboard()
-        {
-            // Arrange
-            _fixture.EnableDownloadSoundFromTranslationApp(true);
-
-            string url = _fixture.Create<Uri>().ToString();
-            string soundFileName = _fixture.Create<string>();
-            string filePath = Path.Combine(Path.GetTempPath(), soundFileName);
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(It.IsAny<string>())).Returns(true);
+            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(false);
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
-            fileDownloaderServiceMock.Setup(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
             var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
 
-            // Act
             var sut = _fixture.Create<SaveSoundFileService>();
-            bool result = await sut.SaveSoundFileAsync(url, soundFileName, It.IsAny<CancellationToken>());
+
+            // Act
+            bool result = await sut.SaveSoundFileAsync(url, soundFileName, CancellationToken.None);
 
             // Assert
-            result.Should().BeFalse();
-            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync($"[sound:{Path.GetFileNameWithoutExtension(filePath)}.mp3]"));
-            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, soundFileName, It.IsAny<CancellationToken>()));
+            result.Should().BeTrue();
+            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync("[sound:sound_file.mp3]"), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, "sound_file", It.IsAny<CancellationToken>()), Times.Once);
+            fileIOServiceMock.Verify(x => x.CopyToAsync(It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
-        public async Task SaveSoundFileAsync_WhenLDFlagIsOnAndOnAndroid_CallsFileDownloaderService()
+        public async Task SaveSoundFileAsync_WhenOnMacCatalyst_CallsDownloadSoundFileAndCopyToAnkiFolderAsync()
         {
             // Arrange
-            _fixture.EnableDownloadSoundFromTranslationApp(true);
-
             string url = _fixture.Create<Uri>().ToString();
-            const string soundFileName = "sound_file.mp3";
-
-            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            const string soundFileName = "test_sound.mp3";
 
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
-            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.MacCatalyst);
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings
+            {
+                AnkiSoundsFolder = "/Users/test/Anki/Sounds"
+            });
+
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(It.IsAny<string>())).Returns(true);
+            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(false);
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
+
+            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
 
             var sut = _fixture.Create<SaveSoundFileService>();
 
             // Act
-            _ = await sut.SaveSoundFileAsync(url, soundFileName, CancellationToken.None);
+            bool result = await sut.SaveSoundFileAsync(url, soundFileName, CancellationToken.None);
 
             // Assert
-            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAndSaveWithFileSaverAsync(url, "sound_file", It.IsAny<CancellationToken>()));
+            result.Should().BeTrue();
+            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync("[sound:test_sound.mp3]"), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, "test_sound", It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
-        public async Task SaveSoundFileAsync_WhenLDFlagIsOnAndOnWindows_CallsFileDownloaderService()
+        public async Task SaveSoundFileAsync_WhenOnWindows_CopiesCorrectTextToClipboard()
         {
             // Arrange
-            _fixture.EnableDownloadSoundFromTranslationApp(true);
-
             string url = _fixture.Create<Uri>().ToString();
-            const string soundFileName = "sound_file.mp3";
-
-            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            const string soundFileName = "my_word.mp3";
 
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
 
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings
+            {
+                AnkiSoundsFolder = @"C:\Anki\Sounds"
+            });
+
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(It.IsAny<string>())).Returns(true);
+            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(false);
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
+
+            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
+
             var sut = _fixture.Create<SaveSoundFileService>();
 
             // Act
-            _ = await sut.SaveSoundFileAsync(url, soundFileName, CancellationToken.None);
+            await sut.SaveSoundFileAsync(url, soundFileName, CancellationToken.None);
 
             // Assert
-            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, "sound_file", It.IsAny<CancellationToken>()));
+            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync("[sound:my_word.mp3]"), Times.Once);
+        }
+
+        #endregion
+
+        #region Tests for DownloadSoundFileAndCopyToAnkiFolderAsync
+
+        [TestMethod]
+        public async Task DownloadSoundFileAndCopyToAnkiFolderAsync_WhenAnkiFolderDoesNotExist_DisplaysAlertAndReturnsFalse()
+        {
+            // Arrange
+            string url = _fixture.Create<Uri>().ToString();
+            string word = "test_word";
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings
+            {
+                AnkiSoundsFolder = @"C:\Invalid\Path"
+            });
+
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(@"C:\Invalid\Path")).Returns(false);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = _fixture.Create<SaveSoundFileService>();
+
+            // Act
+            bool result = await sut.DownloadSoundFileAndCopyToAnkiFolderAsync(url, word, CancellationToken.None);
+
+            // Assert
+            result.Should().BeFalse();
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "Path to Anki folder is incorrect",
+                @"Cannot find path to Anki folder 'C:\Invalid\Path'. Please update it in Settings.",
+                "OK"), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DownloadSoundFileAndCopyToAnkiFolderAsync_WhenFileDoesNotExist_DownloadsAndSavesFile()
+        {
+            // Arrange
+            string url = _fixture.Create<Uri>().ToString();
+            string word = "test_word";
+            string ankiFolder = @"C:\Anki\Sounds";
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings
+            {
+                AnkiSoundsFolder = ankiFolder
+            });
+
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(ankiFolder)).Returns(true);
+            fileIOServiceMock.Setup(x => x.FileExists(Path.Combine(ankiFolder, $"{word}.mp3"))).Returns(false);
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
+
+            var sut = _fixture.Create<SaveSoundFileService>();
+
+            // Act
+            bool result = await sut.DownloadSoundFileAndCopyToAnkiFolderAsync(url, word, CancellationToken.None);
+
+            // Assert
+            result.Should().BeTrue();
+            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()), Times.Once);
+            fileIOServiceMock.Verify(x => x.CopyToAsync(It.IsAny<Stream>(), Path.Combine(ankiFolder, $"{word}.mp3"), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DownloadSoundFileAndCopyToAnkiFolderAsync_WhenFileExistsAndUserWantsToOverwrite_DownloadsAndOverwritesFile()
+        {
+            // Arrange
+            string url = _fixture.Create<Uri>().ToString();
+            string word = "existing_word";
+            string ankiFolder = @"C:\Anki\Sounds";
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings
+            {
+                AnkiSoundsFolder = ankiFolder
+            });
+
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(ankiFolder)).Returns(true);
+            fileIOServiceMock.Setup(x => x.FileExists(Path.Combine(ankiFolder, $"{word}.mp3"))).Returns(true);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock
+                .Setup(x => x.DisplayAlertAsync("File already exists", $"File '{word}.mp3' already exists. Overwrite?", "Yes", "No"))
+                .ReturnsAsync(true);
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
+
+            var sut = _fixture.Create<SaveSoundFileService>();
+
+            // Act
+            bool result = await sut.DownloadSoundFileAndCopyToAnkiFolderAsync(url, word, CancellationToken.None);
+
+            // Assert
+            result.Should().BeTrue();
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("File already exists", $"File '{word}.mp3' already exists. Overwrite?", "Yes", "No"), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()), Times.Once);
+            fileIOServiceMock.Verify(x => x.CopyToAsync(It.IsAny<Stream>(), Path.Combine(ankiFolder, $"{word}.mp3"), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DownloadSoundFileAndCopyToAnkiFolderAsync_WhenFileExistsAndUserDoesNotWantToOverwrite_ReturnsTrue()
+        {
+            // Arrange
+            string url = _fixture.Create<Uri>().ToString();
+            string word = "existing_word";
+            string ankiFolder = @"C:\Anki\Sounds";
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings
+            {
+                AnkiSoundsFolder = ankiFolder
+            });
+
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(ankiFolder)).Returns(true);
+            fileIOServiceMock.Setup(x => x.FileExists(Path.Combine(ankiFolder, $"{word}.mp3"))).Returns(true);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock
+                .Setup(x => x.DisplayAlertAsync("File already exists", $"File '{word}.mp3' already exists. Overwrite?", "Yes", "No"))
+                .ReturnsAsync(false);
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+
+            var sut = _fixture.Create<SaveSoundFileService>();
+
+            // Act
+            bool result = await sut.DownloadSoundFileAndCopyToAnkiFolderAsync(url, word, CancellationToken.None);
+
+            // Assert
+            result.Should().BeTrue();
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("File already exists", $"File '{word}.mp3' already exists. Overwrite?", "Yes", "No"), Times.Once);
+
+            // we download file anyway
+            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+
+            // but the user refused to overwrite existing file
+            fileIOServiceMock.Verify(x => x.CopyToAsync(It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        #endregion
+
+        #region Tests for DownloadSoundFileAndSaveWithFileSaverAsync
+
+        [TestMethod]
+        public async Task DownloadSoundFileAndSaveWithFileSaverAsync_WhenFileSaverSucceeds_ReturnsTrue()
+        {
+            // Arrange
+            string url = _fixture.Create<Uri>().ToString();
+            string word = "test_word";
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
+
+            var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
+            fileSaverMock
+                .Setup(x => x.SaveAsync($"{word}.mp3", It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new FileSaverResult("test_path", null));
+
+            var sut = _fixture.Create<SaveSoundFileService>();
+
+            // Act
+            bool result = await sut.DownloadSoundFileAndSaveWithFileSaverAsync(url, word, CancellationToken.None);
+
+            // Assert
+            result.Should().BeTrue();
+            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()), Times.Once);
+            fileSaverMock.Verify(x => x.SaveAsync($"{word}.mp3", It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DownloadSoundFileAndSaveWithFileSaverAsync_WhenFileSaverFails_ReturnsFalse()
+        {
+            // Arrange
+            string url = _fixture.Create<Uri>().ToString();
+            string word = "test_word";
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
+
+            var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
+            fileSaverMock
+                .Setup(x => x.SaveAsync($"{word}.mp3", It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new FileSaverResult(null, new Exception("Save failed")));
+
+            var sut = _fixture.Create<SaveSoundFileService>();
+
+            // Act
+            bool result = await sut.DownloadSoundFileAndSaveWithFileSaverAsync(url, word, CancellationToken.None);
+
+            // Assert
+            result.Should().BeFalse();
+            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()), Times.Once);
+            fileSaverMock.Verify(x => x.SaveAsync($"{word}.mp3", It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DownloadSoundFileAndSaveWithFileSaverAsync_SavesFileWithCorrectFileName()
+        {
+            // Arrange
+            string url = _fixture.Create<Uri>().ToString();
+            string word = "my_sound";
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
+
+            var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
+            fileSaverMock
+                .Setup(x => x.SaveAsync("my_sound.mp3", It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new FileSaverResult("test_path", null))
+                .Verifiable();
+
+            var sut = _fixture.Create<SaveSoundFileService>();
+
+            // Act
+            await sut.DownloadSoundFileAndSaveWithFileSaverAsync(url, word, CancellationToken.None);
+
+            // Assert
+            fileSaverMock.Verify();
         }
 
         #endregion

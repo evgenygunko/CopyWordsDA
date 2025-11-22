@@ -15,12 +15,12 @@ namespace CopyWords.Core.Tests
             return fixture;
         }
 
-        public static void EnableDownloadSoundFromTranslationApp(this IFixture fixture, bool enable)
+        /*public static void EnableDownloadSoundFromTranslationApp(this IFixture fixture, bool enable)
         {
             var launchDarklyServiceMock = fixture.Freeze<Mock<ILaunchDarklyService>>();
             launchDarklyServiceMock
                 .Setup(x => x.GetBooleanFlag("download-sound-from-translation-app", It.IsAny<bool>()))
                 .Returns(enable);
-        }
+        }*/
     }
 }
