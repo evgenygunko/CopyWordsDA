@@ -304,8 +304,8 @@ namespace CopyWords.Core.Tests.Services
                 .Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
                     ItExpr.Is<HttpRequestMessage>(req =>
-                        req.Method == HttpMethod.Post &&
-                        req.RequestUri!.ToString().Contains("/api/NormalizeSound")),
+                        req.Method == HttpMethod.Get &&
+                        req.RequestUri!.ToString().Contains("/api/DownloadSound")),
                     ItExpr.IsAny<CancellationToken>()
                 )
                 .ReturnsAsync(new HttpResponseMessage
@@ -354,11 +354,13 @@ namespace CopyWords.Core.Tests.Services
             AppSettings appSettings = _fixture.Create<AppSettings>();
             appSettings.AnkiSoundsFolder = @"C:\Anki\Sounds";
 
-            string url = _fixture.Create<Uri>().ToString();
+            string url = "https://example.com/audio.mp3";
             string word = "existing_sound";
 
             string translatorAppUrl = "https://translator.example.com/";
             string requestCode = "test-code-123";
+
+            string expectedUrl = $"{translatorAppUrl.TrimEnd('/')}/api/DownloadSound?soundUrl={Uri.EscapeDataString(url)}&word={Uri.EscapeDataString(word)}&version=1&code={requestCode}";
 
             var handlerMock = new Mock<HttpMessageHandler>();
             handlerMock
@@ -366,8 +368,8 @@ namespace CopyWords.Core.Tests.Services
                 .Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
                     ItExpr.Is<HttpRequestMessage>(req =>
-                        req.Method == HttpMethod.Post &&
-                        req.RequestUri!.ToString() == $"{translatorAppUrl.TrimEnd('/')}/api/NormalizeSound?code={requestCode}"),
+                        req.Method == HttpMethod.Get &&
+                        req.RequestUri!.ToString() == expectedUrl),
                     ItExpr.IsAny<CancellationToken>()
                 )
                 .ReturnsAsync(new HttpResponseMessage
@@ -399,6 +401,7 @@ namespace CopyWords.Core.Tests.Services
             _fixture.Register(() => httpClient);
             var sut = _fixture.Create<FileDownloaderService>();
 
+
             // Act
             bool result = await sut.DownloadSoundFileAsync(url, word, CancellationToken.None);
 
@@ -411,8 +414,8 @@ namespace CopyWords.Core.Tests.Services
                 "SendAsync",
                 Times.Once(),
                 ItExpr.Is<HttpRequestMessage>(req =>
-                    req.Method == HttpMethod.Post &&
-                    req.RequestUri!.ToString() == $"{translatorAppUrl.TrimEnd('/')}/api/NormalizeSound?code={requestCode}"),
+                    req.Method == HttpMethod.Get &&
+                    req.RequestUri!.ToString() == expectedUrl),
                 ItExpr.IsAny<CancellationToken>());
         }
 
@@ -435,8 +438,8 @@ namespace CopyWords.Core.Tests.Services
                 .Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
                     ItExpr.Is<HttpRequestMessage>(req =>
-                        req.Method == HttpMethod.Post &&
-                        req.RequestUri!.ToString().Contains("/api/NormalizeSound")),
+                        req.Method == HttpMethod.Get &&
+                        req.RequestUri!.ToString().Contains("/api/DownloadSound")),
                     ItExpr.IsAny<CancellationToken>()
                 )
                 .ReturnsAsync(new HttpResponseMessage
@@ -493,8 +496,8 @@ namespace CopyWords.Core.Tests.Services
                 .Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
                     ItExpr.Is<HttpRequestMessage>(req =>
-                        req.Method == HttpMethod.Post &&
-                        req.RequestUri!.ToString().Contains("/api/NormalizeSound")),
+                        req.Method == HttpMethod.Get &&
+                        req.RequestUri!.ToString().Contains("/api/DownloadSound")),
                     ItExpr.IsAny<CancellationToken>()
                 )
                 .ReturnsAsync(new HttpResponseMessage
@@ -588,6 +591,8 @@ namespace CopyWords.Core.Tests.Services
             string translatorAppUrl = "https://translator.example.com/";
             string requestCode = "test-code-123";
 
+            string expectedUrl = $"{translatorAppUrl.TrimEnd('/')}/api/DownloadSound?soundUrl={Uri.EscapeDataString(soundUrl)}&word={Uri.EscapeDataString(word)}&version=1&code={requestCode}";
+
             HttpRequestMessage? capturedRequest = null;
 
             var handlerMock = new Mock<HttpMessageHandler>();
@@ -612,7 +617,8 @@ namespace CopyWords.Core.Tests.Services
 
             Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
             fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
-            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(false);
+            fileIOServiceMock.Setup(x => x.FileExists(Path.Combine(appSettings.AnkiSoundsFolder, $"{word}.mp3")))
+                .Returns(false);
 
             Mock<IGlobalSettings> globalSettingsMock = _fixture.Freeze<Mock<IGlobalSettings>>();
             globalSettingsMock.Setup(x => x.TranslatorAppUrl).Returns(translatorAppUrl);
@@ -627,16 +633,8 @@ namespace CopyWords.Core.Tests.Services
             // Assert
             result.Should().BeTrue();
             capturedRequest.Should().NotBeNull();
-            capturedRequest!.Method.Should().Be(HttpMethod.Post);
-            capturedRequest.RequestUri!.ToString().Should().Be($"{translatorAppUrl.TrimEnd('/')}/api/NormalizeSound?code={requestCode}");
-            capturedRequest.Content.Should().NotBeNull();
-
-            string requestBody = await capturedRequest.Content!.ReadAsStringAsync();
-            var normalizeRequest = JsonConvert.DeserializeObject<NormalizeSoundRequest>(requestBody);
-            normalizeRequest.Should().NotBeNull();
-            normalizeRequest!.SoundUrl.Should().Be(soundUrl);
-            normalizeRequest.Word.Should().Be(word);
-            normalizeRequest.Version.Should().Be("1");
+            capturedRequest!.Method.Should().Be(HttpMethod.Get);
+            capturedRequest.RequestUri!.ToString().Should().Be(expectedUrl);
         }
 
         #endregion
@@ -662,8 +660,8 @@ namespace CopyWords.Core.Tests.Services
                 .Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
                     ItExpr.Is<HttpRequestMessage>(req =>
-                        req.Method == HttpMethod.Post &&
-                        req.RequestUri!.ToString().Contains("/api/NormalizeSound")),
+                        req.Method == HttpMethod.Get &&
+                        req.RequestUri!.ToString().Contains("/api/DownloadSound")),
                     ItExpr.IsAny<CancellationToken>()
                 )
                 .ReturnsAsync(new HttpResponseMessage
@@ -685,8 +683,6 @@ namespace CopyWords.Core.Tests.Services
 
             _fixture.Register(() => httpClient);
             var sut = _fixture.Create<FileDownloaderService>();
-
-            // Act
             bool result = await sut.DownloadSoundFileAndSaveWithFileSaverAsync(soundUrl, word, CancellationToken.None);
 
             // Assert
@@ -713,8 +709,8 @@ namespace CopyWords.Core.Tests.Services
                 .Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
                     ItExpr.Is<HttpRequestMessage>(req =>
-                        req.Method == HttpMethod.Post &&
-                        req.RequestUri!.ToString().Contains("/api/NormalizeSound")),
+                        req.Method == HttpMethod.Get &&
+                        req.RequestUri!.ToString().Contains("/api/DownloadSound")),
                     ItExpr.IsAny<CancellationToken>()
                 )
                 .ReturnsAsync(new HttpResponseMessage
@@ -736,8 +732,6 @@ namespace CopyWords.Core.Tests.Services
 
             _fixture.Register(() => httpClient);
             var sut = _fixture.Create<FileDownloaderService>();
-
-            // Act
             bool result = await sut.DownloadSoundFileAndSaveWithFileSaverAsync(soundUrl, word, CancellationToken.None);
 
             // Assert
@@ -761,8 +755,8 @@ namespace CopyWords.Core.Tests.Services
                 .Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
                     ItExpr.Is<HttpRequestMessage>(req =>
-                        req.Method == HttpMethod.Post &&
-                        req.RequestUri!.ToString().Contains("/api/NormalizeSound")),
+                        req.Method == HttpMethod.Get &&
+                        req.RequestUri!.ToString().Contains("/api/DownloadSound")),
                     ItExpr.IsAny<CancellationToken>()
                 )
                 .ReturnsAsync(new HttpResponseMessage
@@ -836,6 +830,8 @@ namespace CopyWords.Core.Tests.Services
             string translatorAppUrl = "https://translator.example.com/";
             string requestCode = "test-code-123";
 
+            string expectedUrl = $"{translatorAppUrl.TrimEnd('/')}/api/DownloadSound?soundUrl={Uri.EscapeDataString(soundUrl)}&word={Uri.EscapeDataString(word)}&version=1&code={requestCode}";
+
             var fileSaverResult = new FileSaverResult(_fixture.Create<string>(), null);
 
             HttpRequestMessage? capturedRequest = null;
@@ -874,16 +870,8 @@ namespace CopyWords.Core.Tests.Services
             // Assert
             result.Should().BeTrue();
             capturedRequest.Should().NotBeNull();
-            capturedRequest!.Method.Should().Be(HttpMethod.Post);
-            capturedRequest.RequestUri!.ToString().Should().Be($"{translatorAppUrl.TrimEnd('/')}/api/NormalizeSound?code={requestCode}");
-            capturedRequest.Content.Should().NotBeNull();
-
-            string requestBody = await capturedRequest.Content!.ReadAsStringAsync();
-            var normalizeRequest = JsonConvert.DeserializeObject<NormalizeSoundRequest>(requestBody);
-            normalizeRequest.Should().NotBeNull();
-            normalizeRequest!.SoundUrl.Should().Be(soundUrl);
-            normalizeRequest.Word.Should().Be(word);
-            normalizeRequest.Version.Should().Be("1");
+            capturedRequest!.Method.Should().Be(HttpMethod.Get);
+            capturedRequest.RequestUri!.ToString().Should().Be(expectedUrl);
         }
 
         [TestMethod]

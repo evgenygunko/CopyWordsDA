@@ -1,11 +1,12 @@
 ﻿using System.Net;
 using System.Reflection;
 using CopyWords.Core.Models;
+using CopyWords.Core.Services;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;
 
-namespace CopyWords.Core.Services.Tests
+namespace CopyWords.Core.Tests.Services
 {
     [TestClass]
     public class UpdateServiceTests

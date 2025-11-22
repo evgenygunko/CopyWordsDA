@@ -2,11 +2,9 @@
 
 using System.Diagnostics;
 using System.Runtime.Versioning;
-using System.Text;
 using CommunityToolkit.Maui.Storage;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
-using Newtonsoft.Json;
 
 namespace CopyWords.Core.Services
 {
@@ -135,7 +133,7 @@ namespace CopyWords.Core.Services
                 return false;
             }
 
-            using Stream stream = await DownloadNormalizedSoundFile(soundUrl, word, cancellationToken);
+            using Stream stream = await DownloadSoundFileFromTranslatorAppAsync(soundUrl, word, cancellationToken);
 
             string fileName = $"{word}.mp3";
             string destinationFile = Path.Combine(ankiSoundsFolder, fileName);
@@ -158,7 +156,7 @@ namespace CopyWords.Core.Services
         [SupportedOSPlatform("android")]
         public async Task<bool> DownloadSoundFileAndSaveWithFileSaverAsync(string soundUrl, string word, CancellationToken cancellationToken)
         {
-            using Stream stream = await DownloadNormalizedSoundFile(soundUrl, word, cancellationToken);
+            using Stream stream = await DownloadSoundFileFromTranslatorAppAsync(soundUrl, word, cancellationToken);
 
             var fileSaverResult = await _fileSaver.SaveAsync($"{word}.mp3", stream, cancellationToken);
             return fileSaverResult.IsSuccessful;
@@ -166,22 +164,15 @@ namespace CopyWords.Core.Services
 
         #region Private Methods
 
-        private async Task<Stream> DownloadNormalizedSoundFile(string soundUrl, string word, CancellationToken cancellationToken)
+        private async Task<Stream> DownloadSoundFileFromTranslatorAppAsync(string soundUrl, string word, CancellationToken cancellationToken)
         {
-            string normalizeSoundUrl = $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/NormalizeSound?code={_globalSettings.TranslatorAppRequestCode}";
+            string downloadSoundUrl = $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/DownloadSound?" +
+                $"soundUrl={Uri.EscapeDataString(soundUrl)}&word={Uri.EscapeDataString(word)}&version=1&code={_globalSettings.TranslatorAppRequestCode}";
 
-            var input = new NormalizeSoundRequest(
-                SoundUrl: soundUrl,
-                Word: word,
-                Version: "1");
-
-            string jsonRequest = JsonConvert.SerializeObject(input);
-            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-
-            using var combinedCts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+            using var combinedCts = new CancellationTokenSource(TimeSpan.FromSeconds(20));
             using CancellationTokenSource cts = CancellationTokenSource.CreateLinkedTokenSource(combinedCts.Token, cancellationToken);
 
-            HttpResponseMessage response = await _httpClient.PostAsync(normalizeSoundUrl, content, combinedCts.Token);
+            HttpResponseMessage response = await _httpClient.GetAsync(downloadSoundUrl, combinedCts.Token);
 
             if (!response.IsSuccessStatusCode)
             {
