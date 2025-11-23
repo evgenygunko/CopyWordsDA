@@ -24,9 +24,7 @@ On Android, you can copy the **front** and **back** fields.
 ## Sound Functionality
 
 - **Play sound**: Downloads an MP3 file (if available) and plays it.
-- **Save sound**: Normalizes the sound file (adjusting its volume) and saves it to Anki's media collection folder.
-
-> Normalizing requires [mp3Gain](http://mp3gain.sourceforge.net/), which is optional.
+- **Save sound**: Saves the sound file to Anki's media collection folder.
 
 ---
 
@@ -39,9 +37,8 @@ The settings dialog can be opened by clicking the **Settings** button in the app
 - **Export**: Save settings as a JSON file.
 - **Import**: Load settings from a JSON file.
 - **Path to Anki Media Collection** _(only relevant for Copy Mode)_
-- **Path to FFMpeg**: Location of the [ffmpeg](https://www.ffmpeg.org/) utility, used to convert audio files.
-- **Path to MP3Gain**: Location of the [mp3gain](http://mp3gain.sourceforge.net/) utility, used to normalize MP3 volume. _(Optional)_
 - **Show copy buttons**: Switch between dictionary mode and copy mode.
+- **Copy translated meanings**: Include translated meanings when copying word details.
 
 ---
 

@@ -106,7 +106,7 @@
             <VerticalStackLayout>
                 <HorizontalStackLayout>
                     <Label
-                            Text="Show copy "
+                            Text="Show copy buttons:"
                             VerticalOptions="Center"></Label>
                     <CheckBox
                             IsChecked="{Binding ShowCopyButtons}"
