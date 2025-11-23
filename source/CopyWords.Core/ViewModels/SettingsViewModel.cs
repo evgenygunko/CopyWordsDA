@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Ffmpeg Validator Api
+﻿// Ignore Spelling: Validator Api
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -52,22 +52,6 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         public partial string? AnkiSoundsFolder { get; set; }
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        public partial string? FfmpegBinFolder { get; set; }
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        public partial bool UseMp3gain { get; set; }
-
-        public bool CanUseMp3gain => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-
-        public bool CanUseFfmpeg => RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        public partial string? Mp3gainPath { get; set; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
@@ -153,48 +137,6 @@ namespace CopyWords.Core.ViewModels
             if (result.IsSuccessful)
             {
                 AnkiSoundsFolder = result.Folder.Path;
-            }
-        }
-
-        [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst15.0")]
-        [SupportedOSPlatform("android")]
-        [RelayCommand]
-        public async Task PickFfmpegBinFolderAsync(CancellationToken cancellationToken)
-        {
-            var result = await FolderPicker.Default.PickAsync(cancellationToken);
-            if (result.IsSuccessful)
-            {
-                FfmpegBinFolder = result.Folder.Path;
-            }
-        }
-
-        [RelayCommand]
-        public async Task PickMp3gainPathAsync()
-        {
-            var customFileType = new FilePickerFileType(
-                new Dictionary<DevicePlatform, IEnumerable<string>>
-                {
-                    { DevicePlatform.WinUI, new[] { ".exe" } }, // file extension
-                });
-
-            PickOptions options = new()
-            {
-                PickerTitle = "Please select path to mp3gain.exe",
-                FileTypes = customFileType,
-            };
-
-            try
-            {
-                var result = await FilePicker.Default.PickAsync(options);
-                if (result != null)
-                {
-                    Mp3gainPath = result.FullPath;
-                }
-            }
-            catch (Exception)
-            {
-                // The user canceled or something went wrong
             }
         }
 
@@ -320,11 +262,6 @@ namespace CopyWords.Core.ViewModels
         private void UpdateUI(AppSettings appSettings)
         {
             AnkiSoundsFolder = appSettings.AnkiSoundsFolder;
-            FfmpegBinFolder = appSettings.FfmpegBinFolder;
-
-            UseMp3gain = appSettings.UseMp3gain;
-            Mp3gainPath = appSettings.Mp3gainPath;
-
             ShowCopyButtons = appSettings.ShowCopyButtons;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
         }
@@ -332,9 +269,6 @@ namespace CopyWords.Core.ViewModels
         private void UpdateAppSettingsWithCurrentValues(AppSettings appSettings)
         {
             appSettings.AnkiSoundsFolder = AnkiSoundsFolder ?? string.Empty;
-            appSettings.FfmpegBinFolder = FfmpegBinFolder ?? string.Empty;
-            appSettings.Mp3gainPath = Mp3gainPath ?? string.Empty;
-            appSettings.UseMp3gain = UseMp3gain;
             appSettings.ShowCopyButtons = ShowCopyButtons;
             appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
         }

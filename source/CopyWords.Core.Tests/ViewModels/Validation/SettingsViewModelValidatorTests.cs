@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Validator Ffmpeg Api
+﻿// Ignore Spelling: Validator Api
 
 using AutoFixture;
 using CommunityToolkit.Maui.Storage;
@@ -45,39 +45,6 @@ namespace CopyWords.Core.Tests.ViewModels.Validation
             result.IsValid.Should().BeFalse();
             result.Errors.Should().HaveCount(1);
             result.Errors.First().ErrorMessage.Should().Be("'Anki Sounds Folder' must not be empty.");
-        }
-
-        [TestMethod]
-        public void Validate_WhenFfmpegBinFolderIsEmpty_ReturnsFalse()
-        {
-            var appSettings = _fixture.Create<AppSettings>();
-            appSettings.FfmpegBinFolder = string.Empty;
-
-            SettingsViewModel settingsViewModel = CreateSettingsViewModel(appSettings);
-
-            var sut = _fixture.Create<SettingsViewModelValidator>();
-            ValidationResult result = sut.Validate(settingsViewModel);
-
-            result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1);
-            result.Errors.First().ErrorMessage.Should().Be("'Path to Ffmpeg' must not be empty.");
-        }
-
-        [TestMethod]
-        public void Validate_WhenUseMPGainAndMp3gainPathIsEmpty_ReturnsFalse()
-        {
-            var appSettings = _fixture.Create<AppSettings>();
-            appSettings.UseMp3gain = true;
-            appSettings.Mp3gainPath = string.Empty;
-
-            SettingsViewModel settingsViewModel = CreateSettingsViewModel(appSettings);
-
-            var sut = _fixture.Create<SettingsViewModelValidator>();
-            ValidationResult result = sut.Validate(settingsViewModel);
-
-            result.IsValid.Should().BeFalse();
-            result.Errors.Should().HaveCount(1);
-            result.Errors.First().ErrorMessage.Should().Be("'Path to mp3gain' must not be empty.");
         }
 
         private SettingsViewModel CreateSettingsViewModel(AppSettings appSettings)

@@ -1,6 +1,5 @@
 ﻿// Ignore Spelling: App Api
 
-using System.Runtime.InteropServices;
 using AutoFixture;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
@@ -32,14 +31,6 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Get("MainWindowYPos", It.IsAny<string>(), It.IsAny<string>()));
 
             preferencesMock.Verify(x => x.Get("AnkiSoundsFolder", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("FfmpegBinFolder", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("Mp3gainPath", It.IsAny<string>(), It.IsAny<string>()));
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                preferencesMock.Verify(x => x.Get("UseMp3gain", It.IsAny<bool>(), It.IsAny<string>()));
-            }
-
             preferencesMock.Verify(x => x.Get("ShowCopyButtons", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
@@ -65,9 +56,6 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("MainWindowYPos", appSettings.MainWindowYPos.ToString(), It.IsAny<string>()));
 
             preferencesMock.Verify(x => x.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("FfmpegBinFolder", appSettings.FfmpegBinFolder, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("Mp3gainPath", appSettings.Mp3gainPath, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("UseMp3gain", appSettings.UseMp3gain, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("ShowCopyButtons", appSettings.ShowCopyButtons, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("SelectedParser", appSettings.SelectedParser, It.IsAny<string>()));
@@ -95,14 +83,6 @@ namespace CopyWords.Core.Tests.Services
 
             // ExportSettingsAsync reads settings from current preferences storage
             preferencesMock.Verify(x => x.Get("AnkiSoundsFolder", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("FfmpegBinFolder", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("Mp3gainPath", It.IsAny<string>(), It.IsAny<string>()));
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                preferencesMock.Verify(x => x.Get("UseMp3gain", false, It.IsAny<string>()));
-            }
-
             preferencesMock.Verify(x => x.Get("ShowCopyButtons", true, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", true, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
@@ -131,12 +111,6 @@ namespace CopyWords.Core.Tests.Services
 
             // ImportSettingsAsync also saves settings to current preferences storage
             preferencesMock.Verify(x => x.Set("AnkiSoundsFolder", result!.AnkiSoundsFolder, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("FfmpegBinFolder", result!.FfmpegBinFolder, It.IsAny<string>()));
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                preferencesMock.Verify(x => x.Set("UseMp3gain", false, It.IsAny<string>()));
-            }
 
             preferencesMock.Verify(x => x.Set("ShowCopyButtons", false, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", false, It.IsAny<string>()));

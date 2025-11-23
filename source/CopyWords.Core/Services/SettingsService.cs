@@ -59,9 +59,6 @@ namespace CopyWords.Core.Services
             appSettings.MainWindowYPos = GetDoubleValue("MainWindowYPos", 100);
 
             appSettings.AnkiSoundsFolder = _preferences.Get("AnkiSoundsFolder", Path.GetTempPath());
-            appSettings.FfmpegBinFolder = GetFfmpegBinFolder();
-            appSettings.Mp3gainPath = _preferences.Get("Mp3gainPath", string.Empty);
-            appSettings.UseMp3gain = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && _preferences.Get<bool>("UseMp3gain", false);
 
             // On mobile by default show the app in a "dictionary" mode, without copy buttons.
             bool showCopyButtonsDefaultValue = _deviceInfo.Platform != DevicePlatform.Android;
@@ -81,9 +78,6 @@ namespace CopyWords.Core.Services
             SetDoubleValue("MainWindowYPos", appSettings.MainWindowYPos);
 
             _preferences.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder);
-            _preferences.Set("FfmpegBinFolder", appSettings.FfmpegBinFolder);
-            _preferences.Set("Mp3gainPath", appSettings.Mp3gainPath);
-            _preferences.Set("UseMp3gain", appSettings.UseMp3gain);
             _preferences.Set("ShowCopyButtons", appSettings.ShowCopyButtons);
             _preferences.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings);
             _preferences.Set("SelectedParser", appSettings.SelectedParser);
@@ -180,17 +174,6 @@ namespace CopyWords.Core.Services
         {
             string dictionary = GetSelectedParser();
             return $"History_{dictionary}";
-        }
-
-        private string GetFfmpegBinFolder()
-        {
-            if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
-            {
-                return _preferences.Get("FfmpegBinFolder", "/usr/local/bin/");
-            }
-
-            string wingetPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "AppData", "Local", "Microsoft", "WinGet", "Links");
-            return _preferences.Get("FfmpegBinFolder", wingetPath);
         }
 
         private double GetDoubleValue(string settingName, int defaultValue)

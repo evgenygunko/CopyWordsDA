@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Ffmpeg Api
+﻿// Ignore Spelling: Api
 
 using System.Runtime.Versioning;
 using AutoFixture;
@@ -41,8 +41,6 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Verify(x => x.LoadSettings());
 
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
-            sut.UseMp3gain.Should().Be(appSettings.UseMp3gain);
-            sut.Mp3gainPath.Should().Be(appSettings.Mp3gainPath);
             sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);
             sut.CopyTranslatedMeanings.Should().Be(appSettings.CopyTranslatedMeanings);
         }
@@ -273,8 +271,6 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.ImportSettingsAsync();
 
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
-            sut.UseMp3gain.Should().Be(appSettings.UseMp3gain);
-            sut.Mp3gainPath.Should().Be(appSettings.Mp3gainPath);
             sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);
             sut.CopyTranslatedMeanings.Should().Be(appSettings.CopyTranslatedMeanings);
 
