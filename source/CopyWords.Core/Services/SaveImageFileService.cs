@@ -13,11 +13,20 @@ namespace CopyWords.Core.Services
     public class SaveImageFileService : ISaveImageFileService
     {
         private readonly IFileDownloaderService _fileDownloaderService;
+        private readonly ISettingsService _settingsService;
+        private readonly IDialogService _dialogService;
+        private readonly IFileIOService _fileIOService;
 
         public SaveImageFileService(
-            IFileDownloaderService fileDownloaderService)
+            IFileDownloaderService fileDownloaderService,
+            ISettingsService settingsService,
+            IDialogService dialogService,
+            IFileIOService fileIOService)
         {
             _fileDownloaderService = fileDownloaderService;
+            _settingsService = settingsService;
+            _dialogService = dialogService;
+            _fileIOService = fileIOService;
         }
 
         internal bool IsUnitTest { get; set; }
@@ -31,7 +40,9 @@ namespace CopyWords.Core.Services
 
             // download file from web into temp folder
             string imgFile = Path.Combine(Path.GetTempPath(), fileName);
-            bool downloadSucceeded = await _fileDownloaderService.DownloadFileAsync(url, imgFile);
+            CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
+
+            bool downloadSucceeded = await _fileDownloaderService.DownloadFileAsync(url, imgFile, cancellationToken);
             if (!downloadSucceeded)
             {
                 return false;
@@ -41,10 +52,36 @@ namespace CopyWords.Core.Services
             string jpgFile = await ResizeFileAsync(imgFile);
 
             // copy file into Anki's sounds folder
-            return await _fileDownloaderService.CopyFileToAnkiFolderAsync(jpgFile);
+            return await CopyFileToAnkiFolderAsync(jpgFile);
         }
 
         #endregion
+
+        internal async Task<bool> CopyFileToAnkiFolderAsync(string sourceFile)
+        {
+            string ankiSoundsFolder = _settingsService.LoadSettings().AnkiSoundsFolder;
+            if (!_fileIOService.DirectoryExists(ankiSoundsFolder))
+            {
+                await _dialogService.DisplayAlertAsync("Path to Anki folder is incorrect", $"Cannot find path to Anki folder '{ankiSoundsFolder}'. Please update it in Settings.", "OK");
+                return false;
+            }
+
+            string destinationFile = Path.Combine(ankiSoundsFolder, Path.GetFileName(sourceFile));
+
+            if (_fileIOService.FileExists(destinationFile))
+            {
+                bool answer = await _dialogService.DisplayAlertAsync("File already exists", $"File '{Path.GetFileName(sourceFile)}' already exists. Overwrite?", "Yes", "No");
+                if (!answer)
+                {
+                    // User doesn't want to overwrite the file, so we can skip the copy. But the file already exists, so we return true.
+                    return true;
+                }
+            }
+
+            _fileIOService.CopyFile(sourceFile, destinationFile, true);
+
+            return true;
+        }
 
         #region Private Methods
 
