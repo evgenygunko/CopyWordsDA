@@ -84,6 +84,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<INavigationHistory, NavigationHistory>();
         builder.Services.AddSingleton<IBuildConfiguration, BuildConfiguration>();
         builder.Services.AddSingleton<IGlobalSettings>(globalSettings);
+        builder.Services.AddSingleton<IImageSharpWrapper, ImageSharpWrapper>();
 
         builder.Services.AddHttpClient<ITranslationsService, TranslationsService>();
         builder.Services.AddHttpClient<IUpdateService, UpdateService>();

@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Downloader
 
 using AutoFixture;
+using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
@@ -17,140 +18,173 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for SaveImageFileAsync
 
         [TestMethod]
-        public async Task SaveImageFileAsync_Should_CallFileDownloaderService()
+        public async Task SaveImageFileAsync_WhenAnkiFolderDoesNotExist_DisplaysAlertAndReturnsFalse()
         {
             const string url = "https://example.com/image.png";
             string fileNameWithoutExtension = _fixture.Create<string>();
 
-            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
-            fileDownloaderServiceMock
-                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(true);
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.AnkiSoundsFolder = "nonexistent-folder";
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(false);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var sut = _fixture.Create<SaveImageFileService>();
-            sut.IsUnitTest = true;
-
-            _ = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
-
-            fileDownloaderServiceMock
-                .Verify(x => x.DownloadFileAsync(url, It.Is<string>(s => s.EndsWith($"{fileNameWithoutExtension}.png")), It.IsAny<CancellationToken>()));
-        }
-
-        [TestMethod]
-        public async Task SaveImageFileAsync_WhenCannotDownloadFile_ReturnsFalse()
-        {
-            const string url = "https://example.com/image.png";
-            string fileNameWithoutExtension = _fixture.Create<string>();
-
-            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
-            fileDownloaderServiceMock
-                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(false);
-
-            var sut = _fixture.Create<SaveImageFileService>();
-            sut.IsUnitTest = true;
 
             bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
 
             result.Should().BeFalse();
-            fileDownloaderServiceMock
-                .Verify(x => x.DownloadFileAsync(url, It.Is<string>(s => s.EndsWith($"{fileNameWithoutExtension}.png")), It.IsAny<CancellationToken>()));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Path to Anki folder is incorrect", $"Cannot find path to Anki folder '{appSettings.AnkiSoundsFolder}'. Please update it in Settings.", "OK"));
         }
 
-        #endregion
-
-        #region Tests for CopyFileToAnkiFolderAsync
-
         [TestMethod]
-        public async Task CopyFileToAnkiFolderAsync_WhenAnkiSoundsFolderDoesNotExist_DisplaysAlertAndReturnsFalse()
+        public async Task SaveImageFileAsync_WhenDownloadSucceedsAndFileDoesNotExist_SavesResizedImage()
         {
+            const string url = "https://example.com/image.png";
+            string fileNameWithoutExtension = _fixture.Create<string>();
+
             AppSettings appSettings = _fixture.Create<AppSettings>();
-            appSettings.AnkiSoundsFolder = "abc";
 
-            string sourceFile = _fixture.Create<string>();
-
-            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
-            Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
+            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(false);
 
-            Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-            fileIOServiceMock.Setup(x => x.FileExists(sourceFile)).Returns(true);
-            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(false);
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new MemoryStream(new byte[] { 1, 2, 3 }));
+
+            var imageSharpWrapperMock = _fixture.Freeze<Mock<IImageSharpWrapper>>();
+            imageSharpWrapperMock
+                .Setup(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((SixLabors.ImageSharp.Image)null!);
+            imageSharpWrapperMock
+                .Setup(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
 
             var sut = _fixture.Create<SaveImageFileService>();
-            bool result = await sut.CopyFileToAnkiFolderAsync(sourceFile);
+
+            bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
+
+            result.Should().BeTrue();
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(url, It.IsAny<CancellationToken>()), Times.Once);
+            imageSharpWrapperMock.Verify(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
+            imageSharpWrapperMock.Verify(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveImageFileAsync_WhenFileExistsAndUserDoesNotWantToOverwrite_ReturnsTrue()
+        {
+            const string url = "https://example.com/image.png";
+            string fileNameWithoutExtension = _fixture.Create<string>();
+
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
+            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new MemoryStream(new byte[] { 1, 2, 3 }));
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock
+                .Setup(x => x.DisplayAlertAsync("File already exists", It.IsAny<string>(), "Yes", "No"))
+                .ReturnsAsync(false);
+
+            var imageSharpWrapperMock = _fixture.Freeze<Mock<IImageSharpWrapper>>();
+
+            var sut = _fixture.Create<SaveImageFileService>();
+
+            bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
+
+            result.Should().BeTrue();
+            imageSharpWrapperMock.Verify(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task SaveImageFileAsync_WhenFileExistsAndUserWantsToOverwrite_SavesResizedImage()
+        {
+            const string url = "https://example.com/image.png";
+            string fileNameWithoutExtension = _fixture.Create<string>();
+
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
+            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new MemoryStream(new byte[] { 1, 2, 3 }));
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock
+                .Setup(x => x.DisplayAlertAsync("File already exists", It.IsAny<string>(), "Yes", "No"))
+                .ReturnsAsync(true);
+
+            var imageSharpWrapperMock = _fixture.Freeze<Mock<IImageSharpWrapper>>();
+            imageSharpWrapperMock
+                .Setup(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((SixLabors.ImageSharp.Image)null!);
+            imageSharpWrapperMock
+                .Setup(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
+            var sut = _fixture.Create<SaveImageFileService>();
+
+            bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
+
+            result.Should().BeTrue();
+            imageSharpWrapperMock.Verify(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
+            imageSharpWrapperMock.Verify(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveImageFileAsync_WhenDownloadThrowsServerErrorException_DisplaysAlertAndReturnsFalse()
+        {
+            const string url = "https://example.com/image.png";
+            string fileNameWithoutExtension = _fixture.Create<string>();
+
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+
+            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
+            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(false);
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new ServerErrorException("Server error"));
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = _fixture.Create<SaveImageFileService>();
+
+            bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
 
             result.Should().BeFalse();
-
-            settingsServiceMock.Verify(x => x.LoadSettings());
-            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Path to Anki folder is incorrect", "Cannot find path to Anki folder 'abc'. Please update it in Settings.", "OK"));
-        }
-
-        [TestMethod]
-        public async Task CopyFileToAnkiFolderAsync_WhenDestinationFileExistsAndUserDoesNotWantToOverwrite_SkipsCopying()
-        {
-            const bool overwriteFile = false;
-            AppSettings appSettings = _fixture.Create<AppSettings>();
-
-            string sourceFile = _fixture.Create<string>();
-
-            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings).Verifiable();
-
-            Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-            dialogServiceMock.Setup(x => x.DisplayAlertAsync("File already exists", It.IsAny<string>(), "Yes", "No"))
-                .ReturnsAsync(overwriteFile)
-                .Verifiable();
-
-            Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-            fileIOServiceMock.SetupSequence(x => x.FileExists(It.IsAny<string>()))
-                .Returns(true) // source file
-                .Returns(true); // destination file
-            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
-
-            var sut = _fixture.Create<SaveImageFileService>();
-            bool result = await sut.CopyFileToAnkiFolderAsync(sourceFile);
-
-            // We want to return true, because the file already exists and so we can create a link to it in the back card
-            result.Should().BeTrue();
-
-            settingsServiceMock.Verify();
-            dialogServiceMock.Verify();
-            fileIOServiceMock.Verify(x => x.CopyFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()), Times.Never);
-        }
-
-        [TestMethod]
-        public async Task CopyFileToAnkiFolderAsync_WhenDestinationFileExistsAndUserWantsToOverwrite_CopiesFile()
-        {
-            const bool overwriteFile = true;
-            AppSettings appSettings = _fixture.Create<AppSettings>();
-
-            string sourceFile = _fixture.Create<string>();
-
-            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings).Verifiable();
-
-            Mock<IDialogService> dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-            dialogServiceMock.Setup(x => x.DisplayAlertAsync("File already exists", It.IsAny<string>(), "Yes", "No"))
-                .ReturnsAsync(overwriteFile)
-                .Verifiable();
-
-            Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-            fileIOServiceMock.SetupSequence(x => x.FileExists(It.IsAny<string>()))
-                .Returns(true) // source file
-                .Returns(true); // destination file
-            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
-
-            var sut = _fixture.Create<SaveImageFileService>();
-            bool result = await sut.CopyFileToAnkiFolderAsync(sourceFile);
-
-            // We want to return true, because the file already exists and so we can create a link to it in the back card
-            result.Should().BeTrue();
-
-            settingsServiceMock.Verify();
-            dialogServiceMock.Verify();
-            fileIOServiceMock.Verify(x => x.CopyFile(sourceFile, It.IsAny<string>(), true));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot download image", "Cannot download image file from 'https://example.com/image.png'. Error: Server error", "OK"));
         }
 
         #endregion

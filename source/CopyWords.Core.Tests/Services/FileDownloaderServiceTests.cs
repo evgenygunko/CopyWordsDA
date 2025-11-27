@@ -22,22 +22,40 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for DownloadFileAsync
 
         [TestMethod]
-        public async Task DownloadFileAsync_WhenUrlIsInvalid_ReturnsFalse()
+        public async Task DownloadFileAsync_WhenServerReturnsError_ThrowsServerErrorException()
         {
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            string url = _fixture.Create<Uri>().ToString();
 
+            var handlerMock = new Mock<HttpMessageHandler>();
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+                )
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                });
+
+            var httpClient = new HttpClient(handlerMock.Object);
+
+            _fixture.Register(() => httpClient);
             var sut = _fixture.Create<FileDownloaderService>();
-            bool result = await sut.DownloadFileAsync(It.IsAny<string>(), It.IsAny<string>(), CancellationToken.None);
 
-            result.Should().BeFalse();
-            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot download file", It.IsAny<string>(), "OK"));
+            Func<Task> act = async () => await sut.DownloadFileAsync(url, CancellationToken.None);
+
+            await act.Should().ThrowAsync<ServerErrorException>()
+                .WithMessage("The server returned the error 'InternalServerError'.");
         }
 
         [TestMethod]
-        public async Task DownloadFileAsync_WhenCouldNotSaveTempFile_ReturnsFalse()
+        public async Task DownloadFileAsync_WhenRequestIsSuccessful_ReturnsStream()
         {
             string url = _fixture.Create<Uri>().ToString();
-            string filePath = Path.Combine(Path.GetTempPath(), "sound.mp3");
+
+            byte[] expectedBytes = new byte[] { 1, 2, 3, 4, 5 };
 
             var handlerMock = new Mock<HttpMessageHandler>();
             handlerMock
@@ -50,61 +68,22 @@ namespace CopyWords.Core.Tests.Services
                 .ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent("abc"),
+                    Content = new StreamContent(new MemoryStream(expectedBytes)),
                 });
 
             var httpClient = new HttpClient(handlerMock.Object);
 
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-
-            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-            fileIOServiceMock.Setup(x => x.WriteAllBytesAsync(filePath, It.IsAny<byte[]>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.CompletedTask);
-            fileIOServiceMock.Setup(x => x.FileExists(filePath)).Returns(false);
-
             _fixture.Register(() => httpClient);
             var sut = _fixture.Create<FileDownloaderService>();
-            bool result = await sut.DownloadFileAsync(url, filePath, CancellationToken.None);
 
-            result.Should().BeFalse();
-            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot download file", It.IsAny<string>(), "OK"));
-        }
+            using Stream result = await sut.DownloadFileAsync(url, CancellationToken.None);
 
-        [TestMethod]
-        public async Task DownloadFileAsync_WhenFileIsDownloaded_ReturnsTrue()
-        {
-            string url = _fixture.Create<Uri>().ToString();
-            string filePath = Path.Combine(Path.GetTempPath(), "sound.mp3");
+            result.Should().NotBeNull();
 
-            var handlerMock = new Mock<HttpMessageHandler>();
-            handlerMock
-                .Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>()
-                )
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent("abc"),
-                });
-
-            var httpClient = new HttpClient(handlerMock.Object);
-
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-
-            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-            fileIOServiceMock.Setup(x => x.WriteAllBytesAsync(filePath, It.IsAny<byte[]>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.CompletedTask);
-            fileIOServiceMock.Setup(x => x.FileExists(filePath)).Returns(true);
-
-            _fixture.Register(() => httpClient);
-            var sut = _fixture.Create<FileDownloaderService>();
-            bool result = await sut.DownloadFileAsync(url, filePath, CancellationToken.None);
-
-            result.Should().BeTrue();
-            dialogServiceMock.VerifyNoOtherCalls();
+            // Verify we can read the stream
+            using var memoryStream = new MemoryStream();
+            await result.CopyToAsync(memoryStream);
+            memoryStream.ToArray().Should().BeEquivalentTo(expectedBytes);
         }
 
         #endregion
