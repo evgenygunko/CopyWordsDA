@@ -2,6 +2,7 @@
 
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 using CopyWords.Core.ViewModels;
 
 namespace CopyWords.MAUI;

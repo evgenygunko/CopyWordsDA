@@ -5,6 +5,7 @@ using AutoFixture;
 using CommunityToolkit.Maui.Storage;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 using CopyWords.Core.ViewModels;
 using FluentAssertions;
 using FluentValidation;

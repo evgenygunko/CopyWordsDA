@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 
 namespace CopyWords.Core.ViewModels
 {

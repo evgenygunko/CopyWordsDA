@@ -3,6 +3,7 @@
 using System.Diagnostics;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
+using CopyWords.Core.Services.Wrappers;
 
 namespace CopyWords.Core.Services
 {

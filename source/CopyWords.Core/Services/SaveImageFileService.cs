@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Downloader
 
+using CopyWords.Core.Services.Wrappers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 

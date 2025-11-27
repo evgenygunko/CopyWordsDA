@@ -3,6 +3,7 @@
 using AutoFixture;
 using CommunityToolkit.Maui.Core;
 using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 using Moq;
 
 namespace CopyWords.Core.Tests.Services

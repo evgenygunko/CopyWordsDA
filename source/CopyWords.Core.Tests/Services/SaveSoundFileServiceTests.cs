@@ -4,6 +4,7 @@ using AutoFixture;
 using CommunityToolkit.Maui.Storage;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 using FluentAssertions;
 using Moq;
 

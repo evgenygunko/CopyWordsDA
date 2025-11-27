@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 using FluentValidation;
 using FluentValidation.Results;
 

@@ -3,6 +3,7 @@
 using System.Diagnostics;
 using System.Timers;
 using CommunityToolkit.Maui.Core;
+using CopyWords.Core.Services.Wrappers;
 
 namespace CopyWords.Core.Services
 {

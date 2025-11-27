@@ -1,4 +1,4 @@
-﻿namespace CopyWords.Core.Services
+﻿namespace CopyWords.Core.Services.Wrappers
 {
     public interface IEmailService
     {

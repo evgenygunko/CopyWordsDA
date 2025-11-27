@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 
 namespace CopyWords.Core.ViewModels
 {

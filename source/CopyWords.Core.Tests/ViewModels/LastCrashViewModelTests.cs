@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 using CopyWords.Core.ViewModels;
 using FluentAssertions;
 using Moq;

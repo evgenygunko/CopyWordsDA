@@ -1,7 +1,8 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using AutoFixture;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 using CopyWords.Core.ViewModels;
 using FluentAssertions;
 using Moq;

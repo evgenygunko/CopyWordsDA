@@ -1,9 +1,10 @@
-// Ignore Spelling: snackbar Snackbars
+﻿// Ignore Spelling: snackbar Snackbars
 
 using AutoFixture;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 using CopyWords.Core.ViewModels;
 using FluentAssertions;
 using Moq;

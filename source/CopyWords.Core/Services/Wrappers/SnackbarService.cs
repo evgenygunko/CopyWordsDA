@@ -3,7 +3,7 @@
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 
-namespace CopyWords.Core.Services
+namespace CopyWords.Core.Services.Wrappers
 {
     public interface ISnackbarService
     {

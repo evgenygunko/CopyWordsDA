@@ -4,7 +4,7 @@ using LaunchDarkly.Sdk;
 using LaunchDarkly.Sdk.Client;
 using LaunchDarkly.Sdk.Client.Interfaces;
 
-namespace CopyWords.Core.Services
+namespace CopyWords.Core.Services.Wrappers
 {
     public interface ILaunchDarklyService
     {
