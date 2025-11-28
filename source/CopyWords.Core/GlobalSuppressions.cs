@@ -14,7 +14,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pending>", Scope = "member", Target = "~M:CopyWords.Core.ViewModels.WordViewModel.CopyExamplesAsync~System.Threading.Tasks.Task")]
 
 [assembly: SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "Need to see its value in debugger", Scope = "member", Target = "~M:CopyWords.Core.ViewModels.SettingsViewModel.PickSettingsFilePathAsync~System.Threading.Tasks.Task{System.String}")]
-[assembly: SuppressMessage("Style", "IDE0305:Simplify collection initialization", Justification = "<Reviewed>", Scope = "member", Target = "~M:CopyWords.Core.ViewModels.WordViewModel.OpenCopyMenuAsync~System.Threading.Tasks.Task")]
 [assembly: SuppressMessage("Style", "IDE0018:Inline variable declaration", Justification = "<Reviewed>", Scope = "member", Target = "~M:CopyWords.Core.ViewModels.MainViewModel.UpdateUI(CopyWords.Core.Models.WordModel)")]
 [assembly: SuppressMessage("Style", "IDE0032:Use auto property", Justification = "<Reviewed>", Scope = "member", Target = "~F:CopyWords.Core.ViewModels.MainViewModel._wordViewModel")]
 

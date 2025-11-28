@@ -77,7 +77,6 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(CopyFrontCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyBackCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyExamplesCommand))]
-        [NotifyCanExecuteChangedFor(nameof(OpenCopyMenuCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShareCommand))]
         public partial bool CanCopyFront { get; set; }
 
@@ -178,79 +177,25 @@ namespace CopyWords.Core.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
-        public async Task OpenCopyMenuAsync()
-        {
-            // This command is used to open the context menu for copying.
-            var options = new List<string>();
-            if (CanCopyFront)
-            {
-                options.Add("Front");
-                options.Add("Back");
-            }
-            if (CanCopyPartOfSpeech)
-            {
-                options.Add("Part of speech");
-            }
-            if (CanCopyEndings)
-            {
-                options.Add("Endings");
-            }
-            if (CanCopyFront)
-            {
-                options.Add("Examples");
-            }
-
-            string result = await _dialogService.DisplayActionSheetAsync(title: "Select field to copy:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, options.ToArray());
-
-            // The action sheet returns the button that user pressed, so it can also be "Cancel"
-            if (!string.IsNullOrEmpty(result) && result != "Cancel")
-            {
-                switch (result)
-                {
-                    case "Front":
-                        await CopyFrontAsync();
-                        break;
-                    case "Back":
-                        await CopyBackAsync();
-                        break;
-                    case "Part of speech":
-                        await CopyPartOfSpeechAsync();
-                        break;
-                    case "Endings":
-                        await CopyEndingsAsync();
-                        break;
-                    case "Examples":
-                        await CopyExamplesAsync();
-                        break;
-                    default:
-                        await _dialogService.DisplayAlertAsync("Error", "Unknown action", "OK");
-                        break;
-                }
-            }
-        }
-
-        [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task ShareAsync()
         {
             try
             {
-                string subjectToShare;
-                string textToShare;
+                string subjectToShare = string.Empty;
+                string textToShare = string.Empty;
 
                 if (ShowCopyButtons)
                 {
+                    // When checkboxes are shown, allow a user to select any meanings to share. The shared text will have html formatting
+                    // to make it look nice in AnkiDroid.
                     subjectToShare = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModels);
-                    if (string.IsNullOrEmpty(subjectToShare))
-                    {
-                        await _dialogService.DisplayAlertAsync("Oops!", "You need to select at least one example before sharing.", "OK");
-                        return;
-                    }
-
                     textToShare = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModels);
                 }
-                else
+
+                if (string.IsNullOrEmpty(subjectToShare))
                 {
-                    // If copy buttons are not shown, share the headword and its translations.
+                    // If the checkboxes are not shown, or a user didn't select any checkboxes, share the headword and its translations.
+                    // The shared text will not have any special formatting.
                     subjectToShare = _copySelectedToClipboardService.CompileHeadword(DefinitionViewModels);
                     textToShare = subjectToShare;
                 }

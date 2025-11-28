@@ -304,7 +304,7 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шампур</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
         }
@@ -328,7 +328,7 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebab skewer</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
         }
@@ -352,8 +352,8 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шампур</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebab skewer</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
         }
@@ -377,8 +377,8 @@ namespace CopyWords.Core.Tests.Services
             string result = await sut.CompileBackAsync(definitionVMs);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шашлыки</span><br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebabs</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шампур</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebab skewer</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
 
@@ -757,6 +757,15 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for CompileHeadword
 
         [TestMethod]
+        public void CompileHeadword_WhenDefinitionViewModelIsEmpty_ReturnsEmptyString()
+        {
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+            string result = sut.CompileHeadword(new ObservableCollection<DefinitionViewModel>());
+
+            result.Should().BeEmpty();
+        }
+
+        [TestMethod]
         public void CompileHeadword_Should_ReturnHeadwordAndItsTranslationsForFirstDefinition()
         {
             var definitionVMs = CreateVMForGrillspyd();
@@ -764,7 +773,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<CopySelectedToClipboardService>();
             string result = sut.CompileHeadword(definitionVMs);
 
-            result.Should().Be("grillspyd" + Environment.NewLine + "шашлыки" + Environment.NewLine + "kebabs");
+            result.Should().Be("grillspyd (substantiv, intetkøn)" + Environment.NewLine + "шампур" + Environment.NewLine + "kebab skewer");
         }
 
         #endregion
@@ -886,7 +895,7 @@ namespace CopyWords.Core.Tests.Services
 
         private ObservableCollection<DefinitionViewModel> CreateVMForGrillspyd()
         {
-            var definition = new Definition(new Headword(Original: "grillspyd", English: "Kebabs", Russian: "Шашлыки"), PartOfSpeech: "substantiv, intetkøn", Endings: "-det eller (uofficielt) -et, -, -dene",
+            var definition = new Definition(new Headword(Original: "grillspyd", English: "kebab skewer", Russian: "шампур"), PartOfSpeech: "substantiv, intetkøn", Endings: "-det eller (uofficielt) -et, -, -dene",
                 new List<Context>
                 {
                     new Context(ContextEN: "", Position: "",

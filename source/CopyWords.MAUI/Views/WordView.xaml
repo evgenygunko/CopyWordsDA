@@ -81,32 +81,6 @@
                         </SfButton.Content>
                     </SfButton>
 
-                    <!-- Copy content -->
-                    <SfButton
-                            Margin="0,0,2,2"
-                            HorizontalOptions="Start"
-                            WidthRequest="85"
-                            BackgroundColor="{Binding CopyFrontButtonColor}"
-                            Command="{Binding OpenCopyMenuCommand}"
-                            IsVisible="{Binding ShowCopyButtons}">
-
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout>
-                                    <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}" />
-                                        </Image.Source>
-                                    </Image>
-
-                                    <Label Text="Copy" VerticalOptions="Center" TextColor="White" />
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
-
                     <!-- Share -->
                     <SfButton
                             Margin="4,0,2,2"

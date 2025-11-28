@@ -289,7 +289,15 @@ namespace CopyWords.Core.Services
             }
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(definitionViewModel.HeadwordViewModel.Original!);
+            sb.Append(definitionViewModel.HeadwordViewModel.Original!);
+
+            if (!string.IsNullOrEmpty(definitionViewModel.PartOfSpeech))
+            {
+                sb.Append(" (");
+                sb.Append(definitionViewModel.PartOfSpeech);
+                sb.Append(")");
+            }
+            sb.AppendLine();
 
             var headwordVM = definitionViewModel.HeadwordViewModel;
 
