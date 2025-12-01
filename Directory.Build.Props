@@ -8,5 +8,7 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <!-- Accept Android SDK licenses -->
+    <AcceptAndroidSDKLicenses>true</AcceptAndroidSDKLicenses>
   </PropertyGroup>
 </Project>

@@ -46,6 +46,7 @@
 
     <DefineConstants>$(DefineConstants);MauiAllowImplicitXmlnsDeclaration</DefineConstants>
     <EnablePreviewFeatures>true</EnablePreviewFeatures>
+    <AssemblyName>CopyWords</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-ios|AnyCPU'">
@@ -67,11 +68,13 @@
     <DefaultLanguage>en</DefaultLanguage>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-maccatalyst|AnyCPU'">
+  <!--  This block was necessary to run the app on .net 9 on Mac, but it seems it needs to be removed
+  for running the app on .net 10. -->
+  <!-- <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-maccatalyst|AnyCPU'">
     <CreatePackage>false</CreatePackage>
     <MtouchLink>SdkOnly</MtouchLink>
     <_MauiForceXamlCForDebug>true</_MauiForceXamlCForDebug>
-  </PropertyGroup>
+  </PropertyGroup> -->
 
   <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Configuration)' == 'Release'">
     <AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
