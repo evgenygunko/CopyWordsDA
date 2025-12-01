@@ -42,9 +42,8 @@
                         <VerticalStackLayout Grid.Row="0" Grid.Column="2"
                                 IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
 
-                            <Label Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}"
-                                   Margin="0,0,0,4"/>
-                            <Label Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="Gray" />
+                            <Label Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}"/>
+                            <Label Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="Gray" Margin="0,2,0,0" />
 
                         </VerticalStackLayout>
 

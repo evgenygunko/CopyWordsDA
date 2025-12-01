@@ -34,7 +34,7 @@
             <CheckBox Grid.Row="0" Grid.Column="0" x:Name="checkBoxRU"
                         IsVisible="{Binding CanCheckRussianTranslation}"
                         IsChecked="{Binding IsRussianTranslationChecked}" />
-            <Label Grid.Row="0" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center">
+            <Label Grid.Row="0" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center" Margin="0,2,0,2">
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="{Binding Russian, FallbackValue='акула'}"/>
