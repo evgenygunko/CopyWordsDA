@@ -30,6 +30,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IClipboardService _clipboardService;
         private readonly ICopySelectedToClipboardService _copySelectedToClipboardService;
         private readonly IShare _share;
+        private readonly IDeviceInfo _deviceInfo;
 
         private string _soundUrl = string.Empty;
 
@@ -38,13 +39,15 @@ namespace CopyWords.Core.ViewModels
             IDialogService dialogService,
             IClipboardService clipboardService,
             ICopySelectedToClipboardService copySelectedToClipboardService,
-            IShare share)
+            IShare share,
+            IDeviceInfo deviceInfo)
         {
             _saveSoundFileService = saveSoundFileService;
             _dialogService = dialogService;
             _clipboardService = clipboardService;
             _copySelectedToClipboardService = copySelectedToClipboardService;
             _share = share;
+            _deviceInfo = deviceInfo;
         }
 
         #region Properties
@@ -128,26 +131,37 @@ namespace CopyWords.Core.ViewModels
                 Debug.WriteLine($"Will play '{SoundUrl}', current state: {mediaElement.CurrentState}");
                 mediaElement.Play();
 
-#if WINDOWS
-                if (!string.IsNullOrEmpty(_soundUrl))
+                if (_deviceInfo.Platform == DevicePlatform.WinUI)
                 {
-                    // There is a strange bug on Windows when Media element would try to play the old sound even when the source has changed.
-                    // The sound would be silent though. So we call Play method again, this time it will play the new sound.
-                    await Task.Delay(200);
-                    mediaElement.Play();
+                    if (!string.IsNullOrEmpty(_soundUrl))
+                    {
+                        // There is a strange bug on Windows when Media element would try to play the old sound even when the source has changed.
+                        // The sound would be silent though. So we call Play method again, this time it will play the new sound.
+                        await Task.Delay(200);
+                        mediaElement.Play();
+                    }
                 }
-#endif
             }
             else
             {
                 Debug.WriteLine($"Will play '{SoundUrl}', current state: {mediaElement.CurrentState}");
-#if ANDROID
-                // On Android calling "Play" again doesn't do anything - we will change the position in current media instead, which will trigger play automatically.
-                await mediaElement.SeekTo(TimeSpan.Zero, new CancellationTokenSource(TimeSpan.FromSeconds(3)).Token);
-#else
-                // However on Windows calling "SeekTo" doesn't play sound - we need to call "Play".
-                mediaElement.Play();
-#endif
+
+                if (_deviceInfo.Platform == DevicePlatform.Android)
+                {
+                    // On Android calling "Play" again doesn't do anything - we will change the position in current media instead, which will trigger play automatically.
+                    await mediaElement.SeekTo(TimeSpan.Zero, new CancellationTokenSource(TimeSpan.FromSeconds(3)).Token);
+                }
+                else if (_deviceInfo.Platform == DevicePlatform.WinUI)
+                {
+                    // However on Windows calling "SeekTo" doesn't play sound - we need to call "Play".
+                    mediaElement.Play();
+                }
+                else
+                {
+                    // On MacCatalyst we need both
+                    await mediaElement.SeekTo(TimeSpan.Zero, new CancellationTokenSource(TimeSpan.FromSeconds(3)).Token);
+                    mediaElement.Play();
+                }
             }
             _soundUrl = SoundUrl;
 
