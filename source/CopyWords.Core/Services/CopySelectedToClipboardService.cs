@@ -79,10 +79,14 @@ namespace CopyWords.Core.Services
                     {
                         front = $"un {word.Replace("el ", "")}";
                     }
-                    if (partOfSpeech.Equals("FEMININE NOUN", StringComparison.OrdinalIgnoreCase))
+
+                    // In Spanish, feminine nouns starting with a stressed “a” take el or un in the singular to avoid the awkward sound
+                    if (partOfSpeech.Equals("FEMININE NOUN", StringComparison.OrdinalIgnoreCase)
+                        && !(word.StartsWith("el ", StringComparison.OrdinalIgnoreCase) || word.StartsWith("un ", StringComparison.OrdinalIgnoreCase)))
                     {
                         front = $"una {word.Replace("la ", "")}";
                     }
+
                     if (partOfSpeech.Equals("MASCULINE OR FEMININE NOUN", StringComparison.OrdinalIgnoreCase))
                     {
                         front = word + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, "m/f");

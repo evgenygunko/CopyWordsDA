@@ -181,6 +181,19 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
+        public async Task CompileFrontAsync_ForFeminineNounStartingWithSTressedA_AddsEl()
+        {
+            var definitionVMs = CreateVMForHampa();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string front = await sut.CompileFrontAsync(definitionVMs);
+
+            front.Should().Be("el hampa");
+        }
+
+        [TestMethod]
         public async Task CompileFrontAsync_ForBien_CopiesFront()
         {
             var definitionVMs = CreateVMForBien();
@@ -1271,6 +1284,42 @@ namespace CopyWords.Core.Tests.Services
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Vivimos en una casa con un gran jardín.", Translation: "We live in a house with a big garden.")
+                                    }),
+                        }),
+                    // ...
+                }
+            );
+
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                SourceLanguage.Spanish,
+                true);
+
+            var definitionVMs = new ObservableCollection<DefinitionViewModel>()
+            {
+                definitionVM
+            };
+
+            return definitionVMs;
+        }
+
+        private ObservableCollection<DefinitionViewModel> CreateVMForHampa()
+        {
+            var definition = new Definition(new Headword("el hampa", null, null), PartOfSpeech: "feminine noun", Endings: "",
+                new List<Context>
+                {
+                    new Context("(mobsters)", "1",
+                        new List<Meaning>
+                        {
+                            new Meaning(
+                                Original: "underworld",
+                                Translation: null,
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Enrico se involucró con el hampa y hace tres días está desaparecido.", Translation: "Enrico got involved with the underworld and has been missing for three days.")
                                     }),
                         }),
                     // ...
