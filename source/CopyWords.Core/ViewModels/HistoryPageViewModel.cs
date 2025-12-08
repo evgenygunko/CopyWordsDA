@@ -54,6 +54,17 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task ClearHistoryAsync()
         {
+            bool confirmed = await _dialogService.DisplayAlertAsync(
+                "Clear History",
+                "Are you sure you want to clear all history?",
+                "Clear",
+                "Cancel");
+
+            if (!confirmed)
+            {
+                return;
+            }
+
             try
             {
                 PreviousWords.Clear();

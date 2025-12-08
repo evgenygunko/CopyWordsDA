@@ -44,9 +44,13 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task ClearHistoryAsync_Should_CallSettingsService()
+        public async Task ClearHistoryAsync_WhenConfirmed_CallsSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock
+                .Setup(x => x.DisplayAlertAsync("Clear History", "Are you sure you want to clear all history?", "Clear", "Cancel"))
+                .ReturnsAsync(true);
 
             var sut = _fixture.Create<HistoryPageViewModel>();
             sut.PreviousWords.Add(new PreviousWordViewModel("haj"));
@@ -56,6 +60,27 @@ namespace CopyWords.Core.Tests.ViewModels
 
             sut.PreviousWords.Should().HaveCount(0);
             settingsServiceMock.Verify(x => x.ClearHistory());
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Clear History", "Are you sure you want to clear all history?", "Clear", "Cancel"), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task ClearHistoryAsync_WhenCanceled_DoesNotClearHistory()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock
+                .Setup(x => x.DisplayAlertAsync("Clear History", "Are you sure you want to clear all history?", "Clear", "Cancel"))
+                .ReturnsAsync(false);
+
+            var sut = _fixture.Create<HistoryPageViewModel>();
+            sut.PreviousWords.Add(new PreviousWordViewModel("haj"));
+            sut.PreviousWords.Should().HaveCount(1);
+
+            await sut.ClearHistoryAsync();
+
+            sut.PreviousWords.Should().HaveCount(1);
+            settingsServiceMock.Verify(x => x.ClearHistory(), Times.Never);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Clear History", "Are you sure you want to clear all history?", "Clear", "Cancel"), Times.Once);
         }
 
         [TestMethod]
