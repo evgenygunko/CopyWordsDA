@@ -40,5 +40,16 @@ public class MainActivity : MauiAppCompatActivity
             instantTranslationService.SetText(selectedText);
         }
     }
+
+    protected override void OnDestroy()
+    {
+        try
+        {
+            base.OnDestroy();
+        }
+        catch (Exception)
+        {
+        }
+    }
 }
 
