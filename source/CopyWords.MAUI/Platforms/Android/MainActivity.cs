@@ -37,7 +37,7 @@ public class MainActivity : MauiAppCompatActivity
             Log.Debug("MainActivity", "Received text: " + selectedText);
 
             var instantTranslationService = MauiProgram.GetService<IInstantTranslationService>();
-            instantTranslationService.SetText(selectedText);
+            instantTranslationService?.SetText(selectedText);
         }
     }
 

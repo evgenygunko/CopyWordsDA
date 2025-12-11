@@ -19,7 +19,18 @@ public static class MauiProgram
 {
     private static IServiceProvider _serviceProvider = default!;
 
-    public static TService GetService<TService>() => _serviceProvider.GetService<TService>()!;
+    public static TService? GetService<TService>() where TService : class
+    {
+        try
+        {
+            return _serviceProvider?.GetService<TService>();
+        }
+        catch (ObjectDisposedException)
+        {
+            // Service provider has been disposed, likely due to app lifecycle
+            return null;
+        }
+    }
 
     [SupportedOSPlatform("windows10.0.17763")]
     [SupportedOSPlatform("maccatalyst15.0")]
