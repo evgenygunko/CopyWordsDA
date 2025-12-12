@@ -102,11 +102,16 @@ public static class MauiProgram
         builder.Services.AddHttpClient<IFileDownloaderService, FileDownloaderService>();
         builder.Services.AddHttpClient<ISuggestionsService, SuggestionsService>();
 
-        builder.Services.AddSingleton<MainWindowViewModel>();
-        builder.Services.AddSingleton<MainViewModel>();
-        builder.Services.AddSingleton<IWordViewModel, WordViewModel>();
-        builder.Services.AddSingleton<SettingsViewModel>();
-        builder.Services.AddSingleton<HistoryPageViewModel>();
+        // ViewModels that need explicit disposal control
+        builder.Services.AddTransient<MainWindowViewModel>();
+        builder.Services.AddTransient<MainViewModel>();
+
+        // Page ViewModels (typically Transient unless they need shared state)
+        builder.Services.AddTransient<IWordViewModel, WordViewModel>();
+        builder.Services.AddTransient<SettingsViewModel>();
+        builder.Services.AddTransient<HistoryPageViewModel>();
+
+        // App-level ViewModels
         builder.Services.AddSingleton<GetUpdateViewModel>();
         builder.Services.AddSingleton<LastCrashViewModel>();
 

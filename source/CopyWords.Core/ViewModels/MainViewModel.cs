@@ -10,7 +10,7 @@ using CopyWords.Core.Services.Wrappers;
 
 namespace CopyWords.Core.ViewModels
 {
-    public partial class MainViewModel : ObservableObject
+    public partial class MainViewModel : ObservableObject, IDisposable
     {
         private readonly ISettingsService _settingsService;
         private readonly IDialogService _dialogService;
@@ -18,12 +18,14 @@ namespace CopyWords.Core.ViewModels
         private readonly ITranslationsService _translationsService;
         private readonly ISuggestionsService _suggestionsService;
         private readonly INavigationHistory _navigationHistory;
+        private readonly IShellService _shellService;
         private readonly IConnectivityService _connectivityService;
+        private readonly IDeviceInfo _deviceInfo;
 
         private readonly IWordViewModel _wordViewModel;
 
-        // Add cancellation token source to cancel ongoing operations during dispose
         private CancellationTokenSource _cancellationTokenSource = new();
+        private bool _disposed;
 
         public MainViewModel(
             ISettingsService settingsService,
@@ -32,7 +34,9 @@ namespace CopyWords.Core.ViewModels
             ITranslationsService translationsService,
             ISuggestionsService suggestionsService,
             INavigationHistory navigationHistory,
+            IShellService shellService,
             IConnectivityService connectivityService,
+            IDeviceInfo deviceInfo,
             IWordViewModel wordViewModel)
         {
             _settingsService = settingsService;
@@ -41,12 +45,12 @@ namespace CopyWords.Core.ViewModels
             _translationsService = translationsService;
             _suggestionsService = suggestionsService;
             _navigationHistory = navigationHistory;
+            _shellService = shellService;
 
             _connectivityService = connectivityService;
-            _connectivityService.ConnectivityChanged += async (object? sender, ConnectivityChangedEventArgs e) =>
-            {
-                await _connectivityService.UpdateConnectivitySnackbarAsync(e.NetworkAccess == NetworkAccess.Internet, _cancellationTokenSource.Token);
-            };
+            _connectivityService.ConnectivityChanged += OnConnectivityChanged;
+
+            _deviceInfo = deviceInfo;
 
             _wordViewModel = wordViewModel;
 
@@ -100,11 +104,12 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task InitAsync()
         {
-            if (IsBusy)
+            if (_disposed || IsBusy)
             {
                 return;
             }
 
+            // Cancel any running http calls and start a new lookup
             if (_cancellationTokenSource != null)
             {
                 _cancellationTokenSource.Cancel();
@@ -134,6 +139,11 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task LookUpAsync()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             // Clear previous word while we are waiting for the new one
             WordModel? wordModel = new WordModel(string.Empty, GetSourceLanguage(), null, null, [], []);
             UpdateUI(wordModel);
@@ -141,6 +151,12 @@ namespace CopyWords.Core.ViewModels
             IsBusy = true;
 
             wordModel = await LookUpWordInDictionaryAsync(SearchWord);
+
+            if (_disposed)
+            {
+                return;
+            }
+
             UpdateUI(wordModel);
 
             // Add current search word to navigation history
@@ -162,9 +178,20 @@ namespace CopyWords.Core.ViewModels
 #endif
         public async Task RefreshAsync()
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             IsRefreshing = true;
 
             WordModel? wordModel = await LookUpWordInDictionaryAsync(SearchWord);
+
+            if (_disposed)
+            {
+                return;
+            }
+
             UpdateUI(wordModel);
 
             IsRefreshing = false;
@@ -173,13 +200,13 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanOpenHistory))]
         public async Task ShowHistory()
         {
-            await Shell.Current.GoToAsync("HistoryPage");
+            await _shellService.GoToAsync("HistoryPage");
         }
 
         [RelayCommand(CanExecute = nameof(CanShowSettingsDialog))]
         public async Task ShowSettingsDialog()
         {
-            await Shell.Current.GoToAsync("SettingsPage");
+            await _shellService.GoToAsync("SettingsPage");
         }
 
         [RelayCommand(CanExecute = nameof(CanSelectDictionary))]
@@ -201,7 +228,7 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanNavigateBack))]
         public async Task<bool> NavigateBackAsync()
         {
-            if (!CanNavigateBack)
+            if (_disposed || !CanNavigateBack)
             {
                 return false;
             }
@@ -242,13 +269,12 @@ namespace CopyWords.Core.ViewModels
         public async Task<List<string>> GetSuggestionsAsync(string inputText, CancellationToken cancellationToken)
         {
             // This method is called from the autocomplete control on every key press: CustomAsyncFilter.
-            if (string.IsNullOrWhiteSpace(inputText))
+            if (_disposed || string.IsNullOrWhiteSpace(inputText))
             {
                 return new List<string>();
             }
 
             using var combinedCts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
-
             List<string> suggestions = new List<string>();
 
             SourceLanguage sourceLanguage;
@@ -264,15 +290,14 @@ namespace CopyWords.Core.ViewModels
                 }
             }
 
-#if ANDROID
             // On Android we have a keyboard open, so show only 6 elements so that they fit the screen above the keyboard.
-            return suggestions.Take(6).ToList();
-#else
+            if (_deviceInfo.Platform == DevicePlatform.Android)
+            {
+                return suggestions.Take(6).ToList();
+            }
+            
             return suggestions;
-#endif
         }
-
-        public void CancelHttpRequests() => _cancellationTokenSource.Cancel();
 
         #endregion
 
@@ -283,6 +308,12 @@ namespace CopyWords.Core.ViewModels
             IsBusy = true;
 
             WordModel? wordModel = await LookUpWordInDictionaryAsync(url);
+
+            if (_disposed)
+            {
+                return;
+            }
+
             UpdateUI(wordModel);
 
             IsBusy = false;
@@ -290,6 +321,11 @@ namespace CopyWords.Core.ViewModels
 
         internal void UpdateUI(WordModel? wordModel)
         {
+            if (_disposed)
+            {
+                return;
+            }
+
             IsBusy = true;
 
             if (wordModel != null)
@@ -367,6 +403,27 @@ namespace CopyWords.Core.ViewModels
 
         #endregion
 
+        #region Event Handlers
+
+        private async void OnConnectivityChanged(object? sender, ConnectivityChangedEventArgs e)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            try
+            {
+                await _connectivityService.UpdateConnectivitySnackbarAsync(e.NetworkAccess == NetworkAccess.Internet, _cancellationTokenSource.Token);
+            }
+            catch (ObjectDisposedException)
+            {
+                // Swallow exception if disposed during async operation
+            }
+        }
+
+        #endregion
+
         #region Private Methods
 
         private void NotifyNavigationStateChanged()
@@ -398,6 +455,34 @@ namespace CopyWords.Core.ViewModels
                 sourceLanguage = SourceLanguage.Danish;
             }
             return sourceLanguage;
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _connectivityService.ConnectivityChanged -= OnConnectivityChanged;
+
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Dispose();
+            }
+
+            _disposed = true;
         }
 
         #endregion

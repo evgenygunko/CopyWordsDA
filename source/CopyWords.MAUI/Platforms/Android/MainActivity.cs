@@ -43,6 +43,8 @@ public class MainActivity : MauiAppCompatActivity
 
     protected override void OnDestroy()
     {
+        // todo: this is workaround for a crash https://github.com/dotnet/maui/issues/32600#issuecomment-3646966167
+        // Delete this method when a fix is released.
         try
         {
             base.OnDestroy();

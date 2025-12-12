@@ -1,36 +1,32 @@
 ﻿using CopyWords.Core.ViewModels;
-#if WINDOWS
 using CopyWords.MAUI.Helpers;
-#endif
 
 namespace CopyWords.MAUI.Views;
 
 public partial class MainPage : ContentPage
 {
-    public MainPage(MainViewModel vm)
+    private readonly MainViewModel _viewModel;
+
+    public MainPage(MainViewModel vm, IDeviceInfo deviceInfo)
     {
         InitializeComponent();
-        BindingContext = vm;
+        _viewModel = vm;
+        BindingContext = _viewModel;
 
-#if WINDOWS
         // Add NavigateBackCommand toolbar button only on Windows.
         // There is no "Visible" property on ToolbarItem, so we need to create and add it conditionally, see https://stackoverflow.com/a/74424283
-        CreateWindowsToolbarItems();
-#endif
-
-        Unloaded += (_, e) =>
+        if (deviceInfo.Platform == DevicePlatform.WinUI)
         {
-            vm.CancelHttpRequests();
-        };
+            CreateWindowsToolbarItems();
+        }
     }
 
-#if WINDOWS
     private void CreateWindowsToolbarItems()
     {
         // Create the Navigate Back toolbar item for Windows only
         var navigateBackToolbarItem = new ToolbarItem
         {
-            Command = ((MainViewModel)BindingContext).NavigateBackCommand,
+            Command = _viewModel.NavigateBackCommand,
             Order = ToolbarItemOrder.Primary,
             Priority = -1 // Put it at the beginning
         };
@@ -45,23 +41,26 @@ public partial class MainPage : ContentPage
         // Insert at the beginning of the toolbar
         ToolbarItems.Insert(0, navigateBackToolbarItem);
     }
-#endif
 
     protected override bool OnBackButtonPressed()
     {
         // Check if we have a MainViewModel and can navigate back in search history
-        if (BindingContext is MainViewModel mainViewModel)
+        if (_viewModel.CanNavigateBack)
         {
-            if (mainViewModel.CanNavigateBack)
+            Dispatcher.Dispatch(async () =>
             {
-                Dispatcher.Dispatch(async () =>
+                try
                 {
-                    await mainViewModel.NavigateBackAsync();
-                });
+                    await _viewModel.NavigateBackAsync();
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Swallow exception if ViewModel disposed during async operation
+                }
+            });
 
-                // Back navigation was handled, prevent default back behavior
-                return true;
-            }
+            // Back navigation was handled, prevent default back behavior
+            return true;
         }
 
         return base.OnBackButtonPressed();
