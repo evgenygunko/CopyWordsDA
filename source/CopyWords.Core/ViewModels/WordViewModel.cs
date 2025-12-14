@@ -5,6 +5,7 @@ using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Exceptions;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
 
@@ -15,6 +16,7 @@ namespace CopyWords.Core.ViewModels
         string? SoundUrl { get; set; }
         string? SoundFileName { get; set; }
         bool ShowCopyButtons { get; set; }
+        bool ShowAddNoteWithAnkiConnectButton { get; set; }
 
         void UpdateUI();
         void ClearDefinitions();
@@ -31,6 +33,7 @@ namespace CopyWords.Core.ViewModels
         private readonly ICopySelectedToClipboardService _copySelectedToClipboardService;
         private readonly IShare _share;
         private readonly IDeviceInfo _deviceInfo;
+        private readonly IAnkiConnectService _ankiConnectService;
 
         private string _soundUrl = string.Empty;
 
@@ -40,7 +43,8 @@ namespace CopyWords.Core.ViewModels
             IClipboardService clipboardService,
             ICopySelectedToClipboardService copySelectedToClipboardService,
             IShare share,
-            IDeviceInfo deviceInfo)
+            IDeviceInfo deviceInfo,
+            IAnkiConnectService ankiConnectService)
         {
             _saveSoundFileService = saveSoundFileService;
             _dialogService = dialogService;
@@ -48,6 +52,7 @@ namespace CopyWords.Core.ViewModels
             _copySelectedToClipboardService = copySelectedToClipboardService;
             _share = share;
             _deviceInfo = deviceInfo;
+            _ankiConnectService = ankiConnectService;
         }
 
         #region Properties
@@ -81,6 +86,7 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(CopyBackCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyExamplesCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShareCommand))]
+        [NotifyCanExecuteChangedFor(nameof(AddNoteWithAnkiConnectCommand))]
         public partial bool CanCopyFront { get; set; }
 
         [ObservableProperty]
@@ -90,6 +96,9 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(CopyEndingsCommand))]
         public partial bool CanCopyEndings { get; set; }
+
+        [ObservableProperty]
+        public partial bool ShowAddNoteWithAnkiConnectButton { get; set; }
 
         [ObservableProperty]
         public partial bool ShowCopyButtons { get; set; }
@@ -188,6 +197,60 @@ namespace CopyWords.Core.ViewModels
             }
 
             IsBusy = false;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanCopyFront))]
+        public async Task AddNoteWithAnkiConnectAsync()
+        {
+            try
+            {
+                string front = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModels);
+                if (string.IsNullOrEmpty(front))
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least example.", "OK");
+                    return;
+                }
+
+                string back = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModels);
+                if (string.IsNullOrEmpty(back))
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least example.", "OK");
+                    return;
+                }
+
+                string partOfSpeech = await _copySelectedToClipboardService.CompilePartOfSpeechAsync(DefinitionViewModels);
+                string endings = await _copySelectedToClipboardService.CompileEndingsAsync(DefinitionViewModels);
+                string examples = await _copySelectedToClipboardService.CompileExamplesAsync(DefinitionViewModels);
+
+                // todo: get them from Settings dialog
+                const string deckName = "Test";
+                const string modelName = "Основная";
+
+                var ankiNoteOptions = new AnkiNoteOptions(
+                    AllowDuplicate: false,
+                    DuplicateScope: "deck",
+                    DuplicateScopeOptions: new AnkiDuplicateScopeOptions(
+                        DeckName: deckName,
+                        CheckChildren: false));
+
+                var note = new AnkiNote(
+                    DeckName: deckName,
+                    ModelName: modelName,
+                    Front: front,
+                    Back: back,
+                    PartOfSpeech: partOfSpeech,
+                    Forms: endings,
+                    Example: examples,
+                    Sound: null,
+                    Options: ankiNoteOptions);
+                var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+
+                await _ankiConnectService.AddNoteAsync(note, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.DisplayAlertAsync("Cannot add note", "Error occurred while trying to add note with AnkiConnect: " + ex.Message, "OK");
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]

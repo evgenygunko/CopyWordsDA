@@ -105,6 +105,21 @@
         <Border Grid.Row="4" Style="{StaticResource BorderStyle}">
             <VerticalStackLayout>
                 <HorizontalStackLayout>
+                    <HorizontalStackLayout.IsVisible>
+                        <OnPlatform x:TypeArguments="x:Boolean">
+                            <On Platform="WinUI" Value="True" />
+                            <On Platform="Android, MacCatalyst" Value="False" />
+                        </OnPlatform>
+                    </HorizontalStackLayout.IsVisible>
+                    <Label
+                            Text="Show copy with AnkiConnect:"
+                            VerticalOptions="Center"></Label>
+                    <CheckBox
+                            IsChecked="{Binding ShowCopyWithAnkiConnectButton}"
+                            HorizontalOptions="Start" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
                     <Label
                             Text="Show copy buttons:"
                             VerticalOptions="Center"></Label>

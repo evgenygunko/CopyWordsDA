@@ -1,7 +1,6 @@
 ﻿// Ignore Spelling: app Api
 
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Text.Json;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services.Wrappers;
@@ -33,6 +32,8 @@ namespace CopyWords.Core.Services
         IEnumerable<string> LoadHistory();
 
         void ClearHistory();
+
+        bool GetShowAddNoteWithAnkiConnectButton();
     }
 
     public class SettingsService : ISettingsService
@@ -65,6 +66,8 @@ namespace CopyWords.Core.Services
             bool showCopyButtonsDefaultValue = _deviceInfo.Platform != DevicePlatform.Android;
             appSettings.ShowCopyButtons = _preferences.Get<bool>("ShowCopyButtons", showCopyButtonsDefaultValue);
 
+            appSettings.ShowCopyWithAnkiConnectButton = _preferences.Get<bool>("ShowCopyWithAnkiConnectButton", false);
+
             appSettings.CopyTranslatedMeanings = _preferences.Get<bool>("CopyTranslatedMeanings", true);
             appSettings.SelectedParser = _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
 
@@ -80,6 +83,7 @@ namespace CopyWords.Core.Services
 
             _preferences.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder);
             _preferences.Set("ShowCopyButtons", appSettings.ShowCopyButtons);
+            _preferences.Set("ShowCopyWithAnkiConnectButton", appSettings.ShowCopyWithAnkiConnectButton);
             _preferences.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings);
             _preferences.Set("SelectedParser", appSettings.SelectedParser);
         }
@@ -113,6 +117,8 @@ namespace CopyWords.Core.Services
         }
 
         public void SetShowCopyButtons(bool value) => _preferences.Set("ShowCopyButtons", value);
+
+        public bool GetShowAddNoteWithAnkiConnectButton() => _preferences.Get<bool>("ShowCopyWithAnkiConnectButton", false);
 
         public void SetCopyTranslatedMeanings(bool value) => _preferences.Set("CopyTranslatedMeanings", value);
 

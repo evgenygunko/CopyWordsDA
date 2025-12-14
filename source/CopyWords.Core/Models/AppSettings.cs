@@ -16,6 +16,8 @@ namespace CopyWords.Core.Models
 
         public bool ShowCopyButtons { get; set; }
 
+        public bool ShowCopyWithAnkiConnectButton { get; set; }
+
         public bool CopyTranslatedMeanings { get; set; }
 
         public string SelectedParser { get; set; } = string.Empty;

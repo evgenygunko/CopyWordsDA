@@ -100,6 +100,7 @@ public static class MauiProgram
         builder.Services.AddHttpClient<ITranslationsService, TranslationsService>();
         builder.Services.AddHttpClient<IUpdateService, UpdateService>();
         builder.Services.AddHttpClient<IFileDownloaderService, FileDownloaderService>();
+        builder.Services.AddHttpClient<IAnkiConnectService, AnkiConnectService>();
         builder.Services.AddHttpClient<ISuggestionsService, SuggestionsService>();
 
         // ViewModels that need explicit disposal control

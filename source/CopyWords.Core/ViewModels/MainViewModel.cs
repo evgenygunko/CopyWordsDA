@@ -295,7 +295,7 @@ namespace CopyWords.Core.ViewModels
             {
                 return suggestions.Take(6).ToList();
             }
-            
+
             return suggestions;
         }
 
@@ -355,6 +355,7 @@ namespace CopyWords.Core.ViewModels
                 }
 
                 _wordViewModel.ShowCopyButtons = showCopyButtons;
+                _wordViewModel.ShowAddNoteWithAnkiConnectButton = _settingsService.GetShowAddNoteWithAnkiConnectButton();
                 _wordViewModel.UpdateUI();
 
                 _settingsService.SetSelectedParser(wordModel.SourceLanguage.ToString());

@@ -131,7 +131,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 clipboardServiceMock.Object,
                 Mock.Of<ICopySelectedToClipboardService>(),
                 Mock.Of<IShare>(),
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -155,7 +156,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 clipboardServiceMock.Object,
                 Mock.Of<ICopySelectedToClipboardService>(),
                 Mock.Of<IShare>(),
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -181,7 +183,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 clipboardServiceMock.Object,
                 Mock.Of<ICopySelectedToClipboardService>(),
                 Mock.Of<IShare>(),
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -207,7 +210,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 clipboardServiceMock.Object,
                 Mock.Of<ICopySelectedToClipboardService>(),
                 Mock.Of<IShare>(),
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.DefinitionViewModels.Add(definitionViewModel);
 
             await sut.CompileAndCopyToClipboard("front", _func.Object);
@@ -242,7 +246,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IClipboardService>(),
                 copySelectedToClipboardServiceMock.Object,
                 shareMock.Object,
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.CanCopyFront = true;
             sut.ShowCopyButtons = true;
 
@@ -280,7 +285,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IClipboardService>(),
                 copySelectedToClipboardServiceMock.Object,
                 shareMock.Object,
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.CanCopyFront = true;
             sut.ShowCopyButtons = false;
 
@@ -319,7 +325,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IClipboardService>(),
                 copySelectedToClipboardServiceMock.Object,
                 shareMock.Object,
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.CanCopyFront = true;
             sut.ShowCopyButtons = true;
 
@@ -359,7 +366,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IClipboardService>(),
                 copySelectedToClipboardServiceMock.Object,
                 shareMock.Object,
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.CanCopyFront = true;
             sut.ShowCopyButtons = true;
 
@@ -393,7 +401,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IClipboardService>(),
                 copySelectedToClipboardServiceMock.Object,
                 shareMock.Object,
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.CanCopyFront = true;
             sut.ShowCopyButtons = true;
 
@@ -419,7 +428,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IClipboardService>(),
                 Mock.Of<ICopySelectedToClipboardService>(),
                 Mock.Of<IShare>(),
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.CanCopyFront.Should().BeFalse();
 
             sut.DefinitionViewModels.Add(definitionViewModel);
@@ -442,7 +452,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IClipboardService>(),
                 Mock.Of<ICopySelectedToClipboardService>(),
                 Mock.Of<IShare>(),
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.CanCopyPartOfSpeech.Should().BeFalse();
 
             sut.DefinitionViewModels.Add(definitionViewModel);
@@ -465,7 +476,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 Mock.Of<IClipboardService>(),
                 Mock.Of<ICopySelectedToClipboardService>(),
                 Mock.Of<IShare>(),
-                Mock.Of<IDeviceInfo>());
+                Mock.Of<IDeviceInfo>(),
+                Mock.Of<IAnkiConnectService>());
             sut.CanCopyEndings.Should().BeFalse();
 
             sut.DefinitionViewModels.Add(definitionViewModel);

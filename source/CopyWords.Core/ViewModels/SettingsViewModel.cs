@@ -56,6 +56,10 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
+        public partial bool ShowCopyWithAnkiConnectButton { get; set; }
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         public partial bool ShowCopyButtons { get; set; }
 
         partial void OnShowCopyButtonsChanged(bool value)
@@ -264,6 +268,7 @@ namespace CopyWords.Core.ViewModels
         {
             AnkiSoundsFolder = appSettings.AnkiSoundsFolder;
             ShowCopyButtons = appSettings.ShowCopyButtons;
+            ShowCopyWithAnkiConnectButton = appSettings.ShowCopyWithAnkiConnectButton;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
         }
 
@@ -271,6 +276,7 @@ namespace CopyWords.Core.ViewModels
         {
             appSettings.AnkiSoundsFolder = AnkiSoundsFolder ?? string.Empty;
             appSettings.ShowCopyButtons = ShowCopyButtons;
+            appSettings.ShowCopyWithAnkiConnectButton = ShowCopyWithAnkiConnectButton;
             appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
         }
 

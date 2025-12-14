@@ -72,7 +72,7 @@ public partial class MainWindow : Window
                     if (string.IsNullOrWhiteSpace(contextKey))
                     {
                         contextKey = Guid.NewGuid().ToString();
-                        _preferences.Get("LDDeviceContextKey", contextKey);
+                        _preferences.Set("LDDeviceContextKey", contextKey);
                     }
                 }
 
