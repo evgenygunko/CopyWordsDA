@@ -218,6 +218,12 @@ namespace CopyWords.Core.ViewModels
 
                 await _ankiConnectService.AddNoteAsync(note, cancellationToken);
             }
+            catch (AnkiConnectNotRunningException ex)
+            {
+                await _dialogService.DisplayAlertAsync("AnkiConnect is not running",
+                    "Please verify that AnkiConnect is installed: run Anki -> Tools -> Add-ons -> Get Add-ons..." + Environment.NewLine + "Error: " + ex.Message,
+                    "OK");
+            }
             catch (Exception ex)
             {
                 await _dialogService.DisplayAlertAsync("Cannot add note", "Error occurred while trying to add note with AnkiConnect: " + ex.Message, "OK");

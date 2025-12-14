@@ -593,5 +593,207 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         #endregion
+
+        #region Tests for AddNoteWithAnkiConnectAsync
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiConnectAsync_WhenFrontIsEmpty_ShowsAlert()
+        {
+            // Arrange
+            const string front = "";
+            string back = _fixture.Create<string>();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(back);
+
+            var dialogServiceMock = new Mock<IDialogService>();
+            var ankiConnectServiceMock = new Mock<IAnkiConnectService>();
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<IShare>(),
+                Mock.Of<IDeviceInfo>(),
+                ankiConnectServiceMock.Object);
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.AddNoteWithAnkiConnectAsync();
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "Cannot add note",
+                "Please select at least example.",
+                "OK"));
+            ankiConnectServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiConnectAsync_WhenBackIsEmpty_ShowsAlert()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            const string back = "";
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(back);
+
+            var dialogServiceMock = new Mock<IDialogService>();
+            var ankiConnectServiceMock = new Mock<IAnkiConnectService>();
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<IShare>(),
+                Mock.Of<IDeviceInfo>(),
+                ankiConnectServiceMock.Object);
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.AddNoteWithAnkiConnectAsync();
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "Cannot add note",
+                "Please select at least example.",
+                "OK"));
+            ankiConnectServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiConnectAsync_WhenSuccessful_CallsAddNoteAsyncWithCorrectParameters()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+            string partOfSpeech = _fixture.Create<string>();
+            string endings = _fixture.Create<string>();
+            string examples = _fixture.Create<string>();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeechAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(partOfSpeech);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndingsAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(endings);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamplesAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(examples);
+
+            var dialogServiceMock = new Mock<IDialogService>();
+            var ankiConnectServiceMock = new Mock<IAnkiConnectService>();
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<IShare>(),
+                Mock.Of<IDeviceInfo>(),
+                ankiConnectServiceMock.Object);
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.AddNoteWithAnkiConnectAsync();
+
+            // Assert
+            ankiConnectServiceMock.Verify(x => x.AddNoteAsync(
+                It.Is<Models.AnkiNote>(note =>
+                    note.DeckName == "Test" &&
+                    note.ModelName == "Основная" &&
+                    note.Front == front &&
+                    note.Back == back &&
+                    note.PartOfSpeech == partOfSpeech &&
+                    note.Forms == endings &&
+                    note.Example == examples &&
+                    note.Sound == null &&
+                    note.Options != null &&
+                    note.Options.AllowDuplicate == false &&
+                    note.Options.DuplicateScope == "deck" &&
+                    note.Options.DuplicateScopeOptions != null &&
+                    note.Options.DuplicateScopeOptions.DeckName == "Test" &&
+                    note.Options.DuplicateScopeOptions.CheckChildren == false),
+                It.IsAny<CancellationToken>()), Times.Once);
+
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiConnectAsync_WhenAnkiConnectNotRunningExceptionThrown_ShowsAlert()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(back);
+
+            var dialogServiceMock = new Mock<IDialogService>();
+
+            var ankiConnectServiceMock = new Mock<IAnkiConnectService>();
+            ankiConnectServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new AnkiConnectNotRunningException("Connection refused"));
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<IShare>(),
+                Mock.Of<IDeviceInfo>(),
+                ankiConnectServiceMock.Object);
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.AddNoteWithAnkiConnectAsync();
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "AnkiConnect is not running",
+                It.Is<string>(msg => msg.Contains("Please verify that AnkiConnect is installed") && msg.Contains("Connection refused")),
+                "OK"));
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiConnectAsync_WhenGeneralExceptionThrown_ShowsAlert()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+
+            var copySelectedToClipboardServiceMock = new Mock<ICopySelectedToClipboardService>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(back);
+
+            var dialogServiceMock = new Mock<IDialogService>();
+
+            var ankiConnectServiceMock = new Mock<IAnkiConnectService>();
+            ankiConnectServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception("General error from unit test"));
+
+            WordViewModel sut = new WordViewModel(
+                Mock.Of<ISaveSoundFileService>(),
+                dialogServiceMock.Object,
+                Mock.Of<IClipboardService>(),
+                copySelectedToClipboardServiceMock.Object,
+                Mock.Of<IShare>(),
+                Mock.Of<IDeviceInfo>(),
+                ankiConnectServiceMock.Object);
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.AddNoteWithAnkiConnectAsync();
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "Cannot add note",
+                "Error occurred while trying to add note with AnkiConnect: General error from unit test",
+                "OK"));
+        }
+        #endregion
     }
 }

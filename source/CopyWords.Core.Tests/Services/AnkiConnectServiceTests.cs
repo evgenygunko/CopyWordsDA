@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using AutoFixture;
+using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using FluentAssertions;
@@ -19,6 +20,8 @@ namespace CopyWords.Core.Tests.Services
         {
             _fixture = FixtureFactory.CreateFixture();
         }
+
+        #region Tests for AddNoteAsync
 
         [TestMethod]
         public async Task AddNoteAsync_WhenSuccess_PostsExpectedPayloadAndReturnsNoteId()
@@ -56,16 +59,17 @@ namespace CopyWords.Core.Tests.Services
 
             // Assert
             result.Should().Be(123);
-            capturedBodies.Should().HaveCount(2, "AddNoteAsync makes two HTTP calls: addNote and guiEditNote");
-            capturedUris.Should().HaveCount(2);
+            capturedBodies.Should().HaveCount(3, "AddNoteAsync makes three HTTP calls: GET for checking that AnkiConnect is running, addNote and guiEditNote");
+            capturedUris.Should().HaveCount(3);
 
-            // Verify both requests went to the correct endpoint
+            // Verify that requests went to the correct endpoint
             capturedUris[0].Should().Be(new Uri("http://127.0.0.1:8765"));
             capturedUris[1].Should().Be(new Uri("http://127.0.0.1:8765"));
+            capturedUris[2].Should().Be(new Uri("http://127.0.0.1:8765"));
 
-            // Verify the first request (addNote)
-            capturedBodies[0].Should().NotBeNull();
-            JObject addNotePayload = JObject.Parse(capturedBodies[0]!);
+            // Verify the second request (addNote)
+            capturedBodies[1].Should().NotBeNull();
+            JObject addNotePayload = JObject.Parse(capturedBodies[1]!);
             addNotePayload["action"]!.Value<string>().Should().Be("addNote");
             addNotePayload["version"]!.Value<int>().Should().Be(6);
 
@@ -83,9 +87,9 @@ namespace CopyWords.Core.Tests.Services
 
             noteObject["tags"]!.Values<string>().Should().BeEquivalentTo(note.Tags);
 
-            // Verify the second request (guiEditNote)
-            capturedBodies[1].Should().NotBeNull();
-            JObject guiEditPayload = JObject.Parse(capturedBodies[1]!);
+            // Verify the third request (guiEditNote)
+            capturedBodies[2].Should().NotBeNull();
+            JObject guiEditPayload = JObject.Parse(capturedBodies[2]!);
             guiEditPayload["action"]!.Value<string>().Should().Be("guiEditNote");
             guiEditPayload["version"]!.Value<int>().Should().Be(6);
             guiEditPayload["params"]!["note"]!.Value<long>().Should().Be(123);
@@ -197,6 +201,80 @@ namespace CopyWords.Core.Tests.Services
             await act.Should().ThrowAsync<ArgumentNullException>();
         }
 
+        #endregion
+
+        #region Tests for CheckThatAnkiConnectIsRunningAsync
+
+        [TestMethod]
+        public async Task CheckThatAnkiConnectIsRunningAsync_WhenAnkiConnectResponds_DoesNotThrow()
+        {
+            // Arrange
+            var httpClient = CreateHttpClient((_, _) => new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("AnkiConnect is running")
+            });
+            var sut = new AnkiConnectService(httpClient);
+
+            // Act
+            var act = async () => await sut.CheckThatAnkiConnectIsRunningAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+        }
+
+        [TestMethod]
+        public async Task CheckThatAnkiConnectIsRunningAsync_WhenHttpRequestExceptionOccurs_ThrowsAnkiConnectNotRunningException()
+        {
+            // Arrange
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ThrowsAsync(new HttpRequestException("Connection refused"));
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            var sut = new AnkiConnectService(httpClient);
+
+            // Act
+            var act = async () => await sut.CheckThatAnkiConnectIsRunningAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<AnkiConnectNotRunningException>()
+                .WithMessage("Connection refused");
+        }
+
+        [TestMethod]
+        public async Task CheckThatAnkiConnectIsRunningAsync_WhenTaskCanceledExceptionOccurs_ThrowsAnkiConnectNotRunningException()
+        {
+            // Arrange
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ThrowsAsync(new TaskCanceledException("Request timed out"));
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            var sut = new AnkiConnectService(httpClient);
+
+            // Act
+            var act = async () => await sut.CheckThatAnkiConnectIsRunningAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<AnkiConnectNotRunningException>()
+                .WithMessage("Request timed out");
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private static HttpClient CreateHttpClient(Func<HttpRequestMessage, CancellationToken, HttpResponseMessage> responseFactory)
         {
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
@@ -210,5 +288,7 @@ namespace CopyWords.Core.Tests.Services
 
             return new HttpClient(handlerMock.Object);
         }
+
+        #endregion
     }
 }

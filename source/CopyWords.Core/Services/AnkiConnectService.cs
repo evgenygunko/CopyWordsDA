@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Anki ankiconnect
 
 using System.Text;
+using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using Newtonsoft.Json;
 
@@ -21,6 +22,8 @@ namespace CopyWords.Core.Services
             _httpClient = httpClient;
         }
 
+        #region Public Methods
+
         public async Task<long> AddNoteAsync(AnkiNote note, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(note);
@@ -33,6 +36,9 @@ namespace CopyWords.Core.Services
             {
                 throw new ArgumentException("Model name cannot be null or empty.", nameof(note));
             }
+
+            // Check if AnkiConnect is running first
+            await CheckThatAnkiConnectIsRunningAsync(cancellationToken);
 
             var request = new AddNoteRequest(
                 Action: "addNote",
@@ -95,6 +101,30 @@ namespace CopyWords.Core.Services
             return noteId;
         }
 
+        #endregion
+
+        #region Internal Methods
+
+        internal async Task CheckThatAnkiConnectIsRunningAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _httpClient.GetAsync(DefaultEndpoint, cancellationToken);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new AnkiConnectNotRunningException(ex.Message);
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new AnkiConnectNotRunningException(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private static AddNoteNoteOptions? BuildOptions(AnkiNoteOptions? options)
         {
             if (options is null)
@@ -143,5 +173,7 @@ namespace CopyWords.Core.Services
                 ["Sound"] = note.Sound ?? string.Empty,
             };
         }
+
+        #endregion
     }
 }
