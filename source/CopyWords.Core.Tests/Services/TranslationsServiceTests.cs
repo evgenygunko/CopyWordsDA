@@ -194,15 +194,25 @@ namespace CopyWords.Core.Tests.Services
         public async Task TranslateAsync_WhenBothTokensActive_UsesFirstTokenToBeCancelled()
         {
             // Arrange
-            using var externalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(100)); // Cancel after 100ms
+            using var externalCts = new CancellationTokenSource();
 
-            // Internal timeout is 30 seconds, so external should win
+            // Internal timeout is 30 seconds, so external should win when cancelled
             var httpClient = CreateMockHttpClientWithDelay(HttpStatusCode.OK, "{}", TimeSpan.FromMilliseconds(200));
 
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object);
 
-            // Act
-            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), externalCts.Token);
+            // Act - Start the operation
+            var task = sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), externalCts.Token);
+
+            // Cancel the external token after the request starts but before the delay completes
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(50);
+                externalCts.Cancel();
+            });
+
+            // Assert
+            var act = async () => await task;
             await act.Should().ThrowAsync<TaskCanceledException>();
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -132,46 +133,16 @@ namespace CopyWords.Core.ViewModels
 
             IsBusy = true;
 
-            MediaElement mediaElement = (MediaElement)control;
+            IMediaElement mediaElement = (IMediaElement)control;
             if (SoundUrl != _soundUrl)
             {
-                mediaElement.Source = MediaSource.FromUri(SoundUrl);
-
-                Debug.WriteLine($"Will play '{SoundUrl}', current state: {mediaElement.CurrentState}");
-                mediaElement.Play();
-
-                if (_deviceInfo.Platform == DevicePlatform.WinUI)
-                {
-                    if (!string.IsNullOrEmpty(_soundUrl))
-                    {
-                        // There is a strange bug on Windows when Media element would try to play the old sound even when the source has changed.
-                        // The sound would be silent though. So we call Play method again, this time it will play the new sound.
-                        await Task.Delay(200);
-                        mediaElement.Play();
-                    }
-                }
+                await PlayNewSoundAsync(new MediaElementWrapper(mediaElement), SoundUrl);
             }
             else
             {
-                Debug.WriteLine($"Will play '{SoundUrl}', current state: {mediaElement.CurrentState}");
-
-                if (_deviceInfo.Platform == DevicePlatform.Android)
-                {
-                    // On Android calling "Play" again doesn't do anything - we will change the position in current media instead, which will trigger play automatically.
-                    await mediaElement.SeekTo(TimeSpan.Zero, new CancellationTokenSource(TimeSpan.FromSeconds(3)).Token);
-                }
-                else if (_deviceInfo.Platform == DevicePlatform.WinUI)
-                {
-                    // However on Windows calling "SeekTo" doesn't play sound - we need to call "Play".
-                    mediaElement.Play();
-                }
-                else
-                {
-                    // On MacCatalyst we need both
-                    await mediaElement.SeekTo(TimeSpan.Zero, new CancellationTokenSource(TimeSpan.FromSeconds(3)).Token);
-                    mediaElement.Play();
-                }
+                await PlaySameSoundAgainAsync(new MediaElementWrapper(mediaElement), SoundUrl);
             }
+
             _soundUrl = SoundUrl;
 
             IsBusy = false;
@@ -366,6 +337,56 @@ namespace CopyWords.Core.ViewModels
         #endregion
 
         #region Internal methods
+
+        internal async Task PlayNewSoundAsync(IMediaElementWrapper mediaElement, string soundUrl)
+        {
+            // Playing new sound
+            mediaElement.Source = MediaSource.FromUri(soundUrl);
+
+            Debug.WriteLine($"Will play '{soundUrl}', current state: {mediaElement.CurrentState}");
+
+            if (_deviceInfo.Platform == DevicePlatform.WinUI)
+            {
+                // There is a strange bug on Windows when Media element would try to play the old sound even when the source has changed.
+                // The sound would be silent though. So we call Play method again, this time it will play the new sound.
+                mediaElement.Play();
+
+                if (string.IsNullOrEmpty(_soundUrl))
+                {
+                    // If it is first time we play the sound, wait longer.
+                    await Task.Delay(2000);
+                }
+                else
+                {
+                    await Task.Delay(200);
+                }
+            }
+
+            mediaElement.Play();
+        }
+
+        internal async Task PlaySameSoundAgainAsync(IMediaElementWrapper mediaElement, string soundUrl)
+        {
+            // Playing the same sound again
+            Debug.WriteLine($"Will play '{soundUrl}', current state: {mediaElement.CurrentState}");
+
+            if (_deviceInfo.Platform == DevicePlatform.Android)
+            {
+                // On Android calling "Play" again doesn't do anything - we will change the position in current media instead, which will trigger play automatically.
+                await mediaElement.SeekTo(TimeSpan.Zero, new CancellationTokenSource(TimeSpan.FromSeconds(3)).Token);
+            }
+            else if (_deviceInfo.Platform == DevicePlatform.WinUI)
+            {
+                // However on Windows calling "SeekTo" doesn't play sound - we need to call "Play".
+                mediaElement.Play();
+            }
+            else
+            {
+                // On MacCatalyst we need both
+                await mediaElement.SeekTo(TimeSpan.Zero, new CancellationTokenSource(TimeSpan.FromSeconds(3)).Token);
+                mediaElement.Play();
+            }
+        }
 
         internal async Task CompileAndCopyToClipboard(string wordPartName, Func<ObservableCollection<DefinitionViewModel>, Task<string>> action)
         {

@@ -487,5 +487,111 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         #endregion
+
+        #region Tests for PlayNewSoundAsync
+
+        [TestMethod]
+        public async Task PlayNewSoundAsync_OnWindows_CallsPlayTwoTimes()
+        {
+            string soundUrl = _fixture.Create<Uri>().ToString();
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            var mediaPlayerMock = new Mock<IMediaElementWrapper>();
+
+            var sut = _fixture.Create<WordViewModel>();
+            await sut.PlayNewSoundAsync(mediaPlayerMock.Object, soundUrl);
+
+            mediaPlayerMock.Verify(x => x.Play(), Times.Exactly(2));
+        }
+
+        [TestMethod]
+        public async Task PlayNewSoundAsync_OnAndroid_CallsPlayOnce()
+        {
+            string soundUrl = _fixture.Create<Uri>().ToString();
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var mediaPlayerMock = new Mock<IMediaElementWrapper>();
+
+            var sut = _fixture.Create<WordViewModel>();
+            await sut.PlayNewSoundAsync(mediaPlayerMock.Object, soundUrl);
+
+            mediaPlayerMock.Verify(x => x.Play(), Times.Once());
+        }
+
+        [TestMethod]
+        public async Task PlayNewSoundAsync_OnMacCatalyst_CallsPlayOnce()
+        {
+            string soundUrl = _fixture.Create<Uri>().ToString();
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.MacCatalyst);
+
+            var mediaPlayerMock = new Mock<IMediaElementWrapper>();
+
+            var sut = _fixture.Create<WordViewModel>();
+            await sut.PlayNewSoundAsync(mediaPlayerMock.Object, soundUrl);
+
+            mediaPlayerMock.Verify(x => x.Play(), Times.Once());
+        }
+
+        #endregion
+
+        #region Tests for PlaySameSoundAgainAsync
+
+        [TestMethod]
+        public async Task PlaySameSoundAgainAsync_OnWindows_CallsPlay()
+        {
+            string soundUrl = _fixture.Create<Uri>().ToString();
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            var mediaPlayerMock = new Mock<IMediaElementWrapper>();
+
+            var sut = _fixture.Create<WordViewModel>();
+            await sut.PlaySameSoundAgainAsync(mediaPlayerMock.Object, soundUrl);
+
+            mediaPlayerMock.Verify(x => x.Play(), Times.Once());
+        }
+
+        [TestMethod]
+        public async Task PlaySameSoundAgainAsync_OnAndroid_CallsSeekTo()
+        {
+            string soundUrl = _fixture.Create<Uri>().ToString();
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var mediaPlayerMock = new Mock<IMediaElementWrapper>();
+
+            var sut = _fixture.Create<WordViewModel>();
+            await sut.PlaySameSoundAgainAsync(mediaPlayerMock.Object, soundUrl);
+
+            mediaPlayerMock.Verify(x => x.SeekTo(TimeSpan.Zero, It.IsAny<CancellationToken>()), Times.Once());
+            mediaPlayerMock.Verify(x => x.Play(), Times.Never());
+        }
+
+        [TestMethod]
+        public async Task PlaySameSoundAgainAsync_OnMacCatalyst_CallsSeekToAndPlay()
+        {
+            string soundUrl = _fixture.Create<Uri>().ToString();
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.MacCatalyst);
+
+            var mediaPlayerMock = new Mock<IMediaElementWrapper>();
+
+            var sut = _fixture.Create<WordViewModel>();
+            await sut.PlaySameSoundAgainAsync(mediaPlayerMock.Object, soundUrl);
+
+            mediaPlayerMock.Verify(x => x.SeekTo(TimeSpan.Zero, It.IsAny<CancellationToken>()), Times.Once());
+            mediaPlayerMock.Verify(x => x.Play(), Times.Once());
+        }
+
+        #endregion
     }
 }
