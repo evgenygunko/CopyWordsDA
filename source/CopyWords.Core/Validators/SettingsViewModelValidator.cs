@@ -1,8 +1,9 @@
 ﻿// Ignore Spelling: Validator Api
 
+using CopyWords.Core.ViewModels;
 using FluentValidation;
 
-namespace CopyWords.Core.ViewModels.Validation
+namespace CopyWords.Core.Validators
 {
     public class SettingsViewModelValidator : AbstractValidator<SettingsViewModel>
     {

@@ -27,8 +27,20 @@ namespace CopyWords.Core.Tests.Services
         public async Task AddNoteAsync_WhenSuccess_PostsExpectedPayloadAndReturnsNoteId()
         {
             // Arrange
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                PartOfSpeech: "noun",
+                Forms: "form1, form2",
+                Example: "example text",
+                Sound: "[sound:file.mp3]",
+                Tags: new[] { "tag1", "tag2" });
+
             var capturedBodies = new List<string?>();
             var capturedUris = new List<Uri?>();
+
             HttpClient httpClient = CreateHttpClient((request, cancellationToken) =>
             {
                 capturedUris.Add(request.RequestUri);
@@ -42,17 +54,9 @@ namespace CopyWords.Core.Tests.Services
                 };
             });
 
-            var sut = new AnkiConnectService(httpClient);
-            var note = new AnkiNote(
-                DeckName: "Default",
-                ModelName: "Basic",
-                Front: "Front text",
-                Back: "Back text",
-                PartOfSpeech: "noun",
-                Forms: "form1, form2",
-                Example: "example text",
-                Sound: "[sound:file.mp3]",
-                Tags: new[] { "tag1", "tag2" });
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
             long result = await sut.AddNoteAsync(note, CancellationToken.None);
@@ -99,14 +103,16 @@ namespace CopyWords.Core.Tests.Services
         public async Task AddNoteAsync_WhenErrorReturned_ThrowsInvalidOperationException()
         {
             // Arrange
+            var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
+
             var httpClient = CreateHttpClient((_, _) => new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent("{\"result\":null,\"error\":\"deck not found\"}")
             });
-            var sut = new AnkiConnectService(httpClient);
+            _fixture.Inject(httpClient);
 
-            var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
+            var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
             var act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
@@ -120,14 +126,17 @@ namespace CopyWords.Core.Tests.Services
         public async Task AddNoteAsync_WhenHttpFailure_ThrowsInvalidOperationException()
         {
             // Arrange
+            var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
+
             var httpClient = CreateHttpClient((_, _) => new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.InternalServerError,
                 ReasonPhrase = "Internal Server Error",
                 Content = new StringContent("{}")
             });
-            var sut = new AnkiConnectService(httpClient);
-            var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
             var act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
@@ -141,13 +150,16 @@ namespace CopyWords.Core.Tests.Services
         public async Task AddNoteAsync_WhenResultMissing_ThrowsInvalidOperationException()
         {
             // Arrange
+            var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
+
             var httpClient = CreateHttpClient((_, _) => new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent("{\"result\":null,\"error\":null}")
             });
-            var sut = new AnkiConnectService(httpClient);
-            var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
             var act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
@@ -155,50 +167,6 @@ namespace CopyWords.Core.Tests.Services
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
                 .WithMessage("AnkiConnect did not return a note id.");
-        }
-
-        [TestMethod]
-        public async Task AddNoteAsync_WhenDeckNameEmpty_ThrowsArgumentException()
-        {
-            // Arrange
-            var httpClient = CreateHttpClient((_, _) => new HttpResponseMessage(HttpStatusCode.OK));
-            var sut = new AnkiConnectService(httpClient);
-            var note = _fixture.Create<AnkiNote>() with { DeckName = string.Empty, ModelName = "model" };
-
-            // Act
-            var act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
-
-            // Assert
-            await act.Should().ThrowAsync<ArgumentException>().WithParameterName("note");
-        }
-
-        [TestMethod]
-        public async Task AddNoteAsync_WhenModelNameEmpty_ThrowsArgumentException()
-        {
-            // Arrange
-            var httpClient = CreateHttpClient((_, _) => new HttpResponseMessage(HttpStatusCode.OK));
-            var sut = new AnkiConnectService(httpClient);
-            var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = string.Empty };
-
-            // Act
-            var act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
-
-            // Assert
-            await act.Should().ThrowAsync<ArgumentException>().WithParameterName("note");
-        }
-
-        [TestMethod]
-        public async Task AddNoteAsync_WhenNoteIsNull_ThrowsArgumentNullException()
-        {
-            // Arrange
-            var httpClient = CreateHttpClient((_, _) => new HttpResponseMessage(HttpStatusCode.OK));
-            var sut = new AnkiConnectService(httpClient);
-
-            // Act
-            var act = async () => await sut.AddNoteAsync(null!, CancellationToken.None);
-
-            // Assert
-            await act.Should().ThrowAsync<ArgumentNullException>();
         }
 
         #endregion
@@ -214,7 +182,9 @@ namespace CopyWords.Core.Tests.Services
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent("AnkiConnect is running")
             });
-            var sut = new AnkiConnectService(httpClient);
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
             var act = async () => await sut.CheckThatAnkiConnectIsRunningAsync(CancellationToken.None);
@@ -237,7 +207,9 @@ namespace CopyWords.Core.Tests.Services
                 .ThrowsAsync(new HttpRequestException("Connection refused"));
 
             var httpClient = new HttpClient(handlerMock.Object);
-            var sut = new AnkiConnectService(httpClient);
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
             var act = async () => await sut.CheckThatAnkiConnectIsRunningAsync(CancellationToken.None);
@@ -261,7 +233,9 @@ namespace CopyWords.Core.Tests.Services
                 .ThrowsAsync(new TaskCanceledException("Request timed out"));
 
             var httpClient = new HttpClient(handlerMock.Object);
-            var sut = new AnkiConnectService(httpClient);
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
             var act = async () => await sut.CheckThatAnkiConnectIsRunningAsync(CancellationToken.None);

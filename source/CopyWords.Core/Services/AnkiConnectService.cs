@@ -3,6 +3,7 @@
 using System.Text;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
+using FluentValidation;
 using Newtonsoft.Json;
 
 namespace CopyWords.Core.Services
@@ -16,25 +17,22 @@ namespace CopyWords.Core.Services
     {
         private const string DefaultEndpoint = "http://127.0.0.1:8765";
         private readonly HttpClient _httpClient;
+        private readonly IValidator<AnkiNote> _ankiNoteValidator;
 
-        public AnkiConnectService(HttpClient httpClient)
+        public AnkiConnectService(HttpClient httpClient, IValidator<AnkiNote> ankiNoteValidator)
         {
             _httpClient = httpClient;
+            _ankiNoteValidator = ankiNoteValidator;
         }
 
         #region Public Methods
 
         public async Task<long> AddNoteAsync(AnkiNote note, CancellationToken cancellationToken)
         {
-            ArgumentNullException.ThrowIfNull(note);
-            if (string.IsNullOrWhiteSpace(note.DeckName))
+            var validationResult = await _ankiNoteValidator.ValidateAsync(note, cancellationToken);
+            if (!validationResult.IsValid)
             {
-                throw new ArgumentException("Deck name cannot be null or empty.", nameof(note));
-            }
-
-            if (string.IsNullOrWhiteSpace(note.ModelName))
-            {
-                throw new ArgumentException("Model name cannot be null or empty.", nameof(note));
+                throw new ArgumentException(validationResult.ToString());
             }
 
             // Check if AnkiConnect is running first

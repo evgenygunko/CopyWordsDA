@@ -6,8 +6,8 @@ using CommunityToolkit.Maui.Storage;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
+using CopyWords.Core.Validators;
 using CopyWords.Core.ViewModels;
-using CopyWords.Core.ViewModels.Validation;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
@@ -117,6 +117,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<LastCrashViewModel>();
 
         builder.Services.AddScoped<IValidator<SettingsViewModel>, SettingsViewModelValidator>();
+        builder.Services.AddScoped<IValidator<AnkiNote>, AnkiNoteValidator>();
 
         var app = builder.Build();
 
