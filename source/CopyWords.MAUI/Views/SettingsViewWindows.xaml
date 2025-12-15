@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/maui/global"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:validation="clr-namespace:CopyWords.Core.ViewModels.Validation;assembly=CopyWords.Core"
+             xmlns:validation="clr-namespace:CopyWords.Core.Validators;assembly=CopyWords.Core"
              x:DataType="SettingsViewModel"
              x:Class="CopyWords.MAUI.Views.SettingsViewWindows">
 
