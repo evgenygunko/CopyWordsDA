@@ -194,6 +194,19 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
+        public async Task CompileFrontAsync_ForMasculineAndFeminineNouns_ReplacesElAndLaWithUnAndUna()
+        {
+            var definitionVMs = CreateVMForMorador();
+            definitionVMs[0].ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string front = await sut.CompileFrontAsync(definitionVMs);
+
+            front.Should().Be("un morador, una moradora");
+        }
+
+        [TestMethod]
         public async Task CompileFrontAsync_ForBien_CopiesFront()
         {
             var definitionVMs = CreateVMForBien();
@@ -1320,6 +1333,42 @@ namespace CopyWords.Core.Tests.Services
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Enrico se involucró con el hampa y hace tres días está desaparecido.", Translation: "Enrico got involved with the underworld and has been missing for three days.")
+                                    }),
+                        }),
+                    // ...
+                }
+            );
+
+            var definitionVM = new DefinitionViewModel(
+                definition,
+                SourceLanguage.Spanish,
+                true);
+
+            var definitionVMs = new ObservableCollection<DefinitionViewModel>()
+            {
+                definitionVM
+            };
+
+            return definitionVMs;
+        }
+
+        private ObservableCollection<DefinitionViewModel> CreateVMForMorador()
+        {
+            var definition = new Definition(new Headword("el morador, la moradora", null, null), PartOfSpeech: "masculine or feminine noun", Endings: "",
+                new List<Context>
+                {
+                    new Context("(general)", "1",
+                        new List<Meaning>
+                        {
+                            new Meaning(
+                                Original: "underworld",
+                                Translation: null,
+                                AlphabeticalPosition: "a",
+                                Tag: null,
+                                ImageUrl: null,
+                                Examples: new List<Example>()
+                                    {
+                                        new Example(Original: "Los moradores de esta aldea viven en casas hechas de adobe.", Translation: "The inhabitants of this village live in adobe houses.")
                                     }),
                         }),
                     // ...

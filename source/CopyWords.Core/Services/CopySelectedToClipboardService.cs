@@ -89,7 +89,19 @@ namespace CopyWords.Core.Services
 
                     if (partOfSpeech.Equals("MASCULINE OR FEMININE NOUN", StringComparison.OrdinalIgnoreCase))
                     {
-                        front = word + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, "m/f");
+                        // Check for pattern "el <word>, la <word>"
+                        const string pattern = @"^el\s+(\w+),\s+la\s+(\w+)$";
+                        Match match = Regex.Match(word, pattern, RegexOptions.IgnoreCase);
+
+                        if (match.Success)
+                        {
+                            // Replace "el" with "un" and "la" with "una"
+                            front = $"un {match.Groups[1].Value}, una {match.Groups[2].Value}";
+                        }
+                        else
+                        {
+                            front = word + " " + string.Format(CultureInfo.CurrentCulture, TemplateGrayText, "m/f");
+                        }
                     }
                 }
             }
