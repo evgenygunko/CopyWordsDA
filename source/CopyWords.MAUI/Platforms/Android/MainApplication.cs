@@ -34,4 +34,3 @@ public class MainApplication : MauiApplication
         return MauiProgram.CreateMauiApp();
     }
 }
-

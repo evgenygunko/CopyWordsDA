@@ -28,7 +28,6 @@ public partial class App : MauiWinUIApplication
             }
             e.Handled = false;
         };
-
     }
 
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();

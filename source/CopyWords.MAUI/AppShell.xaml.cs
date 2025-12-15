@@ -14,4 +14,3 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(HistoryPage), typeof(HistoryPage));
     }
 }
-

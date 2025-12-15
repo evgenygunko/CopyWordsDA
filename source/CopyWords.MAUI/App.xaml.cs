@@ -74,4 +74,3 @@ public partial class App : Application
         return window;
     }
 }
-

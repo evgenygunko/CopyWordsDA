@@ -45,6 +45,7 @@ public class MainActivity : MauiAppCompatActivity
     {
         // todo: this is workaround for a crash https://github.com/dotnet/maui/issues/32600#issuecomment-3646966167
         // Delete this method when a fix is released.
+#pragma warning disable RCS1075 // Avoid empty catch clause that catches System.Exception
         try
         {
             base.OnDestroy();
@@ -52,6 +53,6 @@ public class MainActivity : MauiAppCompatActivity
         catch (Exception)
         {
         }
+#pragma warning restore RCS1075 // Avoid empty catch clause that catches System.Exception
     }
 }
-
