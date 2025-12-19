@@ -60,6 +60,8 @@ namespace CopyWords.Core.Services
             appSettings.MainWindowXPos = GetDoubleValue("MainWindowXPos", 100);
             appSettings.MainWindowYPos = GetDoubleValue("MainWindowYPos", 100);
 
+            appSettings.AnkiDeckName = _preferences.Get("AnkiDeckName", string.Empty);
+            appSettings.AnkiModelName = _preferences.Get("AnkiModelName", string.Empty);
             appSettings.AnkiSoundsFolder = _preferences.Get("AnkiSoundsFolder", Path.GetTempPath());
 
             // On mobile by default show the app in a "dictionary" mode, without copy buttons.
@@ -81,6 +83,8 @@ namespace CopyWords.Core.Services
             SetDoubleValue("MainWindowXPos", appSettings.MainWindowXPos);
             SetDoubleValue("MainWindowYPos", appSettings.MainWindowYPos);
 
+            _preferences.Set("AnkiDeckName", appSettings.AnkiDeckName);
+            _preferences.Set("AnkiModelName", appSettings.AnkiModelName);
             _preferences.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder);
             _preferences.Set("ShowCopyButtons", appSettings.ShowCopyButtons);
             _preferences.Set("ShowCopyWithAnkiConnectButton", appSettings.ShowCopyWithAnkiConnectButton);

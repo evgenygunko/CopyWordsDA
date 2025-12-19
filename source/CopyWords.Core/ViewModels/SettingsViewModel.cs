@@ -51,6 +51,14 @@ namespace CopyWords.Core.ViewModels
         internal bool CanUpdateIndividualSettings => _deviceInfo.Platform == DevicePlatform.Android;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SelectAnkiDeckNameCommand))]
+        public partial string? AnkiDeckName { get; set; }
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SelectAnkiModelNameCommand))]
+        public partial string? AnkiModelName { get; set; }
+
+        [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
         public partial string? AnkiSoundsFolder { get; set; }
 
@@ -130,6 +138,22 @@ namespace CopyWords.Core.ViewModels
                     await _dialogService.DisplayAlertAsync("Cannot import setting", $"Cannot import settings from the file '{settingFile}'. Error: {ex}", "OK");
                 }
             }
+        }
+
+        [SupportedOSPlatform("windows")]
+        [RelayCommand]
+        public async Task SelectAnkiDeckNameAsync()
+        {
+            await _dialogService.DisplayAlertAsync("Not implemented", "Selecting Anki deck name is not implemented yet.", "OK");
+            AnkiDeckName = "not implemented";
+        }
+
+        [SupportedOSPlatform("windows")]
+        [RelayCommand]
+        public async Task SelectAnkiModelNameAsync()
+        {
+            await _dialogService.DisplayAlertAsync("Not implemented", "Selecting Anki model name is not implemented yet.", "OK");
+            AnkiModelName = "not implemented";
         }
 
         [SupportedOSPlatform("windows")]
@@ -266,6 +290,8 @@ namespace CopyWords.Core.ViewModels
 
         private void UpdateUI(AppSettings appSettings)
         {
+            AnkiDeckName = appSettings.AnkiDeckName;
+            AnkiModelName = appSettings.AnkiModelName;
             AnkiSoundsFolder = appSettings.AnkiSoundsFolder;
             ShowCopyButtons = appSettings.ShowCopyButtons;
             ShowCopyWithAnkiConnectButton = appSettings.ShowCopyWithAnkiConnectButton;
@@ -274,6 +300,8 @@ namespace CopyWords.Core.ViewModels
 
         private void UpdateAppSettingsWithCurrentValues(AppSettings appSettings)
         {
+            appSettings.AnkiDeckName = AnkiDeckName ?? string.Empty;
+            appSettings.AnkiModelName = AnkiModelName ?? string.Empty;
             appSettings.AnkiSoundsFolder = AnkiSoundsFolder ?? string.Empty;
             appSettings.ShowCopyButtons = ShowCopyButtons;
             appSettings.ShowCopyWithAnkiConnectButton = ShowCopyWithAnkiConnectButton;

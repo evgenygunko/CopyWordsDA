@@ -35,6 +35,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IShare _share;
         private readonly IDeviceInfo _deviceInfo;
         private readonly IAnkiConnectService _ankiConnectService;
+        private readonly ISettingsService _settingsService;
 
         private string _soundUrl = string.Empty;
 
@@ -45,7 +46,8 @@ namespace CopyWords.Core.ViewModels
             ICopySelectedToClipboardService copySelectedToClipboardService,
             IShare share,
             IDeviceInfo deviceInfo,
-            IAnkiConnectService ankiConnectService)
+            IAnkiConnectService ankiConnectService,
+            ISettingsService settingsService)
         {
             _saveSoundFileService = saveSoundFileService;
             _dialogService = dialogService;
@@ -54,6 +56,7 @@ namespace CopyWords.Core.ViewModels
             _share = share;
             _deviceInfo = deviceInfo;
             _ankiConnectService = ankiConnectService;
+            _settingsService = settingsService;
         }
 
         #region Properties
@@ -175,6 +178,13 @@ namespace CopyWords.Core.ViewModels
         {
             try
             {
+                AppSettings appSettings = _settingsService.LoadSettings();
+                if (string.IsNullOrEmpty(appSettings.AnkiDeckName) || string.IsNullOrEmpty(appSettings.AnkiModelName))
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please configure Anki deck name and model name in the settings.", "OK");
+                    return;
+                }
+
                 string front = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModels);
                 if (string.IsNullOrEmpty(front))
                 {
@@ -193,20 +203,16 @@ namespace CopyWords.Core.ViewModels
                 string endings = await _copySelectedToClipboardService.CompileEndingsAsync(DefinitionViewModels);
                 string examples = await _copySelectedToClipboardService.CompileExamplesAsync(DefinitionViewModels);
 
-                // todo: get them from Settings dialog
-                const string deckName = "Test";
-                const string modelName = "Основная";
-
                 var ankiNoteOptions = new AnkiNoteOptions(
                     AllowDuplicate: false,
                     DuplicateScope: "deck",
                     DuplicateScopeOptions: new AnkiDuplicateScopeOptions(
-                        DeckName: deckName,
+                        DeckName: appSettings.AnkiDeckName,
                         CheckChildren: false));
 
                 var note = new AnkiNote(
-                    DeckName: deckName,
-                    ModelName: modelName,
+                    DeckName: appSettings.AnkiDeckName,
+                    ModelName: appSettings.AnkiModelName,
                     Front: front,
                     Back: back,
                     PartOfSpeech: partOfSpeech,

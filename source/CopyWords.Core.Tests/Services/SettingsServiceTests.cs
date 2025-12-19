@@ -31,6 +31,8 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Get("MainWindowXPos", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("MainWindowYPos", It.IsAny<string>(), It.IsAny<string>()));
 
+            preferencesMock.Verify(x => x.Get("AnkiDeckName", It.IsAny<string>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("AnkiModelName", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("AnkiSoundsFolder", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("ShowCopyButtons", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", It.IsAny<bool>(), It.IsAny<string>()));
@@ -56,6 +58,8 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("MainWindowXPos", appSettings.MainWindowXPos.ToString(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("MainWindowYPos", appSettings.MainWindowYPos.ToString(), It.IsAny<string>()));
 
+            preferencesMock.Verify(x => x.Set("AnkiDeckName", appSettings.AnkiDeckName, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("AnkiModelName", appSettings.AnkiModelName, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("ShowCopyButtons", appSettings.ShowCopyButtons, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings, It.IsAny<string>()));
@@ -83,6 +87,8 @@ namespace CopyWords.Core.Tests.Services
             fileIOServiceMock.Verify(x => x.WriteAllTextAsync(file, It.IsAny<string>(), It.IsAny<CancellationToken>()));
 
             // ExportSettingsAsync reads settings from current preferences storage
+            preferencesMock.Verify(x => x.Get("AnkiDeckName", It.IsAny<string>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("AnkiModelName", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("AnkiSoundsFolder", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("ShowCopyButtons", true, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", true, It.IsAny<string>()));
@@ -111,6 +117,8 @@ namespace CopyWords.Core.Tests.Services
             fileIOServiceMock.Verify(x => x.ReadAllTextAsync(file, It.IsAny<CancellationToken>()));
 
             // ImportSettingsAsync also saves settings to current preferences storage
+            preferencesMock.Verify(x => x.Set("AnkiDeckName", result!.AnkiDeckName, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("AnkiModelName", result!.AnkiModelName, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("AnkiSoundsFolder", result!.AnkiSoundsFolder, It.IsAny<string>()));
 
             preferencesMock.Verify(x => x.Set("ShowCopyButtons", false, It.IsAny<string>()));

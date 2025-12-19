@@ -56,10 +56,14 @@ namespace CopyWords.Core.Services
                 noteId = await FindExistingNoteIdAsync(note, cancellationToken);
                 await ShowAnkiEditNoteWindowAsync(noteId, cancellationToken);
 
-                string messsage = noteId > 0 ?
-                    $"Note '{note.Front}' already exists. Check the existing note to review or update it."
-                    : $"Cannot add '{note.Front}' because it already exists.";
-                await _dialogService.DisplayAlertAsync("Cannot add note", messsage, "OK");
+                if (noteId > 0)
+                {
+                    await _dialogService.DisplayAlertAsync("Note already exists", $"Note '{note.Front}' already exists. Check the existing note to review or update it.", "OK");
+                }
+                else
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot add note", $"Cannot add '{note.Front}' because it already exists.", "OK");
+                }
             }
 
             return noteId;
