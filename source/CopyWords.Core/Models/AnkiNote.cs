@@ -70,4 +70,16 @@ namespace CopyWords.Core.Models
     internal record AddNoteResponse(
         [property: JsonProperty("result")] long? Result,
         [property: JsonProperty("error")] string? Error);
+
+    internal record FindNotesRequest(
+        [property: JsonProperty("action")] string Action,
+        [property: JsonProperty("version")] int Version,
+        [property: JsonProperty("params")] FindNotesParams Params);
+
+    internal record FindNotesParams(
+        [property: JsonProperty("query")] string Query);
+
+    internal record FindNotesResponse(
+        [property: JsonProperty("result")] IEnumerable<long>? Result,
+        [property: JsonProperty("error")] string? Error);
 }

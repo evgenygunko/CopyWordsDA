@@ -46,19 +46,21 @@ namespace CopyWords.Core.Services
             {
                 // Add the note to Anki via AnkiConnect.
                 noteId = await AddNoteWithAnkiConnectAsync(note, cancellationToken);
+
+                // Cards have been added successfully. Now open the note editor in Anki to allow the user to make further edits.
+                // Skip showing the edit window if the note was a duplicate (noteId == 0)
+                await ShowAnkiEditNoteWindowAsync(noteId, cancellationToken);
             }
             catch (AnkiNoteExistsException)
             {
-                await _dialogService.DisplayAlertAsync("Cannot add note", $"Cannot add '{note.Front}' because it already exists", "OK");
+                noteId = await FindExistingNoteIdAsync(note, cancellationToken);
+                await ShowAnkiEditNoteWindowAsync(noteId, cancellationToken);
 
-                // todo: find an existing note with given front field
-                // noteId = await FindExistingNoteIdAsync(note.Front, cancellationToken);
-                return 0;
+                string messsage = noteId > 0 ?
+                    $"Note '{note.Front}' already exists. Check the existing note to review or update it."
+                    : $"Cannot add '{note.Front}' because it already exists.";
+                await _dialogService.DisplayAlertAsync("Cannot add note", messsage, "OK");
             }
-
-            // Cards have been added successfully. Now open the note editor in Anki to allow the user to make further edits.
-            // Skip showing the edit window if the note was a duplicate (noteId == 0)
-            await ShowAnkiEditNoteWindowAsync(noteId, cancellationToken);
 
             return noteId;
         }
@@ -133,6 +135,47 @@ namespace CopyWords.Core.Services
             }
 
             return addNoteResponse.Result.Value;
+        }
+
+        internal async Task<long> FindExistingNoteIdAsync(AnkiNote note, CancellationToken cancellationToken)
+        {
+            // Build a query to search for notes with the given front text in the specific deck
+            // Using "deck:" prefix to search in a specific deck and "Front:" to search in the Front field
+            string query = $"\"deck:{note.DeckName}\" \"Front:{note.Front}\"";
+
+            var request = new FindNotesRequest(
+                Action: "findNotes",
+                Version: 6,
+                Params: new FindNotesParams(query));
+
+            string payload = JsonConvert.SerializeObject(request);
+            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            using HttpResponseMessage response = await _httpClient.PostAsync(DefaultEndpoint, content, cancellationToken);
+            string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            var findNotesResponse = JsonConvert.DeserializeObject<FindNotesResponse>(responseBody);
+            if (findNotesResponse is null)
+            {
+                throw new InvalidOperationException("AnkiConnect returned an empty response.");
+            }
+
+            if (!response.IsSuccessStatusCode || !string.IsNullOrWhiteSpace(findNotesResponse.Error))
+            {
+                string error = !string.IsNullOrWhiteSpace(findNotesResponse.Error)
+                    ? findNotesResponse.Error
+                    : $"HTTP {(int)response.StatusCode} ({response.ReasonPhrase})";
+
+                throw new InvalidOperationException($"Failed to find notes in Anki: {error}");
+            }
+
+            // Return the first note ID if found, otherwise return 0
+            if (findNotesResponse.Result is not null && findNotesResponse.Result.Any())
+            {
+                return findNotesResponse.Result.First();
+            }
+
+            return 0;
         }
 
         internal async Task ShowAnkiEditNoteWindowAsync(long noteId, CancellationToken cancellationToken)
