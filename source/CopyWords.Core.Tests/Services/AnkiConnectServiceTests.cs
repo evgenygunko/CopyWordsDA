@@ -570,6 +570,578 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
+        #region Tests for GetDeckNamesAsync
+
+        [TestMethod]
+        public async Task GetDeckNamesAsync_WhenSuccess_ReturnsDeckNames()
+        {
+            // Arrange
+            var expectedDeckNames = new[] { "Default", "Spanish", "German", "French" };
+            var capturedBodies = new List<string?>();
+            var capturedUris = new List<Uri?>();
+
+            HttpClient httpClient = CreateHttpClient((request, cancellationToken) =>
+            {
+                capturedUris.Add(request.RequestUri);
+                capturedBodies.Add(request.Content != null ? request.Content.ReadAsStringAsync(cancellationToken).Result : null);
+
+                // First request is the connectivity check (GET), second is deckNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":[\"Default\",\"Spanish\",\"German\",\"French\"],\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var result = await sut.GetDeckNamesAsync(CancellationToken.None);
+
+            // Assert
+            result.Should().BeEquivalentTo(expectedDeckNames);
+            capturedBodies.Should().HaveCount(2);
+            capturedUris.Should().HaveCount(2);
+
+            // Both requests should go to the same endpoint
+            capturedUris[0].Should().Be(new Uri("http://127.0.0.1:8765"));
+            capturedUris[1].Should().Be(new Uri("http://127.0.0.1:8765"));
+
+            // First request is connectivity check (no body)
+            capturedBodies[0].Should().BeNull();
+
+            // Second request is deckNames
+            capturedBodies[1].Should().NotBeNull();
+            JObject payload = JObject.Parse(capturedBodies[1]!);
+            payload["action"]!.Value<string>().Should().Be("deckNames");
+            payload["version"]!.Value<int>().Should().Be(6);
+        }
+
+        [TestMethod]
+        public async Task GetDeckNamesAsync_WhenEmptyDeckList_ReturnsEmptyCollection()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is deckNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":[],\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var result = await sut.GetDeckNamesAsync(CancellationToken.None);
+
+            // Assert
+            result.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task GetDeckNamesAsync_WhenResultIsNull_ReturnsEmptyCollection()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is deckNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":null,\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var result = await sut.GetDeckNamesAsync(CancellationToken.None);
+
+            // Assert
+            result.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task GetDeckNamesAsync_WhenErrorReturned_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is deckNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":null,\"error\":\"collection is not available\"}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetDeckNamesAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Failed to get deck names from Anki: collection is not available");
+        }
+
+        [TestMethod]
+        public async Task GetDeckNamesAsync_WhenHttpFailure_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is deckNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ReasonPhrase = "Internal Server Error",
+                    Content = new StringContent("{\"result\":null,\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetDeckNamesAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Failed to get deck names from Anki: HTTP 500 (Internal Server Error)");
+        }
+
+        [TestMethod]
+        public async Task GetDeckNamesAsync_WhenEmptyResponse_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is deckNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetDeckNamesAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("AnkiConnect returned an empty response.");
+        }
+
+        [TestMethod]
+        public async Task GetDeckNamesAsync_WhenAnkiConnectNotRunning_ThrowsAnkiConnectNotRunningException()
+        {
+            // Arrange
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ThrowsAsync(new HttpRequestException("Connection refused"));
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetDeckNamesAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<AnkiConnectNotRunningException>()
+                .WithMessage("Connection refused");
+        }
+
+        [TestMethod]
+        public async Task GetDeckNamesAsync_WhenCancellationRequested_ThrowsAnkiConnectNotRunningException()
+        {
+            // Arrange
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ThrowsAsync(new TaskCanceledException("The operation was canceled."));
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetDeckNamesAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<AnkiConnectNotRunningException>()
+                .WithMessage("The operation was canceled.");
+        }
+
+        #endregion
+
+        #region Tests for GetModelNamesAsync
+
+        [TestMethod]
+        public async Task GetModelNamesAsync_WhenSuccess_ReturnsModelNames()
+        {
+            // Arrange
+            var expectedModelNames = new[] { "Basic", "Basic (and reversed card)", "Cloze", "Custom Model" };
+            var capturedBodies = new List<string?>();
+            var capturedUris = new List<Uri?>();
+
+            HttpClient httpClient = CreateHttpClient((request, cancellationToken) =>
+            {
+                capturedUris.Add(request.RequestUri);
+                capturedBodies.Add(request.Content != null ? request.Content.ReadAsStringAsync(cancellationToken).Result : null);
+
+                // First request is the connectivity check (GET), second is modelNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":[\"Basic\",\"Basic (and reversed card)\",\"Cloze\",\"Custom Model\"],\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var result = await sut.GetModelNamesAsync(CancellationToken.None);
+
+            // Assert
+            result.Should().BeEquivalentTo(expectedModelNames);
+            capturedBodies.Should().HaveCount(2);
+            capturedUris.Should().HaveCount(2);
+
+            // Both requests should go to the same endpoint
+            capturedUris[0].Should().Be(new Uri("http://127.0.0.1:8765"));
+            capturedUris[1].Should().Be(new Uri("http://127.0.0.1:8765"));
+
+            // First request is connectivity check (no body)
+            capturedBodies[0].Should().BeNull();
+
+            // Second request is modelNames
+            capturedBodies[1].Should().NotBeNull();
+            JObject payload = JObject.Parse(capturedBodies[1]!);
+            payload["action"]!.Value<string>().Should().Be("modelNames");
+            payload["version"]!.Value<int>().Should().Be(6);
+        }
+
+        [TestMethod]
+        public async Task GetModelNamesAsync_WhenEmptyModelList_ReturnsEmptyCollection()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is modelNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":[],\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var result = await sut.GetModelNamesAsync(CancellationToken.None);
+
+            // Assert
+            result.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task GetModelNamesAsync_WhenResultIsNull_ReturnsEmptyCollection()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is modelNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":null,\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var result = await sut.GetModelNamesAsync(CancellationToken.None);
+
+            // Assert
+            result.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public async Task GetModelNamesAsync_WhenErrorReturned_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is modelNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":null,\"error\":\"collection is not available\"}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetModelNamesAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Failed to get model names from Anki: collection is not available");
+        }
+
+        [TestMethod]
+        public async Task GetModelNamesAsync_WhenHttpFailure_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is modelNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ReasonPhrase = "Internal Server Error",
+                    Content = new StringContent("{\"result\":null,\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetModelNamesAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Failed to get model names from Anki: HTTP 500 (Internal Server Error)");
+        }
+
+        [TestMethod]
+        public async Task GetModelNamesAsync_WhenEmptyResponse_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is modelNames (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetModelNamesAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("AnkiConnect returned an empty response.");
+        }
+
+        [TestMethod]
+        public async Task GetModelNamesAsync_WhenAnkiConnectNotRunning_ThrowsAnkiConnectNotRunningException()
+        {
+            // Arrange
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ThrowsAsync(new HttpRequestException("Connection refused"));
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetModelNamesAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<AnkiConnectNotRunningException>()
+                .WithMessage("Connection refused");
+        }
+
+        [TestMethod]
+        public async Task GetModelNamesAsync_WhenCancellationRequested_ThrowsAnkiConnectNotRunningException()
+        {
+            // Arrange
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ThrowsAsync(new TaskCanceledException("The operation was canceled."));
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetModelNamesAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<AnkiConnectNotRunningException>()
+                .WithMessage("The operation was canceled.");
+        }
+
+        #endregion
+
         #region Private Methods
 
         private static HttpClient CreateHttpClient(Func<HttpRequestMessage, CancellationToken, HttpResponseMessage> responseFactory)

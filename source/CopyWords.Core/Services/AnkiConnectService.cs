@@ -12,6 +12,10 @@ namespace CopyWords.Core.Services
     public interface IAnkiConnectService
     {
         Task<long> AddNoteAsync(AnkiNote note, CancellationToken cancellationToken);
+
+        Task<IEnumerable<string>> GetDeckNamesAsync(CancellationToken cancellationToken);
+
+        Task<IEnumerable<string>> GetModelNamesAsync(CancellationToken cancellationToken);
     }
 
     public class AnkiConnectService : IAnkiConnectService
@@ -67,6 +71,74 @@ namespace CopyWords.Core.Services
             }
 
             return noteId;
+        }
+
+        public async Task<IEnumerable<string>> GetDeckNamesAsync(CancellationToken cancellationToken)
+        {
+            await CheckThatAnkiConnectIsRunningAsync(cancellationToken);
+
+            var request = new
+            {
+                action = "deckNames",
+                version = 6
+            };
+
+            string payload = JsonConvert.SerializeObject(request);
+            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            using HttpResponseMessage response = await _httpClient.PostAsync(DefaultEndpoint, content, cancellationToken);
+            string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            var deckNamesResponse = JsonConvert.DeserializeObject<DeckNamesResponse>(responseBody);
+            if (deckNamesResponse is null)
+            {
+                throw new InvalidOperationException("AnkiConnect returned an empty response.");
+            }
+
+            if (!response.IsSuccessStatusCode || !string.IsNullOrWhiteSpace(deckNamesResponse.Error))
+            {
+                string error = !string.IsNullOrWhiteSpace(deckNamesResponse.Error)
+                    ? deckNamesResponse.Error
+                    : $"HTTP {(int)response.StatusCode} ({response.ReasonPhrase})";
+
+                throw new InvalidOperationException($"Failed to get deck names from Anki: {error}");
+            }
+
+            return deckNamesResponse.Result ?? Enumerable.Empty<string>();
+        }
+
+        public async Task<IEnumerable<string>> GetModelNamesAsync(CancellationToken cancellationToken)
+        {
+            await CheckThatAnkiConnectIsRunningAsync(cancellationToken);
+
+            var request = new
+            {
+                action = "modelNames",
+                version = 6
+            };
+
+            string payload = JsonConvert.SerializeObject(request);
+            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            using HttpResponseMessage response = await _httpClient.PostAsync(DefaultEndpoint, content, cancellationToken);
+            string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            var modelNamesResponse = JsonConvert.DeserializeObject<ModelNamesResponse>(responseBody);
+            if (modelNamesResponse is null)
+            {
+                throw new InvalidOperationException("AnkiConnect returned an empty response.");
+            }
+
+            if (!response.IsSuccessStatusCode || !string.IsNullOrWhiteSpace(modelNamesResponse.Error))
+            {
+                string error = !string.IsNullOrWhiteSpace(modelNamesResponse.Error)
+                    ? modelNamesResponse.Error
+                    : $"HTTP {(int)response.StatusCode} ({response.ReasonPhrase})";
+
+                throw new InvalidOperationException($"Failed to get model names from Anki: {error}");
+            }
+
+            return modelNamesResponse.Result ?? Enumerable.Empty<string>();
         }
 
         #endregion
@@ -255,5 +327,4 @@ namespace CopyWords.Core.Services
         }
 
         #endregion
-    }
-}
+    }}

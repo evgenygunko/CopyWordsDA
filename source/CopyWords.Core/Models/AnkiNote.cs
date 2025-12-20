@@ -82,4 +82,12 @@ namespace CopyWords.Core.Models
     internal record FindNotesResponse(
         [property: JsonProperty("result")] IEnumerable<long>? Result,
         [property: JsonProperty("error")] string? Error);
+
+    internal record DeckNamesResponse(
+        [property: JsonProperty("result")] IEnumerable<string>? Result,
+        [property: JsonProperty("error")] string? Error);
+
+    internal record ModelNamesResponse(
+        [property: JsonProperty("result")] IEnumerable<string>? Result,
+        [property: JsonProperty("error")] string? Error);
 }

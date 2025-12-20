@@ -29,14 +29,7 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
             sut.Init();
 
             settingsServiceMock.Verify(x => x.LoadSettings());
@@ -58,14 +51,7 @@ namespace CopyWords.Core.Tests.ViewModels
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             Mock<IShellService> shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                shellServiceMock.Object,
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
 
             await sut.SaveSettingsAsync();
 
@@ -86,14 +72,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var settingsViewModelValidatorMock = _fixture.Freeze<Mock<IValidator<SettingsViewModel>>>();
             settingsViewModelValidatorMock.Setup(x => x.ValidateAsync(It.IsAny<SettingsViewModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(validationResult);
 
-            var sut = new SettingsViewModel(
-                Mock.Of<ISettingsService>(x => x.LoadSettings() == new AppSettings()),
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IFileSaver>(),
-                settingsViewModelValidatorMock.Object);
+            var sut = _fixture.Create<SettingsViewModel>();
 
             bool result = sut.CanSaveSettings();
 
@@ -110,14 +89,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var settingsViewModelValidatorMock = _fixture.Freeze<Mock<IValidator<SettingsViewModel>>>();
             settingsViewModelValidatorMock.Setup(x => x.ValidateAsync(It.IsAny<SettingsViewModel>(), It.IsAny<CancellationToken>())).ReturnsAsync(validationResult);
 
-            var sut = new SettingsViewModel(
-                Mock.Of<ISettingsService>(x => x.LoadSettings() == new AppSettings()),
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IFileSaver>(),
-                settingsViewModelValidatorMock.Object);
+            var sut = _fixture.Create<SettingsViewModel>();
 
             bool result = sut.CanSaveSettings();
 
@@ -144,14 +116,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                dialogServiceMock.Object,
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(),
-                fileSaverMock.Object,
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
             await sut.ExportSettingsAsync(default);
 
             settingsServiceMock.Verify(x => x.LoadSettings());
@@ -175,14 +140,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                dialogServiceMock.Object,
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(),
-                fileSaverMock.Object,
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
             await sut.ExportSettingsAsync(default);
 
             settingsServiceMock.Verify(x => x.LoadSettings());
@@ -206,14 +164,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var filePickerMock = _fixture.Freeze<Mock<IFilePicker>>();
             filePickerMock.Setup(x => x.PickAsync(It.IsAny<PickOptions>())).ReturnsAsync(fileResult);
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                filePickerMock.Object,
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
             await sut.ImportSettingsAsync();
 
             settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()), Times.Never);
@@ -233,14 +184,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var filePickerMock = _fixture.Freeze<Mock<IFilePicker>>();
             filePickerMock.Setup(x => x.PickAsync(It.IsAny<PickOptions>())).ReturnsAsync(fileResult);
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                dialogServiceMock.Object,
-                shellServiceMock.Object,
-                filePickerMock.Object,
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
             await sut.ImportSettingsAsync();
 
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot import setting", It.IsAny<string>(), "OK"));
@@ -261,14 +205,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var filePickerMock = _fixture.Freeze<Mock<IFilePicker>>();
             filePickerMock.Setup(x => x.PickAsync(It.IsAny<PickOptions>())).ReturnsAsync(fileResult);
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                dialogServiceMock.Object,
-                shellServiceMock.Object,
-                filePickerMock.Object,
-                Mock.Of<IDeviceInfo>(),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
             await sut.ImportSettingsAsync();
 
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
@@ -282,19 +219,340 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #endregion
 
+        #region Tests for SelectAnkiDeckNameAsync
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiDeckNameAsync_WhenDecksAreAvailableAndUserSelectsDeck_SetsAnkiDeckName()
+        {
+            // Arrange
+            var deckNames = new List<string> { "Default", "Japanese", "English" };
+            string selectedDeckName = "Japanese";
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(deckNames);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<FlowDirection>(),
+                    It.IsAny<string[]>()))
+                .ReturnsAsync(selectedDeckName);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.SelectAnkiDeckNameAsync(default);
+
+            // Assert
+            sut.AnkiDeckName.Should().Be(selectedDeckName);
+            ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayActionSheetAsync(
+                "Select deck:",
+                "Cancel",
+                null!,
+                FlowDirection.LeftToRight,
+                It.Is<string[]>(arr => arr.SequenceEqual(deckNames))), Times.Once);
+        }
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiDeckNameAsync_WhenDecksAreAvailableAndUserCancels_DoesNotChangeAnkiDeckName()
+        {
+            // Arrange
+            var deckNames = new List<string> { "Default", "Japanese", "English" };
+            string originalDeckName = "Original";
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(deckNames);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<FlowDirection>(),
+                    It.IsAny<string[]>()))
+                .ReturnsAsync("Cancel");
+
+            var sut = _fixture.Create<SettingsViewModel>();
+            sut.AnkiDeckName = originalDeckName;
+
+            // Act
+            await sut.SelectAnkiDeckNameAsync(default);
+
+            // Assert
+            sut.AnkiDeckName.Should().Be(originalDeckName);
+            ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiDeckNameAsync_WhenDecksAreAvailableAndUserSelectsEmptyResult_DoesNotChangeAnkiDeckName()
+        {
+            // Arrange
+            var deckNames = new List<string> { "Default", "Japanese", "English" };
+            string originalDeckName = "Original";
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(deckNames);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<FlowDirection>(),
+                    It.IsAny<string[]>()))
+                .ReturnsAsync(string.Empty);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+            sut.AnkiDeckName = originalDeckName;
+
+            // Act
+            await sut.SelectAnkiDeckNameAsync(default);
+
+            // Assert
+            sut.AnkiDeckName.Should().Be(originalDeckName);
+            ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiDeckNameAsync_WhenNoDecksAreAvailable_ShowsAlert()
+        {
+            // Arrange
+            var deckNames = new List<string>();
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(deckNames);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.SelectAnkiDeckNameAsync(default);
+
+            // Assert
+            ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "Fetching deck names",
+                "Cannot get deck names from AnkiConnect.",
+                "OK"), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayActionSheetAsync(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<FlowDirection>(),
+                It.IsAny<string[]>()), Times.Never);
+        }
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiDeckNameAsync_WhenExceptionIsThrown_ShowsErrorAlert()
+        {
+            // Arrange
+            string exceptionMessage = "AnkiConnect is not running";
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception(exceptionMessage));
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.SelectAnkiDeckNameAsync(default);
+
+            // Assert
+            ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "Cannot select deck",
+                $"Error occurred while trying to select deck name: {exceptionMessage}",
+                "OK"), Times.Once);
+        }
+
+        #endregion
+
+        #region Tests for SelectAnkiModelNameAsync
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiModelNameAsync_WhenModelsAreAvailableAndUserSelectsModel_SetsAnkiModelName()
+        {
+            // Arrange
+            var modelNames = new List<string> { "Basic", "Basic (and reversed card)", "Cloze" };
+            string selectedModelName = "Basic (and reversed card)";
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(modelNames);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<FlowDirection>(),
+                    It.IsAny<string[]>()))
+                .ReturnsAsync(selectedModelName);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.SelectAnkiModelNameAsync(default);
+
+            // Assert
+            sut.AnkiModelName.Should().Be(selectedModelName);
+            ankiConnectServiceMock.Verify(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayActionSheetAsync(
+                "Select model:",
+                "Cancel",
+                null!,
+                FlowDirection.LeftToRight,
+                It.Is<string[]>(arr => arr.SequenceEqual(modelNames))), Times.Once);
+        }
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiModelNameAsync_WhenModelsAreAvailableAndUserCancels_DoesNotChangeAnkiModelName()
+        {
+            // Arrange
+            var modelNames = new List<string> { "Basic", "Basic (and reversed card)", "Cloze" };
+            string originalModelName = "Original";
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(modelNames);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<FlowDirection>(),
+                    It.IsAny<string[]>()))
+                .ReturnsAsync("Cancel");
+
+            var sut = _fixture.Create<SettingsViewModel>();
+            sut.AnkiModelName = originalModelName;
+
+            // Act
+            await sut.SelectAnkiModelNameAsync(default);
+
+            // Assert
+            sut.AnkiModelName.Should().Be(originalModelName);
+            ankiConnectServiceMock.Verify(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiModelNameAsync_WhenModelsAreAvailableAndUserSelectsEmptyResult_DoesNotChangeAnkiModelName()
+        {
+            // Arrange
+            var modelNames = new List<string> { "Basic", "Basic (and reversed card)", "Cloze" };
+            string originalModelName = "Original";
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(modelNames);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<FlowDirection>(),
+                    It.IsAny<string[]>()))
+                .ReturnsAsync(string.Empty);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+            sut.AnkiModelName = originalModelName;
+
+            // Act
+            await sut.SelectAnkiModelNameAsync(default);
+
+            // Assert
+            sut.AnkiModelName.Should().Be(originalModelName);
+            ankiConnectServiceMock.Verify(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiModelNameAsync_WhenNoModelsAreAvailable_ShowsAlert()
+        {
+            // Arrange
+            var modelNames = new List<string>();
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(modelNames);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.SelectAnkiModelNameAsync(default);
+
+            // Assert
+            ankiConnectServiceMock.Verify(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "Fetching model names",
+                "Cannot get model names from AnkiConnect.",
+                "OK"), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayActionSheetAsync(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<FlowDirection>(),
+                It.IsAny<string[]>()), Times.Never);
+        }
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiModelNameAsync_WhenExceptionIsThrown_ShowsErrorAlert()
+        {
+            // Arrange
+            string exceptionMessage = "AnkiConnect is not running";
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception(exceptionMessage));
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.SelectAnkiModelNameAsync(default);
+
+            // Assert
+            ankiConnectServiceMock.Verify(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "Cannot select model",
+                $"Error occurred while trying to select model name: {exceptionMessage}",
+                "OK"), Times.Once);
+        }
+
+        #endregion
+
         #region Tests for CanUpdateIndividualSettings
 
         [TestMethod]
         public void CanUpdateIndividualSettings_OnAndroid_ReturnsTrue()
         {
-            var sut = new SettingsViewModel(
-                Mock.Of<ISettingsService>(),
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var sut = _fixture.Create<SettingsViewModel>();
 
             sut.CanUpdateIndividualSettings.Should().BeTrue();
         }
@@ -302,14 +560,9 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public void CanUpdateIndividualSettings_OnWindows_ReturnsFalse()
         {
-            var sut = new SettingsViewModel(
-                Mock.Of<ISettingsService>(),
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            var sut = _fixture.Create<SettingsViewModel>();
 
             sut.CanUpdateIndividualSettings.Should().BeFalse();
         }
@@ -317,14 +570,9 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public void CanUpdateIndividualSettings_OnMacOS_ReturnsFalse()
         {
-            var sut = new SettingsViewModel(
-                Mock.Of<ISettingsService>(),
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.MacCatalyst),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.MacCatalyst);
+
+            var sut = _fixture.Create<SettingsViewModel>();
 
             sut.CanUpdateIndividualSettings.Should().BeFalse();
         }
@@ -339,15 +587,9 @@ namespace CopyWords.Core.Tests.ViewModels
         public void OnShowCopyButtonsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
 
             sut.Init();
             sut.OnShowCopyButtonsChangedInternal(value);
@@ -359,15 +601,9 @@ namespace CopyWords.Core.Tests.ViewModels
         public void OnShowCopyButtonsChangedInternal_WhenNotInitialized_DoesNotCallsSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
 
             sut.OnShowCopyButtonsChangedInternal(true);
 
@@ -378,15 +614,9 @@ namespace CopyWords.Core.Tests.ViewModels
         public void OnShowCopyButtonsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
 
             sut.Init();
             sut.OnShowCopyButtonsChangedInternal(true);
@@ -404,15 +634,9 @@ namespace CopyWords.Core.Tests.ViewModels
         public void OnCopyTranslatedMeaningsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
 
             sut.Init();
             sut.OnCopyTranslatedMeaningsChangedInternal(value);
@@ -424,15 +648,9 @@ namespace CopyWords.Core.Tests.ViewModels
         public void OnCopyTranslatedMeaningsChangedInternal_WhenNotInitialized_DoesNotCallsSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.Android),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
 
             sut.OnCopyTranslatedMeaningsChangedInternal(true);
 
@@ -443,15 +661,9 @@ namespace CopyWords.Core.Tests.ViewModels
         public void OnCopyTranslatedMeaningsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
 
-            var sut = new SettingsViewModel(
-                settingsServiceMock.Object,
-                Mock.Of<IDialogService>(),
-                Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
-                Mock.Of<IDeviceInfo>(x => x.Platform == DevicePlatform.WinUI),
-                Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+            var sut = _fixture.Create<SettingsViewModel>();
 
             sut.Init();
             sut.OnCopyTranslatedMeaningsChangedInternal(true);

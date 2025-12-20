@@ -60,7 +60,8 @@ namespace CopyWords.Core.Tests.Validators
                 Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(),
                 Mock.Of<IFileSaver>(),
-                Mock.Of<IValidator<SettingsViewModel>>());
+                Mock.Of<IValidator<SettingsViewModel>>(),
+                Mock.Of<IAnkiConnectService>());
 
             settingsViewModel.Init();
 

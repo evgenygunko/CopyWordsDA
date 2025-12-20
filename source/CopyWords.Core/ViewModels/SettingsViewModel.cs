@@ -25,6 +25,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IDeviceInfo _deviceInfo;
         private readonly IFileSaver _fileSaver;
         private readonly IValidator<SettingsViewModel> _settingsViewModelValidator;
+        private readonly IAnkiConnectService _ankiConnectService;
 
         private bool _isInitialized;
 
@@ -35,7 +36,8 @@ namespace CopyWords.Core.ViewModels
             IFilePicker filePicker,
             IDeviceInfo deviceInfo,
             IFileSaver fileSaver,
-            IValidator<SettingsViewModel> settingsViewModelValidator)
+            IValidator<SettingsViewModel> settingsViewModelValidator,
+            IAnkiConnectService ankiConnectService)
         {
             _settingsService = settingsService;
             _dialogService = dialogService;
@@ -44,6 +46,7 @@ namespace CopyWords.Core.ViewModels
             _deviceInfo = deviceInfo;
             _fileSaver = fileSaver;
             _settingsViewModelValidator = settingsViewModelValidator;
+            _ankiConnectService = ankiConnectService;
         }
 
         #region Properties
@@ -142,18 +145,56 @@ namespace CopyWords.Core.ViewModels
 
         [SupportedOSPlatform("windows")]
         [RelayCommand]
-        public async Task SelectAnkiDeckNameAsync()
+        public async Task SelectAnkiDeckNameAsync(CancellationToken cancellationToken)
         {
-            await _dialogService.DisplayAlertAsync("Not implemented", "Selecting Anki deck name is not implemented yet.", "OK");
-            AnkiDeckName = "not implemented";
+            try
+            {
+                IEnumerable<string> deckNames = await _ankiConnectService.GetDeckNamesAsync(cancellationToken);
+
+                if (deckNames.Any())
+                {
+                    string result = await _dialogService.DisplayActionSheetAsync(title: "Select deck:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, deckNames.ToArray());
+                    if (!string.IsNullOrEmpty(result) && result != "Cancel")
+                    {
+                        AnkiDeckName = result;
+                    }
+                }
+                else
+                {
+                    await _dialogService.DisplayAlertAsync("Fetching deck names", "Cannot get deck names from AnkiConnect.", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.DisplayAlertAsync("Cannot select deck", "Error occurred while trying to select deck name: " + ex.Message, "OK");
+            }
         }
 
         [SupportedOSPlatform("windows")]
         [RelayCommand]
-        public async Task SelectAnkiModelNameAsync()
+        public async Task SelectAnkiModelNameAsync(CancellationToken cancellationToken)
         {
-            await _dialogService.DisplayAlertAsync("Not implemented", "Selecting Anki model name is not implemented yet.", "OK");
-            AnkiModelName = "not implemented";
+            try
+            {
+                IEnumerable<string> modelNames = await _ankiConnectService.GetModelNamesAsync(cancellationToken);
+
+                if (modelNames.Any())
+                {
+                    string result = await _dialogService.DisplayActionSheetAsync(title: "Select model:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, modelNames.ToArray());
+                    if (!string.IsNullOrEmpty(result) && result != "Cancel")
+                    {
+                        AnkiModelName = result;
+                    }
+                }
+                else
+                {
+                    await _dialogService.DisplayAlertAsync("Fetching model names", "Cannot get model names from AnkiConnect.", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.DisplayAlertAsync("Cannot select model", "Error occurred while trying to select model name: " + ex.Message, "OK");
+            }
         }
 
         [SupportedOSPlatform("windows")]
