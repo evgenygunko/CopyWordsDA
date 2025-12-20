@@ -2,12 +2,15 @@
 
 using System.Runtime.Versioning;
 using CommunityToolkit.Maui.Storage;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services.Wrappers;
 
 namespace CopyWords.Core.Services
 {
     public interface ISaveSoundFileService
     {
+        string CreateDownloadSoundFileUrl(string soundUrl, string word);
+
         Task<bool> SaveSoundFileAsync(string url, string soundFileName, CancellationToken cancellationToken);
     }
 
@@ -20,6 +23,7 @@ namespace CopyWords.Core.Services
         private readonly IFileSaver _fileSaver;
         private readonly IFileIOService _fileIOService;
         private readonly IDialogService _dialogService;
+        private readonly IGlobalSettings _globalSettings;
 
         public SaveSoundFileService(
             IClipboardService clipboardService,
@@ -28,7 +32,8 @@ namespace CopyWords.Core.Services
             ISettingsService settingsService,
             IFileSaver fileSaver,
             IFileIOService fileIOService,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            IGlobalSettings globalSettings)
         {
             _clipboardService = clipboardService;
             _deviceInfo = deviceInfo;
@@ -37,6 +42,13 @@ namespace CopyWords.Core.Services
             _settingsService = settingsService;
             _fileIOService = fileIOService;
             _dialogService = dialogService;
+            _globalSettings = globalSettings;
+        }
+
+        public string CreateDownloadSoundFileUrl(string soundUrl, string word)
+        {
+            return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/DownloadSound?" +
+                   $"soundUrl={Uri.EscapeDataString(soundUrl)}&word={Uri.EscapeDataString(word)}&version=1&code={_globalSettings.TranslatorAppRequestCode}";
         }
 
         [SupportedOSPlatform("windows")]
@@ -71,7 +83,8 @@ namespace CopyWords.Core.Services
                 return false;
             }
 
-            using Stream stream = await _fileDownloaderService.DownloadSoundFileAsync(soundUrl, word, cancellationToken);
+            string downloadSoundUrl = CreateDownloadSoundFileUrl(soundUrl, word);
+            using Stream stream = await _fileDownloaderService.DownloadFileAsync(downloadSoundUrl, cancellationToken);
 
             string fileName = $"{word}.mp3";
             string destinationFile = Path.Combine(ankiSoundsFolder, fileName);
@@ -94,7 +107,8 @@ namespace CopyWords.Core.Services
         [SupportedOSPlatform("android")]
         internal async Task<bool> DownloadSoundFileAndSaveWithFileSaverAsync(string soundUrl, string word, CancellationToken cancellationToken)
         {
-            using Stream stream = await _fileDownloaderService.DownloadSoundFileAsync(soundUrl, word, cancellationToken);
+            string downloadSoundUrl = CreateDownloadSoundFileUrl(soundUrl, word);
+            using Stream stream = await _fileDownloaderService.DownloadFileAsync(downloadSoundUrl, cancellationToken);
 
             var fileSaverResult = await _fileSaver.SaveAsync($"{word}.mp3", stream, cancellationToken);
             return fileSaverResult.IsSuccessful;

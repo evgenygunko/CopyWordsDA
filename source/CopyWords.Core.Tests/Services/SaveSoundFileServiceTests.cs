@@ -15,12 +15,53 @@ namespace CopyWords.Core.Tests.Services
     [TestClass]
     public class SaveSoundFileServiceTests
     {
-        private readonly Fixture _fixture = FixtureFactory.CreateFixture();
+        private Fixture _fixture = default!;
+        private Mock<IGlobalSettings> _globalSettingsMock = default!;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _fixture = FixtureFactory.CreateFixture();
+
+            _globalSettingsMock = _fixture.Freeze<Mock<IGlobalSettings>>();
+            _globalSettingsMock.SetupGet(x => x.TranslatorAppUrl).Returns("http://fake-translator-app-url");
+            _globalSettingsMock.SetupGet(x => x.TranslatorAppRequestCode).Returns("fake-request-code");
+        }
+
+        #region Tests for CreateDownloadSoundFileUrl
+
+        [TestMethod]
+        public void CreateDownloadSoundFileUrl_Should_AddParametersToRequest()
+        {
+            // Arrange
+            string soundUrl = "https://example.com/audio.mp3";
+            string word = "test_word";
+
+            string translatorAppUrl = "https://translator.example.com/";
+            string requestCode = "test-code-123";
+
+            Mock<IGlobalSettings> globalSettingsMock = _fixture.Freeze<Mock<IGlobalSettings>>();
+            globalSettingsMock.Setup(x => x.TranslatorAppUrl).Returns(translatorAppUrl);
+            globalSettingsMock.Setup(x => x.TranslatorAppRequestCode).Returns(requestCode);
+
+            var sut = _fixture.Create<SaveSoundFileService>();
+
+            // Act
+            string result = sut.CreateDownloadSoundFileUrl(soundUrl, word);
+
+            // Assert
+            result.Should().NotBeNull();
+
+            string expectedUrl = $"{translatorAppUrl.TrimEnd('/')}/api/DownloadSound?soundUrl={Uri.EscapeDataString(soundUrl)}&word={Uri.EscapeDataString(word)}&version=1&code={requestCode}";
+            result.Should().Be(expectedUrl);
+        }
+
+        #endregion
 
         #region Tests for SaveSoundFileAsync
 
         [TestMethod]
-        public async Task SaveSoundFileAsync_WhenOnAndroid_CallsDownloadSoundFileAndSaveWithFileSaverAsync()
+        public async Task SaveSoundFileAsync_WhenOnAndroid_DownloadFileAsyncAndSaveWithFileSaverAsync()
         {
             // Arrange
             string url = _fixture.Create<Uri>().ToString();
@@ -31,7 +72,7 @@ namespace CopyWords.Core.Tests.Services
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
             fileDownloaderServiceMock
-                .Setup(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
             var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
@@ -46,7 +87,7 @@ namespace CopyWords.Core.Tests.Services
 
             // Assert
             result.Should().BeTrue();
-            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, "sound_file", It.IsAny<CancellationToken>()), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
             fileSaverMock.Verify(x => x.SaveAsync("sound_file.mp3", It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -72,7 +113,7 @@ namespace CopyWords.Core.Tests.Services
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
             fileDownloaderServiceMock
-                .Setup(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
             var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
@@ -85,7 +126,7 @@ namespace CopyWords.Core.Tests.Services
             // Assert
             result.Should().BeTrue();
             clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync("[sound:sound_file.mp3]"), Times.Once);
-            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, "sound_file", It.IsAny<CancellationToken>()), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
             fileIOServiceMock.Verify(x => x.CopyToAsync(It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -111,7 +152,7 @@ namespace CopyWords.Core.Tests.Services
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
             fileDownloaderServiceMock
-                .Setup(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
             var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
@@ -124,7 +165,7 @@ namespace CopyWords.Core.Tests.Services
             // Assert
             result.Should().BeTrue();
             clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync("[sound:test_sound.mp3]"), Times.Once);
-            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, "test_sound", It.IsAny<CancellationToken>()), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
@@ -149,7 +190,7 @@ namespace CopyWords.Core.Tests.Services
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
             fileDownloaderServiceMock
-                .Setup(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
             var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
@@ -218,7 +259,7 @@ namespace CopyWords.Core.Tests.Services
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
             fileDownloaderServiceMock
-                .Setup(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()))
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
             var sut = _fixture.Create<SaveSoundFileService>();
@@ -228,7 +269,7 @@ namespace CopyWords.Core.Tests.Services
 
             // Assert
             result.Should().BeTrue();
-            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
             fileIOServiceMock.Verify(x => x.CopyToAsync(It.IsAny<Stream>(), Path.Combine(ankiFolder, $"{word}.mp3"), It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -257,7 +298,7 @@ namespace CopyWords.Core.Tests.Services
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
             fileDownloaderServiceMock
-                .Setup(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()))
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
             var sut = _fixture.Create<SaveSoundFileService>();
@@ -268,7 +309,7 @@ namespace CopyWords.Core.Tests.Services
             // Assert
             result.Should().BeTrue();
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("File already exists", $"File '{word}.mp3' already exists. Overwrite?", "Yes", "No"), Times.Once);
-            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
             fileIOServiceMock.Verify(x => x.CopyToAsync(It.IsAny<Stream>(), Path.Combine(ankiFolder, $"{word}.mp3"), It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -296,6 +337,9 @@ namespace CopyWords.Core.Tests.Services
                 .ReturnsAsync(false);
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
             var sut = _fixture.Create<SaveSoundFileService>();
 
@@ -306,8 +350,7 @@ namespace CopyWords.Core.Tests.Services
             result.Should().BeTrue();
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("File already exists", $"File '{word}.mp3' already exists. Overwrite?", "Yes", "No"), Times.Once);
 
-            // we download file anyway
-            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
 
             // but the user refused to overwrite existing file
             fileIOServiceMock.Verify(x => x.CopyToAsync(It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
@@ -326,7 +369,7 @@ namespace CopyWords.Core.Tests.Services
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
             fileDownloaderServiceMock
-                .Setup(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()))
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
             var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
@@ -341,7 +384,7 @@ namespace CopyWords.Core.Tests.Services
 
             // Assert
             result.Should().BeTrue();
-            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
             fileSaverMock.Verify(x => x.SaveAsync($"{word}.mp3", It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -354,7 +397,7 @@ namespace CopyWords.Core.Tests.Services
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
             fileDownloaderServiceMock
-                .Setup(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()))
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
             var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
@@ -369,7 +412,7 @@ namespace CopyWords.Core.Tests.Services
 
             // Assert
             result.Should().BeFalse();
-            fileDownloaderServiceMock.Verify(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
             fileSaverMock.Verify(x => x.SaveAsync($"{word}.mp3", It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -382,7 +425,7 @@ namespace CopyWords.Core.Tests.Services
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
             fileDownloaderServiceMock
-                .Setup(x => x.DownloadSoundFileAsync(url, word, It.IsAny<CancellationToken>()))
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
             var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
