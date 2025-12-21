@@ -9,6 +9,7 @@ README.md
 .npmrc
 .prettierignore
 package.json
+package-lock.json
 yarn.lock
 .eslintcache
 .gitmodules
