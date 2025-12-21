@@ -90,4 +90,8 @@ namespace CopyWords.Core.Models
     internal record ModelNamesResponse(
         [property: JsonProperty("result")] IEnumerable<string>? Result,
         [property: JsonProperty("error")] string? Error);
+
+    internal record MediaDirPathResponse(
+        [property: JsonProperty("result")] string? Result,
+        [property: JsonProperty("error")] string? Error);
 }

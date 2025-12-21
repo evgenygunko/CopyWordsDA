@@ -19,10 +19,10 @@ namespace CopyWords.Core.Tests.ViewModels
     {
         private readonly Fixture _fixture = FixtureFactory.CreateFixture();
 
-        #region Tests for Init
+        #region Tests for InitAsync
 
         [TestMethod]
-        public void Init_Should_ReadValuesFromSettingsService()
+        public async Task InitAsync_Should_CallLoadSettings()
         {
             AppSettings appSettings = _fixture.Create<AppSettings>();
 
@@ -30,10 +30,11 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
             var sut = _fixture.Create<SettingsViewModel>();
-            sut.Init();
+            await sut.InitAsync(CancellationToken.None);
 
             settingsServiceMock.Verify(x => x.LoadSettings());
 
+            // check a few properties to ensure they are set correctly
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
             sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);
             sut.CopyTranslatedMeanings.Should().Be(appSettings.CopyTranslatedMeanings);
@@ -117,7 +118,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var sut = _fixture.Create<SettingsViewModel>();
-            await sut.ExportSettingsAsync(default);
+            await sut.ExportSettingsAsync(CancellationToken.None);
 
             settingsServiceMock.Verify(x => x.LoadSettings());
             fileSaverMock.Verify();
@@ -141,7 +142,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var sut = _fixture.Create<SettingsViewModel>();
-            await sut.ExportSettingsAsync(default);
+            await sut.ExportSettingsAsync(CancellationToken.None);
 
             settingsServiceMock.Verify(x => x.LoadSettings());
             fileSaverMock.Verify();
@@ -165,7 +166,7 @@ namespace CopyWords.Core.Tests.ViewModels
             filePickerMock.Setup(x => x.PickAsync(It.IsAny<PickOptions>())).ReturnsAsync(fileResult);
 
             var sut = _fixture.Create<SettingsViewModel>();
-            await sut.ImportSettingsAsync();
+            await sut.ImportSettingsAsync(CancellationToken.None);
 
             settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()), Times.Never);
         }
@@ -185,7 +186,7 @@ namespace CopyWords.Core.Tests.ViewModels
             filePickerMock.Setup(x => x.PickAsync(It.IsAny<PickOptions>())).ReturnsAsync(fileResult);
 
             var sut = _fixture.Create<SettingsViewModel>();
-            await sut.ImportSettingsAsync();
+            await sut.ImportSettingsAsync(CancellationToken.None);
 
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot import setting", It.IsAny<string>(), "OK"));
         }
@@ -206,7 +207,7 @@ namespace CopyWords.Core.Tests.ViewModels
             filePickerMock.Setup(x => x.PickAsync(It.IsAny<PickOptions>())).ReturnsAsync(fileResult);
 
             var sut = _fixture.Create<SettingsViewModel>();
-            await sut.ImportSettingsAsync();
+            await sut.ImportSettingsAsync(CancellationToken.None);
 
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
             sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);
@@ -245,7 +246,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.SelectAnkiDeckNameAsync(default);
+            await sut.SelectAnkiDeckNameAsync(CancellationToken.None);
 
             // Assert
             sut.AnkiDeckName.Should().Be(selectedDeckName);
@@ -283,7 +284,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.AnkiDeckName = originalDeckName;
 
             // Act
-            await sut.SelectAnkiDeckNameAsync(default);
+            await sut.SelectAnkiDeckNameAsync(CancellationToken.None);
 
             // Assert
             sut.AnkiDeckName.Should().Be(originalDeckName);
@@ -315,7 +316,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.AnkiDeckName = originalDeckName;
 
             // Act
-            await sut.SelectAnkiDeckNameAsync(default);
+            await sut.SelectAnkiDeckNameAsync(CancellationToken.None);
 
             // Assert
             sut.AnkiDeckName.Should().Be(originalDeckName);
@@ -338,7 +339,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.SelectAnkiDeckNameAsync(default);
+            await sut.SelectAnkiDeckNameAsync(CancellationToken.None);
 
             // Assert
             ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -370,7 +371,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.SelectAnkiDeckNameAsync(default);
+            await sut.SelectAnkiDeckNameAsync(CancellationToken.None);
 
             // Assert
             ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -408,7 +409,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.SelectAnkiModelNameAsync(default);
+            await sut.SelectAnkiModelNameAsync(CancellationToken.None);
 
             // Assert
             sut.AnkiModelName.Should().Be(selectedModelName);
@@ -446,7 +447,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.AnkiModelName = originalModelName;
 
             // Act
-            await sut.SelectAnkiModelNameAsync(default);
+            await sut.SelectAnkiModelNameAsync(CancellationToken.None);
 
             // Assert
             sut.AnkiModelName.Should().Be(originalModelName);
@@ -478,7 +479,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.AnkiModelName = originalModelName;
 
             // Act
-            await sut.SelectAnkiModelNameAsync(default);
+            await sut.SelectAnkiModelNameAsync(CancellationToken.None);
 
             // Assert
             sut.AnkiModelName.Should().Be(originalModelName);
@@ -501,7 +502,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.SelectAnkiModelNameAsync(default);
+            await sut.SelectAnkiModelNameAsync(CancellationToken.None);
 
             // Assert
             ankiConnectServiceMock.Verify(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -533,7 +534,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.SelectAnkiModelNameAsync(default);
+            await sut.SelectAnkiModelNameAsync(CancellationToken.None);
 
             // Assert
             ankiConnectServiceMock.Verify(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -541,6 +542,81 @@ namespace CopyWords.Core.Tests.ViewModels
                 "Cannot select model",
                 $"Error occurred while trying to select model name: {exceptionMessage}",
                 "OK"), Times.Once);
+        }
+
+        #endregion
+
+        #region Tests for UpdateUIAsync
+
+        [TestMethod]
+        public async Task UpdateUIAsync_Should_SetAllPropertiesFromAppSettings()
+        {
+            // Arrange
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.AnkiSoundsFolder = _fixture.Create<string>(); // Ensure it's not empty
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.UpdateUIAsync(appSettings, CancellationToken.None);
+
+            // Assert
+            sut.AnkiDeckName.Should().Be(appSettings.AnkiDeckName);
+            sut.AnkiModelName.Should().Be(appSettings.AnkiModelName);
+            sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
+            sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);
+            sut.ShowCopyWithAnkiConnectButton.Should().Be(appSettings.ShowCopyWithAnkiConnectButton);
+            sut.CopyTranslatedMeanings.Should().Be(appSettings.CopyTranslatedMeanings);
+        }
+
+        [TestMethod]
+        public async Task UpdateUIAsync_WhenAnkiSoundsFolderIsEmptyAndPlatformIsWinUI_CallsGetAnkiMediaDirectoryPathAsync()
+        {
+            // Arrange
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.AnkiSoundsFolder = string.Empty;
+            string expectedMediaPath = "C:\\Users\\User\\AppData\\Roaming\\Anki2\\User 1\\collection.media";
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetAnkiMediaDirectoryPathAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expectedMediaPath);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.UpdateUIAsync(appSettings, CancellationToken.None);
+
+            // Assert
+            sut.AnkiSoundsFolder.Should().Be(expectedMediaPath);
+            ankiConnectServiceMock.Verify(x => x.GetAnkiMediaDirectoryPathAsync(CancellationToken.None), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task UpdateUIAsync_WhenAnkiSoundsFolderIsEmptyAndPlatformIsAndroid_UsesEmptyValue()
+        {
+            // Arrange
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.AnkiSoundsFolder = string.Empty;
+
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.UpdateUIAsync(appSettings, CancellationToken.None);
+
+            // Assert
+            sut.AnkiSoundsFolder.Should().Be(string.Empty);
+            ankiConnectServiceMock.Verify(x => x.GetAnkiMediaDirectoryPathAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         #endregion
@@ -584,14 +660,14 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
-        public void OnShowCopyButtonsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
+        public async Task OnShowCopyButtonsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
 
             var sut = _fixture.Create<SettingsViewModel>();
 
-            sut.Init();
+            await sut.InitAsync(CancellationToken.None);
             sut.OnShowCopyButtonsChangedInternal(value);
 
             settingsServiceMock.Verify(x => x.SetShowCopyButtons(value));
@@ -611,14 +687,14 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void OnShowCopyButtonsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
+        public async Task OnShowCopyButtonsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
 
             var sut = _fixture.Create<SettingsViewModel>();
 
-            sut.Init();
+            await sut.InitAsync(CancellationToken.None);
             sut.OnShowCopyButtonsChangedInternal(true);
 
             settingsServiceMock.Verify(x => x.SetShowCopyButtons(It.IsAny<bool>()), Times.Never);
@@ -631,14 +707,14 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
-        public void OnCopyTranslatedMeaningsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
+        public async Task OnCopyTranslatedMeaningsChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
 
             var sut = _fixture.Create<SettingsViewModel>();
 
-            sut.Init();
+            await sut.InitAsync(CancellationToken.None);
             sut.OnCopyTranslatedMeaningsChangedInternal(value);
 
             settingsServiceMock.Verify(x => x.SetCopyTranslatedMeanings(value));
@@ -658,14 +734,14 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void OnCopyTranslatedMeaningsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
+        public async Task OnCopyTranslatedMeaningsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
 
             var sut = _fixture.Create<SettingsViewModel>();
 
-            sut.Init();
+            await sut.InitAsync(CancellationToken.None);
             sut.OnCopyTranslatedMeaningsChangedInternal(true);
 
             settingsServiceMock.Verify(x => x.SetCopyTranslatedMeanings(It.IsAny<bool>()), Times.Never);

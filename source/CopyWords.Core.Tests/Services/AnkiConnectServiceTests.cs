@@ -1142,6 +1142,256 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
+        #region Tests for GetAnkiMediaDirectoryPathAsync
+
+        [TestMethod]
+        public async Task GetAnkiMediaDirectoryPathAsync_WhenSuccess_ReturnsMediaDirectoryPath()
+        {
+            // Arrange
+            var expectedPath = "/home/user/.local/share/Anki2/Main/collection.media";
+            var capturedBodies = new List<string?>();
+            var capturedUris = new List<Uri?>();
+
+            HttpClient httpClient = CreateHttpClient((request, cancellationToken) =>
+            {
+                capturedUris.Add(request.RequestUri);
+                capturedBodies.Add(request.Content != null ? request.Content.ReadAsStringAsync(cancellationToken).Result : null);
+
+                // First request is the connectivity check (GET), second is getMediaDirPath (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":\"/home/user/.local/share/Anki2/Main/collection.media\",\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var result = await sut.GetAnkiMediaDirectoryPathAsync(CancellationToken.None);
+
+            // Assert
+            result.Should().Be(expectedPath);
+            capturedBodies.Should().HaveCount(2);
+            capturedUris.Should().HaveCount(2);
+
+            // Both requests should go to the same endpoint
+            capturedUris[0].Should().Be(new Uri("http://127.0.0.1:8765"));
+            capturedUris[1].Should().Be(new Uri("http://127.0.0.1:8765"));
+
+            // First request is connectivity check (no body)
+            capturedBodies[0].Should().BeNull();
+
+            // Second request is getMediaDirPath
+            capturedBodies[1].Should().NotBeNull();
+            JObject payload = JObject.Parse(capturedBodies[1]!);
+            payload["action"]!.Value<string>().Should().Be("getMediaDirPath");
+            payload["version"]!.Value<int>().Should().Be(6);
+        }
+
+        [TestMethod]
+        public async Task GetAnkiMediaDirectoryPathAsync_WhenResultIsNull_ReturnsNull()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is getMediaDirPath (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":null,\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var result = await sut.GetAnkiMediaDirectoryPathAsync(CancellationToken.None);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task GetAnkiMediaDirectoryPathAsync_WhenErrorReturned_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is getMediaDirPath (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":null,\"error\":\"collection is not available\"}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetAnkiMediaDirectoryPathAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Failed to get media directory path from Anki: collection is not available");
+        }
+
+        [TestMethod]
+        public async Task GetAnkiMediaDirectoryPathAsync_WhenHttpFailure_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is getMediaDirPath (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    ReasonPhrase = "Internal Server Error",
+                    Content = new StringContent("{\"result\":null,\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetAnkiMediaDirectoryPathAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Failed to get media directory path from Anki: HTTP 500 (Internal Server Error)");
+        }
+
+        [TestMethod]
+        public async Task GetAnkiMediaDirectoryPathAsync_WhenEmptyResponse_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            HttpClient httpClient = CreateHttpClient((request, _) =>
+            {
+                // First request is the connectivity check (GET), second is getMediaDirPath (POST)
+                if (request.Method == HttpMethod.Get)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.GetAnkiMediaDirectoryPathAsync(CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("AnkiConnect returned an empty response.");
+        }
+
+        [TestMethod]
+        public async Task GetAnkiMediaDirectoryPathAsync_WhenAnkiConnectNotRunning_ReturnsNull()
+        {
+            // Arrange
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ThrowsAsync(new HttpRequestException("Connection refused"));
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var result = await sut.GetAnkiMediaDirectoryPathAsync(CancellationToken.None);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task GetAnkiMediaDirectoryPathAsync_WhenCancellationRequested_ReturnsNull()
+        {
+            // Arrange
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ThrowsAsync(new TaskCanceledException("The operation was canceled."));
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var result = await sut.GetAnkiMediaDirectoryPathAsync(CancellationToken.None);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        #endregion
+
         #region Private Methods
 
         private static HttpClient CreateHttpClient(Func<HttpRequestMessage, CancellationToken, HttpResponseMessage> responseFactory)

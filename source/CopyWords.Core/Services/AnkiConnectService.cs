@@ -13,6 +13,8 @@ namespace CopyWords.Core.Services
     {
         Task<long> AddNoteAsync(AnkiNote note, CancellationToken cancellationToken);
 
+        Task<string?> GetAnkiMediaDirectoryPathAsync(CancellationToken cancellationToken);
+
         Task<IEnumerable<string>> GetDeckNamesAsync(CancellationToken cancellationToken);
 
         Task<IEnumerable<string>> GetModelNamesAsync(CancellationToken cancellationToken);
@@ -71,6 +73,47 @@ namespace CopyWords.Core.Services
             }
 
             return noteId;
+        }
+
+        public async Task<string?> GetAnkiMediaDirectoryPathAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                await CheckThatAnkiConnectIsRunningAsync(cancellationToken);
+            }
+            catch (AnkiConnectNotRunningException)
+            {
+                return null;
+            }
+
+            var request = new
+            {
+                action = "getMediaDirPath",
+                version = 6
+            };
+
+            string payload = JsonConvert.SerializeObject(request);
+            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            using HttpResponseMessage response = await _httpClient.PostAsync(DefaultEndpoint, content, cancellationToken);
+            string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            var mediaDirPathResponse = JsonConvert.DeserializeObject<MediaDirPathResponse>(responseBody);
+            if (mediaDirPathResponse is null)
+            {
+                throw new InvalidOperationException("AnkiConnect returned an empty response.");
+            }
+
+            if (!response.IsSuccessStatusCode || !string.IsNullOrWhiteSpace(mediaDirPathResponse.Error))
+            {
+                string error = !string.IsNullOrWhiteSpace(mediaDirPathResponse.Error)
+                    ? mediaDirPathResponse.Error
+                    : $"HTTP {(int)response.StatusCode} ({response.ReasonPhrase})";
+
+                throw new InvalidOperationException($"Failed to get media directory path from Anki: {error}");
+            }
+
+            return mediaDirPathResponse.Result;
         }
 
         public async Task<IEnumerable<string>> GetDeckNamesAsync(CancellationToken cancellationToken)
@@ -327,4 +370,5 @@ namespace CopyWords.Core.Services
         }
 
         #endregion
-    }}
+    }
+}

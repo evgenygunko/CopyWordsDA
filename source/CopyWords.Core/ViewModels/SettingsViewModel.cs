@@ -117,7 +117,7 @@ namespace CopyWords.Core.ViewModels
         }
 
         [RelayCommand]
-        public async Task ImportSettingsAsync()
+        public async Task ImportSettingsAsync(CancellationToken cancellationToken)
         {
             string settingFile = await PickSettingsFilePathAsync();
 
@@ -132,7 +132,7 @@ namespace CopyWords.Core.ViewModels
                         return;
                     }
 
-                    UpdateUI(appSettings);
+                    await UpdateUIAsync(appSettings, cancellationToken);
 
                     await _dialogService.DisplayToast("Settings successfully imported.");
                 }
@@ -230,10 +230,10 @@ namespace CopyWords.Core.ViewModels
         }
 
         [RelayCommand]
-        public void Init()
+        public async Task InitAsync(CancellationToken cancellationToken)
         {
             AppSettings appSettings = _settingsService.LoadSettings();
-            UpdateUI(appSettings);
+            await UpdateUIAsync(appSettings, cancellationToken);
 
             _isInitialized = true;
         }
@@ -241,6 +241,25 @@ namespace CopyWords.Core.ViewModels
         #endregion
 
         #region Internal Methods
+
+        internal async Task UpdateUIAsync(AppSettings appSettings, CancellationToken cancellationToken)
+        {
+            AnkiDeckName = appSettings.AnkiDeckName;
+            AnkiModelName = appSettings.AnkiModelName;
+
+            if (string.IsNullOrEmpty(appSettings.AnkiSoundsFolder) && _deviceInfo.Platform == DevicePlatform.WinUI)
+            {
+                AnkiSoundsFolder = await _ankiConnectService.GetAnkiMediaDirectoryPathAsync(cancellationToken);
+            }
+            else
+            {
+                AnkiSoundsFolder = appSettings.AnkiSoundsFolder;
+            }
+
+            ShowCopyButtons = appSettings.ShowCopyButtons;
+            ShowCopyWithAnkiConnectButton = appSettings.ShowCopyWithAnkiConnectButton;
+            CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
+        }
 
         internal bool CanSaveSettings()
         {
@@ -327,16 +346,6 @@ namespace CopyWords.Core.ViewModels
             }
 
             return settingsFilePath;
-        }
-
-        private void UpdateUI(AppSettings appSettings)
-        {
-            AnkiDeckName = appSettings.AnkiDeckName;
-            AnkiModelName = appSettings.AnkiModelName;
-            AnkiSoundsFolder = appSettings.AnkiSoundsFolder;
-            ShowCopyButtons = appSettings.ShowCopyButtons;
-            ShowCopyWithAnkiConnectButton = appSettings.ShowCopyWithAnkiConnectButton;
-            CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
         }
 
         private void UpdateAppSettingsWithCurrentValues(AppSettings appSettings)

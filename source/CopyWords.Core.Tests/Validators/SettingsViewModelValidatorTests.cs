@@ -20,11 +20,11 @@ namespace CopyWords.Core.Tests.Validators
         private readonly Fixture _fixture = FixtureFactory.CreateFixture();
 
         [TestMethod]
-        public void Validate_WhenAllRequiredFieldsHaveValues_ReturnsTrue()
+        public async Task Validate_WhenAllRequiredFieldsHaveValues_ReturnsTrue()
         {
             var appSettings = _fixture.Create<AppSettings>();
 
-            SettingsViewModel settingsViewModel = CreateSettingsViewModel(appSettings);
+            SettingsViewModel settingsViewModel = await CreateSettingsViewModelAsync(appSettings);
 
             var sut = _fixture.Create<SettingsViewModelValidator>();
             ValidationResult result = sut.Validate(settingsViewModel);
@@ -33,12 +33,12 @@ namespace CopyWords.Core.Tests.Validators
         }
 
         [TestMethod]
-        public void Validate_WhenAnkiSoundsFolderIsEmpty_ReturnsFalse()
+        public async Task Validate_WhenAnkiSoundsFolderIsEmpty_ReturnsFalse()
         {
             var appSettings = _fixture.Create<AppSettings>();
             appSettings.AnkiSoundsFolder = string.Empty;
 
-            SettingsViewModel settingsViewModel = CreateSettingsViewModel(appSettings);
+            SettingsViewModel settingsViewModel = await CreateSettingsViewModelAsync(appSettings);
 
             var sut = _fixture.Create<SettingsViewModelValidator>();
             ValidationResult result = sut.Validate(settingsViewModel);
@@ -48,7 +48,7 @@ namespace CopyWords.Core.Tests.Validators
             result.Errors.First().ErrorMessage.Should().Be("'Anki Sounds Folder' must not be empty.");
         }
 
-        private SettingsViewModel CreateSettingsViewModel(AppSettings appSettings)
+        private async Task<SettingsViewModel> CreateSettingsViewModelAsync(AppSettings appSettings)
         {
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
@@ -63,7 +63,7 @@ namespace CopyWords.Core.Tests.Validators
                 Mock.Of<IValidator<SettingsViewModel>>(),
                 Mock.Of<IAnkiConnectService>());
 
-            settingsViewModel.Init();
+            await settingsViewModel.InitAsync(CancellationToken.None);
 
             return settingsViewModel;
         }
