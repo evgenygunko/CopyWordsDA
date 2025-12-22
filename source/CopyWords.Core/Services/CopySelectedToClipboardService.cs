@@ -20,6 +20,8 @@ namespace CopyWords.Core.Services
         Task<string> CompileExamplesAsync(ObservableCollection<DefinitionViewModel> definitionViewModels);
 
         string CompileHeadword(ObservableCollection<DefinitionViewModel> definitionViewModels);
+
+        string CompileSoundFileName(string soundFileName);
     }
 
     public class CopySelectedToClipboardService : ICopySelectedToClipboardService
@@ -331,6 +333,8 @@ namespace CopyWords.Core.Services
             return sb.ToString()
                 .TrimEnd(Environment.NewLine.ToCharArray());
         }
+
+        public string CompileSoundFileName(string soundFileName) => $"[sound:{soundFileName}.mp3]";
 
         #endregion
 

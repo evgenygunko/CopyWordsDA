@@ -330,8 +330,8 @@ namespace CopyWords.Core.ViewModels
 
             if (wordModel != null)
             {
+                _wordViewModel.Word = wordModel.Word;
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
-                _wordViewModel.SoundFileName = wordModel.SoundFileName;
 
                 bool showCopyButtons = _settingsService.GetShowCopyButtons();
 

@@ -804,6 +804,20 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
+        #region Tests for CompileSoundFileName
+
+        [TestMethod]
+        public void CompileSoundFileName_Should_FormatSoundFileNameWithMp3Extension()
+        {
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            string result = sut.CompileSoundFileName("ejemplo");
+
+            result.Should().Be("[sound:ejemplo.mp3]");
+        }
+
+        #endregion
+
         #region Tests for GetImageFileNameWithoutExtension
 
         [TestMethod]

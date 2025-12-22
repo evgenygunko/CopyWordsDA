@@ -14,8 +14,8 @@ namespace CopyWords.Core.ViewModels
 {
     public interface IWordViewModel
     {
+        string Word { get; set; }
         string? SoundUrl { get; set; }
-        string? SoundFileName { get; set; }
         bool ShowCopyButtons { get; set; }
         bool ShowAddNoteWithAnkiConnectButton { get; set; }
 
@@ -66,22 +66,23 @@ namespace CopyWords.Core.ViewModels
         public ObservableCollection<DefinitionViewModel> DefinitionViewModels { get; } = [];
 
         [ObservableProperty]
+        public partial string Word { get; set; } = default!;
+
+        [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PlaySoundCommand))]
+        [NotifyCanExecuteChangedFor(nameof(SaveSoundFileCommand))]
         [NotifyPropertyChangedFor(nameof(PlaySoundButtonColor))]
+        [NotifyPropertyChangedFor(nameof(SaveSoundButtonColor))]
         public partial string? SoundUrl { get; set; }
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveSoundFileCommand))]
-        [NotifyPropertyChangedFor(nameof(SaveSoundButtonColor))]
-        public partial string? SoundFileName { get; set; }
-
-        [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PlaySoundCommand))]
         [NotifyCanExecuteChangedFor(nameof(SaveSoundFileCommand))]
         [NotifyPropertyChangedFor(nameof(PlaySoundButtonColor))]
+        [NotifyPropertyChangedFor(nameof(SaveSoundButtonColor))]
         public partial bool IsBusy { get; set; }
 
-        public bool CanSaveSoundFile => !IsBusy && !string.IsNullOrEmpty(SoundFileName);
+        public bool CanSaveSoundFile => !IsBusy && !string.IsNullOrEmpty(SoundUrl);
 
         public bool CanPlaySound => !IsBusy && !string.IsNullOrEmpty(SoundUrl);
 
@@ -158,10 +159,12 @@ namespace CopyWords.Core.ViewModels
 
             try
             {
-                bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl!, SoundFileName!, cancellationToken);
+                bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl!, Word, cancellationToken);
 
                 if (result)
                 {
+                    string textToCopy = _copySelectedToClipboardService.CompileSoundFileName(Word);
+                    await _clipboardService.CopyTextToClipboardAsync(textToCopy);
                     await _dialogService.DisplayToast("Sound file saved");
                 }
             }

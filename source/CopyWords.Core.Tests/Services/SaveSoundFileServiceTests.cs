@@ -65,7 +65,7 @@ namespace CopyWords.Core.Tests.Services
         {
             // Arrange
             string url = _fixture.Create<Uri>().ToString();
-            const string soundFileName = "sound_file.mp3";
+            string word = _fixture.Create<string>();
 
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
@@ -83,12 +83,12 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<SaveSoundFileService>();
 
             // Act
-            bool result = await sut.SaveSoundFileAsync(url, soundFileName, CancellationToken.None);
+            bool result = await sut.SaveSoundFileAsync(url, word, CancellationToken.None);
 
             // Assert
             result.Should().BeTrue();
             fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
-            fileSaverMock.Verify(x => x.SaveAsync("sound_file.mp3", It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
+            fileSaverMock.Verify(x => x.SaveAsync($"{word}.mp3", It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@ namespace CopyWords.Core.Tests.Services
         {
             // Arrange
             string url = _fixture.Create<Uri>().ToString();
-            const string soundFileName = "sound_file.mp3";
+            string word = _fixture.Create<string>();
 
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
@@ -116,16 +116,13 @@ namespace CopyWords.Core.Tests.Services
                 .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
-            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
-
             var sut = _fixture.Create<SaveSoundFileService>();
 
             // Act
-            bool result = await sut.SaveSoundFileAsync(url, soundFileName, CancellationToken.None);
+            bool result = await sut.SaveSoundFileAsync(url, word, CancellationToken.None);
 
             // Assert
             result.Should().BeTrue();
-            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync("[sound:sound_file.mp3]"), Times.Once);
             fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
             fileIOServiceMock.Verify(x => x.CopyToAsync(It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
         }
@@ -135,7 +132,7 @@ namespace CopyWords.Core.Tests.Services
         {
             // Arrange
             string url = _fixture.Create<Uri>().ToString();
-            const string soundFileName = "test_sound.mp3";
+            string word = _fixture.Create<string>();
 
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.MacCatalyst);
@@ -155,53 +152,14 @@ namespace CopyWords.Core.Tests.Services
                 .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
 
-            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
-
             var sut = _fixture.Create<SaveSoundFileService>();
 
             // Act
-            bool result = await sut.SaveSoundFileAsync(url, soundFileName, CancellationToken.None);
+            bool result = await sut.SaveSoundFileAsync(url, word, CancellationToken.None);
 
             // Assert
             result.Should().BeTrue();
-            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync("[sound:test_sound.mp3]"), Times.Once);
             fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
-        }
-
-        [TestMethod]
-        public async Task SaveSoundFileAsync_WhenOnWindows_CopiesCorrectTextToClipboard()
-        {
-            // Arrange
-            string url = _fixture.Create<Uri>().ToString();
-            const string soundFileName = "my_word.mp3";
-
-            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
-            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings
-            {
-                AnkiSoundsFolder = @"C:\Anki\Sounds"
-            });
-
-            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-            fileIOServiceMock.Setup(x => x.DirectoryExists(It.IsAny<string>())).Returns(true);
-            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(false);
-
-            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
-            fileDownloaderServiceMock
-                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult<Stream>(new MemoryStream(new byte[] { 1, 2, 3 })));
-
-            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
-
-            var sut = _fixture.Create<SaveSoundFileService>();
-
-            // Act
-            await sut.SaveSoundFileAsync(url, soundFileName, CancellationToken.None);
-
-            // Assert
-            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync("[sound:my_word.mp3]"), Times.Once);
         }
 
         #endregion

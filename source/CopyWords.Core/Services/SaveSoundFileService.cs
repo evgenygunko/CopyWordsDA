@@ -11,12 +11,11 @@ namespace CopyWords.Core.Services
     {
         string CreateDownloadSoundFileUrl(string soundUrl, string word);
 
-        Task<bool> SaveSoundFileAsync(string url, string soundFileName, CancellationToken cancellationToken);
+        Task<bool> SaveSoundFileAsync(string url, string word, CancellationToken cancellationToken);
     }
 
     public class SaveSoundFileService : ISaveSoundFileService
     {
-        private readonly IClipboardService _clipboardService;
         private readonly IDeviceInfo _deviceInfo;
         private readonly IFileDownloaderService _fileDownloaderService;
         private readonly ISettingsService _settingsService;
@@ -26,7 +25,6 @@ namespace CopyWords.Core.Services
         private readonly IGlobalSettings _globalSettings;
 
         public SaveSoundFileService(
-            IClipboardService clipboardService,
             IDeviceInfo deviceInfo,
             IFileDownloaderService fileDownloaderService,
             ISettingsService settingsService,
@@ -35,7 +33,6 @@ namespace CopyWords.Core.Services
             IDialogService dialogService,
             IGlobalSettings globalSettings)
         {
-            _clipboardService = clipboardService;
             _deviceInfo = deviceInfo;
             _fileDownloaderService = fileDownloaderService;
             _fileSaver = fileSaver;
@@ -54,21 +51,13 @@ namespace CopyWords.Core.Services
         [SupportedOSPlatform("windows")]
         [SupportedOSPlatform("maccatalyst15.0")]
         [SupportedOSPlatform("android")]
-        public async Task<bool> SaveSoundFileAsync(string url, string soundFileName, CancellationToken cancellationToken)
+        public async Task<bool> SaveSoundFileAsync(string url, string word, CancellationToken cancellationToken)
         {
-            // todo: pass the word from the viewmodel instead of extracting it from the file name
-            string word = Path.GetFileNameWithoutExtension(soundFileName);
-
             // on Android show the FileSavePicker and save the file into allowed location, like Downloads
             if (_deviceInfo.Platform == DevicePlatform.Android)
             {
                 return await DownloadSoundFileAndSaveWithFileSaverAsync(url, word, cancellationToken);
             }
-
-            // Put the text for Anki into the clipboard. We do this before attempting to save the actual file.
-            // If the file already exists and the user chooses not to overwrite it, the text will still be available in the clipboard.
-            string clipboardTest = $"[sound:{word}.mp3]";
-            await _clipboardService.CopyTextToClipboardAsync(clipboardTest);
 
             // On Windows and Mac, download the file and save it directly to the Anki collection media folder.
             return await DownloadSoundFileAndCopyToAnkiFolderAsync(url, word, cancellationToken);

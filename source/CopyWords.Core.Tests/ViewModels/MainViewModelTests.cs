@@ -189,8 +189,8 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             sut.IsBusy.Should().BeFalse();
 
+            wordViewModelMock.VerifySet(x => x.Word = wordModel.Word);
             wordViewModelMock.VerifySet(x => x.SoundUrl = wordModel.SoundUrl);
-            wordViewModelMock.VerifySet(x => x.SoundFileName = wordModel.SoundFileName);
 
             wordViewModelMock.Verify(x => x.ClearDefinitions());
             wordViewModelMock.Verify(x => x.AddDefinition(It.IsAny<DefinitionViewModel>()), Times.Exactly(wordModel.Definitions.Count()));
@@ -475,8 +475,8 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             sut.IsBusy.Should().BeFalse();
 
+            wordViewModelMock.VerifySet(x => x.Word = wordModel.Word);
             wordViewModelMock.VerifySet(x => x.SoundUrl = wordModel.SoundUrl);
-            wordViewModelMock.VerifySet(x => x.SoundFileName = wordModel.SoundFileName);
             wordViewModelMock.VerifySet(x => x.ShowCopyButtons = showCopyButtons);
 
             wordViewModelMock.Verify(x => x.ClearDefinitions());

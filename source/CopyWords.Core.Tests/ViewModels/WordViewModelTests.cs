@@ -40,26 +40,29 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.IsBusy = true;
+            sut.SoundUrl = _fixture.Create<string>();
 
             sut.CanSaveSoundFile.Should().BeFalse();
         }
 
         [TestMethod]
-        public void CanSaveSoundFile_WhenSoundFileNameIsNull_ReturnsFalse()
+        [DataRow(null)]
+        [DataRow("")]
+        public void CanSaveSoundFile_WhenSoundUrlIsNullOrEmpty_ReturnsFalse(string soundUrl)
         {
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.IsBusy = false;
-            sut.SoundFileName = null;
+            sut.SoundUrl = soundUrl;
 
             sut.CanSaveSoundFile.Should().BeFalse();
         }
 
         [TestMethod]
-        public void CanSaveSoundFile_WhenSoundFileNameIsNotNull_ReturnsTrue()
+        public void CanSaveSoundFile_WhenSoundUrlIsProvided_ReturnsTrue()
         {
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.IsBusy = false;
-            sut.SoundFileName = _fixture.Create<string>();
+            sut.SoundUrl = _fixture.Create<string>();
 
             sut.CanSaveSoundFile.Should().BeTrue();
         }
@@ -71,18 +74,29 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task SaveSoundFileAsync_WhenFileSaved_ShowsToast()
         {
+            var soundFileName = _fixture.Create<string>();
+            var compiledFileName = $"[sound:{soundFileName}.mp3]";
+
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
             saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileSoundFileName(It.IsAny<string>()))
+                .Returns(compiledFileName);
+
+            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.Word = soundFileName;
             await sut.SaveSoundFileAsync(It.IsAny<CancellationToken>());
 
             sut.IsBusy.Should().BeFalse();
             saveSoundFileServiceMock.Verify();
-            dialogServiceMock.Verify(x => x.DisplayToast(It.IsAny<string>()));
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileSoundFileName(soundFileName), Times.Once);
+            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(compiledFileName), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayToast("Sound file saved"));
         }
 
         [TestMethod]
@@ -92,6 +106,8 @@ namespace CopyWords.Core.Tests.ViewModels
             saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
@@ -99,6 +115,8 @@ namespace CopyWords.Core.Tests.ViewModels
 
             sut.IsBusy.Should().BeFalse();
             saveSoundFileServiceMock.Verify();
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileSoundFileName(It.IsAny<string>()), Times.Never);
+            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(It.IsAny<string>()), Times.Never);
             dialogServiceMock.Verify(x => x.DisplayToast(It.IsAny<string>()), Times.Never);
         }
 
@@ -109,6 +127,8 @@ namespace CopyWords.Core.Tests.ViewModels
             saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception("exception from unit test"));
 
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
@@ -116,6 +136,8 @@ namespace CopyWords.Core.Tests.ViewModels
 
             sut.IsBusy.Should().BeFalse();
             saveSoundFileServiceMock.Verify();
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileSoundFileName(It.IsAny<string>()), Times.Never);
+            clipboardServiceMock.Verify(x => x.CopyTextToClipboardAsync(It.IsAny<string>()), Times.Never);
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot save sound file", It.IsAny<string>(), "OK"));
         }
 
