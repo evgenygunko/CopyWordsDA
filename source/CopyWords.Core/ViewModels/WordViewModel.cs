@@ -206,6 +206,18 @@ namespace CopyWords.Core.ViewModels
                 string endings = await _copySelectedToClipboardService.CompileEndingsAsync(DefinitionViewModels);
                 string examples = await _copySelectedToClipboardService.CompileExamplesAsync(DefinitionViewModels);
 
+                string? sound = null;
+                if (CanSaveSoundFile)
+                {
+                    var saveFileCancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+                    bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl!, Word, saveFileCancellationToken);
+
+                    if (result)
+                    {
+                        sound = _copySelectedToClipboardService.CompileSoundFileName(Word);
+                    }
+                }
+
                 var ankiNoteOptions = new AnkiNoteOptions(
                     AllowDuplicate: false,
                     DuplicateScope: "deck",
@@ -221,11 +233,11 @@ namespace CopyWords.Core.ViewModels
                     PartOfSpeech: partOfSpeech,
                     Forms: endings,
                     Example: examples,
-                    Sound: null,
+                    Sound: sound,
                     Options: ankiNoteOptions);
-                var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
-                await _ankiConnectService.AddNoteAsync(note, cancellationToken);
+                var addNoteCancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+                await _ankiConnectService.AddNoteAsync(note, addNoteCancellationToken);
             }
             catch (AnkiConnectNotRunningException ex)
             {

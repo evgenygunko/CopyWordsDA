@@ -706,6 +706,126 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
+        public async Task AddNoteWithAnkiConnectAsync_WhenSoundFileIsSaved_CallsAddNoteAsyncWithSoundFileName()
+        {
+            // Arrange
+            string word = _fixture.Create<string>();
+            string soundUrl = _fixture.Create<Uri>().ToString();
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+            string partOfSpeech = _fixture.Create<string>();
+            string endings = _fixture.Create<string>();
+            string examples = _fixture.Create<string>();
+            string soundFileName = $"[sound:{word}.mp3]";
+
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeechAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(partOfSpeech);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndingsAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(endings);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamplesAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(examples);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileSoundFileName(word)).Returns(soundFileName);
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.Word = word;
+            sut.SoundUrl = soundUrl;
+            sut.IsBusy = false;
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.AddNoteWithAnkiConnectAsync();
+
+            // Assert
+            saveSoundFileServiceMock.Verify(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()), Times.Once);
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileSoundFileName(word), Times.Once);
+
+            ankiConnectServiceMock.Verify(x => x.AddNoteAsync(
+                It.Is<Models.AnkiNote>(note =>
+                    note.DeckName == _appSettings.AnkiDeckName &&
+                    note.ModelName == _appSettings.AnkiModelName &&
+                    note.Front == front &&
+                    note.Back == back &&
+                    note.PartOfSpeech == partOfSpeech &&
+                    note.Forms == endings &&
+                    note.Example == examples &&
+                    note.Sound == soundFileName &&
+                    note.Options != null &&
+                    note.Options.AllowDuplicate == false &&
+                    note.Options.DuplicateScope == "deck" &&
+                    note.Options.DuplicateScopeOptions != null &&
+                    note.Options.DuplicateScopeOptions.DeckName == _appSettings.AnkiDeckName &&
+                    note.Options.DuplicateScopeOptions.CheckChildren == false),
+                It.IsAny<CancellationToken>()), Times.Once);
+
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiConnectAsync_WhenSoundFileFailsToSave_CallsAddNoteAsyncWithoutSoundFileName()
+        {
+            // Arrange
+            string word = _fixture.Create<string>();
+            string soundUrl = _fixture.Create<Uri>().ToString();
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+            string partOfSpeech = _fixture.Create<string>();
+            string endings = _fixture.Create<string>();
+            string examples = _fixture.Create<string>();
+
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeechAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(partOfSpeech);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndingsAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(endings);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamplesAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>())).ReturnsAsync(examples);
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(false);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.Word = word;
+            sut.SoundUrl = soundUrl;
+            sut.IsBusy = false;
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.AddNoteWithAnkiConnectAsync();
+
+            // Assert
+            saveSoundFileServiceMock.Verify(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()), Times.Once);
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileSoundFileName(It.IsAny<string>()), Times.Never);
+
+            ankiConnectServiceMock.Verify(x => x.AddNoteAsync(
+                It.Is<Models.AnkiNote>(note =>
+                    note.DeckName == _appSettings.AnkiDeckName &&
+                    note.ModelName == _appSettings.AnkiModelName &&
+                    note.Front == front &&
+                    note.Back == back &&
+                    note.PartOfSpeech == partOfSpeech &&
+                    note.Forms == endings &&
+                    note.Example == examples &&
+                    note.Sound == null &&
+                    note.Options != null &&
+                    note.Options.AllowDuplicate == false &&
+                    note.Options.DuplicateScope == "deck" &&
+                    note.Options.DuplicateScopeOptions != null &&
+                    note.Options.DuplicateScopeOptions.DeckName == _appSettings.AnkiDeckName &&
+                    note.Options.DuplicateScopeOptions.CheckChildren == false),
+                It.IsAny<CancellationToken>()), Times.Once);
+
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
         public async Task AddNoteWithAnkiConnectAsync_WhenAnkiConnectNotRunningExceptionThrown_ShowsAlert()
         {
             // Arrange
