@@ -60,16 +60,22 @@ namespace CopyWords.Core.Services
             catch (AnkiNoteExistsException)
             {
                 noteId = await FindExistingNoteIdAsync(note, cancellationToken);
-                await ShowAnkiEditNoteWindowAsync(noteId, cancellationToken);
 
                 if (noteId > 0)
                 {
-                    await _dialogService.DisplayAlertAsync("Note already exists", $"Note '{note.Front}' already exists. Check the existing note to review or update it.", "OK");
+                    bool shouldUpdate = await _dialogService.DisplayAlertAsync(
+                        "Note already exists",
+                        $"Note '{note.Front}' already exists. Do you want to update it with current values from CopyWords?",
+                        "Yes",
+                        "No");
+
+                    if (shouldUpdate)
+                    {
+                        await UpdateNoteWithAnkiConnectAsync(noteId, note, cancellationToken);
+                    }
                 }
-                else
-                {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", $"Cannot add '{note.Front}' because it already exists.", "OK");
-                }
+
+                await ShowAnkiEditNoteWindowAsync(noteId, cancellationToken);
             }
 
             return noteId;
@@ -314,6 +320,41 @@ namespace CopyWords.Core.Services
             using var editContent = new StringContent(editPayload, Encoding.UTF8, "application/json");
 
             await _httpClient.PostAsync(DefaultEndpoint, editContent, cancellationToken);
+        }
+
+        internal async Task UpdateNoteWithAnkiConnectAsync(long noteId, AnkiNote note, CancellationToken cancellationToken)
+        {
+            var request = new UpdateNoteFieldsRequest(
+                Action: "updateNoteFields",
+                Version: 6,
+                Params: new UpdateNoteFieldsParams(
+                    new UpdateNoteFieldsNote(
+                        noteId,
+                        BuildFields(note),
+                        Audio: BuildMedia(note.Audio),
+                        Video: BuildMedia(note.Video),
+                        Picture: BuildMedia(note.Picture))));
+
+            string payload = JsonConvert.SerializeObject(request);
+            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            using HttpResponseMessage response = await _httpClient.PostAsync(DefaultEndpoint, content, cancellationToken);
+            string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            var updateNoteResponse = JsonConvert.DeserializeObject<UpdateNoteFieldsResponse>(responseBody);
+            if (updateNoteResponse is null)
+            {
+                throw new InvalidOperationException("AnkiConnect returned an empty response.");
+            }
+
+            if (!response.IsSuccessStatusCode || !string.IsNullOrWhiteSpace(updateNoteResponse.Error))
+            {
+                string error = !string.IsNullOrWhiteSpace(updateNoteResponse.Error)
+                    ? updateNoteResponse.Error
+                    : $"HTTP {(int)response.StatusCode} ({response.ReasonPhrase})";
+
+                throw new InvalidOperationException($"Failed to update note in Anki: {error}");
+            }
         }
 
         #endregion

@@ -94,4 +94,23 @@ namespace CopyWords.Core.Models
     internal record MediaDirPathResponse(
         [property: JsonProperty("result")] string? Result,
         [property: JsonProperty("error")] string? Error);
+
+    internal record UpdateNoteFieldsRequest(
+        [property: JsonProperty("action")] string Action,
+        [property: JsonProperty("version")] int Version,
+        [property: JsonProperty("params")] UpdateNoteFieldsParams Params);
+
+    internal record UpdateNoteFieldsParams(
+        [property: JsonProperty("note")] UpdateNoteFieldsNote Note);
+
+    internal record UpdateNoteFieldsNote(
+        [property: JsonProperty("id")] long Id,
+        [property: JsonProperty("fields")] IReadOnlyDictionary<string, string> Fields,
+        [property: JsonProperty("audio")] IEnumerable<AddNoteMedia>? Audio = null,
+        [property: JsonProperty("video")] IEnumerable<AddNoteMedia>? Video = null,
+        [property: JsonProperty("picture")] IEnumerable<AddNoteMedia>? Picture = null);
+
+    internal record UpdateNoteFieldsResponse(
+        [property: JsonProperty("result")] object? Result,
+        [property: JsonProperty("error")] string? Error);
 }

@@ -5,6 +5,8 @@ using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
 using FluentAssertions;
+using FluentValidation;
+using FluentValidation.Results;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json.Linq;
@@ -25,7 +27,7 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for AddNoteAsync
 
         [TestMethod]
-        public async Task AddNoteWithAnkiConnectAsync_WhenCanAddNote_ReturnsNoteId()
+        public async Task AddNoteAsync_WhenCanAddNote_ReturnsNoteIdAndShowsEditWindow()
         {
             // Arrange
             var note = new AnkiNote(
@@ -67,7 +69,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task AddNoteAsync_WhenNoteExists_ShowsAlert()
+        public async Task AddNoteAsync_WhenNoteExistsAndUserChoosesToUpdate_UpdatesNoteAndReturnsNoteId()
         {
             // Arrange
             var note = new AnkiNote(
@@ -102,7 +104,175 @@ namespace CopyWords.Core.Tests.Services
                 }
                 else if (requestBody != null && requestBody.Contains("\"action\":\"findNotes\""))
                 {
-                    // Return empty result for findNotes (note not found)
+                    // Return existing note ID
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("{\"result\":[456],\"error\":null}")
+                    };
+                }
+
+                // Default success response for other actions (like updateNoteFields and guiEditNote)
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":null,\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock
+                .Setup(ds => ds.DisplayAlertAsync(
+                    "Note already exists",
+                    $"Note '{note.Front}' already exists. Do you want to update it with current values from CopyWords?",
+                    "Yes",
+                    "No"))
+                .ReturnsAsync(true);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            long result = await sut.AddNoteAsync(note, CancellationToken.None);
+
+            // Assert
+            result.Should().Be(456);
+
+            // Verify that the dialog was shown
+            dialogServiceMock.Verify(ds => ds.DisplayAlertAsync(
+                "Note already exists",
+                $"Note '{note.Front}' already exists. Do you want to update it with current values from CopyWords?",
+                "Yes",
+                "No"), Times.Once);
+
+            // Verify that updateNoteFields was called
+            var updateRequest = capturedBodies.FirstOrDefault(b => b != null && b.Contains("\"action\":\"updateNoteFields\""));
+            updateRequest.Should().NotBeNull();
+            JObject updatePayload = JObject.Parse(updateRequest!);
+            updatePayload["params"]!["note"]!["id"]!.Value<long>().Should().Be(456);
+
+            // Verify that guiEditNote was called with the correct note ID
+            var editNoteRequest = capturedBodies.FirstOrDefault(b => b != null && b.Contains("\"action\":\"guiEditNote\""));
+            editNoteRequest.Should().NotBeNull();
+            JObject editPayload = JObject.Parse(editNoteRequest!);
+            editPayload["params"]!["note"]!.Value<long>().Should().Be(456);
+        }
+
+        [TestMethod]
+        public async Task AddNoteAsync_WhenNoteExistsAndUserChoosesNotToUpdate_ReturnsNoteIdWithoutUpdating()
+        {
+            // Arrange
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                PartOfSpeech: "noun",
+                Forms: "form1, form2",
+                Example: "example text",
+                Sound: "[sound:file.mp3]",
+                Tags: new[] { "tag1", "tag2" });
+
+            var capturedBodies = new List<string?>();
+            var capturedUris = new List<Uri?>();
+
+            HttpClient httpClient = CreateHttpClient((request, cancellationToken) =>
+            {
+                string? requestBody = request.Content != null ? request.Content.ReadAsStringAsync(cancellationToken).Result : null;
+                capturedBodies.Add(requestBody);
+
+                if (requestBody != null && requestBody.Contains("\"action\":\"addNote\""))
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("{\"result\":null,\"error\":\"cannot create note because it is a duplicate\"}")
+                    };
+                }
+                else if (requestBody != null && requestBody.Contains("\"action\":\"findNotes\""))
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("{\"result\":[456],\"error\":null}")
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":null,\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock
+                .Setup(ds => ds.DisplayAlertAsync(
+                    "Note already exists",
+                    $"Note '{note.Front}' already exists. Do you want to update it with current values from CopyWords?",
+                    "Yes",
+                    "No"))
+                .ReturnsAsync(false);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            long result = await sut.AddNoteAsync(note, CancellationToken.None);
+
+            // Assert
+            result.Should().Be(456);
+
+            // Verify that the dialog was shown
+            dialogServiceMock.Verify(ds => ds.DisplayAlertAsync(
+                "Note already exists",
+                $"Note '{note.Front}' already exists. Do you want to update it with current values from CopyWords?",
+                "Yes",
+                "No"), Times.Once);
+
+            // Verify that updateNoteFields was NOT called
+            var updateRequest = capturedBodies.FirstOrDefault(b => b != null && b.Contains("\"action\":\"updateNoteFields\""));
+            updateRequest.Should().BeNull();
+
+            // Verify that guiEditNote was called with the correct note ID
+            var editNoteRequest = capturedBodies.FirstOrDefault(b => b != null && b.Contains("\"action\":\"guiEditNote\""));
+            editNoteRequest.Should().NotBeNull();
+            JObject editPayload = JObject.Parse(editNoteRequest!);
+            editPayload["params"]!["note"]!.Value<long>().Should().Be(456);
+        }
+
+        [TestMethod]
+        public async Task AddNoteAsync_WhenNoteExistsButCannotFindNoteId_ReturnsZeroAndShowsEditWindow()
+        {
+            // Arrange
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                PartOfSpeech: "noun",
+                Forms: "form1, form2",
+                Example: "example text",
+                Sound: "[sound:file.mp3]",
+                Tags: new[] { "tag1", "tag2" });
+
+            HttpClient httpClient = CreateHttpClient((request, cancellationToken) =>
+            {
+                string? requestBody = request.Content != null ? request.Content.ReadAsStringAsync(cancellationToken).Result : null;
+
+                if (requestBody != null && requestBody.Contains("\"action\":\"addNote\""))
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("{\"result\":null,\"error\":\"cannot create note because it is a duplicate\"}")
+                    };
+                }
+                else if (requestBody != null && requestBody.Contains("\"action\":\"findNotes\""))
+                {
+                    // Return empty result - note not found
                     return new HttpResponseMessage
                     {
                         StatusCode = HttpStatusCode.OK,
@@ -110,7 +280,6 @@ namespace CopyWords.Core.Tests.Services
                     };
                 }
 
-                // Default success response for other actions (like guiEditNote)
                 return new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -130,10 +299,80 @@ namespace CopyWords.Core.Tests.Services
             // Assert
             result.Should().Be(0);
 
+            // Verify that no dialog was shown (since noteId was 0)
             dialogServiceMock.Verify(ds => ds.DisplayAlertAsync(
-                "Cannot add note",
-                $"Cannot add '{note.Front}' because it already exists.",
-                "OK"), Times.Once);
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task AddNoteAsync_WhenValidationFails_ThrowsArgumentException()
+        {
+            // Arrange
+            var note = new AnkiNote(
+                DeckName: string.Empty,  // Invalid - empty deck name
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                PartOfSpeech: "noun",
+                Forms: "form1, form2",
+                Example: "example text",
+                Sound: "[sound:file.mp3]",
+                Tags: new[] { "tag1", "tag2" });
+
+            var validationResult = _fixture.Create<ValidationResult>();
+            validationResult.Errors.Clear();
+            validationResult.Errors.Add(new ValidationFailure("DeckName", "DeckName cannot be null"));
+
+            var ankiNoteValidatorMock = _fixture.Freeze<Mock<IValidator<AnkiNote>>>();
+            ankiNoteValidatorMock.Setup(x => x.ValidateAsync(It.IsAny<AnkiNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(validationResult);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<ArgumentException>();
+        }
+
+        [TestMethod]
+        public async Task AddNoteAsync_WhenAnkiConnectNotRunning_ThrowsAnkiConnectNotRunningException()
+        {
+            // Arrange
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                PartOfSpeech: "noun",
+                Forms: "form1, form2",
+                Example: "example text",
+                Sound: "[sound:file.mp3]",
+                Tags: new[] { "tag1", "tag2" });
+
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ThrowsAsync(new HttpRequestException("Connection refused"));
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<AnkiConnectNotRunningException>()
+                .WithMessage("Connection refused");
         }
 
         #endregion
@@ -562,6 +801,191 @@ namespace CopyWords.Core.Tests.Services
 
             // Act
             var act = async () => await sut.FindExistingNoteIdAsync(note, CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("AnkiConnect returned an empty response.");
+        }
+
+        #endregion
+
+        #region Tests for ShowAnkiEditNoteWindowAsync
+
+        [TestMethod]
+        public async Task ShowAnkiEditNoteWindowAsync_WhenValidNoteId_SendsCorrectRequest()
+        {
+            // Arrange
+            long noteId = 1514547547030;
+            var capturedBodies = new List<string?>();
+            var capturedUris = new List<Uri?>();
+
+            HttpClient httpClient = CreateHttpClient((request, cancellationToken) =>
+            {
+                capturedUris.Add(request.RequestUri);
+                capturedBodies.Add(request.Content != null ? request.Content.ReadAsStringAsync(cancellationToken).Result : null);
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":null,\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            await sut.ShowAnkiEditNoteWindowAsync(noteId, CancellationToken.None);
+
+            // Assert
+            capturedBodies.Should().HaveCount(1);
+            capturedUris.Should().HaveCount(1);
+
+            capturedUris[0].Should().Be(new Uri("http://127.0.0.1:8765"));
+
+            capturedBodies[0].Should().NotBeNull();
+            JObject payload = JObject.Parse(capturedBodies[0]!);
+            payload["action"]!.Value<string>().Should().Be("guiEditNote");
+            payload["version"]!.Value<int>().Should().Be(6);
+            payload["params"]!["note"]!.Value<long>().Should().Be(noteId);
+        }
+
+        #endregion
+
+        #region Tests for UpdateNoteWithAnkiConnectAsync
+
+        [TestMethod]
+        public async Task UpdateNoteWithAnkiConnectAsync_WhenSuccess_UpdatesNoteFields()
+        {
+            // Arrange
+            long noteId = 1514547547030;
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Updated Front",
+                Back: "Updated Back",
+                PartOfSpeech: "verb",
+                Forms: "updated forms",
+                Example: "updated example",
+                Sound: "[sound:updated.mp3]",
+                Tags: new[] { "tag1", "tag2" });
+
+            var capturedBodies = new List<string?>();
+            var capturedUris = new List<Uri?>();
+
+            HttpClient httpClient = CreateHttpClient((request, cancellationToken) =>
+            {
+                capturedUris.Add(request.RequestUri);
+                capturedBodies.Add(request.Content != null ? request.Content.ReadAsStringAsync(cancellationToken).Result : null);
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("{\"result\":null,\"error\":null}")
+                };
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            await sut.UpdateNoteWithAnkiConnectAsync(noteId, note, CancellationToken.None);
+
+            // Assert
+            capturedBodies.Should().HaveCount(1);
+            capturedUris.Should().HaveCount(1);
+
+            capturedUris[0].Should().Be(new Uri("http://127.0.0.1:8765"));
+
+            capturedBodies[0].Should().NotBeNull();
+            JObject payload = JObject.Parse(capturedBodies[0]!);
+            payload["action"]!.Value<string>().Should().Be("updateNoteFields");
+            payload["version"]!.Value<int>().Should().Be(6);
+
+            JObject noteObject = (JObject)payload["params"]!["note"]!;
+            noteObject["id"]!.Value<long>().Should().Be(noteId);
+
+            JObject fields = (JObject)noteObject["fields"]!;
+            fields["Front"]!.Value<string>().Should().Be(note.Front);
+            fields["Back"]!.Value<string>().Should().Be(note.Back);
+            fields["PartOfSpeech"]!.Value<string>().Should().Be(note.PartOfSpeech);
+            fields["Forms"]!.Value<string>().Should().Be(note.Forms);
+            fields["Example"]!.Value<string>().Should().Be(note.Example);
+            fields["Sound"]!.Value<string>().Should().Be(note.Sound);
+        }
+
+        [TestMethod]
+        public async Task UpdateNoteWithAnkiConnectAsync_WhenErrorReturned_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            long noteId = 123456;
+            var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
+
+            HttpClient httpClient = CreateHttpClient((_, _) => new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("{\"result\":null,\"error\":\"note not found\"}")
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.UpdateNoteWithAnkiConnectAsync(noteId, note, CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Failed to update note in Anki: note not found");
+        }
+
+        [TestMethod]
+        public async Task UpdateNoteWithAnkiConnectAsync_WhenHttpFailure_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            long noteId = 123456;
+            var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
+
+            HttpClient httpClient = CreateHttpClient((_, _) => new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.InternalServerError,
+                ReasonPhrase = "Internal Server Error",
+                Content = new StringContent("{\"result\":null,\"error\":null}")
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.UpdateNoteWithAnkiConnectAsync(noteId, note, CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Failed to update note in Anki: HTTP 500 (Internal Server Error)");
+        }
+
+        [TestMethod]
+        public async Task UpdateNoteWithAnkiConnectAsync_WhenEmptyResponse_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            long noteId = 123456;
+            var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
+
+            HttpClient httpClient = CreateHttpClient((_, _) => new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("")
+            });
+
+            _fixture.Inject(httpClient);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            var act = async () => await sut.UpdateNoteWithAnkiConnectAsync(noteId, note, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
