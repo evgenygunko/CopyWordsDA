@@ -9,6 +9,8 @@
         <MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
         <ShowErrorConverter x:Key="ShowErrorConverter" />
 
+        <Color x:Key="LabelColor">#2F2F3A</Color>
+
         <Style x:Key="InvalidEntryStyle" TargetType="Entry">
             <Setter Property="TextColor" Value="Red" />
         </Style>
@@ -17,7 +19,35 @@
             <Setter Property="StrokeShape" Value="RoundRectangle 10" />
             <Setter Property="StrokeThickness" Value="1" />
             <Setter Property="Margin" Value="0,20,0,0" />
-            <Setter Property="Padding" Value="10,10,10,10" />
+            <Setter Property="Padding" Value="20" />
+            <Setter Property="BackgroundColor" Value="White" />
+        </Style>
+        <Style x:Key="SectionHeaderStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#1a1a1a" />
+        </Style>
+        <Style x:Key="SectionDescriptionStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="#666666" />
+            <Setter Property="Margin" Value="0,4,0,12" />
+        </Style>
+        <Style x:Key="FieldLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="#333333" />
+            <Setter Property="Margin" Value="0,14,0,4" />
+        </Style>
+        <Style x:Key="CheckBoxLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="#333333" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="InputEntryStyle" TargetType="Entry">
+            <Setter Property="BackgroundColor" Value="#F7F7FD" />
+            <Setter Property="HeightRequest" Value="44" />
+            <Setter Property="TextColor" Value="{StaticResource LabelColor}" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,0,0,0" />
         </Style>
     </ContentView.Resources>
 
@@ -32,179 +62,146 @@
 
         <!-- Export and Import settings -->
         <Border Grid.Row="0" Style="{StaticResource BorderStyle}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
+            <VerticalStackLayout>
+                <Label Text="Backup &amp; restore" Style="{StaticResource SectionHeaderStyle}" />
+                <Label Text="Export your preferences or import them from a file." Style="{StaticResource SectionDescriptionStyle}" />
 
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-
-                <Label Grid.Row="0" Grid.Column="0" Text="Export or import settings to a file:" />
-
-                <HorizontalStackLayout Grid.Row="0" Grid.Column="1" Margin="10,10,0,0" HorizontalOptions="End">
+                <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
                     <Button
-                            Margin="0,0,10,0"
-                            Text="Export"
-                            Command="{Binding ExportSettingsCommand}" />
+                        Text="Export"
+                        Command="{Binding ExportSettingsCommand}" />
                     <Button
-                            Text="Import"
-                            Command="{Binding ImportSettingsCommand}" />
+                        Text="Import"
+                        Command="{Binding ImportSettingsCommand}" />
                 </HorizontalStackLayout>
-            </Grid>
+            </VerticalStackLayout>
         </Border>
 
         <!-- AnkiConnect settings -->
         <Border Grid.Row="1" Style="{StaticResource BorderStyle}">
             <VerticalStackLayout>
-                <HorizontalStackLayout>
-                    <Label
-                            Text="Show copy with AnkiConnect:"
-                            VerticalOptions="Center"></Label>
+                <Label Text="AnkiConnect" Style="{StaticResource SectionHeaderStyle}" />
+
+                <HorizontalStackLayout Spacing="8" Margin="0,10,0,0">
                     <CheckBox
-                            IsChecked="{Binding ShowCopyWithAnkiConnectButton}"
-                            HorizontalOptions="Start" />
+                        IsChecked="{Binding ShowCopyWithAnkiConnectButton}"
+                        VerticalOptions="Center" />
+                    <Label
+                        Text="Show copy with AnkiConnect"
+                        Style="{StaticResource CheckBoxLabelStyle}" />
                 </HorizontalStackLayout>
 
                 <!-- Anki Deck Name -->
+                <Label Text="Deck name:" Style="{StaticResource FieldLabelStyle}" />
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="auto"></RowDefinition>
-                    </Grid.RowDefinitions>
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="0" Grid.ColumnSpan="2"
-                           Text="Deck name:"
-                           VerticalOptions="Center" />
-
-                    <Entry Grid.Row="1" Grid.Column="0"
-                           Margin="0,10,10,0"
+                    <Entry Grid.Column="0"
                            IsEnabled="False"
+                           Style="{StaticResource InputEntryStyle}"
                            Text="{Binding AnkiDeckName}" />
-                    <ImageButton Grid.Row="1" Grid.Column="1"
+                    <ImageButton Grid.Column="1"
+                        Margin="8,0,0,0"
                         Command="{Binding SelectAnkiDeckNameCommand}">
-
                         <ImageButton.Source>
                             <FontImageSource
-                            FontFamily="MaterialIconsOutlined-Regular"
-                            Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"/>
+                                FontFamily="MaterialIconsOutlined-Regular"
+                                Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"/>
                         </ImageButton.Source>
                     </ImageButton>
                 </Grid>
 
                 <!-- Anki Model Name -->
-                <Grid Margin="0,15,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="auto"></RowDefinition>
-                    </Grid.RowDefinitions>
-
+                <Label Text="Model name:" Style="{StaticResource FieldLabelStyle}" />
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="0" Grid.ColumnSpan="2"
-                           Text="Model name:"
-                           VerticalOptions="Center" />
-
-                    <Entry Grid.Row="1" Grid.Column="0"
-                           Margin="0,10,10,0"
+                    <Entry Grid.Column="0"
                            IsEnabled="False"
+                           Style="{StaticResource InputEntryStyle}"
                            Text="{Binding AnkiModelName}" />
-                    <ImageButton Grid.Row="1" Grid.Column="1"
+                    <ImageButton Grid.Column="1"
+                        Margin="8,0,0,0"
                         Command="{Binding SelectAnkiModelNameCommand}">
-
                         <ImageButton.Source>
                             <FontImageSource
-                            FontFamily="MaterialIconsOutlined-Regular"
-                            Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"/>
+                                FontFamily="MaterialIconsOutlined-Regular"
+                                Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"/>
                         </ImageButton.Source>
                     </ImageButton>
                 </Grid>
 
                 <!-- Path to Anki media collection -->
-                <Grid Margin="0,15,0,0">
+                <Label Text="Path to Anki media collection:" Style="{StaticResource FieldLabelStyle}" />
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-
-                    <Label Grid.Row="0" Grid.Column="0" Text="Path to Anki media collection:" />
-
-                    <Entry
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="0,10,0,0"
-                        Text="{Binding AnkiSoundsFolder}">
-                    </Entry>
-                    <ImageButton
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="10,0,0,0"
+                    <Entry Grid.Column="0"
+                           Style="{StaticResource InputEntryStyle}"
+                           Text="{Binding AnkiSoundsFolder}" />
+                    <ImageButton Grid.Column="1"
+                        Margin="8,0,0,0"
                         Command="{Binding PickAnkiSoundsFolderCommand}">
-
                         <ImageButton.Source>
                             <FontImageSource
-                            FontFamily="MaterialIconsOutlined-Regular"
-                            Glyph="{x:Static MaterialDesignIconFonts.Folder_open}"/>
+                                FontFamily="MaterialIconsOutlined-Regular"
+                                Glyph="{x:Static MaterialDesignIconFonts.Folder_open}"/>
                         </ImageButton.Source>
                     </ImageButton>
-
-                    <Label
-                        Grid.Row="2"
-                        Grid.ColumnSpan="2"
-                        Text="{Binding ValidationResult, Converter={StaticResource ShowErrorConverter}, ConverterParameter={x:Static validation:SettingsViewModelValidator.AnkiSoundsFolderProperty}}"
-                        TextColor="Red"/>
                 </Grid>
+
+                <Label
+                    Text="{Binding ValidationResult, Converter={StaticResource ShowErrorConverter}, ConverterParameter={x:Static validation:SettingsViewModelValidator.AnkiSoundsFolderProperty}}"
+                    TextColor="Red"
+                    Margin="0,4,0,0" />
             </VerticalStackLayout>
         </Border>
 
         <!-- Translation settings -->
         <Border Grid.Row="2" Style="{StaticResource BorderStyle}">
             <VerticalStackLayout>
-                <HorizontalStackLayout>
-                    <Label
-                            Text="Show copy buttons:"
-                            VerticalOptions="Center"></Label>
-                    <CheckBox
-                            IsChecked="{Binding ShowCopyButtons}"
-                            HorizontalOptions="Start" />
-                </HorizontalStackLayout>
+                <Label Text="Copy buttons" Style="{StaticResource SectionHeaderStyle}" />
 
-                <HorizontalStackLayout>
-                    <Label
-                            Text="Copy translated meanings:"
-                            VerticalOptions="Center"></Label>
-                    <CheckBox
+                <VerticalStackLayout Spacing="8" Margin="0,10,0,0">
+                    <HorizontalStackLayout Spacing="8">
+                        <CheckBox
+                            IsChecked="{Binding ShowCopyButtons}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Text="Show copy buttons"
+                            Style="{StaticResource CheckBoxLabelStyle}" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <CheckBox
                             IsChecked="{Binding CopyTranslatedMeanings}"
-                            HorizontalOptions="Start" />
-                </HorizontalStackLayout>
+                            VerticalOptions="Center" />
+                        <Label
+                            Text="Copy translated meanings"
+                            Style="{StaticResource CheckBoxLabelStyle}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
             </VerticalStackLayout>
         </Border>
 
         <HorizontalStackLayout Grid.Row="3"
                 Margin="0,20,0,20"
-                HorizontalOptions="End">
+                HorizontalOptions="End"
+                Spacing="10">
 
             <Button
                     Text="Save"
                     Command="{Binding SaveSettingsCommand}"/>
             <Button
-                    Margin="10,0,0,0"
                     Text="Cancel"
                     Command="{Binding CancelCommand}"/>
         </HorizontalStackLayout>

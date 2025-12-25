@@ -24,6 +24,9 @@ namespace CopyWords.Core.Tests.Validators
         {
             var appSettings = _fixture.Create<AppSettings>();
 
+            Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
+
             SettingsViewModel settingsViewModel = await CreateSettingsViewModelAsync(appSettings);
 
             var sut = _fixture.Create<SettingsViewModelValidator>();
@@ -45,7 +48,42 @@ namespace CopyWords.Core.Tests.Validators
 
             result.IsValid.Should().BeFalse();
             result.Errors.Should().HaveCount(1);
-            result.Errors.First().ErrorMessage.Should().Be("'Anki Sounds Folder' must not be empty.");
+            result.Errors.First().ErrorMessage.Should().Be("Path to Anki media collection cannot be empty");
+        }
+
+        [TestMethod]
+        public async Task Validate_WhenAnkiSoundsFolderIsNull_ReturnsFalse()
+        {
+            var appSettings = _fixture.Create<AppSettings>();
+            appSettings.AnkiSoundsFolder = null!;
+
+            SettingsViewModel settingsViewModel = await CreateSettingsViewModelAsync(appSettings);
+
+            var sut = _fixture.Create<SettingsViewModelValidator>();
+            ValidationResult result = sut.Validate(settingsViewModel);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1);
+            result.Errors.First().ErrorMessage.Should().Be("Path to Anki media collection cannot be empty");
+        }
+
+        [TestMethod]
+        public async Task Validate_WhenDirectoryDoesNotExist_ReturnsFalse()
+        {
+            var appSettings = _fixture.Create<AppSettings>();
+            appSettings.AnkiSoundsFolder = @"C:\NonExistentDirectory";
+
+            Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(false);
+
+            SettingsViewModel settingsViewModel = await CreateSettingsViewModelAsync(appSettings);
+
+            var sut = _fixture.Create<SettingsViewModelValidator>();
+            ValidationResult result = sut.Validate(settingsViewModel);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1);
+            result.Errors.First().ErrorMessage.Should().Be("The specified directory does not exist");
         }
 
         private async Task<SettingsViewModel> CreateSettingsViewModelAsync(AppSettings appSettings)

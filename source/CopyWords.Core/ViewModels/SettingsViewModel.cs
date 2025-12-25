@@ -264,8 +264,6 @@ namespace CopyWords.Core.ViewModels
         internal bool CanSaveSettings()
         {
             // Apply the validation and get the result
-            ValidationResult = _settingsViewModelValidator.ValidateAsync(this).GetAwaiter().GetResult();
-
             if (SynchronizationContext.Current == null && TaskScheduler.Current == TaskScheduler.Default)
             {
                 ValidationResult = _settingsViewModelValidator.ValidateAsync(this).GetAwaiter().GetResult();
