@@ -144,6 +144,7 @@ namespace CopyWords.Core.ViewModels
         }
 
         [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst15.0")]
         [RelayCommand]
         public async Task SelectAnkiDeckNameAsync(CancellationToken cancellationToken)
         {
@@ -171,6 +172,7 @@ namespace CopyWords.Core.ViewModels
         }
 
         [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst15.0")]
         [RelayCommand]
         public async Task SelectAnkiModelNameAsync(CancellationToken cancellationToken)
         {
@@ -247,7 +249,7 @@ namespace CopyWords.Core.ViewModels
             AnkiDeckName = appSettings.AnkiDeckName;
             AnkiModelName = appSettings.AnkiModelName;
 
-            if (string.IsNullOrEmpty(appSettings.AnkiSoundsFolder) && _deviceInfo.Platform == DevicePlatform.WinUI)
+            if (string.IsNullOrEmpty(appSettings.AnkiSoundsFolder) && (_deviceInfo.Platform == DevicePlatform.WinUI || _deviceInfo.Platform == DevicePlatform.MacCatalyst))
             {
                 AnkiSoundsFolder = await _ankiConnectService.GetAnkiMediaDirectoryPathAsync(cancellationToken);
             }
