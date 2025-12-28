@@ -60,7 +60,8 @@ namespace CopyWords.Core.Services
             appSettings.MainWindowXPos = GetDoubleValue("MainWindowXPos", 100);
             appSettings.MainWindowYPos = GetDoubleValue("MainWindowYPos", 100);
 
-            appSettings.AnkiDeckName = _preferences.Get("AnkiDeckName", string.Empty);
+            appSettings.AnkiDeckNameDanish = _preferences.Get("AnkiDeckNameDanish", string.Empty);
+            appSettings.AnkiDeckNameSpanish = _preferences.Get("AnkiDeckNameSpanish", string.Empty);
             appSettings.AnkiModelName = _preferences.Get("AnkiModelName", string.Empty);
             appSettings.AnkiSoundsFolder = _preferences.Get("AnkiSoundsFolder", Path.GetTempPath());
 
@@ -83,7 +84,8 @@ namespace CopyWords.Core.Services
             SetDoubleValue("MainWindowXPos", appSettings.MainWindowXPos);
             SetDoubleValue("MainWindowYPos", appSettings.MainWindowYPos);
 
-            _preferences.Set("AnkiDeckName", appSettings.AnkiDeckName);
+            _preferences.Set("AnkiDeckNameDanish", appSettings.AnkiDeckNameDanish);
+            _preferences.Set("AnkiDeckNameSpanish", appSettings.AnkiDeckNameSpanish);
             _preferences.Set("AnkiModelName", appSettings.AnkiModelName);
             _preferences.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder);
             _preferences.Set("ShowCopyButtons", appSettings.ShowCopyButtons);

@@ -220,11 +220,11 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #endregion
 
-        #region Tests for SelectAnkiDeckNameAsync
+        #region Tests for SelectAnkiDeckNameDanishAsync
 
         [SupportedOSPlatform("windows")]
         [TestMethod]
-        public async Task SelectAnkiDeckNameAsync_WhenDecksAreAvailableAndUserSelectsDeck_SetsAnkiDeckName()
+        public async Task SelectAnkiDeckNameDanishAsync_WhenDecksAreAvailableAndUserSelectsDeck_SetsAnkiDeckNameDanish()
         {
             // Arrange
             var deckNames = new List<string> { "Default", "Japanese", "English" };
@@ -246,10 +246,10 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.SelectAnkiDeckNameAsync(CancellationToken.None);
+            await sut.SelectAnkiDeckNameDanishAsync(CancellationToken.None);
 
             // Assert
-            sut.AnkiDeckName.Should().Be(selectedDeckName);
+            sut.AnkiDeckNameDanish.Should().Be(selectedDeckName);
             ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
             dialogServiceMock.Verify(x => x.DisplayActionSheetAsync(
                 "Select deck:",
@@ -261,7 +261,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
         [SupportedOSPlatform("windows")]
         [TestMethod]
-        public async Task SelectAnkiDeckNameAsync_WhenDecksAreAvailableAndUserCancels_DoesNotChangeAnkiDeckName()
+        public async Task SelectAnkiDeckNameDanishAsync_WhenDecksAreAvailableAndUserCancels_DoesNotChangeAnkiDeckNameDanish()
         {
             // Arrange
             var deckNames = new List<string> { "Default", "Japanese", "English" };
@@ -281,19 +281,19 @@ namespace CopyWords.Core.Tests.ViewModels
                 .ReturnsAsync("Cancel");
 
             var sut = _fixture.Create<SettingsViewModel>();
-            sut.AnkiDeckName = originalDeckName;
+            sut.AnkiDeckNameDanish = originalDeckName;
 
             // Act
-            await sut.SelectAnkiDeckNameAsync(CancellationToken.None);
+            await sut.SelectAnkiDeckNameDanishAsync(CancellationToken.None);
 
             // Assert
-            sut.AnkiDeckName.Should().Be(originalDeckName);
+            sut.AnkiDeckNameDanish.Should().Be(originalDeckName);
             ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [SupportedOSPlatform("windows")]
         [TestMethod]
-        public async Task SelectAnkiDeckNameAsync_WhenDecksAreAvailableAndUserSelectsEmptyResult_DoesNotChangeAnkiDeckName()
+        public async Task SelectAnkiDeckNameDanishAsync_WhenDecksAreAvailableAndUserSelectsEmptyResult_DoesNotChangeAnkiDeckNameDanish()
         {
             // Arrange
             var deckNames = new List<string> { "Default", "Japanese", "English" };
@@ -313,19 +313,19 @@ namespace CopyWords.Core.Tests.ViewModels
                 .ReturnsAsync(string.Empty);
 
             var sut = _fixture.Create<SettingsViewModel>();
-            sut.AnkiDeckName = originalDeckName;
+            sut.AnkiDeckNameDanish = originalDeckName;
 
             // Act
-            await sut.SelectAnkiDeckNameAsync(CancellationToken.None);
+            await sut.SelectAnkiDeckNameDanishAsync(CancellationToken.None);
 
             // Assert
-            sut.AnkiDeckName.Should().Be(originalDeckName);
+            sut.AnkiDeckNameDanish.Should().Be(originalDeckName);
             ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [SupportedOSPlatform("windows")]
         [TestMethod]
-        public async Task SelectAnkiDeckNameAsync_WhenNoDecksAreAvailable_ShowsAlert()
+        public async Task SelectAnkiDeckNameDanishAsync_WhenNoDecksAreAvailable_ShowsAlert()
         {
             // Arrange
             var deckNames = new List<string>();
@@ -339,7 +339,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.SelectAnkiDeckNameAsync(CancellationToken.None);
+            await sut.SelectAnkiDeckNameDanishAsync(CancellationToken.None);
 
             // Assert
             ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -357,7 +357,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
         [SupportedOSPlatform("windows")]
         [TestMethod]
-        public async Task SelectAnkiDeckNameAsync_WhenExceptionIsThrown_ShowsErrorAlert()
+        public async Task SelectAnkiDeckNameDanishAsync_WhenExceptionIsThrown_ShowsErrorAlert()
         {
             // Arrange
             string exceptionMessage = "AnkiConnect is not running";
@@ -371,7 +371,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.SelectAnkiDeckNameAsync(CancellationToken.None);
+            await sut.SelectAnkiDeckNameDanishAsync(CancellationToken.None);
 
             // Assert
             ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -379,6 +379,79 @@ namespace CopyWords.Core.Tests.ViewModels
                 "Cannot select deck",
                 $"Error occurred while trying to select deck name: {exceptionMessage}",
                 "OK"), Times.Once);
+        }
+
+        #endregion
+
+        #region Tests for SelectAnkiDeckNameSpanishAsync
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiDeckNameSpanishAsync_WhenDecksAreAvailableAndUserSelectsDeck_SetsAnkiDeckNameSpanish()
+        {
+            // Arrange
+            var deckNames = new List<string> { "Default", "Japanese", "Spanish" };
+            string selectedDeckName = "Spanish";
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(deckNames);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<FlowDirection>(),
+                    It.IsAny<string[]>()))
+                .ReturnsAsync(selectedDeckName);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.SelectAnkiDeckNameSpanishAsync(CancellationToken.None);
+
+            // Assert
+            sut.AnkiDeckNameSpanish.Should().Be(selectedDeckName);
+            ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayActionSheetAsync(
+                "Select deck:",
+                "Cancel",
+                null!,
+                FlowDirection.LeftToRight,
+                It.Is<string[]>(arr => arr.SequenceEqual(deckNames))), Times.Once);
+        }
+
+        [SupportedOSPlatform("windows")]
+        [TestMethod]
+        public async Task SelectAnkiDeckNameSpanishAsync_WhenDecksAreAvailableAndUserCancels_DoesNotChangeAnkiDeckNameSpanish()
+        {
+            // Arrange
+            var deckNames = new List<string> { "Default", "Japanese", "Spanish" };
+            string originalDeckName = "Original";
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(deckNames);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<FlowDirection>(),
+                    It.IsAny<string[]>()))
+                .ReturnsAsync("Cancel");
+
+            var sut = _fixture.Create<SettingsViewModel>();
+            sut.AnkiDeckNameSpanish = originalDeckName;
+
+            // Act
+            await sut.SelectAnkiDeckNameSpanishAsync(CancellationToken.None);
+
+            // Assert
+            sut.AnkiDeckNameSpanish.Should().Be(originalDeckName);
+            ankiConnectServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         #endregion
@@ -564,7 +637,8 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.UpdateUIAsync(appSettings, CancellationToken.None);
 
             // Assert
-            sut.AnkiDeckName.Should().Be(appSettings.AnkiDeckName);
+            sut.AnkiDeckNameDanish.Should().Be(appSettings.AnkiDeckNameDanish);
+            sut.AnkiDeckNameSpanish.Should().Be(appSettings.AnkiDeckNameSpanish);
             sut.AnkiModelName.Should().Be(appSettings.AnkiModelName);
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
             sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);

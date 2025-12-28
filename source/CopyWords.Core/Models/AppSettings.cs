@@ -12,7 +12,9 @@ namespace CopyWords.Core.Models
 
         public double MainWindowYPos { get; set; }
 
-        public string AnkiDeckName { get; set; } = string.Empty;
+        public string AnkiDeckNameDanish { get; set; } = string.Empty;
+
+        public string AnkiDeckNameSpanish { get; set; } = string.Empty;
 
         public string AnkiModelName { get; set; } = string.Empty;
 

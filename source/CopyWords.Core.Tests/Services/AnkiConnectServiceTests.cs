@@ -126,7 +126,7 @@ namespace CopyWords.Core.Tests.Services
             dialogServiceMock
                 .Setup(ds => ds.DisplayAlertAsync(
                     "Note already exists",
-                    $"Note '{note.Front}' already exists. Do you want to update it with current values from CopyWords?",
+                    $"Note '{note.Front}' already exists in the deck '{note.DeckName}'. Do you want to update it with current values from CopyWords?",
                     "Yes",
                     "No"))
                 .ReturnsAsync(true);
@@ -142,7 +142,7 @@ namespace CopyWords.Core.Tests.Services
             // Verify that the dialog was shown
             dialogServiceMock.Verify(ds => ds.DisplayAlertAsync(
                 "Note already exists",
-                $"Note '{note.Front}' already exists. Do you want to update it with current values from CopyWords?",
+                $"Note '{note.Front}' already exists in the deck '{note.DeckName}'. Do you want to update it with current values from CopyWords?",
                 "Yes",
                 "No"), Times.Once);
 
@@ -228,7 +228,7 @@ namespace CopyWords.Core.Tests.Services
             // Verify that the dialog was shown
             dialogServiceMock.Verify(ds => ds.DisplayAlertAsync(
                 "Note already exists",
-                $"Note '{note.Front}' already exists. Do you want to update it with current values from CopyWords?",
+                $"Note '{note.Front}' already exists in the deck '{note.DeckName}'. Do you want to update it with current values from CopyWords?",
                 "Yes",
                 "No"), Times.Once);
 

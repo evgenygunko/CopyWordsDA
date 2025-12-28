@@ -91,8 +91,8 @@
                         Style="{StaticResource CheckBoxLabelStyle}" />
                 </HorizontalStackLayout>
 
-                <!-- Anki Deck Name -->
-                <Label Text="Deck name:" Style="{StaticResource FieldLabelStyle}" />
+                <!-- Anki Deck Name Danish -->
+                <Label Text="Deck name (Danish):" Style="{StaticResource FieldLabelStyle}" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -102,10 +102,33 @@
                     <Entry Grid.Column="0"
                            IsEnabled="False"
                            Style="{StaticResource InputEntryStyle}"
-                           Text="{Binding AnkiDeckName}" />
+                           Text="{Binding AnkiDeckNameDanish}" />
                     <ImageButton Grid.Column="1"
                         Margin="8,0,0,0"
-                        Command="{Binding SelectAnkiDeckNameCommand}">
+                        Command="{Binding SelectAnkiDeckNameDanishCommand}">
+                        <ImageButton.Source>
+                            <FontImageSource
+                                FontFamily="MaterialIconsOutlined-Regular"
+                                Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"/>
+                        </ImageButton.Source>
+                    </ImageButton>
+                </Grid>
+
+                <!-- Anki Deck Name Spanish -->
+                <Label Text="Deck name (Spanish):" Style="{StaticResource FieldLabelStyle}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Entry Grid.Column="0"
+                           IsEnabled="False"
+                           Style="{StaticResource InputEntryStyle}"
+                           Text="{Binding AnkiDeckNameSpanish}" />
+                    <ImageButton Grid.Column="1"
+                        Margin="8,0,0,0"
+                        Command="{Binding SelectAnkiDeckNameSpanishCommand}">
                         <ImageButton.Source>
                             <FontImageSource
                                 FontFamily="MaterialIconsOutlined-Regular"

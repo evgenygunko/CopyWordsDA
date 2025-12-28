@@ -23,7 +23,9 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             _fixture = FixtureFactory.CreateFixture();
 
+            // Default to Danish parser
             _appSettings = _fixture.Create<AppSettings>();
+            _appSettings.SelectedParser = SourceLanguage.Danish.ToString();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(_appSettings);
@@ -544,11 +546,42 @@ namespace CopyWords.Core.Tests.ViewModels
         #region Tests for AddNoteWithAnkiConnectAsync
 
         [TestMethod]
-        public async Task AddNoteWithAnkiConnectAsync_WhenAnkiDeckNameIsEmpty_ShowsAlert()
+        public async Task AddNoteWithAnkiConnectAsync_WhenAnkiDeckNameDanishIsEmptyAndParserIsDanish_ShowsAlert()
         {
             // Arrange
             AppSettings appSettings = _fixture.Create<AppSettings>();
-            appSettings.AnkiDeckName = string.Empty;
+            appSettings.AnkiDeckNameDanish = string.Empty;
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.AddNoteWithAnkiConnectAsync();
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "Cannot add note",
+                "Please configure Anki deck name and model name in the settings.",
+                "OK"));
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileFrontAsync(It.IsAny<ObservableCollection<DefinitionViewModel>>()), Times.Never);
+            ankiConnectServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiConnectAsync_WhenAnkiDeckNameSpanishIsEmptyAndParserIsSpanish_ShowsAlert()
+        {
+            // Arrange
+            AppSettings appSettings = _fixture.Create<AppSettings>();
+            appSettings.AnkiDeckNameSpanish = string.Empty;
+            appSettings.SelectedParser = SourceLanguage.Spanish.ToString();
 
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
@@ -581,6 +614,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(SourceLanguage.Danish.ToString());
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
             var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
@@ -624,7 +658,7 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             dialogServiceMock.Verify(x => x.DisplayAlertAsync(
                 "Cannot add note",
-                "Please select at least example.",
+                "Please select at least one example.",
                 "OK"));
             ankiConnectServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>(), It.IsAny<CancellationToken>()), Times.Never);
         }
@@ -652,7 +686,7 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             dialogServiceMock.Verify(x => x.DisplayAlertAsync(
                 "Cannot add note",
-                "Please select at least example.",
+                "Please select at least one example.",
                 "OK"));
             ankiConnectServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>(), It.IsAny<CancellationToken>()), Times.Never);
         }
@@ -686,7 +720,7 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             ankiConnectServiceMock.Verify(x => x.AddNoteAsync(
                 It.Is<Models.AnkiNote>(note =>
-                    note.DeckName == _appSettings.AnkiDeckName &&
+                    note.DeckName == _appSettings.AnkiDeckNameDanish &&
                     note.ModelName == _appSettings.AnkiModelName &&
                     note.Front == front &&
                     note.Back == back &&
@@ -698,7 +732,7 @@ namespace CopyWords.Core.Tests.ViewModels
                     note.Options.AllowDuplicate == false &&
                     note.Options.DuplicateScope == "deck" &&
                     note.Options.DuplicateScopeOptions != null &&
-                    note.Options.DuplicateScopeOptions.DeckName == _appSettings.AnkiDeckName &&
+                    note.Options.DuplicateScopeOptions.DeckName == _appSettings.AnkiDeckNameDanish &&
                     note.Options.DuplicateScopeOptions.CheckChildren == false),
                 It.IsAny<CancellationToken>()), Times.Once);
 
@@ -747,7 +781,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             ankiConnectServiceMock.Verify(x => x.AddNoteAsync(
                 It.Is<Models.AnkiNote>(note =>
-                    note.DeckName == _appSettings.AnkiDeckName &&
+                    note.DeckName == _appSettings.AnkiDeckNameDanish &&
                     note.ModelName == _appSettings.AnkiModelName &&
                     note.Front == front &&
                     note.Back == back &&
@@ -759,7 +793,7 @@ namespace CopyWords.Core.Tests.ViewModels
                     note.Options.AllowDuplicate == false &&
                     note.Options.DuplicateScope == "deck" &&
                     note.Options.DuplicateScopeOptions != null &&
-                    note.Options.DuplicateScopeOptions.DeckName == _appSettings.AnkiDeckName &&
+                    note.Options.DuplicateScopeOptions.DeckName == _appSettings.AnkiDeckNameDanish &&
                     note.Options.DuplicateScopeOptions.CheckChildren == false),
                 It.IsAny<CancellationToken>()), Times.Once);
 
@@ -806,7 +840,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             ankiConnectServiceMock.Verify(x => x.AddNoteAsync(
                 It.Is<Models.AnkiNote>(note =>
-                    note.DeckName == _appSettings.AnkiDeckName &&
+                    note.DeckName == _appSettings.AnkiDeckNameDanish &&
                     note.ModelName == _appSettings.AnkiModelName &&
                     note.Front == front &&
                     note.Back == back &&
@@ -818,7 +852,7 @@ namespace CopyWords.Core.Tests.ViewModels
                     note.Options.AllowDuplicate == false &&
                     note.Options.DuplicateScope == "deck" &&
                     note.Options.DuplicateScopeOptions != null &&
-                    note.Options.DuplicateScopeOptions.DeckName == _appSettings.AnkiDeckName &&
+                    note.Options.DuplicateScopeOptions.DeckName == _appSettings.AnkiDeckNameDanish &&
                     note.Options.DuplicateScopeOptions.CheckChildren == false),
                 It.IsAny<CancellationToken>()), Times.Once);
 

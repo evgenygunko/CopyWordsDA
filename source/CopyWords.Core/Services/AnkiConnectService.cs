@@ -65,7 +65,7 @@ namespace CopyWords.Core.Services
                 {
                     bool shouldUpdate = await _dialogService.DisplayAlertAsync(
                         "Note already exists",
-                        $"Note '{note.Front}' already exists. Do you want to update it with current values from CopyWords?",
+                        $"Note '{note.Front}' already exists in the deck '{note.DeckName}'. Do you want to update it with current values from CopyWords?",
                         "Yes",
                         "No");
 

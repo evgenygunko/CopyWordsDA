@@ -54,8 +54,12 @@ namespace CopyWords.Core.ViewModels
         internal bool CanUpdateIndividualSettings => _deviceInfo.Platform == DevicePlatform.Android;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SelectAnkiDeckNameCommand))]
-        public partial string? AnkiDeckName { get; set; }
+        [NotifyCanExecuteChangedFor(nameof(SelectAnkiDeckNameDanishCommand))]
+        public partial string? AnkiDeckNameDanish { get; set; }
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SelectAnkiDeckNameSpanishCommand))]
+        public partial string? AnkiDeckNameSpanish { get; set; }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SelectAnkiModelNameCommand))]
@@ -146,7 +150,30 @@ namespace CopyWords.Core.ViewModels
         [SupportedOSPlatform("windows")]
         [SupportedOSPlatform("maccatalyst15.0")]
         [RelayCommand]
-        public async Task SelectAnkiDeckNameAsync(CancellationToken cancellationToken)
+        public async Task SelectAnkiDeckNameDanishAsync(CancellationToken cancellationToken)
+        {
+            string? selectedDeck = await SelectAnkiDeckNameAsync(cancellationToken);
+            if (selectedDeck != null)
+            {
+                AnkiDeckNameDanish = selectedDeck;
+            }
+        }
+
+        [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst15.0")]
+        [RelayCommand]
+        public async Task SelectAnkiDeckNameSpanishAsync(CancellationToken cancellationToken)
+        {
+            string? selectedDeck = await SelectAnkiDeckNameAsync(cancellationToken);
+            if (selectedDeck != null)
+            {
+                AnkiDeckNameSpanish = selectedDeck;
+            }
+        }
+
+        [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst15.0")]
+        private async Task<string?> SelectAnkiDeckNameAsync(CancellationToken cancellationToken)
         {
             try
             {
@@ -157,7 +184,7 @@ namespace CopyWords.Core.ViewModels
                     string result = await _dialogService.DisplayActionSheetAsync(title: "Select deck:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, deckNames.ToArray());
                     if (!string.IsNullOrEmpty(result) && result != "Cancel")
                     {
-                        AnkiDeckName = result;
+                        return result;
                     }
                 }
                 else
@@ -169,6 +196,8 @@ namespace CopyWords.Core.ViewModels
             {
                 await _dialogService.DisplayAlertAsync("Cannot select deck", "Error occurred while trying to select deck name: " + ex.Message, "OK");
             }
+
+            return null;
         }
 
         [SupportedOSPlatform("windows")]
@@ -246,7 +275,8 @@ namespace CopyWords.Core.ViewModels
 
         internal async Task UpdateUIAsync(AppSettings appSettings, CancellationToken cancellationToken)
         {
-            AnkiDeckName = appSettings.AnkiDeckName;
+            AnkiDeckNameDanish = appSettings.AnkiDeckNameDanish;
+            AnkiDeckNameSpanish = appSettings.AnkiDeckNameSpanish;
             AnkiModelName = appSettings.AnkiModelName;
 
             if (string.IsNullOrEmpty(appSettings.AnkiSoundsFolder) && (_deviceInfo.Platform == DevicePlatform.WinUI || _deviceInfo.Platform == DevicePlatform.MacCatalyst))
@@ -350,7 +380,8 @@ namespace CopyWords.Core.ViewModels
 
         private void UpdateAppSettingsWithCurrentValues(AppSettings appSettings)
         {
-            appSettings.AnkiDeckName = AnkiDeckName ?? string.Empty;
+            appSettings.AnkiDeckNameDanish = AnkiDeckNameDanish ?? string.Empty;
+            appSettings.AnkiDeckNameSpanish = AnkiDeckNameSpanish ?? string.Empty;
             appSettings.AnkiModelName = AnkiModelName ?? string.Empty;
             appSettings.AnkiSoundsFolder = AnkiSoundsFolder ?? string.Empty;
             appSettings.ShowCopyButtons = ShowCopyButtons;

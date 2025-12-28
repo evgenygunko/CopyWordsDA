@@ -182,7 +182,9 @@ namespace CopyWords.Core.ViewModels
             try
             {
                 AppSettings appSettings = _settingsService.LoadSettings();
-                if (string.IsNullOrEmpty(appSettings.AnkiDeckName) || string.IsNullOrEmpty(appSettings.AnkiModelName))
+                string deckName = (appSettings.SelectedParser == SourceLanguage.Spanish.ToString()) ? appSettings.AnkiDeckNameSpanish : appSettings.AnkiDeckNameDanish;
+
+                if (string.IsNullOrEmpty(deckName) || string.IsNullOrEmpty(appSettings.AnkiModelName))
                 {
                     await _dialogService.DisplayAlertAsync("Cannot add note", "Please configure Anki deck name and model name in the settings.", "OK");
                     return;
@@ -191,14 +193,14 @@ namespace CopyWords.Core.ViewModels
                 string front = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModels);
                 if (string.IsNullOrEmpty(front))
                 {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least example.", "OK");
+                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
                     return;
                 }
 
                 string back = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModels);
                 if (string.IsNullOrEmpty(back))
                 {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least example.", "OK");
+                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
                     return;
                 }
 
@@ -222,11 +224,11 @@ namespace CopyWords.Core.ViewModels
                     AllowDuplicate: false,
                     DuplicateScope: "deck",
                     DuplicateScopeOptions: new AnkiDuplicateScopeOptions(
-                        DeckName: appSettings.AnkiDeckName,
+                        DeckName: deckName,
                         CheckChildren: false));
 
                 var note = new AnkiNote(
-                    DeckName: appSettings.AnkiDeckName,
+                    DeckName: deckName,
                     ModelName: appSettings.AnkiModelName,
                     Front: front,
                     Back: back,
