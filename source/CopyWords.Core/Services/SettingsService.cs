@@ -59,45 +59,45 @@ namespace CopyWords.Core.Services
         public AppSettings LoadSettings()
         {
             AppSettings appSettings = new AppSettings();
-            appSettings.MainWindowWidth = GetDoubleValue("MainWindowWidth", 800);
-            appSettings.MainWindowHeight = GetDoubleValue("MainWindowHeight", 600);
-            appSettings.MainWindowXPos = GetDoubleValue("MainWindowXPos", 100);
-            appSettings.MainWindowYPos = GetDoubleValue("MainWindowYPos", 100);
+            appSettings.MainWindowWidth = GetDoubleValue(nameof(AppSettings.MainWindowWidth), 800);
+            appSettings.MainWindowHeight = GetDoubleValue(nameof(AppSettings.MainWindowHeight), 600);
+            appSettings.MainWindowXPos = GetDoubleValue(nameof(AppSettings.MainWindowXPos), 100);
+            appSettings.MainWindowYPos = GetDoubleValue(nameof(AppSettings.MainWindowYPos), 100);
 
-            appSettings.AnkiDeckNameDanish = _preferences.Get("AnkiDeckNameDanish", string.Empty);
-            appSettings.AnkiDeckNameSpanish = _preferences.Get("AnkiDeckNameSpanish", string.Empty);
-            appSettings.AnkiModelName = _preferences.Get("AnkiModelName", string.Empty);
-            appSettings.AnkiSoundsFolder = _preferences.Get("AnkiSoundsFolder", Path.GetTempPath());
+            appSettings.AnkiDeckNameDanish = _preferences.Get(nameof(AppSettings.AnkiDeckNameDanish), string.Empty);
+            appSettings.AnkiDeckNameSpanish = _preferences.Get(nameof(AppSettings.AnkiDeckNameSpanish), string.Empty);
+            appSettings.AnkiModelName = _preferences.Get(nameof(AppSettings.AnkiModelName), string.Empty);
+            appSettings.AnkiSoundsFolder = _preferences.Get(nameof(AppSettings.AnkiSoundsFolder), Path.GetTempPath());
 
             // On mobile by default show the app in a "dictionary" mode, without copy buttons.
             bool showCopyButtonsDefaultValue = _deviceInfo.Platform != DevicePlatform.Android;
-            appSettings.ShowCopyButtons = _preferences.Get<bool>("ShowCopyButtons", showCopyButtonsDefaultValue);
+            appSettings.ShowCopyButtons = _preferences.Get<bool>(nameof(AppSettings.ShowCopyButtons), showCopyButtonsDefaultValue);
 
-            appSettings.ShowCopyWithAnkiConnectButton = _preferences.Get<bool>("ShowCopyWithAnkiConnectButton", false);
+            appSettings.ShowCopyWithAnkiConnectButton = _preferences.Get<bool>(nameof(AppSettings.ShowCopyWithAnkiConnectButton), false);
 
-            appSettings.CopyTranslatedMeanings = _preferences.Get<bool>("CopyTranslatedMeanings", true);
-            appSettings.SelectedParser = _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
-            appSettings.UseDarkTheme = _preferences.Get<bool>("UseDarkTheme", false);
+            appSettings.CopyTranslatedMeanings = _preferences.Get<bool>(nameof(AppSettings.CopyTranslatedMeanings), true);
+            appSettings.SelectedParser = _preferences.Get(nameof(AppSettings.SelectedParser), SourceLanguage.Danish.ToString());
+            appSettings.UseDarkTheme = _preferences.Get<bool>(nameof(AppSettings.UseDarkTheme), false);
 
             return appSettings;
         }
 
         public void SaveSettings(AppSettings appSettings)
         {
-            SetDoubleValue("MainWindowWidth", appSettings.MainWindowWidth);
-            SetDoubleValue("MainWindowHeight", appSettings.MainWindowHeight);
-            SetDoubleValue("MainWindowXPos", appSettings.MainWindowXPos);
-            SetDoubleValue("MainWindowYPos", appSettings.MainWindowYPos);
+            SetDoubleValue(nameof(AppSettings.MainWindowWidth), appSettings.MainWindowWidth);
+            SetDoubleValue(nameof(AppSettings.MainWindowHeight), appSettings.MainWindowHeight);
+            SetDoubleValue(nameof(AppSettings.MainWindowXPos), appSettings.MainWindowXPos);
+            SetDoubleValue(nameof(AppSettings.MainWindowYPos), appSettings.MainWindowYPos);
 
-            _preferences.Set("AnkiDeckNameDanish", appSettings.AnkiDeckNameDanish);
-            _preferences.Set("AnkiDeckNameSpanish", appSettings.AnkiDeckNameSpanish);
-            _preferences.Set("AnkiModelName", appSettings.AnkiModelName);
-            _preferences.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder);
-            _preferences.Set("ShowCopyButtons", appSettings.ShowCopyButtons);
-            _preferences.Set("ShowCopyWithAnkiConnectButton", appSettings.ShowCopyWithAnkiConnectButton);
-            _preferences.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings);
-            _preferences.Set("SelectedParser", appSettings.SelectedParser);
-            _preferences.Set("UseDarkTheme", appSettings.UseDarkTheme);
+            _preferences.Set(nameof(AppSettings.AnkiDeckNameDanish), appSettings.AnkiDeckNameDanish);
+            _preferences.Set(nameof(AppSettings.AnkiDeckNameSpanish), appSettings.AnkiDeckNameSpanish);
+            _preferences.Set(nameof(AppSettings.AnkiModelName), appSettings.AnkiModelName);
+            _preferences.Set(nameof(AppSettings.AnkiSoundsFolder), appSettings.AnkiSoundsFolder);
+            _preferences.Set(nameof(AppSettings.ShowCopyButtons), appSettings.ShowCopyButtons);
+            _preferences.Set(nameof(AppSettings.ShowCopyWithAnkiConnectButton), appSettings.ShowCopyWithAnkiConnectButton);
+            _preferences.Set(nameof(AppSettings.CopyTranslatedMeanings), appSettings.CopyTranslatedMeanings);
+            _preferences.Set(nameof(AppSettings.SelectedParser), appSettings.SelectedParser);
+            _preferences.Set(nameof(AppSettings.UseDarkTheme), appSettings.UseDarkTheme);
         }
 
         public async Task<AppSettings?> ImportSettingsAsync(string filePath)
@@ -125,22 +125,22 @@ namespace CopyWords.Core.Services
         {
             // On mobile by default show the app in a "dictionary" mode, without copy buttons.
             bool showCopyButtonsDefaultValue = _deviceInfo.Platform != DevicePlatform.Android;
-            return _preferences.Get<bool>("ShowCopyButtons", showCopyButtonsDefaultValue);
+            return _preferences.Get<bool>(nameof(AppSettings.ShowCopyButtons), showCopyButtonsDefaultValue);
         }
 
-        public void SetShowCopyButtons(bool value) => _preferences.Set("ShowCopyButtons", value);
+        public void SetShowCopyButtons(bool value) => _preferences.Set(nameof(AppSettings.ShowCopyButtons), value);
 
-        public bool GetShowAddNoteWithAnkiConnectButton() => _preferences.Get<bool>("ShowCopyWithAnkiConnectButton", false);
+        public bool GetShowAddNoteWithAnkiConnectButton() => _preferences.Get<bool>(nameof(AppSettings.ShowCopyWithAnkiConnectButton), false);
 
-        public void SetCopyTranslatedMeanings(bool value) => _preferences.Set("CopyTranslatedMeanings", value);
+        public void SetCopyTranslatedMeanings(bool value) => _preferences.Set(nameof(AppSettings.CopyTranslatedMeanings), value);
 
-        public bool GetUseDarkTheme() => _preferences.Get<bool>("UseDarkTheme", false);
+        public bool GetUseDarkTheme() => _preferences.Get<bool>(nameof(AppSettings.UseDarkTheme), false);
 
-        public void SetUseDarkTheme(bool value) => _preferences.Set("UseDarkTheme", value);
+        public void SetUseDarkTheme(bool value) => _preferences.Set(nameof(AppSettings.UseDarkTheme), value);
 
-        public string GetSelectedParser() => _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
+        public string GetSelectedParser() => _preferences.Get(nameof(AppSettings.SelectedParser), SourceLanguage.Danish.ToString());
 
-        public void SetSelectedParser(string value) => _preferences.Set("SelectedParser", value);
+        public void SetSelectedParser(string value) => _preferences.Set(nameof(AppSettings.SelectedParser), value);
 
         public void AddToHistory(string word)
         {
