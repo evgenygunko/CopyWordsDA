@@ -6,7 +6,7 @@
              x:DataType="MainViewModel"
              x:Class="CopyWords.MAUI.Views.MainPage"
              x:Name="contentPageMainPage"
-             Shell.BackgroundColor="Gray">
+             Shell.BackgroundColor="{StaticResource Gray500}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -82,7 +82,7 @@
 
                     <editors:SfAutocomplete
                             x:Name="autocomplete"
-                            BackgroundColor="#F4F2FC"
+                            BackgroundColor="{StaticResource AutocompleteBackgroundColor}"
                             ShowBorder="False"
                             FontSize="{OnPlatform 20, Android=14}"
                             Padding="{OnPlatform 0, Android='5,0,0,0'}"

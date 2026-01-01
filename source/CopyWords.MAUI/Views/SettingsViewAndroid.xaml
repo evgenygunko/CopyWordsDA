@@ -4,14 +4,6 @@
              x:DataType="SettingsViewModel"
              x:Class="CopyWords.MAUI.Views.SettingsViewAndroid">
 
-    <ContentView.Resources>
-        <Style x:Key="Filler" TargetType="BoxView">
-            <Setter Property="Color" Value="#E1E1E1" />
-            <Setter Property="HeightRequest" Value="20" />
-            <Setter Property="Margin" Value="0,10,0,10" />
-        </Style>
-    </ContentView.Resources>
-
     <VerticalStackLayout>
 
         <!-- Section "Backup" -->
@@ -36,7 +28,7 @@
 
                 <Image.Source>
                     <FontImageSource
-                        Color="Gray"
+                        Color="{StaticResource Gray500}"
                         FontFamily="MaterialIconsOutlined-Regular"
                         Glyph="{x:Static MaterialDesignIconFonts.Cloud_upload}" />
                 </Image.Source>
@@ -54,7 +46,7 @@
         </Grid>
 
         <!-- Horizontal line -->
-        <BoxView Color="#E1E1E1" HeightRequest="1" Margin="0,10,0,10" />
+        <BoxView Style="{StaticResource HorizontalDividerStyle}" Margin="0,10,0,10" />
 
         <Grid Margin="20,0,10,0" x:Name="gridImportSettings">
             <Grid.ColumnDefinitions>
@@ -76,7 +68,7 @@
 
                 <Image.Source>
                     <FontImageSource
-                        Color="Gray"
+                        Color="{StaticResource Gray500}"
                         FontFamily="MaterialIconsOutlined-Regular"
                         Glyph="{x:Static MaterialDesignIconFonts.Cloud_download}" />
                 </Image.Source>
@@ -94,7 +86,7 @@
         </Grid>
 
         <!-- Filler -->
-        <BoxView Style="{StaticResource Filler}" />
+        <BoxView Style="{StaticResource FillerStyle}" />
 
         <!-- Section "Dictionary mode" -->
         <Label Text="Dictionary mode" Margin="20,0,10,0" FontSize="Subtitle" />
@@ -118,7 +110,7 @@
         </Grid>
 
         <!-- Filler -->
-        <BoxView Style="{StaticResource Filler}" />
+        <BoxView Style="{StaticResource FillerStyle}" />
 
         <!-- Section "Translations" -->
         <Label Text="Translations" Margin="20,0,10,0" FontSize="Subtitle" />
@@ -142,7 +134,7 @@
         </Grid>
 
         <!-- Filler -->
-        <BoxView Style="{StaticResource Filler}" />
+        <BoxView Style="{StaticResource FillerStyle}" />
 
         <!-- Section "Other" -->
         <Label Text="Other" FontSize="Subtitle" Margin="20,0,10,0" />

@@ -15,7 +15,7 @@
 
     <Border
             BackgroundColor="{StaticResource TranslationBoxColor}"
-            Stroke="#CCCCCC"
+            Stroke="{StaticResource BorderStrokeColor}"
             StrokeThickness="1"
             Padding="{Binding BorderPadding}">
 

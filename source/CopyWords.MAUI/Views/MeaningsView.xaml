@@ -43,7 +43,7 @@
                                 IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
 
                             <Label Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}"/>
-                            <Label Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="Gray" Margin="0,2,0,0" />
+                            <Label Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="{StaticResource Gray500}" Margin="0,2,0,0" />
 
                         </VerticalStackLayout>
 

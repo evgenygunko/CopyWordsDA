@@ -21,14 +21,14 @@
                                 </OnPlatform>
                             </Label.Text>
                         </Label>
-                        <Label TextColor="#58b40b" Text="{Binding ContextEN, FallbackValue='ContextEN'}" />
+                        <Label TextColor="{StaticResource ContextGreenColor}" Text="{Binding ContextEN, FallbackValue='ContextEN'}" />
                     </HorizontalStackLayout>
 
                     <!--Meanings -->
                     <MeaningsView Margin="10,0,0,0" />
 
                     <!-- Horizontal line -->
-                    <BoxView Color="LightGray" HeightRequest="1" Margin="0,10,0,10"/>
+                    <BoxView Style="{StaticResource HorizontalDividerStyle}" Margin="0,10,0,10"/>
                 </VerticalStackLayout>
             </DataTemplate>
 

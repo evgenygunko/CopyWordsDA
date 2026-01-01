@@ -5,7 +5,7 @@
              x:DataType="SettingsViewModel"
              x:Name="contentPageSettingsPage"
              Title="Settings"
-             Shell.BackgroundColor="Gray">
+             Shell.BackgroundColor="{StaticResource Gray500}">
 
     <ContentPage.Behaviors>
         <EventToCommandBehavior

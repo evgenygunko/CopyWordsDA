@@ -5,7 +5,7 @@
              x:DataType="HistoryPageViewModel"
              x:Name="contentPageHistoryPage"
              Title="History"
-             Shell.BackgroundColor="Gray">
+             Shell.BackgroundColor="{StaticResource Gray500}">
 
     <ContentPage.Behaviors>
         <EventToCommandBehavior
@@ -24,7 +24,7 @@
         <ScrollView Grid.Row="0" Padding="20">
             <Border Padding="20,16"
                     Margin="0,4"
-                    Stroke="LightGray"
+                    Stroke="{StaticResource DividerColor}"
                     StrokeThickness="0.5">
 
                 <Border.StrokeShape>

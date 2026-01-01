@@ -37,6 +37,19 @@
     <Color x:Key="GreyBoxColor">#eaeff2</Color>
     <Color x:Key="SelectedItemColor">LightBlue</Color>
 
+    <!-- Context and text colors -->
+    <Color x:Key="ContextGreenColor">#58b40b</Color>
+    <Color x:Key="DividerColor">LightGray</Color>
+    <Color x:Key="BorderStrokeColor">#CCCCCC</Color>
+    <Color x:Key="AutocompleteBackgroundColor">#F4F2FC</Color>
+
+    <!-- Settings view colors -->
+    <Color x:Key="SettingsLabelColor">#2F2F3A</Color>
+    <Color x:Key="SettingsSectionHeaderColor">#1a1a1a</Color>
+    <Color x:Key="SettingsSectionDescriptionColor">#666666</Color>
+    <Color x:Key="SettingsFieldLabelColor">#333333</Color>
+    <Color x:Key="SettingsInputBackgroundColor">#F7F7FD</Color>
+
     <Color x:Key="Yellow100Accent">#F7B548</Color>
     <Color x:Key="Yellow200Accent">#FFD590</Color>
     <Color x:Key="Yellow300Accent">#FFE5B9</Color>

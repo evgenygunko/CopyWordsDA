@@ -39,7 +39,7 @@
             <Label Text="{Binding Path=UpdateDescription}" TextType="Html" />
 
             <!-- Horizontal line -->
-            <BoxView Color="LightGray" HeightRequest="1" Margin="0,30,0,0"/>
+            <BoxView Style="{StaticResource HorizontalDividerStyle}" Margin="0,30,0,0"/>
 
             <Grid>
                 <Grid.ColumnDefinitions>

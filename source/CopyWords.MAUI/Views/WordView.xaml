@@ -188,7 +188,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Anki" VerticalOptions="Center" TextColor="White" />
+                                    <Label Text="Anki" VerticalOptions="Center" TextColor="{StaticResource White}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -214,7 +214,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Front" VerticalOptions="Center" TextColor="White" />
+                                    <Label Text="Front" VerticalOptions="Center" TextColor="{StaticResource White}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -240,7 +240,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Back" VerticalOptions="Center" TextColor="White" />
+                                    <Label Text="Back" VerticalOptions="Center" TextColor="{StaticResource White}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -266,7 +266,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Type" VerticalOptions="Center" TextColor="White" />
+                                    <Label Text="Type" VerticalOptions="Center" TextColor="{StaticResource White}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -292,7 +292,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Endings" VerticalOptions="Center" TextColor="White" />
+                                    <Label Text="Endings" VerticalOptions="Center" TextColor="{StaticResource White}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -317,7 +317,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Examples" VerticalOptions="Center" TextColor="White" />
+                                    <Label Text="Examples" VerticalOptions="Center" TextColor="{StaticResource White}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -327,7 +327,7 @@
         </OnPlatform>
 
         <!-- Horizontal line -->
-        <BoxView Grid.Row="2" Color="LightGray"  HeightRequest="1" Margin="0,15,0,0" />
+        <BoxView Grid.Row="2" Style="{StaticResource HorizontalDividerStyle}" Margin="0,15,0,0" />
 
         <!-- Definitions -->
         <DefinitionsView Grid.Row="3" />
