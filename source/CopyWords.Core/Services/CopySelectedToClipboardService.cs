@@ -50,6 +50,12 @@ namespace CopyWords.Core.Services
             DefinitionViewModel? definitionViewModel = FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionViewModels);
             if (definitionViewModel == null)
             {
+                // If no examples are selected, select the first definition
+                definitionViewModel = definitionViewModels.FirstOrDefault();
+            }
+
+            if (definitionViewModel == null)
+            {
                 return Task.FromResult(string.Empty);
             }
 
@@ -348,7 +354,7 @@ namespace CopyWords.Core.Services
             var viewModelsWithSelectedHeadwords = definitionViewModels.Where(x => x.HeadwordViewModel.IsEnglishTranslationChecked || x.HeadwordViewModel.IsRussianTranslationChecked);
             if (viewModelsWithSelectedHeadwords.Count() > 1)
             {
-                throw new ExamplesFromSeveralDefinitionsSelectedException("You’ve selected headwords from multiple definitions. Please choose headwords from only one.");
+                throw new ExamplesFromSeveralDefinitionsSelectedException("You've selected headwords from multiple definitions. Please choose headwords from only one.");
             }
 
             if (viewModelsWithSelectedHeadwords.Count() == 1)
@@ -361,7 +367,7 @@ namespace CopyWords.Core.Services
                 if (viewModelsWithSelectedExamplesInOtherDefinitions.Count() > 0)
                 {
                     throw new ExamplesFromSeveralDefinitionsSelectedException(
-                        "You’ve selected examples from definitions other than the one with the selected headword. Please choose examples and a headword from the same definition.");
+                        "You've selected examples from definitions other than the one with the selected headword. Please choose examples and a headword from the same definition.");
                 }
             }
 
@@ -373,7 +379,7 @@ namespace CopyWords.Core.Services
             }
             else if (viewModelsWithSelectedExamples.Count() > 1)
             {
-                throw new ExamplesFromSeveralDefinitionsSelectedException("You’ve selected examples from multiple definitions. Please choose examples from only one.");
+                throw new ExamplesFromSeveralDefinitionsSelectedException("You've selected examples from multiple definitions. Please choose examples from only one.");
             }
 
             return definitionViewModel;

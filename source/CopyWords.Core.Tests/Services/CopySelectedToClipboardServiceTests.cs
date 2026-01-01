@@ -21,14 +21,14 @@ namespace CopyWords.Core.Tests.Services
         #region Danish
 
         [TestMethod]
-        public async Task CompileFrontAsync_WhenNoExamplesSelected_ReturnsEmptyString()
+        public async Task CompileFrontAsync_WhenNoExamplesSelected_UsesFirstDefinition()
         {
             var definitionVMs = CreateVMForGrillspyd();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
-            string result = await sut.CompileFrontAsync(definitionVMs);
+            string front = await sut.CompileFrontAsync(definitionVMs);
 
-            result.Should().BeEmpty();
+            front.Should().Be("et grillspyd");
         }
 
         [TestMethod]
@@ -124,7 +124,7 @@ namespace CopyWords.Core.Tests.Services
 
             await sut.Invoking(x => x.CompileFrontAsync(definitionVMs))
                 .Should().ThrowAsync<ExamplesFromSeveralDefinitionsSelectedException>()
-                .WithMessage("You’ve selected examples from multiple definitions. Please choose examples from only one.");
+                .WithMessage("You've selected examples from multiple definitions. Please choose examples from only one.");
         }
 
         [TestMethod]
@@ -862,7 +862,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<CopySelectedToClipboardService>();
             sut.Invoking(x => x.FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionVMs))
                 .Should().Throw<ExamplesFromSeveralDefinitionsSelectedException>()
-                .WithMessage("You’ve selected headwords from multiple definitions. Please choose headwords from only one.");
+                .WithMessage("You've selected headwords from multiple definitions. Please choose headwords from only one.");
         }
 
         [TestMethod]
@@ -875,7 +875,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<CopySelectedToClipboardService>();
             sut.Invoking(x => x.FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionVMs))
                 .Should().Throw<ExamplesFromSeveralDefinitionsSelectedException>()
-                .WithMessage("You’ve selected examples from multiple definitions. Please choose examples from only one.");
+                .WithMessage("You've selected examples from multiple definitions. Please choose examples from only one.");
         }
 
         [TestMethod]
@@ -888,7 +888,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<CopySelectedToClipboardService>();
             sut.Invoking(x => x.FindDefinitionViewModelWithSelectedHeadwordOrExamples(definitionVMs))
                 .Should().Throw<ExamplesFromSeveralDefinitionsSelectedException>()
-                .WithMessage("You’ve selected examples from definitions other than the one with the selected headword. Please choose examples and a headword from the same definition.");
+                .WithMessage("You've selected examples from definitions other than the one with the selected headword. Please choose examples and a headword from the same definition.");
         }
 
         [TestMethod]
