@@ -27,5 +27,7 @@ namespace CopyWords.Core.Models
         public bool CopyTranslatedMeanings { get; set; }
 
         public string SelectedParser { get; set; } = string.Empty;
+
+        public bool UseDarkTheme { get; set; }
     }
 }

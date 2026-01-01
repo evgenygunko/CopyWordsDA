@@ -136,6 +136,30 @@
         <!-- Filler -->
         <BoxView Style="{StaticResource FillerStyle}" />
 
+        <!-- Section "Theme" -->
+        <Label Text="Theme" Margin="20,0,10,0" FontSize="Subtitle" />
+
+        <Grid Margin="20,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0"
+                   FontSize="13"
+                   VerticalOptions="Center"
+                   Text="Dark theme"/>
+            <Switch Grid.Row="0" Grid.Column="1"
+                IsToggled="{Binding UseDarkTheme}" />
+        </Grid>
+
+        <!-- Filler -->
+        <BoxView Style="{StaticResource FillerStyle}" />
+
         <!-- Section "Other" -->
         <Label Text="Other" FontSize="Subtitle" Margin="20,0,10,0" />
 

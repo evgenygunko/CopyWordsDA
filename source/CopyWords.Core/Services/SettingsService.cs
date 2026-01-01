@@ -23,6 +23,10 @@ namespace CopyWords.Core.Services
 
         void SetCopyTranslatedMeanings(bool value);
 
+        bool GetUseDarkTheme();
+
+        void SetUseDarkTheme(bool value);
+
         string GetSelectedParser();
 
         void SetSelectedParser(string value);
@@ -73,6 +77,7 @@ namespace CopyWords.Core.Services
 
             appSettings.CopyTranslatedMeanings = _preferences.Get<bool>("CopyTranslatedMeanings", true);
             appSettings.SelectedParser = _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
+            appSettings.UseDarkTheme = _preferences.Get<bool>("UseDarkTheme", false);
 
             return appSettings;
         }
@@ -92,6 +97,7 @@ namespace CopyWords.Core.Services
             _preferences.Set("ShowCopyWithAnkiConnectButton", appSettings.ShowCopyWithAnkiConnectButton);
             _preferences.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings);
             _preferences.Set("SelectedParser", appSettings.SelectedParser);
+            _preferences.Set("UseDarkTheme", appSettings.UseDarkTheme);
         }
 
         public async Task<AppSettings?> ImportSettingsAsync(string filePath)
@@ -127,6 +133,10 @@ namespace CopyWords.Core.Services
         public bool GetShowAddNoteWithAnkiConnectButton() => _preferences.Get<bool>("ShowCopyWithAnkiConnectButton", false);
 
         public void SetCopyTranslatedMeanings(bool value) => _preferences.Set("CopyTranslatedMeanings", value);
+
+        public bool GetUseDarkTheme() => _preferences.Get<bool>("UseDarkTheme", false);
+
+        public void SetUseDarkTheme(bool value) => _preferences.Set("UseDarkTheme", value);
 
         public string GetSelectedParser() => _preferences.Get("SelectedParser", SourceLanguage.Danish.ToString());
 

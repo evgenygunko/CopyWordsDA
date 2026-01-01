@@ -748,7 +748,7 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void OnShowCopyButtonsChangedInternal_WhenNotInitialized_DoesNotCallsSettingsService()
+        public void OnShowCopyButtonsChangedInternal_WhenNotInitialized_DoesNotCallSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
@@ -761,7 +761,7 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task OnShowCopyButtonsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
+        public async Task OnShowCopyButtonsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
@@ -795,7 +795,7 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void OnCopyTranslatedMeaningsChangedInternal_WhenNotInitialized_DoesNotCallsSettingsService()
+        public void OnCopyTranslatedMeaningsChangedInternal_WhenNotInitialized_DoesNotCallSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
@@ -808,7 +808,7 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task OnCopyTranslatedMeaningsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallsSettingsService()
+        public async Task OnCopyTranslatedMeaningsChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallSettingsService()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
@@ -819,6 +819,124 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.OnCopyTranslatedMeaningsChangedInternal(true);
 
             settingsServiceMock.Verify(x => x.SetCopyTranslatedMeanings(It.IsAny<bool>()), Times.Never);
+        }
+
+        #endregion
+
+        #region Tests for OnUseDarkThemeChangedInternal
+
+        [TestMethod]
+        [DataRow(true, AppTheme.Dark)]
+        [DataRow(false, AppTheme.Light)]
+        public async Task OnUseDarkThemeChangedInternal_WhenInitialized_CallsApplyTheme(bool value, AppTheme expectedTheme)
+        {
+            var appThemeServiceMock = _fixture.Freeze<Mock<IAppThemeService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            await sut.InitAsync(CancellationToken.None);
+            sut.OnUseDarkThemeChangedInternal(value);
+
+            appThemeServiceMock.Verify(x => x.ApplyTheme(expectedTheme), Times.Once);
+        }
+
+        [TestMethod]
+        public void OnUseDarkThemeChangedInternal_WhenNotInitialized_DoesNotCallApplyTheme()
+        {
+            var appThemeServiceMock = _fixture.Freeze<Mock<IAppThemeService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            sut.OnUseDarkThemeChangedInternal(true);
+
+            appThemeServiceMock.Verify(x => x.ApplyTheme(It.IsAny<AppTheme>()), Times.Never);
+        }
+
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public async Task OnUseDarkThemeChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService(bool value)
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            await sut.InitAsync(CancellationToken.None);
+            sut.OnUseDarkThemeChangedInternal(value);
+
+            settingsServiceMock.Verify(x => x.SetUseDarkTheme(value));
+        }
+
+        [TestMethod]
+        public void OnUseDarkThemeChangedInternal_WhenNotInitialized_DoesNotCallSettingsService()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            sut.OnUseDarkThemeChangedInternal(true);
+
+            settingsServiceMock.Verify(x => x.SetUseDarkTheme(It.IsAny<bool>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task OnUseDarkThemeChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallSettingsService()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            await sut.InitAsync(CancellationToken.None);
+            sut.OnUseDarkThemeChangedInternal(true);
+
+            settingsServiceMock.Verify(x => x.SetUseDarkTheme(It.IsAny<bool>()), Times.Never);
+        }
+
+        #endregion
+
+        #region Tests for CancelAsync
+
+        [TestMethod]
+        [DataRow(true, AppTheme.Dark)]
+        [DataRow(false, AppTheme.Light)]
+        public async Task CancelAsync_RestoresThemeFromSettings(bool useDarkTheme, AppTheme expectedTheme)
+        {
+            // Arrange
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetUseDarkTheme()).Returns(useDarkTheme);
+
+            var appThemeServiceMock = _fixture.Freeze<Mock<IAppThemeService>>();
+            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.CancelAsync();
+
+            // Assert
+            settingsServiceMock.Verify(x => x.GetUseDarkTheme(), Times.Once);
+            appThemeServiceMock.Verify(x => x.ApplyTheme(expectedTheme), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task CancelAsync_NavigatesBack()
+        {
+            // Arrange
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            // Act
+            await sut.CancelAsync();
+
+            // Assert
+            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..")), Times.Once);
         }
 
         #endregion

@@ -38,6 +38,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Get("ShowCopyButtons", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("UseDarkTheme", It.IsAny<bool>(), It.IsAny<string>()));
         }
 
         #endregion
@@ -66,6 +67,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("ShowCopyButtons", appSettings.ShowCopyButtons, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("SelectedParser", appSettings.SelectedParser, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("UseDarkTheme", appSettings.UseDarkTheme, It.IsAny<string>()));
         }
 
         #endregion
@@ -96,6 +98,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Get("ShowCopyButtons", true, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", true, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("UseDarkTheme", It.IsAny<bool>(), It.IsAny<string>()));
         }
 
         #endregion
@@ -128,6 +131,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("ShowCopyButtons", false, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", false, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("UseDarkTheme", It.IsAny<bool>(), It.IsAny<string>()));
         }
 
         #endregion

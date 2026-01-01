@@ -8,6 +8,7 @@ using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
 using CopyWords.Core.Validators;
 using CopyWords.Core.ViewModels;
+using CopyWords.MAUI.Services;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
@@ -76,6 +77,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IFileIOService, FileIOService>();
         builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
         builder.Services.AddSingleton<IEmailService, EmailService>();
+        builder.Services.AddSingleton<IAppThemeService, AppThemeService>();
         builder.Services.AddSingleton(Preferences.Default);
         builder.Services.AddSingleton(FolderPicker.Default);
         builder.Services.AddSingleton(FilePicker.Default);

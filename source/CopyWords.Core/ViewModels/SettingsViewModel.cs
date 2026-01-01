@@ -26,6 +26,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IFileSaver _fileSaver;
         private readonly IValidator<SettingsViewModel> _settingsViewModelValidator;
         private readonly IAnkiConnectService _ankiConnectService;
+        private readonly IAppThemeService _appThemeService;
 
         private bool _isInitialized;
 
@@ -37,7 +38,8 @@ namespace CopyWords.Core.ViewModels
             IDeviceInfo deviceInfo,
             IFileSaver fileSaver,
             IValidator<SettingsViewModel> settingsViewModelValidator,
-            IAnkiConnectService ankiConnectService)
+            IAnkiConnectService ankiConnectService,
+            IAppThemeService appThemeService)
         {
             _settingsService = settingsService;
             _dialogService = dialogService;
@@ -47,6 +49,7 @@ namespace CopyWords.Core.ViewModels
             _fileSaver = fileSaver;
             _settingsViewModelValidator = settingsViewModelValidator;
             _ankiConnectService = ankiConnectService;
+            _appThemeService = appThemeService;
         }
 
         #region Properties
@@ -89,6 +92,15 @@ namespace CopyWords.Core.ViewModels
         partial void OnCopyTranslatedMeaningsChanged(bool value)
         {
             OnCopyTranslatedMeaningsChangedInternal(value);
+        }
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
+        public partial bool UseDarkTheme { get; set; }
+
+        partial void OnUseDarkThemeChanged(bool value)
+        {
+            OnUseDarkThemeChangedInternal(value);
         }
 
         [ObservableProperty]
@@ -257,6 +269,10 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task CancelAsync()
         {
+            // Restore theme if a user changed it but canceled the settings
+            AppTheme theme = _settingsService.GetUseDarkTheme() ? AppTheme.Dark : AppTheme.Light;
+            _appThemeService.ApplyTheme(theme);
+
             await _shellService.GoToAsync("..");
         }
 
@@ -291,6 +307,7 @@ namespace CopyWords.Core.ViewModels
             ShowCopyButtons = appSettings.ShowCopyButtons;
             ShowCopyWithAnkiConnectButton = appSettings.ShowCopyWithAnkiConnectButton;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
+            UseDarkTheme = appSettings.UseDarkTheme;
         }
 
         internal bool CanSaveSettings()
@@ -329,6 +346,22 @@ namespace CopyWords.Core.ViewModels
             {
                 _settingsService.SetShowCopyButtons(value);
                 Debug.WriteLine($"ShowCopyButtons has changed to {value}");
+            }
+        }
+
+        internal void OnUseDarkThemeChangedInternal(bool value)
+        {
+            if (_isInitialized)
+            {
+                AppTheme theme = value ? AppTheme.Dark : AppTheme.Light;
+                _appThemeService.ApplyTheme(theme);
+
+                if (CanUpdateIndividualSettings)
+                {
+                    _settingsService.SetUseDarkTheme(value);
+                }
+
+                Debug.WriteLine($"UseDarkTheme has changed to {value}");
             }
         }
 
@@ -387,6 +420,7 @@ namespace CopyWords.Core.ViewModels
             appSettings.ShowCopyButtons = ShowCopyButtons;
             appSettings.ShowCopyWithAnkiConnectButton = ShowCopyWithAnkiConnectButton;
             appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
+            appSettings.UseDarkTheme = UseDarkTheme;
         }
 
         #endregion
