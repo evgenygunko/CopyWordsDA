@@ -43,7 +43,7 @@
                                 IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
 
                             <Label Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}"/>
-                            <Label Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="{StaticResource Gray500}" Margin="0,2,0,0" />
+                            <Label Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="{DynamicResource SecondaryTextColor}" Margin="0,2,0,0" />
 
                         </VerticalStackLayout>
 
@@ -63,7 +63,7 @@
                                     IsChecked="{Binding IsImageChecked}" />
 
                             <!-- If ShowCopyButtons is false, add an invisible label to add margin -->
-                            <Label Text="a" TextColor="{StaticResource AppBackgroundLightColor}" IsVisible="{Binding ShowCopyButtons, Converter={StaticResource InvertedBoolConverter}}" />
+                            <Label Text="a" TextColor="{DynamicResource PageBackgroundColor}" IsVisible="{Binding ShowCopyButtons, Converter={StaticResource InvertedBoolConverter}}" />
 
                             <Border>
                                 <Border.Triggers>

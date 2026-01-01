@@ -23,24 +23,24 @@
                     <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding IsChecked}" IsVisible="{Binding ShowCopyButtons}" />
 
                     <!-- If ShowCopyButtons is false, add an invisible label to add margin -->
-                    <Label Grid.Column="0" Text="a" TextColor="{StaticResource AppBackgroundLightColor}" IsVisible="{Binding ShowCopyButtons, Converter={StaticResource InvertedBoolConverter}}" />
+                    <Label Grid.Column="0" Text="a" TextColor="{DynamicResource PageBackgroundColor}" IsVisible="{Binding ShowCopyButtons, Converter={StaticResource InvertedBoolConverter}}" />
 
                     <Label Grid.Column="1" LineBreakMode="WordWrap" Padding="10,5,10,5" VerticalOptions="Center">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="{Binding Original, FallbackValue='Example Original'}"/>
                                 <Span Text=" " />
-                                <Span Text="{Binding Translation, FallbackValue='Example English'}" TextColor="{StaticResource Gray500}" />
+                                <Span Text="{Binding Translation, FallbackValue='Example English'}" TextColor="{DynamicResource SecondaryTextColor}" />
                             </FormattedString>
                         </Label.FormattedText>
 
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="true">
-                                <Setter Property="BackgroundColor" Value="{StaticResource SelectedItemColor}" />
+                                <Setter Property="BackgroundColor" Value="{DynamicResource SelectedItemColor}" />
                             </DataTrigger>
 
                             <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="false">
-                                <Setter Property="BackgroundColor" Value="{StaticResource GreyBoxColor}" />
+                                <Setter Property="BackgroundColor" Value="{DynamicResource GreyBoxColor}" />
                             </DataTrigger>
                         </Label.Triggers>
                     </Label>

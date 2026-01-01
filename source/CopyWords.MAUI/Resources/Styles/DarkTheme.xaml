@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/maui/global"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="CopyWords.MAUI.Resources.Styles.DarkTheme">
+
+    <!-- Page and Background Colors -->
+    <Color x:Key="PageBackgroundColor">#121212</Color>
+    <Color x:Key="SurfaceColor">#1E1E1E</Color>
+
+    <!-- Primary and Accent Colors -->
+    <Color x:Key="PrimaryColor">#9B7BD4</Color>
+    <Color x:Key="SecondaryColor">#B8A0E8</Color>
+    <Color x:Key="TertiaryColor">#7B5BAF</Color>
+
+    <!-- Text Colors -->
+    <Color x:Key="PrimaryTextColor">#FFFFFF</Color>
+    <Color x:Key="SecondaryTextColor">#B3B3B3</Color>
+    <Color x:Key="DisabledTextColor">#666666</Color>
+    <Color x:Key="InverseTextColor">#121212</Color>
+
+    <!-- Button Colors -->
+    <Color x:Key="ButtonBackgroundColor">#9B7BD4</Color>
+    <Color x:Key="ButtonTextColor">#121212</Color>
+    <Color x:Key="ButtonDisabledBackgroundColor">#5C4D73</Color>
+    <Color x:Key="ButtonDisabledTextColor">#A899BA</Color>
+    <Color x:Key="ButtonIconColor">#121212</Color>
+
+    <!-- Input Colors -->
+    <Color x:Key="InputBackgroundColor">#2D2D2D</Color>
+    <Color x:Key="InputTextColor">#FFFFFF</Color>
+    <Color x:Key="InputPlaceholderColor">#888888</Color>
+    <Color x:Key="InputDisabledTextColor">#555555</Color>
+
+    <!-- Border and Divider Colors -->
+    <Color x:Key="BorderColor">#404040</Color>
+    <Color x:Key="DividerColor">#3D3D3D</Color>
+
+    <!-- Control-specific Colors -->
+    <Color x:Key="CheckBoxColor">#9B7BD4</Color>
+    <Color x:Key="CheckBoxDisabledColor">#555555</Color>
+    <Color x:Key="SwitchOnColor">#9B7BD4</Color>
+    <Color x:Key="SwitchThumbColor">#FFFFFF</Color>
+    <Color x:Key="SliderMinimumTrackColor">#9B7BD4</Color>
+    <Color x:Key="SliderMaximumTrackColor">#555555</Color>
+    <Color x:Key="SliderThumbColor">#9B7BD4</Color>
+    <Color x:Key="ProgressBarColor">#9B7BD4</Color>
+    <Color x:Key="ActivityIndicatorColor">#9B7BD4</Color>
+    <Color x:Key="RefreshViewColor">#B3B3B3</Color>
+
+    <!-- Navigation Colors -->
+    <Color x:Key="NavigationBarBackgroundColor">#1E1E1E</Color>
+    <Color x:Key="NavigationBarTextColor">#FFFFFF</Color>
+    <Color x:Key="ShellBackgroundColor">#1E1E1E</Color>
+    <Color x:Key="ShellForegroundColor">#FFFFFF</Color>
+    <Color x:Key="ShellTitleColor">#FFFFFF</Color>
+    <Color x:Key="ShellDisabledColor">#555555</Color>
+    <Color x:Key="ShellUnselectedColor">#888888</Color>
+    <Color x:Key="TabBarBackgroundColor">#1E1E1E</Color>
+    <Color x:Key="TabBarForegroundColor">#9B7BD4</Color>
+    <Color x:Key="TabBarTitleColor">#9B7BD4</Color>
+    <Color x:Key="TabBarUnselectedColor">#888888</Color>
+
+    <!-- Indicator Colors -->
+    <Color x:Key="IndicatorColor">#555555</Color>
+    <Color x:Key="SelectedIndicatorColor">#FFFFFF</Color>
+
+    <!-- Box and Shadow Colors -->
+    <Color x:Key="BoxViewColor">#888888</Color>
+    <Color x:Key="ShadowBrushColor">#000000</Color>
+
+    <!-- App-specific Colors -->
+    <Color x:Key="TranslationBoxColor">#2D2D2D</Color>
+    <Color x:Key="GreyBoxColor">#2D2D2D</Color>
+    <Color x:Key="SelectedItemColor">#3D2D5A</Color>
+    <Color x:Key="ContextGreenColor">#4CAF50</Color>
+    <Color x:Key="BorderStrokeColor">#404040</Color>
+    <Color x:Key="AutocompleteBackgroundColor">#2D2D2D</Color>
+    <Color x:Key="AutocompleteTextColor">#FFFFFF</Color>
+
+    <!-- Settings view colors -->
+    <Color x:Key="SettingsLabelColor">#E0E0E0</Color>
+    <Color x:Key="SettingsSectionHeaderColor">#FFFFFF</Color>
+    <Color x:Key="SettingsSectionDescriptionColor">#B3B3B3</Color>
+    <Color x:Key="SettingsFieldLabelColor">#CCCCCC</Color>
+    <Color x:Key="SettingsInputBackgroundColor">#2D2D2D</Color>
+    <Color x:Key="SettingsBorderBackgroundColor">#1E1E1E</Color>
+    <Color x:Key="FillerColor">#2D2D2D</Color>
+
+</ResourceDictionary>

@@ -14,8 +14,8 @@
     </ContentView.Resources>
 
     <Border
-            BackgroundColor="{StaticResource TranslationBoxColor}"
-            Stroke="{StaticResource BorderStrokeColor}"
+            BackgroundColor="{DynamicResource TranslationBoxColor}"
+            Stroke="{DynamicResource BorderStrokeColor}"
             StrokeThickness="1"
             Padding="{Binding BorderPadding}">
 
@@ -43,10 +43,10 @@
 
                 <Label.Triggers>
                     <DataTrigger TargetType="Label" Binding="{Binding IsRussianTranslationChecked}" Value="false">
-                        <Setter Property="BackgroundColor" Value="{StaticResource TranslationBoxColor}" />
+                        <Setter Property="BackgroundColor" Value="{DynamicResource TranslationBoxColor}" />
                     </DataTrigger>
                     <DataTrigger TargetType="Label" Binding="{Binding IsRussianTranslationChecked}" Value="true">
-                        <Setter Property="BackgroundColor" Value="{StaticResource SelectedItemColor}" />
+                        <Setter Property="BackgroundColor" Value="{DynamicResource SelectedItemColor}" />
                     </DataTrigger>
                 </Label.Triggers>
             </Label>
@@ -65,10 +65,10 @@
 
                 <Label.Triggers>
                     <DataTrigger TargetType="Label" Binding="{Binding IsEnglishTranslationChecked}" Value="false">
-                        <Setter Property="BackgroundColor" Value="{StaticResource TranslationBoxColor}" />
+                        <Setter Property="BackgroundColor" Value="{DynamicResource TranslationBoxColor}" />
                     </DataTrigger>
                     <DataTrigger TargetType="Label" Binding="{Binding IsEnglishTranslationChecked}" Value="true">
-                        <Setter Property="BackgroundColor" Value="{StaticResource SelectedItemColor}" />
+                        <Setter Property="BackgroundColor" Value="{DynamicResource SelectedItemColor}" />
                     </DataTrigger>
                 </Label.Triggers>
             </Label>

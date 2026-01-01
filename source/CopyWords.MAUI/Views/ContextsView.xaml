@@ -21,7 +21,7 @@
                                 </OnPlatform>
                             </Label.Text>
                         </Label>
-                        <Label TextColor="{StaticResource ContextGreenColor}" Text="{Binding ContextEN, FallbackValue='ContextEN'}" />
+                        <Label TextColor="{DynamicResource ContextGreenColor}" Text="{Binding ContextEN, FallbackValue='ContextEN'}" />
                     </HorizontalStackLayout>
 
                     <!--Meanings -->

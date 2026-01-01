@@ -48,7 +48,8 @@
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Play_circle}" />
+                                                Glyph="{x:Static MaterialDesignIconFonts.Play_circle}"
+                                                Color="{DynamicResource ButtonIconColor}" />
                                         </Image.Source>
                                     </Image>
                                 </HorizontalStackLayout>
@@ -73,7 +74,8 @@
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Save}" />
+                                                Glyph="{x:Static MaterialDesignIconFonts.Save}"
+                                                Color="{DynamicResource ButtonIconColor}" />
                                         </Image.Source>
                                     </Image>
                                 </HorizontalStackLayout>
@@ -98,7 +100,8 @@
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Share}" />
+                                                Glyph="{x:Static MaterialDesignIconFonts.Share}"
+                                                Color="{DynamicResource ButtonIconColor}" />
                                         </Image.Source>
                                     </Image>
                                 </HorizontalStackLayout>
@@ -134,7 +137,8 @@
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Play_circle}" />
+                                                Glyph="{x:Static MaterialDesignIconFonts.Play_circle}"
+                                                Color="{DynamicResource ButtonIconColor}" />
                                         </Image.Source>
                                     </Image>
                                 </HorizontalStackLayout>
@@ -160,7 +164,8 @@
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Save}" />
+                                                Glyph="{x:Static MaterialDesignIconFonts.Save}"
+                                                Color="{DynamicResource ButtonIconColor}" />
                                         </Image.Source>
                                     </Image>
                                 </HorizontalStackLayout>
@@ -184,11 +189,12 @@
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Send}" />
+                                                Glyph="{x:Static MaterialDesignIconFonts.Send}"
+                                                Color="{DynamicResource ButtonIconColor}" />
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Anki" VerticalOptions="Center" TextColor="{StaticResource White}" />
+                                    <Label Text="Anki" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -210,11 +216,12 @@
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}" />
+                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
+                                                Color="{DynamicResource ButtonIconColor}" />
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Front" VerticalOptions="Center" TextColor="{StaticResource White}" />
+                                    <Label Text="Front" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -236,11 +243,12 @@
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}" />
+                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
+                                                Color="{DynamicResource ButtonIconColor}" />
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Back" VerticalOptions="Center" TextColor="{StaticResource White}" />
+                                    <Label Text="Back" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -262,11 +270,12 @@
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}" />
+                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
+                                                Color="{DynamicResource ButtonIconColor}" />
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Type" VerticalOptions="Center" TextColor="{StaticResource White}" />
+                                    <Label Text="Type" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -288,11 +297,12 @@
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}" />
+                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
+                                                Color="{DynamicResource ButtonIconColor}" />
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Endings" VerticalOptions="Center" TextColor="{StaticResource White}" />
+                                    <Label Text="Endings" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -313,11 +323,12 @@
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}" />
+                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
+                                                Color="{DynamicResource ButtonIconColor}" />
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Examples" VerticalOptions="Center" TextColor="{StaticResource White}" />
+                                    <Label Text="Examples" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>

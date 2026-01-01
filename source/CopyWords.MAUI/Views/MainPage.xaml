@@ -82,7 +82,8 @@
 
                     <editors:SfAutocomplete
                             x:Name="autocomplete"
-                            BackgroundColor="{StaticResource AutocompleteBackgroundColor}"
+                            BackgroundColor="{DynamicResource AutocompleteBackgroundColor}"
+                            TextColor="{DynamicResource AutocompleteTextColor}"
                             ShowBorder="False"
                             FontSize="{OnPlatform 20, Android=14}"
                             Padding="{OnPlatform 0, Android='5,0,0,0'}"
