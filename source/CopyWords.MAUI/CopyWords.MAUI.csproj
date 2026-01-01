@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!-- Default target frameworks for non-Windows platforms (macOS/Linux) -->
     <TargetFrameworks>net10.0-maccatalyst;net10.0-android</TargetFrameworks>
@@ -113,20 +113,20 @@
     <None Remove="Resources\Fonts\MaterialIconsOutlined-Regular.otf" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.20" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="13.0.0" />
-    <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="7.0.0" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
+    <PackageReference Include="Microsoft.Maui.Controls" />
+    <PackageReference Include="CommunityToolkit.Maui" />
+    <PackageReference Include="CommunityToolkit.Maui.MediaElement" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Roslynator.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Sentry.Maui" Version="6.0.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
-    <PackageReference Include="Syncfusion.Licensing" Version="32.1.21" />
-    <PackageReference Include="Syncfusion.Maui.Inputs" Version="32.1.21" />
-    <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.8" />
+    <PackageReference Include="Sentry.Maui" />
+    <PackageReference Include="SixLabors.ImageSharp" />
+    <PackageReference Include="Syncfusion.Licensing" />
+    <PackageReference Include="Syncfusion.Maui.Inputs" />
+    <PackageReference Include="Syncfusion.Maui.Toolkit" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CopyWords.Core\CopyWords.Core.csproj" />

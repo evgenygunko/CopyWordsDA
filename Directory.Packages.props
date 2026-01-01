@@ -1,0 +1,27 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="AutoFixture" Version="4.18.1" />
+    <PackageVersion Include="AutoFixture.AutoMoq" Version="4.18.1" />
+    <PackageVersion Include="CommunityToolkit.Maui" Version="13.0.0" />
+    <PackageVersion Include="CommunityToolkit.Maui.MediaElement" Version="7.0.0" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="FluentAssertions" Version="7.2.0" />
+    <PackageVersion Include="FluentValidation" Version="12.1.1" />
+    <PackageVersion Include="LaunchDarkly.ClientSdk" Version="5.5.4" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.20" />
+    <PackageVersion Include="Moq" Version="4.20.72" />
+    <PackageVersion Include="MSTest" Version="4.0.2" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
+    <PackageVersion Include="Sentry.Maui" Version="6.0.0" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <PackageVersion Include="Syncfusion.Licensing" Version="32.1.21" />
+    <PackageVersion Include="Syncfusion.Maui.Inputs" Version="32.1.21" />
+    <PackageVersion Include="Syncfusion.Maui.Toolkit" Version="1.0.8" />
+  </ItemGroup>
+</Project>
