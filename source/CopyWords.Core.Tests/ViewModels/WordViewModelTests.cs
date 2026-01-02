@@ -284,7 +284,7 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             shareMock.Verify(x => x.RequestAsync(It.IsAny<ShareTextRequest>()));
 
-            sharedTextRequests[0].Subject.Should().Be(textToShare);
+            sharedTextRequests[0].Subject.Should().BeEmpty();
             sharedTextRequests[0].Text.Should().Be(textToShare);
             sharedTextRequests[0].Title.Should().Be("Share Translations");
 
@@ -317,7 +317,7 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             shareMock.Verify(x => x.RequestAsync(It.IsAny<ShareTextRequest>()));
 
-            sharedTextRequests[0].Subject.Should().Be(textToShare);
+            sharedTextRequests[0].Subject.Should().BeEmpty();
             sharedTextRequests[0].Text.Should().Be(textToShare);
             sharedTextRequests[0].Title.Should().Be("Share Translations");
 

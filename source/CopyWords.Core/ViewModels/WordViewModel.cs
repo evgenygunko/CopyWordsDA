@@ -269,20 +269,20 @@ namespace CopyWords.Core.ViewModels
                     textToShare = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModels);
                 }
 
-                if (string.IsNullOrEmpty(subjectToShare))
+                if (string.IsNullOrEmpty(textToShare))
                 {
                     // If the checkboxes are not shown, or a user didn't select any checkboxes, share the headword and its translations.
                     // The shared text will not have any special formatting.
-                    subjectToShare = _copySelectedToClipboardService.CompileHeadword(DefinitionViewModels);
-                    textToShare = subjectToShare;
+                    textToShare = _copySelectedToClipboardService.CompileHeadword(DefinitionViewModels);
                 }
 
-                await _share.RequestAsync(new ShareTextRequest
+                var shareRequest = new ShareTextRequest
                 {
                     Subject = subjectToShare,  // In AnkiDroid it will be extras.getString(Intent.EXTRA_SUBJECT) and will go to the first edit box
                     Text = textToShare,    // In AnkiDroid it will be extras.getString(Intent.EXTRA_TEXT) and will go to the second edit box
                     Title = "Share Translations",
-                });
+                };
+                await _share.RequestAsync(shareRequest);
             }
             catch (ExamplesFromSeveralDefinitionsSelectedException ex)
             {
