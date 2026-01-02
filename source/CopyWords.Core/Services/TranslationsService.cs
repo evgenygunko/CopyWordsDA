@@ -24,6 +24,11 @@ namespace CopyWords.Core.Services
             _globalSettings = globalSettings;
         }
 
+        public string CreateLookUpWordUrl()
+        {
+            return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/v1/Translation/LookUpWord?code={_globalSettings.TranslatorAppRequestCode}";
+        }
+
         public async Task<WordModel?> LookUpWordAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(wordToLookUp))
@@ -36,8 +41,7 @@ namespace CopyWords.Core.Services
                 throw new ArgumentException("TranslatorApp URL cannot be null or empty");
             }
 
-            // Construct full URL by appending the API path and code
-            string lookupUrl = $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/LookUpWord?code={_globalSettings.TranslatorAppRequestCode}";
+            string lookupUrl = CreateLookUpWordUrl();
 
             var input = new LookUpWordRequest(
                 Text: wordToLookUp,

@@ -52,7 +52,7 @@ namespace CopyWords.Core.Tests.Services
             // Assert
             result.Should().NotBeNull();
 
-            string expectedUrl = $"{translatorAppUrl.TrimEnd('/')}/api/DownloadSound?soundUrl={Uri.EscapeDataString(soundUrl)}&word={Uri.EscapeDataString(word)}&version=1&code={requestCode}";
+            string expectedUrl = $"{translatorAppUrl.TrimEnd('/')}/api/v1/Sound/DownloadSound?soundUrl={Uri.EscapeDataString(soundUrl)}&word={Uri.EscapeDataString(word)}&version=1&code={requestCode}";
             result.Should().Be(expectedUrl);
         }
 

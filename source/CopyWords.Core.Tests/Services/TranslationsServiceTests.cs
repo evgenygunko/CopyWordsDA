@@ -94,6 +94,71 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
+        #region Tests for CreateLookUpWordUrl
+
+        [TestMethod]
+        public void CreateLookUpWordUrl_Should_ReturnCorrectUrl()
+        {
+            // Arrange
+            string translatorAppUrl = "https://translator.example.com/";
+            string requestCode = "test-code-123";
+
+            _globalSettingsMock.SetupGet(x => x.TranslatorAppUrl).Returns(translatorAppUrl);
+            _globalSettingsMock.SetupGet(x => x.TranslatorAppRequestCode).Returns(requestCode);
+
+            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object);
+
+            // Act
+            string result = sut.CreateLookUpWordUrl();
+
+            // Assert
+            result.Should().Be("https://translator.example.com/api/v1/Translation/LookUpWord?code=test-code-123");
+        }
+
+        [TestMethod]
+        public void CreateLookUpWordUrl_WhenUrlHasTrailingSlash_RemovesItBeforeAppending()
+        {
+            // Arrange
+            string translatorAppUrl = "https://translator.example.com/";
+            string requestCode = "my-code";
+
+            _globalSettingsMock.SetupGet(x => x.TranslatorAppUrl).Returns(translatorAppUrl);
+            _globalSettingsMock.SetupGet(x => x.TranslatorAppRequestCode).Returns(requestCode);
+
+            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object);
+
+            // Act
+            string result = sut.CreateLookUpWordUrl();
+
+            // Assert
+            result.Should().NotContain("//api");
+            result.Should().Be("https://translator.example.com/api/v1/Translation/LookUpWord?code=my-code");
+        }
+
+        [TestMethod]
+        public void CreateLookUpWordUrl_WhenUrlHasNoTrailingSlash_WorksCorrectly()
+        {
+            // Arrange
+            string translatorAppUrl = "https://translator.example.com";
+            string requestCode = "my-code";
+
+            _globalSettingsMock.SetupGet(x => x.TranslatorAppUrl).Returns(translatorAppUrl);
+            _globalSettingsMock.SetupGet(x => x.TranslatorAppRequestCode).Returns(requestCode);
+
+            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object);
+
+            // Act
+            string result = sut.CreateLookUpWordUrl();
+
+            // Assert
+            result.Should().Be("https://translator.example.com/api/v1/Translation/LookUpWord?code=my-code");
+        }
+
+        #endregion
+
         #region Tests for TranslateAsync
 
         [TestMethod]

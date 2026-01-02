@@ -9,8 +9,6 @@ namespace CopyWords.Core.Services
 {
     public interface ISaveSoundFileService
     {
-        string CreateDownloadSoundFileUrl(string soundUrl, string word);
-
         Task<bool> SaveSoundFileAsync(string url, string word, CancellationToken cancellationToken);
     }
 
@@ -44,7 +42,7 @@ namespace CopyWords.Core.Services
 
         public string CreateDownloadSoundFileUrl(string soundUrl, string word)
         {
-            return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/DownloadSound?" +
+            return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/v1/Sound/DownloadSound?" +
                    $"soundUrl={Uri.EscapeDataString(soundUrl)}&word={Uri.EscapeDataString(word)}&version=1&code={_globalSettings.TranslatorAppRequestCode}";
         }
 
