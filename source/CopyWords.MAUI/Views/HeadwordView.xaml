@@ -18,7 +18,7 @@
             Stroke="{DynamicResource BorderStrokeColor}"
             StrokeThickness="1">
 
-        <Grid Padding="7,3,0,3">
+        <Grid Padding="{OnPlatform '7,3,0,3', Android='0'}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
