@@ -145,7 +145,8 @@ namespace CopyWords.Core.ViewModels
             }
 
             // Clear previous word while we are waiting for the new one
-            WordModel? wordModel = new WordModel(string.Empty, GetSourceLanguage(), null, null, [], []);
+            var definition = new Definition(new Headword(string.Empty, null, null), string.Empty, string.Empty, []);
+            WordModel? wordModel = new WordModel(string.Empty, GetSourceLanguage(), null, null, definition, []);
             UpdateUI(wordModel);
 
             IsBusy = true;
@@ -335,14 +336,10 @@ namespace CopyWords.Core.ViewModels
 
                 bool showCopyButtons = _settingsService.GetShowCopyButtons();
 
-                _wordViewModel.ClearDefinitions();
-                foreach (var definition in wordModel.Definitions)
-                {
-                    _wordViewModel.AddDefinition(new DefinitionViewModel(definition, wordModel.SourceLanguage, showCopyButtons));
-                }
+                _wordViewModel.SetDefinition(new DefinitionViewModel(wordModel.Definition, wordModel.SourceLanguage, showCopyButtons));
 
                 _wordViewModel.ClearVariants();
-                foreach (var variant in wordModel.Variations)
+                foreach (var variant in wordModel.Variants)
                 {
                     var variantVM = new VariantViewModel(variant);
                     variantVM.Clicked += async (sender, url) =>

@@ -5,6 +5,12 @@
              x:DataType="WordViewModel"
              x:Class="CopyWords.MAUI.Views.WordView">
 
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <toolkit:IsNotNullConverter x:Key="IsNotNullConverter" />
+        </ResourceDictionary>
+    </ContentView.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -340,7 +346,7 @@
         <!-- Horizontal line -->
         <BoxView Grid.Row="2" Style="{StaticResource HorizontalDividerStyle}" Margin="0,15,0,0" />
 
-        <!-- Definitions -->
-        <DefinitionsView Grid.Row="3" />
+        <!-- Definition -->
+        <DefinitionsView Grid.Row="3" IsVisible="{Binding IsDefinitionVisible}" />
     </Grid>
 </ContentView>

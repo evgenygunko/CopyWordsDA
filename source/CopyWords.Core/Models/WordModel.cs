@@ -1,12 +1,12 @@
 ﻿namespace CopyWords.Core.Models
 {
     public record WordModel(
-        string Word,
-        SourceLanguage SourceLanguage,
-        string? SoundUrl,
-        string? SoundFileName,
-        IEnumerable<Definition> Definitions,
-        IEnumerable<Variant> Variations); // only for Danish dictionary
+       string Word,
+       SourceLanguage SourceLanguage,
+       string? SoundUrl,
+       string? SoundFileName,
+       Definition Definition,
+       IEnumerable<Variant> Variants);
 
     public record Definition(
         Headword Headword,

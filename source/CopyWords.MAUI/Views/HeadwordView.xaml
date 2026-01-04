@@ -16,10 +16,9 @@
     <Border
             BackgroundColor="{DynamicResource TranslationBoxColor}"
             Stroke="{DynamicResource BorderStrokeColor}"
-            StrokeThickness="1"
-            Padding="{Binding BorderPadding}">
+            StrokeThickness="1">
 
-        <Grid>
+        <Grid Padding="7,3,0,3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -32,9 +31,10 @@
 
             <!-- Russian -->
             <CheckBox Grid.Row="0" Grid.Column="0" x:Name="checkBoxRU"
-                        IsVisible="{Binding CanCheckRussianTranslation}"
-                        IsChecked="{Binding IsRussianTranslationChecked}" />
-            <Label Grid.Row="0" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center" Margin="0,2,0,2">
+                      IsVisible="{Binding CanCheckRussianTranslation}"
+                      IsChecked="{Binding IsRussianTranslationChecked}" />
+            <Label Grid.Row="0" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center"
+                   Margin="7,7,7,7">
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="{Binding Russian, FallbackValue='акула'}"/>
@@ -52,11 +52,12 @@
             </Label>
 
             <!-- English -->
-            <CheckBox Grid.Row="1" Grid.Column="0" x:Name="checkBoxEN"
+            <CheckBox Grid.Row="1" Grid.Column="0"
                         IsChecked="{Binding IsEnglishTranslationChecked}"
                         IsVisible="{Binding CanCheckEnglishTranslation}"/>
             <Label Grid.Row="1" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center"
-                        IsVisible="{Binding ShowEnglishTranslation}">
+                   Margin="7,4,7,7"
+                   IsVisible="{Binding ShowEnglishTranslation}">
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="{Binding English, FallbackValue='shark'}"/>

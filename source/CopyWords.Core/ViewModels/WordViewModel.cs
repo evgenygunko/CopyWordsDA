@@ -20,9 +20,8 @@ namespace CopyWords.Core.ViewModels
         bool ShowAddNoteWithAnkiConnectButton { get; set; }
 
         void UpdateUI();
-        void ClearDefinitions();
+        void SetDefinition(DefinitionViewModel definition);
         void ClearVariants();
-        void AddDefinition(DefinitionViewModel definition);
         void AddVariant(VariantViewModel variant);
     }
 
@@ -63,7 +62,11 @@ namespace CopyWords.Core.ViewModels
 
         public ObservableCollection<VariantViewModel> Variants { get; } = [];
 
-        public ObservableCollection<DefinitionViewModel> DefinitionViewModels { get; } = [];
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsDefinitionVisible))]
+        public partial DefinitionViewModel DefinitionViewModel { get; set; } = default!;
+
+        public bool IsDefinitionVisible => !string.IsNullOrEmpty(DefinitionViewModel?.HeadwordViewModel.Original);
 
         [ObservableProperty]
         public partial string Word { get; set; } = default!;
@@ -190,23 +193,23 @@ namespace CopyWords.Core.ViewModels
                     return;
                 }
 
-                string front = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModels);
+                string front = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModel);
                 if (string.IsNullOrEmpty(front))
                 {
                     await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
                     return;
                 }
 
-                string back = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModels);
+                string back = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModel);
                 if (string.IsNullOrEmpty(back))
                 {
                     await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
                     return;
                 }
 
-                string partOfSpeech = await _copySelectedToClipboardService.CompilePartOfSpeechAsync(DefinitionViewModels);
-                string endings = await _copySelectedToClipboardService.CompileEndingsAsync(DefinitionViewModels);
-                string examples = await _copySelectedToClipboardService.CompileExamplesAsync(DefinitionViewModels);
+                string partOfSpeech = await _copySelectedToClipboardService.CompilePartOfSpeechAsync(DefinitionViewModel);
+                string endings = await _copySelectedToClipboardService.CompileEndingsAsync(DefinitionViewModel);
+                string examples = await _copySelectedToClipboardService.CompileExamplesAsync(DefinitionViewModel);
 
                 string? sound = null;
                 if (CanSaveSoundFile)
@@ -265,15 +268,15 @@ namespace CopyWords.Core.ViewModels
                 {
                     // When checkboxes are shown, allow a user to select any meanings to share. The shared text will have html formatting
                     // to make it look nice in AnkiDroid.
-                    subjectToShare = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModels);
-                    textToShare = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModels);
+                    subjectToShare = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModel);
+                    textToShare = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModel);
                 }
 
                 if (string.IsNullOrEmpty(textToShare))
                 {
                     // If the checkboxes are not shown, or a user didn't select any checkboxes, share the headword and its translations.
                     // The shared text will not have any special formatting.
-                    textToShare = _copySelectedToClipboardService.CompileHeadword(DefinitionViewModels);
+                    textToShare = _copySelectedToClipboardService.CompileHeadword(DefinitionViewModel);
                 }
 
                 var shareRequest = new ShareTextRequest
@@ -330,36 +333,16 @@ namespace CopyWords.Core.ViewModels
 
         public void UpdateUI()
         {
-            CanCopyFront = DefinitionViewModels.Any();
+            CanCopyFront = !string.IsNullOrEmpty(DefinitionViewModel?.HeadwordViewModel.Original);
 
-            bool canCopyPartOfSpeech = false;
-            foreach (var definitionViewModel in DefinitionViewModels)
-            {
-                if (!string.IsNullOrEmpty(definitionViewModel.PartOfSpeech))
-                {
-                    canCopyPartOfSpeech = true;
-                    break;
-                }
-            }
-            CanCopyPartOfSpeech = canCopyPartOfSpeech;
+            CanCopyPartOfSpeech = !string.IsNullOrEmpty(DefinitionViewModel?.PartOfSpeech);
 
-            bool canCopyEndings = false;
-            foreach (var definitionViewModel in DefinitionViewModels)
-            {
-                if (!string.IsNullOrEmpty(definitionViewModel.Endings))
-                {
-                    canCopyEndings = true;
-                    break;
-                }
-            }
-            CanCopyEndings = canCopyEndings;
+            CanCopyEndings = !string.IsNullOrEmpty(DefinitionViewModel?.Endings);
         }
-
-        public void ClearDefinitions() => DefinitionViewModels.Clear();
 
         public void ClearVariants() => Variants.Clear();
 
-        public void AddDefinition(DefinitionViewModel definition) => DefinitionViewModels.Add(definition);
+        public void SetDefinition(DefinitionViewModel definition) => DefinitionViewModel = definition;
 
         public void AddVariant(VariantViewModel variant) => Variants.Add(variant);
 
@@ -417,11 +400,11 @@ namespace CopyWords.Core.ViewModels
             }
         }
 
-        internal async Task CompileAndCopyToClipboard(string wordPartName, Func<ObservableCollection<DefinitionViewModel>, Task<string>> action)
+        internal async Task CompileAndCopyToClipboard(string wordPartName, Func<DefinitionViewModel, Task<string>> action)
         {
             try
             {
-                string textToCopy = await action(DefinitionViewModels);
+                string textToCopy = await action(DefinitionViewModel);
 
                 if (!string.IsNullOrEmpty(textToCopy))
                 {

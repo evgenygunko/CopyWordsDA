@@ -192,11 +192,10 @@ namespace CopyWords.Core.Tests.ViewModels
             wordViewModelMock.VerifySet(x => x.Word = wordModel.Word);
             wordViewModelMock.VerifySet(x => x.SoundUrl = wordModel.SoundUrl);
 
-            wordViewModelMock.Verify(x => x.ClearDefinitions());
-            wordViewModelMock.Verify(x => x.AddDefinition(It.IsAny<DefinitionViewModel>()), Times.Exactly(wordModel.Definitions.Count()));
+            wordViewModelMock.Verify(x => x.SetDefinition(It.IsAny<DefinitionViewModel>()), Times.AtLeastOnce);
 
             wordViewModelMock.Verify(x => x.ClearVariants());
-            wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variations.Count()));
+            wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variants.Count()));
 
             navigationHistoryMock.Verify(x => x.Push(wordModel.Word, wordModel.SourceLanguage.ToString()));
             settingsServiceMock.Verify(x => x.AddToHistory(wordModel.Word));
@@ -479,11 +478,10 @@ namespace CopyWords.Core.Tests.ViewModels
             wordViewModelMock.VerifySet(x => x.SoundUrl = wordModel.SoundUrl);
             wordViewModelMock.VerifySet(x => x.ShowCopyButtons = showCopyButtons);
 
-            wordViewModelMock.Verify(x => x.ClearDefinitions());
-            wordViewModelMock.Verify(x => x.AddDefinition(It.IsAny<DefinitionViewModel>()), Times.Exactly(wordModel.Definitions.Count()));
+            wordViewModelMock.Verify(x => x.SetDefinition(It.IsAny<DefinitionViewModel>()), Times.AtLeastOnce);
 
             wordViewModelMock.Verify(x => x.ClearVariants());
-            wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variations.Count()));
+            wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variants.Count()));
 
             dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }

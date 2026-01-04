@@ -26,7 +26,7 @@ namespace CopyWords.Core.Services
 
         public string CreateLookUpWordUrl()
         {
-            return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/v1/Translation/LookUpWord?code={_globalSettings.TranslatorAppRequestCode}";
+            return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/v2/Translation/LookUpWord?code={_globalSettings.TranslatorAppRequestCode}";
         }
 
         public async Task<WordModel?> LookUpWordAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken)
