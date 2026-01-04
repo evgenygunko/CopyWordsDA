@@ -34,7 +34,7 @@
                       IsVisible="{Binding CanCheckRussianTranslation}"
                       IsChecked="{Binding IsRussianTranslationChecked}" />
             <Label Grid.Row="0" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center"
-                   Margin="7,7,7,7">
+                   Margin="{OnPlatform '7', Android='0,0,7,0'}">
                 <Label.FormattedText>
                     <FormattedString>
                         <Span Text="{Binding Russian, FallbackValue='акула'}"/>
@@ -56,7 +56,7 @@
                         IsChecked="{Binding IsEnglishTranslationChecked}"
                         IsVisible="{Binding CanCheckEnglishTranslation}"/>
             <Label Grid.Row="1" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center"
-                   Margin="7,4,7,7"
+                   Margin="{OnPlatform '7,4,7,7', Android='0,0,7,0'}"
                    IsVisible="{Binding ShowEnglishTranslation}">
                 <Label.FormattedText>
                     <FormattedString>
