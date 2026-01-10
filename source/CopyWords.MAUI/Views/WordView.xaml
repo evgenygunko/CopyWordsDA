@@ -8,6 +8,21 @@
     <ContentView.Resources>
         <ResourceDictionary>
             <toolkit:IsNotNullConverter x:Key="IsNotNullConverter" />
+
+            <DataTemplate x:Key="variantTemplate"
+                          x:DataType="VariantViewModel">
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Word, FallbackValue='høj1 sb.'}" TextDecorations="Underline">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelectVariantCommand}" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </DataTemplate>
         </ResourceDictionary>
     </ContentView.Resources>
 
@@ -16,13 +31,17 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <ActivityIndicator Grid.RowSpan="4" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="Center" />
 
-        <!-- Word variants -->
-        <VariantsView Grid.Row="0" />
+        <!-- Variants -->
+        <VerticalStackLayout Grid.Row="0"
+                BindableLayout.ItemsSource="{Binding Variants}"
+                BindableLayout.ItemTemplate="{StaticResource variantTemplate}" />
 
         <!-- Media control -->
         <toolkit:MediaElement Grid.Row="1" x:Name="mediaElement" IsVisible="False" ShouldAutoPlay="false" />
@@ -348,5 +367,19 @@
 
         <!-- Definition -->
         <DefinitionsView Grid.Row="3" IsVisible="{Binding IsDefinitionVisible}" />
+
+        <!-- Horizontal line -->
+        <BoxView Grid.Row="4" Style="{StaticResource HorizontalDividerStyle}" IsVisible="{Binding HasExpressions}" />
+
+        <!-- Expressions -->
+        <VerticalStackLayout Grid.Row="5" IsVisible="{Binding HasExpressions}">
+            <Label
+                Margin="0,20,0,10"
+                FontSize="Micro"
+                Text="Faste udtryk" />
+            <VerticalStackLayout
+                BindableLayout.ItemsSource="{Binding Expressions}"
+                BindableLayout.ItemTemplate="{StaticResource variantTemplate}" />
+        </VerticalStackLayout>
     </Grid>
 </ContentView>

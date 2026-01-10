@@ -270,6 +270,9 @@ namespace CopyWords.Core.Tests.ViewModels
             wordViewModelMock.Verify(x => x.ClearVariants());
             wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variants.Count()));
 
+            wordViewModelMock.Verify(x => x.ClearExpressions());
+            wordViewModelMock.Verify(x => x.AddExpression(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Expressions.Count()));
+
             navigationHistoryMock.Verify(x => x.Push(wordModel.Word, wordModel.SourceLanguage.ToString()));
             settingsServiceMock.Verify(x => x.AddToHistory(wordModel.Word));
         }
@@ -555,6 +558,9 @@ namespace CopyWords.Core.Tests.ViewModels
 
             wordViewModelMock.Verify(x => x.ClearVariants());
             wordViewModelMock.Verify(x => x.AddVariant(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Variants.Count()));
+
+            wordViewModelMock.Verify(x => x.ClearExpressions());
+            wordViewModelMock.Verify(x => x.AddExpression(It.IsAny<VariantViewModel>()), Times.Exactly(wordModel.Expressions.Count()));
 
             dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }

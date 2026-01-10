@@ -24,6 +24,8 @@ namespace CopyWords.Core.ViewModels
         void SetDefinition(DefinitionViewModel definition);
         void ClearVariants();
         void AddVariant(VariantViewModel variant);
+        void ClearExpressions();
+        void AddExpression(VariantViewModel expression);
     }
 
     public partial class WordViewModel : ObservableObject, IWordViewModel
@@ -68,6 +70,10 @@ namespace CopyWords.Core.ViewModels
         #region Properties
 
         public ObservableCollection<VariantViewModel> Variants { get; } = [];
+
+        public ObservableCollection<VariantViewModel> Expressions { get; } = [];
+
+        public bool HasExpressions => Expressions.Count > 0;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsDefinitionVisible))]
@@ -354,6 +360,18 @@ namespace CopyWords.Core.ViewModels
         public void SetDefinition(DefinitionViewModel definition) => DefinitionViewModel = definition;
 
         public void AddVariant(VariantViewModel variant) => Variants.Add(variant);
+
+        public void ClearExpressions()
+        {
+            Expressions.Clear();
+            OnPropertyChanged(nameof(HasExpressions));
+        }
+
+        public void AddExpression(VariantViewModel expression)
+        {
+            Expressions.Add(expression);
+            OnPropertyChanged(nameof(HasExpressions));
+        }
 
         #endregion
 

@@ -1,4 +1,4 @@
-﻿using AutoFixture;
+using AutoFixture;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
@@ -538,6 +538,36 @@ namespace CopyWords.Core.Tests.ViewModels
 
             mediaPlayerMock.Verify(x => x.SeekTo(TimeSpan.Zero, It.IsAny<CancellationToken>()), Times.Once());
             mediaPlayerMock.Verify(x => x.Play(), Times.Once());
+        }
+
+        #endregion
+
+        #region Tests for ClearExpressions and AddExpression
+
+        [TestMethod]
+        public void ClearExpressions_Should_ClearExpressionsCollection()
+        {
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            var expression = new VariantViewModel(new Variant("test expression", "http://test.com"));
+            sut.AddExpression(expression);
+            sut.Expressions.Should().HaveCount(1);
+
+            sut.ClearExpressions();
+
+            sut.Expressions.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void AddExpression_Should_AddExpressionToCollection()
+        {
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            var expression = new VariantViewModel(new Variant("test expression", "http://test.com"));
+
+            sut.AddExpression(expression);
+
+            sut.Expressions.Should().HaveCount(1);
+            sut.Expressions[0].Word.Should().Be("test expression");
+            sut.Expressions[0].Url.Should().Be("http://test.com");
         }
 
         #endregion

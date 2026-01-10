@@ -160,7 +160,7 @@ namespace CopyWords.Core.ViewModels
 
             // Clear previous word while we are waiting for the new one
             var definition = new Definition(new Headword(string.Empty, null, null), string.Empty, string.Empty, []);
-            WordModel? wordModel = new WordModel(string.Empty, GetSourceLanguage(), null, null, definition, []);
+            WordModel? wordModel = new WordModel(string.Empty, GetSourceLanguage(), null, null, definition, [], []);
             UpdateUI(wordModel);
 
             IsBusy = true;
@@ -363,6 +363,19 @@ namespace CopyWords.Core.ViewModels
                     };
 
                     _wordViewModel.AddVariant(variantVM);
+                }
+
+                _wordViewModel.ClearExpressions();
+                foreach (var expression in wordModel.Expressions)
+                {
+                    var expressionVM = new VariantViewModel(expression);
+                    expressionVM.Clicked += async (sender, url) =>
+                    {
+                        Debug.WriteLine($"Expression clicked, will lookup '{url}'");
+                        await GetVariantAsync(url);
+                    };
+
+                    _wordViewModel.AddExpression(expressionVM);
                 }
 
                 _wordViewModel.ShowCopyButtons = showCopyButtons;

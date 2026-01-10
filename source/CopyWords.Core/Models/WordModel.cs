@@ -6,7 +6,8 @@
        string? SoundUrl,
        string? SoundFileName,
        Definition Definition,
-       IEnumerable<Variant> Variants);
+       IEnumerable<Variant> Variants,
+       IEnumerable<Variant> Expressions);
 
     public record Definition(
         Headword Headword,
