@@ -156,6 +156,79 @@ namespace CopyWords.Core.Tests.ViewModels
             connectivityServiceMock.Verify(x => x.UpdateConnectivitySnackbarAsync(It.IsAny<bool>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
+        [TestMethod]
+        public async Task InitAsync_WhenAlreadyInitializedAndNoInstantText_ReturnsEarlyWithoutLookup()
+        {
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+
+            var instantTranslationServiceMock = _fixture.Freeze<Mock<IInstantTranslationService>>();
+            instantTranslationServiceMock.Setup(x => x.GetTextAndClear()).Returns((string?)null);
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+
+            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
+
+            // First call to InitAsync - this initializes the ViewModel
+            await sut.InitAsync();
+
+            // Simulate that after init, user searched for a word
+            sut.SearchWord = "existingWord";
+
+            // Reset mocks to verify second call behavior
+            translationsServiceMock.Invocations.Clear();
+            wordViewModelMock.Invocations.Clear();
+
+            // Second call to InitAsync (simulates navigating back from Settings)
+            await sut.InitAsync();
+
+            // Should return early without calling lookup or updating UI
+            translationsServiceMock.VerifyNoOtherCalls();
+            wordViewModelMock.Verify(x => x.UpdateUI(), Times.Never);
+
+            // SearchWord should remain unchanged (not cleared by returning from Settings)
+            sut.SearchWord.Should().Be("existingWord");
+        }
+
+        [TestMethod]
+        public async Task InitAsync_WhenAlreadyInitializedAndHasInstantText_RunsLookup()
+        {
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(wordModel);
+
+            var instantTranslationServiceMock = _fixture.Freeze<Mock<IInstantTranslationService>>();
+            instantTranslationServiceMock.SetupSequence(x => x.GetTextAndClear())
+                .Returns((string?)null)  // First call returns null
+                .Returns("newWord");      // Second call returns instant text
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
+
+            // First call to InitAsync - this initializes the ViewModel
+            await sut.InitAsync();
+
+            // Reset mocks to verify second call behavior
+            translationsServiceMock.Invocations.Clear();
+
+            // Second call to InitAsync with instant text (simulates coming from History page)
+            await sut.InitAsync();
+
+            // Should run lookup because there is instant text
+            sut.SearchWord.Should().Be("newWord");
+            translationsServiceMock.Verify(x => x.LookUpWordAsync("newWord", nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
         #endregion
 
         #region Tests for LookUpAsync
@@ -717,7 +790,9 @@ namespace CopyWords.Core.Tests.ViewModels
             navigationHistoryMock.SetupGet(x => x.CanNavigateBack).Returns(true);
             navigationHistoryMock.Setup(x => x.Pop()).Returns(new NavigationEntry("test1", "dict1"));
             navigationHistoryMock.SetupSequence(x => x.Count)
+                // Returns(1) simulates that there is one item in the navigation history
                 .Returns(1)
+                // Returns(0) simulates that the navigation history is now empty after popping the item
                 .Returns(0);
 
             var sut = _fixture.Create<MainViewModel>();
@@ -765,7 +840,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.SearchWord.Should().Be("test1");
 
             navigationHistoryMock.Verify(x => x.Pop(), Times.Exactly(2));
-            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()));
+            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()), Times.Once);
             settingsServiceMock.Verify(x => x.SetSelectedParser("dict1"));
         }
 
@@ -800,8 +875,8 @@ namespace CopyWords.Core.Tests.ViewModels
             result.Should().BeTrue();
             sut.SearchWord.Should().Be("test1");
 
-            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()));
-            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()));
+            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()), Times.Once);
+            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()), Times.Once);
             settingsServiceMock.Verify(x => x.SetSelectedParser("dict1"));
         }
 

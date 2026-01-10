@@ -5,6 +5,7 @@ using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CopyWords.Core.Constants;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
@@ -35,6 +36,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IDeviceInfo _deviceInfo;
         private readonly IAnkiConnectService _ankiConnectService;
         private readonly ISettingsService _settingsService;
+        private readonly IAppThemeService _appThemeService;
 
         private string _soundUrl = string.Empty;
 
@@ -46,7 +48,8 @@ namespace CopyWords.Core.ViewModels
             IShare share,
             IDeviceInfo deviceInfo,
             IAnkiConnectService ankiConnectService,
-            ISettingsService settingsService)
+            ISettingsService settingsService,
+            IAppThemeService appThemeService)
         {
             _saveSoundFileService = saveSoundFileService;
             _dialogService = dialogService;
@@ -56,6 +59,10 @@ namespace CopyWords.Core.ViewModels
             _deviceInfo = deviceInfo;
             _ankiConnectService = ankiConnectService;
             _settingsService = settingsService;
+            _appThemeService = appThemeService;
+
+            // Subscribe to theme changes
+            _appThemeService.ThemeChanged += (s, e) => OnPropertyChanged(nameof(ButtonTextColor));
         }
 
         #region Properties
@@ -124,6 +131,8 @@ namespace CopyWords.Core.ViewModels
         public Color CopyEndingsButtonColor => GetButtonColor(CanCopyEndings);
 
         public Color CopyExamplesButtonColor => GetButtonColor(CanCopyFront);
+
+        public Color ButtonTextColor => ThemeColors.GetButtonForegroundColor(_appThemeService.CurrentTheme);
 
         #endregion
 
@@ -430,11 +439,7 @@ namespace CopyWords.Core.ViewModels
 
         #region Private methods
 
-        private static Color GetButtonColor(bool isEnabled)
-        {
-            Color color = isEnabled ? Color.Parse("#512BD4") : Color.Parse("#919191");
-            return color;
-        }
+        private static Color GetButtonColor(bool isEnabled) => ThemeColors.GetButtonBackgroundColor(isEnabled);
 
         #endregion
     }

@@ -26,6 +26,7 @@ namespace CopyWords.Core.ViewModels
 
         private CancellationTokenSource _cancellationTokenSource = new();
         private bool _disposed;
+        private bool _isInitialized;
 
         public MainViewModel(
             ISettingsService settingsService,
@@ -118,22 +119,35 @@ namespace CopyWords.Core.ViewModels
 
             _cancellationTokenSource = new CancellationTokenSource();
 
+            // Check if there's instant text (from Android context menu or History page)
+            string? instantText = _instantTranslationService.GetTextAndClear();
+
+            // If already initialized and no instant text, just return (e.g., when navigating back from Settings)
+            if (_isInitialized && string.IsNullOrEmpty(instantText))
+            {
+                return;
+            }
+
             DictionaryName = _settingsService.GetSelectedParser();
             UpdateDictionaryImage(DictionaryName);
 
-            _navigationHistory.Clear();
-            NotifyNavigationStateChanged();
-
-            _connectivityService.Initialize();
-            if (!_connectivityService.TestConnection())
+            if (!_isInitialized)
             {
-                await _connectivityService.UpdateConnectivitySnackbarAsync(false, _cancellationTokenSource.Token);
+                _navigationHistory.Clear();
+                NotifyNavigationStateChanged();
+
+                _connectivityService.Initialize();
+                if (!_connectivityService.TestConnection())
+                {
+                    await _connectivityService.UpdateConnectivitySnackbarAsync(false, _cancellationTokenSource.Token);
+                }
             }
 
             // Check if the app was called from a context menu on Android (or from History page) and set the search word accordingly
-            string instantText = _instantTranslationService.GetTextAndClear() ?? string.Empty;
-            SearchWord = instantText;
+            SearchWord = instantText ?? string.Empty;
             await LookUpAsync();
+
+            _isInitialized = true;
         }
 
         [RelayCommand]

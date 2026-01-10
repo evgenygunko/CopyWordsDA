@@ -69,7 +69,8 @@
                         <ImageButton.Source>
                             <FontImageSource
                                 FontFamily="MaterialIconsOutlined-Regular"
-                                Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"/>
+                                Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
+                                Color="{Binding ButtonIconColor}"/>
                         </ImageButton.Source>
                     </ImageButton>
                 </Grid>
@@ -92,7 +93,8 @@
                         <ImageButton.Source>
                             <FontImageSource
                                 FontFamily="MaterialIconsOutlined-Regular"
-                                Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"/>
+                                Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
+                                Color="{Binding ButtonIconColor}"/>
                         </ImageButton.Source>
                     </ImageButton>
                 </Grid>
@@ -115,7 +117,8 @@
                         <ImageButton.Source>
                             <FontImageSource
                                 FontFamily="MaterialIconsOutlined-Regular"
-                                Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"/>
+                                Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
+                                Color="{Binding ButtonIconColor}"/>
                         </ImageButton.Source>
                     </ImageButton>
                 </Grid>
@@ -137,7 +140,8 @@
                         <ImageButton.Source>
                             <FontImageSource
                                 FontFamily="MaterialIconsOutlined-Regular"
-                                Glyph="{x:Static MaterialDesignIconFonts.Folder_open}"/>
+                                Glyph="{x:Static MaterialDesignIconFonts.Folder_open}"
+                                Color="{Binding ButtonIconColor}"/>
                         </ImageButton.Source>
                     </ImageButton>
                 </Grid>

@@ -8,6 +8,7 @@ using System.Text.Json;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CopyWords.Core.Constants;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
@@ -50,6 +51,9 @@ namespace CopyWords.Core.ViewModels
             _settingsViewModelValidator = settingsViewModelValidator;
             _ankiConnectService = ankiConnectService;
             _appThemeService = appThemeService;
+
+            // Subscribe to theme changes
+            _appThemeService.ThemeChanged += (s, e) => OnPropertyChanged(nameof(ButtonIconColor));
         }
 
         #region Properties
@@ -107,6 +111,8 @@ namespace CopyWords.Core.ViewModels
         public partial ValidationResult? ValidationResult { get; set; }
 
         public string About => $"App version: {AppInfo.VersionString} (Build {AppInfo.BuildString}), {RuntimeInformation.FrameworkDescription}";
+
+        public Color ButtonIconColor => ThemeColors.GetButtonForegroundColor(_appThemeService.CurrentTheme);
 
         #endregion
 

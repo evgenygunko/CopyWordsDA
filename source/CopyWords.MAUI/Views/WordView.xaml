@@ -200,7 +200,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Anki" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
+                                    <Label Text="Anki" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -227,7 +227,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Front" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
+                                    <Label Text="Front" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -254,7 +254,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Back" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
+                                    <Label Text="Back" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -281,7 +281,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Type" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
+                                    <Label Text="Type" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -308,7 +308,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Endings" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
+                                    <Label Text="Endings" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>
@@ -334,7 +334,7 @@
                                         </Image.Source>
                                     </Image>
 
-                                    <Label Text="Examples" VerticalOptions="Center" TextColor="{DynamicResource ButtonTextColor}" />
+                                    <Label Text="Examples" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
                                 </HorizontalStackLayout>
                             </DataTemplate>
                         </SfButton.Content>

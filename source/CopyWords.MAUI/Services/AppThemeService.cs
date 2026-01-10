@@ -5,6 +5,10 @@ namespace CopyWords.MAUI.Services
 {
     public class AppThemeService : IAppThemeService
     {
+        public AppTheme CurrentTheme { get; private set; } = AppTheme.Light;
+
+        public event EventHandler<AppTheme>? ThemeChanged;
+
         public void ApplyTheme(AppTheme theme)
         {
             if (Application.Current?.Resources.MergedDictionaries == null)
@@ -46,6 +50,10 @@ namespace CopyWords.MAUI.Services
 
             // Update the UserAppTheme to match
             Application.Current.UserAppTheme = theme;
+
+            // Update the current theme and raise the event
+            CurrentTheme = theme;
+            ThemeChanged?.Invoke(this, theme);
         }
     }
 }
