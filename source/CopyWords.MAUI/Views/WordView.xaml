@@ -372,14 +372,20 @@
         <BoxView Grid.Row="4" Style="{StaticResource HorizontalDividerStyle}" IsVisible="{Binding HasExpressions}" />
 
         <!-- Expressions -->
-        <VerticalStackLayout Grid.Row="5" IsVisible="{Binding HasExpressions}">
-            <Label
-                Margin="0,20,0,10"
-                FontSize="Micro"
-                Text="Faste udtryk" />
-            <VerticalStackLayout
-                BindableLayout.ItemsSource="{Binding Expressions}"
-                BindableLayout.ItemTemplate="{StaticResource variantTemplate}" />
-        </VerticalStackLayout>
+        <SfExpander Grid.Row="5" IsVisible="{Binding HasExpressions}"
+                    Margin="0,20,0,0"
+                    IsExpanded="False"
+                    HeaderBackground="{DynamicResource ExpanderHeaderBackgroundColor}">
+            <SfExpander.Header>
+                <Label
+                    Margin="5,10,0,10"
+                    Text="Faste udtryk" />
+            </SfExpander.Header>
+            <SfExpander.Content>
+                <VerticalStackLayout
+                    BindableLayout.ItemsSource="{Binding Expressions}"
+                    BindableLayout.ItemTemplate="{StaticResource variantTemplate}" />
+            </SfExpander.Content>
+        </SfExpander>
     </Grid>
 </ContentView>

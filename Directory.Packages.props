@@ -22,6 +22,7 @@
     <PackageVersion Include="Sentry.Maui" Version="6.0.0" />
     <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.12" />
     <PackageVersion Include="Syncfusion.Licensing" Version="32.1.22" />
+    <PackageVersion Include="Syncfusion.Maui.Expander" Version="32.1.22" />
     <PackageVersion Include="Syncfusion.Maui.Inputs" Version="32.1.22" />
     <PackageVersion Include="Syncfusion.Maui.Toolkit" Version="1.0.8" />
   </ItemGroup>

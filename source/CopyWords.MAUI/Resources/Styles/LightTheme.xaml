@@ -88,4 +88,6 @@
     <Color x:Key="SettingsBorderBackgroundColor">White</Color>
     <Color x:Key="FillerColor">#E1E1E1</Color>
 
+    <!-- Expander colors -->
+    <Color x:Key="ExpanderHeaderBackgroundColor">#EEEEEE</Color>
 </ResourceDictionary>

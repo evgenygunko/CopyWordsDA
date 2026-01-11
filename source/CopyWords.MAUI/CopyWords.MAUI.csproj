@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!-- Default target frameworks for non-Windows platforms (macOS/Linux) -->
     <TargetFrameworks>net10.0-maccatalyst;net10.0-android</TargetFrameworks>
@@ -125,6 +125,7 @@
     <PackageReference Include="Sentry.Maui" />
     <PackageReference Include="SixLabors.ImageSharp" />
     <PackageReference Include="Syncfusion.Licensing" />
+    <PackageReference Include="Syncfusion.Maui.Expander" />
     <PackageReference Include="Syncfusion.Maui.Inputs" />
     <PackageReference Include="Syncfusion.Maui.Toolkit" />
   </ItemGroup>
