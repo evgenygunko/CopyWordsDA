@@ -98,6 +98,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IBuildConfiguration, BuildConfiguration>();
         builder.Services.AddSingleton<IGlobalSettings>(globalSettings);
         builder.Services.AddSingleton<IImageSharpWrapper, ImageSharpWrapper>();
+        builder.Services.AddSingleton<IAnkiDroidService, AnkiDroidService>();
 
         builder.Services.AddHttpClient<ITranslationsService, TranslationsService>();
         builder.Services.AddHttpClient<IUpdateService, UpdateService>();

@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Validator Api
 
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -27,6 +28,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IFileSaver _fileSaver;
         private readonly IValidator<SettingsViewModel> _settingsViewModelValidator;
         private readonly IAnkiConnectService _ankiConnectService;
+        private readonly IAnkiDroidService _ankiDroidService;
         private readonly IAppThemeService _appThemeService;
 
         private bool _isInitialized;
@@ -40,6 +42,7 @@ namespace CopyWords.Core.ViewModels
             IFileSaver fileSaver,
             IValidator<SettingsViewModel> settingsViewModelValidator,
             IAnkiConnectService ankiConnectService,
+            IAnkiDroidService ankiDroidService,
             IAppThemeService appThemeService)
         {
             _settingsService = settingsService;
@@ -50,6 +53,7 @@ namespace CopyWords.Core.ViewModels
             _fileSaver = fileSaver;
             _settingsViewModelValidator = settingsViewModelValidator;
             _ankiConnectService = ankiConnectService;
+            _ankiDroidService = ankiDroidService;
             _appThemeService = appThemeService;
 
             // Subscribe to theme changes
@@ -61,16 +65,40 @@ namespace CopyWords.Core.ViewModels
         internal bool CanUpdateIndividualSettings => _deviceInfo.Platform == DevicePlatform.Android;
 
         [ObservableProperty]
+        public partial ObservableCollection<string> DeckNames { get; set; } = [];
+
+        [ObservableProperty]
+        public partial ObservableCollection<string> ModelNames { get; set; } = [];
+
+        [ObservableProperty]
+        public partial bool IsAnkiIntegrationAvailable { get; set; }
+
+        [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SelectAnkiDeckNameDanishCommand))]
         public partial string? AnkiDeckNameDanish { get; set; }
+
+        partial void OnAnkiDeckNameDanishChanged(string? value)
+        {
+            OnAnkiDeckNameDanishChangedInternal(value);
+        }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SelectAnkiDeckNameSpanishCommand))]
         public partial string? AnkiDeckNameSpanish { get; set; }
 
+        partial void OnAnkiDeckNameSpanishChanged(string? value)
+        {
+            OnAnkiDeckNameSpanishChangedInternal(value);
+        }
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SelectAnkiModelNameCommand))]
         public partial string? AnkiModelName { get; set; }
+
+        partial void OnAnkiModelNameChanged(string? value)
+        {
+            OnAnkiModelNameChangedInternal(value);
+        }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
@@ -297,6 +325,12 @@ namespace CopyWords.Core.ViewModels
 
         internal async Task UpdateUIAsync(AppSettings appSettings, CancellationToken cancellationToken)
         {
+            // Load deck and model names for Android Picker controls
+            if (_deviceInfo.Platform == DevicePlatform.Android)
+            {
+                await InitializeAnkiDroidAsync(cancellationToken);
+            }
+
             AnkiDeckNameDanish = appSettings.AnkiDeckNameDanish;
             AnkiDeckNameSpanish = appSettings.AnkiDeckNameSpanish;
             AnkiModelName = appSettings.AnkiModelName;
@@ -314,6 +348,27 @@ namespace CopyWords.Core.ViewModels
             ShowCopyWithAnkiConnectButton = appSettings.ShowCopyWithAnkiConnectButton;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
             UseDarkTheme = appSettings.UseDarkTheme;
+        }
+
+        internal async Task InitializeAnkiDroidAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                IsAnkiIntegrationAvailable = _ankiDroidService.IsAvailable();
+
+                if (IsAnkiIntegrationAvailable)
+                {
+                    IEnumerable<string> deckNames = await _ankiDroidService.GetDeckNamesAsync(cancellationToken);
+                    DeckNames = new ObservableCollection<string>(deckNames);
+
+                    IEnumerable<string> modelNames = await _ankiDroidService.GetModelNamesAsync(cancellationToken);
+                    ModelNames = new ObservableCollection<string>(modelNames);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading deck/model names: {ex.Message}");
+            }
         }
 
         internal bool CanSaveSettings()
@@ -368,6 +423,33 @@ namespace CopyWords.Core.ViewModels
                 }
 
                 Debug.WriteLine($"UseDarkTheme has changed to {value}");
+            }
+        }
+
+        internal void OnAnkiDeckNameDanishChangedInternal(string? value)
+        {
+            if (_isInitialized && CanUpdateIndividualSettings && !string.IsNullOrEmpty(value))
+            {
+                _settingsService.SetAnkiDeckNameDanish(value);
+                Debug.WriteLine($"AnkiDeckNameDanish has changed to {value}");
+            }
+        }
+
+        internal void OnAnkiDeckNameSpanishChangedInternal(string? value)
+        {
+            if (_isInitialized && CanUpdateIndividualSettings && !string.IsNullOrEmpty(value))
+            {
+                _settingsService.SetAnkiDeckNameSpanish(value);
+                Debug.WriteLine($"AnkiDeckNameSpanish has changed to {value}");
+            }
+        }
+
+        internal void OnAnkiModelNameChangedInternal(string? value)
+        {
+            if (_isInitialized && CanUpdateIndividualSettings && !string.IsNullOrEmpty(value))
+            {
+                _settingsService.SetAnkiModelName(value);
+                Debug.WriteLine($"AnkiModelName has changed to {value}");
             }
         }
 

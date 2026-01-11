@@ -23,6 +23,12 @@ namespace CopyWords.Core.Services
 
         void SetCopyTranslatedMeanings(bool value);
 
+        void SetAnkiDeckNameDanish(string value);
+
+        void SetAnkiDeckNameSpanish(string value);
+
+        void SetAnkiModelName(string value);
+
         bool GetUseDarkTheme();
 
         void SetUseDarkTheme(bool value);
@@ -133,6 +139,12 @@ namespace CopyWords.Core.Services
         public bool GetShowAddNoteWithAnkiConnectButton() => _preferences.Get<bool>(nameof(AppSettings.ShowCopyWithAnkiConnectButton), false);
 
         public void SetCopyTranslatedMeanings(bool value) => _preferences.Set(nameof(AppSettings.CopyTranslatedMeanings), value);
+
+        public void SetAnkiDeckNameDanish(string value) => _preferences.Set(nameof(AppSettings.AnkiDeckNameDanish), value);
+
+        public void SetAnkiDeckNameSpanish(string value) => _preferences.Set(nameof(AppSettings.AnkiDeckNameSpanish), value);
+
+        public void SetAnkiModelName(string value) => _preferences.Set(nameof(AppSettings.AnkiModelName), value);
 
         public bool GetUseDarkTheme() => _preferences.Get<bool>(nameof(AppSettings.UseDarkTheme), false);
 
