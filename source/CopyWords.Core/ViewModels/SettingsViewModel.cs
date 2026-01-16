@@ -358,6 +358,19 @@ namespace CopyWords.Core.ViewModels
 
                 if (IsAnkiIntegrationAvailable)
                 {
+                    // Check and request permission to access AnkiDroid
+                    if (!_ankiDroidService.HasPermission())
+                    {
+                        await _ankiDroidService.RequestPermissionAsync();
+                    }
+
+                    // Only proceed if permission was granted
+                    if (!_ankiDroidService.HasPermission())
+                    {
+                        Debug.WriteLine("AnkiDroid permission was not granted by the user.");
+                        return;
+                    }
+
                     IEnumerable<string> deckNames = await _ankiDroidService.GetDeckNamesAsync(cancellationToken);
                     DeckNames = new ObservableCollection<string>(deckNames);
 

@@ -995,6 +995,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
             ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(true);
+            ankiDroidServiceMock.Setup(x => x.HasPermission()).Returns(true);
             ankiDroidServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(expectedDeckNames);
             ankiDroidServiceMock.Setup(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()))
@@ -1018,6 +1019,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
             ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(true);
+            ankiDroidServiceMock.Setup(x => x.HasPermission()).Returns(true);
             ankiDroidServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<string>());
             ankiDroidServiceMock.Setup(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()))
