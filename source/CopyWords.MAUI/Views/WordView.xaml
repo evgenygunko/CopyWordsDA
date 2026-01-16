@@ -46,315 +46,249 @@
         <!-- Media control -->
         <toolkit:MediaElement Grid.Row="1" x:Name="mediaElement" IsVisible="False" ShouldAutoPlay="false" />
 
-        <OnPlatform x:TypeArguments="View">
-            <On Platform="Android">
-                <!-- Play sound, save sound, and copy buttons -->
-                <FlexLayout Grid.Row="1"
-                        Margin="0,10,0,0"
-                        Direction="Row"
-                        Wrap="Wrap"
-                        AlignItems="Start">
+        <!-- Play sound, save sound, share, copy buttons -->
+        <FlexLayout Grid.Row="1"
+                Margin="0,10,0,0"
+                Direction="Row"
+                Wrap="Wrap"
+                AlignItems="Start">
 
-                    <!-- Play sound -->
-                    <SfButton
-                            Margin="0,0,2,2"
-                            WidthRequest="44" HeightRequest="44"
-                            ToolTipProperties.Text="Play sound"
-                            BackgroundColor="{Binding PlaySoundButtonColor}"
-                            Command="{Binding PlaySoundCommand}"
-                            CommandParameter="{Binding Source={x:Reference mediaElement}, x:DataType=toolkit:MediaElement}">
+            <!-- Play sound -->
+            <SfButton
+                    Margin="0,0,3,3"
+                    WidthRequest="44" HeightRequest="44"
+                    ToolTipProperties.Text="Play sound"
+                    BackgroundColor="{Binding PlaySoundButtonColor}"
+                    Command="{Binding PlaySoundCommand}"
+                    CommandParameter="{Binding Source={x:Reference mediaElement}, x:DataType=toolkit:MediaElement}">
 
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout HorizontalOptions="Center">
-                                    <Image
-                                            WidthRequest="{OnPlatform 24, Android=36}"
-                                            HeightRequest="{OnPlatform 24, Android=36}">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Play_circle}"
-                                                Color="{DynamicResource ButtonIconColor}" />
-                                        </Image.Source>
-                                    </Image>
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
+                <SfButton.Content>
+                    <DataTemplate>
+                        <HorizontalStackLayout HorizontalOptions="Center">
+                            <Image
+                                    WidthRequest="{OnPlatform 24, Android=36}"
+                                    HeightRequest="{OnPlatform 24, Android=36}">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static MaterialDesignIconFonts.Play_circle}"
+                                        Color="{DynamicResource ButtonIconColor}" />
+                                </Image.Source>
+                            </Image>
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </SfButton.Content>
+            </SfButton>
 
-                    <!-- Save sound file -->
-                    <SfButton
-                            Margin="0,0,6,2"
-                            WidthRequest="44" HeightRequest="44"
-                            ToolTipProperties.Text="Save sound file"
-                            BackgroundColor="{Binding SaveSoundButtonColor}"
-                            Command="{Binding SaveSoundFileCommand}">
+            <!-- Save sound file -->
+            <SfButton
+                    Margin="0,0,6,3"
+                    WidthRequest="44" HeightRequest="44"
+                    ToolTipProperties.Text="Save sound file"
+                    BackgroundColor="{Binding SaveSoundButtonColor}"
+                    Command="{Binding SaveSoundFileCommand}">
 
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout HorizontalOptions="Center">
-                                    <Image
-                                            WidthRequest="{OnPlatform 24, Android=36}"
-                                            HeightRequest="{OnPlatform 24, Android=36}">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Save}"
-                                                Color="{DynamicResource ButtonIconColor}" />
-                                        </Image.Source>
-                                    </Image>
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
+                <SfButton.Content>
+                    <DataTemplate>
+                        <HorizontalStackLayout HorizontalOptions="Center">
+                            <Image
+                                    WidthRequest="{OnPlatform 24, Android=36}"
+                                    HeightRequest="{OnPlatform 24, Android=36}">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static MaterialDesignIconFonts.Save}"
+                                        Color="{DynamicResource ButtonIconColor}" />
+                                </Image.Source>
+                            </Image>
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </SfButton.Content>
+            </SfButton>
 
-                    <!-- Share -->
-                    <SfButton
-                            Margin="4,0,2,2"
-                            WidthRequest="44" HeightRequest="44"
-                            ToolTipProperties.Text="Share word"
-                            BackgroundColor="{Binding CopyFrontButtonColor}"
-                            Command="{Binding ShareCommand}">
+            <!-- Share -->
+            <SfButton
+                    Margin="0,0,3,3"
+                    WidthRequest="44" HeightRequest="44"
+                    ToolTipProperties.Text="Share word"
+                    BackgroundColor="{Binding CopyFrontButtonColor}"
+                    Command="{Binding ShareCommand}"
+                    IsVisible="{Binding ShowShareButton}">
 
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout HorizontalOptions="Center">
-                                    <Image
-                                            WidthRequest="{OnPlatform 24, Android=30}"
-                                            HeightRequest="{OnPlatform 24, Android=30}">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Share}"
-                                                Color="{DynamicResource ButtonIconColor}" />
-                                        </Image.Source>
-                                    </Image>
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
-                </FlexLayout>
-            </On>
-            <On Platform="WinUI, MacCatalyst">
+                <SfButton.Content>
+                    <DataTemplate>
+                        <HorizontalStackLayout HorizontalOptions="Center">
+                            <Image
+                                    WidthRequest="{OnPlatform 24, Android=30}"
+                                    HeightRequest="{OnPlatform 24, Android=30}">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static MaterialDesignIconFonts.Share}"
+                                        Color="{DynamicResource ButtonIconColor}" />
+                                </Image.Source>
+                            </Image>
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </SfButton.Content>
+            </SfButton>
 
-                <!-- Play sound, save sound, copy front, copy back, copy part of speech, copy endings, and copy examples buttons -->
-                <FlexLayout Grid.Row="1"
-                        Margin="0,10,0,0"
-                        Direction="Row"
-                        Wrap="Wrap"
-                        AlignItems="Start">
+            <!-- Add a new note with AnkiConnect -->
+            <SfButton
+                    Margin="0,0,3,3"
+                    ToolTipProperties.Text="Add note with AnkiConnect"
+                    BackgroundColor="{Binding CopyFrontButtonColor}"
+                    Command="{Binding AddNoteWithAnkiConnectCommand}"
+                    IsVisible="{Binding ShowAddNoteWithAnkiConnectButton}">
 
-                    <!-- Play sound -->
-                    <SfButton
-                            Margin="0,0,3,3"
-                            WidthRequest="44" HeightRequest="44"
-                            ToolTipProperties.Text="Play sound"
-                            BackgroundColor="{Binding PlaySoundButtonColor}"
-                            Command="{Binding PlaySoundCommand}"
-                            CommandParameter="{Binding Source={x:Reference mediaElement}, x:DataType=toolkit:MediaElement}">
+                <SfButton.Content>
+                    <DataTemplate>
+                        <HorizontalStackLayout Padding="10" Spacing="8">
+                            <Image WidthRequest="20" HeightRequest="20">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static MaterialDesignIconFonts.Send}"
+                                        Color="{DynamicResource ButtonIconColor}" />
+                                </Image.Source>
+                            </Image>
 
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout HorizontalOptions="Center">
-                                    <Image
-                                            WidthRequest="{OnPlatform 24, Android=36}"
-                                            HeightRequest="{OnPlatform 24, Android=36}">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Play_circle}"
-                                                Color="{DynamicResource ButtonIconColor}" />
-                                        </Image.Source>
-                                    </Image>
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
+                            <Label Text="Anki" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </SfButton.Content>
+            </SfButton>
 
-                    <!-- Save sound file -->
-                    <SfButton
-                            Margin="0,0,6,2"
-                            WidthRequest="44" HeightRequest="44"
-                            ToolTipProperties.Text="Save sound file"
-                            BackgroundColor="{Binding SaveSoundButtonColor}"
-                            Command="{Binding SaveSoundFileCommand}"
-                            IsVisible="{Binding ShowCopyButtons}">
+            <!-- Copy Front -->
+            <SfButton
+                    Margin="0,0,3,3"
+                    ToolTipProperties.Text="Copy text for the Anki 'Front' field"
+                    BackgroundColor="{Binding CopyFrontButtonColor}"
+                    Command="{Binding CopyFrontCommand}"
+                    IsVisible="{Binding ShowCopyButtons}">
 
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout HorizontalOptions="Center">
-                                    <Image
-                                            WidthRequest="{OnPlatform 24, Android=36}"
-                                            HeightRequest="{OnPlatform 24, Android=36}">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Save}"
-                                                Color="{DynamicResource ButtonIconColor}" />
-                                        </Image.Source>
-                                    </Image>
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
+                <SfButton.Content>
+                    <DataTemplate>
+                        <HorizontalStackLayout Padding="10" Spacing="8">
+                            <Image WidthRequest="20" HeightRequest="20">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
+                                        Color="{DynamicResource ButtonIconColor}" />
+                                </Image.Source>
+                            </Image>
 
-                    <!-- Add a new note with AnkiConnect -->
-                    <SfButton
-                            Margin="0,0,3,3"
-                            ToolTipProperties.Text="Add note with AnkiConnect"
-                            BackgroundColor="{Binding CopyFrontButtonColor}"
-                            Command="{Binding AddNoteWithAnkiConnectCommand}"
-                            IsVisible="{Binding ShowAddNoteWithAnkiConnectButton}">
+                            <Label Text="Front" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </SfButton.Content>
+            </SfButton>
 
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout Padding="10" Spacing="8">
-                                    <Image WidthRequest="20" HeightRequest="20">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Send}"
-                                                Color="{DynamicResource ButtonIconColor}" />
-                                        </Image.Source>
-                                    </Image>
+            <!-- Copy Back -->
+            <SfButton
+                    Margin="0,0,3,3"
+                    ToolTipProperties.Text="Copy text for the Anki 'Back' field"
+                    BackgroundColor="{Binding CopyBackButtonColor}"
+                    Command="{Binding CopyBackCommand}"
+                    IsVisible="{Binding ShowCopyButtons}">
 
-                                    <Label Text="Anki" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
+                <SfButton.Content>
+                    <DataTemplate>
+                        <HorizontalStackLayout Padding="10" Spacing="8">
+                            <Image WidthRequest="20" HeightRequest="20">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
+                                        Color="{DynamicResource ButtonIconColor}" />
+                                </Image.Source>
+                            </Image>
 
-                    <!-- Copy Front -->
-                    <SfButton
-                            Margin="0,0,3,3"
-                            ToolTipProperties.Text="Copy text for the Anki 'Front' field"
-                            BackgroundColor="{Binding CopyFrontButtonColor}"
-                            Command="{Binding CopyFrontCommand}"
-                            IsVisible="{Binding ShowCopyButtons}">
+                            <Label Text="Back" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </SfButton.Content>
+            </SfButton>
 
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout Padding="10" Spacing="8">
-                                    <Image WidthRequest="20" HeightRequest="20">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
-                                                Color="{DynamicResource ButtonIconColor}" />
-                                        </Image.Source>
-                                    </Image>
+            <!-- Copy Part of speech -->
+            <SfButton
+                    Margin="0,0,3,3"
+                    ToolTipProperties.Text="Copy text for the Anki 'PartOfSpeech' field"
+                    BackgroundColor="{Binding CopyPartOfSpeechButtonColor}"
+                    Command="{Binding CopyPartOfSpeechCommand}"
+                    IsVisible="{Binding ShowCopyButtons}">
 
-                                    <Label Text="Front" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
+                <SfButton.Content>
+                    <DataTemplate>
+                        <HorizontalStackLayout Padding="10" Spacing="8">
+                            <Image WidthRequest="20" HeightRequest="20">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
+                                        Color="{DynamicResource ButtonIconColor}" />
+                                </Image.Source>
+                            </Image>
 
-                    <!-- Copy Back -->
-                    <SfButton
-                            Margin="0,0,3,3"
-                            ToolTipProperties.Text="Copy text for the Anki 'Back' field"
-                            BackgroundColor="{Binding CopyBackButtonColor}"
-                            Command="{Binding CopyBackCommand}"
-                            IsVisible="{Binding ShowCopyButtons}">
+                            <Label Text="Type" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </SfButton.Content>
+            </SfButton>
 
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout Padding="10" Spacing="8">
-                                    <Image WidthRequest="20" HeightRequest="20">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
-                                                Color="{DynamicResource ButtonIconColor}" />
-                                        </Image.Source>
-                                    </Image>
+            <!-- Copy Endings -->
+            <SfButton
+                    Margin="0,0,3,3"
+                    ToolTipProperties.Text="Copy text for the Anki 'Forms' field"
+                    BackgroundColor="{Binding CopyEndingsButtonColor}"
+                    Command="{Binding CopyEndingsCommand}"
+                    IsVisible="{Binding ShowCopyButtons}">
 
-                                    <Label Text="Back" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
+                <SfButton.Content>
+                    <DataTemplate>
+                        <HorizontalStackLayout Padding="10" Spacing="8">
+                            <Image WidthRequest="20" HeightRequest="20">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
+                                        Color="{DynamicResource ButtonIconColor}" />
+                                </Image.Source>
+                            </Image>
 
-                    <!-- Copy Part of speech -->
-                    <SfButton
-                            Margin="0,0,3,3"
-                            ToolTipProperties.Text="Copy text for the Anki 'PartOfSpeech' field"
-                            BackgroundColor="{Binding CopyPartOfSpeechButtonColor}"
-                            Command="{Binding CopyPartOfSpeechCommand}"
-                            IsVisible="{Binding ShowCopyButtons}">
+                            <Label Text="Endings" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </SfButton.Content>
+            </SfButton>
 
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout Padding="10" Spacing="8">
-                                    <Image WidthRequest="20" HeightRequest="20">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
-                                                Color="{DynamicResource ButtonIconColor}" />
-                                        </Image.Source>
-                                    </Image>
+            <!-- Copy Examples -->
+            <SfButton
+                    Margin="0,0,3,3"
+                    ToolTipProperties.Text="Copy text for the Anki 'Example' field"
+                    BackgroundColor="{Binding CopyExamplesButtonColor}"
+                    Command="{Binding CopyExamplesCommand}"
+                    IsVisible="{Binding ShowCopyButtons}">
 
-                                    <Label Text="Type" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
+                <SfButton.Content>
+                    <DataTemplate>
+                        <HorizontalStackLayout Padding="10" Spacing="8">
+                            <Image WidthRequest="20" HeightRequest="20">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialIconsOutlined-Regular"
+                                        Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
+                                        Color="{DynamicResource ButtonIconColor}" />
+                                </Image.Source>
+                            </Image>
 
-                    <!-- Copy Endings -->
-                    <SfButton
-                            Margin="0,0,3,3"
-                            ToolTipProperties.Text="Copy text for the Anki 'Forms' field"
-                            BackgroundColor="{Binding CopyEndingsButtonColor}"
-                            Command="{Binding CopyEndingsCommand}"
-                            IsVisible="{Binding ShowCopyButtons}">
-
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout Padding="10" Spacing="8">
-                                    <Image WidthRequest="20" HeightRequest="20">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
-                                                Color="{DynamicResource ButtonIconColor}" />
-                                        </Image.Source>
-                                    </Image>
-
-                                    <Label Text="Endings" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
-
-                    <!-- Copy Examples -->
-                    <SfButton
-                            ToolTipProperties.Text="Copy text for the Anki 'Example' field"
-                            BackgroundColor="{Binding CopyExamplesButtonColor}"
-                            Command="{Binding CopyExamplesCommand}"
-                            IsVisible="{Binding ShowCopyButtons}">
-
-                        <SfButton.Content>
-                            <DataTemplate>
-                                <HorizontalStackLayout Padding="10" Spacing="8">
-                                    <Image WidthRequest="20" HeightRequest="20">
-                                        <Image.Source>
-                                            <FontImageSource
-                                                FontFamily="MaterialIconsOutlined-Regular"
-                                                Glyph="{x:Static MaterialDesignIconFonts.Content_copy}"
-                                                Color="{DynamicResource ButtonIconColor}" />
-                                        </Image.Source>
-                                    </Image>
-
-                                    <Label Text="Examples" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
-                                </HorizontalStackLayout>
-                            </DataTemplate>
-                        </SfButton.Content>
-                    </SfButton>
-                </FlexLayout>
-            </On>
-        </OnPlatform>
+                            <Label Text="Examples" VerticalOptions="Center" TextColor="{Binding ButtonTextColor}" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </SfButton.Content>
+            </SfButton>
+        </FlexLayout>
 
         <!-- Horizontal line -->
         <BoxView Grid.Row="2" Style="{StaticResource HorizontalDividerStyle}" Margin="0,15,0,0" />

@@ -378,8 +378,9 @@ namespace CopyWords.Core.ViewModels
                     _wordViewModel.AddExpression(expressionVM);
                 }
 
-                _wordViewModel.ShowCopyButtons = showCopyButtons;
-                _wordViewModel.ShowAddNoteWithAnkiConnectButton = _settingsService.GetShowAddNoteWithAnkiConnectButton();
+                _wordViewModel.ShowCopyButtons = showCopyButtons && (_deviceInfo.Platform != DevicePlatform.Android);
+                _wordViewModel.ShowAddNoteWithAnkiConnectButton = _settingsService.GetShowAddNoteWithAnkiConnectButton() && (_deviceInfo.Platform != DevicePlatform.Android);
+                _wordViewModel.ShowShareButton = (_deviceInfo.Platform == DevicePlatform.Android);
                 _wordViewModel.UpdateUI();
 
                 _settingsService.SetSelectedParser(wordModel.SourceLanguage.ToString());

@@ -19,6 +19,7 @@ namespace CopyWords.Core.ViewModels
         string? SoundUrl { get; set; }
         bool ShowCopyButtons { get; set; }
         bool ShowAddNoteWithAnkiConnectButton { get; set; }
+        bool ShowShareButton { get; set; }
 
         void UpdateUI();
         void SetDefinition(DefinitionViewModel definition);
@@ -123,6 +124,9 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         public partial bool ShowCopyButtons { get; set; }
+
+        [ObservableProperty]
+        public partial bool ShowShareButton { get; set; }
 
         public Color PlaySoundButtonColor => GetButtonColor(CanPlaySound);
 
