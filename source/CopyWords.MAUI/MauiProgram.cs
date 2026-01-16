@@ -117,7 +117,6 @@ public static class MauiProgram
 
         // App-level ViewModels
         builder.Services.AddSingleton<GetUpdateViewModel>();
-        builder.Services.AddSingleton<LastCrashViewModel>();
 
         builder.Services.AddScoped<IValidator<SettingsViewModel>, SettingsViewModelValidator>();
         builder.Services.AddScoped<IValidator<AnkiNote>, AnkiNoteValidator>();

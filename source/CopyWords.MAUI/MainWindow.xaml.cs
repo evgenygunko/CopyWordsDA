@@ -17,7 +17,6 @@ public partial class MainWindow : Window
     private readonly ILaunchDarklyService _launchDarklyService;
 
     private readonly GetUpdateViewModel _getUpdateViewModel;
-    private readonly LastCrashViewModel _lastCrashViewModel;
 
     public MainWindow(
         IUpdateService updateService,
@@ -25,8 +24,7 @@ public partial class MainWindow : Window
         IPreferences preferences,
         IGlobalSettings globalSettings,
         ILaunchDarklyService launchDarklyService,
-        GetUpdateViewModel getUpdateViewModel,
-        LastCrashViewModel lastCrashViewModel)
+        GetUpdateViewModel getUpdateViewModel)
     {
         InitializeComponent();
 
@@ -37,23 +35,10 @@ public partial class MainWindow : Window
         _launchDarklyService = launchDarklyService;
 
         _getUpdateViewModel = getUpdateViewModel;
-        _lastCrashViewModel = lastCrashViewModel;
     }
 
     protected override async void OnCreated()
     {
-        bool isLastCrashHandled = _preferences.Get("LastCrashHandled", false);
-        string lastCrashMessage = _preferences.Get("LastCrashMessage", string.Empty);
-
-        // Check for last crash and show the LastCrashPage if needed.
-        if (!isLastCrashHandled && !string.IsNullOrEmpty(lastCrashMessage))
-        {
-            await Navigation.PushModalAsync(new LastCrashPage
-            {
-                BindingContext = _lastCrashViewModel
-            });
-        }
-
         // Initialize LaunchDarkly
         if (!string.IsNullOrWhiteSpace(_globalSettings.LaunchDarklyMobileKey))
         {

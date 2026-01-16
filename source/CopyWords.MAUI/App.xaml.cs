@@ -15,7 +15,6 @@ public partial class App : Application
     private readonly IPreferences _preferences;
     private readonly MainWindowViewModel _mainWindowViewModel;
     private readonly GetUpdateViewModel _getUpdateViewModel;
-    private readonly LastCrashViewModel _lastCrashViewModel;
     private readonly IGlobalSettings _globalSettings;
     private readonly ILaunchDarklyService _launchDarklyService;
     private readonly IAppThemeService _appThemeService;
@@ -27,7 +26,6 @@ public partial class App : Application
         IPreferences preferences,
         MainWindowViewModel mainWindowViewModel,
         GetUpdateViewModel getUpdateViewModel,
-        LastCrashViewModel lastCrashViewModel,
         IGlobalSettings globalSettings,
         ILaunchDarklyService launchDarklyService,
         IAppThemeService appThemeService)
@@ -38,7 +36,6 @@ public partial class App : Application
         _preferences = preferences;
         _mainWindowViewModel = mainWindowViewModel;
         _getUpdateViewModel = getUpdateViewModel;
-        _lastCrashViewModel = lastCrashViewModel;
         _globalSettings = globalSettings;
         _launchDarklyService = launchDarklyService;
         _appThemeService = appThemeService;
@@ -56,7 +53,7 @@ public partial class App : Application
     {
         AppSettings appSettings = _settingsService.LoadSettings();
 
-        Window window = new MainWindow(_updateService, _dialogService, _preferences, _globalSettings, _launchDarklyService, _getUpdateViewModel, _lastCrashViewModel)
+        Window window = new MainWindow(_updateService, _dialogService, _preferences, _globalSettings, _launchDarklyService, _getUpdateViewModel)
         {
             BindingContext = _mainWindowViewModel,
             Width = appSettings.MainWindowWidth,

@@ -15,19 +15,6 @@ public partial class App : MauiWinUIApplication
     public App()
     {
         InitializeComponent();
-
-        UnhandledException += (sender, e) =>
-        {
-            if (e.Exception is Exception ex)
-            {
-                Preferences.Default.Set("LastCrashHandled", false);
-                Preferences.Default.Set("LastCrashTime", DateTimeOffset.Now.ToUnixTimeMilliseconds());
-                Preferences.Default.Set("LastCrashException", ex.GetType().FullName);
-                Preferences.Default.Set("LastCrashMessage", ex.Message);
-                Preferences.Default.Set("LastCrashStackTrace", ex.StackTrace);
-            }
-            e.Handled = false;
-        };
     }
 
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();

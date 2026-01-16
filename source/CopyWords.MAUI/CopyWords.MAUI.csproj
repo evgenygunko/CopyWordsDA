@@ -160,9 +160,6 @@
     <MauiXaml Update="Views\HistoryPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
-    <MauiXaml Update="Views\LastCrashPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
     <MauiXaml Update="Views\MeaningsView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

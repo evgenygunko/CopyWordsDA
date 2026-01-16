@@ -65,6 +65,7 @@
                            Text="{Binding AnkiDeckNameDanish}" />
                     <ImageButton Grid.Column="1"
                         Margin="8,0,0,0"
+                        IsEnabled="{Binding ShowCopyWithAnkiConnectButton}"
                         Command="{Binding SelectAnkiDeckNameDanishCommand}">
                         <ImageButton.Source>
                             <FontImageSource
@@ -89,6 +90,7 @@
                            Text="{Binding AnkiDeckNameSpanish}" />
                     <ImageButton Grid.Column="1"
                         Margin="8,0,0,0"
+                        IsEnabled="{Binding ShowCopyWithAnkiConnectButton}"
                         Command="{Binding SelectAnkiDeckNameSpanishCommand}">
                         <ImageButton.Source>
                             <FontImageSource
@@ -113,6 +115,7 @@
                            Text="{Binding AnkiModelName}" />
                     <ImageButton Grid.Column="1"
                         Margin="8,0,0,0"
+                        IsEnabled="{Binding ShowCopyWithAnkiConnectButton}"
                         Command="{Binding SelectAnkiModelNameCommand}">
                         <ImageButton.Source>
                             <FontImageSource
@@ -132,10 +135,12 @@
                     </Grid.ColumnDefinitions>
 
                     <Entry Grid.Column="0"
+                           IsEnabled="{Binding ShowCopyWithAnkiConnectButton}"
                            Style="{StaticResource InputEntryStyle}"
                            Text="{Binding AnkiSoundsFolder}" />
                     <ImageButton Grid.Column="1"
                         Margin="8,0,0,0"
+                        IsEnabled="{Binding ShowCopyWithAnkiConnectButton}"
                         Command="{Binding PickAnkiSoundsFolderCommand}">
                         <ImageButton.Source>
                             <FontImageSource
