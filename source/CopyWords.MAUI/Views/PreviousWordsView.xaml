@@ -8,8 +8,7 @@
             <DataTemplate x:Key="previousWordsTemplate"
                           x:DataType="PreviousWordViewModel">
 
-                <Label Margin="10"
-                       FontSize="18">
+                <Label FontSize="{StaticResource FontSizeTitle}">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="{Binding Word, FallbackValue='høj1 sb.'}" TextDecorations="Underline">
@@ -28,5 +27,5 @@
             x:DataType="HistoryPageViewModel"
             BindableLayout.ItemsSource="{Binding PreviousWords}"
             BindableLayout.ItemTemplate="{StaticResource previousWordsTemplate}"
-            Spacing="0" />
+            Spacing="8" />
 </ContentView>

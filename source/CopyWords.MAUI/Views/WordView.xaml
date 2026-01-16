@@ -7,8 +7,6 @@
 
     <ContentView.Resources>
         <ResourceDictionary>
-            <toolkit:IsNotNullConverter x:Key="IsNotNullConverter" />
-
             <DataTemplate x:Key="variantTemplate"
                           x:DataType="VariantViewModel">
                 <Label>
@@ -40,6 +38,8 @@
 
         <!-- Variants -->
         <VerticalStackLayout Grid.Row="0"
+                Margin="{OnPlatform '0,5,0,0', MacCatalyst='0,10,0,10'}"
+                Spacing="{OnPlatform '4', MacCatalyst='8'}"
                 BindableLayout.ItemsSource="{Binding Variants}"
                 BindableLayout.ItemTemplate="{StaticResource variantTemplate}" />
 
@@ -146,7 +146,7 @@
 
                     <!-- Play sound -->
                     <SfButton
-                            Margin="0,0,2,2"
+                            Margin="0,0,3,3"
                             WidthRequest="44" HeightRequest="44"
                             ToolTipProperties.Text="Play sound"
                             BackgroundColor="{Binding PlaySoundButtonColor}"
@@ -200,8 +200,7 @@
 
                     <!-- Add a new note with AnkiConnect -->
                     <SfButton
-                            Margin="0,0,2,2"
-                            WidthRequest="80"
+                            Margin="0,0,3,3"
                             ToolTipProperties.Text="Add note with AnkiConnect"
                             BackgroundColor="{Binding CopyFrontButtonColor}"
                             Command="{Binding AddNoteWithAnkiConnectCommand}"
@@ -209,8 +208,8 @@
 
                         <SfButton.Content>
                             <DataTemplate>
-                                <HorizontalStackLayout>
-                                    <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
+                                <HorizontalStackLayout Padding="10" Spacing="8">
+                                    <Image WidthRequest="20" HeightRequest="20">
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
@@ -227,8 +226,7 @@
 
                     <!-- Copy Front -->
                     <SfButton
-                            Margin="0,0,2,2"
-                            WidthRequest="{OnPlatform 80, Android=60}"
+                            Margin="0,0,3,3"
                             ToolTipProperties.Text="Copy text for the Anki 'Front' field"
                             BackgroundColor="{Binding CopyFrontButtonColor}"
                             Command="{Binding CopyFrontCommand}"
@@ -236,8 +234,8 @@
 
                         <SfButton.Content>
                             <DataTemplate>
-                                <HorizontalStackLayout>
-                                    <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
+                                <HorizontalStackLayout Padding="10" Spacing="8">
+                                    <Image WidthRequest="20" HeightRequest="20">
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
@@ -254,8 +252,7 @@
 
                     <!-- Copy Back -->
                     <SfButton
-                            Margin="0,0,2,2"
-                            WidthRequest="{OnPlatform 80, Android=60}"
+                            Margin="0,0,3,3"
                             ToolTipProperties.Text="Copy text for the Anki 'Back' field"
                             BackgroundColor="{Binding CopyBackButtonColor}"
                             Command="{Binding CopyBackCommand}"
@@ -263,8 +260,8 @@
 
                         <SfButton.Content>
                             <DataTemplate>
-                                <HorizontalStackLayout>
-                                    <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
+                                <HorizontalStackLayout Padding="10" Spacing="8">
+                                    <Image WidthRequest="20" HeightRequest="20">
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
@@ -281,8 +278,7 @@
 
                     <!-- Copy Part of speech -->
                     <SfButton
-                            Margin="0,0,2,2"
-                            WidthRequest="{OnPlatform 80, Android=60}"
+                            Margin="0,0,3,3"
                             ToolTipProperties.Text="Copy text for the Anki 'PartOfSpeech' field"
                             BackgroundColor="{Binding CopyPartOfSpeechButtonColor}"
                             Command="{Binding CopyPartOfSpeechCommand}"
@@ -290,8 +286,8 @@
 
                         <SfButton.Content>
                             <DataTemplate>
-                                <HorizontalStackLayout>
-                                    <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
+                                <HorizontalStackLayout Padding="10" Spacing="8">
+                                    <Image WidthRequest="20" HeightRequest="20">
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
@@ -308,8 +304,7 @@
 
                     <!-- Copy Endings -->
                     <SfButton
-                            Margin="0,0,2,2"
-                            WidthRequest="{OnPlatform 98, Android=60}"
+                            Margin="0,0,3,3"
                             ToolTipProperties.Text="Copy text for the Anki 'Forms' field"
                             BackgroundColor="{Binding CopyEndingsButtonColor}"
                             Command="{Binding CopyEndingsCommand}"
@@ -317,8 +312,8 @@
 
                         <SfButton.Content>
                             <DataTemplate>
-                                <HorizontalStackLayout>
-                                    <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
+                                <HorizontalStackLayout Padding="10" Spacing="8">
+                                    <Image WidthRequest="20" HeightRequest="20">
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
@@ -335,7 +330,6 @@
 
                     <!-- Copy Examples -->
                     <SfButton
-                            WidthRequest="{OnPlatform 108, Android=60}"
                             ToolTipProperties.Text="Copy text for the Anki 'Example' field"
                             BackgroundColor="{Binding CopyExamplesButtonColor}"
                             Command="{Binding CopyExamplesCommand}"
@@ -343,8 +337,8 @@
 
                         <SfButton.Content>
                             <DataTemplate>
-                                <HorizontalStackLayout>
-                                    <Image Margin="10,0,5,0" WidthRequest="20" HeightRequest="20">
+                                <HorizontalStackLayout Padding="10" Spacing="8">
+                                    <Image WidthRequest="20" HeightRequest="20">
                                         <Image.Source>
                                             <FontImageSource
                                                 FontFamily="MaterialIconsOutlined-Regular"
@@ -383,6 +377,8 @@
             </SfExpander.Header>
             <SfExpander.Content>
                 <VerticalStackLayout
+                    Margin="{OnPlatform '0,5,5,0', MacCatalyst='0,10,10,0'}"
+                    Spacing="{OnPlatform '4', MacCatalyst='8'}"
                     BindableLayout.ItemsSource="{Binding Expressions}"
                     BindableLayout.ItemTemplate="{StaticResource variantTemplate}" />
             </SfExpander.Content>

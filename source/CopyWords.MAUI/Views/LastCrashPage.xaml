@@ -21,20 +21,20 @@
             <VerticalStackLayout Spacing="16">
                 <!-- Warning Symbol -->
                 <Label Text="⚠"
-                           FontSize="32"
+                           FontSize="{StaticResource FontSizeHuge}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center" />
 
                 <!-- Title -->
                 <Label Text="Application Crash Detected"
-                           FontSize="20"
+                           FontSize="{StaticResource FontSizeLarge}"
                            FontAttributes="Bold"
                            HorizontalOptions="Center"
                            TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
 
                 <!-- Subtitle -->
                 <Label Text="The application encountered an unexpected error during the last session"
-                           FontSize="14"
+                           FontSize="{StaticResource FontSizeBody}"
                            HorizontalOptions="Center"
                            TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"
                            HorizontalTextAlignment="Center" />
@@ -50,7 +50,7 @@
 
                     <!-- Section Header -->
                     <Label Text="Crash Information"
-                           FontSize="16"
+                           FontSize="{StaticResource FontSizeSubtitle}"
                            FontAttributes="Bold" />
 
                     <!-- Crash Time -->
@@ -58,7 +58,7 @@
 
                         <VerticalStackLayout Grid.Column="1" Spacing="4">
                             <Label Text="Crash Time"
-                                   FontSize="12"
+                                   FontSize="{StaticResource FontSizeCaption}"
                                    FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
 
@@ -69,7 +69,7 @@
                                     Margin="0,0,0,0">
 
                                 <Label Text="{Binding CrashTime}"
-                                       FontSize="13"
+                                       FontSize="{StaticResource FontSizeBody}"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
                                        LineBreakMode="WordWrap" />
                             </Border>
@@ -86,7 +86,7 @@
                         <VerticalStackLayout Grid.Column="1" Spacing="4">
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="Error Details"
-                                       FontSize="12"
+                                       FontSize="{StaticResource FontSizeCaption}"
                                        FontAttributes="Bold"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
                                        VerticalOptions="Center" />
@@ -111,7 +111,7 @@
                                     Margin="0,0,0,0">
 
                                 <Label Text="{Binding ErrorMessage}"
-                                       FontSize="13"
+                                       FontSize="{StaticResource FontSizeBody}"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
                                        LineBreakMode="WordWrap" />
                             </Border>
@@ -128,7 +128,7 @@
                         <VerticalStackLayout Grid.Column="1" Spacing="4">
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="Stack Trace"
-                                       FontSize="12"
+                                       FontSize="{StaticResource FontSizeCaption}"
                                        FontAttributes="Bold"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
                                        VerticalOptions="Center" />
@@ -156,12 +156,12 @@
                                 <VerticalStackLayout>
 
                                     <Label Text="{Binding ExceptionName}"
-                                           FontSize="11"
+                                           FontSize="{StaticResource FontSizeSmall}"
                                            TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
                                            LineBreakMode="WordWrap" />
 
                                     <Label Text="{Binding StackTrace}"
-                                           FontSize="11"
+                                           FontSize="{StaticResource FontSizeSmall}"
                                            TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"
                                            LineBreakMode="WordWrap" />
                                 </VerticalStackLayout>

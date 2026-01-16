@@ -4,47 +4,31 @@
              x:DataType="SettingsViewModel"
              x:Class="CopyWords.MAUI.Views.SettingsViewAndroid">
 
-    <ContentView.Resources>
-        <ResourceDictionary>
-            <!-- Value label style (used in grids) -->
-            <Style x:Key="AndroidValueLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="13" />
-                <Setter Property="VerticalOptions" Value="Center" />
-            </Style>
-
-            <!-- Picker style for Android settings -->
-            <Style x:Key="AndroidPickerStyle" TargetType="Picker">
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="HorizontalOptions" Value="Fill" />
-            </Style>
-        </ResourceDictionary>
-    </ContentView.Resources>
-
     <VerticalStackLayout>
 
         <!-- Section "Anki settings" -->
         <Label Text="Anki settings" Margin="20,10,10,0" FontSize="Subtitle" />
 
         <!-- Anki Deck Name Danish -->
-        <Label Text="Deck name (Danish):" Margin="20,10,10,0" FontSize="13" />
+        <Label Text="Deck name (Danish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
         <Picker Margin="20,0,20,0"
-                Style="{StaticResource AndroidPickerStyle}"
+                Style="{StaticResource SettingsPickerStyleAndroid}"
                 Title="Select a deck"
                 ItemsSource="{Binding DeckNames}"
                 SelectedItem="{Binding AnkiDeckNameDanish}" />
 
         <!-- Anki Deck Name Spanish -->
-        <Label Text="Deck name (Spanish):" Margin="20,10,10,0" FontSize="13" />
+        <Label Text="Deck name (Spanish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
         <Picker Margin="20,0,20,0"
-                Style="{StaticResource AndroidPickerStyle}"
+                Style="{StaticResource SettingsPickerStyleAndroid}"
                 Title="Select a deck"
                 ItemsSource="{Binding DeckNames}"
                 SelectedItem="{Binding AnkiDeckNameSpanish}" />
 
         <!-- Anki Model Name -->
-        <Label Text="Model name:" Margin="20,10,10,0" FontSize="13" />
+        <Label Text="Model name:" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
         <Picker Margin="20,0,20,0"
-                Style="{StaticResource AndroidPickerStyle}"
+                Style="{StaticResource SettingsPickerStyleAndroid}"
                 Title="Select a model"
                 ItemsSource="{Binding ModelNames}"
                 SelectedItem="{Binding AnkiModelName}" />
@@ -66,7 +50,8 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0"
-                   Style="{StaticResource AndroidValueLabelStyle}"
+                   Style="{StaticResource SettingsLabelStyleAndroid}"
+                   VerticalOptions="Center"
                    Text="Show copy buttons"/>
             <Switch Grid.Row="0" Grid.Column="1"
                 IsToggled="{Binding ShowCopyButtons}" />
@@ -89,7 +74,8 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0"
-                   Style="{StaticResource AndroidValueLabelStyle}"
+                   Style="{StaticResource SettingsLabelStyleAndroid}"
+                   VerticalOptions="Center"
                    Text="Include translated meanings when copying to the back of the card"/>
             <Switch Grid.Row="0" Grid.Column="1"
                 IsToggled="{Binding CopyTranslatedMeanings}" />
@@ -112,7 +98,8 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0"
-                   Style="{StaticResource AndroidValueLabelStyle}"
+                   Style="{StaticResource SettingsLabelStyleAndroid}"
+                   VerticalOptions="Center"
                    Text="Dark theme"/>
             <Switch Grid.Row="0" Grid.Column="1"
                 IsToggled="{Binding UseDarkTheme}" />
@@ -126,7 +113,8 @@
 
         <Label Text="About" Margin="20,10,10,0" FontAttributes="Bold" />
         <Label Text="{Binding About}" Margin="20,0,10,0"
-                   Style="{StaticResource AndroidValueLabelStyle}" />
+                   Style="{StaticResource SettingsLabelStyleAndroid}"
+                   VerticalOptions="Center" />
     </VerticalStackLayout>
 
 </ContentView>

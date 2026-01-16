@@ -23,8 +23,8 @@
         <!-- Export and Import settings -->
         <Border Grid.Row="0" Style="{StaticResource SettingsBorderStyle}">
             <VerticalStackLayout>
-                <Label Text="Backup &amp; restore" Style="{StaticResource SectionHeaderStyle}" />
-                <Label Text="Export your preferences or import them from a file." Style="{StaticResource SectionDescriptionStyle}" />
+                <Label Text="Backup &amp; restore" Style="{StaticResource SettingsSectionHeaderStyle}" />
+                <Label Text="Export your preferences or import them from a file." Style="{StaticResource SettingsSectionDescriptionStyle}" />
 
                 <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
                     <Button
@@ -40,7 +40,7 @@
         <!-- AnkiConnect settings -->
         <Border Grid.Row="1" Style="{StaticResource SettingsBorderStyle}">
             <VerticalStackLayout>
-                <Label Text="AnkiConnect" Style="{StaticResource SectionHeaderStyle}" />
+                <Label Text="AnkiConnect" Style="{StaticResource SettingsSectionHeaderStyle}" />
 
                 <HorizontalStackLayout Spacing="8" Margin="0,10,0,0">
                     <CheckBox
@@ -52,7 +52,7 @@
                 </HorizontalStackLayout>
 
                 <!-- Anki Deck Name Danish -->
-                <Label Text="Deck name (Danish):" Style="{StaticResource FieldLabelStyle}" />
+                <Label Text="Deck name (Danish):" Style="{StaticResource SettingsFieldLabelStyle}" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -76,7 +76,7 @@
                 </Grid>
 
                 <!-- Anki Deck Name Spanish -->
-                <Label Text="Deck name (Spanish):" Style="{StaticResource FieldLabelStyle}" />
+                <Label Text="Deck name (Spanish):" Style="{StaticResource SettingsFieldLabelStyle}" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -100,7 +100,7 @@
                 </Grid>
 
                 <!-- Anki Model Name -->
-                <Label Text="Model name:" Style="{StaticResource FieldLabelStyle}" />
+                <Label Text="Model name:" Style="{StaticResource SettingsFieldLabelStyle}" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -124,7 +124,7 @@
                 </Grid>
 
                 <!-- Path to Anki media collection -->
-                <Label Text="Path to Anki media collection:" Style="{StaticResource FieldLabelStyle}" />
+                <Label Text="Path to Anki media collection:" Style="{StaticResource SettingsFieldLabelStyle}" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -156,7 +156,7 @@
         <!-- Translation settings -->
         <Border Grid.Row="2" Style="{StaticResource SettingsBorderStyle}">
             <VerticalStackLayout>
-                <Label Text="Copy buttons" Style="{StaticResource SectionHeaderStyle}" />
+                <Label Text="Copy buttons" Style="{StaticResource SettingsSectionHeaderStyle}" />
 
                 <VerticalStackLayout Spacing="8" Margin="0,10,0,0">
                     <HorizontalStackLayout Spacing="8">
@@ -183,7 +183,7 @@
         <!-- Theme settings -->
         <Border Grid.Row="3" Style="{StaticResource SettingsBorderStyle}">
             <VerticalStackLayout>
-                <Label Text="Theme" Style="{StaticResource SectionHeaderStyle}" />
+                <Label Text="Theme" Style="{StaticResource SettingsSectionHeaderStyle}" />
 
                 <HorizontalStackLayout Spacing="8" Margin="0,10,0,0">
                     <CheckBox

@@ -85,7 +85,7 @@
                             BackgroundColor="{DynamicResource AutocompleteBackgroundColor}"
                             TextColor="{DynamicResource AutocompleteTextColor}"
                             ShowBorder="False"
-                            FontSize="{OnPlatform 20, Android=14}"
+                            FontSize="{OnPlatform MacCatalyst=28, Default=20, Android=14}"
                             Padding="{OnPlatform 0, Android='5,0,0,0'}"
                             SelectionTextHighlightColor="{StaticResource Gray400}"
                             SelectedDropDownItemBackground ="Transparent"
