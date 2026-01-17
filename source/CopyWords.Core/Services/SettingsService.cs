@@ -11,11 +11,13 @@ namespace CopyWords.Core.Services
 
         void SaveSettings(AppSettings appSettings);
 
-        bool GetShowAddNoteWithAnkiConnectButton();
-
         bool GetShowCopyButtons();
 
         void SetShowCopyButtons(bool value);
+
+        bool GetShowAnkiButton();
+
+        void SetShowAnkiButton(bool value);
 
         void SetCopyTranslatedMeanings(bool value);
 
@@ -70,7 +72,7 @@ namespace CopyWords.Core.Services
             bool showCopyButtonsDefaultValue = _deviceInfo.Platform != DevicePlatform.Android;
             appSettings.ShowCopyButtons = _preferences.Get<bool>(nameof(AppSettings.ShowCopyButtons), showCopyButtonsDefaultValue);
 
-            appSettings.ShowCopyWithAnkiConnectButton = _preferences.Get<bool>(nameof(AppSettings.ShowCopyWithAnkiConnectButton), false);
+            appSettings.ShowAnkiButton = _preferences.Get<bool>(nameof(AppSettings.ShowAnkiButton), false);
 
             appSettings.CopyTranslatedMeanings = _preferences.Get<bool>(nameof(AppSettings.CopyTranslatedMeanings), true);
             appSettings.SelectedParser = _preferences.Get(nameof(AppSettings.SelectedParser), SourceLanguage.Danish.ToString());
@@ -91,7 +93,7 @@ namespace CopyWords.Core.Services
             _preferences.Set(nameof(AppSettings.AnkiModelName), appSettings.AnkiModelName);
             _preferences.Set(nameof(AppSettings.AnkiSoundsFolder), appSettings.AnkiSoundsFolder);
             _preferences.Set(nameof(AppSettings.ShowCopyButtons), appSettings.ShowCopyButtons);
-            _preferences.Set(nameof(AppSettings.ShowCopyWithAnkiConnectButton), appSettings.ShowCopyWithAnkiConnectButton);
+            _preferences.Set(nameof(AppSettings.ShowAnkiButton), appSettings.ShowAnkiButton);
             _preferences.Set(nameof(AppSettings.CopyTranslatedMeanings), appSettings.CopyTranslatedMeanings);
             _preferences.Set(nameof(AppSettings.SelectedParser), appSettings.SelectedParser);
             _preferences.Set(nameof(AppSettings.UseDarkTheme), appSettings.UseDarkTheme);
@@ -106,7 +108,9 @@ namespace CopyWords.Core.Services
 
         public void SetShowCopyButtons(bool value) => _preferences.Set(nameof(AppSettings.ShowCopyButtons), value);
 
-        public bool GetShowAddNoteWithAnkiConnectButton() => _preferences.Get<bool>(nameof(AppSettings.ShowCopyWithAnkiConnectButton), false);
+        public bool GetShowAnkiButton() => _preferences.Get<bool>(nameof(AppSettings.ShowAnkiButton), false);
+
+        public void SetShowAnkiButton(bool value) => _preferences.Set(nameof(AppSettings.ShowAnkiButton), value);
 
         public void SetCopyTranslatedMeanings(bool value) => _preferences.Set(nameof(AppSettings.CopyTranslatedMeanings), value);
 

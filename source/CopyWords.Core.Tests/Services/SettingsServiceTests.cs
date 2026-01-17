@@ -35,7 +35,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Get("AnkiModelName", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("AnkiSoundsFolder", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("ShowCopyButtons", It.IsAny<bool>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("ShowCopyWithAnkiConnectButton", It.IsAny<bool>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("ShowAnkiButton", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("UseDarkTheme", It.IsAny<bool>(), It.IsAny<string>()));
@@ -65,7 +65,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("AnkiModelName", appSettings.AnkiModelName, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("ShowCopyButtons", appSettings.ShowCopyButtons, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("ShowCopyWithAnkiConnectButton", appSettings.ShowCopyWithAnkiConnectButton, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("ShowAnkiButton", appSettings.ShowAnkiButton, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("SelectedParser", appSettings.SelectedParser, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("UseDarkTheme", appSettings.UseDarkTheme, It.IsAny<string>()));

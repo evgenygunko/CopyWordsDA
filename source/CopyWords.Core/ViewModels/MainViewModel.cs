@@ -125,6 +125,8 @@ namespace CopyWords.Core.ViewModels
             // If already initialized and no instant text, just return (e.g., when navigating back from Settings)
             if (_isInitialized && string.IsNullOrEmpty(instantText))
             {
+                // Refresh controls in case user has updated settings
+                UpdateUI(null);
                 return;
             }
 
@@ -349,7 +351,6 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
 
                 bool showCopyButtons = _settingsService.GetShowCopyButtons();
-
                 _wordViewModel.SetDefinition(new DefinitionViewModel(wordModel.Definition, wordModel.SourceLanguage, showCopyButtons));
 
                 _wordViewModel.ClearVariants();
@@ -378,15 +379,12 @@ namespace CopyWords.Core.ViewModels
                     _wordViewModel.AddExpression(expressionVM);
                 }
 
-                _wordViewModel.ShowCopyButtons = showCopyButtons && (_deviceInfo.Platform != DevicePlatform.Android);
-                _wordViewModel.ShowAddNoteWithAnkiConnectButton = _settingsService.GetShowAddNoteWithAnkiConnectButton() && (_deviceInfo.Platform != DevicePlatform.Android);
-                _wordViewModel.ShowShareButton = (_deviceInfo.Platform == DevicePlatform.Android);
-                _wordViewModel.UpdateUI();
-
                 _settingsService.SetSelectedParser(wordModel.SourceLanguage.ToString());
                 DictionaryName = wordModel.SourceLanguage.ToString();
                 UpdateDictionaryImage(DictionaryName);
             }
+
+            _wordViewModel.UpdateUI();
 
             IsBusy = false;
         }

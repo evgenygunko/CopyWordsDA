@@ -520,7 +520,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.AnkiModelName.Should().Be(appSettings.AnkiModelName);
             sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
             sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);
-            sut.ShowCopyWithAnkiConnectButton.Should().Be(appSettings.ShowCopyWithAnkiConnectButton);
+            sut.ShowAnkiButton.Should().Be(appSettings.ShowAnkiButton);
             sut.CopyTranslatedMeanings.Should().Be(appSettings.CopyTranslatedMeanings);
         }
 

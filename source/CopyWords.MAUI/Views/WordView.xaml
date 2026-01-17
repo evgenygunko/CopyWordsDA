@@ -133,13 +133,13 @@
                 </SfButton.Content>
             </SfButton>
 
-            <!-- Add a new note with AnkiConnect -->
+            <!-- Add a new note to Anki with AnkiConnect or AnkiDroid API -->
             <SfButton
                     Margin="0,0,3,3"
                     ToolTipProperties.Text="Add note with AnkiConnect"
                     BackgroundColor="{Binding CopyFrontButtonColor}"
                     Command="{Binding AddNoteWithAnkiConnectCommand}"
-                    IsVisible="{Binding ShowAddNoteWithAnkiConnectButton}">
+                    IsVisible="{Binding ShowAnkiButton}">
 
                 <SfButton.Content>
                     <DataTemplate>

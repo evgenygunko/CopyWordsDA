@@ -98,7 +98,12 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        public partial bool ShowCopyWithAnkiConnectButton { get; set; }
+        public partial bool ShowAnkiButton { get; set; }
+
+        partial void OnShowAnkiButtonChanged(bool value)
+        {
+            OnShowAnkiButtonInternal(value);
+        }
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
@@ -242,7 +247,7 @@ namespace CopyWords.Core.ViewModels
             appSettings.AnkiModelName = AnkiModelName ?? string.Empty;
             appSettings.AnkiSoundsFolder = AnkiSoundsFolder ?? string.Empty;
             appSettings.ShowCopyButtons = ShowCopyButtons;
-            appSettings.ShowCopyWithAnkiConnectButton = ShowCopyWithAnkiConnectButton;
+            appSettings.ShowAnkiButton = ShowAnkiButton;
             appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
             appSettings.UseDarkTheme = UseDarkTheme;
 
@@ -298,7 +303,7 @@ namespace CopyWords.Core.ViewModels
             }
 
             ShowCopyButtons = appSettings.ShowCopyButtons;
-            ShowCopyWithAnkiConnectButton = appSettings.ShowCopyWithAnkiConnectButton;
+            ShowAnkiButton = appSettings.ShowAnkiButton;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
             UseDarkTheme = appSettings.UseDarkTheme;
         }
@@ -373,6 +378,15 @@ namespace CopyWords.Core.ViewModels
             {
                 _settingsService.SetShowCopyButtons(value);
                 Debug.WriteLine($"ShowCopyButtons has changed to {value}");
+            }
+        }
+
+        internal void OnShowAnkiButtonInternal(bool value)
+        {
+            if (_isInitialized && CanUpdateIndividualSettings)
+            {
+                _settingsService.SetShowAnkiButton(value);
+                Debug.WriteLine($"ShowAnkiButton has changed to {value}");
             }
         }
 

@@ -18,7 +18,7 @@ namespace CopyWords.Core.ViewModels
         string Word { get; set; }
         string? SoundUrl { get; set; }
         bool ShowCopyButtons { get; set; }
-        bool ShowAddNoteWithAnkiConnectButton { get; set; }
+        bool ShowAnkiButton { get; set; }
         bool ShowShareButton { get; set; }
 
         void UpdateUI();
@@ -120,7 +120,7 @@ namespace CopyWords.Core.ViewModels
         public partial bool CanCopyEndings { get; set; }
 
         [ObservableProperty]
-        public partial bool ShowAddNoteWithAnkiConnectButton { get; set; }
+        public partial bool ShowAnkiButton { get; set; }
 
         [ObservableProperty]
         public partial bool ShowCopyButtons { get; set; }
@@ -353,10 +353,23 @@ namespace CopyWords.Core.ViewModels
         public void UpdateUI()
         {
             CanCopyFront = !string.IsNullOrEmpty(DefinitionViewModel?.HeadwordViewModel.Original);
-
             CanCopyPartOfSpeech = !string.IsNullOrEmpty(DefinitionViewModel?.PartOfSpeech);
-
             CanCopyEndings = !string.IsNullOrEmpty(DefinitionViewModel?.Endings);
+
+            if (_deviceInfo.Platform == DevicePlatform.Android)
+            {
+                // On Android we don't show copy buttons, it only makes sense on Windows and Mac when you have multi-window.
+                // But we do show share button instead.
+                ShowCopyButtons = false;
+                ShowShareButton = true;
+            }
+            else
+            {
+                ShowCopyButtons = _settingsService.GetShowCopyButtons();
+                ShowShareButton = false;
+            }
+
+            ShowAnkiButton = _settingsService.GetShowAnkiButton();
         }
 
         public void ClearVariants() => Variants.Clear();

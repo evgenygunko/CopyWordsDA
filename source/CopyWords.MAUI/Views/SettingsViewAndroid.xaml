@@ -4,34 +4,67 @@
              x:DataType="SettingsViewModel"
              x:Class="CopyWords.MAUI.Views.SettingsViewAndroid">
 
+    <ContentView.Resources>
+        <BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
+    </ContentView.Resources>
+
     <VerticalStackLayout>
 
         <!-- Section "Anki settings" -->
         <Label Text="Anki settings" Margin="20,10,10,0" FontSize="Subtitle" />
 
-        <!-- Anki Deck Name Danish -->
-        <Label Text="Deck name (Danish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
-        <Picker Margin="20,0,20,0"
-                Style="{StaticResource SettingsPickerStyleAndroid}"
-                Title="Select a deck"
-                ItemsSource="{Binding DeckNames}"
-                SelectedItem="{Binding AnkiDeckNameDanish}" />
+        <Grid Margin="20,10,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <!-- Anki Deck Name Spanish -->
-        <Label Text="Deck name (Spanish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
-        <Picker Margin="20,0,20,0"
-                Style="{StaticResource SettingsPickerStyleAndroid}"
-                Title="Select a deck"
-                ItemsSource="{Binding DeckNames}"
-                SelectedItem="{Binding AnkiDeckNameSpanish}" />
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
 
-        <!-- Anki Model Name -->
-        <Label Text="Model name:" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
-        <Picker Margin="20,0,20,0"
-                Style="{StaticResource SettingsPickerStyleAndroid}"
-                Title="Select a model"
-                ItemsSource="{Binding ModelNames}"
-                SelectedItem="{Binding AnkiModelName}" />
+            <Label Grid.Row="0" Grid.Column="0"
+                   Style="{StaticResource SettingsLabelStyleAndroid}"
+                   VerticalOptions="Center"
+                   Text="Show Anki button"/>
+            <Switch Grid.Row="0" Grid.Column="1"
+                IsToggled="{Binding ShowAnkiButton}" />
+        </Grid>
+
+        <VerticalStackLayout Opacity="{Binding ShowAnkiButton, Converter={StaticResource BoolToOpacityConverter}}">
+            <!-- Anki Deck Name Danish -->
+            <Label Text="Deck name (Danish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
+            <Picker Margin="20,0,20,0"
+                    FontSize="{StaticResource FontSizeBody}"
+                    TextColor="{DynamicResource PrimaryTextColor}"
+                    TitleColor="{DynamicResource SecondaryTextColor}"
+                    IsEnabled="{Binding ShowAnkiButton}"
+                    Title="Select a deck"
+                    ItemsSource="{Binding DeckNames}"
+                    SelectedItem="{Binding AnkiDeckNameDanish}" />
+
+            <!-- Anki Deck Name Spanish -->
+            <Label Text="Deck name (Spanish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
+            <Picker Margin="20,0,20,0"
+                    FontSize="{StaticResource FontSizeBody}"
+                    TextColor="{DynamicResource PrimaryTextColor}"
+                    TitleColor="{DynamicResource SecondaryTextColor}"
+                    IsEnabled="{Binding ShowAnkiButton}"
+                    Title="Select a deck"
+                    ItemsSource="{Binding DeckNames}"
+                    SelectedItem="{Binding AnkiDeckNameSpanish}" />
+
+            <!-- Anki Model Name -->
+            <Label Text="Model name:" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
+            <Picker Margin="20,0,20,0"
+                    FontSize="{StaticResource FontSizeBody}"
+                    TextColor="{DynamicResource PrimaryTextColor}"
+                    TitleColor="{DynamicResource SecondaryTextColor}"
+                    IsEnabled="{Binding ShowAnkiButton}"
+                    Title="Select a model"
+                    ItemsSource="{Binding ModelNames}"
+                    SelectedItem="{Binding AnkiModelName}" />
+        </VerticalStackLayout>
 
         <!-- Filler -->
         <BoxView Style="{StaticResource FillerStyle}" />

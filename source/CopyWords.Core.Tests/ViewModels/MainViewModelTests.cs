@@ -185,9 +185,9 @@ namespace CopyWords.Core.Tests.ViewModels
             // Second call to InitAsync (simulates navigating back from Settings)
             await sut.InitAsync();
 
-            // Should return early without calling lookup or updating UI
+            // Should return early without calling lookup, but should update UI
             translationsServiceMock.VerifyNoOtherCalls();
-            wordViewModelMock.Verify(x => x.UpdateUI(), Times.Never);
+            wordViewModelMock.Verify(x => x.UpdateUI());
 
             // SearchWord should remain unchanged (not cleared by returning from Settings)
             sut.SearchWord.Should().Be("existingWord");
@@ -552,7 +552,6 @@ namespace CopyWords.Core.Tests.ViewModels
 
             wordViewModelMock.VerifySet(x => x.Word = wordModel.Word);
             wordViewModelMock.VerifySet(x => x.SoundUrl = wordModel.SoundUrl);
-            wordViewModelMock.VerifySet(x => x.ShowCopyButtons = showCopyButtons);
 
             wordViewModelMock.Verify(x => x.SetDefinition(It.IsAny<DefinitionViewModel>()), Times.AtLeastOnce);
 
@@ -913,111 +912,16 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void UpdateUI_OnAndroid_HidesShowCopyButtons()
+        public void UpdateUI_WhenWordModelIsNull_CallsUpdateUIOnWordViewModel()
         {
-            WordModel wordModel = _fixture.Create<WordModel>();
+            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetShowCopyButtons()).Returns(true);
-
-            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
-            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
-
-            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
 
             var sut = _fixture.Create<MainViewModel>();
-            sut.UpdateUI(wordModel);
+            sut.UpdateUI(null);
 
-            wordViewModelMock.VerifySet(x => x.ShowCopyButtons = false);
-        }
-
-        [TestMethod]
-        public void UpdateUI_OnAndroid_HidesShowAddNoteWithAnkiConnectButton()
-        {
-            WordModel wordModel = _fixture.Create<WordModel>();
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetShowAddNoteWithAnkiConnectButton()).Returns(true);
-
-            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
-            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
-
-            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
-
-            var sut = _fixture.Create<MainViewModel>();
-            sut.UpdateUI(wordModel);
-
-            wordViewModelMock.VerifySet(x => x.ShowAddNoteWithAnkiConnectButton = false);
-        }
-
-        [TestMethod]
-        public void UpdateUI_OnAndroid_ShowsShowShareButton()
-        {
-            WordModel wordModel = _fixture.Create<WordModel>();
-
-            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
-            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
-
-            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
-
-            var sut = _fixture.Create<MainViewModel>();
-            sut.UpdateUI(wordModel);
-
-            wordViewModelMock.VerifySet(x => x.ShowShareButton = true);
-        }
-
-        [TestMethod]
-        public void UpdateUI_OnWindows_ShowsCopyButtons()
-        {
-            WordModel wordModel = _fixture.Create<WordModel>();
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetShowCopyButtons()).Returns(true);
-
-            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
-            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
-
-            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
-
-            var sut = _fixture.Create<MainViewModel>();
-            sut.UpdateUI(wordModel);
-
-            wordViewModelMock.VerifySet(x => x.ShowCopyButtons = true);
-        }
-
-        [TestMethod]
-        public void UpdateUI_OnWindows_ShowsAddNoteWithAnkiConnectButton()
-        {
-            WordModel wordModel = _fixture.Create<WordModel>();
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetShowAddNoteWithAnkiConnectButton()).Returns(true);
-
-            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
-            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
-
-            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
-
-            var sut = _fixture.Create<MainViewModel>();
-            sut.UpdateUI(wordModel);
-
-            wordViewModelMock.VerifySet(x => x.ShowAddNoteWithAnkiConnectButton = true);
-        }
-
-        [TestMethod]
-        public void UpdateUI_OnWindows_HidesShowShareButton()
-        {
-            WordModel wordModel = _fixture.Create<WordModel>();
-
-            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
-            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
-
-            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
-
-            var sut = _fixture.Create<MainViewModel>();
-            sut.UpdateUI(wordModel);
-
-            wordViewModelMock.VerifySet(x => x.ShowShareButton = false);
+            wordViewModelMock.Verify(x => x.UpdateUI());
         }
 
         #endregion

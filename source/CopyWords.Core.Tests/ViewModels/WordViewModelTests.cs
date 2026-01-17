@@ -1,4 +1,4 @@
-using AutoFixture;
+﻿using AutoFixture;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
@@ -432,6 +432,60 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.UpdateUI();
 
             sut.CanCopyEndings.Should().Be(expected);
+        }
+
+        [TestMethod]
+        public void UpdateUI_WhenPlatformIsAndroid_SetsShowCopyButtonsToFalseAndShowShareButtonToTrue()
+        {
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.SetDefinition(definitionViewModel);
+            sut.UpdateUI();
+
+            sut.ShowCopyButtons.Should().BeFalse();
+            sut.ShowShareButton.Should().BeTrue();
+        }
+
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void UpdateUI_WhenPlatformIsNotAndroid_SetsShowCopyButtonsFromSettingsAndShowShareButtonToFalse(bool showCopyButtonsSetting)
+        {
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetShowCopyButtons()).Returns(showCopyButtonsSetting);
+
+            DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.SetDefinition(definitionViewModel);
+            sut.UpdateUI();
+
+            sut.ShowCopyButtons.Should().Be(showCopyButtonsSetting);
+            sut.ShowShareButton.Should().BeFalse();
+        }
+
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void UpdateUI_SetsShowAnkiButtonFromSettings(bool showAnkiButtonSetting)
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetShowAnkiButton()).Returns(showAnkiButtonSetting);
+
+            DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.SetDefinition(definitionViewModel);
+            sut.UpdateUI();
+
+            sut.ShowAnkiButton.Should().Be(showAnkiButtonSetting);
         }
 
         #endregion
