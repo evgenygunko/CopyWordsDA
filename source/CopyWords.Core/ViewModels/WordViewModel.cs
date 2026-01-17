@@ -476,8 +476,57 @@ namespace CopyWords.Core.ViewModels
         {
             try
             {
+                AppSettings appSettings = _settingsService.LoadSettings();
+                string deckName = (appSettings.SelectedParser == SourceLanguage.Spanish.ToString()) ? appSettings.AnkiDeckNameSpanish : appSettings.AnkiDeckNameDanish;
+
+                if (string.IsNullOrEmpty(deckName) || string.IsNullOrEmpty(appSettings.AnkiModelName))
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please configure Anki deck name and model name in the settings.", "OK");
+                    return;
+                }
+
+                var ankiNoteOptions = new AnkiNoteOptions(
+                    AllowDuplicate: false,
+                    DuplicateScope: "deck",
+                    DuplicateScopeOptions: new AnkiDuplicateScopeOptions(
+                        DeckName: deckName,
+                        CheckChildren: false));
+
+                string front = _copySelectedToClipboardService.CompileFront(DefinitionViewModel);
+                if (string.IsNullOrEmpty(front))
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
+                    return;
+                }
+
+                string back = _copySelectedToClipboardService.CompileBack(DefinitionViewModel);
+                if (string.IsNullOrEmpty(back))
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
+                    return;
+                }
+
+                string partOfSpeech = _copySelectedToClipboardService.CompilePartOfSpeech(DefinitionViewModel);
+                string endings = _copySelectedToClipboardService.CompileEndings(DefinitionViewModel);
+                string examples = _copySelectedToClipboardService.CompileExamples(DefinitionViewModel);
+
+                // todo: save images
+                // todo: to implement
+                string? sound = null;
+
+                var note = new AnkiNote(
+                    DeckName: deckName,
+                    ModelName: appSettings.AnkiModelName,
+                    Front: front,
+                    Back: back,
+                    PartOfSpeech: partOfSpeech,
+                    Forms: endings,
+                    Example: examples,
+                    Sound: sound,
+                    Options: ankiNoteOptions);
+
                 var ct = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
-                await _ankiDroidService.AddNoteAsync(ct);
+                await _ankiDroidService.AddNoteAsync(note, ct);
             }
             catch (AnkiDroidAPINotAvailableException ex)
             {
