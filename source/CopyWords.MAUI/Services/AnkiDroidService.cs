@@ -84,6 +84,8 @@ namespace CopyWords.MAUI.Services
                 return false;
             }
         }
+
+        public Task AddNoteAsync(CancellationToken cancellationToken) => throw new NotImplementedException();
     }
 
     /// <summary>
@@ -98,15 +100,9 @@ namespace CopyWords.MAUI.Services
 #else
     public class AnkiDroidService : IAnkiDroidService
     {
-        public bool HasPermission()
-        {
-            return true;
-        }
+        public bool HasPermission() => true;
 
-        public async Task RequestPermissionAsync()
-        {
-            await Task.CompletedTask;
-        }
+        public async Task RequestPermissionAsync() => await Task.CompletedTask;
 
         public Task<IEnumerable<string>> GetDeckNamesAsync(CancellationToken cancellationToken)
         {
@@ -118,10 +114,9 @@ namespace CopyWords.MAUI.Services
             return Task.FromResult<IEnumerable<string>>([]);
         }
 
-        public bool IsAvailable()
-        {
-            return false;
-        }
+        public bool IsAvailable() => false;
+
+        public async Task AddNoteAsync(CancellationToken cancellationToken) => await Task.CompletedTask;
     }
 #endif
 }

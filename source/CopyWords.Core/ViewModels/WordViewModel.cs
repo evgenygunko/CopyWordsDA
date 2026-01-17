@@ -38,6 +38,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IShare _share;
         private readonly IDeviceInfo _deviceInfo;
         private readonly IAnkiConnectService _ankiConnectService;
+        private readonly IAnkiDroidService _ankiDroidService;
         private readonly ISettingsService _settingsService;
         private readonly IAppThemeService _appThemeService;
 
@@ -51,6 +52,7 @@ namespace CopyWords.Core.ViewModels
             IShare share,
             IDeviceInfo deviceInfo,
             IAnkiConnectService ankiConnectService,
+            IAnkiDroidService ankiDroidService,
             ISettingsService settingsService,
             IAppThemeService appThemeService)
         {
@@ -61,6 +63,7 @@ namespace CopyWords.Core.ViewModels
             _share = share;
             _deviceInfo = deviceInfo;
             _ankiConnectService = ankiConnectService;
+            _ankiDroidService = ankiDroidService;
             _settingsService = settingsService;
             _appThemeService = appThemeService;
 
@@ -108,7 +111,7 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(CopyBackCommand))]
         [NotifyCanExecuteChangedFor(nameof(CopyExamplesCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShareCommand))]
-        [NotifyCanExecuteChangedFor(nameof(AddNoteWithAnkiConnectCommand))]
+        [NotifyCanExecuteChangedFor(nameof(AddNoteToAnkiCommand))]
         public partial bool CanCopyFront { get; set; }
 
         [ObservableProperty]
@@ -199,79 +202,15 @@ namespace CopyWords.Core.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
-        public async Task AddNoteWithAnkiConnectAsync()
+        public async Task AddNoteToAnkiAsync()
         {
-            try
+            if (_deviceInfo.Platform == DevicePlatform.Android)
             {
-                AppSettings appSettings = _settingsService.LoadSettings();
-                string deckName = (appSettings.SelectedParser == SourceLanguage.Spanish.ToString()) ? appSettings.AnkiDeckNameSpanish : appSettings.AnkiDeckNameDanish;
-
-                if (string.IsNullOrEmpty(deckName) || string.IsNullOrEmpty(appSettings.AnkiModelName))
-                {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please configure Anki deck name and model name in the settings.", "OK");
-                    return;
-                }
-
-                string front = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModel);
-                if (string.IsNullOrEmpty(front))
-                {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
-                    return;
-                }
-
-                string back = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModel);
-                if (string.IsNullOrEmpty(back))
-                {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
-                    return;
-                }
-
-                string partOfSpeech = await _copySelectedToClipboardService.CompilePartOfSpeechAsync(DefinitionViewModel);
-                string endings = await _copySelectedToClipboardService.CompileEndingsAsync(DefinitionViewModel);
-                string examples = await _copySelectedToClipboardService.CompileExamplesAsync(DefinitionViewModel);
-
-                string? sound = null;
-                if (CanSaveSoundFile)
-                {
-                    var saveFileCancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
-                    bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl!, Word, saveFileCancellationToken);
-
-                    if (result)
-                    {
-                        sound = _copySelectedToClipboardService.CompileSoundFileName(Word);
-                    }
-                }
-
-                var ankiNoteOptions = new AnkiNoteOptions(
-                    AllowDuplicate: false,
-                    DuplicateScope: "deck",
-                    DuplicateScopeOptions: new AnkiDuplicateScopeOptions(
-                        DeckName: deckName,
-                        CheckChildren: false));
-
-                var note = new AnkiNote(
-                    DeckName: deckName,
-                    ModelName: appSettings.AnkiModelName,
-                    Front: front,
-                    Back: back,
-                    PartOfSpeech: partOfSpeech,
-                    Forms: endings,
-                    Example: examples,
-                    Sound: sound,
-                    Options: ankiNoteOptions);
-
-                var addNoteCancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
-                await _ankiConnectService.AddNoteAsync(note, addNoteCancellationToken);
+                await AddNoteWithAnkiDroidServiceAsync();
             }
-            catch (AnkiConnectNotRunningException ex)
+            else
             {
-                await _dialogService.DisplayAlertAsync("AnkiConnect is not running",
-                    "Please verify that AnkiConnect is installed: run Anki -> Tools -> Add-ons -> Get Add-ons..." + Environment.NewLine + "Error: " + ex.Message,
-                    "OK");
-            }
-            catch (Exception ex)
-            {
-                await _dialogService.DisplayAlertAsync("Cannot add note", "Error occurred while trying to add note with AnkiConnect: " + ex.Message, "OK");
+                await AddNoteWithAnkiConnectAsync();
             }
         }
 
@@ -467,6 +406,101 @@ namespace CopyWords.Core.ViewModels
             catch (Exception ex)
             {
                 await _dialogService.DisplayAlertAsync($"Cannot copy {wordPartName}", $"Error occurred while trying to copy {wordPartName}: " + ex.Message, "OK");
+            }
+        }
+
+        internal async Task AddNoteWithAnkiConnectAsync()
+        {
+            try
+            {
+                AppSettings appSettings = _settingsService.LoadSettings();
+                string deckName = (appSettings.SelectedParser == SourceLanguage.Spanish.ToString()) ? appSettings.AnkiDeckNameSpanish : appSettings.AnkiDeckNameDanish;
+
+                if (string.IsNullOrEmpty(deckName) || string.IsNullOrEmpty(appSettings.AnkiModelName))
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please configure Anki deck name and model name in the settings.", "OK");
+                    return;
+                }
+
+                string front = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModel);
+                if (string.IsNullOrEmpty(front))
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
+                    return;
+                }
+
+                string back = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModel);
+                if (string.IsNullOrEmpty(back))
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
+                    return;
+                }
+
+                string partOfSpeech = await _copySelectedToClipboardService.CompilePartOfSpeechAsync(DefinitionViewModel);
+                string endings = await _copySelectedToClipboardService.CompileEndingsAsync(DefinitionViewModel);
+                string examples = await _copySelectedToClipboardService.CompileExamplesAsync(DefinitionViewModel);
+
+                string? sound = null;
+                if (CanSaveSoundFile)
+                {
+                    var saveFileCancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+                    bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl!, Word, saveFileCancellationToken);
+
+                    if (result)
+                    {
+                        sound = _copySelectedToClipboardService.CompileSoundFileName(Word);
+                    }
+                }
+
+                var ankiNoteOptions = new AnkiNoteOptions(
+                    AllowDuplicate: false,
+                    DuplicateScope: "deck",
+                    DuplicateScopeOptions: new AnkiDuplicateScopeOptions(
+                        DeckName: deckName,
+                        CheckChildren: false));
+
+                var note = new AnkiNote(
+                    DeckName: deckName,
+                    ModelName: appSettings.AnkiModelName,
+                    Front: front,
+                    Back: back,
+                    PartOfSpeech: partOfSpeech,
+                    Forms: endings,
+                    Example: examples,
+                    Sound: sound,
+                    Options: ankiNoteOptions);
+
+                var ct = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+                await _ankiConnectService.AddNoteAsync(note, ct);
+            }
+            catch (AnkiConnectNotRunningException ex)
+            {
+                await _dialogService.DisplayAlertAsync("AnkiConnect is not running",
+                    "Please verify that AnkiConnect is installed: run Anki -> Tools -> Add-ons -> Get Add-ons..." + Environment.NewLine + "Error: " + ex.Message,
+                    "OK");
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.DisplayAlertAsync("Cannot add note", "Error occurred while trying to add note with AnkiConnect: " + ex.Message, "OK");
+            }
+        }
+
+        internal async Task AddNoteWithAnkiDroidServiceAsync()
+        {
+            try
+            {
+                var ct = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+                await _ankiDroidService.AddNoteAsync(ct);
+            }
+            catch (AnkiDroidAPINotAvailableException ex)
+            {
+                await _dialogService.DisplayAlertAsync("AnkiDroid API is not accessible",
+                    "Please verify that AndkiDroid API is enabled: run AnkiDroid -> Settings -> Advanced -> Enable AndkiDroid API" + Environment.NewLine + "Error: " + ex.Message,
+                    "OK");
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.DisplayAlertAsync("Cannot add note", "Error occurred while trying to add note with  AndkiDroid API: " + ex.Message, "OK");
             }
         }
 

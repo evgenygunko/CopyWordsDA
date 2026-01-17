@@ -13,5 +13,7 @@ namespace CopyWords.Core.Services
         Task<IEnumerable<string>> GetDeckNamesAsync(CancellationToken cancellationToken);
 
         Task<IEnumerable<string>> GetModelNamesAsync(CancellationToken cancellationToken);
+
+        Task AddNoteAsync(CancellationToken cancellationToken);
     }
 }

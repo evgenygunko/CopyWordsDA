@@ -1002,5 +1002,70 @@ namespace CopyWords.Core.Tests.ViewModels
                 "OK"));
         }
         #endregion
+
+        #region Tests for AddNoteWithAnkiDroidServiceAsync
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiDroidServiceAsync_WhenSuccessful_CallsAddNoteAsync()
+        {
+            // Arrange
+            var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+
+            // Act
+            await sut.AddNoteWithAnkiDroidServiceAsync();
+
+            // Assert
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<CancellationToken>()), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiDroidServiceAsync_WhenAnkiDroidAPINotAvailableExceptionThrown_ShowsAlert()
+        {
+            // Arrange
+            var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
+            ankiDroidServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new AnkiDroidAPINotAvailableException("API not enabled"));
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+
+            // Act
+            await sut.AddNoteWithAnkiDroidServiceAsync();
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "AnkiDroid API is not accessible",
+                It.Is<string>(msg => msg.Contains("Please verify that AndkiDroid API is enabled") && msg.Contains("API not enabled")),
+                "OK"));
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiDroidServiceAsync_WhenGeneralExceptionThrown_ShowsAlert()
+        {
+            // Arrange
+            var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
+            ankiDroidServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception("General error from unit test"));
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+
+            // Act
+            await sut.AddNoteWithAnkiDroidServiceAsync();
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "Cannot add note",
+                "Error occurred while trying to add note with  AndkiDroid API: General error from unit test",
+                "OK"));
+        }
+
+        #endregion
     }
 }

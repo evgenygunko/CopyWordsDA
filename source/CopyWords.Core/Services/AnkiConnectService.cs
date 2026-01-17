@@ -51,7 +51,7 @@ namespace CopyWords.Core.Services
             try
             {
                 // Add the note to Anki via AnkiConnect.
-                noteId = await AddNoteWithAnkiConnectAsync(note, cancellationToken);
+                noteId = await AddNoteToAnkiAsync(note, cancellationToken);
 
                 // Cards have been added successfully. Now open the note editor in Anki to allow the user to make further edits.
                 // Skip showing the edit window if the note was a duplicate (noteId == 0)
@@ -210,7 +210,7 @@ namespace CopyWords.Core.Services
             }
         }
 
-        internal async Task<long> AddNoteWithAnkiConnectAsync(AnkiNote note, CancellationToken cancellationToken)
+        internal async Task<long> AddNoteToAnkiAsync(AnkiNote note, CancellationToken cancellationToken)
         {
             var request = new AddNoteRequest(
                 Action: "addNote",

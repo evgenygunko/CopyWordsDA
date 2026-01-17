@@ -377,10 +377,10 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
-        #region Tests for AddNoteWithAnkiConnectAsync
+        #region Tests for AddNoteToAnkiAsync
 
         [TestMethod]
-        public async Task AddNoteWithAnkiConnectAsync_WhenSuccess_ReturnsNoteId()
+        public async Task AddNoteToAnkiAsync_WhenSuccess_ReturnsNoteId()
         {
             // Arrange
             var note = new AnkiNote(
@@ -415,7 +415,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
-            long result = await sut.AddNoteWithAnkiConnectAsync(note, CancellationToken.None);
+            long result = await sut.AddNoteToAnkiAsync(note, CancellationToken.None);
 
             // Assert
             result.Should().Be(123);
@@ -447,7 +447,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task AddNoteWithAnkiConnectAsync_WhenErrorReturned_ThrowsInvalidOperationException()
+        public async Task AddNoteToAnkiAsync_WhenErrorReturned_ThrowsInvalidOperationException()
         {
             // Arrange
             var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
@@ -462,7 +462,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
-            var act = async () => await sut.AddNoteWithAnkiConnectAsync(note, CancellationToken.None);
+            var act = async () => await sut.AddNoteToAnkiAsync(note, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
@@ -470,7 +470,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task AddNoteWithAnkiConnectAsync_WhenHttpFailure_ThrowsInvalidOperationException()
+        public async Task AddNoteToAnkiAsync_WhenHttpFailure_ThrowsInvalidOperationException()
         {
             // Arrange
             var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
@@ -486,7 +486,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
-            var act = async () => await sut.AddNoteWithAnkiConnectAsync(note, CancellationToken.None);
+            var act = async () => await sut.AddNoteToAnkiAsync(note, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
@@ -494,7 +494,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task AddNoteWithAnkiConnectAsync_WhenResultMissing_ThrowsInvalidOperationException()
+        public async Task AddNoteToAnkiAsync_WhenResultMissing_ThrowsInvalidOperationException()
         {
             // Arrange
             var note = _fixture.Create<AnkiNote>() with { DeckName = "deck", ModelName = "model" };
@@ -509,7 +509,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
-            var act = async () => await sut.AddNoteWithAnkiConnectAsync(note, CancellationToken.None);
+            var act = async () => await sut.AddNoteToAnkiAsync(note, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
@@ -517,7 +517,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task AddNoteWithAnkiConnectAsync_WhenDuplicateNote_ThrowsAnkiNoteExistsException()
+        public async Task AddNoteToAnkiAsync_WhenDuplicateNote_ThrowsAnkiNoteExistsException()
         {
             // Arrange
             var note = new AnkiNote(
@@ -541,7 +541,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiConnectService>();
 
             // Act
-            Func<Task> act = async () => await sut.AddNoteWithAnkiConnectAsync(note, CancellationToken.None);
+            Func<Task> act = async () => await sut.AddNoteToAnkiAsync(note, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<AnkiNoteExistsException>()
