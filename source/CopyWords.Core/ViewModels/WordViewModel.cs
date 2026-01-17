@@ -19,7 +19,6 @@ namespace CopyWords.Core.ViewModels
         string? SoundUrl { get; set; }
         bool ShowCopyButtons { get; set; }
         bool ShowAnkiButton { get; set; }
-        bool ShowShareButton { get; set; }
 
         void UpdateUI();
         void SetDefinition(DefinitionViewModel definition);
@@ -128,8 +127,7 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         public partial bool ShowCopyButtons { get; set; }
 
-        [ObservableProperty]
-        public partial bool ShowShareButton { get; set; }
+        public bool ShowShareButton => (_deviceInfo.Platform == DevicePlatform.Android);
 
         public Color PlaySoundButtonColor => GetButtonColor(CanPlaySound);
 
@@ -217,25 +215,13 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task ShareAsync()
         {
+            // This command is only available on Android platform
             try
             {
-                string subjectToShare = string.Empty;
-                string textToShare = string.Empty;
+                string subjectToShare = _copySelectedToClipboardService.CompileFront(DefinitionViewModel);
 
-                if (ShowCopyButtons)
-                {
-                    // When checkboxes are shown, allow a user to select any meanings to share. The shared text will have html formatting
-                    // to make it look nice in AnkiDroid.
-                    subjectToShare = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModel);
-                    textToShare = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModel);
-                }
-
-                if (string.IsNullOrEmpty(textToShare))
-                {
-                    // If the checkboxes are not shown, or a user didn't select any checkboxes, share the headword and its translations.
-                    // The shared text will not have any special formatting.
-                    textToShare = _copySelectedToClipboardService.CompileHeadword(DefinitionViewModel);
-                }
+                // Compile the translations - they will go to the second edit box in AnkiDroid
+                string textToShare = _copySelectedToClipboardService.CompileTranslations(DefinitionViewModel);
 
                 var shareRequest = new ShareTextRequest
                 {
@@ -258,31 +244,32 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task CopyFrontAsync()
         {
-            await CompileAndCopyToClipboard("front", _copySelectedToClipboardService.CompileFrontAsync);
+            await CompileAndCopyToClipboard("front", _copySelectedToClipboardService.CompileFront);
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task CopyBackAsync()
         {
-            await CompileAndCopyToClipboard("back", _copySelectedToClipboardService.CompileBackAsync);
+            await CompileAndCopyToClipboard("back", _copySelectedToClipboardService.CompileBack);
+            await _copySelectedToClipboardService.SaveImagesAsync(DefinitionViewModel);
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyPartOfSpeech))]
         public async Task CopyPartOfSpeechAsync()
         {
-            await CompileAndCopyToClipboard("word type", _copySelectedToClipboardService.CompilePartOfSpeechAsync);
+            await CompileAndCopyToClipboard("word type", _copySelectedToClipboardService.CompilePartOfSpeech);
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyEndings))]
         public async Task CopyEndingsAsync()
         {
-            await CompileAndCopyToClipboard("endings", _copySelectedToClipboardService.CompileEndingsAsync);
+            await CompileAndCopyToClipboard("endings", _copySelectedToClipboardService.CompileEndings);
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
         public async Task CopyExamplesAsync()
         {
-            await CompileAndCopyToClipboard("examples", _copySelectedToClipboardService.CompileExamplesAsync);
+            await CompileAndCopyToClipboard("examples", _copySelectedToClipboardService.CompileExamples);
         }
 
         #endregion
@@ -300,12 +287,10 @@ namespace CopyWords.Core.ViewModels
                 // On Android we don't show copy buttons, it only makes sense on Windows and Mac when you have multi-window.
                 // But we do show share button instead.
                 ShowCopyButtons = false;
-                ShowShareButton = true;
             }
             else
             {
                 ShowCopyButtons = _settingsService.GetShowCopyButtons();
-                ShowShareButton = false;
             }
 
             ShowAnkiButton = _settingsService.GetShowAnkiButton();
@@ -383,11 +368,11 @@ namespace CopyWords.Core.ViewModels
             }
         }
 
-        internal async Task CompileAndCopyToClipboard(string wordPartName, Func<DefinitionViewModel, Task<string>> action)
+        internal async Task CompileAndCopyToClipboard(string wordPartName, Func<DefinitionViewModel, string> action)
         {
             try
             {
-                string textToCopy = await action(DefinitionViewModel);
+                string textToCopy = action(DefinitionViewModel);
 
                 if (!string.IsNullOrEmpty(textToCopy))
                 {
@@ -422,23 +407,25 @@ namespace CopyWords.Core.ViewModels
                     return;
                 }
 
-                string front = await _copySelectedToClipboardService.CompileFrontAsync(DefinitionViewModel);
+                string front = _copySelectedToClipboardService.CompileFront(DefinitionViewModel);
                 if (string.IsNullOrEmpty(front))
                 {
                     await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
                     return;
                 }
 
-                string back = await _copySelectedToClipboardService.CompileBackAsync(DefinitionViewModel);
+                string back = _copySelectedToClipboardService.CompileBack(DefinitionViewModel);
                 if (string.IsNullOrEmpty(back))
                 {
                     await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
                     return;
                 }
 
-                string partOfSpeech = await _copySelectedToClipboardService.CompilePartOfSpeechAsync(DefinitionViewModel);
-                string endings = await _copySelectedToClipboardService.CompileEndingsAsync(DefinitionViewModel);
-                string examples = await _copySelectedToClipboardService.CompileExamplesAsync(DefinitionViewModel);
+                await _copySelectedToClipboardService.SaveImagesAsync(DefinitionViewModel);
+
+                string partOfSpeech = _copySelectedToClipboardService.CompilePartOfSpeech(DefinitionViewModel);
+                string endings = _copySelectedToClipboardService.CompileEndings(DefinitionViewModel);
+                string examples = _copySelectedToClipboardService.CompileExamples(DefinitionViewModel);
 
                 string? sound = null;
                 if (CanSaveSoundFile)

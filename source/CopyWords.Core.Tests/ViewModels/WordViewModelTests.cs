@@ -15,7 +15,7 @@ namespace CopyWords.Core.Tests.ViewModels
         private Fixture _fixture = default!;
         private AppSettings _appSettings = default!;
 
-        private Mock<Func<DefinitionViewModel, Task<string>>> _func = default!;
+        private Mock<Func<DefinitionViewModel, string>> _func = default!;
 
         [TestInitialize]
         public void Initialize()
@@ -29,9 +29,9 @@ namespace CopyWords.Core.Tests.ViewModels
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(_appSettings);
 
-            _func = new Mock<Func<DefinitionViewModel, Task<string>>>();
+            _func = new Mock<Func<DefinitionViewModel, string>>();
             _func.Setup(x => x.Invoke(It.IsAny<DefinitionViewModel>()))
-                .Returns((DefinitionViewModel vm) => Task.FromResult(vm.HeadwordViewModel.Original!));
+                .Returns((DefinitionViewModel vm) => vm.HeadwordViewModel.Original!);
         }
 
         #region Tests for CanSaveSoundFile
@@ -190,7 +190,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
-            _func.Setup(x => x.Invoke(It.IsAny<DefinitionViewModel>())).ThrowsAsync(new ExamplesFromSeveralDefinitionsSelectedException("exception from unit tests"));
+            _func.Setup(x => x.Invoke(It.IsAny<DefinitionViewModel>())).Throws(new ExamplesFromSeveralDefinitionsSelectedException("exception from unit tests"));
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.SetDefinition(definitionViewModel);
@@ -210,7 +210,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
-            _func.Setup(x => x.Invoke(It.IsAny<DefinitionViewModel>())).ThrowsAsync(new Exception("exception from unit tests"));
+            _func.Setup(x => x.Invoke(It.IsAny<DefinitionViewModel>())).Throws(new Exception("exception from unit tests"));
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.SetDefinition(definitionViewModel);
@@ -223,14 +223,42 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #endregion
 
+        #region Tests for CopyBackAsync
+
+        [TestMethod]
+        public async Task CopyBackAsync_Should_CallCompileBackAndSavesImages()
+        {
+            // Arrange
+            string compiledBack = _fixture.Create<string>();
+            DefinitionViewModel definitionViewModel = _fixture.Create<DefinitionViewModel>();
+
+            var clipboardServiceMock = _fixture.Freeze<Mock<IClipboardService>>();
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(compiledBack);
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.SetDefinition(definitionViewModel);
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.CopyBackAsync();
+
+            // Assert
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileBack(It.IsAny<DefinitionViewModel>()));
+            copySelectedToClipboardServiceMock.Verify(x => x.SaveImagesAsync(definitionViewModel), Times.Once);
+        }
+
+        #endregion
+
         #region Tests for ShareAsync
 
         [TestMethod]
-        public async Task ShareAsync_WhenCopyButtonsShownAndCompileFrontAsyncReturnsValue_CallsCompileBackAsync()
+        public async Task ShareAsync_Should_CallCopySelectedToClipboardService()
         {
             // Arrange
-            string front = _fixture.Create<string>();
-            string back = _fixture.Create<string>();
+            string textToShareFront = _fixture.Create<string>();
+            string textToShareBack = _fixture.Create<string>();
 
             var sharedTextRequests = new List<ShareTextRequest>();
 
@@ -238,40 +266,8 @@ namespace CopyWords.Core.Tests.ViewModels
             shareMock.Setup(x => x.RequestAsync(Capture.In(sharedTextRequests)));
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(front);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(back);
-
-            WordViewModel sut = _fixture.Create<WordViewModel>();
-            sut.CanCopyFront = true;
-            sut.ShowCopyButtons = true;
-
-            // Act
-            await sut.ShareAsync();
-
-            // Assert
-            shareMock.Verify(x => x.RequestAsync(It.IsAny<ShareTextRequest>()));
-
-            sharedTextRequests[0].Subject.Should().Be(front);
-            sharedTextRequests[0].Text.Should().Be(back);
-            sharedTextRequests[0].Title.Should().Be("Share Translations");
-
-            copySelectedToClipboardServiceMock.Verify(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>()));
-            copySelectedToClipboardServiceMock.Verify(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>()));
-        }
-
-        [TestMethod]
-        public async Task ShareAsync_WhenCopyButtonsHidden_CallsCompileHeadword()
-        {
-            // Arrange
-            string textToShare = _fixture.Create<string>();
-
-            var sharedTextRequests = new List<ShareTextRequest>();
-
-            var shareMock = _fixture.Freeze<Mock<IShare>>();
-            shareMock.Setup(x => x.RequestAsync(Capture.In(sharedTextRequests)));
-
-            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileHeadword(It.IsAny<DefinitionViewModel>())).Returns(textToShare);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(textToShareFront);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileTranslations(It.IsAny<DefinitionViewModel>())).Returns(textToShareBack);
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.CanCopyFront = true;
@@ -283,72 +279,12 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             shareMock.Verify(x => x.RequestAsync(It.IsAny<ShareTextRequest>()));
 
-            sharedTextRequests[0].Subject.Should().BeEmpty();
-            sharedTextRequests[0].Text.Should().Be(textToShare);
+            sharedTextRequests[0].Subject.Should().Be(textToShareFront);
+            sharedTextRequests[0].Text.Should().Be(textToShareBack);
             sharedTextRequests[0].Title.Should().Be("Share Translations");
 
-            copySelectedToClipboardServiceMock.Verify(x => x.CompileHeadword(It.IsAny<DefinitionViewModel>()));
-        }
-
-        [TestMethod]
-        public async Task ShareAsync_WhenCopyButtonsShownAndCompileFrontAsyncDoesNotReturnValue_CallsCompileHeadword()
-        {
-            // Arrange
-            string textToShare = _fixture.Create<string>();
-
-            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(string.Empty);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(string.Empty);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileHeadword(It.IsAny<DefinitionViewModel>())).Returns(textToShare);
-
-            var sharedTextRequests = new List<ShareTextRequest>();
-
-            var shareMock = _fixture.Freeze<Mock<IShare>>();
-            shareMock.Setup(x => x.RequestAsync(Capture.In(sharedTextRequests)));
-
-            WordViewModel sut = _fixture.Create<WordViewModel>();
-            sut.CanCopyFront = true;
-            sut.ShowCopyButtons = true;
-
-            // Act
-            await sut.ShareAsync();
-
-            // Assert
-            shareMock.Verify(x => x.RequestAsync(It.IsAny<ShareTextRequest>()));
-
-            sharedTextRequests[0].Subject.Should().BeEmpty();
-            sharedTextRequests[0].Text.Should().Be(textToShare);
-            sharedTextRequests[0].Title.Should().Be("Share Translations");
-
-            copySelectedToClipboardServiceMock.Verify(x => x.CompileHeadword(It.IsAny<DefinitionViewModel>()));
-        }
-
-        [TestMethod]
-        public async Task ShareAsync_WhenExamplesFromSeveralDefinitionsSelectedExceptionIsThrown_ShowsAlert()
-        {
-            // Arrange
-            string front = _fixture.Create<string>();
-            string back = _fixture.Create<string>();
-
-            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(front);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(back);
-
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-
-            var shareMock = _fixture.Freeze<Mock<IShare>>();
-            shareMock.Setup(x => x.RequestAsync(It.IsAny<ShareTextRequest>()))
-                .ThrowsAsync(new ExamplesFromSeveralDefinitionsSelectedException("please select examples from one definition!"));
-
-            WordViewModel sut = _fixture.Create<WordViewModel>();
-            sut.CanCopyFront = true;
-            sut.ShowCopyButtons = true;
-
-            // Act
-            await sut.ShareAsync();
-
-            // Assert
-            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot share the word", "please select examples from one definition!", "OK"));
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileFront(It.IsAny<DefinitionViewModel>()));
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileTranslations(It.IsAny<DefinitionViewModel>()));
         }
 
         [TestMethod]
@@ -359,8 +295,8 @@ namespace CopyWords.Core.Tests.ViewModels
             string back = _fixture.Create<string>();
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(front);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
@@ -654,7 +590,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 "Cannot add note",
                 "Please configure Anki deck name and model name in the settings.",
                 "OK"));
-            copySelectedToClipboardServiceMock.Verify(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>()), Times.Never);
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileFront(It.IsAny<DefinitionViewModel>()), Times.Never);
             ankiConnectServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
@@ -684,7 +620,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 "Cannot add note",
                 "Please configure Anki deck name and model name in the settings.",
                 "OK"));
-            copySelectedToClipboardServiceMock.Verify(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>()), Times.Never);
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileFront(It.IsAny<DefinitionViewModel>()), Times.Never);
             ankiConnectServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
@@ -714,7 +650,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 "Cannot add note",
                 "Please configure Anki deck name and model name in the settings.",
                 "OK"));
-            copySelectedToClipboardServiceMock.Verify(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>()), Times.Never);
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileFront(It.IsAny<DefinitionViewModel>()), Times.Never);
             ankiConnectServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
@@ -726,8 +662,8 @@ namespace CopyWords.Core.Tests.ViewModels
             string back = _fixture.Create<string>();
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(front);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
             var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
@@ -754,8 +690,8 @@ namespace CopyWords.Core.Tests.ViewModels
             const string back = "";
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(front);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
             var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
@@ -785,11 +721,11 @@ namespace CopyWords.Core.Tests.ViewModels
             string examples = _fixture.Create<string>();
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(front);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(back);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeechAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(partOfSpeech);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndingsAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(endings);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamplesAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(examples);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeech(It.IsAny<DefinitionViewModel>())).Returns(partOfSpeech);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndings(It.IsAny<DefinitionViewModel>())).Returns(endings);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamples(It.IsAny<DefinitionViewModel>())).Returns(examples);
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
             var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
@@ -820,6 +756,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 It.IsAny<CancellationToken>()), Times.Once);
 
             dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            copySelectedToClipboardServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<DefinitionViewModel>()), Times.Once);
         }
 
         [TestMethod]
@@ -836,11 +773,11 @@ namespace CopyWords.Core.Tests.ViewModels
             string soundFileName = $"[sound:{word}.mp3]";
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(front);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(back);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeechAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(partOfSpeech);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndingsAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(endings);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamplesAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(examples);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeech(It.IsAny<DefinitionViewModel>())).Returns(partOfSpeech);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndings(It.IsAny<DefinitionViewModel>())).Returns(endings);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamples(It.IsAny<DefinitionViewModel>())).Returns(examples);
             copySelectedToClipboardServiceMock.Setup(x => x.CompileSoundFileName(word)).Returns(soundFileName);
 
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
@@ -896,11 +833,11 @@ namespace CopyWords.Core.Tests.ViewModels
             string examples = _fixture.Create<string>();
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(front);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(back);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeechAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(partOfSpeech);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndingsAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(endings);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamplesAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(examples);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeech(It.IsAny<DefinitionViewModel>())).Returns(partOfSpeech);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndings(It.IsAny<DefinitionViewModel>())).Returns(endings);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamples(It.IsAny<DefinitionViewModel>())).Returns(examples);
 
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
             saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(false);
@@ -950,8 +887,8 @@ namespace CopyWords.Core.Tests.ViewModels
             string back = _fixture.Create<string>();
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(front);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
@@ -980,8 +917,8 @@ namespace CopyWords.Core.Tests.ViewModels
             string back = _fixture.Create<string>();
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileFrontAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(front);
-            copySelectedToClipboardServiceMock.Setup(x => x.CompileBackAsync(It.IsAny<DefinitionViewModel>())).ReturnsAsync(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 

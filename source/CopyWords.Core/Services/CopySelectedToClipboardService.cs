@@ -7,19 +7,21 @@ namespace CopyWords.Core.Services
 {
     public interface ICopySelectedToClipboardService
     {
-        Task<string> CompileFrontAsync(DefinitionViewModel definitionViewModel);
+        string CompileFront(DefinitionViewModel definitionViewModel);
 
-        Task<string> CompileBackAsync(DefinitionViewModel definitionViewModel);
+        string CompileBack(DefinitionViewModel definitionViewModel);
 
-        Task<string> CompilePartOfSpeechAsync(DefinitionViewModel definitionViewModel);
+        string CompilePartOfSpeech(DefinitionViewModel definitionViewModel);
 
-        Task<string> CompileEndingsAsync(DefinitionViewModel definitionViewModel);
+        string CompileEndings(DefinitionViewModel definitionViewModel);
 
-        Task<string> CompileExamplesAsync(DefinitionViewModel definitionViewModel);
+        string CompileExamples(DefinitionViewModel definitionViewModel);
 
-        string CompileHeadword(DefinitionViewModel definitionViewModel);
+        string CompileTranslations(DefinitionViewModel definitionViewModel);
 
         string CompileSoundFileName(string soundFileName);
+
+        Task SaveImagesAsync(DefinitionViewModel definitionViewModel);
     }
 
     public class CopySelectedToClipboardService : ICopySelectedToClipboardService
@@ -27,22 +29,19 @@ namespace CopyWords.Core.Services
         private const string TemplateGrayText = "<span style=\"color: rgba(0, 0, 0, 0.4)\">{0}</span>";
 
         private readonly ISaveImageFileService _saveImageFileService;
-        private readonly IDeviceInfo _deviceInfo;
         private readonly ISettingsService _settingsService;
 
         public CopySelectedToClipboardService(
             ISaveImageFileService saveImageFileService,
-            IDeviceInfo deviceInfo,
             ISettingsService settingsService)
         {
             _saveImageFileService = saveImageFileService;
-            _deviceInfo = deviceInfo;
             _settingsService = settingsService;
         }
 
         #region Public Methods
 
-        public Task<string> CompileFrontAsync(DefinitionViewModel definitionViewModel)
+        public string CompileFront(DefinitionViewModel definitionViewModel)
         {
             string word = definitionViewModel.HeadwordViewModel.Original!;
 
@@ -99,10 +98,10 @@ namespace CopyWords.Core.Services
                 }
             }
 
-            return Task.FromResult(front);
+            return front;
         }
 
-        public async Task<string> CompileBackAsync(DefinitionViewModel definitionViewModel)
+        public string CompileBack(DefinitionViewModel definitionViewModel)
         {
             List<string> backMeanings = new();
             int imageIndex = 0;
@@ -142,27 +141,15 @@ namespace CopyWords.Core.Services
 
                         if (meaningVM.IsImageChecked && !string.IsNullOrEmpty(meaningVM.ImageUrl))
                         {
-                            if (_deviceInfo.Platform == DevicePlatform.Android)
+                            // On Windows and macOS, generate the image file name reference. The actual saving is done by SaveImagesAsync.
+                            string imageFileName = GetImageFileNameWithoutExtension(definitionViewModel.HeadwordViewModel.Original!);
+                            if (imageIndex > 0)
                             {
-                                // On Android we cannot save files into Android folders, they are protected. We will add a link to the image instead.
-                                backMeaning.Append($"<br><img src=\"{meaningVM.ImageUrl}\">");
+                                imageFileName += imageIndex;
                             }
-                            else
-                            {
-                                // On Windows and macOS, download the image, resize it, and save it to the Anki media collection folder.
-                                string imageFileName = GetImageFileNameWithoutExtension(definitionViewModel.HeadwordViewModel.Original!);
-                                if (imageIndex > 0)
-                                {
-                                    imageFileName += imageIndex;
-                                }
 
-                                bool result = await _saveImageFileService.SaveImageFileAsync(meaningVM.ImageUrl, imageFileName);
-                                if (result)
-                                {
-                                    backMeaning.Append($"<br><img src=\"{imageFileName}.jpg\">");
-                                    imageIndex++;
-                                }
-                            }
+                            backMeaning.Append($"<br><img src=\"{imageFileName}.jpg\">");
+                            imageIndex++;
                         }
 
                         backMeanings.Add(backMeaning.ToString());
@@ -211,17 +198,11 @@ namespace CopyWords.Core.Services
             return text;
         }
 
-        public Task<string> CompilePartOfSpeechAsync(DefinitionViewModel definitionViewModel)
-        {
-            return Task.FromResult(definitionViewModel.PartOfSpeech);
-        }
+        public string CompilePartOfSpeech(DefinitionViewModel definitionViewModel) => definitionViewModel.PartOfSpeech;
 
-        public Task<string> CompileEndingsAsync(DefinitionViewModel definitionViewModel)
-        {
-            return Task.FromResult(definitionViewModel.Endings);
-        }
+        public string CompileEndings(DefinitionViewModel definitionViewModel) => definitionViewModel.Endings;
 
-        public Task<string> CompileExamplesAsync(DefinitionViewModel definitionViewModel)
+        public string CompileExamples(DefinitionViewModel definitionViewModel)
         {
             var selectedExampleVMs = definitionViewModel
                 .ContextViewModels
@@ -259,10 +240,10 @@ namespace CopyWords.Core.Services
                 i++;
             }
 
-            return Task.FromResult(sb.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
+            return sb.ToString().TrimEnd(Environment.NewLine.ToCharArray());
         }
 
-        public string CompileHeadword(DefinitionViewModel definitionViewModel)
+        public string CompileTranslations(DefinitionViewModel definitionViewModel)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(definitionViewModel.HeadwordViewModel.Original!);
@@ -290,6 +271,32 @@ namespace CopyWords.Core.Services
             // Trim any trailing new lines
             return sb.ToString()
                 .TrimEnd(Environment.NewLine.ToCharArray());
+        }
+
+        public async Task SaveImagesAsync(DefinitionViewModel definitionViewModel)
+        {
+            int imageIndex = 0;
+
+            foreach (var contextVM in definitionViewModel.ContextViewModels)
+            {
+                foreach (var meaningVM in contextVM.MeaningViewModels)
+                {
+                    // The meaning is the same for all examples - so find first example which is selected
+                    ExampleViewModel? exampleVM = meaningVM.ExampleViewModels.FirstOrDefault(x => x.IsChecked);
+                    if (exampleVM != null && meaningVM.IsImageChecked && !string.IsNullOrEmpty(meaningVM.ImageUrl))
+                    {
+                        // On Windows and macOS, download the image, resize it, and save it to the Anki media collection folder.
+                        string imageFileName = GetImageFileNameWithoutExtension(definitionViewModel.HeadwordViewModel.Original!);
+                        if (imageIndex > 0)
+                        {
+                            imageFileName += imageIndex;
+                        }
+
+                        await _saveImageFileService.SaveImageFileAsync(meaningVM.ImageUrl, imageFileName);
+                        imageIndex++;
+                    }
+                }
+            }
         }
 
         public string CompileSoundFileName(string soundFileName) => $"[sound:{soundFileName}.mp3]";

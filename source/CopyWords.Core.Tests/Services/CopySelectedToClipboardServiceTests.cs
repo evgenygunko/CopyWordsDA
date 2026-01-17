@@ -19,90 +19,90 @@ namespace CopyWords.Core.Tests.Services
         #region Danish
 
         [TestMethod]
-        public async Task CompileFrontAsync_WhenNoExamplesSelected_UsesFirstDefinition()
+        public void CompileFrontAsync_WhenNoExamplesSelected_UsesFirstDefinition()
         {
             var definitionVM = CreateVMForGrillspyd();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("et grillspyd");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForSubstantivIntetkøn_AddsArticle()
+        public void CompileFrontAsync_ForSubstantivIntetkøn_AddsArticle()
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("et grillspyd");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForuSubstantivFælleskøn_AddsArticle()
+        public void CompileFrontAsync_ForuSubstantivFælleskøn_AddsArticle()
         {
             var definitionVM = CreateVMForUnderholdning();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("en underholdning");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForVerbum_AddsAt()
+        public void CompileFrontAsync_ForVerbum_AddsAt()
         {
             var definitionVM = CreateVMForKigge();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("at kigge");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForAdjektiv_CopiesFront()
+        public void CompileFrontAsync_ForAdjektiv_CopiesFront()
         {
             var definitionVM = CreateVMForHøj();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("høj");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForAdverbium_CopiesFront()
+        public void CompileFrontAsync_ForAdverbium_CopiesFront()
         {
             var definitionVM = CreateVMForLigeud();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("ligeud");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForForkortelse_CopiesFrontl()
+        public void CompileFrontAsync_ForForkortelse_CopiesFrontl()
         {
             var definitionVM = CreateVMForIForbindleseMed();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("i forb. med");
         }
@@ -112,20 +112,20 @@ namespace CopyWords.Core.Tests.Services
         #region Spanish
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForCocheWhenOneExampleSelected_ReturnsOneFrontMeaning()
+        public void CompileFrontAsync_ForCocheWhenOneExampleSelected_ReturnsOneFrontMeaning()
         {
             var definitionVM = CreateVMForCoche();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("un coche");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForCocheWhenTwoExamplesSelected_ReturnsOneFrontMeaning()
+        public void CompileFrontAsync_ForCocheWhenTwoExamplesSelected_ReturnsOneFrontMeaning()
         {
             var definitionVM = CreateVMForCoche();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -133,78 +133,78 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("un coche");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForMasculineNoun_AddsUn()
+        public void CompileFrontAsync_ForMasculineNoun_AddsUn()
         {
             var definitionVM = CreateVMForCoche();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("un coche");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForFeminineNoun_AddsUna()
+        public void CompileFrontAsync_ForFeminineNoun_AddsUna()
         {
             var definitionVM = CreateVMForCasa();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("una casa");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForFeminineNounStartingWithSTressedA_AddsEl()
+        public void CompileFrontAsync_ForFeminineNounStartingWithSTressedA_AddsEl()
         {
             var definitionVM = CreateVMForHampa();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("el hampa");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForMasculineAndFeminineNouns_ReplacesElAndLaWithUnAndUna()
+        public void CompileFrontAsync_ForMasculineAndFeminineNouns_ReplacesElAndLaWithUnAndUna()
         {
             var definitionVM = CreateVMForMorador();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("un morador, una moradora");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForBien_CopiesFront()
+        public void CompileFrontAsync_ForBien_CopiesFront()
         {
             var definitionVM = CreateVMForBien();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("bien");
         }
 
         [TestMethod]
-        public async Task CompileFrontAsync_ForLuce_CopiesFront()
+        public void CompileFrontAsync_ForLuce_CopiesFront()
         {
             var definitionVM = CreateVMForLuce();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -213,7 +213,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string front = await sut.CompileFrontAsync(definitionVM);
+            string front = sut.CompileFront(definitionVM);
 
             front.Should().Be("luce");
         }
@@ -222,23 +222,23 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
-        #region Tests for CompileBackAsync
+        #region Tests for CompileBack
 
         #region Danish
 
         [TestMethod]
-        public async Task CompileBackAsync_WhenNoExamplesSelected_ReturnsEmptyString()
+        public void CompileBack_WhenNoExamplesSelected_ReturnsEmptyString()
         {
             var definitionVM = CreateVMForGrillspyd();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().BeEmpty();
         }
 
         [TestMethod]
-        public async Task CompileBackAsyncWhenTranslationInMeaningIsNotEmpty_AddsHRTagAsADelimiterBetweenMeanings()
+        public void CompileBackWhenTranslationInMeaningIsNotEmpty_AddsHRTagAsADelimiterBetweenMeanings()
         {
             var definitionVM = CreateVMForHaj();
             foreach (var maningVM in definitionVM.ContextViewModels[0].MeaningViewModels)
@@ -257,16 +257,16 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
-                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><br>" +
-                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><br>" +
-                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">человек, который особенно умел в игре, ремесле и т. д.</span>");
+                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">???????, ?????????? ???????? ????</span><br>" +
+                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">??????, ????????????? ???????, ??????? ??????????? ??? ?????????? ???????? ???????? ?????????? ?????? ?? ???? ??????</span><br>" +
+                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">???????, ??????? ???????? ???? ? ????, ??????? ? ?. ?.</span>");
         }
 
         [TestMethod]
-        public async Task CompileBackAsync_WhenTranslationInMeaningIsEmpty_OnlyAddsOriginalMeaningToResult()
+        public void CompileBack_WhenTranslationInMeaningIsEmpty_OnlyAddsOriginalMeaningToResult()
         {
             var definitionVM = CreateVMForLigeud();
             definitionVM.ContextViewModels[0].MeaningViewModels[2].ExampleViewModels[0].IsChecked = true;
@@ -275,13 +275,13 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().Be("billet til kørsel uden omstigning med et offentligt transportmiddel");
         }
 
         [TestMethod]
-        public async Task CompileBackAsync_WhenRussianTranslationIsSelected_AddsTranslationToResult()
+        public void CompileBack_WhenRussianTranslationIsSelected_AddsTranslationToResult()
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -296,16 +296,16 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шампур</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????????? ??????? ?? ?????? ??? ??????? ??? ???????????? ???? ? ?????? ?? ????? ????? ?? ?????</span>");
         }
 
         [TestMethod]
-        public async Task CompileBackAsync_WhenEnglishTranslationIsSelected_AddsTranslationToResult()
+        public void CompileBack_WhenEnglishTranslationIsSelected_AddsTranslationToResult()
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -320,16 +320,16 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebab skewer</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????????? ??????? ?? ?????? ??? ??????? ??? ???????????? ???? ? ?????? ?? ????? ????? ?? ?????</span>");
         }
 
         [TestMethod]
-        public async Task CompileBackAsync_WhenBothTranslationsAreSelected_AddsTranslationsToResult()
+        public void CompileBack_WhenBothTranslationsAreSelected_AddsTranslationsToResult()
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -344,17 +344,17 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шампур</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????</span><br>" +
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebab skewer</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????????? ??????? ?? ?????? ??? ??????? ??? ???????????? ???? ? ?????? ?? ????? ????? ?? ?????</span>");
         }
 
         [TestMethod]
-        public async Task CompileBackAsync_WhenCopyTranslatedMeaningsIsFalse_DoesNotCopyTranslationForMeaningsToResult()
+        public void CompileBack_WhenCopyTranslatedMeaningsIsFalse_DoesNotCopyTranslationForMeaningsToResult()
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -369,16 +369,16 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шампур</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????</span><br>" +
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebab skewer</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
 
         [TestMethod]
-        public async Task CompileBackAsync_WhenOneExampleIsSelected_DoesNotAddNumbers()
+        public void CompileBack_WhenOneExampleIsSelected_DoesNotAddNumbers()
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -393,15 +393,15 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????????? ??????? ?? ?????? ??? ??????? ??? ???????????? ???? ? ?????? ?? ????? ????? ?? ?????</span>");
         }
 
         [TestMethod]
-        public async Task CompileBackAsync_WhenSeveralExamplesAreSelected_AddsNumbers()
+        public void CompileBack_WhenSeveralExamplesAreSelected_AddsNumbers()
         {
             var definitionVM = CreateVMForHaj();
             foreach (var maningVM in definitionVM.ContextViewModels[0].MeaningViewModels)
@@ -420,16 +420,16 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
-                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><br>" +
-                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><br>" +
-                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">человек, который особенно умел в игре, ремесле и т. д.</span>");
+                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">???????, ?????????? ???????? ????</span><br>" +
+                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">??????, ????????????? ???????, ??????? ??????????? ??? ?????????? ???????? ???????? ?????????? ?????? ?? ???? ??????</span><br>" +
+                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">???????, ??????? ???????? ???? ? ????, ??????? ? ?. ?.</span>");
         }
 
         [TestMethod]
-        public async Task CompileBackAsync_WhenImageIsSelectedAndNotAndroid_CopiesFileToAnkiCollection()
+        public void CompileBack_Should_InsertTagsForImages()
         {
             string? imageUrl = null;
 
@@ -448,45 +448,11 @@ namespace CopyWords.Core.Tests.Services
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
 
-            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(imageUrl!, "casa")).ReturnsAsync(true).Verifiable();
-
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().Be("house (dwelling)<br><img src=\"casa.jpg\">");
-            saveImageFileServiceMock.Verify();
-        }
-
-        [TestMethod]
-        public async Task CompileBackAsync_WhenImageIsSelectedAndAndroid_InsertsUrlToImageInOnlineDictionary()
-        {
-            string? imageUrl = null;
-
-            var definitionVM = CreateVMForCasa();
-            foreach (var maningVM in definitionVM.ContextViewModels[0].MeaningViewModels)
-            {
-                maningVM.IsImageChecked = true;
-                imageUrl = maningVM.ImageUrl;
-
-                foreach (var exampleVM in maningVM.ExampleViewModels)
-                {
-                    exampleVM.IsChecked = true;
-                }
-            }
-
-            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
-            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
-
-            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-
-            var sut = _fixture.Create<CopySelectedToClipboardService>();
-
-            string result = await sut.CompileBackAsync(definitionVM);
-
-            result.Should().Be($"house (dwelling)<br><img src=\"{imageUrl}\">");
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         #endregion
@@ -494,20 +460,20 @@ namespace CopyWords.Core.Tests.Services
         #region Spanish
 
         [TestMethod]
-        public async Task CompileBackAsync_ForCocheWhenOneExampleSelected_ReturnsOneBackMeaning()
+        public void CompileBack_ForCocheWhenOneExampleSelected_ReturnsOneBackMeaning()
         {
             var definitionVM = CreateVMForCoche();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().Be("car (vehicle)");
         }
 
         [TestMethod]
-        public async Task CompileBackAsync_ForCocheWhenTwoExamplesSelected_ReturnsOneBackMeaning()
+        public void CompileBack_ForCocheWhenTwoExamplesSelected_ReturnsOneBackMeaning()
         {
             var definitionVM = CreateVMForCoche();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -515,165 +481,79 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileBackAsync(definitionVM);
+            string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
                 "1.&nbsp;car (vehicle)<br>" +
                 "2.&nbsp;coach (vehicle led by horses)");
         }
 
-        [TestMethod]
-        public async Task CompileBackAsync_WhenImageUrlIsPresentAndSelected_CallsSaveImageFileService()
-        {
-            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
-
-            var definitionVM = CreateVMForSaltamontes();
-            definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
-            definitionVM.ContextViewModels[0].MeaningViewModels[0].IsImageChecked = true;
-            definitionVM.ContextViewModels[0].MeaningViewModels[0].ImageUrl.Should().NotBeNullOrEmpty();
-
-            var sut = _fixture.Create<CopySelectedToClipboardService>();
-
-            string result = await sut.CompileBackAsync(definitionVM);
-
-            result.Should().Be(
-                "grasshopper (animal)<br>" +
-                "<img src=\"saltamontes.jpg\">");
-
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(definitionVM.ContextViewModels[0].MeaningViewModels[0].ImageUrl, "saltamontes"));
-        }
-
-        [TestMethod]
-        public async Task CompileBackAsync_WhenImageUrlIsPresentButNotSelected_DoesNotCallSaveImageFileService()
-        {
-            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
-
-            var definitionVM = CreateVMForSaltamontes();
-            definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
-            definitionVM.ContextViewModels[0].MeaningViewModels[0].IsImageChecked = false;
-            definitionVM.ContextViewModels[0].MeaningViewModels[0].ImageUrl.Should().NotBeNullOrEmpty();
-
-            var sut = _fixture.Create<CopySelectedToClipboardService>();
-
-            string result = await sut.CompileBackAsync(definitionVM);
-
-            result.Should().Be("grasshopper (animal)");
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public async Task CompileBackAsync_WhenImageUrlIsNull_DoesNotCallSaveImageFileService()
-        {
-            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
-
-            var definitionVM = CreateVMForLuce();
-            definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
-
-            var sut = _fixture.Create<CopySelectedToClipboardService>();
-
-            string result = await sut.CompileBackAsync(definitionVM);
-
-            result.Should().Be("he looks (masculine) (third person singular)");
-
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public async Task CompileBackAsync_WhenMultipleImagesArePresentAndSelected_SavesImagesUnderDifferentNames()
-        {
-            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
-
-            var definitionVM = CreateVMForVeneno();
-            definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
-            definitionVM.ContextViewModels[0].MeaningViewModels[0].IsImageChecked = true;
-            definitionVM.ContextViewModels[0].MeaningViewModels[0].ImageUrl.Should().NotBeNullOrEmpty();
-
-            definitionVM.ContextViewModels[0].MeaningViewModels[1].ExampleViewModels[0].IsChecked = true;
-            definitionVM.ContextViewModels[0].MeaningViewModels[1].IsImageChecked = true;
-            definitionVM.ContextViewModels[0].MeaningViewModels[1].ImageUrl.Should().NotBeNullOrEmpty();
-
-            var sut = _fixture.Create<CopySelectedToClipboardService>();
-
-            string result = await sut.CompileBackAsync(definitionVM);
-
-            result.Should().Be(
-                "1.&nbsp;venom (of an animal) (toxic substance)<br><img src=\"veneno.jpg\"><br>" +
-                "2.&nbsp;poison<br><img src=\"veneno1.jpg\">");
-
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(definitionVM.ContextViewModels[0].MeaningViewModels[0].ImageUrl, "veneno"));
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(definitionVM.ContextViewModels[0].MeaningViewModels[1].ImageUrl, "veneno1"));
-        }
-
         #endregion
 
         #endregion
 
-        #region Tests for CompilePartOfSpeechAsync
+        #region Tests for CompilePartOfSpeech
 
         [TestMethod]
-        public async Task CompilePartOfSpeechAsync_Should_CopyPartOfSpeech()
+        public void CompilePartOfSpeech_Should_CopyPartOfSpeech()
         {
             var definitionVM = CreateVMForGrillspyd();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompilePartOfSpeechAsync(definitionVM);
+            string result = sut.CompilePartOfSpeech(definitionVM);
 
             result.Should().Be("substantiv, intetkøn");
         }
 
         #endregion
 
-        #region Tests for CompileEndingsAsync
+        #region Tests for CompileEndings
 
         [TestMethod]
-        public async Task CompileEndingsAsync_Should_CopyEndings()
+        public void CompileEndings_Should_CopyEndings()
         {
             var definitionVM = CreateVMForGrillspyd();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileEndingsAsync(definitionVM);
+            string result = sut.CompileEndings(definitionVM);
 
             result.Should().Be("-det eller (uofficielt) -et, -, -dene");
         }
 
         #endregion
 
-        #region Tests for CompileExamplesAsync
+        #region Tests for CompileExamples
 
         #region Danish
 
         [TestMethod]
-        public async Task CompileExamplesAsync_WhenNoExamplesSelected_ReturnsEmptyString()
+        public void CompileExamples_WhenNoExamplesSelected_ReturnsEmptyString()
         {
             var definitionVM = CreateVMForGrillspyd();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
-            string result = await sut.CompileExamplesAsync(definitionVM);
+            string result = sut.CompileExamples(definitionVM);
 
             result.Should().BeEmpty();
         }
 
         [TestMethod]
-        public async Task CompileExamplesAsync_WhenOneExampleSelected_DoesNotAddNumbers()
+        public void CompileExamples_WhenOneExampleSelected_DoesNotAddNumbers()
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileExamplesAsync(definitionVM);
+            string result = sut.CompileExamples(definitionVM);
 
             result.Should().Be("<span style=\"color: rgba(0, 0, 0, 1)\">Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver</span>");
         }
 
         [TestMethod]
-        public async Task CompileExamplesAsync_WhenTwoExamplesSelected_AddsNumbers()
+        public void CompileExamples_WhenTwoExamplesSelected_AddsNumbers()
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -681,7 +561,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileExamplesAsync(definitionVM);
+            string result = sut.CompileExamples(definitionVM);
 
             result.Should().Be(
                 "<span style=\"color: rgba(0, 0, 0, 1)\">1.&nbsp;Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver</span><br>" +
@@ -693,20 +573,20 @@ namespace CopyWords.Core.Tests.Services
         #region Spanish
 
         [TestMethod]
-        public async Task CompileExamplesAsync_ForCocheWhenOneExampleSelected_ReturnsExampleWithoutNumbering()
+        public void CompileExamples_ForCocheWhenOneExampleSelected_ReturnsExampleWithoutNumbering()
         {
             var definitionVM = CreateVMForCoche();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileExamplesAsync(definitionVM);
+            string result = sut.CompileExamples(definitionVM);
 
             result.Should().Be("<span style=\"color: rgba(0, 0, 0, 1)\">Mi coche no prende porque tiene una falla en el motor.</span>&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">My car won't start because of a problem with the engine.</span>");
         }
 
         [TestMethod]
-        public async Task CompileExamplesAsync_ForCocheWhenTwoExampleSelected_ReturnsExamplesWithoutNumbering()
+        public void CompileExamples_ForCocheWhenTwoExampleSelected_ReturnsExamplesWithoutNumbering()
         {
             var definitionVM = CreateVMForCoche();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
@@ -714,7 +594,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            string result = await sut.CompileExamplesAsync(definitionVM);
+            string result = sut.CompileExamples(definitionVM);
 
             result.Should().Be(
                 "<span style=\"color: rgba(0, 0, 0, 1)\">1.&nbsp;Mi coche no prende porque tiene una falla en el motor.</span>&nbsp;<span style=\"color: rgba(0, 0, 0, 0.4)\">My car won't start because of a problem with the engine.</span><br>" +
@@ -725,31 +605,31 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
-        #region Tests for CompileHeadword
+        #region Tests for CompileTranslations
 
         [TestMethod]
         [DataRow(null)]
         [DataRow("")]
-        public void CompileHeadword_WhenHeadwordOriginalIsNullOrEmpty_ReturnsEmptyString(string headwordOriginal)
+        public void CompileTranslations_WhenHeadwordOriginalIsNullOrEmpty_ReturnsEmptyString(string headwordOriginal)
         {
             var definition = new Definition(new Headword(headwordOriginal, null, null), string.Empty, string.Empty, []);
             var definitionVM = new DefinitionViewModel(definition, SourceLanguage.Danish, true);
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
-            string result = sut.CompileHeadword(definitionVM);
+            string result = sut.CompileTranslations(definitionVM);
 
             result.Should().BeEmpty();
         }
 
         [TestMethod]
-        public void CompileHeadword_Should_ReturnHeadwordAndItsTranslationsForFirstDefinition()
+        public void CompileTranslations_Should_ReturnTranslations()
         {
             var definitionVM = CreateVMForGrillspyd();
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
-            string result = sut.CompileHeadword(definitionVM);
+            string result = sut.CompileTranslations(definitionVM);
 
-            result.Should().Be("grillspyd (substantiv, intetkøn)" + Environment.NewLine + "шампур" + Environment.NewLine + "kebab skewer");
+            result.Should().Be("grillspyd (substantiv, intetkøn)" + Environment.NewLine + "??????" + Environment.NewLine + "kebab skewer");
         }
 
         #endregion
@@ -764,6 +644,107 @@ namespace CopyWords.Core.Tests.Services
             string result = sut.CompileSoundFileName("ejemplo");
 
             result.Should().Be("[sound:ejemplo.mp3]");
+        }
+
+        #endregion
+
+        #region Tests for SaveImagesAsync
+
+        [TestMethod]
+        public async Task SaveImagesAsync_WhenNoExamplesSelected_DoesNotSaveAnyImages()
+        {
+            var definitionVM = CreateVMForCasa();
+
+            Mock<ISaveImageFileService> saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            await sut.SaveImagesAsync(definitionVM);
+
+            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task SaveImagesAsync_WhenExampleSelectedButImageNotChecked_DoesNotSaveImage()
+        {
+            var definitionVM = CreateVMForCasa();
+            definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVM.ContextViewModels[0].MeaningViewModels[0].IsImageChecked = false;
+
+            Mock<ISaveImageFileService> saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            await sut.SaveImagesAsync(definitionVM);
+
+            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task SaveImagesAsync_WhenExampleSelectedAndImageChecked_SavesImage()
+        {
+            var definitionVM = CreateVMForCasa();
+            definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVM.ContextViewModels[0].MeaningViewModels[0].IsImageChecked = true;
+
+            Mock<ISaveImageFileService> saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            await sut.SaveImagesAsync(definitionVM);
+
+            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(
+                "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/1ccc644c-898c-49b1-be9b-01eee0375a72.jpg",
+                "casa"), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveImagesAsync_WhenMultipleImagesSelected_SavesImagesWithIndexedFileNames()
+        {
+            var definitionVM = CreateVMForVeneno();
+            foreach (var contextVM in definitionVM.ContextViewModels)
+            {
+                foreach (var meaningVM in contextVM.MeaningViewModels)
+                {
+                    if (!string.IsNullOrEmpty(meaningVM.ImageUrl))
+                    {
+                        meaningVM.IsImageChecked = true;
+                        meaningVM.ExampleViewModels[0].IsChecked = true;
+                    }
+                }
+            }
+
+            Mock<ISaveImageFileService> saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            await sut.SaveImagesAsync(definitionVM);
+
+            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(
+                "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d533b470-18a4-4cae-ad08-3ee8858ae02c.jpg",
+                "veneno"), Times.Once);
+            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(
+                "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d07aa7fd-a3fd-4d06-9751-656180d8b1ee.jpg",
+                "veneno1"), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveImagesAsync_WhenImageUrlIsEmpty_DoesNotSaveImage()
+        {
+            var definitionVM = CreateVMForGrillspyd();
+            definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
+            definitionVM.ContextViewModels[0].MeaningViewModels[0].IsImageChecked = true;
+            // ImageUrl is null for grillspyd
+
+            Mock<ISaveImageFileService> saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+
+            var sut = _fixture.Create<CopySelectedToClipboardService>();
+
+            await sut.SaveImagesAsync(definitionVM);
+
+            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         #endregion
@@ -796,7 +777,7 @@ namespace CopyWords.Core.Tests.Services
 
         private DefinitionViewModel CreateVMForGrillspyd()
         {
-            var definition = new Definition(new Headword(Original: "grillspyd", English: "kebab skewer", Russian: "шампур"), PartOfSpeech: "substantiv, intetkøn", Endings: "-det eller (uofficielt) -et, -, -dene",
+            var definition = new Definition(new Headword(Original: "grillspyd", English: "kebab skewer", Russian: "??????"), PartOfSpeech: "substantiv, intetkøn", Endings: "-det eller (uofficielt) -et, -, -dene",
                 new List<Context>
                 {
                     new Context(ContextEN: "", Position: "",
@@ -804,7 +785,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
-                                Translation: "заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле",
+                                Translation: "??????????? ??????? ?? ?????? ??? ??????? ??? ???????????? ???? ? ?????? ?? ????? ????? ?? ?????",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -832,7 +813,7 @@ namespace CopyWords.Core.Tests.Services
                         new List<Meaning>
                         {
                             new Meaning(Original: "noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse",
-                                Translation: "что-то, что развлекает, радует или отвлекает кого-то, например, представление, более легкий и не особенно требовательный интеллектуальный продукт или приятное занятие",
+                                Translation: "???-??, ??? ??????????, ?????? ??? ????????? ????-??, ????????, ?????????????, ????? ?????? ? ?? ???????? ?????????????? ???????????????? ??????? ??? ???????? ???????",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -859,14 +840,14 @@ namespace CopyWords.Core.Tests.Services
                     new Context(ContextEN: "", Position: "",
                         new List<Meaning>
                         {
-                            new Meaning(Original : "rette blikket i en bestemt retning", Translation : "направить взгляд в определенном направлении", AlphabeticalPosition: "1", Tag: null, ImageUrl: null,
+                            new Meaning(Original : "rette blikket i en bestemt retning", Translation : "????????? ?????? ? ???????????? ???????????", AlphabeticalPosition: "1", Tag: null, ImageUrl: null,
                                 new List<Example>()
                                 {
                                     new Example(Original : "Børnene kiggede spørgende på hinanden", Translation: null),
                                     new Example(Original : "kig lige en gang!", Translation: null),
                                     new Example(Original : "Han kiggede sig rundt, som om han ledte efter noget", Translation: null),
                                 }),
-                            new Meaning(Original: "undersøge nærmere; sætte sig ind i", Translation: "присмотритесь повнимательнее; попасть в", AlphabeticalPosition: "2", Tag: null, ImageUrl: null,
+                            new Meaning(Original: "undersøge nærmere; sætte sig ind i", Translation: "????????????? ??????????????; ??????? ?", AlphabeticalPosition: "2", Tag: null, ImageUrl: null,
                                 new List<Example>()
                                 {
                                     new Example(Original : "hun har kigget på de psykiske eftervirkninger hos voldtagne piger og kvinder", Translation: null)
@@ -891,7 +872,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original : "med forholdsvis stor udstrækning i lodret retning",
-                                Translation : "с относительно большой протяженностью в вертикальном направлении",
+                                Translation : "? ???????????? ??????? ?????????????? ? ???????????? ???????????",
                                 AlphabeticalPosition : "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -902,7 +883,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original : "med en forholdsvis stor værdi på en eksisterende eller tænkt skala; af stor størrelse, omfang el.lign.",
-                                Translation : "с относительно большой ценностью в существующих или воображаемых масштабах; большого размера, масштаба и т. д.",
+                                Translation : "? ???????????? ??????? ????????? ? ???????????? ??? ???????????? ?????????; ???????? ???????, ???????? ? ?. ?.",
                                 AlphabeticalPosition : "2",
                                 Tag: null,
                                 ImageUrl: null,
@@ -931,7 +912,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original : "uden at dreje eller skifte kurs om bevægelse eller retning",
-                                Translation : "не поворачиваясь и не меняя курс или направление движения",
+                                Translation : "?? ????????????? ? ?? ????? ???? ??? ??????????? ????????",
                                 AlphabeticalPosition : "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -941,7 +922,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original : "uden omsvøb",
-                                Translation : "без каких-либо обременений",
+                                Translation : "??? ?????-???? ???????????",
                                 AlphabeticalPosition : "2",
                                 Tag: null,
                                 ImageUrl: null,
@@ -979,7 +960,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "= i forbindelse med",
-                                Translation: "= в связи с",
+                                Translation: "= ? ????? ?",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -1008,7 +989,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "stor, langstrakt bruskfisk",
-                                Translation: "крупная, удлиненная хрящевая рыба",
+                                Translation: "???????, ?????????? ???????? ????",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -1018,7 +999,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning",
-                                Translation: "жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других",
+                                Translation: "??????, ????????????? ???????, ??????? ??????????? ??? ?????????? ???????? ???????? ?????????? ?????? ?? ???? ??????",
                                 AlphabeticalPosition: "2",
                                 Tag: "SLANG",
                                 ImageUrl: null,
@@ -1028,7 +1009,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original: "person der er særlig dygtig til et spil, håndværk el.lign.",
-                                Translation: "человек, который особенно умел в игре, ремесле и т. д.",
+                                Translation: "???????, ??????? ???????? ???? ? ????, ??????? ? ?. ?.",
                                 AlphabeticalPosition: "3",
                                 Tag: "SLANG",
                                 ImageUrl: null,
@@ -1303,7 +1284,7 @@ namespace CopyWords.Core.Tests.Services
                                     }),
                             new Meaning(
                                 Original: "she looks (feminine)",
-                                Translation: "она выглядит",
+                                Translation: "??? ????????",
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
