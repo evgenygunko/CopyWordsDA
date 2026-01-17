@@ -1,9 +1,7 @@
 ﻿// Ignore Spelling: app Api
 
 using System.Globalization;
-using System.Text.Json;
 using CopyWords.Core.Models;
-using CopyWords.Core.Services.Wrappers;
 
 namespace CopyWords.Core.Services
 {
@@ -13,9 +11,7 @@ namespace CopyWords.Core.Services
 
         void SaveSettings(AppSettings appSettings);
 
-        Task<AppSettings?> ImportSettingsAsync(string filePath);
-
-        Task ExportSettingsAsync(string filePath);
+        bool GetShowAddNoteWithAnkiConnectButton();
 
         bool GetShowCopyButtons();
 
@@ -42,23 +38,18 @@ namespace CopyWords.Core.Services
         IEnumerable<string> LoadHistory();
 
         void ClearHistory();
-
-        bool GetShowAddNoteWithAnkiConnectButton();
     }
 
     public class SettingsService : ISettingsService
     {
         private readonly IPreferences _preferences;
-        private readonly IFileIOService _fileIOService;
         private readonly IDeviceInfo _deviceInfo;
 
         public SettingsService(
             IPreferences preferences,
-            IFileIOService fileIOService,
             IDeviceInfo deviceInfo)
         {
             _preferences = preferences;
-            _fileIOService = fileIOService;
             _deviceInfo = deviceInfo;
         }
 
@@ -104,27 +95,6 @@ namespace CopyWords.Core.Services
             _preferences.Set(nameof(AppSettings.CopyTranslatedMeanings), appSettings.CopyTranslatedMeanings);
             _preferences.Set(nameof(AppSettings.SelectedParser), appSettings.SelectedParser);
             _preferences.Set(nameof(AppSettings.UseDarkTheme), appSettings.UseDarkTheme);
-        }
-
-        public async Task<AppSettings?> ImportSettingsAsync(string filePath)
-        {
-            var json = await _fileIOService.ReadAllTextAsync(filePath);
-            AppSettings? appSettings = JsonSerializer.Deserialize<AppSettings>(json);
-
-            if (appSettings != null)
-            {
-                SaveSettings(appSettings);
-            }
-
-            return appSettings;
-        }
-
-        public async Task ExportSettingsAsync(string filePath)
-        {
-            AppSettings appSettings = LoadSettings();
-            string json = JsonSerializer.Serialize(appSettings);
-
-            await _fileIOService.WriteAllTextAsync(filePath, json);
         }
 
         public bool GetShowCopyButtons()

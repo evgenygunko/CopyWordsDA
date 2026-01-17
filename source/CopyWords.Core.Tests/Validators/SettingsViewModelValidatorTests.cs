@@ -1,7 +1,6 @@
 ﻿// Ignore Spelling: Validator Api
 
 using AutoFixture;
-using CommunityToolkit.Maui.Storage;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
@@ -95,9 +94,7 @@ namespace CopyWords.Core.Tests.Validators
                 settingsServiceMock.Object,
                 Mock.Of<IDialogService>(),
                 Mock.Of<IShellService>(),
-                Mock.Of<IFilePicker>(),
                 Mock.Of<IDeviceInfo>(),
-                Mock.Of<IFileSaver>(),
                 Mock.Of<IValidator<SettingsViewModel>>(),
                 Mock.Of<IAnkiConnectService>(),
                 Mock.Of<IAnkiDroidService>(),

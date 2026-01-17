@@ -3,7 +3,6 @@
 using AutoFixture;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
-using CopyWords.Core.Services.Wrappers;
 using FluentAssertions;
 using Moq;
 
@@ -36,6 +35,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Get("AnkiModelName", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("AnkiSoundsFolder", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("ShowCopyButtons", It.IsAny<bool>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("ShowCopyWithAnkiConnectButton", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("UseDarkTheme", It.IsAny<bool>(), It.IsAny<string>()));
@@ -65,73 +65,10 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("AnkiModelName", appSettings.AnkiModelName, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("AnkiSoundsFolder", appSettings.AnkiSoundsFolder, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("ShowCopyButtons", appSettings.ShowCopyButtons, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("ShowCopyWithAnkiConnectButton", appSettings.ShowCopyWithAnkiConnectButton, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("SelectedParser", appSettings.SelectedParser, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("UseDarkTheme", appSettings.UseDarkTheme, It.IsAny<string>()));
-        }
-
-        #endregion
-
-        #region Tests for ExportSettingsAsync
-
-        [TestMethod]
-        public async Task ExportSettingsAsync_Should_CallFileIOService()
-        {
-            string file = _fixture.Create<string>();
-
-            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
-            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
-
-            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-
-            var sut = _fixture.Create<SettingsService>();
-            await sut.ExportSettingsAsync(file);
-
-            fileIOServiceMock.Verify(x => x.WriteAllTextAsync(file, It.IsAny<string>(), It.IsAny<CancellationToken>()));
-
-            // ExportSettingsAsync reads settings from current preferences storage
-            preferencesMock.Verify(x => x.Get("AnkiDeckNameDanish", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("AnkiDeckNameSpanish", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("AnkiModelName", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("AnkiSoundsFolder", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("ShowCopyButtons", true, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", true, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("UseDarkTheme", It.IsAny<bool>(), It.IsAny<string>()));
-        }
-
-        #endregion
-
-        #region Tests for ImportSettingsAsync
-
-        [TestMethod]
-        public async Task ImportSettingsAsync_Should_ReturnAppSettings()
-        {
-            string file = _fixture.Create<string>();
-            string json = "{}";
-
-            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-
-            var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
-            fileIOServiceMock.Setup(x => x.ReadAllTextAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(json);
-
-            var sut = _fixture.Create<SettingsService>();
-            AppSettings? result = await sut.ImportSettingsAsync(file);
-
-            result.Should().NotBeNull();
-            fileIOServiceMock.Verify(x => x.ReadAllTextAsync(file, It.IsAny<CancellationToken>()));
-
-            // ImportSettingsAsync also saves settings to current preferences storage
-            preferencesMock.Verify(x => x.Set("AnkiDeckNameDanish", result!.AnkiDeckNameDanish, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("AnkiDeckNameSpanish", result!.AnkiDeckNameSpanish, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("AnkiModelName", result!.AnkiModelName, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("AnkiSoundsFolder", result!.AnkiSoundsFolder, It.IsAny<string>()));
-
-            preferencesMock.Verify(x => x.Set("ShowCopyButtons", false, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", false, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("UseDarkTheme", It.IsAny<bool>(), It.IsAny<string>()));
         }
 
         #endregion

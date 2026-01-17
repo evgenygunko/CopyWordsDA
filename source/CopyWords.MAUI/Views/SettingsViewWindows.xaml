@@ -16,29 +16,11 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <!-- Export and Import settings -->
-        <Border Grid.Row="0" Style="{StaticResource SettingsBorderStyle}">
-            <VerticalStackLayout>
-                <Label Text="Backup &amp; restore" Style="{StaticResource SettingsSectionHeaderStyle}" />
-                <Label Text="Export your preferences or import them from a file." Style="{StaticResource SettingsSectionDescriptionStyle}" />
-
-                <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
-                    <Button
-                        Text="Export"
-                        Command="{Binding ExportSettingsCommand}" />
-                    <Button
-                        Text="Import"
-                        Command="{Binding ImportSettingsCommand}" />
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
-        </Border>
-
         <!-- AnkiConnect settings -->
-        <Border Grid.Row="1" Style="{StaticResource SettingsBorderStyle}">
+        <Border Grid.Row="0" Style="{StaticResource SettingsBorderStyle}">
             <VerticalStackLayout>
                 <Label Text="AnkiConnect" Style="{StaticResource SettingsSectionHeaderStyle}" />
 
@@ -159,7 +141,7 @@
         </Border>
 
         <!-- Translation settings -->
-        <Border Grid.Row="2" Style="{StaticResource SettingsBorderStyle}">
+        <Border Grid.Row="1" Style="{StaticResource SettingsBorderStyle}">
             <VerticalStackLayout>
                 <Label Text="Copy buttons" Style="{StaticResource SettingsSectionHeaderStyle}" />
 
@@ -186,7 +168,7 @@
         </Border>
 
         <!-- Theme settings -->
-        <Border Grid.Row="3" Style="{StaticResource SettingsBorderStyle}">
+        <Border Grid.Row="2" Style="{StaticResource SettingsBorderStyle}">
             <VerticalStackLayout>
                 <Label Text="Theme" Style="{StaticResource SettingsSectionHeaderStyle}" />
 
@@ -201,7 +183,7 @@
             </VerticalStackLayout>
         </Border>
 
-        <HorizontalStackLayout Grid.Row="4"
+        <HorizontalStackLayout Grid.Row="3"
                 Margin="0,20,0,20"
                 HorizontalOptions="End"
                 Spacing="10">
@@ -214,7 +196,7 @@
                     Command="{Binding CancelCommand}"/>
         </HorizontalStackLayout>
 
-        <Label Grid.Row="5"
+        <Label Grid.Row="4"
                 Text="{Binding About}"
                 VerticalOptions="End" />
     </Grid>

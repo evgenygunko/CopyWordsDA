@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Text;
-using System.Text.Json;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -23,9 +21,7 @@ namespace CopyWords.Core.ViewModels
         private readonly ISettingsService _settingsService;
         private readonly IDialogService _dialogService;
         private readonly IShellService _shellService;
-        private readonly IFilePicker _filePicker;
         private readonly IDeviceInfo _deviceInfo;
-        private readonly IFileSaver _fileSaver;
         private readonly IValidator<SettingsViewModel> _settingsViewModelValidator;
         private readonly IAnkiConnectService _ankiConnectService;
         private readonly IAnkiDroidService _ankiDroidService;
@@ -37,9 +33,7 @@ namespace CopyWords.Core.ViewModels
             ISettingsService settingsService,
             IDialogService dialogService,
             IShellService shellService,
-            IFilePicker filePicker,
             IDeviceInfo deviceInfo,
-            IFileSaver fileSaver,
             IValidator<SettingsViewModel> settingsViewModelValidator,
             IAnkiConnectService ankiConnectService,
             IAnkiDroidService ankiDroidService,
@@ -48,9 +42,7 @@ namespace CopyWords.Core.ViewModels
             _settingsService = settingsService;
             _dialogService = dialogService;
             _shellService = shellService;
-            _filePicker = filePicker;
             _deviceInfo = deviceInfo;
-            _fileSaver = fileSaver;
             _settingsViewModelValidator = settingsViewModelValidator;
             _ankiConnectService = ankiConnectService;
             _ankiDroidService = ankiDroidService;
@@ -145,53 +137,6 @@ namespace CopyWords.Core.ViewModels
         #endregion
 
         #region Commands
-
-        [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst15.0")]
-        [SupportedOSPlatform("android")]
-        [RelayCommand]
-        public async Task ExportSettingsAsync(CancellationToken cancellationToken)
-        {
-            // Load all settings but update with values that the user changed
-            AppSettings appSettings = _settingsService.LoadSettings();
-            UpdateAppSettingsWithCurrentValues(appSettings);
-
-            string json = JsonSerializer.Serialize(appSettings);
-            using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
-
-            FileSaverResult fileSaveResult = await _fileSaver.SaveAsync("CopyWords_Settings.json", memoryStream, cancellationToken);
-            if (fileSaveResult.IsSuccessful)
-            {
-                await _dialogService.DisplayToast($"Settings successfully exported to '{fileSaveResult.FilePath}'.");
-            }
-        }
-
-        [RelayCommand]
-        public async Task ImportSettingsAsync(CancellationToken cancellationToken)
-        {
-            string settingFile = await PickSettingsFilePathAsync();
-
-            if (!string.IsNullOrEmpty(settingFile))
-            {
-                try
-                {
-                    AppSettings? appSettings = await _settingsService.ImportSettingsAsync(settingFile);
-                    if (appSettings == null)
-                    {
-                        await _dialogService.DisplayAlertAsync("Cannot import setting", $"Cannot import settings from the file '{settingFile}'. The format is incorrect", "OK");
-                        return;
-                    }
-
-                    await UpdateUIAsync(appSettings, cancellationToken);
-
-                    await _dialogService.DisplayToast("Settings successfully imported.");
-                }
-                catch (Exception ex)
-                {
-                    await _dialogService.DisplayAlertAsync("Cannot import setting", $"Cannot import settings from the file '{settingFile}'. Error: {ex}", "OK");
-                }
-            }
-        }
 
         [SupportedOSPlatform("windows")]
         [SupportedOSPlatform("maccatalyst15.0")]
@@ -291,7 +236,15 @@ namespace CopyWords.Core.ViewModels
         public async Task SaveSettingsAsync()
         {
             AppSettings appSettings = _settingsService.LoadSettings();
-            UpdateAppSettingsWithCurrentValues(appSettings);
+
+            appSettings.AnkiDeckNameDanish = AnkiDeckNameDanish ?? string.Empty;
+            appSettings.AnkiDeckNameSpanish = AnkiDeckNameSpanish ?? string.Empty;
+            appSettings.AnkiModelName = AnkiModelName ?? string.Empty;
+            appSettings.AnkiSoundsFolder = AnkiSoundsFolder ?? string.Empty;
+            appSettings.ShowCopyButtons = ShowCopyButtons;
+            appSettings.ShowCopyWithAnkiConnectButton = ShowCopyWithAnkiConnectButton;
+            appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
+            appSettings.UseDarkTheme = UseDarkTheme;
 
             _settingsService.SaveSettings(appSettings);
 
@@ -464,64 +417,6 @@ namespace CopyWords.Core.ViewModels
                 _settingsService.SetAnkiModelName(value);
                 Debug.WriteLine($"AnkiModelName has changed to {value}");
             }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private async Task<string> PickSettingsFilePathAsync()
-        {
-            string settingsFilePath = "";
-
-            PickOptions? options = null;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                // Attempting to use a filter on MacOS causes the FilePicker to throw an exception.
-                // There’s a related issue on GitHub (https://github.com/dotnet/maui/issues/9394#issuecomment-1285814762)
-                // indicating it should work, but an exception still occurs.
-                // For now, filtering is enabled only for Windows.
-                var customFileType = new FilePickerFileType(
-                    new Dictionary<DevicePlatform, IEnumerable<string>>
-                    {
-                        { DevicePlatform.WinUI, new[] { ".json" } }, // file extension
-                        { DevicePlatform.MacCatalyst, new[] { "json" } }, // UTType values
-                    });
-
-                options = new PickOptions()
-                {
-                    PickerTitle = "Please select path to settings file",
-                    FileTypes = customFileType,
-                };
-            }
-
-            try
-            {
-                var result = await _filePicker.PickAsync(options);
-                if (result != null)
-                {
-                    settingsFilePath = result.FullPath;
-                }
-            }
-            catch (Exception ex)
-            {
-                _ = ex;
-                // The user canceled or something went wrong
-            }
-
-            return settingsFilePath;
-        }
-
-        private void UpdateAppSettingsWithCurrentValues(AppSettings appSettings)
-        {
-            appSettings.AnkiDeckNameDanish = AnkiDeckNameDanish ?? string.Empty;
-            appSettings.AnkiDeckNameSpanish = AnkiDeckNameSpanish ?? string.Empty;
-            appSettings.AnkiModelName = AnkiModelName ?? string.Empty;
-            appSettings.AnkiSoundsFolder = AnkiSoundsFolder ?? string.Empty;
-            appSettings.ShowCopyButtons = ShowCopyButtons;
-            appSettings.ShowCopyWithAnkiConnectButton = ShowCopyWithAnkiConnectButton;
-            appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
-            appSettings.UseDarkTheme = UseDarkTheme;
         }
 
         #endregion

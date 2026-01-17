@@ -2,7 +2,6 @@
 
 using System.Runtime.Versioning;
 using AutoFixture;
-using CommunityToolkit.Maui.Storage;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
@@ -95,127 +94,6 @@ namespace CopyWords.Core.Tests.ViewModels
             bool result = sut.CanSaveSettings();
 
             result.Should().BeFalse();
-        }
-
-        #endregion
-
-        #region Tests for ExportSettingsAsync
-
-        [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst15.0")]
-        [TestMethod]
-        public async Task ExportSettingsAsync_WhenFileIsNotSelected_DoesNotExportSettings()
-        {
-            FileSaverResult fileSaverResult = new FileSaverResult(FilePath: null, Exception: new Exception("folder is not selected"));
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
-            fileSaverMock.Setup(x => x.SaveAsync("CopyWords_Settings.json", It.IsAny<MemoryStream>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(fileSaverResult)
-                .Verifiable();
-
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-
-            var sut = _fixture.Create<SettingsViewModel>();
-            await sut.ExportSettingsAsync(CancellationToken.None);
-
-            settingsServiceMock.Verify(x => x.LoadSettings());
-            fileSaverMock.Verify();
-            dialogServiceMock.VerifyNoOtherCalls();
-        }
-
-        [SupportedOSPlatform("windows")]
-        [SupportedOSPlatform("maccatalyst15.0")]
-        [TestMethod]
-        public async Task ExportSettingsAsync_WhenFileIsSelected_ExportsSettings()
-        {
-            FileSaverResult fileSaverResult = new FileSaverResult(FilePath: _fixture.Create<string>(), Exception: null);
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-
-            var fileSaverMock = _fixture.Freeze<Mock<IFileSaver>>();
-            fileSaverMock.Setup(x => x.SaveAsync("CopyWords_Settings.json", It.IsAny<MemoryStream>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(fileSaverResult)
-                .Verifiable();
-
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-
-            var sut = _fixture.Create<SettingsViewModel>();
-            await sut.ExportSettingsAsync(CancellationToken.None);
-
-            settingsServiceMock.Verify(x => x.LoadSettings());
-            fileSaverMock.Verify();
-            dialogServiceMock.Verify(x => x.DisplayToast(It.Is<string>(s => s.StartsWith("Settings successfully exported to"))));
-        }
-
-        #endregion
-
-        #region Tests for ImportSettingsAsync
-
-        [TestMethod]
-        public async Task ImportSettingsAsync_WhenFileIsNotSelected_DoesNotImportSettings()
-        {
-            FileResult? fileResult = null;
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-
-            var filePickerMock = _fixture.Freeze<Mock<IFilePicker>>();
-            filePickerMock.Setup(x => x.PickAsync(It.IsAny<PickOptions>())).ReturnsAsync(fileResult);
-
-            var sut = _fixture.Create<SettingsViewModel>();
-            await sut.ImportSettingsAsync(CancellationToken.None);
-
-            settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public async Task ImportSettingsAsync_WhenExceptionIsThrown_ShowsAlert()
-        {
-            var fileResult = _fixture.Create<FileResult>();
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.ImportSettingsAsync(It.IsAny<string>())).ThrowsAsync(new Exception("exception from unit test"));
-
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-
-            var filePickerMock = _fixture.Freeze<Mock<IFilePicker>>();
-            filePickerMock.Setup(x => x.PickAsync(It.IsAny<PickOptions>())).ReturnsAsync(fileResult);
-
-            var sut = _fixture.Create<SettingsViewModel>();
-            await sut.ImportSettingsAsync(CancellationToken.None);
-
-            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot import setting", It.IsAny<string>(), "OK"));
-        }
-
-        [TestMethod]
-        public async Task ImportSettingsAsync_WhenFileIsSelected_ImportsSettings()
-        {
-            AppSettings appSettings = _fixture.Create<AppSettings>();
-            var fileResult = _fixture.Create<FileResult>();
-
-            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.ImportSettingsAsync(It.IsAny<string>())).ReturnsAsync(appSettings);
-
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
-
-            var filePickerMock = _fixture.Freeze<Mock<IFilePicker>>();
-            filePickerMock.Setup(x => x.PickAsync(It.IsAny<PickOptions>())).ReturnsAsync(fileResult);
-
-            var sut = _fixture.Create<SettingsViewModel>();
-            await sut.ImportSettingsAsync(CancellationToken.None);
-
-            sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
-            sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);
-            sut.CopyTranslatedMeanings.Should().Be(appSettings.CopyTranslatedMeanings);
-
-            settingsServiceMock.Verify(x => x.ImportSettingsAsync(It.IsAny<string>()));
-            dialogServiceMock.Verify(x => x.DisplayToast("Settings successfully imported."));
-            shellServiceMock.VerifyNoOtherCalls();
         }
 
         #endregion
