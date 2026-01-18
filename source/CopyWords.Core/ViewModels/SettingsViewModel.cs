@@ -286,7 +286,7 @@ namespace CopyWords.Core.ViewModels
             // Load deck and model names for Android Picker controls
             if (_deviceInfo.Platform == DevicePlatform.Android)
             {
-                await InitializeAnkiDroidAsync(cancellationToken);
+                await InitializeAnkiDroidAsync();
             }
 
             AnkiDeckNameDanish = appSettings.AnkiDeckNameDanish;
@@ -308,7 +308,7 @@ namespace CopyWords.Core.ViewModels
             UseDarkTheme = appSettings.UseDarkTheme;
         }
 
-        internal async Task InitializeAnkiDroidAsync(CancellationToken cancellationToken)
+        internal async Task InitializeAnkiDroidAsync()
         {
             try
             {
@@ -329,10 +329,10 @@ namespace CopyWords.Core.ViewModels
                         return;
                     }
 
-                    IEnumerable<string> deckNames = await _ankiDroidService.GetDeckNamesAsync(cancellationToken);
+                    IEnumerable<string> deckNames = _ankiDroidService.GetDeckNames();
                     DeckNames = new ObservableCollection<string>(deckNames);
 
-                    IEnumerable<string> modelNames = await _ankiDroidService.GetModelNamesAsync(cancellationToken);
+                    IEnumerable<string> modelNames = _ankiDroidService.GetModelNames();
                     ModelNames = new ObservableCollection<string>(modelNames);
                 }
             }

@@ -827,15 +827,15 @@ namespace CopyWords.Core.Tests.ViewModels
             // Arrange
             var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
             ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(true);
-            ankiDroidServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<string>());
-            ankiDroidServiceMock.Setup(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<string>());
+            ankiDroidServiceMock.Setup(x => x.GetDeckNames())
+                .Returns(new List<string>());
+            ankiDroidServiceMock.Setup(x => x.GetModelNames())
+                .Returns(new List<string>());
 
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.InitializeAnkiDroidAsync(CancellationToken.None);
+            await sut.InitializeAnkiDroidAsync();
 
             // Assert
             sut.IsAnkiIntegrationAvailable.Should().BeTrue();
@@ -848,21 +848,21 @@ namespace CopyWords.Core.Tests.ViewModels
             // Arrange
             var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
             ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(false);
-            ankiDroidServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<string>());
-            ankiDroidServiceMock.Setup(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<string>());
+            ankiDroidServiceMock.Setup(x => x.GetDeckNames())
+                .Returns(new List<string>());
+            ankiDroidServiceMock.Setup(x => x.GetModelNames())
+                .Returns(new List<string>());
 
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.InitializeAnkiDroidAsync(CancellationToken.None);
+            await sut.InitializeAnkiDroidAsync();
 
             // Assert
             sut.IsAnkiIntegrationAvailable.Should().BeFalse();
             ankiDroidServiceMock.Verify(x => x.IsAvailable(), Times.Once);
-            ankiDroidServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Never);
-            ankiDroidServiceMock.Verify(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()), Times.Never);
+            ankiDroidServiceMock.Verify(x => x.GetDeckNames(), Times.Never);
+            ankiDroidServiceMock.Verify(x => x.GetModelNames(), Times.Never);
         }
 
         [TestMethod]
@@ -874,19 +874,19 @@ namespace CopyWords.Core.Tests.ViewModels
             var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
             ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(true);
             ankiDroidServiceMock.Setup(x => x.HasPermission()).Returns(true);
-            ankiDroidServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(expectedDeckNames);
-            ankiDroidServiceMock.Setup(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<string>());
+            ankiDroidServiceMock.Setup(x => x.GetDeckNames())
+                .Returns(expectedDeckNames);
+            ankiDroidServiceMock.Setup(x => x.GetModelNames())
+                .Returns(new List<string>());
 
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.InitializeAnkiDroidAsync(CancellationToken.None);
+            await sut.InitializeAnkiDroidAsync();
 
             // Assert
             sut.DeckNames.Should().BeEquivalentTo(expectedDeckNames);
-            ankiDroidServiceMock.Verify(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            ankiDroidServiceMock.Verify(x => x.GetDeckNames(), Times.Once);
         }
 
         [TestMethod]
@@ -898,19 +898,19 @@ namespace CopyWords.Core.Tests.ViewModels
             var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
             ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(true);
             ankiDroidServiceMock.Setup(x => x.HasPermission()).Returns(true);
-            ankiDroidServiceMock.Setup(x => x.GetDeckNamesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<string>());
-            ankiDroidServiceMock.Setup(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(expectedModelNames);
+            ankiDroidServiceMock.Setup(x => x.GetDeckNames())
+                .Returns(new List<string>());
+            ankiDroidServiceMock.Setup(x => x.GetModelNames())
+                .Returns(expectedModelNames);
 
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.InitializeAnkiDroidAsync(CancellationToken.None);
+            await sut.InitializeAnkiDroidAsync();
 
             // Assert
             sut.ModelNames.Should().BeEquivalentTo(expectedModelNames);
-            ankiDroidServiceMock.Verify(x => x.GetModelNamesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            ankiDroidServiceMock.Verify(x => x.GetModelNames(), Times.Once);
         }
 
         #endregion

@@ -525,8 +525,7 @@ namespace CopyWords.Core.ViewModels
                     Sound: sound,
                     Options: ankiNoteOptions);
 
-                var ct = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
-                await _ankiDroidService.AddNoteAsync(note, ct);
+                _ankiDroidService.AddNote(note);
             }
             catch (AnkiDroidAPINotAvailableException ex)
             {
