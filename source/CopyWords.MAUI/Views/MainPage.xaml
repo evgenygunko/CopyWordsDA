@@ -86,6 +86,7 @@
                             TextColor="{DynamicResource AutocompleteTextColor}"
                             ShowBorder="False"
                             FontSize="{OnPlatform MacCatalyst=28, Default=20, Android=14}"
+                            DropDownItemFontSize="{OnPlatform MacCatalyst=20, Default=14}"
                             Padding="{OnPlatform 0, Android='5,0,0,0'}"
                             SelectionTextHighlightColor="{StaticResource Gray400}"
                             SelectedDropDownItemBackground ="Transparent"
@@ -98,6 +99,10 @@
                         <editors:SfAutocomplete.FilterBehavior>
                             <behaviors:CustomAsyncFilter/>
                         </editors:SfAutocomplete.FilterBehavior>
+
+                        <editors:SfAutocomplete.SelectedDropDownItemTextStyle>
+                            <editors:DropDownTextStyle FontSize="{OnPlatform MacCatalyst=20, Default=14}" />
+                        </editors:SfAutocomplete.SelectedDropDownItemTextStyle>
 
                         <editors:SfAutocomplete.Behaviors>
                             <EventToCommandBehavior
