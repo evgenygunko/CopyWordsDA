@@ -2,6 +2,7 @@
 
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
+using CopyWords.Core.Services.Wrappers;
 
 namespace CopyWords.Core.Services
 {
@@ -17,16 +18,20 @@ namespace CopyWords.Core.Services
 
         IEnumerable<string> GetModelNames();
 
-        long AddNote(AnkiNote note);
+        Task<long> AddNoteAsync(AnkiNote note);
     }
 
     public class AnkiDroidService : IAnkiDroidService
     {
         private readonly IAnkiContentApi _ankiContentApi;
+        private readonly IDialogService _dialogService;
 
-        public AnkiDroidService(IAnkiContentApi ankiContentApi)
+        public AnkiDroidService(
+            IAnkiContentApi ankiContentApi,
+            IDialogService dialogService)
         {
             _ankiContentApi = ankiContentApi;
+            _dialogService = dialogService;
         }
 
         #region Public Methods
@@ -43,7 +48,7 @@ namespace CopyWords.Core.Services
         public IEnumerable<string> GetModelNames() =>
             _ankiContentApi.GetModelList()?.Values.ToList() ?? [];
 
-        public long AddNote(AnkiNote note)
+        public async Task<long> AddNoteAsync(AnkiNote note)
         {
             // Get deck ID from deck name
             long? deckId = _ankiContentApi.GetDeckList()?
@@ -75,10 +80,29 @@ namespace CopyWords.Core.Services
             // Build fields array matching the model's field order
             string[] fields = BuildFieldsArray(fieldNames, note);
 
-            // Add the note
-            long noteId = _ankiContentApi.AddNote(modelId.Value, deckId.Value, fields, null);
+            // First check for duplicates using the Front field value
+            bool isDuplicate = _ankiContentApi.FindDuplicateNotes(modelId.Value, note.Front).Any();
 
-            // todo: handle duplicates
+            long noteId = 0;
+            if (isDuplicate)
+            {
+                bool shouldAdd = await _dialogService.DisplayAlertAsync(
+                    "Note already exists",
+                    $"Note '{note.Front}' already exists in the deck '{note.DeckName}'. Do you want to add a duplicate note?",
+                    "Yes",
+                    "No");
+
+                if (shouldAdd)
+                {
+                    noteId = _ankiContentApi.AddNote(modelId.Value, deckId.Value, fields, null);
+                }
+            }
+            else
+            {
+                // Add the note
+                noteId = _ankiContentApi.AddNote(modelId.Value, deckId.Value, fields, null);
+            }
+
             return noteId;
         }
 

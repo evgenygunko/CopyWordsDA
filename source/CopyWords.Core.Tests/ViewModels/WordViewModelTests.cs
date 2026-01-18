@@ -969,7 +969,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 "Please configure Anki deck name and model name in the settings.",
                 "OK"));
             copySelectedToClipboardServiceMock.Verify(x => x.CompileFront(It.IsAny<DefinitionViewModel>()), Times.Never);
-            ankiDroidServiceMock.Verify(x => x.AddNote(It.IsAny<AnkiNote>()), Times.Never);
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<AnkiNote>()), Times.Never);
         }
 
         [TestMethod]
@@ -999,7 +999,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 "Please configure Anki deck name and model name in the settings.",
                 "OK"));
             copySelectedToClipboardServiceMock.Verify(x => x.CompileFront(It.IsAny<DefinitionViewModel>()), Times.Never);
-            ankiDroidServiceMock.Verify(x => x.AddNote(It.IsAny<AnkiNote>()), Times.Never);
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<AnkiNote>()), Times.Never);
         }
 
         [TestMethod]
@@ -1029,7 +1029,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 "Please configure Anki deck name and model name in the settings.",
                 "OK"));
             copySelectedToClipboardServiceMock.Verify(x => x.CompileFront(It.IsAny<DefinitionViewModel>()), Times.Never);
-            ankiDroidServiceMock.Verify(x => x.AddNote(It.IsAny<AnkiNote>()), Times.Never);
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<AnkiNote>()), Times.Never);
         }
 
         [TestMethod]
@@ -1059,7 +1059,7 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.AddNoteWithAnkiDroidServiceAsync();
 
             // Assert
-            ankiDroidServiceMock.Verify(x => x.AddNote(
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(
                 It.Is<Models.AnkiNote>(note =>
                     note.DeckName == _appSettings.AnkiDeckNameDanish &&
                     note.ModelName == _appSettings.AnkiModelName &&
@@ -1081,6 +1081,76 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
+        public async Task AddNoteWithAnkiDroidServiceAsync_WhenNoteIdIsGreaterThanZero_ShowsToast()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+            string partOfSpeech = _fixture.Create<string>();
+            string endings = _fixture.Create<string>();
+            string examples = _fixture.Create<string>();
+            long noteId = 12345L;
+
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeech(It.IsAny<DefinitionViewModel>())).Returns(partOfSpeech);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndings(It.IsAny<DefinitionViewModel>())).Returns(endings);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamples(It.IsAny<DefinitionViewModel>())).Returns(examples);
+
+            var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
+            ankiDroidServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>())).ReturnsAsync(noteId);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.AddNoteWithAnkiDroidServiceAsync();
+
+            // Assert
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<AnkiNote>()), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayToast("The note has been added to Anki."), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiDroidServiceAsync_WhenNoteIdIsZero_DoesNotShowToast()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+            string partOfSpeech = _fixture.Create<string>();
+            string endings = _fixture.Create<string>();
+            string examples = _fixture.Create<string>();
+            long noteId = 0L;
+
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompilePartOfSpeech(It.IsAny<DefinitionViewModel>())).Returns(partOfSpeech);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileEndings(It.IsAny<DefinitionViewModel>())).Returns(endings);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileExamples(It.IsAny<DefinitionViewModel>())).Returns(examples);
+
+            var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
+            ankiDroidServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>())).ReturnsAsync(noteId);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.CanCopyFront = true;
+
+            // Act
+            await sut.AddNoteWithAnkiDroidServiceAsync();
+
+            // Assert
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<AnkiNote>()), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayToast(It.IsAny<string>()), Times.Never);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
         public async Task AddNoteWithAnkiDroidServiceAsync_WhenAnkiDroidAPINotAvailableExceptionThrown_ShowsAlert()
         {
             // Arrange
@@ -1092,7 +1162,7 @@ namespace CopyWords.Core.Tests.ViewModels
             copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
 
             var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
-            ankiDroidServiceMock.Setup(x => x.AddNote(It.IsAny<Models.AnkiNote>()))
+            ankiDroidServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>()))
                 .Throws(new AnkiDroidAPINotAvailableException("API not enabled"));
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
@@ -1122,7 +1192,7 @@ namespace CopyWords.Core.Tests.ViewModels
             copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
 
             var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
-            ankiDroidServiceMock.Setup(x => x.AddNote(It.IsAny<Models.AnkiNote>()))
+            ankiDroidServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<Models.AnkiNote>()))
                 .Throws(new Exception("General error from unit test"));
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();

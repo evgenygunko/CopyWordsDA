@@ -91,6 +91,26 @@ namespace CopyWords.MAUI.Services
 
             return result;
         }
+
+        public List<long> FindDuplicateNotes(long modelId, string key)
+        {
+            var context = Android.App.Application.Context;
+            var api = new AddContentApi(context);
+
+            var duplicates = api.FindDuplicateNotes(modelId, key);
+            if (duplicates == null)
+            {
+                return [];
+            }
+
+            var result = new List<long>();
+            foreach (var noteInfo in duplicates)
+            {
+                result.Add(noteInfo.Id);
+            }
+
+            return result;
+        }
     }
 
     /// <summary>
@@ -119,6 +139,7 @@ public class AnkiContentApiWrapper : IAnkiContentApi
     public IDictionary<long, string>? GetModelList() => null;
     public string[]? GetFieldList(long modelId) => null;
     public long AddNote(long modelId, long deckId, string[] fields, string[]? tags) => 0;
+    public List<long> FindDuplicateNotes(long modelId, string key) => [];
 }
 
 #endif

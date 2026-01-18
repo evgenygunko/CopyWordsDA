@@ -32,5 +32,13 @@
         /// </summary>
         /// <returns>True if the note was added successfully; false otherwise.</returns>
         long AddNote(long modelId, long deckId, string[] fields, string[]? tags);
+
+        /// <summary>
+        /// Finds all notes in the collection with the given model, where a first field matches the given key.
+        /// </summary>
+        /// <param name="modelId"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        List<long> FindDuplicateNotes(long modelId, string key);
     }
 }

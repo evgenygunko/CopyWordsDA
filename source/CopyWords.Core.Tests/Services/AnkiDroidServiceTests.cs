@@ -2,6 +2,7 @@
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 using FluentAssertions;
 using Moq;
 
@@ -232,10 +233,10 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
-        #region Tests for AddNote
+        #region Tests for AddNoteAsync
 
         [TestMethod]
-        public void AddNote_WhenAllDataValid_ReturnsNoteId()
+        public async Task AddNoteAsync_WhenAllDataValid_ReturnsNoteId()
         {
             // Arrange
             const long expectedDeckId = 1L;
@@ -256,6 +257,7 @@ namespace CopyWords.Core.Tests.Services
             ankiContentApiMock.Setup(x => x.GetDeckList()).Returns(deckList);
             ankiContentApiMock.Setup(x => x.GetModelList()).Returns(modelList);
             ankiContentApiMock.Setup(x => x.GetFieldList(expectedModelId)).Returns(fieldNames);
+            ankiContentApiMock.Setup(x => x.FindDuplicateNotes(expectedModelId, "Front text")).Returns([]);
             ankiContentApiMock
                 .Setup(x => x.AddNote(expectedModelId, expectedDeckId, It.IsAny<string[]>(), null))
                 .Returns(expectedNoteId);
@@ -263,7 +265,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            long result = sut.AddNote(note);
+            long result = await sut.AddNoteAsync(note);
 
             // Assert
             result.Should().Be(expectedNoteId);
@@ -273,7 +275,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public void AddNote_WhenDeckNotFound_ThrowsAnkiDroidDeckNotFoundException()
+        public async Task AddNoteAsync_WhenDeckNotFound_ThrowsAnkiDroidDeckNotFoundException()
         {
             // Arrange
             var note = new AnkiNote(
@@ -290,15 +292,15 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Action act = () => sut.AddNote(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note);
 
             // Assert
-            act.Should().Throw<AnkiDroidDeckNotFoundException>()
+            await act.Should().ThrowAsync<AnkiDroidDeckNotFoundException>()
                 .WithMessage("Deck 'NonExistentDeck' not found in AnkiDroid.");
         }
 
         [TestMethod]
-        public void AddNote_WhenDeckListIsNull_ThrowsAnkiDroidDeckNotFoundException()
+        public async Task AddNoteAsync_WhenDeckListIsNull_ThrowsAnkiDroidDeckNotFoundException()
         {
             // Arrange
             var note = new AnkiNote(
@@ -313,15 +315,15 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Action act = () => sut.AddNote(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note);
 
             // Assert
-            act.Should().Throw<AnkiDroidDeckNotFoundException>()
+            await act.Should().ThrowAsync<AnkiDroidDeckNotFoundException>()
                 .WithMessage("Deck 'Default' not found in AnkiDroid.");
         }
 
         [TestMethod]
-        public void AddNote_WhenModelNotFound_ThrowsAnkiDroidModelNotFoundException()
+        public async Task AddNoteAsync_WhenModelNotFound_ThrowsAnkiDroidModelNotFoundException()
         {
             // Arrange
             var note = new AnkiNote(
@@ -340,15 +342,15 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Action act = () => sut.AddNote(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note);
 
             // Assert
-            act.Should().Throw<AnkiDroidModelNotFoundException>()
+            await act.Should().ThrowAsync<AnkiDroidModelNotFoundException>()
                 .WithMessage("Model 'NonExistentModel' not found in AnkiDroid.");
         }
 
         [TestMethod]
-        public void AddNote_WhenModelListIsNull_ThrowsAnkiDroidModelNotFoundException()
+        public async Task AddNoteAsync_WhenModelListIsNull_ThrowsAnkiDroidModelNotFoundException()
         {
             // Arrange
             var note = new AnkiNote(
@@ -366,15 +368,15 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Action act = () => sut.AddNote(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note);
 
             // Assert
-            act.Should().Throw<AnkiDroidModelNotFoundException>()
+            await act.Should().ThrowAsync<AnkiDroidModelNotFoundException>()
                 .WithMessage("Model 'Basic' not found in AnkiDroid.");
         }
 
         [TestMethod]
-        public void AddNote_WhenFieldsNotFound_ThrowsAnkiDroidFieldsNotFoundException()
+        public async Task AddNoteAsync_WhenFieldsNotFound_ThrowsAnkiDroidFieldsNotFoundException()
         {
             // Arrange
             const long modelId = 100L;
@@ -396,15 +398,15 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Action act = () => sut.AddNote(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note);
 
             // Assert
-            act.Should().Throw<AnkiDroidFieldsNotFoundException>()
+            await act.Should().ThrowAsync<AnkiDroidFieldsNotFoundException>()
                 .WithMessage("No fields found for model 'Basic'.");
         }
 
         [TestMethod]
-        public void AddNote_WhenFieldsArrayIsEmpty_ThrowsAnkiDroidFieldsNotFoundException()
+        public async Task AddNoteAsync_WhenFieldsArrayIsEmpty_ThrowsAnkiDroidFieldsNotFoundException()
         {
             // Arrange
             const long modelId = 100L;
@@ -426,61 +428,66 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Action act = () => sut.AddNote(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note);
 
             // Assert
-            act.Should().Throw<AnkiDroidFieldsNotFoundException>()
+            await act.Should().ThrowAsync<AnkiDroidFieldsNotFoundException>()
                 .WithMessage("No fields found for model 'Basic'.");
         }
 
         [TestMethod]
-        public void AddNote_WithAllOptionalFields_BuildsFieldsArrayCorrectly()
+        public async Task AddNoteAsync_WhenDuplicateFoundAndUserDeclines_DoesNotCallAddNote()
         {
             // Arrange
             const long expectedDeckId = 1L;
             const long expectedModelId = 100L;
-            const long expectedNoteId = 12345L;
 
             var note = new AnkiNote(
                 DeckName: "Default",
-                ModelName: "CustomModel",
+                ModelName: "Basic",
                 Front: "Front text",
-                Back: "Back text",
-                PartOfSpeech: "noun",
-                Forms: "word, words",
-                Example: "Example sentence",
-                Sound: "[sound:audio.mp3]");
+                Back: "Back text");
 
             var deckList = new Dictionary<long, string> { { expectedDeckId, "Default" } };
-            var modelList = new Dictionary<long, string> { { expectedModelId, "CustomModel" } };
-            string[] fieldNames = ["Front", "Back", "PartOfSpeech", "Forms", "Example", "Sound"];
-
-            string[]? capturedFields = null;
+            var modelList = new Dictionary<long, string> { { expectedModelId, "Basic" } };
+            string[] fieldNames = ["Front", "Back"];
 
             var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
             ankiContentApiMock.Setup(x => x.GetDeckList()).Returns(deckList);
             ankiContentApiMock.Setup(x => x.GetModelList()).Returns(modelList);
             ankiContentApiMock.Setup(x => x.GetFieldList(expectedModelId)).Returns(fieldNames);
-            ankiContentApiMock
-                .Setup(x => x.AddNote(expectedModelId, expectedDeckId, It.IsAny<string[]>(), null))
-                .Callback<long, long, string[], string[]?>((_, _, fields, _) => capturedFields = fields)
-                .Returns(expectedNoteId);
+            ankiContentApiMock.Setup(x => x.FindDuplicateNotes(expectedModelId, "Front text")).Returns([1L]);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock
+                .Setup(x => x.DisplayAlertAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()))
+                .ReturnsAsync(false);
 
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            long result = sut.AddNote(note);
+            long result = await sut.AddNoteAsync(note);
 
             // Assert
-            result.Should().Be(expectedNoteId);
-            capturedFields.Should().NotBeNull();
-            capturedFields.Should().BeEquivalentTo(
-                ["Front text", "Back text", "noun", "word, words", "Example sentence", "[sound:audio.mp3]"],
-                options => options.WithStrictOrdering());
+            result.Should().Be(0);
+            ankiContentApiMock.Verify(
+                x => x.AddNote(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string[]>(), It.IsAny<string[]?>()),
+                Times.Never);
+            dialogServiceMock.Verify(
+                x => x.DisplayAlertAsync(
+                    "Note already exists",
+                    "Note 'Front text' already exists in the deck 'Default'. Do you want to add a duplicate note?",
+                    "Yes",
+                    "No"),
+                Times.Once);
         }
 
         [TestMethod]
-        public void AddNote_WithUnknownFields_FillsThemWithEmptyString()
+        public async Task AddNoteAsync_WhenDuplicateFoundAndUserAgrees_CallsAddNoteAndReturnsNoteId()
         {
             // Arrange
             const long expectedDeckId = 1L;
@@ -495,76 +502,43 @@ namespace CopyWords.Core.Tests.Services
 
             var deckList = new Dictionary<long, string> { { expectedDeckId, "Default" } };
             var modelList = new Dictionary<long, string> { { expectedModelId, "Basic" } };
-            string[] fieldNames = ["Front", "Back", "UnknownField1", "UnknownField2"];
-
-            string[]? capturedFields = null;
+            string[] fieldNames = ["Front", "Back"];
 
             var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
             ankiContentApiMock.Setup(x => x.GetDeckList()).Returns(deckList);
             ankiContentApiMock.Setup(x => x.GetModelList()).Returns(modelList);
             ankiContentApiMock.Setup(x => x.GetFieldList(expectedModelId)).Returns(fieldNames);
+            ankiContentApiMock.Setup(x => x.FindDuplicateNotes(expectedModelId, "Front text")).Returns([1L]);
             ankiContentApiMock
                 .Setup(x => x.AddNote(expectedModelId, expectedDeckId, It.IsAny<string[]>(), null))
-                .Callback<long, long, string[], string[]?>((_, _, fields, _) => capturedFields = fields)
                 .Returns(expectedNoteId);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock
+                .Setup(x => x.DisplayAlertAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()))
+                .ReturnsAsync(true);
 
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            long result = sut.AddNote(note);
+            long result = await sut.AddNoteAsync(note);
 
             // Assert
             result.Should().Be(expectedNoteId);
-            capturedFields.Should().NotBeNull();
-            capturedFields.Should().BeEquivalentTo(
-                ["Front text", "Back text", "", ""],
-                options => options.WithStrictOrdering());
-        }
-
-        [TestMethod]
-        public void AddNote_WithNullOptionalFields_FillsThemWithEmptyString()
-        {
-            // Arrange
-            const long expectedDeckId = 1L;
-            const long expectedModelId = 100L;
-            const long expectedNoteId = 12345L;
-
-            var note = new AnkiNote(
-                DeckName: "Default",
-                ModelName: "CustomModel",
-                Front: "Front text",
-                Back: "Back text",
-                PartOfSpeech: null,
-                Forms: null,
-                Example: null,
-                Sound: null);
-
-            var deckList = new Dictionary<long, string> { { expectedDeckId, "Default" } };
-            var modelList = new Dictionary<long, string> { { expectedModelId, "CustomModel" } };
-            string[] fieldNames = ["Front", "Back", "PartOfSpeech", "Forms", "Example", "Sound"];
-
-            string[]? capturedFields = null;
-
-            var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
-            ankiContentApiMock.Setup(x => x.GetDeckList()).Returns(deckList);
-            ankiContentApiMock.Setup(x => x.GetModelList()).Returns(modelList);
-            ankiContentApiMock.Setup(x => x.GetFieldList(expectedModelId)).Returns(fieldNames);
-            ankiContentApiMock
-                .Setup(x => x.AddNote(expectedModelId, expectedDeckId, It.IsAny<string[]>(), null))
-                .Callback<long, long, string[], string[]?>((_, _, fields, _) => capturedFields = fields)
-                .Returns(expectedNoteId);
-
-            var sut = _fixture.Create<AnkiDroidService>();
-
-            // Act
-            long result = sut.AddNote(note);
-
-            // Assert
-            result.Should().Be(expectedNoteId);
-            capturedFields.Should().NotBeNull();
-            capturedFields.Should().BeEquivalentTo(
-                ["Front text", "Back text", "", "", "", ""],
-                options => options.WithStrictOrdering());
+            ankiContentApiMock.Verify(
+                x => x.AddNote(expectedModelId, expectedDeckId, It.Is<string[]>(f => f[0] == "Front text" && f[1] == "Back text"), null),
+                Times.Once);
+            dialogServiceMock.Verify(
+                x => x.DisplayAlertAsync(
+                    "Note already exists",
+                    "Note 'Front text' already exists in the deck 'Default'. Do you want to add a duplicate note?",
+                    "Yes",
+                    "No"),
+                Times.Once);
         }
 
         #endregion

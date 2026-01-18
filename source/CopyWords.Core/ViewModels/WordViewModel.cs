@@ -525,7 +525,11 @@ namespace CopyWords.Core.ViewModels
                     Sound: sound,
                     Options: ankiNoteOptions);
 
-                _ankiDroidService.AddNote(note);
+                long noteId = await _ankiDroidService.AddNoteAsync(note);
+                if (noteId > 0)
+                {
+                    await _dialogService.DisplayToast("The note has been added to Anki.");
+                }
             }
             catch (AnkiDroidAPINotAvailableException ex)
             {
