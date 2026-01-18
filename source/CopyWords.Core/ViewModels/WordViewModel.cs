@@ -421,23 +421,10 @@ namespace CopyWords.Core.ViewModels
                     return;
                 }
 
-                await _copySelectedToClipboardService.SaveImagesAsync(DefinitionViewModel);
-
                 string partOfSpeech = _copySelectedToClipboardService.CompilePartOfSpeech(DefinitionViewModel);
                 string endings = _copySelectedToClipboardService.CompileEndings(DefinitionViewModel);
                 string examples = _copySelectedToClipboardService.CompileExamples(DefinitionViewModel);
-
-                string? sound = null;
-                if (CanSaveSoundFile)
-                {
-                    var saveFileCancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
-                    bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl!, Word, saveFileCancellationToken);
-
-                    if (result)
-                    {
-                        sound = _copySelectedToClipboardService.CompileSoundFileName(Word);
-                    }
-                }
+                string? sound = CanSaveSoundFile ? _copySelectedToClipboardService.CompileSoundFileName(Word) : null;
 
                 var ankiNoteOptions = new AnkiNoteOptions(
                     AllowDuplicate: false,
@@ -458,7 +445,18 @@ namespace CopyWords.Core.ViewModels
                     Options: ankiNoteOptions);
 
                 var ct = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
-                await _ankiConnectService.AddNoteAsync(note, ct);
+                long noteId = await _ankiConnectService.AddNoteAsync(note, ct);
+                if (noteId > 0)
+                {
+                    // If the note has been added, copy sound and images into Anki media directory
+                    if (CanSaveSoundFile)
+                    {
+                        var saveFileCancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+                        bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl!, Word, saveFileCancellationToken);
+                    }
+
+                    await _copySelectedToClipboardService.SaveImagesAsync(DefinitionViewModel);
+                }
             }
             catch (AnkiConnectNotRunningException ex)
             {

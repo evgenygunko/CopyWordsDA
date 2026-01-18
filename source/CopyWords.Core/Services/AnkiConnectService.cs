@@ -48,14 +48,12 @@ namespace CopyWords.Core.Services
             await CheckThatAnkiConnectIsRunningAsync(cancellationToken);
 
             long noteId = 0;
+            bool noteNotUpdated = false;
+
             try
             {
                 // Add the note to Anki via AnkiConnect.
                 noteId = await AddNoteToAnkiAsync(note, cancellationToken);
-
-                // Cards have been added successfully. Now open the note editor in Anki to allow the user to make further edits.
-                // Skip showing the edit window if the note was a duplicate (noteId == 0)
-                await ShowAnkiEditNoteWindowAsync(noteId, cancellationToken);
             }
             catch (AnkiNoteExistsException)
             {
@@ -73,12 +71,20 @@ namespace CopyWords.Core.Services
                     {
                         await UpdateNoteWithAnkiConnectAsync(noteId, note, cancellationToken);
                     }
+                    else
+                    {
+                        noteNotUpdated = true;
+                    }
                 }
+            }
 
+            if (noteId > 0)
+            {
+                // Open the note editor in Anki to allow the user to make further edits.
                 await ShowAnkiEditNoteWindowAsync(noteId, cancellationToken);
             }
 
-            return noteId;
+            return noteNotUpdated ? 0 : noteId;
         }
 
         public async Task<string?> GetAnkiMediaDirectoryPathAsync(CancellationToken cancellationToken)

@@ -160,7 +160,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task AddNoteAsync_WhenNoteExistsAndUserChoosesNotToUpdate_ReturnsNoteIdWithoutUpdating()
+        public async Task AddNoteAsync_WhenNoteExistsAndUserChoosesNotToUpdate_ReturnsZeroWithoutUpdating()
         {
             // Arrange
             var note = new AnkiNote(
@@ -175,7 +175,6 @@ namespace CopyWords.Core.Tests.Services
                 Tags: new[] { "tag1", "tag2" });
 
             var capturedBodies = new List<string?>();
-            var capturedUris = new List<Uri?>();
 
             HttpClient httpClient = CreateHttpClient((request, cancellationToken) =>
             {
@@ -212,7 +211,7 @@ namespace CopyWords.Core.Tests.Services
             dialogServiceMock
                 .Setup(ds => ds.DisplayAlertAsync(
                     "Note already exists",
-                    $"Note '{note.Front}' already exists. Do you want to update it with current values from CopyWords?",
+                    $"Note '{note.Front}' already exists in the deck '{note.DeckName}'. Do you want to update it with current values from CopyWords?",
                     "Yes",
                     "No"))
                 .ReturnsAsync(false);
@@ -223,7 +222,7 @@ namespace CopyWords.Core.Tests.Services
             long result = await sut.AddNoteAsync(note, CancellationToken.None);
 
             // Assert
-            result.Should().Be(456);
+            result.Should().Be(0);
 
             // Verify that the dialog was shown
             dialogServiceMock.Verify(ds => ds.DisplayAlertAsync(
@@ -236,7 +235,7 @@ namespace CopyWords.Core.Tests.Services
             var updateRequest = capturedBodies.FirstOrDefault(b => b != null && b.Contains("\"action\":\"updateNoteFields\""));
             updateRequest.Should().BeNull();
 
-            // Verify that guiEditNote was called with the correct note ID
+            // Verify that guiEditNote was still called (since noteId > 0, the edit window is shown regardless of update choice)
             var editNoteRequest = capturedBodies.FirstOrDefault(b => b != null && b.Contains("\"action\":\"guiEditNote\""));
             editNoteRequest.Should().NotBeNull();
             JObject editPayload = JObject.Parse(editNoteRequest!);
