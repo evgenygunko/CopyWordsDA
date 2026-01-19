@@ -18,29 +18,6 @@ namespace CopyWords.Core.Tests.ViewModels
     {
         private readonly Fixture _fixture = FixtureFactory.CreateFixture();
 
-        #region Tests for InitAsync
-
-        [TestMethod]
-        public async Task InitAsync_Should_CallLoadSettings()
-        {
-            AppSettings appSettings = _fixture.Create<AppSettings>();
-
-            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
-
-            var sut = _fixture.Create<SettingsViewModel>();
-            await sut.InitAsync(CancellationToken.None);
-
-            settingsServiceMock.Verify(x => x.LoadSettings());
-
-            // check a few properties to ensure they are set correctly
-            sut.AnkiSoundsFolder.Should().Be(appSettings.AnkiSoundsFolder);
-            sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);
-            sut.CopyTranslatedMeanings.Should().Be(appSettings.CopyTranslatedMeanings);
-        }
-
-        #endregion
-
         #region Tests for SaveSettingsAsync
 
         [TestMethod]
@@ -497,14 +474,17 @@ namespace CopyWords.Core.Tests.ViewModels
 
         #endregion
 
-        #region Tests for UpdateUIAsync
+        #region Tests for InitAsync
 
         [TestMethod]
-        public async Task UpdateUIAsync_Should_SetAllPropertiesFromAppSettings()
+        public async Task InitAsync_Should_SetAllPropertiesFromAppSettings()
         {
             // Arrange
             AppSettings appSettings = _fixture.Create<AppSettings>();
             appSettings.AnkiSoundsFolder = _fixture.Create<string>(); // Ensure it's not empty
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
@@ -512,9 +492,11 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.UpdateUIAsync(appSettings, CancellationToken.None);
+            await sut.InitAsync(CancellationToken.None);
 
             // Assert
+            settingsServiceMock.Verify(x => x.LoadSettings());
+
             sut.AnkiDeckNameDanish.Should().Be(appSettings.AnkiDeckNameDanish);
             sut.AnkiDeckNameSpanish.Should().Be(appSettings.AnkiDeckNameSpanish);
             sut.AnkiModelName.Should().Be(appSettings.AnkiModelName);
@@ -525,12 +507,15 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task UpdateUIAsync_WhenAnkiSoundsFolderIsEmptyAndPlatformIsWinUI_CallsGetAnkiMediaDirectoryPathAsync()
+        public async Task InitAsync_WhenAnkiSoundsFolderIsEmptyAndPlatformIsWinUI_CallsGetAnkiMediaDirectoryPathAsync()
         {
             // Arrange
             AppSettings appSettings = _fixture.Create<AppSettings>();
             appSettings.AnkiSoundsFolder = string.Empty;
             string expectedMediaPath = "C:\\Users\\User\\AppData\\Roaming\\Anki2\\User 1\\collection.media";
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
@@ -542,7 +527,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.UpdateUIAsync(appSettings, CancellationToken.None);
+            await sut.InitAsync(CancellationToken.None);
 
             // Assert
             sut.AnkiSoundsFolder.Should().Be(expectedMediaPath);
@@ -550,11 +535,14 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task UpdateUIAsync_WhenAnkiSoundsFolderIsEmptyAndPlatformIsAndroid_UsesEmptyValue()
+        public async Task InitAsync_WhenAnkiSoundsFolderIsEmptyAndPlatformIsAndroid_UsesEmptyValue()
         {
             // Arrange
             AppSettings appSettings = _fixture.Create<AppSettings>();
             appSettings.AnkiSoundsFolder = string.Empty;
+
+            Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
@@ -564,7 +552,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var sut = _fixture.Create<SettingsViewModel>();
 
             // Act
-            await sut.UpdateUIAsync(appSettings, CancellationToken.None);
+            await sut.InitAsync(CancellationToken.None);
 
             // Assert
             sut.AnkiSoundsFolder.Should().Be(string.Empty);

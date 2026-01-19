@@ -119,17 +119,6 @@ namespace CopyWords.Core.ViewModels
 
             _cancellationTokenSource = new CancellationTokenSource();
 
-            // Check if there's instant text (from Android context menu or History page)
-            string? instantText = _instantTranslationService.GetTextAndClear();
-
-            // If already initialized and no instant text, just return (e.g., when navigating back from Settings)
-            if (_isInitialized && string.IsNullOrEmpty(instantText))
-            {
-                // Refresh controls in case user has updated settings
-                UpdateUI(null);
-                return;
-            }
-
             DictionaryName = _settingsService.GetSelectedParser();
             UpdateDictionaryImage(DictionaryName);
 
@@ -146,7 +135,12 @@ namespace CopyWords.Core.ViewModels
             }
 
             // Check if the app was called from a context menu on Android (or from History page) and set the search word accordingly
-            SearchWord = instantText ?? string.Empty;
+            string? instantText = _instantTranslationService.GetTextAndClear();
+            if (!string.IsNullOrEmpty(instantText))
+            {
+                SearchWord = instantText;
+            }
+
             await LookUpAsync();
 
             _isInitialized = true;
@@ -350,8 +344,17 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.Word = wordModel.Word;
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
 
-                bool showCopyButtons = _settingsService.GetShowCopyButtons();
-                _wordViewModel.SetDefinition(new DefinitionViewModel(wordModel.Definition, wordModel.SourceLanguage, showCopyButtons));
+                bool showCheckBoxes = false;
+                if (_deviceInfo.Platform == DevicePlatform.Android)
+                {
+                    showCheckBoxes = _settingsService.GetShowCopyButtons();
+                }
+                else
+                {
+                    // On Windows and MacCatalyst a user might want to hide copy buttons, but keep Anki button visible.
+                    showCheckBoxes = _settingsService.GetShowCopyButtons() || _settingsService.GetShowAnkiButton();
+                }
+                _wordViewModel.SetDefinition(new DefinitionViewModel(wordModel.Definition, wordModel.SourceLanguage, showCheckBoxes));
 
                 _wordViewModel.ClearVariants();
                 foreach (var variant in wordModel.Variants)

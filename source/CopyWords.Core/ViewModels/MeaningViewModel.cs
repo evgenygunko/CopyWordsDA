@@ -9,7 +9,7 @@ namespace CopyWords.Core.ViewModels
         public MeaningViewModel(
             Meaning meaning,
             SourceLanguage sourceLanguage,
-            bool showCopyButtons)
+            bool showCheckBoxes)
         {
             Original = meaning.Original;
 
@@ -21,10 +21,10 @@ namespace CopyWords.Core.ViewModels
             ExampleViewModels.Clear();
             foreach (var example in meaning.Examples)
             {
-                ExampleViewModels.Add(new ExampleViewModel(example, showCopyButtons));
+                ExampleViewModels.Add(new ExampleViewModel(example, showCheckBoxes));
             }
 
-            ShowCopyButtons = showCopyButtons;
+            ShowCheckBoxes = showCheckBoxes;
 
             if (sourceLanguage == SourceLanguage.Spanish)
             {
@@ -55,7 +55,7 @@ namespace CopyWords.Core.ViewModels
         public partial bool IsImageChecked { get; set; }
 
         [ObservableProperty]
-        public partial bool ShowCopyButtons { get; set; }
+        public partial bool ShowCheckBoxes { get; set; }
 
         [ObservableProperty]
         public partial Thickness ExamplesMargin { get; set; }

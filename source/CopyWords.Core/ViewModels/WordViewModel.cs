@@ -127,7 +127,7 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         public partial bool ShowCopyButtons { get; set; }
 
-        public bool ShowShareButton => (_deviceInfo.Platform == DevicePlatform.Android);
+        public bool ShowShareButton => _deviceInfo.Platform == DevicePlatform.Android;
 
         public Color PlaySoundButtonColor => GetButtonColor(CanPlaySound);
 

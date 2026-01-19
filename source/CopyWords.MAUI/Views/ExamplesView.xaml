@@ -19,11 +19,11 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <!-- If ShowCopyButtons is true -->
-                    <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding IsChecked}" IsVisible="{Binding ShowCopyButtons}" />
+                    <!-- If ShowCheckBoxes is true -->
+                    <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding IsChecked}" IsVisible="{Binding ShowCheckBoxes}" />
 
-                    <!-- If ShowCopyButtons is false, add an invisible label to add margin -->
-                    <Label Grid.Column="0" Text="a" TextColor="{DynamicResource PageBackgroundColor}" IsVisible="{Binding ShowCopyButtons, Converter={StaticResource InvertedBoolConverter}}" />
+                    <!-- If ShowCheckBoxes is false, add an invisible label to add margin -->
+                    <Label Grid.Column="0" Text="a" TextColor="{DynamicResource PageBackgroundColor}" IsVisible="{Binding ShowCheckBoxes, Converter={StaticResource InvertedBoolConverter}}" />
 
                     <Label Grid.Column="1" LineBreakMode="WordWrap" Padding="10,5,10,5" VerticalOptions="Center">
                         <Label.FormattedText>

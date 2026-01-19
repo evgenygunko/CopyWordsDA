@@ -9,7 +9,7 @@ namespace CopyWords.Core.ViewModels
         public ContextViewModel(
             Context context,
             SourceLanguage sourceLanguage,
-            bool showCopyButtons)
+            bool showCheckBoxes)
         {
             ContextEN = context.ContextEN;
             Position = context.Position;
@@ -17,7 +17,7 @@ namespace CopyWords.Core.ViewModels
             MeaningViewModels.Clear();
             foreach (var meanings in context.Meanings)
             {
-                MeaningViewModels.Add(new MeaningViewModel(meanings, sourceLanguage, showCopyButtons));
+                MeaningViewModels.Add(new MeaningViewModel(meanings, sourceLanguage, showCheckBoxes));
             }
         }
 

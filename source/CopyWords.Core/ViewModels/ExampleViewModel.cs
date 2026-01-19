@@ -5,11 +5,11 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class ExampleViewModel : ObservableObject
     {
-        public ExampleViewModel(Example example, bool showCopyButtons)
+        public ExampleViewModel(Example example, bool showCheckBoxes)
         {
             Original = example.Original;
             Translation = example.Translation ?? string.Empty;
-            ShowCopyButtons = showCopyButtons;
+            ShowCheckBoxes = showCheckBoxes;
         }
 
         [ObservableProperty]
@@ -22,6 +22,6 @@ namespace CopyWords.Core.ViewModels
         public partial bool IsChecked { get; set; }
 
         [ObservableProperty]
-        public partial bool ShowCopyButtons { get; set; }
+        public partial bool ShowCheckBoxes { get; set; }
     }
 }

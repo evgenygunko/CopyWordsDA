@@ -57,13 +57,13 @@
                                     Margin="8,0,0,0"
                                     IsVisible="{Binding ImageUrl, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
 
-                            <!-- If ShowCopyButtons is true, show the checkbox -->
+                            <!-- If ShowCheckBoxes is true, show the checkbox -->
                             <CheckBox x:Name="checkBox"
-                                    IsVisible="{Binding ShowCopyButtons}"
+                                    IsVisible="{Binding ShowCheckBoxes}"
                                     IsChecked="{Binding IsImageChecked}" />
 
-                            <!-- If ShowCopyButtons is false, add an invisible label to add margin -->
-                            <Label Text="a" TextColor="{DynamicResource PageBackgroundColor}" IsVisible="{Binding ShowCopyButtons, Converter={StaticResource InvertedBoolConverter}}" />
+                            <!-- If ShowCheckBoxes is false, add an invisible label to add margin -->
+                            <Label Text="a" TextColor="{DynamicResource PageBackgroundColor}" IsVisible="{Binding ShowCheckBoxes, Converter={StaticResource InvertedBoolConverter}}" />
 
                             <Border>
                                 <Border.Triggers>

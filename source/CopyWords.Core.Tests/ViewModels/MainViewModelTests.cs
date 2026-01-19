@@ -157,44 +157,7 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task InitAsync_WhenAlreadyInitializedAndNoInstantText_ReturnsEarlyWithoutLookup()
-        {
-            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
-
-            var instantTranslationServiceMock = _fixture.Freeze<Mock<IInstantTranslationService>>();
-            instantTranslationServiceMock.Setup(x => x.GetTextAndClear()).Returns((string?)null);
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-
-            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
-
-            var sut = _fixture.Create<MainViewModel>();
-            sut.IsBusy = false;
-
-            // First call to InitAsync - this initializes the ViewModel
-            await sut.InitAsync();
-
-            // Simulate that after init, user searched for a word
-            sut.SearchWord = "existingWord";
-
-            // Reset mocks to verify second call behavior
-            translationsServiceMock.Invocations.Clear();
-            wordViewModelMock.Invocations.Clear();
-
-            // Second call to InitAsync (simulates navigating back from Settings)
-            await sut.InitAsync();
-
-            // Should return early without calling lookup, but should update UI
-            translationsServiceMock.VerifyNoOtherCalls();
-            wordViewModelMock.Verify(x => x.UpdateUI());
-
-            // SearchWord should remain unchanged (not cleared by returning from Settings)
-            sut.SearchWord.Should().Be("existingWord");
-        }
-
-        [TestMethod]
-        public async Task InitAsync_WhenAlreadyInitializedAndHasInstantText_RunsLookup()
+        public async Task InitAsync_WhenHasInstantText_RunsLookup()
         {
             WordModel wordModel = _fixture.Create<WordModel>();
 

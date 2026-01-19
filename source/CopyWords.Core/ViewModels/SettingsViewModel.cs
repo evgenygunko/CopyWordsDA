@@ -271,24 +271,13 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand]
         public async Task InitAsync(CancellationToken cancellationToken)
         {
-            AppSettings appSettings = _settingsService.LoadSettings();
-            await UpdateUIAsync(appSettings, cancellationToken);
-
-            _isInitialized = true;
-        }
-
-        #endregion
-
-        #region Internal Methods
-
-        internal async Task UpdateUIAsync(AppSettings appSettings, CancellationToken cancellationToken)
-        {
             // Load deck and model names for Android Picker controls
             if (_deviceInfo.Platform == DevicePlatform.Android)
             {
                 await InitializeAnkiDroidAsync();
             }
 
+            AppSettings appSettings = _settingsService.LoadSettings();
             AnkiDeckNameDanish = appSettings.AnkiDeckNameDanish;
             AnkiDeckNameSpanish = appSettings.AnkiDeckNameSpanish;
             AnkiModelName = appSettings.AnkiModelName;
@@ -306,7 +295,13 @@ namespace CopyWords.Core.ViewModels
             ShowAnkiButton = appSettings.ShowAnkiButton;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
             UseDarkTheme = appSettings.UseDarkTheme;
+
+            _isInitialized = true;
         }
+
+        #endregion
+
+        #region Internal Methods
 
         internal async Task InitializeAnkiDroidAsync()
         {
@@ -376,6 +371,12 @@ namespace CopyWords.Core.ViewModels
         {
             if (_isInitialized && CanUpdateIndividualSettings)
             {
+                if (!value && _deviceInfo.Platform == DevicePlatform.Android)
+                {
+                    // On Android we only show the Anki button if not in "dictionary mode" (i.e. copy buttons are shown).
+                    ShowAnkiButton = false;
+                }
+
                 _settingsService.SetShowCopyButtons(value);
                 Debug.WriteLine($"ShowCopyButtons has changed to {value}");
             }

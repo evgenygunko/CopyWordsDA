@@ -9,9 +9,9 @@ namespace CopyWords.Core.ViewModels
         public DefinitionViewModel(
             Definition definition,
             SourceLanguage sourceLanguage,
-            bool showCopyButtons)
+            bool showCheckBoxes)
         {
-            HeadwordViewModel = new HeadwordViewModel(definition.Headword, sourceLanguage, showCopyButtons);
+            HeadwordViewModel = new HeadwordViewModel(definition.Headword, sourceLanguage, showCheckBoxes);
 
             PartOfSpeech = definition.PartOfSpeech;
             Endings = definition.Endings;
@@ -19,7 +19,7 @@ namespace CopyWords.Core.ViewModels
             ContextViewModels.Clear();
             foreach (var context in definition.Contexts)
             {
-                ContextViewModels.Add(new ContextViewModel(context, sourceLanguage, showCopyButtons));
+                ContextViewModels.Add(new ContextViewModel(context, sourceLanguage, showCheckBoxes));
             }
         }
 

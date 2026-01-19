@@ -8,7 +8,7 @@ namespace CopyWords.Core.ViewModels
         public HeadwordViewModel(
             Headword headword,
             SourceLanguage sourceLanguage,
-            bool showCopyButtons)
+            bool showCheckBoxes)
         {
             Original = headword?.Original;
 
@@ -19,10 +19,10 @@ namespace CopyWords.Core.ViewModels
             // SpanishDict already return English translations, no need to show what the Translator app returned.
             ShowEnglishTranslation = sourceLanguage != SourceLanguage.Spanish;
 
-            CanCheckRussianTranslation = showCopyButtons;
-            CanCheckEnglishTranslation = showCopyButtons && ShowEnglishTranslation;
+            CanCheckRussianTranslation = showCheckBoxes;
+            CanCheckEnglishTranslation = showCheckBoxes && ShowEnglishTranslation;
 
-            if (showCopyButtons)
+            if (showCheckBoxes)
             {
                 BorderPadding = new Thickness(0);
             }
