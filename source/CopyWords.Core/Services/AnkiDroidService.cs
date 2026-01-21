@@ -19,19 +19,24 @@ namespace CopyWords.Core.Services
         IEnumerable<string> GetModelNames();
 
         Task<long> AddNoteAsync(AnkiNote note);
+
+        Task SaveImagesAsync(IEnumerable<ImageFile> imageFiles);
     }
 
     public class AnkiDroidService : IAnkiDroidService
     {
         private readonly IAnkiContentApi _ankiContentApi;
         private readonly IDialogService _dialogService;
+        private readonly ISaveImageFileService _saveImageFileService;
 
         public AnkiDroidService(
             IAnkiContentApi ankiContentApi,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            ISaveImageFileService saveImageFileService)
         {
             _ankiContentApi = ankiContentApi;
             _dialogService = dialogService;
+            _saveImageFileService = saveImageFileService;
         }
 
         #region Public Methods
@@ -104,6 +109,15 @@ namespace CopyWords.Core.Services
             }
 
             return noteId;
+        }
+
+        public async Task SaveImagesAsync(IEnumerable<ImageFile> imageFiles)
+        {
+            foreach (var imageFile in imageFiles)
+            {
+                await using Stream stream = await _saveImageFileService.DownloadAndResizeImageAsync(imageFile.ImageUrl);
+                await _ankiContentApi.AddImageToAnkiMediaAsync(imageFile.FileName, stream);
+            }
         }
 
         #endregion

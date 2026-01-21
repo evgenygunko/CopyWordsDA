@@ -8,6 +8,8 @@ namespace CopyWords.Core.Services
 {
     public interface ISaveImageFileService
     {
+        Task<Stream> DownloadAndResizeImageAsync(string imageUrl);
+
         Task<bool> SaveImagesAsync(IEnumerable<ImageFile> imageFiles);
     }
 
@@ -31,6 +33,16 @@ namespace CopyWords.Core.Services
             _dialogService = dialogService;
             _fileIOService = fileIOService;
             _imageSharpWrapper = imageSharpWrapper;
+        }
+
+        public async Task<Stream> DownloadAndResizeImageAsync(string imageUrl)
+        {
+            var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
+
+            using Stream stream = await _fileDownloaderService.DownloadFileAsync(imageUrl, cancellationToken);
+            using SixLabors.ImageSharp.Image image = await _imageSharpWrapper.ResizeImageAsync(stream, cancellationToken);
+
+            return await _imageSharpWrapper.SaveAsJpegAsync(image, cancellationToken);
         }
 
         public async Task<bool> SaveImagesAsync(IEnumerable<ImageFile> imageFiles)

@@ -40,5 +40,12 @@
         /// <param name="key"></param>
         /// <returns></returns>
         List<long> FindDuplicateNotes(long modelId, string key);
+
+        /// <summary>
+        /// Saves an image to the Anki media folder.
+        /// </summary>
+        /// <param name="fileName">The target file name.</param>
+        /// <param name="imageStream">The image content as a stream.</param>
+        Task AddImageToAnkiMediaAsync(string fileName, Stream imageStream);
     }
 }

@@ -532,6 +532,9 @@ namespace CopyWords.Core.ViewModels
                 long noteId = await _ankiDroidService.AddNoteAsync(note);
                 if (noteId > 0)
                 {
+                    var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
+                    await _ankiDroidService.SaveImagesAsync(imageFiles);
+
                     await _dialogService.DisplayToast("The note has been added to Anki.");
                 }
             }

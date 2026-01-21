@@ -210,5 +210,77 @@ namespace CopyWords.Core.Tests.Services
         }
 
         #endregion
+
+        #region Tests for DownloadAndResizeImageAsync
+
+        [TestMethod]
+        public async Task DownloadAndResizeImageAsync_WhenCalled_DownloadsResizesAndReturnsStream()
+        {
+            string imageUrl = "https://example.com/image.png";
+            var expectedStream = new MemoryStream(new byte[] { 10, 20, 30 });
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadFileAsync(imageUrl, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new MemoryStream(new byte[] { 1, 2, 3 }));
+
+            var imageSharpWrapperMock = _fixture.Freeze<Mock<IImageSharpWrapper>>();
+            imageSharpWrapperMock
+                .Setup(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((SixLabors.ImageSharp.Image)null!);
+            imageSharpWrapperMock
+                .Setup(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expectedStream);
+
+            var sut = _fixture.Create<SaveImageFileService>();
+
+            Stream result = await sut.DownloadAndResizeImageAsync(imageUrl);
+
+            result.Should().BeSameAs(expectedStream);
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(imageUrl, It.IsAny<CancellationToken>()), Times.Once);
+            imageSharpWrapperMock.Verify(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
+            imageSharpWrapperMock.Verify(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DownloadAndResizeImageAsync_WhenDownloadFails_ThrowsException()
+        {
+            string imageUrl = "https://example.com/image.png";
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadFileAsync(imageUrl, It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new ServerErrorException("Download failed"));
+
+            var sut = _fixture.Create<SaveImageFileService>();
+
+            Func<Task> act = async () => await sut.DownloadAndResizeImageAsync(imageUrl);
+
+            await act.Should().ThrowAsync<ServerErrorException>().WithMessage("Download failed");
+        }
+
+        [TestMethod]
+        public async Task DownloadAndResizeImageAsync_WhenResizeFails_ThrowsException()
+        {
+            string imageUrl = "https://example.com/image.png";
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadFileAsync(imageUrl, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new MemoryStream(new byte[] { 1, 2, 3 }));
+
+            var imageSharpWrapperMock = _fixture.Freeze<Mock<IImageSharpWrapper>>();
+            imageSharpWrapperMock
+                .Setup(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new InvalidOperationException("Resize failed"));
+
+            var sut = _fixture.Create<SaveImageFileService>();
+
+            Func<Task> act = async () => await sut.DownloadAndResizeImageAsync(imageUrl);
+
+            await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Resize failed");
+        }
+
+        #endregion
     }
 }

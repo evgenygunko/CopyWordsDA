@@ -8,6 +8,8 @@ namespace CopyWords.Core.Services.Wrappers
         Task<SixLabors.ImageSharp.Image> ResizeImageAsync(Stream stream, CancellationToken cancellationToken);
 
         Task SaveAsJpegAsync(SixLabors.ImageSharp.Image image, string path, CancellationToken cancellationToken);
+
+        Task<Stream> SaveAsJpegAsync(SixLabors.ImageSharp.Image image, CancellationToken cancellationToken);
     }
 
     public class ImageSharpWrapper : IImageSharpWrapper
@@ -44,6 +46,14 @@ namespace CopyWords.Core.Services.Wrappers
         public async Task SaveAsJpegAsync(SixLabors.ImageSharp.Image image, string path, CancellationToken cancellationToken)
         {
             await image.SaveAsJpegAsync(path, cancellationToken);
+        }
+
+        public async Task<Stream> SaveAsJpegAsync(SixLabors.ImageSharp.Image image, CancellationToken cancellationToken)
+        {
+            var memoryStream = new MemoryStream();
+            await image.SaveAsJpegAsync(memoryStream, cancellationToken);
+            memoryStream.Position = 0;
+            return memoryStream;
         }
     }
 }

@@ -14,6 +14,8 @@ namespace CopyWords.MAUI.Services
         private const string AnkiDroidPackage = "com.ichi2.anki";
         private const string AnkiDroidPermission = "com.ichi2.anki.permission.READ_WRITE_DATABASE";
 
+        #region Public Methods
+
         public bool IsAvailable()
         {
             var ctx = Android.App.Application.Context;
@@ -76,22 +78,6 @@ namespace CopyWords.MAUI.Services
             return noteId?.LongValue() ?? 0;
         }
 
-        private static Dictionary<long, string>? ConvertToDotNetDictionary(IDictionary<Long, string>? javaDict)
-        {
-            if (javaDict is null)
-            {
-                return null;
-            }
-
-            var result = new Dictionary<long, string>();
-            foreach (var kvp in javaDict)
-            {
-                result[kvp.Key.LongValue()] = kvp.Value;
-            }
-
-            return result;
-        }
-
         public List<long> FindDuplicateNotes(long modelId, string key)
         {
             var context = Android.App.Application.Context;
@@ -111,6 +97,46 @@ namespace CopyWords.MAUI.Services
 
             return result;
         }
+
+        public async Task AddImageToAnkiMediaAsync(string fileName, Stream imageStream)
+        {
+            _ = fileName;
+            _ = imageStream;
+            throw new NotImplementedException();
+
+            /*var context = Android.App.Application.Context;
+            if (context.CacheDir is null)
+            {
+                throw new AnkiDroidCannotSaveMediaException($"Cannot save media file '{fileName}', CacheDir is null");
+            }
+
+            string cachedFilePath = Path.Combine(context.CacheDir.AbsolutePath, fileName);
+
+            using var fileStream = new FileStream(cachedFilePath, FileMode.Create, FileAccess.Write);
+            await imageStream.CopyToAsync(fileStream);*/
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static Dictionary<long, string>? ConvertToDotNetDictionary(IDictionary<Long, string>? javaDict)
+        {
+            if (javaDict is null)
+            {
+                return null;
+            }
+
+            var result = new Dictionary<long, string>();
+            foreach (var kvp in javaDict)
+            {
+                result[kvp.Key.LongValue()] = kvp.Value;
+            }
+
+            return result;
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -140,6 +166,7 @@ public class AnkiContentApiWrapper : IAnkiContentApi
     public string[]? GetFieldList(long modelId) => null;
     public long AddNote(long modelId, long deckId, string[] fields, string[]? tags) => 0;
     public List<long> FindDuplicateNotes(long modelId, string key) => [];
+    public async Task AddImageToAnkiMediaAsync(string fileName, Stream imageStream) => await Task.CompletedTask;
 }
 
 #endif

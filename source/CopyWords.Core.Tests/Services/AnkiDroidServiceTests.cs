@@ -542,5 +542,167 @@ namespace CopyWords.Core.Tests.Services
         }
 
         #endregion
+
+        #region Tests for SaveImagesAsync
+
+        [TestMethod]
+        public async Task SaveImagesAsync_WhenImageFilesIsEmpty_DoesNotCallAnyServices()
+        {
+            // Arrange
+            var imageFiles = Enumerable.Empty<ImageFile>();
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
+
+            var sut = _fixture.Create<AnkiDroidService>();
+
+            // Act
+            await sut.SaveImagesAsync(imageFiles);
+
+            // Assert
+            saveImageFileServiceMock.Verify(
+                x => x.DownloadAndResizeImageAsync(It.IsAny<string>()),
+                Times.Never);
+            ankiContentApiMock.Verify(
+                x => x.AddImageToAnkiMediaAsync(It.IsAny<string>(), It.IsAny<Stream>()),
+                Times.Never);
+        }
+
+        [TestMethod]
+        public async Task SaveImagesAsync_WhenSingleImageFile_DownloadsAndSavesToAnki()
+        {
+            // Arrange
+            const string fileName = "test_image.jpg";
+            const string imageUrl = "https://example.com/image.jpg";
+            var imageFile = new ImageFile(fileName, imageUrl);
+            var imageFiles = new[] { imageFile };
+
+            using var testStream = new MemoryStream([1, 2, 3]);
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock
+                .Setup(x => x.DownloadAndResizeImageAsync(imageUrl))
+                .ReturnsAsync(testStream);
+
+            var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
+            ankiContentApiMock
+                .Setup(x => x.AddImageToAnkiMediaAsync(fileName, testStream))
+                .Returns(Task.CompletedTask);
+
+            var sut = _fixture.Create<AnkiDroidService>();
+
+            // Act
+            await sut.SaveImagesAsync(imageFiles);
+
+            // Assert
+            saveImageFileServiceMock.Verify(
+                x => x.DownloadAndResizeImageAsync(imageUrl),
+                Times.Once);
+            ankiContentApiMock.Verify(
+                x => x.AddImageToAnkiMediaAsync(fileName, testStream),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveImagesAsync_WhenMultipleImageFiles_DownloadsAndSavesAllToAnki()
+        {
+            // Arrange
+            var imageFile1 = new ImageFile("image1.jpg", "https://example.com/image1.jpg");
+            var imageFile2 = new ImageFile("image2.png", "https://example.com/image2.png");
+            var imageFile3 = new ImageFile("image3.gif", "https://example.com/image3.gif");
+            var imageFiles = new[] { imageFile1, imageFile2, imageFile3 };
+
+            using var stream1 = new MemoryStream([1]);
+            using var stream2 = new MemoryStream([2]);
+            using var stream3 = new MemoryStream([3]);
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock
+                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image1.jpg"))
+                .ReturnsAsync(stream1);
+            saveImageFileServiceMock
+                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image2.png"))
+                .ReturnsAsync(stream2);
+            saveImageFileServiceMock
+                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image3.gif"))
+                .ReturnsAsync(stream3);
+
+            var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
+            ankiContentApiMock
+                .Setup(x => x.AddImageToAnkiMediaAsync(It.IsAny<string>(), It.IsAny<Stream>()))
+                .Returns(Task.CompletedTask);
+
+            var sut = _fixture.Create<AnkiDroidService>();
+
+            // Act
+            await sut.SaveImagesAsync(imageFiles);
+
+            // Assert
+            saveImageFileServiceMock.Verify(
+                x => x.DownloadAndResizeImageAsync(It.IsAny<string>()),
+                Times.Exactly(3));
+            ankiContentApiMock.Verify(
+                x => x.AddImageToAnkiMediaAsync("image1.jpg", stream1),
+                Times.Once);
+            ankiContentApiMock.Verify(
+                x => x.AddImageToAnkiMediaAsync("image2.png", stream2),
+                Times.Once);
+            ankiContentApiMock.Verify(
+                x => x.AddImageToAnkiMediaAsync("image3.gif", stream3),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveImagesAsync_WhenDownloadThrows_PropagatesException()
+        {
+            // Arrange
+            var imageFile = new ImageFile("test.jpg", "https://example.com/test.jpg");
+            var imageFiles = new[] { imageFile };
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock
+                .Setup(x => x.DownloadAndResizeImageAsync(It.IsAny<string>()))
+                .ThrowsAsync(new HttpRequestException("Download failed"));
+
+            var sut = _fixture.Create<AnkiDroidService>();
+
+            // Act
+            Func<Task> act = async () => await sut.SaveImagesAsync(imageFiles);
+
+            // Assert
+            await act.Should().ThrowAsync<HttpRequestException>()
+                .WithMessage("Download failed");
+        }
+
+        [TestMethod]
+        public async Task SaveImagesAsync_WhenAddImageToAnkiThrows_PropagatesException()
+        {
+            // Arrange
+            var imageFile = new ImageFile("test.jpg", "https://example.com/test.jpg");
+            var imageFiles = new[] { imageFile };
+
+            using var testStream = new MemoryStream([1, 2, 3]);
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock
+                .Setup(x => x.DownloadAndResizeImageAsync(It.IsAny<string>()))
+                .ReturnsAsync(testStream);
+
+            var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
+            ankiContentApiMock
+                .Setup(x => x.AddImageToAnkiMediaAsync(It.IsAny<string>(), It.IsAny<Stream>()))
+                .ThrowsAsync(new InvalidOperationException("Failed to save to Anki media"));
+
+            var sut = _fixture.Create<AnkiDroidService>();
+
+            // Act
+            Func<Task> act = async () => await sut.SaveImagesAsync(imageFiles);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Failed to save to Anki media");
+        }
+
+        #endregion
     }
 }

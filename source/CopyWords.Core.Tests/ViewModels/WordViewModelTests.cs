@@ -1082,6 +1082,8 @@ namespace CopyWords.Core.Tests.ViewModels
 
             // Assert
             ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<AnkiNote>()), Times.Once);
+            ankiDroidServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Once);
+
             dialogServiceMock.Verify(x => x.DisplayToast("The note has been added to Anki."), Times.Once);
             dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
@@ -1117,6 +1119,8 @@ namespace CopyWords.Core.Tests.ViewModels
 
             // Assert
             ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<AnkiNote>()), Times.Once);
+            ankiDroidServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Never);
+
             dialogServiceMock.Verify(x => x.DisplayToast(It.IsAny<string>()), Times.Never);
             dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
@@ -1149,6 +1153,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 "AnkiDroid API is not accessible",
                 It.Is<string>(msg => msg.Contains("Please verify that AndkiDroid API is enabled") && msg.Contains("API not enabled")),
                 "OK"));
+
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<AnkiNote>()), Times.Once);
+            ankiDroidServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Never);
         }
 
         [TestMethod]
@@ -1179,6 +1186,8 @@ namespace CopyWords.Core.Tests.ViewModels
                 "Cannot add note",
                 "Error occurred while trying to add note with  AndkiDroid API: General error from unit test",
                 "OK"));
+
+            ankiDroidServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Never);
         }
 
         #endregion
