@@ -15,13 +15,13 @@ namespace CopyWords.Core.Tests.Services
     {
         private readonly Fixture _fixture = FixtureFactory.CreateFixture();
 
-        #region Tests for SaveImageFileAsync
+        #region Tests for SaveImagesAsync
 
         [TestMethod]
-        public async Task SaveImageFileAsync_WhenAnkiFolderDoesNotExist_DisplaysAlertAndReturnsFalse()
+        public async Task SaveImagesAsync_WhenAnkiFolderDoesNotExist_DisplaysAlertAndReturnsFalse()
         {
-            const string url = "https://example.com/image.png";
-            string fileNameWithoutExtension = _fixture.Create<string>();
+            var imageFile = new ImageFile("image.jpg", "https://example.com/image.png");
+            var imageFiles = new List<ImageFile> { imageFile };
 
             AppSettings appSettings = _fixture.Create<AppSettings>();
             appSettings.AnkiSoundsFolder = "nonexistent-folder";
@@ -36,17 +36,17 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
+            bool result = await sut.SaveImagesAsync(imageFiles);
 
             result.Should().BeFalse();
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Path to Anki folder is incorrect", $"Cannot find path to Anki folder '{appSettings.AnkiSoundsFolder}'. Please update it in Settings.", "OK"));
         }
 
         [TestMethod]
-        public async Task SaveImageFileAsync_WhenDownloadSucceedsAndFileDoesNotExist_SavesResizedImage()
+        public async Task SaveImagesAsync_WhenDownloadSucceedsAndFileDoesNotExist_SavesResizedImage()
         {
-            const string url = "https://example.com/image.png";
-            string fileNameWithoutExtension = _fixture.Create<string>();
+            var imageFile = new ImageFile("image.jpg", "https://example.com/image.png");
+            var imageFiles = new List<ImageFile> { imageFile };
 
             AppSettings appSettings = _fixture.Create<AppSettings>();
 
@@ -72,19 +72,20 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
+            bool result = await sut.SaveImagesAsync(imageFiles);
 
             result.Should().BeTrue();
-            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(url, It.IsAny<CancellationToken>()), Times.Once);
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(imageFile.ImageUrl, It.IsAny<CancellationToken>()), Times.Once);
             imageSharpWrapperMock.Verify(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
             imageSharpWrapperMock.Verify(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
-        public async Task SaveImageFileAsync_WhenFileExistsAndUserDoesNotWantToOverwrite_ReturnsTrue()
+        public async Task SaveImagesAsync_WhenFileExistsAndUserDoesNotWantToOverwrite_ReturnsTrue()
         {
-            const string url = "https://example.com/image.png";
-            string fileNameWithoutExtension = _fixture.Create<string>();
+            var imageFile1 = new ImageFile("image1.jpg", "https://example.com/image1.jpg");
+            var imageFile2 = new ImageFile("image2.jpg", "https://example.com/image2.jpg");
+            var imageFiles = new List<ImageFile> { imageFile1, imageFile2 };
 
             AppSettings appSettings = _fixture.Create<AppSettings>();
 
@@ -93,7 +94,9 @@ namespace CopyWords.Core.Tests.Services
 
             var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
             fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
-            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+            fileIOServiceMock.SetupSequence(x => x.FileExists(It.IsAny<string>()))
+                .Returns(true)
+                .Returns(false);
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
             fileDownloaderServiceMock
@@ -106,20 +109,31 @@ namespace CopyWords.Core.Tests.Services
                 .ReturnsAsync(false);
 
             var imageSharpWrapperMock = _fixture.Freeze<Mock<IImageSharpWrapper>>();
+            imageSharpWrapperMock
+                .Setup(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((SixLabors.ImageSharp.Image)null!);
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
+            bool result = await sut.SaveImagesAsync(imageFiles);
 
             result.Should().BeTrue();
-            imageSharpWrapperMock.Verify(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Never);
+            imageSharpWrapperMock.Verify(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
+
+            // Skip first file, but save second file
+            imageSharpWrapperMock.Verify(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(),
+                It.Is<string>(str => str.EndsWith(imageFile1.FileName)), It.IsAny<CancellationToken>()), Times.Never);
+
+            imageSharpWrapperMock.Verify(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(),
+                It.Is<string>(str => str.EndsWith(imageFile2.FileName)), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
-        public async Task SaveImageFileAsync_WhenFileExistsAndUserWantsToOverwrite_SavesResizedImage()
+        public async Task SaveImagesAsync_WhenFileExistsAndUserWantsToOverwrite_SavesResizedImage()
         {
-            const string url = "https://example.com/image.png";
-            string fileNameWithoutExtension = _fixture.Create<string>();
+            var imageFile1 = new ImageFile("image1.jpg", "https://example.com/image1.jpg");
+            var imageFile2 = new ImageFile("image2.jpg", "https://example.com/image2.jpg");
+            var imageFiles = new List<ImageFile> { imageFile1, imageFile2 };
 
             AppSettings appSettings = _fixture.Create<AppSettings>();
 
@@ -128,7 +142,9 @@ namespace CopyWords.Core.Tests.Services
 
             var fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
             fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
-            fileIOServiceMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+            fileIOServiceMock.SetupSequence(x => x.FileExists(It.IsAny<string>()))
+                .Returns(true)
+                .Returns(false);
 
             var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
             fileDownloaderServiceMock
@@ -150,18 +166,24 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
+            bool result = await sut.SaveImagesAsync(imageFiles);
 
             result.Should().BeTrue();
-            imageSharpWrapperMock.Verify(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
-            imageSharpWrapperMock.Verify(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+            imageSharpWrapperMock.Verify(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+
+            // Save both files
+            imageSharpWrapperMock.Verify(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(),
+                It.Is<string>(str => str.EndsWith(imageFile1.FileName)), It.IsAny<CancellationToken>()), Times.Once);
+
+            imageSharpWrapperMock.Verify(x => x.SaveAsJpegAsync(It.IsAny<SixLabors.ImageSharp.Image>(),
+                It.Is<string>(str => str.EndsWith(imageFile2.FileName)), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
-        public async Task SaveImageFileAsync_WhenDownloadThrowsServerErrorException_DisplaysAlertAndReturnsFalse()
+        public async Task SaveImagesAsync_WhenDownloadThrowsServerErrorException_DisplaysAlertAndReturnsFalse()
         {
-            const string url = "https://example.com/image.png";
-            string fileNameWithoutExtension = _fixture.Create<string>();
+            var imageFile = new ImageFile("image.jpg", "https://example.com/image.png");
+            var imageFiles = new List<ImageFile> { imageFile };
 
             AppSettings appSettings = _fixture.Create<AppSettings>();
 
@@ -181,10 +203,10 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            bool result = await sut.SaveImageFileAsync(url, fileNameWithoutExtension);
+            bool result = await sut.SaveImagesAsync(imageFiles);
 
             result.Should().BeFalse();
-            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot download image", "Cannot download image file from 'https://example.com/image.png'. Error: Server error", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot download image", $"Cannot download image file from '{imageFile.ImageUrl}'. Error: Server error", "OK"));
         }
 
         #endregion

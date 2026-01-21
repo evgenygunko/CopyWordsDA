@@ -648,59 +648,52 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
-        #region Tests for SaveImagesAsync
+        #region Tests for CompileImages
 
         [TestMethod]
-        public async Task SaveImagesAsync_WhenNoExamplesSelected_DoesNotSaveAnyImages()
+        public void CompileImages_WhenNoExamplesSelected_ReturnsEmptyCollection()
         {
             var definitionVM = CreateVMForCasa();
 
-            Mock<ISaveImageFileService> saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            await sut.SaveImagesAsync(definitionVM);
+            var result = sut.CompileImages(definitionVM);
 
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            result.Should().BeEmpty();
         }
 
         [TestMethod]
-        public async Task SaveImagesAsync_WhenExampleSelectedButImageNotChecked_DoesNotSaveImage()
+        public void CompileImages_WhenExampleSelectedButImageNotChecked_ReturnsEmptyCollection()
         {
             var definitionVM = CreateVMForCasa();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVM.ContextViewModels[0].MeaningViewModels[0].IsImageChecked = false;
 
-            Mock<ISaveImageFileService> saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            await sut.SaveImagesAsync(definitionVM);
+            var result = sut.CompileImages(definitionVM);
 
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            result.Should().BeEmpty();
         }
 
         [TestMethod]
-        public async Task SaveImagesAsync_WhenExampleSelectedAndImageChecked_SavesImage()
+        public void CompileImages_WhenExampleSelectedAndImageChecked_ReturnsImageFile()
         {
             var definitionVM = CreateVMForCasa();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVM.ContextViewModels[0].MeaningViewModels[0].IsImageChecked = true;
 
-            Mock<ISaveImageFileService> saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
-
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            await sut.SaveImagesAsync(definitionVM);
+            var result = sut.CompileImages(definitionVM).ToList();
 
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(
-                "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/1ccc644c-898c-49b1-be9b-01eee0375a72.jpg",
-                "casa"), Times.Once);
+            result.Should().HaveCount(1);
+            result[0].FileName.Should().Be("casa.jpg");
+            result[0].ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/1ccc644c-898c-49b1-be9b-01eee0375a72.jpg");
         }
 
         [TestMethod]
-        public async Task SaveImagesAsync_WhenMultipleImagesSelected_SavesImagesWithIndexedFileNames()
+        public void CompileImages_WhenMultipleImagesSelected_ReturnsImageFilesWithIndexedFileNames()
         {
             var definitionVM = CreateVMForVeneno();
             foreach (var contextVM in definitionVM.ContextViewModels)
@@ -715,36 +708,30 @@ namespace CopyWords.Core.Tests.Services
                 }
             }
 
-            Mock<ISaveImageFileService> saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-            saveImageFileServiceMock.Setup(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
-
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            await sut.SaveImagesAsync(definitionVM);
+            var result = sut.CompileImages(definitionVM).ToList();
 
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(
-                "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d533b470-18a4-4cae-ad08-3ee8858ae02c.jpg",
-                "veneno"), Times.Once);
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(
-                "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d07aa7fd-a3fd-4d06-9751-656180d8b1ee.jpg",
-                "veneno1"), Times.Once);
+            result.Should().HaveCount(2);
+            result[0].FileName.Should().Be("veneno.jpg");
+            result[0].ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d533b470-18a4-4cae-ad08-3ee8858ae02c.jpg");
+            result[1].FileName.Should().Be("veneno1.jpg");
+            result[1].ImageUrl.Should().Be("https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d07aa7fd-a3fd-4d06-9751-656180d8b1ee.jpg");
         }
 
         [TestMethod]
-        public async Task SaveImagesAsync_WhenImageUrlIsEmpty_DoesNotSaveImage()
+        public void CompileImages_WhenImageUrlIsEmpty_ReturnsEmptyCollection()
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
             definitionVM.ContextViewModels[0].MeaningViewModels[0].IsImageChecked = true;
             // ImageUrl is null for grillspyd
 
-            Mock<ISaveImageFileService> saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
-
             var sut = _fixture.Create<CopySelectedToClipboardService>();
 
-            await sut.SaveImagesAsync(definitionVM);
+            var result = sut.CompileImages(definitionVM);
 
-            saveImageFileServiceMock.Verify(x => x.SaveImageFileAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            result.Should().BeEmpty();
         }
 
         #endregion

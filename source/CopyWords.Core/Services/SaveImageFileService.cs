@@ -1,14 +1,14 @@
 ﻿// Ignore Spelling: Downloader
 
 using CopyWords.Core.Exceptions;
+using CopyWords.Core.Models;
 using CopyWords.Core.Services.Wrappers;
-using SixLabors.ImageSharp;
 
 namespace CopyWords.Core.Services
 {
     public interface ISaveImageFileService
     {
-        Task<bool> SaveImageFileAsync(string url, string fileNameWithoutExtension);
+        Task<bool> SaveImagesAsync(IEnumerable<ImageFile> imageFiles);
     }
 
     public class SaveImageFileService : ISaveImageFileService
@@ -33,7 +33,7 @@ namespace CopyWords.Core.Services
             _imageSharpWrapper = imageSharpWrapper;
         }
 
-        public async Task<bool> SaveImageFileAsync(string url, string fileNameWithoutExtension)
+        public async Task<bool> SaveImagesAsync(IEnumerable<ImageFile> imageFiles)
         {
             string ankiSoundsFolder = _settingsService.LoadSettings().AnkiSoundsFolder;
             if (!_fileIOService.DirectoryExists(ankiSoundsFolder))
@@ -42,32 +42,35 @@ namespace CopyWords.Core.Services
                 return false;
             }
 
-            string destinationFile = Path.Combine(ankiSoundsFolder, $"{fileNameWithoutExtension}.jpg");
-
-            try
+            foreach (var imageFile in imageFiles)
             {
-                CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
-                using Stream stream = await _fileDownloaderService.DownloadFileAsync(url, cancellationToken);
+                string destinationFile = Path.Combine(ankiSoundsFolder, imageFile.FileName);
 
-                if (_fileIOService.FileExists(destinationFile))
+                try
                 {
-                    bool answer = await _dialogService.DisplayAlertAsync("File already exists", $"File '{destinationFile}' already exists. Overwrite?", "Yes", "No");
-                    if (!answer)
-                    {
-                        // User doesn't want to overwrite the file, so we can skip the copy. But the file already exists, so we return true.
-                        return true;
-                    }
-                }
+                    CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
+                    using Stream stream = await _fileDownloaderService.DownloadFileAsync(imageFile.ImageUrl, cancellationToken);
 
-                // Resize to 150x150 px and save as JPEG
-                cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
-                using SixLabors.ImageSharp.Image image = await _imageSharpWrapper.ResizeImageAsync(stream, cancellationToken);
-                await _imageSharpWrapper.SaveAsJpegAsync(image, destinationFile, cancellationToken);
-            }
-            catch (ServerErrorException ex)
-            {
-                await _dialogService.DisplayAlertAsync($"Cannot download image", $"Cannot download image file from '{url}'. Error: {ex.Message}", "OK");
-                return false;
+                    if (_fileIOService.FileExists(destinationFile))
+                    {
+                        bool answer = await _dialogService.DisplayAlertAsync("File already exists", $"File '{destinationFile}' already exists. Overwrite?", "Yes", "No");
+                        if (!answer)
+                        {
+                            // User doesn't want to overwrite the file, so we skip this one and continue with the next.
+                            continue;
+                        }
+                    }
+
+                    // Resize to 150x150 px and save as JPEG
+                    cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
+                    using SixLabors.ImageSharp.Image image = await _imageSharpWrapper.ResizeImageAsync(stream, cancellationToken);
+                    await _imageSharpWrapper.SaveAsJpegAsync(image, destinationFile, cancellationToken);
+                }
+                catch (ServerErrorException ex)
+                {
+                    await _dialogService.DisplayAlertAsync($"Cannot download image", $"Cannot download image file from '{imageFile.ImageUrl}'. Error: {ex.Message}", "OK");
+                    return false;
+                }
             }
 
             return true;

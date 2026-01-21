@@ -30,6 +30,7 @@ namespace CopyWords.Core.ViewModels
 
     public partial class WordViewModel : ObservableObject, IWordViewModel
     {
+        private readonly ISaveImageFileService _saveImageFileService;
         private readonly ISaveSoundFileService _saveSoundFileService;
         private readonly IDialogService _dialogService;
         private readonly IClipboardService _clipboardService;
@@ -44,6 +45,7 @@ namespace CopyWords.Core.ViewModels
         private string _soundUrl = string.Empty;
 
         public WordViewModel(
+            ISaveImageFileService saveImageFileService,
             ISaveSoundFileService saveSoundFileService,
             IDialogService dialogService,
             IClipboardService clipboardService,
@@ -55,6 +57,7 @@ namespace CopyWords.Core.ViewModels
             ISettingsService settingsService,
             IAppThemeService appThemeService)
         {
+            _saveImageFileService = saveImageFileService;
             _saveSoundFileService = saveSoundFileService;
             _dialogService = dialogService;
             _clipboardService = clipboardService;
@@ -251,7 +254,9 @@ namespace CopyWords.Core.ViewModels
         public async Task CopyBackAsync()
         {
             await CompileAndCopyToClipboard("back", _copySelectedToClipboardService.CompileBack);
-            await _copySelectedToClipboardService.SaveImagesAsync(DefinitionViewModel);
+
+            var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
+            await _saveImageFileService.SaveImagesAsync(imageFiles);
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyPartOfSpeech))]
@@ -455,7 +460,8 @@ namespace CopyWords.Core.ViewModels
                         bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl!, Word, saveFileCancellationToken);
                     }
 
-                    await _copySelectedToClipboardService.SaveImagesAsync(DefinitionViewModel);
+                    var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
+                    await _saveImageFileService.SaveImagesAsync(imageFiles);
                 }
             }
             catch (AnkiConnectNotRunningException ex)

@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using CopyWords.Core.Models;
 using CopyWords.Core.ViewModels;
 
 namespace CopyWords.Core.Services
@@ -21,21 +22,18 @@ namespace CopyWords.Core.Services
 
         string CompileSoundFileName(string soundFileName);
 
-        Task SaveImagesAsync(DefinitionViewModel definitionViewModel);
+        IEnumerable<ImageFile> CompileImages(DefinitionViewModel definitionViewModel);
     }
 
     public class CopySelectedToClipboardService : ICopySelectedToClipboardService
     {
         private const string TemplateGrayText = "<span style=\"color: rgba(0, 0, 0, 0.4)\">{0}</span>";
 
-        private readonly ISaveImageFileService _saveImageFileService;
         private readonly ISettingsService _settingsService;
 
         public CopySelectedToClipboardService(
-            ISaveImageFileService saveImageFileService,
             ISettingsService settingsService)
         {
-            _saveImageFileService = saveImageFileService;
             _settingsService = settingsService;
         }
 
@@ -273,8 +271,9 @@ namespace CopyWords.Core.Services
                 .TrimEnd(Environment.NewLine.ToCharArray());
         }
 
-        public async Task SaveImagesAsync(DefinitionViewModel definitionViewModel)
+        public IEnumerable<ImageFile> CompileImages(DefinitionViewModel definitionViewModel)
         {
+            List<ImageFile> imageFiles = new();
             int imageIndex = 0;
 
             foreach (var contextVM in definitionViewModel.ContextViewModels)
@@ -292,11 +291,13 @@ namespace CopyWords.Core.Services
                             imageFileName += imageIndex;
                         }
 
-                        await _saveImageFileService.SaveImageFileAsync(meaningVM.ImageUrl, imageFileName);
+                        imageFiles.Add(new ImageFile($"{imageFileName}.jpg", meaningVM.ImageUrl));
                         imageIndex++;
                     }
                 }
             }
+
+            return imageFiles;
         }
 
         public string CompileSoundFileName(string soundFileName) => $"[sound:{soundFileName}.mp3]";

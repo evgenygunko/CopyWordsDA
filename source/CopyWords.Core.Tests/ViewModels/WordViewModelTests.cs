@@ -237,6 +237,9 @@ namespace CopyWords.Core.Tests.ViewModels
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
             copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(compiledBack);
 
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock.Setup(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>())).ReturnsAsync(true);
+
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.SetDefinition(definitionViewModel);
             sut.CanCopyFront = true;
@@ -246,7 +249,8 @@ namespace CopyWords.Core.Tests.ViewModels
 
             // Assert
             copySelectedToClipboardServiceMock.Verify(x => x.CompileBack(It.IsAny<DefinitionViewModel>()));
-            copySelectedToClipboardServiceMock.Verify(x => x.SaveImagesAsync(definitionViewModel), Times.Once);
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileImages(definitionViewModel), Times.Once);
+            saveImageFileServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Once);
         }
 
         #endregion
@@ -735,6 +739,9 @@ namespace CopyWords.Core.Tests.ViewModels
             var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
             ankiConnectServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(noteId);
 
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock.Setup(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>())).ReturnsAsync(true);
+
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
             saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
@@ -766,8 +773,9 @@ namespace CopyWords.Core.Tests.ViewModels
                 It.IsAny<CancellationToken>()), Times.Once);
 
             dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            copySelectedToClipboardServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<DefinitionViewModel>()), Times.Once);
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileImages(It.IsAny<DefinitionViewModel>()), Times.Once);
 
+            saveImageFileServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Once);
             saveSoundFileServiceMock.Verify(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()), Times.Once);
             copySelectedToClipboardServiceMock.Verify(x => x.CompileSoundFileName(word), Times.Once);
         }
@@ -787,6 +795,9 @@ namespace CopyWords.Core.Tests.ViewModels
             var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
             ankiConnectServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(noteId);
 
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock.Setup(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>())).ReturnsAsync(true);
+
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
             saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
@@ -799,7 +810,8 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.AddNoteWithAnkiConnectAsync();
 
             // Assert
-            copySelectedToClipboardServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<DefinitionViewModel>()), Times.Once);
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileImages(It.IsAny<DefinitionViewModel>()), Times.Once);
+            saveImageFileServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Once);
             saveSoundFileServiceMock.Verify(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -818,6 +830,9 @@ namespace CopyWords.Core.Tests.ViewModels
             var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
             ankiConnectServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(noteId);
 
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock.Setup(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>())).ReturnsAsync(true);
+
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
             saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
@@ -830,7 +845,8 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.AddNoteWithAnkiConnectAsync();
 
             // Assert
-            copySelectedToClipboardServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<DefinitionViewModel>()), Times.Never);
+            copySelectedToClipboardServiceMock.Verify(x => x.CompileImages(It.IsAny<DefinitionViewModel>()), Times.Never);
+            saveImageFileServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Never);
             saveSoundFileServiceMock.Verify(x => x.SaveSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
