@@ -9,7 +9,7 @@
 
             <DataTemplate x:Key="examplesTemplate"
                           x:DataType="ExampleViewModel">
-                <Grid>
+                <Grid Margin="0,0,0,4">
                     <Grid.RowDefinitions>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
@@ -26,6 +26,11 @@
                     <Label Grid.Column="0" Text="a" TextColor="{DynamicResource PageBackgroundColor}" IsVisible="{Binding ShowCheckBoxes, Converter={StaticResource InvertedBoolConverter}}" />
 
                     <Label Grid.Column="1" LineBreakMode="WordWrap" Padding="10,5,10,5" VerticalOptions="Center">
+                        <Label.Margin>
+                            <OnPlatform x:TypeArguments="Thickness">
+                                <On Platform="MacCatalyst" Value="10,0,0,0" />
+                            </OnPlatform>
+                        </Label.Margin>
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="{Binding Original, FallbackValue='Example Original'}"/>

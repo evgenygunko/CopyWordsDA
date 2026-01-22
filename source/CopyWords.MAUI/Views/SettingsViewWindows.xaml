@@ -47,17 +47,26 @@
                                IsEnabled="False"
                                Style="{StaticResource InputEntryStyle}"
                                Text="{Binding AnkiDeckNameDanish}" />
-                        <ImageButton Grid.Column="1"
+                        <SfButton Grid.Column="1"
                             Margin="8,0,0,0"
+                            WidthRequest="44" HeightRequest="44"
                             IsEnabled="{Binding ShowAnkiButton}"
                             Command="{Binding SelectAnkiDeckNameDanishCommand}">
-                            <ImageButton.Source>
-                                <FontImageSource
-                                    FontFamily="MaterialIconsOutlined-Regular"
-                                    Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
-                                    Color="{Binding ButtonIconColor}"/>
-                            </ImageButton.Source>
-                        </ImageButton>
+                            <SfButton.Content>
+                                <DataTemplate>
+                                    <HorizontalStackLayout HorizontalOptions="Center">
+                                        <Image WidthRequest="24" HeightRequest="24">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialIconsOutlined-Regular"
+                                                    Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
+                                                    Color="{DynamicResource ButtonIconColor}"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </SfButton.Content>
+                        </SfButton>
                     </Grid>
 
                     <!-- Anki Deck Name Spanish -->
@@ -72,17 +81,26 @@
                                IsEnabled="False"
                                Style="{StaticResource InputEntryStyle}"
                                Text="{Binding AnkiDeckNameSpanish}" />
-                        <ImageButton Grid.Column="1"
+                        <SfButton Grid.Column="1"
                             Margin="8,0,0,0"
+                            WidthRequest="44" HeightRequest="44"
                             IsEnabled="{Binding ShowAnkiButton}"
                             Command="{Binding SelectAnkiDeckNameSpanishCommand}">
-                            <ImageButton.Source>
-                                <FontImageSource
-                                    FontFamily="MaterialIconsOutlined-Regular"
-                                    Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
-                                    Color="{Binding ButtonIconColor}"/>
-                            </ImageButton.Source>
-                        </ImageButton>
+                            <SfButton.Content>
+                                <DataTemplate>
+                                    <HorizontalStackLayout HorizontalOptions="Center">
+                                        <Image WidthRequest="24" HeightRequest="24">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialIconsOutlined-Regular"
+                                                    Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
+                                                    Color="{DynamicResource ButtonIconColor}"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </SfButton.Content>
+                        </SfButton>
                     </Grid>
 
                     <!-- Anki Model Name -->
@@ -97,17 +115,26 @@
                                IsEnabled="False"
                                Style="{StaticResource InputEntryStyle}"
                                Text="{Binding AnkiModelName}" />
-                        <ImageButton Grid.Column="1"
+                        <SfButton Grid.Column="1"
                             Margin="8,0,0,0"
+                            WidthRequest="44" HeightRequest="44"
                             IsEnabled="{Binding ShowAnkiButton}"
                             Command="{Binding SelectAnkiModelNameCommand}">
-                            <ImageButton.Source>
-                                <FontImageSource
-                                    FontFamily="MaterialIconsOutlined-Regular"
-                                    Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
-                                    Color="{Binding ButtonIconColor}"/>
-                            </ImageButton.Source>
-                        </ImageButton>
+                            <SfButton.Content>
+                                <DataTemplate>
+                                    <HorizontalStackLayout HorizontalOptions="Center">
+                                        <Image WidthRequest="24" HeightRequest="24">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialIconsOutlined-Regular"
+                                                    Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
+                                                    Color="{DynamicResource ButtonIconColor}"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </SfButton.Content>
+                        </SfButton>
                     </Grid>
 
                     <!-- Path to Anki media collection -->
@@ -122,17 +149,26 @@
                                IsEnabled="{Binding ShowAnkiButton}"
                                Style="{StaticResource InputEntryStyle}"
                                Text="{Binding AnkiSoundsFolder}" />
-                        <ImageButton Grid.Column="1"
+                        <SfButton Grid.Column="1"
                             Margin="8,0,0,0"
+                            WidthRequest="44" HeightRequest="44"
                             IsEnabled="{Binding ShowAnkiButton}"
                             Command="{Binding PickAnkiSoundsFolderCommand}">
-                            <ImageButton.Source>
-                                <FontImageSource
-                                    FontFamily="MaterialIconsOutlined-Regular"
-                                    Glyph="{x:Static MaterialDesignIconFonts.Folder_open}"
-                                    Color="{Binding ButtonIconColor}"/>
-                            </ImageButton.Source>
-                        </ImageButton>
+                            <SfButton.Content>
+                                <DataTemplate>
+                                    <HorizontalStackLayout HorizontalOptions="Center">
+                                        <Image WidthRequest="24" HeightRequest="24">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialIconsOutlined-Regular"
+                                                    Glyph="{x:Static MaterialDesignIconFonts.Folder_open}"
+                                                    Color="{DynamicResource ButtonIconColor}"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </SfButton.Content>
+                        </SfButton>
                     </Grid>
 
                     <Label
