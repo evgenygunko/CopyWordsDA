@@ -55,7 +55,7 @@
                             <SfButton.Content>
                                 <DataTemplate>
                                     <HorizontalStackLayout HorizontalOptions="Center">
-                                        <Image WidthRequest="24" HeightRequest="24">
+                                        <Image WidthRequest="16" HeightRequest="16">
                                             <Image.Source>
                                                 <FontImageSource
                                                     FontFamily="MaterialIconsOutlined-Regular"
@@ -89,7 +89,7 @@
                             <SfButton.Content>
                                 <DataTemplate>
                                     <HorizontalStackLayout HorizontalOptions="Center">
-                                        <Image WidthRequest="24" HeightRequest="24">
+                                        <Image WidthRequest="16" HeightRequest="16">
                                             <Image.Source>
                                                 <FontImageSource
                                                     FontFamily="MaterialIconsOutlined-Regular"
@@ -123,7 +123,7 @@
                             <SfButton.Content>
                                 <DataTemplate>
                                     <HorizontalStackLayout HorizontalOptions="Center">
-                                        <Image WidthRequest="24" HeightRequest="24">
+                                        <Image WidthRequest="16" HeightRequest="16">
                                             <Image.Source>
                                                 <FontImageSource
                                                     FontFamily="MaterialIconsOutlined-Regular"
