@@ -577,6 +577,8 @@ namespace CopyWords.Core.Tests.Services
             var imageFile = new ImageFile(fileName, imageUrl);
             var imageFiles = new[] { imageFile };
 
+            const string ankiImageTag = "<img src=\test_image.jpg_6481766173072004017.jpg\" />";
+
             using var testStream = new MemoryStream([1, 2, 3]);
 
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
@@ -587,14 +589,19 @@ namespace CopyWords.Core.Tests.Services
             var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
             ankiContentApiMock
                 .Setup(x => x.AddImageToAnkiMediaAsync(fileName, testStream))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(ankiImageTag);
 
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            await sut.SaveImagesAsync(imageFiles);
+            IEnumerable<ImageTag> result = await sut.SaveImagesAsync(imageFiles);
 
             // Assert
+            result.Should().HaveCount(1);
+            ImageTag imageTag1 = result.First();
+            imageTag1.FileName.Should().Be("test_image.jpg");
+            imageTag1.HtmlTag.Should().Be(ankiImageTag);
+
             saveImageFileServiceMock.Verify(
                 x => x.DownloadAndResizeImageAsync(imageUrl),
                 Times.Once);
@@ -608,36 +615,56 @@ namespace CopyWords.Core.Tests.Services
         {
             // Arrange
             var imageFile1 = new ImageFile("image1.jpg", "https://example.com/image1.jpg");
-            var imageFile2 = new ImageFile("image2.png", "https://example.com/image2.png");
-            var imageFile3 = new ImageFile("image3.gif", "https://example.com/image3.gif");
+            var imageFile2 = new ImageFile("image2.jpg", "https://example.com/image2.jpg");
+            var imageFile3 = new ImageFile("image3.jpg", "https://example.com/image3.jpg");
             var imageFiles = new[] { imageFile1, imageFile2, imageFile3 };
 
             using var stream1 = new MemoryStream([1]);
             using var stream2 = new MemoryStream([2]);
             using var stream3 = new MemoryStream([3]);
 
+            const string ankiImageTag1 = "<img src=\"image1.jpg_6481766173072004017.jpg\" />";
+            const string ankiImageTag2 = "<img src=\"image2.jpg_6481766173072004017.jpg\" />";
+            const string ankiImageTag3 = "<img src=\"image3.jpg_6481766173072004017.jpg\" />";
+
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock
                 .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image1.jpg"))
                 .ReturnsAsync(stream1);
             saveImageFileServiceMock
-                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image2.png"))
+                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image2.jpg"))
                 .ReturnsAsync(stream2);
             saveImageFileServiceMock
-                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image3.gif"))
+                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image3.jpg"))
                 .ReturnsAsync(stream3);
 
             var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
             ankiContentApiMock
-                .Setup(x => x.AddImageToAnkiMediaAsync(It.IsAny<string>(), It.IsAny<Stream>()))
-                .Returns(Task.CompletedTask);
+                .SetupSequence(x => x.AddImageToAnkiMediaAsync(It.IsAny<string>(), It.IsAny<Stream>()))
+                .ReturnsAsync(ankiImageTag1)
+                .ReturnsAsync(ankiImageTag2)
+                .ReturnsAsync(ankiImageTag3);
 
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            await sut.SaveImagesAsync(imageFiles);
+            IEnumerable<ImageTag> result = await sut.SaveImagesAsync(imageFiles);
 
             // Assert
+            result.Should().HaveCount(3);
+
+            ImageTag imageTag1 = result.First();
+            imageTag1.FileName.Should().Be("image1.jpg");
+            imageTag1.HtmlTag.Should().Be(ankiImageTag1);
+
+            ImageTag imageTag2 = result.Skip(1).First();
+            imageTag2.FileName.Should().Be("image2.jpg");
+            imageTag2.HtmlTag.Should().Be(ankiImageTag2);
+
+            ImageTag imageTag3 = result.Skip(2).First();
+            imageTag3.FileName.Should().Be("image3.jpg");
+            imageTag3.HtmlTag.Should().Be(ankiImageTag3);
+
             saveImageFileServiceMock.Verify(
                 x => x.DownloadAndResizeImageAsync(It.IsAny<string>()),
                 Times.Exactly(3));
@@ -645,10 +672,10 @@ namespace CopyWords.Core.Tests.Services
                 x => x.AddImageToAnkiMediaAsync("image1.jpg", stream1),
                 Times.Once);
             ankiContentApiMock.Verify(
-                x => x.AddImageToAnkiMediaAsync("image2.png", stream2),
+                x => x.AddImageToAnkiMediaAsync("image2.jpg", stream2),
                 Times.Once);
             ankiContentApiMock.Verify(
-                x => x.AddImageToAnkiMediaAsync("image3.gif", stream3),
+                x => x.AddImageToAnkiMediaAsync("image3.jpg", stream3),
                 Times.Once);
         }
 

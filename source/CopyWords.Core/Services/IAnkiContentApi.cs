@@ -46,6 +46,8 @@
         /// </summary>
         /// <param name="fileName">The target file name.</param>
         /// <param name="imageStream">The image content as a stream.</param>
-        Task AddImageToAnkiMediaAsync(string fileName, Stream imageStream);
+        /// <returns>Image tag with file name saves in the media folder</returns>
+        /// <example><img src="voluntario.jpg_6481766173072004017.jpg" /></example>
+        Task<string> AddImageToAnkiMediaAsync(string fileName, Stream imageStream);
     }
 }

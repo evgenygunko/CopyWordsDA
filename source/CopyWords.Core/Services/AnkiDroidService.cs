@@ -20,7 +20,7 @@ namespace CopyWords.Core.Services
 
         Task<long> AddNoteAsync(AnkiNote note);
 
-        Task SaveImagesAsync(IEnumerable<ImageFile> imageFiles);
+        Task<IEnumerable<ImageTag>> SaveImagesAsync(IEnumerable<ImageFile> imageFiles);
     }
 
     public class AnkiDroidService : IAnkiDroidService
@@ -111,13 +111,19 @@ namespace CopyWords.Core.Services
             return noteId;
         }
 
-        public async Task SaveImagesAsync(IEnumerable<ImageFile> imageFiles)
+        public async Task<IEnumerable<ImageTag>> SaveImagesAsync(IEnumerable<ImageFile> imageFiles)
         {
+            List<ImageTag> imageTags = new();
+
             foreach (var imageFile in imageFiles)
             {
                 await using Stream stream = await _saveImageFileService.DownloadAndResizeImageAsync(imageFile.ImageUrl);
-                await _ankiContentApi.AddImageToAnkiMediaAsync(imageFile.FileName, stream);
+
+                string htmlTag = await _ankiContentApi.AddImageToAnkiMediaAsync(imageFile.FileName, stream);
+                imageTags.Add(new ImageTag(imageFile.FileName, htmlTag));
             }
+
+            return imageTags;
         }
 
         #endregion

@@ -1,4 +1,5 @@
 ﻿using CopyWords.Core.Services;
+using CopyWords.Core.Exceptions;
 
 #if ANDROID
 
@@ -98,22 +99,63 @@ namespace CopyWords.MAUI.Services
             return result;
         }
 
-        public async Task AddImageToAnkiMediaAsync(string fileName, Stream imageStream)
+        public async Task<string> AddImageToAnkiMediaAsync(string fileName, Stream imageStream)
         {
-            _ = fileName;
-            _ = imageStream;
-            throw new NotImplementedException();
-
-            /*var context = Android.App.Application.Context;
+            var context = Android.App.Application.Context;
             if (context.CacheDir is null)
             {
                 throw new AnkiDroidCannotSaveMediaException($"Cannot save media file '{fileName}', CacheDir is null");
             }
 
             string cachedFilePath = Path.Combine(context.CacheDir.AbsolutePath, fileName);
+            Android.Net.Uri? fileUri = null;
 
-            using var fileStream = new FileStream(cachedFilePath, FileMode.Create, FileAccess.Write);
-            await imageStream.CopyToAsync(fileStream);*/
+            try
+            {
+                // Save the image stream to a temp file
+                using (var fileStream = new FileStream(cachedFilePath, FileMode.Create, FileAccess.Write))
+                {
+                    await imageStream.CopyToAsync(fileStream);
+                }
+
+                // Get a FileProvider URI for the temp file
+                var file = new Java.IO.File(cachedFilePath);
+                string authority = $"{context.PackageName}.fileprovider";
+                fileUri = AndroidX.Core.Content.FileProvider.GetUriForFile(context, authority, file);
+
+                if (fileUri == null)
+                {
+                    throw new AnkiDroidCannotSaveMediaException($"FileProvider returned null URI for file '{fileName}'");
+                }
+
+                // Grant URI permission to AnkiDroid
+                context.GrantUriPermission(AnkiDroidPackage, fileUri, Android.Content.ActivityFlags.GrantReadUriPermission);
+
+                // Add the media to AnkiDroid
+                var api = new AddContentApi(context);
+                string? result = api.AddMediaFromUri(fileUri, fileName, "image");
+
+                if (result == null)
+                {
+                    throw new AnkiDroidCannotSaveMediaException($"AnkiDroid API returned null when adding media file '{fileName}'");
+                }
+
+                return result;
+            }
+            finally
+            {
+                // Revoke URI permission
+                if (fileUri != null)
+                {
+                    context.RevokeUriPermission(fileUri, Android.Content.ActivityFlags.GrantReadUriPermission);
+                }
+
+                // Delete temp file
+                if (File.Exists(cachedFilePath))
+                {
+                    File.Delete(cachedFilePath);
+                }
+            }
         }
 
         #endregion
@@ -166,7 +208,7 @@ public class AnkiContentApiWrapper : IAnkiContentApi
     public string[]? GetFieldList(long modelId) => null;
     public long AddNote(long modelId, long deckId, string[] fields, string[]? tags) => 0;
     public List<long> FindDuplicateNotes(long modelId, string key) => [];
-    public async Task AddImageToAnkiMediaAsync(string fileName, Stream imageStream) => await Task.CompletedTask;
+    public async Task<string> AddImageToAnkiMediaAsync(string fileName, Stream imageStream) => await Task.FromResult(string.Empty);
 }
 
 #endif

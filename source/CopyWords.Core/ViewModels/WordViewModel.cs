@@ -480,6 +480,14 @@ namespace CopyWords.Core.ViewModels
         {
             try
             {
+                if (!_ankiDroidService.IsAvailable())
+                {
+                    await _dialogService.DisplayAlertAsync("AnkiDroid API is not accessible",
+                        "Please verify that AndkiDroid API is enabled: run AnkiDroid -> Settings -> Advanced -> Enable AndkiDroid API",
+                        "OK");
+                    return;
+                }
+
                 AppSettings appSettings = _settingsService.LoadSettings();
                 string deckName = (appSettings.SelectedParser == SourceLanguage.Spanish.ToString()) ? appSettings.AnkiDeckNameSpanish : appSettings.AnkiDeckNameDanish;
 
@@ -514,7 +522,17 @@ namespace CopyWords.Core.ViewModels
                 string endings = _copySelectedToClipboardService.CompileEndings(DefinitionViewModel);
                 string examples = _copySelectedToClipboardService.CompileExamples(DefinitionViewModel);
 
-                // todo: save images
+                // AnkiDroid API returns image tags when saving images, for example '<img src="voluntario.jpg_6481766173072004017.jpg" />'
+                // We need to save images first and then use these image tags in the back field.
+                var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
+                var imageTags = await _ankiDroidService.SaveImagesAsync(imageFiles);
+
+                // Replace image html tag in the back field with the new image tags with correct file names
+                foreach (var imageTag in imageTags)
+                {
+                    back = back.Replace($"<img src=\"{imageTag.FileName}\">", imageTag.HtmlTag);
+                }
+
                 // todo: to implement
                 string? sound = null;
 
@@ -532,17 +550,8 @@ namespace CopyWords.Core.ViewModels
                 long noteId = await _ankiDroidService.AddNoteAsync(note);
                 if (noteId > 0)
                 {
-                    var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
-                    await _ankiDroidService.SaveImagesAsync(imageFiles);
-
                     await _dialogService.DisplayToast("The note has been added to Anki.");
                 }
-            }
-            catch (AnkiDroidAPINotAvailableException ex)
-            {
-                await _dialogService.DisplayAlertAsync("AnkiDroid API is not accessible",
-                    "Please verify that AndkiDroid API is enabled: run AnkiDroid -> Settings -> Advanced -> Enable AndkiDroid API" + Environment.NewLine + "Error: " + ex.Message,
-                    "OK");
             }
             catch (Exception ex)
             {
