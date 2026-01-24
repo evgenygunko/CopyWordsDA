@@ -60,6 +60,9 @@ public static class MauiProgram
                 options.Debug = true;
 
                 // Other Sentry options can be set here.
+                // By default, only HTTP client errors with a response code between 500 and 599 are captured as error events.
+                // We do not want this - our own error handling will capture and log errors as needed.
+                options.CaptureFailedRequests = false;
             })
             .ConfigureFonts(fonts =>
             {

@@ -51,7 +51,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task GetDanishWordsSuggestionsAsync_WhenServerError_ThrowsServerErrorException()
+        public async Task GetDanishWordsSuggestionsAsync_WhenServerErrorAndDebugBuild_ThrowsServerErrorException()
         {
             // Arrange
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
@@ -66,6 +66,24 @@ namespace CopyWords.Core.Tests.Services
             // Assert
             await act.Should().ThrowAsync<ServerErrorException>()
                 .WithMessage("The server returned the error 'InternalServerError'.");
+        }
+
+        [TestMethod]
+        public async Task GetDanishWordsSuggestionsAsync_WhenServerErrorAndReleaseBuild_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
+
+            var buildConfigurationMock = new Mock<IBuildConfiguration>();
+            buildConfigurationMock.SetupGet(bc => bc.IsDebug).Returns(false);
+
+            // Act
+            var sut = new SuggestionsService(httpClient, new Mock<IBuildConfiguration>().Object);
+            var result = await sut.GetDanishWordsSuggestionsAsync("h", CancellationToken.None);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
         }
 
         [TestMethod]
