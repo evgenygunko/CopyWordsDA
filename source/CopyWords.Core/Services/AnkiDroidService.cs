@@ -18,11 +18,7 @@ namespace CopyWords.Core.Services
 
         IEnumerable<string> GetModelNames();
 
-        Task<long> AddNoteAsync(AnkiNote note);
-
-        Task<IEnumerable<ImageTag>> SaveImagesAsync(IEnumerable<ImageFile> imageFiles);
-
-        Task<SoundTag> SaveSoundAsync(string soundUrl, string word);
+        Task<long> AddNoteAsync(AnkiNote note, CancellationToken cancellationToken);
     }
 
     public class AnkiDroidService : IAnkiDroidService
@@ -58,7 +54,7 @@ namespace CopyWords.Core.Services
         public IEnumerable<string> GetModelNames() =>
             _ankiContentApi.GetModelList()?.Values.ToList() ?? [];
 
-        public async Task<long> AddNoteAsync(AnkiNote note)
+        public async Task<long> AddNoteAsync(AnkiNote note, CancellationToken cancellationToken)
         {
             // Get deck ID from deck name
             long? deckId = _ankiContentApi.GetDeckList()?
@@ -87,8 +83,37 @@ namespace CopyWords.Core.Services
                 throw new AnkiDroidFieldsNotFoundException($"No fields found for model '{note.ModelName}'.");
             }
 
+            Note noteModel = new Note()
+            {
+                Front = note.Front,
+                Back = note.Back,
+                PartOfSpeech = note.PartOfSpeech ?? string.Empty,
+                Forms = note.Forms ?? string.Empty,
+                Example = note.Example ?? string.Empty
+            };
+
+            if (note.Picture != null && note.Picture.Any())
+            {
+                // AnkiDroid API returns image tags when saving images, for example '<img src="voluntario.jpg_6481766173072004017.jpg" />'.
+                // We need to save images first and then use these image tags in the back field.
+                IEnumerable<ImageTag> imageTags = await SaveImagesAsync(note.Picture, cancellationToken);
+
+                // Replace image html tag in the back field with the new image tags with correct file names
+                foreach (var imageTag in imageTags)
+                {
+                    noteModel.Back = noteModel.Back.Replace($"<img src=\"{imageTag.FileName}\">", imageTag.HtmlTag);
+                }
+            }
+
+            if (note.Audio != null && note.Audio.Any())
+            {
+                // Save sound with AnkiDroid API and get the sound tag
+                var soundTag = await SaveSoundAsync(note.Audio, cancellationToken);
+                noteModel.Sound = soundTag.AnkiTag;
+            }
+
             // Build fields array matching the model's field order
-            string[] fields = BuildFieldsArray(fieldNames, note);
+            string[] fields = BuildFieldsArray(fieldNames, noteModel);
 
             // First check for duplicates using the Front field value
             bool isDuplicate = _ankiContentApi.FindDuplicateNotes(modelId.Value, note.Front).Any();
@@ -116,37 +141,45 @@ namespace CopyWords.Core.Services
             return noteId;
         }
 
-        public async Task<IEnumerable<ImageTag>> SaveImagesAsync(IEnumerable<ImageFile> imageFiles)
+        #endregion
+
+        #region Internal Methods
+
+        internal async Task<IEnumerable<ImageTag>> SaveImagesAsync(IEnumerable<AnkiMedia> ankiMediaImages, CancellationToken cancellationToken)
         {
             List<ImageTag> imageTags = new();
 
-            foreach (var imageFile in imageFiles)
+            foreach (AnkiMedia ankiMedia in ankiMediaImages)
             {
-                await using Stream stream = await _saveImageFileService.DownloadAndResizeImageAsync(imageFile.ImageUrl);
+                await using Stream stream = await _saveImageFileService.DownloadAndResizeImageAsync(ankiMedia.Url, cancellationToken);
 
-                string htmlTag = await _ankiContentApi.AddImageToAnkiMediaAsync(imageFile.FileName, stream);
-                imageTags.Add(new ImageTag(imageFile.FileName, htmlTag));
+                string htmlTag = await _ankiContentApi.AddImageToAnkiMediaAsync(ankiMedia.Filename, stream);
+                imageTags.Add(new ImageTag(ankiMedia.Filename, htmlTag));
             }
 
             return imageTags;
         }
 
-        public async Task<SoundTag> SaveSoundAsync(string soundUrl, string word)
+        internal async Task<SoundTag> SaveSoundAsync(IEnumerable<AnkiMedia> ankiMediaSounds, CancellationToken cancellationToken)
         {
-            var ct = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
-            await using Stream stream = await _saveSoundFileService.DownloadSoundFileAsync(soundUrl, word, ct);
+            // We only allow to save one sound file per note
+            AnkiMedia ankiMedia = ankiMediaSounds.First();
+
+            // We will pass "Word" in the filename property
+            string word = ankiMedia.Filename;
+            await using Stream stream = await _saveSoundFileService.DownloadSoundFileAsync(ankiMedia.Url, word, cancellationToken);
 
             string fileName = $"{word}.mp3";
             string htmlTag = await _ankiContentApi.AddImageToAnkiMediaAsync(fileName, stream);
 
-            return new SoundTag(word, htmlTag);
+            return new SoundTag(fileName, htmlTag);
         }
 
         #endregion
 
         #region Private Methods
 
-        private static string[] BuildFieldsArray(string[] fieldNames, AnkiNote note)
+        private static string[] BuildFieldsArray(string[] fieldNames, Note note)
         {
             var fields = new string[fieldNames.Length];
 
@@ -156,10 +189,10 @@ namespace CopyWords.Core.Services
                 {
                     "Front" => note.Front,
                     "Back" => note.Back,
-                    "PartOfSpeech" => note.PartOfSpeech ?? string.Empty,
-                    "Forms" => note.Forms ?? string.Empty,
-                    "Example" => note.Example ?? string.Empty,
-                    "Sound" => note.Sound ?? string.Empty,
+                    "PartOfSpeech" => note.PartOfSpeech,
+                    "Forms" => note.Forms,
+                    "Example" => note.Example,
+                    "Sound" => note.Sound,
                     _ => string.Empty
                 };
             }
@@ -168,5 +201,15 @@ namespace CopyWords.Core.Services
         }
 
         #endregion
+
+        private record Note
+        {
+            public string Front { get; set; } = "";
+            public string Back { get; set; } = "";
+            public string PartOfSpeech { get; set; } = "";
+            public string Forms { get; set; } = "";
+            public string Example { get; set; } = "";
+            public string Sound { get; set; } = "";
+        }
     }
 }

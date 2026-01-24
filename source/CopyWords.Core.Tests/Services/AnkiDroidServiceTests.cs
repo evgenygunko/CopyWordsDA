@@ -265,7 +265,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            long result = await sut.AddNoteAsync(note);
+            long result = await sut.AddNoteAsync(note, CancellationToken.None);
 
             // Assert
             result.Should().Be(expectedNoteId);
@@ -292,7 +292,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Func<Task> act = async () => await sut.AddNoteAsync(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<AnkiDroidDeckNotFoundException>()
@@ -315,7 +315,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Func<Task> act = async () => await sut.AddNoteAsync(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<AnkiDroidDeckNotFoundException>()
@@ -342,7 +342,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Func<Task> act = async () => await sut.AddNoteAsync(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<AnkiDroidModelNotFoundException>()
@@ -368,7 +368,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Func<Task> act = async () => await sut.AddNoteAsync(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<AnkiDroidModelNotFoundException>()
@@ -398,7 +398,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Func<Task> act = async () => await sut.AddNoteAsync(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<AnkiDroidFieldsNotFoundException>()
@@ -428,7 +428,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Func<Task> act = async () => await sut.AddNoteAsync(note);
+            Func<Task> act = async () => await sut.AddNoteAsync(note, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<AnkiDroidFieldsNotFoundException>()
@@ -470,7 +470,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            long result = await sut.AddNoteAsync(note);
+            long result = await sut.AddNoteAsync(note, CancellationToken.None);
 
             // Assert
             result.Should().Be(0);
@@ -525,7 +525,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            long result = await sut.AddNoteAsync(note);
+            long result = await sut.AddNoteAsync(note, CancellationToken.None);
 
             // Assert
             result.Should().Be(expectedNoteId);
@@ -541,6 +541,60 @@ namespace CopyWords.Core.Tests.Services
                 Times.Once);
         }
 
+        [TestMethod]
+        public async Task AddNoteAsync_Should_UpdateImageTagsInBackField()
+        {
+            // Arrange
+            const long expectedDeckId = 1L;
+            const long expectedModelId = 100L;
+            const long expectedNoteId = 12345L;
+
+            const string backWithUpdatedImageTags = "back <img src=\"image1_12345.png\" /> <img src=\"image2_67890.png\" />";
+
+            var ankiMediaImages = new List<AnkiMedia>()
+            {
+                new AnkiMedia(Url: _fixture.Create<Uri>().ToString(), Filename: "image1.png"),
+                new AnkiMedia(Url: _fixture.Create<Uri>().ToString(), Filename: "image2.png")
+            };
+
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "back <img src=\"image1.png\"> <img src=\"image2.png\">",
+                Picture: ankiMediaImages);
+
+            var deckList = new Dictionary<long, string> { { expectedDeckId, "Default" } };
+            var modelList = new Dictionary<long, string> { { expectedModelId, "Basic" } };
+            string[] fieldNames = ["Front", "Back"];
+
+            var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
+            ankiContentApiMock.Setup(x => x.GetDeckList()).Returns(deckList);
+            ankiContentApiMock.Setup(x => x.GetModelList()).Returns(modelList);
+            ankiContentApiMock.Setup(x => x.GetFieldList(expectedModelId)).Returns(fieldNames);
+            ankiContentApiMock.Setup(x => x.FindDuplicateNotes(expectedModelId, "Front text")).Returns([]);
+            ankiContentApiMock
+                .Setup(x => x.AddImageToAnkiMediaAsync("image1.png", It.IsAny<Stream>()))
+                .ReturnsAsync("<img src=\"image1_12345.png\" />");
+            ankiContentApiMock
+                .Setup(x => x.AddImageToAnkiMediaAsync("image2.png", It.IsAny<Stream>()))
+                .ReturnsAsync("<img src=\"image2_67890.png\" />");
+            ankiContentApiMock
+                .Setup(x => x.AddNote(expectedModelId, expectedDeckId, It.IsAny<string[]>(), null))
+                .Returns(expectedNoteId);
+
+            var sut = _fixture.Create<AnkiDroidService>();
+
+            // Act
+            long result = await sut.AddNoteAsync(note, CancellationToken.None);
+
+            // Assert
+            result.Should().Be(expectedNoteId);
+            ankiContentApiMock.Verify(
+                x => x.AddNote(expectedModelId, expectedDeckId, It.Is<string[]>(f => f[0] == "Front text" && f[1] == backWithUpdatedImageTags), null),
+                Times.Once);
+        }
+
         #endregion
 
         #region Tests for SaveImagesAsync
@@ -549,7 +603,7 @@ namespace CopyWords.Core.Tests.Services
         public async Task SaveImagesAsync_WhenImageFilesIsEmpty_DoesNotCallAnyServices()
         {
             // Arrange
-            var imageFiles = Enumerable.Empty<ImageFile>();
+            var imageFiles = Enumerable.Empty<AnkiMedia>();
 
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
@@ -557,11 +611,11 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            await sut.SaveImagesAsync(imageFiles);
+            await sut.SaveImagesAsync(imageFiles, CancellationToken.None);
 
             // Assert
             saveImageFileServiceMock.Verify(
-                x => x.DownloadAndResizeImageAsync(It.IsAny<string>()),
+                x => x.DownloadAndResizeImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
                 Times.Never);
             ankiContentApiMock.Verify(
                 x => x.AddImageToAnkiMediaAsync(It.IsAny<string>(), It.IsAny<Stream>()),
@@ -574,8 +628,10 @@ namespace CopyWords.Core.Tests.Services
             // Arrange
             const string fileName = "test_image.jpg";
             const string imageUrl = "https://example.com/image.jpg";
-            var imageFile = new ImageFile(fileName, imageUrl);
-            var imageFiles = new[] { imageFile };
+            var imageFiles = new List<AnkiMedia>()
+            {
+                new AnkiMedia(Url: imageUrl, Filename: fileName)
+            };
 
             const string ankiImageTag = "<img src=\test_image.jpg_6481766173072004017.jpg\" />";
 
@@ -583,7 +639,7 @@ namespace CopyWords.Core.Tests.Services
 
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock
-                .Setup(x => x.DownloadAndResizeImageAsync(imageUrl))
+                .Setup(x => x.DownloadAndResizeImageAsync(imageUrl, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(testStream);
 
             var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
@@ -594,16 +650,16 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            IEnumerable<ImageTag> result = await sut.SaveImagesAsync(imageFiles);
+            IEnumerable<ImageTag> result = await sut.SaveImagesAsync(imageFiles, CancellationToken.None);
 
             // Assert
             result.Should().HaveCount(1);
             ImageTag imageTag1 = result.First();
-            imageTag1.FileName.Should().Be("test_image.jpg");
+            imageTag1.FileName.Should().Be(fileName);
             imageTag1.HtmlTag.Should().Be(ankiImageTag);
 
             saveImageFileServiceMock.Verify(
-                x => x.DownloadAndResizeImageAsync(imageUrl),
+                x => x.DownloadAndResizeImageAsync(imageUrl, It.IsAny<CancellationToken>()),
                 Times.Once);
             ankiContentApiMock.Verify(
                 x => x.AddImageToAnkiMediaAsync(fileName, testStream),
@@ -614,10 +670,12 @@ namespace CopyWords.Core.Tests.Services
         public async Task SaveImagesAsync_WhenMultipleImageFiles_DownloadsAndSavesAllToAnki()
         {
             // Arrange
-            var imageFile1 = new ImageFile("image1.jpg", "https://example.com/image1.jpg");
-            var imageFile2 = new ImageFile("image2.jpg", "https://example.com/image2.jpg");
-            var imageFile3 = new ImageFile("image3.jpg", "https://example.com/image3.jpg");
-            var imageFiles = new[] { imageFile1, imageFile2, imageFile3 };
+            var imageFiles = new List<AnkiMedia>()
+            {
+                new AnkiMedia(Url: "https://example.com/image1.jpg", Filename: "image1.jpg"),
+                new AnkiMedia(Url: "https://example.com/image2.jpg", Filename: "image2.jpg"),
+                new AnkiMedia(Url: "https://example.com/image3.jpg", Filename: "image3.jpg"),
+            };
 
             using var stream1 = new MemoryStream([1]);
             using var stream2 = new MemoryStream([2]);
@@ -629,13 +687,13 @@ namespace CopyWords.Core.Tests.Services
 
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock
-                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image1.jpg"))
+                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image1.jpg", It.IsAny<CancellationToken>()))
                 .ReturnsAsync(stream1);
             saveImageFileServiceMock
-                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image2.jpg"))
+                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image2.jpg", It.IsAny<CancellationToken>()))
                 .ReturnsAsync(stream2);
             saveImageFileServiceMock
-                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image3.jpg"))
+                .Setup(x => x.DownloadAndResizeImageAsync("https://example.com/image3.jpg", It.IsAny<CancellationToken>()))
                 .ReturnsAsync(stream3);
 
             var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
@@ -648,7 +706,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            IEnumerable<ImageTag> result = await sut.SaveImagesAsync(imageFiles);
+            IEnumerable<ImageTag> result = await sut.SaveImagesAsync(imageFiles, CancellationToken.None);
 
             // Assert
             result.Should().HaveCount(3);
@@ -666,7 +724,7 @@ namespace CopyWords.Core.Tests.Services
             imageTag3.HtmlTag.Should().Be(ankiImageTag3);
 
             saveImageFileServiceMock.Verify(
-                x => x.DownloadAndResizeImageAsync(It.IsAny<string>()),
+                x => x.DownloadAndResizeImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
                 Times.Exactly(3));
             ankiContentApiMock.Verify(
                 x => x.AddImageToAnkiMediaAsync("image1.jpg", stream1),
@@ -683,18 +741,20 @@ namespace CopyWords.Core.Tests.Services
         public async Task SaveImagesAsync_WhenDownloadThrows_PropagatesException()
         {
             // Arrange
-            var imageFile = new ImageFile("test.jpg", "https://example.com/test.jpg");
-            var imageFiles = new[] { imageFile };
+            var imageFiles = new List<AnkiMedia>()
+            {
+                new AnkiMedia(Url: "https://example.com/image1.jpg", Filename: "image1.jpg")
+            };
 
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock
-                .Setup(x => x.DownloadAndResizeImageAsync(It.IsAny<string>()))
+                .Setup(x => x.DownloadAndResizeImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new HttpRequestException("Download failed"));
 
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Func<Task> act = async () => await sut.SaveImagesAsync(imageFiles);
+            Func<Task> act = async () => await sut.SaveImagesAsync(imageFiles, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<HttpRequestException>()
@@ -705,14 +765,16 @@ namespace CopyWords.Core.Tests.Services
         public async Task SaveImagesAsync_WhenAddImageToAnkiThrows_PropagatesException()
         {
             // Arrange
-            var imageFile = new ImageFile("test.jpg", "https://example.com/test.jpg");
-            var imageFiles = new[] { imageFile };
+            var imageFiles = new List<AnkiMedia>()
+            {
+                new AnkiMedia(Url: "https://example.com/image1.jpg", Filename: "image1.jpg")
+            };
 
             using var testStream = new MemoryStream([1, 2, 3]);
 
             var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
             saveImageFileServiceMock
-                .Setup(x => x.DownloadAndResizeImageAsync(It.IsAny<string>()))
+                .Setup(x => x.DownloadAndResizeImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(testStream);
 
             var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
@@ -723,7 +785,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Func<Task> act = async () => await sut.SaveImagesAsync(imageFiles);
+            Func<Task> act = async () => await sut.SaveImagesAsync(imageFiles, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
@@ -745,6 +807,11 @@ namespace CopyWords.Core.Tests.Services
 
             using var testStream = new MemoryStream([1, 2, 3]);
 
+            var soundFiles = new List<AnkiMedia>()
+            {
+                new AnkiMedia(Url: soundUrl, Filename: word)
+            };
+
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
             saveSoundFileServiceMock
                 .Setup(x => x.DownloadSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()))
@@ -752,16 +819,16 @@ namespace CopyWords.Core.Tests.Services
 
             var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
             ankiContentApiMock
-                .Setup(x => x.AddImageToAnkiMediaAsync(expectedFileName, testStream))
+                .Setup(x => x.AddImageToAnkiMediaAsync(It.IsAny<string>(), It.IsAny<Stream>()))
                 .ReturnsAsync(ankiSoundTag);
 
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            SoundTag result = await sut.SaveSoundAsync(soundUrl, word);
+            SoundTag result = await sut.SaveSoundAsync(soundFiles, It.IsAny<CancellationToken>());
 
             // Assert
-            result.Word.Should().Be(word);
+            result.FileName.Should().Be(expectedFileName);
             result.AnkiTag.Should().Be(ankiSoundTag);
 
             saveSoundFileServiceMock.Verify(
@@ -777,17 +844,21 @@ namespace CopyWords.Core.Tests.Services
         {
             // Arrange
             const string soundUrl = "https://example.com/sound.mp3";
-            const string word = "testword";
+
+            var soundFiles = new List<AnkiMedia>()
+            {
+                new AnkiMedia(Url: soundUrl, Filename: "testword.mp3")
+            };
 
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
             saveSoundFileServiceMock
-                .Setup(x => x.DownloadSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()))
+                .Setup(x => x.DownloadSoundFileAsync(soundUrl, It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new HttpRequestException("Download failed"));
 
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Func<Task> act = async () => await sut.SaveSoundAsync(soundUrl, word);
+            Func<Task> act = async () => await sut.SaveSoundAsync(soundFiles, It.IsAny<CancellationToken>());
 
             // Assert
             await act.Should().ThrowAsync<HttpRequestException>()
@@ -803,6 +874,11 @@ namespace CopyWords.Core.Tests.Services
 
             using var testStream = new MemoryStream([1, 2, 3]);
 
+            var soundFiles = new List<AnkiMedia>()
+            {
+                new AnkiMedia(Url: soundUrl, Filename: "testword.mp3")
+            };
+
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
             saveSoundFileServiceMock
                 .Setup(x => x.DownloadSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()))
@@ -816,7 +892,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            Func<Task> act = async () => await sut.SaveSoundAsync(soundUrl, word);
+            Func<Task> act = async () => await sut.SaveSoundAsync(soundFiles, It.IsAny<CancellationToken>());
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
@@ -831,6 +907,12 @@ namespace CopyWords.Core.Tests.Services
             const string word = "danish_word";
             const string expectedFileName = "danish_word.mp3";
             const string ankiSoundTag = "[sound:danish_word.mp3]";
+
+            var soundFiles = new List<AnkiMedia>()
+            {
+                // We pass Word in the Filename property
+                new AnkiMedia(Url: soundUrl, Filename: word)
+            };
 
             using var testStream = new MemoryStream([1, 2, 3]);
 
@@ -847,7 +929,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<AnkiDroidService>();
 
             // Act
-            await sut.SaveSoundAsync(soundUrl, word);
+            await sut.SaveSoundAsync(soundFiles, It.IsAny<CancellationToken>());
 
             // Assert
             ankiContentApiMock.Verify(

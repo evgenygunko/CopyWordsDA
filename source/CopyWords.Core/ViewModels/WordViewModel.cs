@@ -100,6 +100,8 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(PlaySoundCommand))]
         [NotifyCanExecuteChangedFor(nameof(SaveSoundFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ShareCommand))]
+        [NotifyCanExecuteChangedFor(nameof(AddNoteToAnkiCommand))]
         [NotifyPropertyChangedFor(nameof(PlaySoundButtonColor))]
         [NotifyPropertyChangedFor(nameof(SaveSoundButtonColor))]
         public partial bool IsBusy { get; set; }
@@ -107,6 +109,10 @@ namespace CopyWords.Core.ViewModels
         public bool CanSaveSoundFile => !IsBusy && !string.IsNullOrEmpty(SoundUrl);
 
         public bool CanPlaySound => !IsBusy && !string.IsNullOrEmpty(SoundUrl);
+
+        public bool CanShare => !IsBusy && CanCopyFront;
+
+        public bool CanAddNoteToAnki => !IsBusy && CanCopyFront;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(CopyFrontCommand))]
@@ -204,20 +210,24 @@ namespace CopyWords.Core.ViewModels
             IsBusy = false;
         }
 
-        [RelayCommand(CanExecute = nameof(CanCopyFront))]
-        public async Task AddNoteToAnkiAsync()
+        [RelayCommand(CanExecute = nameof(CanAddNoteToAnki))]
+        public async Task AddNoteToAnkiAsync(CancellationToken cancellationToken)
         {
+            IsBusy = true;
+
             if (_deviceInfo.Platform == DevicePlatform.Android)
             {
-                await AddNoteWithAnkiDroidServiceAsync();
+                await AddNoteWithAnkiDroidServiceAsync(cancellationToken);
             }
             else
             {
-                await AddNoteWithAnkiConnectAsync();
+                await AddNoteWithAnkiConnectAsync(cancellationToken);
             }
+
+            IsBusy = false;
         }
 
-        [RelayCommand(CanExecute = nameof(CanCopyFront))]
+        [RelayCommand(CanExecute = nameof(CanShare))]
         public async Task ShareAsync()
         {
             // This command is only available on Android platform
@@ -253,12 +263,12 @@ namespace CopyWords.Core.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyFront))]
-        public async Task CopyBackAsync()
+        public async Task CopyBackAsync(CancellationToken cancellationToken)
         {
             await CompileAndCopyToClipboard("back", _copySelectedToClipboardService.CompileBack);
 
             var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
-            await _saveImageFileService.SaveImagesAsync(imageFiles);
+            await _saveImageFileService.SaveImagesAsync(imageFiles, cancellationToken);
         }
 
         [RelayCommand(CanExecute = nameof(CanCopyPartOfSpeech))]
@@ -401,7 +411,7 @@ namespace CopyWords.Core.ViewModels
             }
         }
 
-        internal async Task AddNoteWithAnkiConnectAsync()
+        internal async Task AddNoteWithAnkiConnectAsync(CancellationToken cancellationToken)
         {
             try
             {
@@ -463,7 +473,7 @@ namespace CopyWords.Core.ViewModels
                     }
 
                     var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
-                    await _saveImageFileService.SaveImagesAsync(imageFiles);
+                    await _saveImageFileService.SaveImagesAsync(imageFiles, cancellationToken);
                 }
             }
             catch (AnkiConnectNotRunningException ex)
@@ -478,7 +488,7 @@ namespace CopyWords.Core.ViewModels
             }
         }
 
-        internal async Task AddNoteWithAnkiDroidServiceAsync()
+        internal async Task AddNoteWithAnkiDroidServiceAsync(CancellationToken cancellationToken)
         {
             try
             {
@@ -524,22 +534,17 @@ namespace CopyWords.Core.ViewModels
                 string endings = _copySelectedToClipboardService.CompileEndings(DefinitionViewModel);
                 string examples = _copySelectedToClipboardService.CompileExamples(DefinitionViewModel);
 
-                // AnkiDroid API returns image tags when saving images, for example '<img src="voluntario.jpg_6481766173072004017.jpg" />'
-                // We need to save images first and then use these image tags in the back field.
+                var ankiMediaPicture = new List<AnkiMedia>();
                 var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
-                var imageTags = await _ankiDroidService.SaveImagesAsync(imageFiles);
-
-                // Replace image html tag in the back field with the new image tags with correct file names
-                foreach (var imageTag in imageTags)
+                foreach (var imageFile in imageFiles)
                 {
-                    back = back.Replace($"<img src=\"{imageTag.FileName}\">", imageTag.HtmlTag);
+                    ankiMediaPicture.Add(new AnkiMedia(Url: imageFile.ImageUrl, imageFile.FileName));
                 }
 
-                string? sound = null;
+                var ankiMediaAudio = new List<AnkiMedia>();
                 if (CanSaveSoundFile)
                 {
-                    var soundTag = await _ankiDroidService.SaveSoundAsync(SoundUrl!, Word);
-                    sound = soundTag.AnkiTag;
+                    ankiMediaAudio.Add(new AnkiMedia(Url: SoundUrl!, Filename: Word));
                 }
 
                 var note = new AnkiNote(
@@ -550,10 +555,11 @@ namespace CopyWords.Core.ViewModels
                     PartOfSpeech: partOfSpeech,
                     Forms: endings,
                     Example: examples,
-                    Sound: sound,
-                    Options: ankiNoteOptions);
+                    Options: ankiNoteOptions,
+                    Picture: ankiMediaPicture,
+                    Audio: ankiMediaAudio);
 
-                long noteId = await _ankiDroidService.AddNoteAsync(note);
+                long noteId = await _ankiDroidService.AddNoteAsync(note, cancellationToken);
                 if (noteId > 0)
                 {
                     await _dialogService.DisplayToast("The note has been added to Anki.");

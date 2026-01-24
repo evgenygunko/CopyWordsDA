@@ -36,7 +36,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            bool result = await sut.SaveImagesAsync(imageFiles);
+            bool result = await sut.SaveImagesAsync(imageFiles, CancellationToken.None);
 
             result.Should().BeFalse();
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Path to Anki folder is incorrect", $"Cannot find path to Anki folder '{appSettings.AnkiSoundsFolder}'. Please update it in Settings.", "OK"));
@@ -72,7 +72,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            bool result = await sut.SaveImagesAsync(imageFiles);
+            bool result = await sut.SaveImagesAsync(imageFiles, CancellationToken.None);
 
             result.Should().BeTrue();
             fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(imageFile.ImageUrl, It.IsAny<CancellationToken>()), Times.Once);
@@ -115,7 +115,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            bool result = await sut.SaveImagesAsync(imageFiles);
+            bool result = await sut.SaveImagesAsync(imageFiles, CancellationToken.None);
 
             result.Should().BeTrue();
             imageSharpWrapperMock.Verify(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -166,7 +166,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            bool result = await sut.SaveImagesAsync(imageFiles);
+            bool result = await sut.SaveImagesAsync(imageFiles, CancellationToken.None);
 
             result.Should().BeTrue();
             imageSharpWrapperMock.Verify(x => x.ResizeImageAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
@@ -203,7 +203,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            bool result = await sut.SaveImagesAsync(imageFiles);
+            bool result = await sut.SaveImagesAsync(imageFiles, CancellationToken.None);
 
             result.Should().BeFalse();
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot download image", $"Cannot download image file from '{imageFile.ImageUrl}'. Error: Server error", "OK"));
@@ -234,7 +234,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            Stream result = await sut.DownloadAndResizeImageAsync(imageUrl);
+            Stream result = await sut.DownloadAndResizeImageAsync(imageUrl, CancellationToken.None);
 
             result.Should().BeSameAs(expectedStream);
             fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(imageUrl, It.IsAny<CancellationToken>()), Times.Once);
@@ -254,7 +254,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            Func<Task> act = async () => await sut.DownloadAndResizeImageAsync(imageUrl);
+            Func<Task> act = async () => await sut.DownloadAndResizeImageAsync(imageUrl, CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>().WithMessage("Download failed");
         }
@@ -276,7 +276,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = _fixture.Create<SaveImageFileService>();
 
-            Func<Task> act = async () => await sut.DownloadAndResizeImageAsync(imageUrl);
+            Func<Task> act = async () => await sut.DownloadAndResizeImageAsync(imageUrl, CancellationToken.None);
 
             await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Resize failed");
         }

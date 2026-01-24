@@ -8,9 +8,9 @@ namespace CopyWords.Core.Services
 {
     public interface ISaveImageFileService
     {
-        Task<Stream> DownloadAndResizeImageAsync(string imageUrl);
+        Task<Stream> DownloadAndResizeImageAsync(string imageUrl, CancellationToken cancellationToken);
 
-        Task<bool> SaveImagesAsync(IEnumerable<ImageFile> imageFiles);
+        Task<bool> SaveImagesAsync(IEnumerable<ImageFile> imageFiles, CancellationToken cancellationToken);
     }
 
     public class SaveImageFileService : ISaveImageFileService
@@ -35,17 +35,15 @@ namespace CopyWords.Core.Services
             _imageSharpWrapper = imageSharpWrapper;
         }
 
-        public async Task<Stream> DownloadAndResizeImageAsync(string imageUrl)
+        public async Task<Stream> DownloadAndResizeImageAsync(string imageUrl, CancellationToken cancellationToken)
         {
-            var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
-
             using Stream stream = await _fileDownloaderService.DownloadFileAsync(imageUrl, cancellationToken);
             using SixLabors.ImageSharp.Image image = await _imageSharpWrapper.ResizeImageAsync(stream, cancellationToken);
 
             return await _imageSharpWrapper.SaveAsJpegAsync(image, cancellationToken);
         }
 
-        public async Task<bool> SaveImagesAsync(IEnumerable<ImageFile> imageFiles)
+        public async Task<bool> SaveImagesAsync(IEnumerable<ImageFile> imageFiles, CancellationToken cancellationToken)
         {
             string ankiSoundsFolder = _settingsService.LoadSettings().AnkiSoundsFolder;
             if (!_fileIOService.DirectoryExists(ankiSoundsFolder))
@@ -60,7 +58,6 @@ namespace CopyWords.Core.Services
 
                 try
                 {
-                    CancellationToken cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(20)).Token;
                     using Stream stream = await _fileDownloaderService.DownloadFileAsync(imageFile.ImageUrl, cancellationToken);
 
                     if (_fileIOService.FileExists(destinationFile))
