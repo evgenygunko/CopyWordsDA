@@ -86,7 +86,8 @@
                     WidthRequest="44" HeightRequest="44"
                     ToolTipProperties.Text="Save sound file"
                     BackgroundColor="{Binding SaveSoundButtonColor}"
-                    Command="{Binding SaveSoundFileCommand}">
+                    Command="{Binding SaveSoundFileCommand}"
+                    IsVisible="{Binding ShowSaveSoundButton}">
 
                 <SfButton.Content>
                     <DataTemplate>

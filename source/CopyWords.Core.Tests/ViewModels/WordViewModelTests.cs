@@ -79,7 +79,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var compiledFileName = $"[sound:{soundFileName}.mp3]";
 
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
-            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
@@ -104,7 +104,7 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task SaveSoundFileAsync_WhenFileNotSaved_DoesNotShowToast()
         {
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
-            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
@@ -125,7 +125,7 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task SaveSoundFileAsync_WhenExceptionThrown_ShowsAlert()
         {
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
-            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception("exception from unit test"));
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
@@ -375,7 +375,7 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void UpdateUI_WhenPlatformIsAndroid_SetsShowCopyButtonsToFalseAndShowShareButtonToTrue()
+        public void UpdateUI_WhenPlatformIsAndroid_SetsShowCopyButtonsToFalse()
         {
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
@@ -387,13 +387,12 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.UpdateUI();
 
             sut.ShowCopyButtons.Should().BeFalse();
-            sut.ShowShareButton.Should().BeTrue();
         }
 
         [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
-        public void UpdateUI_WhenPlatformIsNotAndroid_SetsShowCopyButtonsFromSettingsAndShowShareButtonToFalse(bool showCopyButtonsSetting)
+        public void UpdateUI_WhenPlatformIsNotAndroid_SetsShowCopyButtonsFromSettings(bool showCopyButtonsSetting)
         {
             var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
             deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
@@ -408,7 +407,6 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.UpdateUI();
 
             sut.ShowCopyButtons.Should().Be(showCopyButtonsSetting);
-            sut.ShowShareButton.Should().BeFalse();
         }
 
         [TestMethod]
@@ -743,7 +741,7 @@ namespace CopyWords.Core.Tests.ViewModels
             saveImageFileServiceMock.Setup(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>())).ReturnsAsync(true);
 
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
-            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileToAnkiFolderAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.CanCopyFront = true;
@@ -776,7 +774,7 @@ namespace CopyWords.Core.Tests.ViewModels
             copySelectedToClipboardServiceMock.Verify(x => x.CompileImages(It.IsAny<DefinitionViewModel>()), Times.Once);
 
             saveImageFileServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Once);
-            saveSoundFileServiceMock.Verify(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()), Times.Once);
+            saveSoundFileServiceMock.Verify(x => x.SaveSoundFileToAnkiFolderAsync(soundUrl, word, It.IsAny<CancellationToken>()), Times.Once);
             copySelectedToClipboardServiceMock.Verify(x => x.CompileSoundFileName(word), Times.Once);
         }
 
@@ -799,7 +797,7 @@ namespace CopyWords.Core.Tests.ViewModels
             saveImageFileServiceMock.Setup(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>())).ReturnsAsync(true);
 
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
-            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileToAnkiFolderAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.CanCopyFront = true;
@@ -812,7 +810,7 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             copySelectedToClipboardServiceMock.Verify(x => x.CompileImages(It.IsAny<DefinitionViewModel>()), Times.Once);
             saveImageFileServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Once);
-            saveSoundFileServiceMock.Verify(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()), Times.Once);
+            saveSoundFileServiceMock.Verify(x => x.SaveSoundFileToAnkiFolderAsync(soundUrl, word, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
@@ -834,7 +832,7 @@ namespace CopyWords.Core.Tests.ViewModels
             saveImageFileServiceMock.Setup(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>())).ReturnsAsync(true);
 
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
-            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileToAnkiFolderAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.CanCopyFront = true;
@@ -847,7 +845,7 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             copySelectedToClipboardServiceMock.Verify(x => x.CompileImages(It.IsAny<DefinitionViewModel>()), Times.Never);
             saveImageFileServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Never);
-            saveSoundFileServiceMock.Verify(x => x.SaveSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+            saveSoundFileServiceMock.Verify(x => x.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [TestMethod]
@@ -1276,6 +1274,126 @@ namespace CopyWords.Core.Tests.ViewModels
 
             ankiDroidServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Once);
             ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<AnkiNote>()), Times.Once);
+        }
+
+        #endregion
+
+        #region Tests for ShowShareButton
+
+        [TestMethod]
+        public void ShowShareButton_WhenPlatformIsAndroid_ReturnsTrue()
+        {
+            // Arrange
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            // Act
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+
+            // Assert
+            sut.ShowShareButton.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void ShowShareButton_WhenPlatformIsWinUI_ReturnsFalse()
+        {
+            // Arrange
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            // Act
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+
+            // Assert
+            sut.ShowShareButton.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void ShowShareButton_WhenPlatformIsMacCatalyst_ReturnsFalse()
+        {
+            // Arrange
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.MacCatalyst);
+
+            // Act
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+
+            // Assert
+            sut.ShowShareButton.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void ShowShareButton_WhenPlatformIsiOS_ReturnsFalse()
+        {
+            // Arrange
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.iOS);
+
+            // Act
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+
+            // Assert
+            sut.ShowShareButton.Should().BeFalse();
+        }
+
+        #endregion
+
+        #region Tests for ShowSaveSoundButton
+
+        [TestMethod]
+        public void ShowSaveSoundButton_WhenPlatformIsWinUI_ReturnsTrue()
+        {
+            // Arrange
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            // Act
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+
+            // Assert
+            sut.ShowSaveSoundButton.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void ShowSaveSoundButton_WhenPlatformIsMacCatalyst_ReturnsTrue()
+        {
+            // Arrange
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.MacCatalyst);
+
+            // Act
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+
+            // Assert
+            sut.ShowSaveSoundButton.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void ShowSaveSoundButton_WhenPlatformIsAndroid_ReturnsFalse()
+        {
+            // Arrange
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            // Act
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+
+            // Assert
+            sut.ShowSaveSoundButton.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void ShowSaveSoundButton_WhenPlatformIsiOS_ReturnsFalse()
+        {
+            // Arrange
+            var deviceInfoMock = _fixture.Freeze<Mock<IDeviceInfo>>();
+            deviceInfoMock.Setup(x => x.Platform).Returns(DevicePlatform.iOS);
+
+            // Act
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+
+            // Assert
+            sut.ShowSaveSoundButton.Should().BeFalse();
         }
 
         #endregion

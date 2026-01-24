@@ -132,6 +132,8 @@ namespace CopyWords.Core.ViewModels
 
         public bool ShowShareButton => _deviceInfo.Platform == DevicePlatform.Android;
 
+        public bool ShowSaveSoundButton => _deviceInfo.Platform == DevicePlatform.WinUI || _deviceInfo.Platform == DevicePlatform.MacCatalyst;
+
         public Color PlaySoundButtonColor => GetButtonColor(CanPlaySound);
 
         public Color SaveSoundButtonColor => GetButtonColor(CanSaveSoundFile);
@@ -185,7 +187,7 @@ namespace CopyWords.Core.ViewModels
 
             try
             {
-                bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl!, Word, cancellationToken);
+                bool result = await _saveSoundFileService.SaveSoundFileToAnkiFolderAsync(SoundUrl!, Word, cancellationToken);
 
                 if (result)
                 {
@@ -457,7 +459,7 @@ namespace CopyWords.Core.ViewModels
                     if (CanSaveSoundFile)
                     {
                         var saveFileCancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
-                        bool result = await _saveSoundFileService.SaveSoundFileAsync(SoundUrl!, Word, saveFileCancellationToken);
+                        bool result = await _saveSoundFileService.SaveSoundFileToAnkiFolderAsync(SoundUrl!, Word, saveFileCancellationToken);
                     }
 
                     var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
