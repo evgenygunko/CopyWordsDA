@@ -101,6 +101,14 @@ namespace CopyWords.MAUI.Services
 
         public async Task<string> AddImageToAnkiMediaAsync(string fileName, Stream imageStream)
         {
+            string extension = Path.GetExtension(fileName).ToLowerInvariant();
+            string mimeType = extension switch
+            {
+                ".jpg" or ".jpeg" or ".png" or ".gif" => "image",
+                ".mp3" or ".mp4" => "audio",
+                _ => throw new AnkiDroidCannotSaveMediaException($"Unsupported file extension for file '{fileName}'")
+            };
+
             var context = Android.App.Application.Context;
             if (context.CacheDir is null)
             {
@@ -133,7 +141,7 @@ namespace CopyWords.MAUI.Services
 
                 // Add the media to AnkiDroid
                 var api = new AddContentApi(context);
-                string? result = api.AddMediaFromUri(fileUri, fileName, "image");
+                string? result = api.AddMediaFromUri(fileUri, fileName, mimeType);
 
                 if (result == null)
                 {

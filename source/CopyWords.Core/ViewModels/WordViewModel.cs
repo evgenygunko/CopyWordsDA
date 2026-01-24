@@ -535,8 +535,12 @@ namespace CopyWords.Core.ViewModels
                     back = back.Replace($"<img src=\"{imageTag.FileName}\">", imageTag.HtmlTag);
                 }
 
-                // todo: to implement
                 string? sound = null;
+                if (CanSaveSoundFile)
+                {
+                    var soundTag = await _ankiDroidService.SaveSoundAsync(SoundUrl!, Word);
+                    sound = soundTag.AnkiTag;
+                }
 
                 var note = new AnkiNote(
                     DeckName: deckName,

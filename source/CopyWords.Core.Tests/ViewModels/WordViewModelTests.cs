@@ -1037,18 +1037,51 @@ namespace CopyWords.Core.Tests.ViewModels
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.CanCopyFront = true;
+            sut.SoundUrl = null;
 
             // Act
             await sut.AddNoteWithAnkiDroidServiceAsync();
 
             // Assert
-            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.IsAny<AnkiNote>()), Times.Once);
             ankiDroidServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>()), Times.Once);
+            ankiDroidServiceMock.Verify(x => x.SaveSoundAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.Is<AnkiNote>(note => note.Back == backWithUpdatedImageTags)), Times.Once);
+        }
 
-            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(
-                It.Is<Models.AnkiNote>(note =>
-                    note.Back == backWithUpdatedImageTags)),
-                Times.Once);
+        [TestMethod]
+        public async Task AddNoteWithAnkiDroidServiceAsync_WhenCanSaveSoundFile_CallsSaveSoundAsync()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+            string soundUrl = _fixture.Create<Uri>().ToString();
+
+            string word = _fixture.Create<string>();
+            const string soundAnkiTag = "[sound.mp3]";
+            SoundTag soundTag = new SoundTag(front, soundAnkiTag);
+
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
+
+            var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
+            ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(true);
+            ankiDroidServiceMock.Setup(x => x.SaveSoundAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(soundTag);
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.CanCopyFront = true;
+            sut.Word = word;
+            sut.SoundUrl = soundUrl;
+            sut.CanSaveSoundFile.Should().BeTrue();
+
+            // Act
+            await sut.AddNoteWithAnkiDroidServiceAsync();
+
+            // Assert
+            sut.CanSaveSoundFile.Should().BeTrue();
+
+            ankiDroidServiceMock.Verify(x => x.SaveSoundAsync(soundUrl, word), Times.Once);
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(It.Is<AnkiNote>(note => note.Sound == soundAnkiTag)), Times.Once);
         }
 
         [TestMethod]
@@ -1074,6 +1107,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.CanCopyFront = true;
+            sut.SoundUrl = null;
 
             // Act
             await sut.AddNoteWithAnkiDroidServiceAsync();
@@ -1126,6 +1160,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.CanCopyFront = true;
+            sut.SoundUrl = null;
 
             // Act
             await sut.AddNoteWithAnkiDroidServiceAsync();
@@ -1164,6 +1199,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.CanCopyFront = true;
+            sut.SoundUrl = null;
 
             // Act
             await sut.AddNoteWithAnkiDroidServiceAsync();
@@ -1262,6 +1298,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.CanCopyFront = true;
+            sut.SoundUrl = null;
 
             // Act
             await sut.AddNoteWithAnkiDroidServiceAsync();

@@ -731,5 +731,130 @@ namespace CopyWords.Core.Tests.Services
         }
 
         #endregion
+
+        #region Tests for SaveSoundAsync
+
+        [TestMethod]
+        public async Task SaveSoundAsync_WhenSoundUrlAndWordProvided_DownloadsAndSavesToAnki()
+        {
+            // Arrange
+            const string soundUrl = "https://example.com/sound.mp3";
+            const string word = "testword";
+            const string expectedFileName = "testword.mp3";
+            const string ankiSoundTag = "[sound:testword.mp3_6481766173072004017.mp3]";
+
+            using var testStream = new MemoryStream([1, 2, 3]);
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+            saveSoundFileServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(testStream);
+
+            var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
+            ankiContentApiMock
+                .Setup(x => x.AddImageToAnkiMediaAsync(expectedFileName, testStream))
+                .ReturnsAsync(ankiSoundTag);
+
+            var sut = _fixture.Create<AnkiDroidService>();
+
+            // Act
+            SoundTag result = await sut.SaveSoundAsync(soundUrl, word);
+
+            // Assert
+            result.Word.Should().Be(word);
+            result.AnkiTag.Should().Be(ankiSoundTag);
+
+            saveSoundFileServiceMock.Verify(
+                x => x.DownloadSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()),
+                Times.Once);
+            ankiContentApiMock.Verify(
+                x => x.AddImageToAnkiMediaAsync(expectedFileName, testStream),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveSoundAsync_WhenDownloadThrows_PropagatesException()
+        {
+            // Arrange
+            const string soundUrl = "https://example.com/sound.mp3";
+            const string word = "testword";
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+            saveSoundFileServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new HttpRequestException("Download failed"));
+
+            var sut = _fixture.Create<AnkiDroidService>();
+
+            // Act
+            Func<Task> act = async () => await sut.SaveSoundAsync(soundUrl, word);
+
+            // Assert
+            await act.Should().ThrowAsync<HttpRequestException>()
+                .WithMessage("Download failed");
+        }
+
+        [TestMethod]
+        public async Task SaveSoundAsync_WhenAddToAnkiMediaThrows_PropagatesException()
+        {
+            // Arrange
+            const string soundUrl = "https://example.com/sound.mp3";
+            const string word = "testword";
+
+            using var testStream = new MemoryStream([1, 2, 3]);
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+            saveSoundFileServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(testStream);
+
+            var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
+            ankiContentApiMock
+                .Setup(x => x.AddImageToAnkiMediaAsync(It.IsAny<string>(), It.IsAny<Stream>()))
+                .ThrowsAsync(new InvalidOperationException("Failed to save to Anki media"));
+
+            var sut = _fixture.Create<AnkiDroidService>();
+
+            // Act
+            Func<Task> act = async () => await sut.SaveSoundAsync(soundUrl, word);
+
+            // Assert
+            await act.Should().ThrowAsync<InvalidOperationException>()
+                .WithMessage("Failed to save to Anki media");
+        }
+
+        [TestMethod]
+        public async Task SaveSoundAsync_GeneratesCorrectFileName()
+        {
+            // Arrange
+            const string soundUrl = "https://example.com/sound.mp3";
+            const string word = "danish_word";
+            const string expectedFileName = "danish_word.mp3";
+            const string ankiSoundTag = "[sound:danish_word.mp3]";
+
+            using var testStream = new MemoryStream([1, 2, 3]);
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+            saveSoundFileServiceMock
+                .Setup(x => x.DownloadSoundFileAsync(soundUrl, word, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(testStream);
+
+            var ankiContentApiMock = _fixture.Freeze<Mock<IAnkiContentApi>>();
+            ankiContentApiMock
+                .Setup(x => x.AddImageToAnkiMediaAsync(expectedFileName, It.IsAny<Stream>()))
+                .ReturnsAsync(ankiSoundTag);
+
+            var sut = _fixture.Create<AnkiDroidService>();
+
+            // Act
+            await sut.SaveSoundAsync(soundUrl, word);
+
+            // Assert
+            ankiContentApiMock.Verify(
+                x => x.AddImageToAnkiMediaAsync(expectedFileName, It.IsAny<Stream>()),
+                Times.Once);
+        }
+
+        #endregion
     }
 }

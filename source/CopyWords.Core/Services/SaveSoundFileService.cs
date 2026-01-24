@@ -8,6 +8,8 @@ namespace CopyWords.Core.Services
 {
     public interface ISaveSoundFileService
     {
+        Task<Stream> DownloadSoundFileAsync(string url, string word, CancellationToken cancellationToken);
+
         Task<bool> SaveSoundFileToAnkiFolderAsync(string url, string word, CancellationToken cancellationToken);
     }
 
@@ -31,6 +33,12 @@ namespace CopyWords.Core.Services
             _fileIOService = fileIOService;
             _dialogService = dialogService;
             _globalSettings = globalSettings;
+        }
+
+        public async Task<Stream> DownloadSoundFileAsync(string url, string word, CancellationToken cancellationToken)
+        {
+            string downloadSoundUrl = CreateDownloadSoundFileUrl(url, word);
+            return await _fileDownloaderService.DownloadFileAsync(downloadSoundUrl, cancellationToken);
         }
 
         [SupportedOSPlatform("windows")]

@@ -21,6 +21,8 @@ namespace CopyWords.Core.Services
         Task<long> AddNoteAsync(AnkiNote note);
 
         Task<IEnumerable<ImageTag>> SaveImagesAsync(IEnumerable<ImageFile> imageFiles);
+
+        Task<SoundTag> SaveSoundAsync(string soundUrl, string word);
     }
 
     public class AnkiDroidService : IAnkiDroidService
@@ -28,15 +30,18 @@ namespace CopyWords.Core.Services
         private readonly IAnkiContentApi _ankiContentApi;
         private readonly IDialogService _dialogService;
         private readonly ISaveImageFileService _saveImageFileService;
+        private readonly ISaveSoundFileService _saveSoundFileService;
 
         public AnkiDroidService(
             IAnkiContentApi ankiContentApi,
             IDialogService dialogService,
-            ISaveImageFileService saveImageFileService)
+            ISaveImageFileService saveImageFileService,
+            ISaveSoundFileService saveSoundFileService)
         {
             _ankiContentApi = ankiContentApi;
             _dialogService = dialogService;
             _saveImageFileService = saveImageFileService;
+            _saveSoundFileService = saveSoundFileService;
         }
 
         #region Public Methods
@@ -124,6 +129,17 @@ namespace CopyWords.Core.Services
             }
 
             return imageTags;
+        }
+
+        public async Task<SoundTag> SaveSoundAsync(string soundUrl, string word)
+        {
+            var ct = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
+            await using Stream stream = await _saveSoundFileService.DownloadSoundFileAsync(soundUrl, word, ct);
+
+            string fileName = $"{word}.mp3";
+            string htmlTag = await _ankiContentApi.AddImageToAnkiMediaAsync(fileName, stream);
+
+            return new SoundTag(word, htmlTag);
         }
 
         #endregion

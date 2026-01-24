@@ -58,6 +58,78 @@ namespace CopyWords.Core.Tests.Services
 
         #endregion
 
+        #region Tests for DownloadSoundFileAsync
+
+        [TestMethod]
+        public async Task DownloadSoundFileAsync_Should_CallFileDownloaderWithCorrectUrl()
+        {
+            // Arrange
+            string soundUrl = "https://example.com/audio.mp3";
+            string word = "test_word";
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new MemoryStream(new byte[] { 1, 2, 3 }));
+
+            var sut = _fixture.Create<SaveSoundFileService>();
+
+            // Act
+            await sut.DownloadSoundFileAsync(soundUrl, word, CancellationToken.None);
+
+            // Assert
+            string expectedUrl = sut.CreateDownloadSoundFileUrl(soundUrl, word);
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(expectedUrl, CancellationToken.None), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task DownloadSoundFileAsync_Should_ReturnStreamFromFileDownloader()
+        {
+            // Arrange
+            string soundUrl = "https://example.com/audio.mp3";
+            string word = "test_word";
+            byte[] expectedBytes = [1, 2, 3, 4, 5];
+            var expectedStream = new MemoryStream(expectedBytes);
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expectedStream);
+
+            var sut = _fixture.Create<SaveSoundFileService>();
+
+            // Act
+            Stream result = await sut.DownloadSoundFileAsync(soundUrl, word, CancellationToken.None);
+
+            // Assert
+            result.Should().BeSameAs(expectedStream);
+        }
+
+        [TestMethod]
+        public async Task DownloadSoundFileAsync_Should_PassCancellationTokenToFileDownloader()
+        {
+            // Arrange
+            string soundUrl = "https://example.com/audio.mp3";
+            string word = "test_word";
+            using var cts = new CancellationTokenSource();
+            CancellationToken token = cts.Token;
+
+            var fileDownloaderServiceMock = _fixture.Freeze<Mock<IFileDownloaderService>>();
+            fileDownloaderServiceMock
+                .Setup(x => x.DownloadFileAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new MemoryStream());
+
+            var sut = _fixture.Create<SaveSoundFileService>();
+
+            // Act
+            await sut.DownloadSoundFileAsync(soundUrl, word, token);
+
+            // Assert
+            fileDownloaderServiceMock.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), token), Times.Once);
+        }
+
+        #endregion
+
         #region Tests for SaveSoundFileToAnkiFolderAsync
 
         [TestMethod]
