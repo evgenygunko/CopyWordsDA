@@ -29,36 +29,35 @@
                    VerticalOptions="Center"
                    Text="Dictionary mode"/>
             <Switch Grid.Row="0" Grid.Column="1"
-                   IsToggled="{Binding ShowCopyButtons, Converter={StaticResource InvertedBoolConverter}}" />
+                   IsToggled="{Binding ShowAnkiButton, Converter={StaticResource InvertedBoolConverter}}" />
+        </Grid>
+
+        <Grid Margin="20,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0"
+                    Style="{StaticResource SettingsLabelStyleAndroid}"
+                    VerticalOptions="Center"
+                    Text="Include translated meanings when copying to the back of the card"/>
+            <Switch Grid.Row="0" Grid.Column="1"
+                    IsToggled="{Binding CopyTranslatedMeanings}" />
         </Grid>
 
         <!-- Filler -->
         <BoxView Style="{StaticResource FillerStyle}" />
 
-        <VerticalStackLayout Opacity="{Binding ShowCopyButtons, Converter={StaticResource BoolToOpacityConverter}}">
-            <!-- Section "Anki settings" -->
-            <Label Text="Anki settings" Margin="20,10,10,0" FontSize="Subtitle" />
+        <!-- Section "Anki settings" -->
+        <Label Text="Anki settings" Margin="20,10,10,0" FontSize="Subtitle" />
 
-            <Grid Margin="20,10,10,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="45"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-
-                <Label Grid.Row="0" Grid.Column="0"
-                       Style="{StaticResource SettingsLabelStyleAndroid}"
-                       VerticalOptions="Center"
-                       Text="Show Anki button"/>
-                <Switch Grid.Row="0" Grid.Column="1"
-                        IsEnabled="{Binding ShowCopyButtons}"
-                        IsToggled="{Binding ShowAnkiButton}" />
-            </Grid>
-
-            <VerticalStackLayout Opacity="{Binding ShowAnkiButton, Converter={StaticResource BoolToOpacityConverter}}">
+        <VerticalStackLayout Opacity="{Binding ShowAnkiButton, Converter={StaticResource BoolToOpacityConverter}}">
+                <!-- Anki Deck Name Danish -->
                 <!-- Anki Deck Name Danish -->
                 <Label Text="Deck name (Danish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
                 <Picker Margin="20,0,20,0"
@@ -92,31 +91,6 @@
                     ItemsSource="{Binding ModelNames}"
                     SelectedItem="{Binding AnkiModelName}" />
             </VerticalStackLayout>
-        </VerticalStackLayout>
-
-        <!-- Filler -->
-        <BoxView Style="{StaticResource FillerStyle}" />
-
-        <!-- Section "Translations" -->
-        <Label Text="Translations" Margin="20,0,10,0" FontSize="Subtitle" />
-
-        <Grid Margin="20,0,10,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="45"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <Label Grid.Row="0" Grid.Column="0"
-                    Style="{StaticResource SettingsLabelStyleAndroid}"
-                    VerticalOptions="Center"
-                    Text="Include translated meanings when copying to the back of the card"/>
-            <Switch Grid.Row="0" Grid.Column="1"
-                    IsToggled="{Binding CopyTranslatedMeanings}" />
-        </Grid>
 
         <!-- Filler -->
         <BoxView Style="{StaticResource FillerStyle}" />

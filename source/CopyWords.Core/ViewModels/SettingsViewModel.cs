@@ -371,12 +371,6 @@ namespace CopyWords.Core.ViewModels
         {
             if (_isInitialized && CanUpdateIndividualSettings)
             {
-                if (!value && _deviceInfo.Platform == DevicePlatform.Android)
-                {
-                    // On Android we only show the Anki button if not in "dictionary mode" (i.e. copy buttons are shown).
-                    ShowAnkiButton = false;
-                }
-
                 _settingsService.SetShowCopyButtons(value);
                 Debug.WriteLine($"ShowCopyButtons has changed to {value}");
             }

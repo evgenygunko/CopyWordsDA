@@ -347,7 +347,7 @@ namespace CopyWords.Core.ViewModels
                 bool showCheckBoxes = false;
                 if (_deviceInfo.Platform == DevicePlatform.Android)
                 {
-                    showCheckBoxes = _settingsService.GetShowCopyButtons();
+                    showCheckBoxes = _settingsService.GetShowAnkiButton();
                 }
                 else
                 {
