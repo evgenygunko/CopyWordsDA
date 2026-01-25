@@ -466,7 +466,7 @@ namespace CopyWords.Core.ViewModels
                 if (noteId > 0)
                 {
                     // If the note has been added, copy sound and images into Anki media directory
-                    if (CanSaveSoundFile)
+                    if (!string.IsNullOrEmpty(SoundUrl))
                     {
                         var saveFileCancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
                         bool result = await _saveSoundFileService.SaveSoundFileToAnkiFolderAsync(SoundUrl!, Word, saveFileCancellationToken);
@@ -542,9 +542,9 @@ namespace CopyWords.Core.ViewModels
                 }
 
                 var ankiMediaAudio = new List<AnkiMedia>();
-                if (CanSaveSoundFile)
+                if (!string.IsNullOrEmpty(SoundUrl))
                 {
-                    ankiMediaAudio.Add(new AnkiMedia(Url: SoundUrl!, Filename: Word));
+                    ankiMediaAudio.Add(new AnkiMedia(Url: SoundUrl, Filename: Word));
                 }
 
                 var note = new AnkiNote(

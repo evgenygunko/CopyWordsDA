@@ -807,6 +807,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
             sut.CanCopyFront = true;
+            sut.IsBusy = true;
             sut.Word = word;
             sut.SoundUrl = soundUrl;
 
@@ -853,6 +854,69 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             copySelectedToClipboardServiceMock.Verify(x => x.CompileImages(It.IsAny<DefinitionViewModel>()), Times.Never);
             saveImageFileServiceMock.Verify(x => x.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>(), It.IsAny<CancellationToken>()), Times.Never);
+            saveSoundFileServiceMock.Verify(x => x.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiConnectAsync_WhenSoundUrlIsNotNullOrEmpty_CallsSaveSoundFileToAnkiFolderAsync()
+        {
+            // Arrange
+            string word = _fixture.Create<string>();
+            string soundUrl = _fixture.Create<Uri>().ToString();
+            const long noteId = 1;
+
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns("front");
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns("back");
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(noteId);
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileToAnkiFolderAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.CanCopyFront = true;
+            sut.IsBusy = true;
+            sut.Word = word;
+            sut.SoundUrl = soundUrl;
+
+            // Act
+            await sut.AddNoteWithAnkiConnectAsync(CancellationToken.None);
+
+            // Assert
+            saveSoundFileServiceMock.Verify(x => x.SaveSoundFileToAnkiFolderAsync(soundUrl, word, It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AddNoteWithAnkiConnectAsync_WhenSoundUrlIsNullOrEmpty_DoesNotCallSaveSoundFileToAnkiFolderAsync(string soundUrl)
+        {
+            // Arrange
+            string word = _fixture.Create<string>();
+            const long noteId = 1;
+
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns("front");
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns("back");
+
+            var ankiConnectServiceMock = _fixture.Freeze<Mock<IAnkiConnectService>>();
+            ankiConnectServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(noteId);
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+            saveSoundFileServiceMock.Setup(x => x.SaveSoundFileToAnkiFolderAsync(soundUrl, word, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.CanCopyFront = true;
+            sut.IsBusy = true;
+            sut.Word = word;
+            sut.SoundUrl = soundUrl;
+
+            // Act
+            await sut.AddNoteWithAnkiConnectAsync(CancellationToken.None);
+
+            // Assert
             saveSoundFileServiceMock.Verify(x => x.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
@@ -1029,6 +1093,7 @@ namespace CopyWords.Core.Tests.ViewModels
                 new ImageFile(FileName: "image1.jpg", ImageUrl: "http://example.com/image1.jpg"),
                 new ImageFile(FileName: "image2.jpg", ImageUrl: "http://example.com/image2.jpg")
             };
+            const long noteId = 1;
 
             var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
             copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
@@ -1040,6 +1105,8 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
             ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(true);
+            ankiDroidServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(noteId);
+
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             WordViewModel sut = _fixture.Create<WordViewModel>();
@@ -1071,7 +1138,180 @@ namespace CopyWords.Core.Tests.ViewModels
                 It.IsAny<CancellationToken>()),
                 Times.Once);
 
+            dialogServiceMock.Verify(x => x.DisplayToast("The note has been added to Anki."), Times.Once);
             dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiDroidServiceAsync_WhenSoundUrlIsNotNullOrEmpty_AddsAudioPropertyToAnkiNote()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+            const long noteId = 1;
+
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
+
+            var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
+            ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(true);
+            ankiDroidServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(noteId);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.CanCopyFront = true;
+            sut.IsBusy = true;
+            sut.SoundUrl = _fixture.Create<Uri>().ToString();
+
+            // Act
+            await sut.AddNoteWithAnkiDroidServiceAsync(CancellationToken.None);
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayToast("The note has been added to Anki."), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(
+                It.Is<Models.AnkiNote>(note =>
+                    note.DeckName == _appSettings.AnkiDeckNameDanish &&
+                    note.ModelName == _appSettings.AnkiModelName &&
+                    note.Front == front &&
+                    note.Back == back &&
+                    note.Sound == null &&
+                    note.Audio!.Count() == 1),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task AddNoteWithAnkiDroidServiceAsync_WhenSoundUrlIsNullOrEmpty_DoesNotAddAudioPropertyToAnkiNote(string soundUrl)
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
+
+            var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
+            ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(true);
+            ankiDroidServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(1L);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.CanCopyFront = true;
+            sut.IsBusy = true;
+            sut.SoundUrl = soundUrl;
+
+            // Act
+            await sut.AddNoteWithAnkiDroidServiceAsync(CancellationToken.None);
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayToast("The note has been added to Anki."), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(
+                It.Is<Models.AnkiNote>(note =>
+                    note.DeckName == _appSettings.AnkiDeckNameDanish &&
+                    note.ModelName == _appSettings.AnkiModelName &&
+                    note.Front == front &&
+                    note.Back == back &&
+                    note.Sound == null &&
+                    note.Audio!.Count() == 0),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiDroidServiceAsync_WhenAnyImageSelected_AddsPicturePropertyToAnkiNote()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileImages(It.IsAny<DefinitionViewModel>())).Returns(new List<ImageFile>()
+            {
+                new ImageFile(FileName: "image1.jpg", ImageUrl: "http://example.com/image1.jpg"),
+                new ImageFile(FileName: "image2.jpg", ImageUrl: "http://example.com/image2.jpg"),
+                new ImageFile(FileName: "image3.jpg", ImageUrl: "http://example.com/image3.jpg"),
+            });
+
+            var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
+            ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(true);
+            ankiDroidServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(1L);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.CanCopyFront = true;
+            sut.IsBusy = true;
+
+            // Act
+            await sut.AddNoteWithAnkiDroidServiceAsync(CancellationToken.None);
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayToast("The note has been added to Anki."), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(
+                It.Is<Models.AnkiNote>(note =>
+                    note.DeckName == _appSettings.AnkiDeckNameDanish &&
+                    note.ModelName == _appSettings.AnkiModelName &&
+                    note.Front == front &&
+                    note.Back == back &&
+                    note.Sound == null &&
+                    note.Picture!.Count() == 3),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task AddNoteWithAnkiDroidServiceAsync_WhenNoImageSelected_DoesNotAddPicturePropertyToAnkiNote()
+        {
+            // Arrange
+            string front = _fixture.Create<string>();
+            string back = _fixture.Create<string>();
+
+            var copySelectedToClipboardServiceMock = _fixture.Freeze<Mock<ICopySelectedToClipboardService>>();
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileFront(It.IsAny<DefinitionViewModel>())).Returns(front);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileBack(It.IsAny<DefinitionViewModel>())).Returns(back);
+            copySelectedToClipboardServiceMock.Setup(x => x.CompileImages(It.IsAny<DefinitionViewModel>())).Returns([]);
+
+            var ankiDroidServiceMock = _fixture.Freeze<Mock<IAnkiDroidService>>();
+            ankiDroidServiceMock.Setup(x => x.IsAvailable()).Returns(true);
+            ankiDroidServiceMock.Setup(x => x.AddNoteAsync(It.IsAny<AnkiNote>(), It.IsAny<CancellationToken>())).ReturnsAsync(1L);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.CanCopyFront = true;
+            sut.IsBusy = true;
+
+            // Act
+            await sut.AddNoteWithAnkiDroidServiceAsync(CancellationToken.None);
+
+            // Assert
+            dialogServiceMock.Verify(x => x.DisplayToast("The note has been added to Anki."), Times.Once);
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+
+            ankiDroidServiceMock.Verify(x => x.AddNoteAsync(
+                It.Is<Models.AnkiNote>(note =>
+                    note.DeckName == _appSettings.AnkiDeckNameDanish &&
+                    note.ModelName == _appSettings.AnkiModelName &&
+                    note.Front == front &&
+                    note.Back == back &&
+                    note.Sound == null &&
+                    note.Picture!.Count() == 0),
+                It.IsAny<CancellationToken>()),
+                Times.Once);
         }
 
         [TestMethod]

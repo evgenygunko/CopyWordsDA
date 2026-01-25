@@ -442,11 +442,23 @@ namespace CopyWords.Core.Tests.Services
             const long expectedDeckId = 1L;
             const long expectedModelId = 100L;
 
+            var ankiMediaImages = new List<AnkiMedia>()
+            {
+                new AnkiMedia(Url: _fixture.Create<Uri>().ToString(), Filename: "image1.png"),
+                new AnkiMedia(Url: _fixture.Create<Uri>().ToString(), Filename: "image2.png")
+            };
+            var ankiMediaSounds = new List<AnkiMedia>()
+            {
+                new AnkiMedia(Url: _fixture.Create<Uri>().ToString(), Filename: _fixture.Create<string>())
+            };
+
             var note = new AnkiNote(
                 DeckName: "Default",
                 ModelName: "Basic",
                 Front: "Front text",
-                Back: "Back text");
+                Back: "Back text",
+                Picture: ankiMediaImages,
+                Audio: ankiMediaSounds);
 
             var deckList = new Dictionary<long, string> { { expectedDeckId, "Default" } };
             var modelList = new Dictionary<long, string> { { expectedModelId, "Basic" } };
@@ -457,6 +469,9 @@ namespace CopyWords.Core.Tests.Services
             ankiContentApiMock.Setup(x => x.GetModelList()).Returns(modelList);
             ankiContentApiMock.Setup(x => x.GetFieldList(expectedModelId)).Returns(fieldNames);
             ankiContentApiMock.Setup(x => x.FindDuplicateNotes(expectedModelId, "Front text")).Returns([1L]);
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
             dialogServiceMock
@@ -474,9 +489,14 @@ namespace CopyWords.Core.Tests.Services
 
             // Assert
             result.Should().Be(0);
-            ankiContentApiMock.Verify(
-                x => x.AddNote(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string[]>(), It.IsAny<string[]?>()),
-                Times.Never);
+
+            // We shouldn't save any media files if a user declines to add a duplicate note
+            saveImageFileServiceMock.Verify(x => x.DownloadAndResizeImageAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+            saveSoundFileServiceMock.Verify(x => x.DownloadSoundFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+            ankiContentApiMock.Verify(x => x.AddImageToAnkiMediaAsync(It.IsAny<string>(), It.IsAny<Stream>()), Times.Never);
+
+            ankiContentApiMock.Verify(x => x.AddNote(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string[]>(), It.IsAny<string[]?>()), Times.Never);
+
             dialogServiceMock.Verify(
                 x => x.DisplayAlertAsync(
                     "Note already exists",

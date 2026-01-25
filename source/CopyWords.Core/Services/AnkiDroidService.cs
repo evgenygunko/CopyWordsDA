@@ -56,21 +56,17 @@ namespace CopyWords.Core.Services
 
         public async Task<long> AddNoteAsync(AnkiNote note, CancellationToken cancellationToken)
         {
-            // Get deck ID from deck name
-            long? deckId = _ankiContentApi.GetDeckList()?
-                .FirstOrDefault(kv => kv.Value == note.DeckName).Key;
+            long noteId = 0;
 
-            // If no deck is found, Key will be 0 (default for long), so check if the deck exists
+            // Get deck ID from deck name
+            long? deckId = _ankiContentApi.GetDeckList()?.FirstOrDefault(kv => kv.Value == note.DeckName).Key;
             if (deckId == null || deckId == 0)
             {
                 throw new AnkiDroidDeckNotFoundException($"Deck '{note.DeckName}' not found in AnkiDroid.");
             }
 
             // Get model ID from model name
-            long? modelId = _ankiContentApi.GetModelList()?
-                .FirstOrDefault(kv => kv.Value == note.ModelName).Key;
-
-            // If no model is found, Key will be 0 (default for long), so check if the model exists
+            long? modelId = _ankiContentApi.GetModelList()?.FirstOrDefault(kv => kv.Value == note.ModelName).Key;
             if (modelId is null || modelId == 0)
             {
                 throw new AnkiDroidModelNotFoundException($"Model '{note.ModelName}' not found in AnkiDroid.");
@@ -81,6 +77,22 @@ namespace CopyWords.Core.Services
             if (fieldNames is null || fieldNames.Length == 0)
             {
                 throw new AnkiDroidFieldsNotFoundException($"No fields found for model '{note.ModelName}'.");
+            }
+
+            // Check for duplicate notes using the Front field value
+            bool isDuplicate = _ankiContentApi.FindDuplicateNotes(modelId.Value, note.Front).Any();
+            if (isDuplicate)
+            {
+                bool shouldAdd = await _dialogService.DisplayAlertAsync(
+                    "Note already exists",
+                    $"Note '{note.Front}' already exists in the deck '{note.DeckName}'. Do you want to add a duplicate note?",
+                    "Yes",
+                    "No");
+
+                if (!shouldAdd)
+                {
+                    return noteId;
+                }
             }
 
             Note noteModel = new Note()
@@ -115,29 +127,8 @@ namespace CopyWords.Core.Services
             // Build fields array matching the model's field order
             string[] fields = BuildFieldsArray(fieldNames, noteModel);
 
-            // First check for duplicates using the Front field value
-            bool isDuplicate = _ankiContentApi.FindDuplicateNotes(modelId.Value, note.Front).Any();
-
-            long noteId = 0;
-            if (isDuplicate)
-            {
-                bool shouldAdd = await _dialogService.DisplayAlertAsync(
-                    "Note already exists",
-                    $"Note '{note.Front}' already exists in the deck '{note.DeckName}'. Do you want to add a duplicate note?",
-                    "Yes",
-                    "No");
-
-                if (shouldAdd)
-                {
-                    noteId = _ankiContentApi.AddNote(modelId.Value, deckId.Value, fields, null);
-                }
-            }
-            else
-            {
-                // Add the note
-                noteId = _ankiContentApi.AddNote(modelId.Value, deckId.Value, fields, null);
-            }
-
+            // Add the note
+            noteId = _ankiContentApi.AddNote(modelId.Value, deckId.Value, fields, null);
             return noteId;
         }
 
