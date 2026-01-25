@@ -26,12 +26,21 @@ namespace CopyWords.Core.Services
         private readonly HttpClient _httpClient;
         private readonly IValidator<AnkiNote> _ankiNoteValidator;
         private readonly IDialogService _dialogService;
+        private readonly ISaveSoundFileService _saveSoundFileService;
+        private readonly ISaveImageFileService _saveImageFileService;
 
-        public AnkiConnectService(HttpClient httpClient, IValidator<AnkiNote> ankiNoteValidator, IDialogService dialogService)
+        public AnkiConnectService(
+            HttpClient httpClient,
+            IValidator<AnkiNote> ankiNoteValidator,
+            IDialogService dialogService,
+            ISaveSoundFileService saveSoundFileService,
+            ISaveImageFileService saveImageFileService)
         {
             _httpClient = httpClient;
             _ankiNoteValidator = ankiNoteValidator;
             _dialogService = dialogService;
+            _saveSoundFileService = saveSoundFileService;
+            _saveImageFileService = saveImageFileService;
         }
 
         #region Public Methods
@@ -48,7 +57,6 @@ namespace CopyWords.Core.Services
             await CheckThatAnkiConnectIsRunningAsync(cancellationToken);
 
             long noteId = 0;
-            bool noteNotUpdated = false;
 
             try
             {
@@ -73,18 +81,23 @@ namespace CopyWords.Core.Services
                     }
                     else
                     {
-                        noteNotUpdated = true;
+                        // Open the note editor in Anki to allow the user to make further edits.
+                        await ShowAnkiEditNoteWindowAsync(noteId, cancellationToken);
+                        noteId = 0;
                     }
                 }
             }
 
             if (noteId > 0)
             {
+                // If the note has been added, copy sound and images into Anki media directory
+                await SaveMediaFilesAsync(note, cancellationToken);
+
                 // Open the note editor in Anki to allow the user to make further edits.
                 await ShowAnkiEditNoteWindowAsync(noteId, cancellationToken);
             }
 
-            return noteNotUpdated ? 0 : noteId;
+            return noteId;
         }
 
         public async Task<string?> GetAnkiMediaDirectoryPathAsync(CancellationToken cancellationToken)
@@ -227,10 +240,7 @@ namespace CopyWords.Core.Services
                         note.ModelName,
                         BuildFields(note),
                         note.Tags,
-                        Options: BuildOptions(note.Options),
-                        Audio: BuildMedia(note.Audio),
-                        Video: BuildMedia(note.Video),
-                        Picture: BuildMedia(note.Picture))));
+                        Options: BuildOptions(note.Options))));
 
             string payload = JsonConvert.SerializeObject(request);
             using var content = new StringContent(payload, Encoding.UTF8, "application/json");
@@ -336,10 +346,7 @@ namespace CopyWords.Core.Services
                 Params: new UpdateNoteFieldsParams(
                     new UpdateNoteFieldsNote(
                         noteId,
-                        BuildFields(note),
-                        Audio: BuildMedia(note.Audio),
-                        Video: BuildMedia(note.Video),
-                        Picture: BuildMedia(note.Picture))));
+                        BuildFields(note))));
 
             string payload = JsonConvert.SerializeObject(request);
             using var content = new StringContent(payload, Encoding.UTF8, "application/json");
@@ -361,6 +368,51 @@ namespace CopyWords.Core.Services
 
                 throw new InvalidOperationException($"Failed to update note in Anki: {error}");
             }
+        }
+
+        internal async Task SaveMediaFilesAsync(AnkiNote note, CancellationToken cancellationToken)
+        {
+            // Save sound files
+            if (note.Audio is not null)
+            {
+                foreach (var audio in note.Audio)
+                {
+                    if (!string.IsNullOrEmpty(audio.Url))
+                    {
+                        await _saveSoundFileService.SaveSoundFileToAnkiFolderAsync(audio.Url, audio.Filename, cancellationToken);
+                    }
+                }
+            }
+
+            // Save image files
+            if (note.Picture is not null)
+            {
+                var imageFiles = note.Picture
+                    .Where(p => !string.IsNullOrEmpty(p.Url))
+                    .Select(p => new ImageFile(p.Url, p.Filename));
+
+                await _saveImageFileService.SaveImagesAsync(imageFiles, cancellationToken);
+            }
+        }
+
+        internal static Dictionary<string, string> BuildFields(AnkiNote note)
+        {
+            string soundTag = string.Empty;
+            if (note.Audio != null && note.Audio.Any())
+            {
+                AnkiMedia ankiMediaSound = note.Audio.First();
+                soundTag = $"[sound:{ankiMediaSound.Filename}.mp3]";
+            }
+
+            return new Dictionary<string, string>
+            {
+                ["Front"] = note.Front,
+                ["Back"] = note.Back,
+                ["PartOfSpeech"] = note.PartOfSpeech ?? string.Empty,
+                ["Forms"] = note.Forms ?? string.Empty,
+                ["Example"] = note.Example ?? string.Empty,
+                ["Sound"] = soundTag ?? string.Empty,
+            };
         }
 
         #endregion
@@ -387,33 +439,6 @@ namespace CopyWords.Core.Services
                 options.AllowDuplicate,
                 options.DuplicateScope,
                 duplicateScopeOptions);
-        }
-
-        private static IEnumerable<AddNoteMedia>? BuildMedia(IEnumerable<AnkiMedia>? media)
-        {
-            if (media is null)
-            {
-                return null;
-            }
-
-            return media.Select(m => new AddNoteMedia(
-                m.Url,
-                m.Filename,
-                m.SkipHash,
-                m.Fields)).ToList();
-        }
-
-        private static Dictionary<string, string> BuildFields(AnkiNote note)
-        {
-            return new Dictionary<string, string>
-            {
-                ["Front"] = note.Front,
-                ["Back"] = note.Back,
-                ["PartOfSpeech"] = note.PartOfSpeech ?? string.Empty,
-                ["Forms"] = note.Forms ?? string.Empty,
-                ["Example"] = note.Example ?? string.Empty,
-                ["Sound"] = note.Sound ?? string.Empty,
-            };
         }
 
         #endregion

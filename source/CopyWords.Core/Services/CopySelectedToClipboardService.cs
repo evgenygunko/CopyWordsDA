@@ -20,7 +20,7 @@ namespace CopyWords.Core.Services
 
         string CompileTranslations(DefinitionViewModel definitionViewModel);
 
-        string CompileSoundFileName(string soundFileName);
+        string CompileSoundFileName(string word);
 
         IEnumerable<ImageFile> CompileImages(DefinitionViewModel definitionViewModel);
     }
@@ -300,7 +300,7 @@ namespace CopyWords.Core.Services
             return imageFiles;
         }
 
-        public string CompileSoundFileName(string soundFileName) => $"[sound:{soundFileName}.mp3]";
+        public string CompileSoundFileName(string word) => $"[sound:{word}.mp3]";
 
         #endregion
 

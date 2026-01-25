@@ -415,65 +415,14 @@ namespace CopyWords.Core.ViewModels
         {
             try
             {
-                AppSettings appSettings = _settingsService.LoadSettings();
-                string deckName = (appSettings.SelectedParser == SourceLanguage.Spanish.ToString()) ? appSettings.AnkiDeckNameSpanish : appSettings.AnkiDeckNameDanish;
-
-                if (string.IsNullOrEmpty(deckName) || string.IsNullOrEmpty(appSettings.AnkiModelName))
+                AnkiNote? ankiNote = await CreateAnkiNoteAsync();
+                if (ankiNote != null)
                 {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please configure Anki deck name and model name in the settings.", "OK");
-                    return;
-                }
-
-                string front = _copySelectedToClipboardService.CompileFront(DefinitionViewModel);
-                if (string.IsNullOrEmpty(front))
-                {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
-                    return;
-                }
-
-                string back = _copySelectedToClipboardService.CompileBack(DefinitionViewModel);
-                if (string.IsNullOrEmpty(back))
-                {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
-                    return;
-                }
-
-                string partOfSpeech = _copySelectedToClipboardService.CompilePartOfSpeech(DefinitionViewModel);
-                string endings = _copySelectedToClipboardService.CompileEndings(DefinitionViewModel);
-                string examples = _copySelectedToClipboardService.CompileExamples(DefinitionViewModel);
-                string? sound = CanSaveSoundFile ? _copySelectedToClipboardService.CompileSoundFileName(Word) : null;
-
-                var ankiNoteOptions = new AnkiNoteOptions(
-                    AllowDuplicate: false,
-                    DuplicateScope: "deck",
-                    DuplicateScopeOptions: new AnkiDuplicateScopeOptions(
-                        DeckName: deckName,
-                        CheckChildren: false));
-
-                var note = new AnkiNote(
-                    DeckName: deckName,
-                    ModelName: appSettings.AnkiModelName,
-                    Front: front,
-                    Back: back,
-                    PartOfSpeech: partOfSpeech,
-                    Forms: endings,
-                    Example: examples,
-                    Sound: sound,
-                    Options: ankiNoteOptions);
-
-                var ct = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
-                long noteId = await _ankiConnectService.AddNoteAsync(note, ct);
-                if (noteId > 0)
-                {
-                    // If the note has been added, copy sound and images into Anki media directory
-                    if (!string.IsNullOrEmpty(SoundUrl))
+                    long noteId = await _ankiConnectService.AddNoteAsync(ankiNote, cancellationToken);
+                    if (noteId > 0)
                     {
-                        var saveFileCancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
-                        bool result = await _saveSoundFileService.SaveSoundFileToAnkiFolderAsync(SoundUrl!, Word, saveFileCancellationToken);
+                        await _dialogService.DisplayToast("The note has been added to Anki.");
                     }
-
-                    var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
-                    await _saveImageFileService.SaveImagesAsync(imageFiles, cancellationToken);
                 }
             }
             catch (AnkiConnectNotRunningException ex)
@@ -500,75 +449,84 @@ namespace CopyWords.Core.ViewModels
                     return;
                 }
 
-                AppSettings appSettings = _settingsService.LoadSettings();
-                string deckName = (appSettings.SelectedParser == SourceLanguage.Spanish.ToString()) ? appSettings.AnkiDeckNameSpanish : appSettings.AnkiDeckNameDanish;
-
-                if (string.IsNullOrEmpty(deckName) || string.IsNullOrEmpty(appSettings.AnkiModelName))
+                AnkiNote? ankiNote = await CreateAnkiNoteAsync();
+                if (ankiNote != null)
                 {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please configure Anki deck name and model name in the settings.", "OK");
-                    return;
-                }
-
-                var ankiNoteOptions = new AnkiNoteOptions(
-                    AllowDuplicate: false,
-                    DuplicateScope: "deck",
-                    DuplicateScopeOptions: new AnkiDuplicateScopeOptions(
-                        DeckName: deckName,
-                        CheckChildren: false));
-
-                string front = _copySelectedToClipboardService.CompileFront(DefinitionViewModel);
-                if (string.IsNullOrEmpty(front))
-                {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
-                    return;
-                }
-
-                string back = _copySelectedToClipboardService.CompileBack(DefinitionViewModel);
-                if (string.IsNullOrEmpty(back))
-                {
-                    await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
-                    return;
-                }
-
-                string partOfSpeech = _copySelectedToClipboardService.CompilePartOfSpeech(DefinitionViewModel);
-                string endings = _copySelectedToClipboardService.CompileEndings(DefinitionViewModel);
-                string examples = _copySelectedToClipboardService.CompileExamples(DefinitionViewModel);
-
-                var ankiMediaPicture = new List<AnkiMedia>();
-                var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
-                foreach (var imageFile in imageFiles)
-                {
-                    ankiMediaPicture.Add(new AnkiMedia(Url: imageFile.ImageUrl, imageFile.FileName));
-                }
-
-                var ankiMediaAudio = new List<AnkiMedia>();
-                if (!string.IsNullOrEmpty(SoundUrl))
-                {
-                    ankiMediaAudio.Add(new AnkiMedia(Url: SoundUrl, Filename: Word));
-                }
-
-                var note = new AnkiNote(
-                    DeckName: deckName,
-                    ModelName: appSettings.AnkiModelName,
-                    Front: front,
-                    Back: back,
-                    PartOfSpeech: partOfSpeech,
-                    Forms: endings,
-                    Example: examples,
-                    Options: ankiNoteOptions,
-                    Picture: ankiMediaPicture,
-                    Audio: ankiMediaAudio);
-
-                long noteId = await _ankiDroidService.AddNoteAsync(note, cancellationToken);
-                if (noteId > 0)
-                {
-                    await _dialogService.DisplayToast("The note has been added to Anki.");
+                    long noteId = await _ankiDroidService.AddNoteAsync(ankiNote, cancellationToken);
+                    if (noteId > 0)
+                    {
+                        await _dialogService.DisplayToast("The note has been added to Anki.");
+                    }
                 }
             }
             catch (Exception ex)
             {
                 await _dialogService.DisplayAlertAsync("Cannot add note", "Error occurred while trying to add note with  AndkiDroid API: " + ex.Message, "OK");
             }
+        }
+
+        internal async Task<AnkiNote?> CreateAnkiNoteAsync()
+        {
+            AppSettings appSettings = _settingsService.LoadSettings();
+            string deckName = (appSettings.SelectedParser == SourceLanguage.Spanish.ToString()) ? appSettings.AnkiDeckNameSpanish : appSettings.AnkiDeckNameDanish;
+
+            if (string.IsNullOrEmpty(deckName) || string.IsNullOrEmpty(appSettings.AnkiModelName))
+            {
+                await _dialogService.DisplayAlertAsync("Cannot add note", "Please configure Anki deck name and model name in the settings.", "OK");
+                return null;
+            }
+
+            var ankiNoteOptions = new AnkiNoteOptions(
+                AllowDuplicate: false,
+                DuplicateScope: "deck",
+                DuplicateScopeOptions: new AnkiDuplicateScopeOptions(
+                    DeckName: deckName,
+                    CheckChildren: false));
+
+            string front = _copySelectedToClipboardService.CompileFront(DefinitionViewModel);
+            if (string.IsNullOrEmpty(front))
+            {
+                await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
+                return null;
+            }
+
+            string back = _copySelectedToClipboardService.CompileBack(DefinitionViewModel);
+            if (string.IsNullOrEmpty(back))
+            {
+                await _dialogService.DisplayAlertAsync("Cannot add note", "Please select at least one example.", "OK");
+                return null;
+            }
+
+            string partOfSpeech = _copySelectedToClipboardService.CompilePartOfSpeech(DefinitionViewModel);
+            string endings = _copySelectedToClipboardService.CompileEndings(DefinitionViewModel);
+            string examples = _copySelectedToClipboardService.CompileExamples(DefinitionViewModel);
+
+            var ankiMediaPicture = new List<AnkiMedia>();
+            var imageFiles = _copySelectedToClipboardService.CompileImages(DefinitionViewModel);
+            foreach (var imageFile in imageFiles)
+            {
+                ankiMediaPicture.Add(new AnkiMedia(Url: imageFile.ImageUrl, imageFile.FileName));
+            }
+
+            var ankiMediaAudio = new List<AnkiMedia>();
+            if (!string.IsNullOrEmpty(SoundUrl))
+            {
+                // Important: we pass word in the Filename field. AnkiConnectService and AnkiDroidService will create a tag for Anki note from it.
+                ankiMediaAudio.Add(new AnkiMedia(Url: SoundUrl, Filename: Word));
+            }
+
+            var note = new AnkiNote(
+                DeckName: deckName,
+                ModelName: appSettings.AnkiModelName,
+                Front: front,
+                Back: back,
+                PartOfSpeech: partOfSpeech,
+                Forms: endings,
+                Example: examples,
+                Options: ankiNoteOptions,
+                Picture: ankiMediaPicture,
+                Audio: ankiMediaAudio);
+            return note;
         }
 
         #endregion

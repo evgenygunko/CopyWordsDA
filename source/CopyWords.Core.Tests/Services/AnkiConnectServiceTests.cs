@@ -382,6 +382,8 @@ namespace CopyWords.Core.Tests.Services
         public async Task AddNoteToAnkiAsync_WhenSuccess_ReturnsNoteId()
         {
             // Arrange
+            var audio = new AnkiMedia(Url: "http://example.com/sound.mp3", Filename: "test_sound");
+
             var note = new AnkiNote(
                 DeckName: "Default",
                 ModelName: "Basic",
@@ -390,7 +392,8 @@ namespace CopyWords.Core.Tests.Services
                 PartOfSpeech: "noun",
                 Forms: "form1, form2",
                 Example: "example text",
-                Sound: "[sound:file.mp3]",
+                Sound: null,
+                Audio: new[] { audio },
                 Tags: new[] { "tag1", "tag2" });
 
             var capturedBodies = new List<string?>();
@@ -440,7 +443,7 @@ namespace CopyWords.Core.Tests.Services
             fields["PartOfSpeech"]!.Value<string>().Should().Be(note.PartOfSpeech);
             fields["Forms"]!.Value<string>().Should().Be(note.Forms);
             fields["Example"]!.Value<string>().Should().Be(note.Example);
-            fields["Sound"]!.Value<string>().Should().Be(note.Sound);
+            fields["Sound"]!.Value<string>().Should().Be($"[sound:{audio.Filename}.mp3]");
 
             noteObject["tags"]!.Values<string>().Should().BeEquivalentTo(note.Tags);
         }
@@ -859,6 +862,8 @@ namespace CopyWords.Core.Tests.Services
         {
             // Arrange
             long noteId = 1514547547030;
+            var audio = new AnkiMedia(Url: "http://example.com/sound.mp3", Filename: "test_sound");
+
             var note = new AnkiNote(
                 DeckName: "Default",
                 ModelName: "Basic",
@@ -867,7 +872,8 @@ namespace CopyWords.Core.Tests.Services
                 PartOfSpeech: "verb",
                 Forms: "updated forms",
                 Example: "updated example",
-                Sound: "[sound:updated.mp3]",
+                Sound: null,
+                Audio: new[] { audio },
                 Tags: new[] { "tag1", "tag2" });
 
             var capturedBodies = new List<string?>();
@@ -912,7 +918,7 @@ namespace CopyWords.Core.Tests.Services
             fields["PartOfSpeech"]!.Value<string>().Should().Be(note.PartOfSpeech);
             fields["Forms"]!.Value<string>().Should().Be(note.Forms);
             fields["Example"]!.Value<string>().Should().Be(note.Example);
-            fields["Sound"]!.Value<string>().Should().Be(note.Sound);
+            fields["Sound"]!.Value<string>().Should().Be($"[sound:{audio.Filename}.mp3]");
         }
 
         [TestMethod]
@@ -1811,6 +1817,416 @@ namespace CopyWords.Core.Tests.Services
 
             // Assert
             result.Should().BeNull();
+        }
+
+        #endregion
+
+        #region Tests for BuildFields
+
+        [TestMethod]
+        public void BuildFields_WhenAllFieldsProvided_ReturnsCorrectDictionary()
+        {
+            // Arrange
+            var audio = new AnkiMedia(Url: "http://example.com/sound.mp3", Filename: "test_sound");
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                PartOfSpeech: "noun",
+                Forms: "form1, form2",
+                Example: "example text",
+                Audio: new[] { audio });
+
+            // Act
+            var result = AnkiConnectService.BuildFields(note);
+
+            // Assert
+            result.Should().HaveCount(6);
+            result["Front"].Should().Be("Front text");
+            result["Back"].Should().Be("Back text");
+            result["PartOfSpeech"].Should().Be("noun");
+            result["Forms"].Should().Be("form1, form2");
+            result["Example"].Should().Be("example text");
+            result["Sound"].Should().Be("[sound:test_sound.mp3]");
+        }
+
+        [TestMethod]
+        public void BuildFields_WhenOptionalFieldsAreNull_ReturnsEmptyStrings()
+        {
+            // Arrange
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                PartOfSpeech: null,
+                Forms: null,
+                Example: null,
+                Audio: null);
+
+            // Act
+            var result = AnkiConnectService.BuildFields(note);
+
+            // Assert
+            result.Should().HaveCount(6);
+            result["Front"].Should().Be("Front text");
+            result["Back"].Should().Be("Back text");
+            result["PartOfSpeech"].Should().BeEmpty();
+            result["Forms"].Should().BeEmpty();
+            result["Example"].Should().BeEmpty();
+            result["Sound"].Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void BuildFields_WhenAudioListIsEmpty_ReturnsSoundAsEmptyString()
+        {
+            // Arrange
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                PartOfSpeech: "verb",
+                Forms: "forms",
+                Example: "example",
+                Audio: Enumerable.Empty<AnkiMedia>());
+
+            // Act
+            var result = AnkiConnectService.BuildFields(note);
+
+            // Assert
+            result["Sound"].Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void BuildFields_WhenMultipleAudioFiles_UsesFirstAudioFile()
+        {
+            // Arrange
+            var audio1 = new AnkiMedia(Url: "http://example.com/sound1.mp3", Filename: "first_sound");
+            var audio2 = new AnkiMedia(Url: "http://example.com/sound2.mp3", Filename: "second_sound");
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                Audio: new[] { audio1, audio2 });
+
+            // Act
+            var result = AnkiConnectService.BuildFields(note);
+
+            // Assert
+            result["Sound"].Should().Be("[sound:first_sound.mp3]");
+        }
+
+        [TestMethod]
+        public void BuildFields_WhenFrontAndBackContainSpecialCharacters_PreservesContent()
+        {
+            // Arrange
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Hej! <b>Hvordan</b> går det?",
+                Back: "Hello! <i>How</i> are you? &amp; fine",
+                PartOfSpeech: "phrase",
+                Forms: null,
+                Example: "Example with \"quotes\" and 'apostrophes'");
+
+            // Act
+            var result = AnkiConnectService.BuildFields(note);
+
+            // Assert
+            result["Front"].Should().Be("Hej! <b>Hvordan</b> går det?");
+            result["Back"].Should().Be("Hello! <i>How</i> are you? &amp; fine");
+            result["Example"].Should().Be("Example with \"quotes\" and 'apostrophes'");
+        }
+
+        #endregion
+
+        #region Tests for SaveMediaFilesAsync
+
+        [TestMethod]
+        public async Task SaveMediaFilesAsync_WhenNoteHasAudioFiles_SavesSoundFiles()
+        {
+            // Arrange
+            var audio1 = new AnkiMedia(Url: "http://example.com/sound1.mp3", Filename: "sound1");
+            var audio2 = new AnkiMedia(Url: "http://example.com/sound2.mp3", Filename: "sound2");
+
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                Audio: new[] { audio1, audio2 });
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+            saveSoundFileServiceMock
+                .Setup(s => s.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            await sut.SaveMediaFilesAsync(note, CancellationToken.None);
+
+            // Assert
+            saveSoundFileServiceMock.Verify(
+                s => s.SaveSoundFileToAnkiFolderAsync(audio1.Url, audio1.Filename, It.IsAny<CancellationToken>()),
+                Times.Once);
+            saveSoundFileServiceMock.Verify(
+                s => s.SaveSoundFileToAnkiFolderAsync(audio2.Url, audio2.Filename, It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveMediaFilesAsync_WhenNoteHasPictureFiles_SavesImageFiles()
+        {
+            // Arrange
+            var picture1 = new AnkiMedia(Url: "http://example.com/image1.jpg", Filename: "image1");
+            var picture2 = new AnkiMedia(Url: "http://example.com/image2.jpg", Filename: "image2");
+
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                Picture: new[] { picture1, picture2 });
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock
+                .Setup(s => s.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            await sut.SaveMediaFilesAsync(note, CancellationToken.None);
+
+            // Assert
+            saveImageFileServiceMock.Verify(
+                s => s.SaveImagesAsync(
+                    It.Is<IEnumerable<ImageFile>>(files =>
+                        files.Count() == 2 &&
+                        files.Any(f => f.FileName == picture1.Url && f.ImageUrl == picture1.Filename) &&
+                        files.Any(f => f.FileName == picture2.Url && f.ImageUrl == picture2.Filename)),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveMediaFilesAsync_WhenAudioIsNull_DoesNotCallSaveSoundFileService()
+        {
+            // Arrange
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                Audio: null);
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            await sut.SaveMediaFilesAsync(note, CancellationToken.None);
+
+            // Assert
+            saveSoundFileServiceMock.Verify(
+                s => s.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
+                Times.Never);
+        }
+
+        [TestMethod]
+        public async Task SaveMediaFilesAsync_WhenAudioIsEmpty_DoesNotCallSaveSoundFileService()
+        {
+            // Arrange
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                Audio: Enumerable.Empty<AnkiMedia>());
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            await sut.SaveMediaFilesAsync(note, CancellationToken.None);
+
+            // Assert
+            saveSoundFileServiceMock.Verify(
+                s => s.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
+                Times.Never);
+        }
+
+        [TestMethod]
+        public async Task SaveMediaFilesAsync_WhenPictureIsNull_DoesNotCallSaveImageFileService()
+        {
+            // Arrange
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                Picture: null);
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            await sut.SaveMediaFilesAsync(note, CancellationToken.None);
+
+            // Assert
+            saveImageFileServiceMock.Verify(
+                s => s.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>(), It.IsAny<CancellationToken>()),
+                Times.Never);
+        }
+
+        [TestMethod]
+        public async Task SaveMediaFilesAsync_WhenPictureIsEmpty_CallsSaveImageFileServiceWithEmptyCollection()
+        {
+            // Arrange
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                Picture: Enumerable.Empty<AnkiMedia>());
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock
+                .Setup(s => s.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            await sut.SaveMediaFilesAsync(note, CancellationToken.None);
+
+            // Assert
+            saveImageFileServiceMock.Verify(
+                s => s.SaveImagesAsync(
+                    It.Is<IEnumerable<ImageFile>>(files => !files.Any()),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveMediaFilesAsync_WhenAudioUrlIsEmpty_SkipsAudioFile()
+        {
+            // Arrange
+            var audioWithUrl = new AnkiMedia(Url: "http://example.com/sound.mp3", Filename: "sound");
+            var audioWithoutUrl = new AnkiMedia(Url: string.Empty, Filename: "empty_sound");
+            var audioWithNullUrl = new AnkiMedia(Url: null!, Filename: "null_sound");
+
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                Audio: new[] { audioWithUrl, audioWithoutUrl, audioWithNullUrl });
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+            saveSoundFileServiceMock
+                .Setup(s => s.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            await sut.SaveMediaFilesAsync(note, CancellationToken.None);
+
+            // Assert
+            saveSoundFileServiceMock.Verify(
+                s => s.SaveSoundFileToAnkiFolderAsync(audioWithUrl.Url, audioWithUrl.Filename, It.IsAny<CancellationToken>()),
+                Times.Once);
+            saveSoundFileServiceMock.Verify(
+                s => s.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveMediaFilesAsync_WhenPictureUrlIsEmpty_SkipsPictureFile()
+        {
+            // Arrange
+            var pictureWithUrl = new AnkiMedia(Url: "http://example.com/image.jpg", Filename: "image");
+            var pictureWithoutUrl = new AnkiMedia(Url: string.Empty, Filename: "empty_image");
+            var pictureWithNullUrl = new AnkiMedia(Url: null!, Filename: "null_image");
+
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                Picture: new[] { pictureWithUrl, pictureWithoutUrl, pictureWithNullUrl });
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock
+                .Setup(s => s.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            await sut.SaveMediaFilesAsync(note, CancellationToken.None);
+
+            // Assert
+            saveImageFileServiceMock.Verify(
+                s => s.SaveImagesAsync(
+                    It.Is<IEnumerable<ImageFile>>(files =>
+                        files.Count() == 1 &&
+                        files.Single().FileName == pictureWithUrl.Url &&
+                        files.Single().ImageUrl == pictureWithUrl.Filename),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task SaveMediaFilesAsync_WhenNoteHasBothAudioAndPicture_SavesBothTypes()
+        {
+            // Arrange
+            var audio = new AnkiMedia(Url: "http://example.com/sound.mp3", Filename: "sound");
+            var picture = new AnkiMedia(Url: "http://example.com/image.jpg", Filename: "image");
+
+            var note = new AnkiNote(
+                DeckName: "Default",
+                ModelName: "Basic",
+                Front: "Front text",
+                Back: "Back text",
+                Audio: new[] { audio },
+                Picture: new[] { picture });
+
+            var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
+            saveSoundFileServiceMock
+                .Setup(s => s.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            var saveImageFileServiceMock = _fixture.Freeze<Mock<ISaveImageFileService>>();
+            saveImageFileServiceMock
+                .Setup(s => s.SaveImagesAsync(It.IsAny<IEnumerable<ImageFile>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            var sut = _fixture.Create<AnkiConnectService>();
+
+            // Act
+            await sut.SaveMediaFilesAsync(note, CancellationToken.None);
+
+            // Assert
+            saveSoundFileServiceMock.Verify(
+                s => s.SaveSoundFileToAnkiFolderAsync(audio.Url, audio.Filename, It.IsAny<CancellationToken>()),
+                Times.Once);
+
+            saveImageFileServiceMock.Verify(
+                s => s.SaveImagesAsync(
+                    It.Is<IEnumerable<ImageFile>>(files =>
+                        files.Count() == 1 &&
+                        files.Single().FileName == picture.Url &&
+                        files.Single().ImageUrl == picture.Filename),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
         }
 
         #endregion
