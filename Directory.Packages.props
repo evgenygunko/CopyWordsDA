@@ -14,7 +14,7 @@
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
     <PackageVersion Include="LaunchDarkly.ClientSdk" Version="5.5.4" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.2" />
-    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.30" />
+    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.31" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="MSTest" Version="4.0.2" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
