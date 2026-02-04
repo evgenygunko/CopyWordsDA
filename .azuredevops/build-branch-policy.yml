@@ -21,12 +21,12 @@ steps:
       inputs:
           packageType: 'sdk'
           version: '$(DOTNET_VERSION)'
-      condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
+      condition: and(succeeded(), eq(variables['Agent.Name'], 'Azure Pipelines 1'))
 
     # On a private agent we don't need this
     - script: dotnet workload install maui
       displayName: 'Install .NET MAUI Workload'
-      condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'))
+      condition: and(succeeded(), eq(variables['Agent.Name'], 'Azure Pipelines 1'))
 
     - task: DotNetCoreCLI@2
       displayName: 'dotnet test'

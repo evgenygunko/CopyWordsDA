@@ -13,7 +13,7 @@ steps:
           script: |
               $password = "$(SIGNING_CERTIFICATE_PASSWORD)" | ConvertTo-SecureString -Force -AsPlainText
               Import-PfxCertificate -FilePath "$(Agent.TempDirectory)/cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password $password
-      condition: and(succeeded(), eq(variables['Agent.Name'], 'Hosted Agent'), eq(variables['Agent.OS'], 'Windows_NT'))
+      condition: and(succeeded(), eq(variables['Agent.Name'], 'Azure Pipelines 1'), eq(variables['Agent.OS'], 'Windows_NT'))
 
     - task: PowerShell@2
       displayName: '[Windows] Convert .pfx to .cer'
