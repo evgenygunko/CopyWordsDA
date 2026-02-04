@@ -389,7 +389,7 @@ namespace CopyWords.Core.Services
             {
                 var imageFiles = note.Picture
                     .Where(p => !string.IsNullOrEmpty(p.Url))
-                    .Select(p => new ImageFile(p.Url, p.Filename));
+                    .Select(p => new ImageFile(p.Filename, p.Url));
 
                 await _saveImageFileService.SaveImagesAsync(imageFiles, cancellationToken);
             }

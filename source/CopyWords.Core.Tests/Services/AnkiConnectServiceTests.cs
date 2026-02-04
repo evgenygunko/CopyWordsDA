@@ -2007,8 +2007,8 @@ namespace CopyWords.Core.Tests.Services
                 s => s.SaveImagesAsync(
                     It.Is<IEnumerable<ImageFile>>(files =>
                         files.Count() == 2 &&
-                        files.Any(f => f.FileName == picture1.Url && f.ImageUrl == picture1.Filename) &&
-                        files.Any(f => f.FileName == picture2.Url && f.ImageUrl == picture2.Filename)),
+                        files.Any(f => f.FileName == picture1.Filename && f.ImageUrl == picture1.Url) &&
+                        files.Any(f => f.FileName == picture2.Filename && f.ImageUrl == picture2.Url)),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
         }
@@ -2115,19 +2115,19 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task SaveMediaFilesAsync_WhenAudioUrlIsEmpty_SkipsAudioFile()
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task SaveMediaFilesAsync_WhenAudioUrlIsNullOrEmpty_SkipsAudioFile(string soundUrl)
         {
             // Arrange
-            var audioWithUrl = new AnkiMedia(Url: "http://example.com/sound.mp3", Filename: "sound");
-            var audioWithoutUrl = new AnkiMedia(Url: string.Empty, Filename: "empty_sound");
-            var audioWithNullUrl = new AnkiMedia(Url: null!, Filename: "null_sound");
+            var ankiMedia = new AnkiMedia(Url: soundUrl, Filename: "sound");
 
             var note = new AnkiNote(
                 DeckName: "Default",
                 ModelName: "Basic",
                 Front: "Front text",
                 Back: "Back text",
-                Audio: new[] { audioWithUrl, audioWithoutUrl, audioWithNullUrl });
+                Audio: [ankiMedia]);
 
             var saveSoundFileServiceMock = _fixture.Freeze<Mock<ISaveSoundFileService>>();
             saveSoundFileServiceMock
@@ -2141,11 +2141,8 @@ namespace CopyWords.Core.Tests.Services
 
             // Assert
             saveSoundFileServiceMock.Verify(
-                s => s.SaveSoundFileToAnkiFolderAsync(audioWithUrl.Url, audioWithUrl.Filename, It.IsAny<CancellationToken>()),
-                Times.Once);
-            saveSoundFileServiceMock.Verify(
                 s => s.SaveSoundFileToAnkiFolderAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
-                Times.Once);
+                Times.Never);
         }
 
         [TestMethod]
@@ -2178,8 +2175,8 @@ namespace CopyWords.Core.Tests.Services
                 s => s.SaveImagesAsync(
                     It.Is<IEnumerable<ImageFile>>(files =>
                         files.Count() == 1 &&
-                        files.Single().FileName == pictureWithUrl.Url &&
-                        files.Single().ImageUrl == pictureWithUrl.Filename),
+                        files.Single().FileName == pictureWithUrl.Filename &&
+                        files.Single().ImageUrl == pictureWithUrl.Url),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
         }
@@ -2223,8 +2220,8 @@ namespace CopyWords.Core.Tests.Services
                 s => s.SaveImagesAsync(
                     It.Is<IEnumerable<ImageFile>>(files =>
                         files.Count() == 1 &&
-                        files.Single().FileName == picture.Url &&
-                        files.Single().ImageUrl == picture.Filename),
+                        files.Single().FileName == picture.Filename &&
+                        files.Single().ImageUrl == picture.Url),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
         }
