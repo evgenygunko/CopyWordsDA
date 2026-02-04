@@ -29,7 +29,7 @@ If you’re interested in using CopyWords together with Anki, see the [Copy Mode
 1. Select the source language (Danish or Spanish).
 2. Type a word (or part of it) in the **Search** box.
 3. Click the **Search** button.
-4. Use the **Play sound** or **Save sound** buttons if audio is available.
+4. Use the **Play sound** button if audio is available.
 
 <div>Danish dictionary:</div>
 
@@ -78,19 +78,22 @@ You can then side-load the CopyWords app.
 
 ## Settings
 
-The settings dialog can be opened by clicking the **Settings** button in the app bar.
+
+The settings dialog is accessible by tapping the **Settings** button (gear icon) in the app bar.
 
 ![Settings](./img/CopyWords_settings_Android.png)
 
-- **Export**: Save settings as a JSON file.
-- **Import**: Load settings from a JSON file.
-- **Show copy buttons**: Switches the app between **dictionary mode** and **copy mode**.
-- **Include translated meanings when copying to the back of the card** *(only relevant for Copy Mode)*: Copies both the translated text and the original meaning.
+**Available settings on Android:**
+
+- **Dictionary mode**: Switch between **Dictionary mode** (for word lookup and pronunciation) and **Copy mode** (for preparing Anki flashcards).
+- **Include translated meanings**: When enabled in Copy mode, both the translated text and the original meaning are copied to the back of the card.
+- **Anki settings**: Allows you to select a deck and a note type for automatically created Anki notes.
+- **Theme**: Switch between Dark and Light themes.
 
 ---
 ## Technology
 
-CopyWords is built with [Microsoft .NET MAUI](https://learn.microsoft.com/en-us/dotnet/maui/what-is-maui) and runs on both Windows and Android.
+CopyWords is built with [Microsoft .NET MAUI](https://learn.microsoft.com/en-us/dotnet/maui/what-is-maui) and runs on Windows, MacOS (via MacCatalyst), and Android.
 
 ---
 
