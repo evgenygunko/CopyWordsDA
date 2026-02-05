@@ -11,6 +11,15 @@ namespace CopyWords.Core.Tests.Services
     [TestClass]
     public class UpdateServiceTests
     {
+        private const string TestLatestReleaseUrl = "https://api.github.com/repos/test/releases/latest";
+
+        private static Mock<IGlobalSettings> CreateGlobalSettingsMock()
+        {
+            var mock = new Mock<IGlobalSettings>();
+            mock.Setup(x => x.LatestReleaseUrl).Returns(TestLatestReleaseUrl);
+            return mock;
+        }
+
         #region Tests for GetLatestReleaseVersionAsync
 
         [TestMethod]
@@ -38,7 +47,8 @@ namespace CopyWords.Core.Tests.Services
                 });
 
             var httpClient = new HttpClient(handlerMock.Object);
-            var sut = new UpdateService(httpClient);
+            var globalSettingsMock = CreateGlobalSettingsMock();
+            var sut = new UpdateService(httpClient, globalSettingsMock.Object);
 
             // Act
             ReleaseInfo result = await sut.GetLatestReleaseVersionAsync();
@@ -65,7 +75,8 @@ namespace CopyWords.Core.Tests.Services
                 });
 
             var httpClient = new HttpClient(handlerMock.Object);
-            var sut = new UpdateService(httpClient);
+            var globalSettingsMock = CreateGlobalSettingsMock();
+            var sut = new UpdateService(httpClient, globalSettingsMock.Object);
 
             // Act & Assert
             _ = sut.Invoking(x => x.GetLatestReleaseVersionAsync())
@@ -94,7 +105,8 @@ namespace CopyWords.Core.Tests.Services
                 });
 
             var httpClient = new HttpClient(handlerMock.Object);
-            var sut = new UpdateService(httpClient);
+            var globalSettingsMock = CreateGlobalSettingsMock();
+            var sut = new UpdateService(httpClient, globalSettingsMock.Object);
 
             // Act
             ReleaseInfo result = await sut.GetLatestReleaseVersionAsync();
@@ -110,14 +122,33 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for IsUpdateAvailableAsync
 
         [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow("not-a-valid-url")]
+        [DataRow("relative/path/only")]
+        public async Task IsUpdateAvailableAsync_WhenLatestReleaseUrlIsInvalid_ReturnsFalse(string? invalidUrl)
+        {
+            var handlerMock = new Mock<HttpMessageHandler>();
+            var httpClient = new HttpClient(handlerMock.Object);
+            var globalSettingsMock = new Mock<IGlobalSettings>();
+            globalSettingsMock.Setup(x => x.LatestReleaseUrl).Returns(invalidUrl!);
+
+            var sut = new UpdateService(httpClient, globalSettingsMock.Object);
+            bool result = await sut.IsUpdateAvailableAsync("1.0.0");
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
         public async Task IsUpdateAvailableAsync_WhenCannotParseCurrentVersion_ReturnsFalse()
         {
             const string currentVersion = "invalid_version";
 
             var handlerMock = new Mock<HttpMessageHandler>();
             var httpClient = new HttpClient(handlerMock.Object);
+            var globalSettingsMock = CreateGlobalSettingsMock();
 
-            var sut = new UpdateService(httpClient);
+            var sut = new UpdateService(httpClient, globalSettingsMock.Object);
             bool result = await sut.IsUpdateAvailableAsync(currentVersion);
 
             result.Should().BeFalse();
@@ -149,8 +180,9 @@ namespace CopyWords.Core.Tests.Services
                 });
 
             var httpClient = new HttpClient(handlerMock.Object);
+            var globalSettingsMock = CreateGlobalSettingsMock();
 
-            var sut = new UpdateService(httpClient);
+            var sut = new UpdateService(httpClient, globalSettingsMock.Object);
             bool result = await sut.IsUpdateAvailableAsync(currentVersion);
 
             result.Should().BeFalse();
@@ -182,8 +214,9 @@ namespace CopyWords.Core.Tests.Services
                 });
 
             var httpClient = new HttpClient(handlerMock.Object);
+            var globalSettingsMock = CreateGlobalSettingsMock();
 
-            var sut = new UpdateService(httpClient);
+            var sut = new UpdateService(httpClient, globalSettingsMock.Object);
             bool result = await sut.IsUpdateAvailableAsync(currentVersion);
 
             result.Should().BeFalse();
@@ -215,8 +248,9 @@ namespace CopyWords.Core.Tests.Services
                 });
 
             var httpClient = new HttpClient(handlerMock.Object);
+            var globalSettingsMock = CreateGlobalSettingsMock();
 
-            var sut = new UpdateService(httpClient);
+            var sut = new UpdateService(httpClient, globalSettingsMock.Object);
             bool result = await sut.IsUpdateAvailableAsync(currentVersion);
 
             result.Should().BeTrue();

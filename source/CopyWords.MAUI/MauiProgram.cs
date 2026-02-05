@@ -39,7 +39,6 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         GlobalSettings globalSettings = ReadGlobalSettings();
-        Debug.Assert(!string.IsNullOrEmpty(globalSettings.SentryDsn), "Sentry DSN is not configured in appsettings.");
 
         var builder = MauiApp.CreateBuilder();
         builder
@@ -47,8 +46,11 @@ public static class MauiProgram
             .ConfigureSyncfusionToolkit()
             .ConfigureSyncfusionCore()
             .UseMauiCommunityToolkit()
-            .UseMauiCommunityToolkitMediaElement()
-            .UseSentry(options =>
+            .UseMauiCommunityToolkitMediaElement();
+
+        if (!string.IsNullOrEmpty(globalSettings.SentryDsn))
+        {
+            builder.UseSentry(options =>
             {
                 // The DSN is the only required setting.
                 options.Dsn = globalSettings.SentryDsn;
@@ -63,8 +65,10 @@ public static class MauiProgram
                 // By default, only HTTP client errors with a response code between 500 and 599 are captured as error events.
                 // We do not want this - our own error handling will capture and log errors as needed.
                 options.CaptureFailedRequests = false;
-            })
-            .ConfigureFonts(fonts =>
+            });
+        }
+
+        builder.ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");

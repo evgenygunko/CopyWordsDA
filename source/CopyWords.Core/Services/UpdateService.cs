@@ -12,20 +12,20 @@ namespace CopyWords.Core.Services
 
     public class UpdateService : IUpdateService
     {
-        private const string LatestReleaseUrl = "https://api.github.com/repos/evgenygunko/CopyWordsDA/releases/latest";
-
         private readonly HttpClient _httpClient;
+        private readonly IGlobalSettings _globalSettings;
 
-        public UpdateService(HttpClient httpClient)
+        public UpdateService(HttpClient httpClient, IGlobalSettings globalSettings)
         {
             _httpClient = httpClient;
+            _globalSettings = globalSettings;
         }
 
         public async Task<ReleaseInfo> GetLatestReleaseVersionAsync()
         {
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("request");
 
-            var response = await _httpClient.GetAsync(LatestReleaseUrl, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
+            var response = await _httpClient.GetAsync(_globalSettings.LatestReleaseUrl, new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token);
             response.EnsureSuccessStatusCode();
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -58,6 +58,11 @@ namespace CopyWords.Core.Services
 
         public async Task<bool> IsUpdateAvailableAsync(string currentVersion)
         {
+            if (!Uri.TryCreate(_globalSettings.LatestReleaseUrl, UriKind.Absolute, out _))
+            {
+                return false;
+            }
+
             Version? current;
             if (!Version.TryParse(currentVersion, out current))
             {

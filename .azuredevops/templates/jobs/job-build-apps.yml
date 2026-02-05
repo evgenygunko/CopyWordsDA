@@ -34,7 +34,8 @@ jobs:
                         -replace '"SyncfusionLicenseKey":\s*""', '"SyncfusionLicenseKey": "$(SyncfusionLicenseKey)"' `
                         -replace '"SentryDsn":\s*""', '"SentryDsn": "$(SentryDsn)"' `
                         -replace '"LaunchDarklyMobileKey":\s*""', '"LaunchDarklyMobileKey": "$(LaunchDarklyMobileKey)"' `
-                        -replace '"LaunchDarklyMemberId":\s*""', '"LaunchDarklyMemberId": "$(LaunchDarklyMemberId)"' |
+                        -replace '"LaunchDarklyMemberId":\s*""', '"LaunchDarklyMemberId": "$(LaunchDarklyMemberId)"' `
+                        -replace '"LatestReleaseUrl":\s*""', '"LatestReleaseUrl": "$(LatestReleaseUrl)"' |
                         Set-Content $file
 
                     Write-Host "Updated appsettings.json:"

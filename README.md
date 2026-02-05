@@ -109,4 +109,5 @@ This service uses an OpenAI language model (LLM) to generate translations.
 ## More Information
 
 - [Copy Mode & Anki Integration](./README_COPY_MODE.md)
-- [Card Templates for Anki](./README_COPY_MODE.md#card-templates)
+- [Card Templates for Anki](./README_CARD_TEMPLATES.md)
+- [Development Guide](./README_DEVELOPMENT.md)
