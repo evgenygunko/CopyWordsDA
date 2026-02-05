@@ -60,7 +60,7 @@ steps:
     - task: CopyFiles@2
       displayName: '[Windows] Copy build output to artifact staging directory'
       inputs:
-          SourceFolder: './source/CopyWords.MAUI/bin/'
+          SourceFolder: './source/CopyWords.MAUI/AppPackages/'
           Contents: |
               **/CopyWords*.msix
           TargetFolder: '$(build.artifactstagingdirectory)/windows'

@@ -12,11 +12,13 @@ namespace CopyWords.Core.ViewModels
         private readonly IUpdateService _updateService;
         private readonly IShellService _shellService;
         private readonly IDialogService _dialogService;
+        private readonly IAppInfo _appInfo;
 
         public GetUpdateViewModel(
             IUpdateService updateService,
             IShellService shellService,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            IAppInfo appInfo)
         {
             _updateService = updateService;
             _shellService = shellService;
@@ -27,6 +29,7 @@ namespace CopyWords.Core.ViewModels
             LatestVersion = string.Empty;
             ErrorMessage = string.Empty;
             DownloadUrl = string.Empty;
+            _appInfo = appInfo;
         }
 
         [ObservableProperty]
@@ -57,9 +60,15 @@ namespace CopyWords.Core.ViewModels
 
                 WhatIsNew = $"What is new in {releaseInfo.LatestVersion}";
                 UpdateDescription = releaseInfo.Description;
-                CurrentVersion = AppInfo.VersionString;
+                CurrentVersion = _appInfo.VersionString;
                 LatestVersion = releaseInfo.LatestVersion;
                 DownloadUrl = releaseInfo.DownloadUrl;
+
+                if (!Uri.TryCreate(DownloadUrl, UriKind.Absolute, out _))
+                {
+                    Debug.WriteLine("The download URL is not valid: " + DownloadUrl);
+                    ErrorMessage = "The download URL is not valid.";
+                }
             }
             catch (Exception ex)
             {
