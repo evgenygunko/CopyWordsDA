@@ -46,7 +46,7 @@ public static class MauiProgram
             .ConfigureSyncfusionToolkit()
             .ConfigureSyncfusionCore()
             .UseMauiCommunityToolkit()
-            .UseMauiCommunityToolkitMediaElement();
+            .UseMauiCommunityToolkitMediaElement(isAndroidForegroundServiceEnabled: true);
 
         if (!string.IsNullOrEmpty(globalSettings.SentryDsn))
         {
