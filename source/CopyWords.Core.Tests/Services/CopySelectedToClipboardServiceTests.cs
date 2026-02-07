@@ -776,6 +776,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                 {
                                     new Example(Original : "Form kødet til små boller og stik dem på et grillspyd – ca. 4-5 stykker på hver", Translation: null),
@@ -804,6 +805,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                 {
                                     new Example(Original : "8000 medarbejdere skal til fest med god mad og underholdning af bl.a. Hans Otto Bisgaard", Translation: null),
@@ -827,15 +829,27 @@ namespace CopyWords.Core.Tests.Services
                     new Context(ContextEN: "", Position: "",
                         new List<Meaning>
                         {
-                            new Meaning(Original : "rette blikket i en bestemt retning", Translation : "направить взгляд в определенном направлении", AlphabeticalPosition: "1", Tag: null, ImageUrl: null,
-                                new List<Example>()
+                            new Meaning
+                                (Original : "rette blikket i en bestemt retning",
+                                Translation : "направить взгляд в определенном направлении",
+                                AlphabeticalPosition: "1",
+                                Tag: null,
+                                ImageUrl: null,
+                                LookupUrl: null,
+                                Examples: new List<Example>()
                                 {
                                     new Example(Original : "Børnene kiggede spørgende på hinanden", Translation: null),
                                     new Example(Original : "kig lige en gang!", Translation: null),
                                     new Example(Original : "Han kiggede sig rundt, som om han ledte efter noget", Translation: null),
                                 }),
-                            new Meaning(Original: "undersøge nærmere; sætte sig ind i", Translation: "присмотритесь повнимательнее; попасть в", AlphabeticalPosition: "2", Tag: null, ImageUrl: null,
-                                new List<Example>()
+                            new Meaning(
+                                Original: "undersøge nærmere; sætte sig ind i",
+                                Translation: "присмотритесь повнимательнее; попасть в",
+                                AlphabeticalPosition: "2",
+                                Tag: null,
+                                ImageUrl: null,
+                                LookupUrl: null,
+                                Examples: new List<Example>()
                                 {
                                     new Example(Original : "hun har kigget på de psykiske eftervirkninger hos voldtagne piger og kvinder", Translation: null)
                                 })
@@ -863,6 +877,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition : "1",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                 {
                                     new Example(Original : "Overalt var der rejst høje flagstænger med røde og hvide bannere", Translation: null),
@@ -874,6 +889,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition : "2",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                 {
                                     new Example(Original : "I år ser det ud til at antallet af rapporterede salmonellatilfælde bliver 40 pct. højere end i fjor", Translation: null),
@@ -903,6 +919,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition : "1",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                 {
                                     new Example(Original : "Vi skulle stå med samlede ben, med vægten lagt på hælene og se ligeud", Translation: null)
@@ -913,6 +930,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition : "2",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples : new List<Example>()
                                 {
                                     new Example(Original : "det er for at sige det ligeud: skidehamrende-irriterende", Translation: null)
@@ -923,6 +941,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition : "3",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples : new List<Example>()
                                 {
                                     new Example(Original : "To ligeud, sagde moderen da konduktøren kom, – pigerne kører på én billet", Translation: null)
@@ -951,6 +970,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                 {
                                     new Example(Original : "Stillingen som sognepræst i Hellebæk og Hornbæk pastorater skal besættes midlertidigt i forb. med et barselsvikariat", Translation: null),
@@ -980,6 +1000,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                 {
                                     new Example(Original : "Hubertus [vidste], at det var en haj, der kredsede rundt og håbede på, at en sørøver skulle gå planken ud eller blive kølhalet, så den kunne æde ham", Translation: null),
@@ -990,6 +1011,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "2",
                                 Tag: "SLANG",
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                 {
                                     new Example(Original : "-", Translation: null),
@@ -1000,6 +1022,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "3",
                                 Tag: "SLANG",
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                 {
                                     new Example(Original : "Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb", Translation: null),
@@ -1032,6 +1055,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Mi coche no prende porque tiene una falla en el motor.", Translation: "My car won't start because of a problem with the engine.")
@@ -1042,6 +1066,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Todos estos coches tienen bolsas de aire.", Translation: "All these automobiles have airbags.")
@@ -1057,6 +1082,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Los monarcas llegaron en un coche elegante.", Translation: "The monarchs arrived in an elegant carriage.")
@@ -1067,6 +1093,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Los coches de caballos se utilizaban mucho más antes de que se inventara el automóvil.", Translation: "Horse-drawn coaches were used much more before the invention of the automobile.")
@@ -1095,6 +1122,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/1ccc644c-898c-49b1-be9b-01eee0375a72.jpg",
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Vivimos en una casa con un gran jardín.", Translation: "We live in a house with a big garden.")
@@ -1124,6 +1152,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Enrico se involucró con el hampa y hace tres días está desaparecido.", Translation: "Enrico got involved with the underworld and has been missing for three days.")
@@ -1153,6 +1182,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Los moradores de esta aldea viven en casas hechas de adobe.", Translation: "The inhabitants of this village live in adobe houses.")
@@ -1182,6 +1212,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Últimamente no me he sentido bien.", Translation: "I haven't felt well lately.")
@@ -1196,6 +1227,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Si la carne molida no se cocina bien, las bacterias no mueren.", Translation: "If the ground meat is not cooked well, the bacteria don't die.")
@@ -1225,6 +1257,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "¿Quieres que veamos la peli en mi ordenador? - ¡Guay, tío!", Translation: "Do you want to watch the movie on my computer? - Cool, man!"),
@@ -1236,6 +1269,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Puedes tomarte el día libre mañana. - ¡Guay!", Translation: "You can take the day off tomorrow. - Great!")
@@ -1265,6 +1299,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Luce más fuerte. ¿Ha estado yendo al gimnasio?", Translation: "He looks stronger. Has he been going to the gym?"),
@@ -1275,6 +1310,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Luce muy bien con el pelo corto.", Translation: "She looks great with short hair.")
@@ -1285,6 +1321,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "c",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "¿Llevaste tu uniforme a la tintorería? Luce impecable el día de hoy.", Translation: "Did you take your uniform to the cleaners? It looks immaculate today.")
@@ -1299,6 +1336,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Luce muy elegante, Sra. Vargas. ¿Tiene planes para hoy?", Translation: "You look very elegant, Mrs. Vargas. Do you have plans for today?"),
@@ -1327,6 +1365,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/5bf100e5-da54-4be6-a55c-281edcd08b10.jpg",
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Los saltamontes pueden saltar muy alto.", Translation: "Grasshoppers can jump really high.")
@@ -1356,6 +1395,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d533b470-18a4-4cae-ad08-3ee8858ae02c.jpg",
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "La herida aún tiene el veneno dentro.", Translation: "The wound still has venom in it.")
@@ -1366,6 +1406,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: "https://d25rq8gxcq0p71.cloudfront.net/dictionary-images/300/d07aa7fd-a3fd-4d06-9751-656180d8b1ee.jpg",
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Estos hongos contienen un veneno mortal.", Translation: "These mushrooms contain a deadly poison.")
@@ -1380,6 +1421,7 @@ namespace CopyWords.Core.Tests.Services
                                 AlphabeticalPosition: "a",
                                 Tag: null,
                                 ImageUrl: null,
+                                LookupUrl: null,
                                 Examples: new List<Example>()
                                     {
                                         new Example(Original: "Le espetó con tal veneno que ni se atrevió a responderle.", Translation: "She spat at him with such venom that he didn't even dare respond.")

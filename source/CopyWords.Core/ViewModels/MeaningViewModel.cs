@@ -1,11 +1,14 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CopyWords.Core.Models;
 
 namespace CopyWords.Core.ViewModels
 {
     public partial class MeaningViewModel : ObservableObject
     {
+        public event EventHandler<string> MeaningLookupClicked = default!;
+
         public MeaningViewModel(
             Meaning meaning,
             SourceLanguage sourceLanguage,
@@ -17,6 +20,7 @@ namespace CopyWords.Core.ViewModels
             AlphabeticalPosition = meaning.AlphabeticalPosition;
             Tag = meaning.Tag ?? string.Empty;
             ImageUrl = meaning.ImageUrl ?? string.Empty;
+            LookupUrl = meaning.LookupUrl ?? string.Empty;
 
             ExampleViewModels.Clear();
             foreach (var example in meaning.Examples)
@@ -60,6 +64,17 @@ namespace CopyWords.Core.ViewModels
         [ObservableProperty]
         public partial Thickness ExamplesMargin { get; set; }
 
+        [ObservableProperty]
+        public partial string LookupUrl { get; set; }
+
+        public bool CanLookupMeaning => !string.IsNullOrEmpty(LookupUrl);
+
         public ObservableCollection<ExampleViewModel> ExampleViewModels { get; } = [];
+
+        [RelayCommand(CanExecute = nameof(CanLookupMeaning))]
+        private void SelectLookupUrl()
+        {
+            MeaningLookupClicked?.Invoke(this, LookupUrl);
+        }
     }
 }

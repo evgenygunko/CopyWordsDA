@@ -354,7 +354,14 @@ namespace CopyWords.Core.ViewModels
                     // On Windows and MacCatalyst a user might want to hide copy buttons, but keep Anki button visible.
                     showCheckBoxes = _settingsService.GetShowCopyButtons() || _settingsService.GetShowAnkiButton();
                 }
-                _wordViewModel.SetDefinition(new DefinitionViewModel(wordModel.Definition, wordModel.SourceLanguage, showCheckBoxes));
+
+                var definitionVM = new DefinitionViewModel(wordModel.Definition, wordModel.SourceLanguage, showCheckBoxes);
+                definitionVM.MeaningLookupClicked += async (sender, url) =>
+                {
+                    Debug.WriteLine($"Meaning lookup clicked, will lookup '{url}'");
+                    await GetVariantAsync(url);
+                };
+                _wordViewModel.SetDefinition(definitionVM);
 
                 _wordViewModel.ClearVariants();
                 foreach (var variant in wordModel.Variants)

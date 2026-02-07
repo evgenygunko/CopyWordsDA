@@ -6,6 +6,8 @@ namespace CopyWords.Core.ViewModels
 {
     public partial class ContextViewModel : ObservableObject
     {
+        public event EventHandler<string> MeaningLookupClicked = default!;
+
         public ContextViewModel(
             Context context,
             SourceLanguage sourceLanguage,
@@ -17,7 +19,9 @@ namespace CopyWords.Core.ViewModels
             MeaningViewModels.Clear();
             foreach (var meanings in context.Meanings)
             {
-                MeaningViewModels.Add(new MeaningViewModel(meanings, sourceLanguage, showCheckBoxes));
+                var meaningVM = new MeaningViewModel(meanings, sourceLanguage, showCheckBoxes);
+                meaningVM.MeaningLookupClicked += (sender, url) => MeaningLookupClicked?.Invoke(sender, url);
+                MeaningViewModels.Add(meaningVM);
             }
         }
 

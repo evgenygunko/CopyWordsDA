@@ -11,6 +11,7 @@
             <MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
             <MyIsStringNullOrWhiteSpaceConverter x:Key="IsStringNullOrWhiteSpaceConverter" />
             <InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <StringToTextDecorationsConverter x:Key="StringToTextDecorationsConverter" />
 
             <DataTemplate x:Key="translationsTemplate"
                           x:DataType="MeaningViewModel">
@@ -42,7 +43,19 @@
                         <VerticalStackLayout Grid.Row="0" Grid.Column="2"
                                 IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
 
-                            <Label Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}"/>
+                            <!-- If LookupUrl is defined, show Original as a hyperlink, otherwise as a normal text -->
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}"
+                                              TextDecorations="{Binding LookupUrl, Converter={StaticResource StringToTextDecorationsConverter}}">
+                                            <Span.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding SelectLookupUrlCommand}" />
+                                            </Span.GestureRecognizers>
+                                        </Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
                             <Label Text="{Binding Translation, FallbackValue='крупная, удлиненная хрящевая рыба'}" TextColor="{DynamicResource SecondaryTextColor}" Margin="0,2,0,0" />
 
                         </VerticalStackLayout>

@@ -39,6 +39,7 @@ namespace CopyWords.Core.Models
         string AlphabeticalPosition,
         string? Tag,
         string? ImageUrl,
+        string? LookupUrl,
         IEnumerable<Example> Examples);
 
     public record Example(
@@ -46,7 +47,7 @@ namespace CopyWords.Core.Models
         string? Translation);
 
     /// <summary>
-    /// List of related words (only for Danish dictionary)
+    /// List of related words
     /// </summary>
     public record Variant(
         string Word,
