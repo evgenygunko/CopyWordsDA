@@ -29,23 +29,23 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <!-- Russian -->
-            <CheckBox Grid.Row="0" Grid.Column="0" x:Name="checkBoxRU"
-                      IsVisible="{Binding CanCheckRussianTranslation}"
-                      IsChecked="{Binding IsRussianTranslationChecked}" />
+            <!-- Destination Translation -->
+            <CheckBox Grid.Row="0" Grid.Column="0" x:Name="checkBoxDestination"
+                      IsVisible="{Binding CanCheckDestinationTranslation}"
+                      IsChecked="{Binding IsDestinationTranslationChecked}" />
             <Label Grid.Row="0" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center"
                    Margin="{OnPlatform '7', Android='0,0,7,0'}">
                 <Label.FormattedText>
                     <FormattedString>
-                        <Span Text="{Binding Russian, FallbackValue='акула'}"/>
+                        <Span Text="{Binding Translation, FallbackValue='акула'}"/>
                     </FormattedString>
                 </Label.FormattedText>
 
                 <Label.Triggers>
-                    <DataTrigger TargetType="Label" Binding="{Binding IsRussianTranslationChecked}" Value="false">
+                    <DataTrigger TargetType="Label" Binding="{Binding IsDestinationTranslationChecked}" Value="false">
                         <Setter Property="BackgroundColor" Value="{DynamicResource TranslationBoxColor}" />
                     </DataTrigger>
-                    <DataTrigger TargetType="Label" Binding="{Binding IsRussianTranslationChecked}" Value="true">
+                    <DataTrigger TargetType="Label" Binding="{Binding IsDestinationTranslationChecked}" Value="true">
                         <Setter Property="BackgroundColor" Value="{DynamicResource SelectedItemColor}" />
                     </DataTrigger>
                 </Label.Triggers>

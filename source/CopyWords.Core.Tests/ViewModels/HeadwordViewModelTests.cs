@@ -27,11 +27,11 @@ namespace CopyWords.Core.Tests.ViewModels
 
             // we also make first letter lower case
             sut.English.Should().Be("kebabs");
-            sut.Russian.Should().Be("шашлыки");
+            sut.Translation.Should().Be("шашлыки");
 
             sut.ShowEnglishTranslation.Should().BeTrue();
 
-            sut.CanCheckRussianTranslation.Should().Be(showCopyButtons);
+            sut.CanCheckDestinationTranslation.Should().Be(showCopyButtons);
             sut.CanCheckEnglishTranslation.Should().Be(showCopyButtons);
 
             if (showCopyButtons)
@@ -61,7 +61,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             sut.ShowEnglishTranslation.Should().BeFalse();
 
-            sut.CanCheckRussianTranslation.Should().Be(showCopyButtons);
+            sut.CanCheckDestinationTranslation.Should().Be(showCopyButtons);
 
             // English translation is not shown for SpanishDict, so we don't chow the checkbox either
             sut.CanCheckEnglishTranslation.Should().BeFalse();
@@ -94,7 +94,7 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void FirstLetterToLower_WhenRussianAndFirstLetterIsUpperCase_ChangesToLowerCase()
+        public void FirstLetterToLower_WhenDestinationTranslationAndFirstLetterIsUpperCase_ChangesToLowerCase()
         {
             HeadwordViewModel.FirstLetterToLower("At full speed").Should().Be("at full speed");
         }

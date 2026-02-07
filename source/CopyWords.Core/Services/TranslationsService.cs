@@ -46,7 +46,7 @@ namespace CopyWords.Core.Services
             var input = new LookUpWordRequest(
                 Text: wordToLookUp,
                 SourceLanguage: sourceLanguage,
-                DestinationLanguage: "Russian",
+                DestinationLanguage: _globalSettings.DestinationLanguage,
                 Version: "2");
 
             WordModel? wordModel = await TranslateAsync(lookupUrl, input, cancellationToken);

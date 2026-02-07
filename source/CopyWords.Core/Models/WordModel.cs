@@ -1,4 +1,7 @@
-﻿namespace CopyWords.Core.Models
+﻿using System.Text.Json.Serialization;
+using CopyWords.Core.Converters;
+
+namespace CopyWords.Core.Models
 {
     public record WordModel(
        string Word,
@@ -15,10 +18,15 @@
         string Endings, // only for Danish dictionary
         IEnumerable<Context> Contexts);
 
+    /// <summary>
+    /// Represents the headword with translations.
+    /// The converter supports both "Translation" (new) and "Russian" (legacy) property names for backward compatibility.
+    /// </summary>
+    [JsonConverter(typeof(HeadwordJsonConverter))]
     public record Headword(
         string Original,
         string? English,
-        string? Russian);
+        string? Translation);
 
     public record Context(
         string ContextEN,

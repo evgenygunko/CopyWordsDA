@@ -14,12 +14,12 @@ namespace CopyWords.Core.ViewModels
 
             // Make first letter lower case, it looks better
             English = FirstLetterToLower(headword?.English);
-            Russian = FirstLetterToLower(headword?.Russian);
+            Translation = FirstLetterToLower(headword?.Translation);
 
             // SpanishDict already return English translations, no need to show what the Translator app returned.
             ShowEnglishTranslation = sourceLanguage != SourceLanguage.Spanish;
 
-            CanCheckRussianTranslation = showCheckBoxes;
+            CanCheckDestinationTranslation = showCheckBoxes;
             CanCheckEnglishTranslation = showCheckBoxes && ShowEnglishTranslation;
 
             if (showCheckBoxes)
@@ -39,19 +39,19 @@ namespace CopyWords.Core.ViewModels
         public partial string? English { get; set; }
 
         [ObservableProperty]
-        public partial string? Russian { get; set; }
+        public partial string? Translation { get; set; }
 
         [ObservableProperty]
         public partial bool IsEnglishTranslationChecked { get; set; }
 
         [ObservableProperty]
-        public partial bool IsRussianTranslationChecked { get; set; }
+        public partial bool IsDestinationTranslationChecked { get; set; }
 
         [ObservableProperty]
         public partial bool ShowEnglishTranslation { get; set; }
 
         [ObservableProperty]
-        public partial bool CanCheckRussianTranslation { get; set; }
+        public partial bool CanCheckDestinationTranslation { get; set; }
 
         [ObservableProperty]
         public partial bool CanCheckEnglishTranslation { get; set; }

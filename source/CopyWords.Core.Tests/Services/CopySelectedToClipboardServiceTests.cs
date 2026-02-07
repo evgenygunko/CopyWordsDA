@@ -260,9 +260,9 @@ namespace CopyWords.Core.Tests.Services
             string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
-                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">???????, ?????????? ???????? ????</span><br>" +
-                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">??????, ????????????? ???????, ??????? ??????????? ??? ?????????? ???????? ???????? ?????????? ?????? ?? ???? ??????</span><br>" +
-                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">???????, ??????? ???????? ???? ? ????, ??????? ? ?. ?.</span>");
+                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><br>" +
+                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><br>" +
+                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">человек, который особенно умел в игре, ремесле и т. д.</span>");
         }
 
         [TestMethod]
@@ -270,7 +270,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var definitionVM = CreateVMForLigeud();
             definitionVM.ContextViewModels[0].MeaningViewModels[2].ExampleViewModels[0].IsChecked = true;
-            definitionVM.HeadwordViewModel.IsRussianTranslationChecked = false;
+            definitionVM.HeadwordViewModel.IsDestinationTranslationChecked = false;
             definitionVM.HeadwordViewModel.IsEnglishTranslationChecked = false;
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
@@ -281,11 +281,11 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public void CompileBack_WhenRussianTranslationIsSelected_AddsTranslationToResult()
+        public void CompileBack_WhenDestinationTranslationIsSelected_AddsTranslationToResult()
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
-            definitionVM.HeadwordViewModel.IsRussianTranslationChecked = true;
+            definitionVM.HeadwordViewModel.IsDestinationTranslationChecked = true;
             definitionVM.HeadwordViewModel.IsEnglishTranslationChecked = false;
 
             AppSettings appSettings = _fixture.Create<AppSettings>();
@@ -299,9 +299,9 @@ namespace CopyWords.Core.Tests.Services
             string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шампур</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????????? ??????? ?? ?????? ??? ??????? ??? ???????????? ???? ? ?????? ?? ????? ????? ?? ?????</span>");
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
         }
 
         [TestMethod]
@@ -309,7 +309,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
-            definitionVM.HeadwordViewModel.IsRussianTranslationChecked = false;
+            definitionVM.HeadwordViewModel.IsDestinationTranslationChecked = false;
             definitionVM.HeadwordViewModel.IsEnglishTranslationChecked = true;
 
             AppSettings appSettings = _fixture.Create<AppSettings>();
@@ -325,7 +325,7 @@ namespace CopyWords.Core.Tests.Services
             result.Should().Be(
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebab skewer</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????????? ??????? ?? ?????? ??? ??????? ??? ???????????? ???? ? ?????? ?? ????? ????? ?? ?????</span>");
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
         }
 
         [TestMethod]
@@ -333,7 +333,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
-            definitionVM.HeadwordViewModel.IsRussianTranslationChecked = true;
+            definitionVM.HeadwordViewModel.IsDestinationTranslationChecked = true;
             definitionVM.HeadwordViewModel.IsEnglishTranslationChecked = true;
 
             AppSettings appSettings = _fixture.Create<AppSettings>();
@@ -347,10 +347,10 @@ namespace CopyWords.Core.Tests.Services
             string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шампур</span><br>" +
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebab skewer</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????????? ??????? ?? ?????? ??? ??????? ??? ???????????? ???? ? ?????? ?? ????? ????? ?? ?????</span>");
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
         }
 
         [TestMethod]
@@ -358,7 +358,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
-            definitionVM.HeadwordViewModel.IsRussianTranslationChecked = true;
+            definitionVM.HeadwordViewModel.IsDestinationTranslationChecked = true;
             definitionVM.HeadwordViewModel.IsEnglishTranslationChecked = true;
 
             AppSettings appSettings = _fixture.Create<AppSettings>();
@@ -372,7 +372,7 @@ namespace CopyWords.Core.Tests.Services
             string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????</span><br>" +
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">шампур</span><br>" +
                 "<span style=\"color: rgba(0, 0, 0, 0.4)\">kebab skewer</span><br>" +
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
         }
@@ -382,7 +382,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var definitionVM = CreateVMForGrillspyd();
             definitionVM.ContextViewModels[0].MeaningViewModels[0].ExampleViewModels[0].IsChecked = true;
-            definitionVM.HeadwordViewModel.IsRussianTranslationChecked = false;
+            definitionVM.HeadwordViewModel.IsDestinationTranslationChecked = false;
             definitionVM.HeadwordViewModel.IsEnglishTranslationChecked = false;
 
             AppSettings appSettings = _fixture.Create<AppSettings>();
@@ -397,7 +397,7 @@ namespace CopyWords.Core.Tests.Services
 
             result.Should().Be(
                 "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning<br>" +
-                "<span style=\"color: rgba(0, 0, 0, 0.4)\">??????????? ??????? ?? ?????? ??? ??????? ??? ???????????? ???? ? ?????? ?? ????? ????? ?? ?????</span>");
+                "<span style=\"color: rgba(0, 0, 0, 0.4)\">заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле</span>");
         }
 
         [TestMethod]
@@ -423,9 +423,9 @@ namespace CopyWords.Core.Tests.Services
             string result = sut.CompileBack(definitionVM);
 
             result.Should().Be(
-                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">???????, ?????????? ???????? ????</span><br>" +
-                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">??????, ????????????? ???????, ??????? ??????????? ??? ?????????? ???????? ???????? ?????????? ?????? ?? ???? ??????</span><br>" +
-                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">???????, ??????? ???????? ???? ? ????, ??????? ? ?. ?.</span>");
+                "1.&nbsp;stor, langstrakt bruskfisk<br><span style=\"color: rgba(0, 0, 0, 0.4)\">крупная, удлиненная хрящевая рыба</span><br>" +
+                $"2.&nbsp;<span {StyleAttributeForTag}>SLANG</span>grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning<br><span style=\"color: rgba(0, 0, 0, 0.4)\">жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других</span><br>" +
+                $"3.&nbsp;<span {StyleAttributeForTag}>SLANG</span>person der er særlig dygtig til et spil, håndværk el.lign.<br><span style=\"color: rgba(0, 0, 0, 0.4)\">человек, который особенно умел в игре, ремесле и т. д.</span>");
         }
 
         [TestMethod]
@@ -629,7 +629,7 @@ namespace CopyWords.Core.Tests.Services
             var sut = _fixture.Create<CopySelectedToClipboardService>();
             string result = sut.CompileTranslations(definitionVM);
 
-            result.Should().Be("grillspyd (substantiv, intetkøn)" + Environment.NewLine + "??????" + Environment.NewLine + "kebab skewer");
+            result.Should().Be("grillspyd (substantiv, intetkøn)" + Environment.NewLine + "шампур" + Environment.NewLine + "kebab skewer");
         }
 
         #endregion
@@ -764,7 +764,7 @@ namespace CopyWords.Core.Tests.Services
 
         private DefinitionViewModel CreateVMForGrillspyd()
         {
-            var definition = new Definition(new Headword(Original: "grillspyd", English: "kebab skewer", Russian: "??????"), PartOfSpeech: "substantiv, intetkøn", Endings: "-det eller (uofficielt) -et, -, -dene",
+            var definition = new Definition(new Headword(Original: "grillspyd", English: "kebab skewer", Translation: "шампур"), PartOfSpeech: "substantiv, intetkøn", Endings: "-det eller (uofficielt) -et, -, -dene",
                 new List<Context>
                 {
                     new Context(ContextEN: "", Position: "",
@@ -772,7 +772,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning",
-                                Translation: "??????????? ??????? ?? ?????? ??? ??????? ??? ???????????? ???? ? ?????? ?? ????? ????? ?? ?????",
+                                Translation: "заостренная палочка из дерева или металла для прокалывания мяса и овощей во время жарки на гриле",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -800,7 +800,7 @@ namespace CopyWords.Core.Tests.Services
                         new List<Meaning>
                         {
                             new Meaning(Original: "noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse",
-                                Translation: "???-??, ??? ??????????, ?????? ??? ????????? ????-??, ????????, ?????????????, ????? ?????? ? ?? ???????? ?????????????? ???????????????? ??????? ??? ???????? ???????",
+                                Translation: "что-то, что развлекает, радует или отвлекает кого-то, например, представление, более легкий и не особенно требовательный интеллектуальный продукт или приятное занятие",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -827,14 +827,14 @@ namespace CopyWords.Core.Tests.Services
                     new Context(ContextEN: "", Position: "",
                         new List<Meaning>
                         {
-                            new Meaning(Original : "rette blikket i en bestemt retning", Translation : "????????? ?????? ? ???????????? ???????????", AlphabeticalPosition: "1", Tag: null, ImageUrl: null,
+                            new Meaning(Original : "rette blikket i en bestemt retning", Translation : "направить взгляд в определенном направлении", AlphabeticalPosition: "1", Tag: null, ImageUrl: null,
                                 new List<Example>()
                                 {
                                     new Example(Original : "Børnene kiggede spørgende på hinanden", Translation: null),
                                     new Example(Original : "kig lige en gang!", Translation: null),
                                     new Example(Original : "Han kiggede sig rundt, som om han ledte efter noget", Translation: null),
                                 }),
-                            new Meaning(Original: "undersøge nærmere; sætte sig ind i", Translation: "????????????? ??????????????; ??????? ?", AlphabeticalPosition: "2", Tag: null, ImageUrl: null,
+                            new Meaning(Original: "undersøge nærmere; sætte sig ind i", Translation: "присмотритесь повнимательнее; попасть в", AlphabeticalPosition: "2", Tag: null, ImageUrl: null,
                                 new List<Example>()
                                 {
                                     new Example(Original : "hun har kigget på de psykiske eftervirkninger hos voldtagne piger og kvinder", Translation: null)
@@ -859,7 +859,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original : "med forholdsvis stor udstrækning i lodret retning",
-                                Translation : "? ???????????? ??????? ?????????????? ? ???????????? ???????????",
+                                Translation : "с относительно большой протяженностью в вертикальном направлении",
                                 AlphabeticalPosition : "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -870,7 +870,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original : "med en forholdsvis stor værdi på en eksisterende eller tænkt skala; af stor størrelse, omfang el.lign.",
-                                Translation : "? ???????????? ??????? ????????? ? ???????????? ??? ???????????? ?????????; ???????? ???????, ???????? ? ?. ?.",
+                                Translation : "с относительно большой ценностью в существующих или воображаемых масштабах; большого размера, масштаба и т. д.",
                                 AlphabeticalPosition : "2",
                                 Tag: null,
                                 ImageUrl: null,
@@ -899,7 +899,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original : "uden at dreje eller skifte kurs om bevægelse eller retning",
-                                Translation : "?? ????????????? ? ?? ????? ???? ??? ??????????? ????????",
+                                Translation : "не поворачиваясь и не меняя курс или направление движения",
                                 AlphabeticalPosition : "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -909,7 +909,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original : "uden omsvøb",
-                                Translation : "??? ?????-???? ???????????",
+                                Translation : "без каких-либо обременений",
                                 AlphabeticalPosition : "2",
                                 Tag: null,
                                 ImageUrl: null,
@@ -947,7 +947,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "= i forbindelse med",
-                                Translation: "= ? ????? ?",
+                                Translation: "= в связи с",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -976,7 +976,7 @@ namespace CopyWords.Core.Tests.Services
                         {
                             new Meaning(
                                 Original: "stor, langstrakt bruskfisk",
-                                Translation: "???????, ?????????? ???????? ????",
+                                Translation: "крупная, удлиненная хрящевая рыба",
                                 AlphabeticalPosition: "1",
                                 Tag: null,
                                 ImageUrl: null,
@@ -986,7 +986,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original: "grisk, skrupelløs person der ved ulovlige eller ufine metoder opnår økonomisk gevinst på andres bekostning",
-                                Translation: "??????, ????????????? ???????, ??????? ??????????? ??? ?????????? ???????? ???????? ?????????? ?????? ?? ???? ??????",
+                                Translation: "жадный, беспринципный человек, который незаконными или нечестными методами получает финансовую выгоду за счет других",
                                 AlphabeticalPosition: "2",
                                 Tag: "SLANG",
                                 ImageUrl: null,
@@ -996,7 +996,7 @@ namespace CopyWords.Core.Tests.Services
                                 }),
                             new Meaning(
                                 Original: "person der er særlig dygtig til et spil, håndværk el.lign.",
-                                Translation: "???????, ??????? ???????? ???? ? ????, ??????? ? ?. ?.",
+                                Translation: "человек, который особенно умел в игре, ремесле и т. д.",
                                 AlphabeticalPosition: "3",
                                 Tag: "SLANG",
                                 ImageUrl: null,
@@ -1271,7 +1271,7 @@ namespace CopyWords.Core.Tests.Services
                                     }),
                             new Meaning(
                                 Original: "she looks (feminine)",
-                                Translation: "??? ????????",
+                                Translation: "она выглядит",
                                 AlphabeticalPosition: "b",
                                 Tag: null,
                                 ImageUrl: null,

@@ -161,9 +161,9 @@ namespace CopyWords.Core.Services
             // If translation for the headword is selected, add it first.
             string format = (backMeanings.Count > 0) ? TemplateGrayText : "{0}";
             var headwordVM = definitionViewModel.HeadwordViewModel;
-            if (headwordVM.IsRussianTranslationChecked && !string.IsNullOrEmpty(headwordVM.Russian))
+            if (headwordVM.IsDestinationTranslationChecked && !string.IsNullOrEmpty(headwordVM.Translation))
             {
-                sb.Append(string.Format(CultureInfo.CurrentCulture, format, headwordVM.Russian) + "<br>");
+                sb.Append(string.Format(CultureInfo.CurrentCulture, format, headwordVM.Translation) + "<br>");
             }
             if (headwordVM.IsEnglishTranslationChecked && !string.IsNullOrEmpty(headwordVM.English))
             {
@@ -257,9 +257,9 @@ namespace CopyWords.Core.Services
             var headwordVM = definitionViewModel.HeadwordViewModel;
 
             // In dictionary mode just add translations without formatting
-            if (!string.IsNullOrEmpty(headwordVM.Russian))
+            if (!string.IsNullOrEmpty(headwordVM.Translation))
             {
-                sb.AppendLine(headwordVM.Russian);
+                sb.AppendLine(headwordVM.Translation);
             }
             if (!string.IsNullOrEmpty(headwordVM.English))
             {
