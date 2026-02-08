@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: snackbar
 
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -98,6 +99,10 @@ namespace CopyWords.Core.ViewModels
 
         public bool CanNavigateBack => !IsBusy && !IsRefreshing && _navigationHistory.CanNavigateBack;
 
+        public ObservableCollection<VariantViewModel> SuggestionViewModels { get; } = [];
+
+        public bool ShowSuggestions => SuggestionViewModels.Count > 0;
+
         #endregion
 
         #region Commands
@@ -156,7 +161,7 @@ namespace CopyWords.Core.ViewModels
 
             // Clear previous word while we are waiting for the new one
             var definition = new Definition(new Headword(string.Empty, null, null), string.Empty, string.Empty, []);
-            WordModel? wordModel = new WordModel(string.Empty, GetSourceLanguage(), null, null, definition, [], []);
+            WordModel? wordModel = new WordModel(string.Empty, GetSourceLanguage(), null, null, definition, [], [], []);
             UpdateUI(wordModel);
 
             IsBusy = true;
@@ -344,50 +349,71 @@ namespace CopyWords.Core.ViewModels
                 _wordViewModel.Word = wordModel.Word;
                 _wordViewModel.SoundUrl = wordModel.SoundUrl;
 
-                bool showCheckBoxes = false;
-                if (_deviceInfo.Platform == DevicePlatform.Android)
+                if (wordModel.Definition is not null)
                 {
-                    showCheckBoxes = _settingsService.GetShowAnkiButton();
-                }
-                else
-                {
-                    // On Windows and MacCatalyst a user might want to hide copy buttons, but keep Anki button visible.
-                    showCheckBoxes = _settingsService.GetShowCopyButtons() || _settingsService.GetShowAnkiButton();
-                }
-
-                var definitionVM = new DefinitionViewModel(wordModel.Definition, wordModel.SourceLanguage, showCheckBoxes);
-                definitionVM.MeaningLookupClicked += async (sender, url) =>
-                {
-                    Debug.WriteLine($"Meaning lookup clicked, will lookup '{url}'");
-                    await GetVariantAsync(url);
-                };
-                _wordViewModel.SetDefinition(definitionVM);
-
-                _wordViewModel.ClearVariants();
-                foreach (var variant in wordModel.Variants)
-                {
-                    var variantVM = new VariantViewModel(variant);
-                    variantVM.Clicked += async (sender, url) =>
+                    bool showCheckBoxes = false;
+                    if (_deviceInfo.Platform == DevicePlatform.Android)
                     {
-                        Debug.WriteLine($"Variant clicked, will lookup '{url}'");
+                        showCheckBoxes = _settingsService.GetShowAnkiButton();
+                    }
+                    else
+                    {
+                        // On Windows and MacCatalyst a user might want to hide copy buttons, but keep Anki button visible.
+                        showCheckBoxes = _settingsService.GetShowCopyButtons() || _settingsService.GetShowAnkiButton();
+                    }
+
+                    var definitionVM = new DefinitionViewModel(wordModel.Definition, wordModel.SourceLanguage, showCheckBoxes);
+                    definitionVM.MeaningLookupClicked += async (sender, url) =>
+                    {
+                        Debug.WriteLine($"Meaning lookup clicked, will lookup '{url}'");
                         await GetVariantAsync(url);
                     };
+                    _wordViewModel.SetDefinition(definitionVM);
 
-                    _wordViewModel.AddVariant(variantVM);
-                }
-
-                _wordViewModel.ClearExpressions();
-                foreach (var expression in wordModel.Expressions)
-                {
-                    var expressionVM = new VariantViewModel(expression);
-                    expressionVM.Clicked += async (sender, url) =>
+                    _wordViewModel.ClearVariants();
+                    foreach (var variant in wordModel.Variants)
                     {
-                        Debug.WriteLine($"Expression clicked, will lookup '{url}'");
-                        await GetVariantAsync(url);
-                    };
+                        var variantVM = new VariantViewModel(variant);
+                        variantVM.Clicked += async (sender, url) =>
+                        {
+                            Debug.WriteLine($"Variant clicked, will lookup '{url}'");
+                            await GetVariantAsync(url);
+                        };
 
-                    _wordViewModel.AddExpression(expressionVM);
+                        _wordViewModel.AddVariant(variantVM);
+                    }
+
+                    _wordViewModel.ClearExpressions();
+                    foreach (var expression in wordModel.Expressions)
+                    {
+                        var expressionVM = new VariantViewModel(expression);
+                        expressionVM.Clicked += async (sender, url) =>
+                        {
+                            Debug.WriteLine($"Expression clicked, will lookup '{url}'");
+                            await GetVariantAsync(url);
+                        };
+
+                        _wordViewModel.AddExpression(expressionVM);
+                    }
                 }
+
+                // Populate suggestions when Definition is null but SimilarWords are available
+                SuggestionViewModels.Clear();
+                if (wordModel.Definition is null && wordModel.SimilarWords.Any())
+                {
+                    foreach (var similarWord in wordModel.SimilarWords)
+                    {
+                        var suggestionVM = new VariantViewModel(similarWord);
+                        suggestionVM.Clicked += async (sender, url) =>
+                        {
+                            Debug.WriteLine($"Suggestion clicked, will lookup '{url}'");
+                            await GetVariantAsync(url);
+                        };
+
+                        SuggestionViewModels.Add(suggestionVM);
+                    }
+                }
+                OnPropertyChanged(nameof(ShowSuggestions));
 
                 _settingsService.SetSelectedParser(wordModel.SourceLanguage.ToString());
                 DictionaryName = wordModel.SourceLanguage.ToString();

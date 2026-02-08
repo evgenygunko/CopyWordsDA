@@ -8,9 +8,10 @@ namespace CopyWords.Core.Models
        SourceLanguage SourceLanguage,
        string? SoundUrl,
        string? SoundFileName,
-       Definition Definition,
+       Definition? Definition,
        IEnumerable<Variant> Variants,
-       IEnumerable<Variant> Expressions);
+       IEnumerable<Variant> Expressions,
+       IEnumerable<Variant> SimilarWords);
 
     public record Definition(
         Headword Headword,

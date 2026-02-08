@@ -114,7 +114,14 @@
                 </Border>
 
                 <!-- Parsed word user control -->
-                <WordView Grid.Row="1" BindingContext="{Binding Path=WordViewModel}" />
+                <WordView Grid.Row="1"
+                          IsVisible="{Binding Path=IsVisible, Source={x:Reference suggestionsView}, x:DataType=ContentView, Converter={StaticResource InvertedBoolConverter}}"
+                          BindingContext="{Binding Path=WordViewModel}" />
+
+                <!-- Suggestions when word not found -->
+                <SuggestionsView Grid.Row="1"
+                          x:Name="suggestionsView"
+                          IsVisible="{Binding ShowSuggestions}" />
 
                 <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsBusy}" VerticalOptions="Center" HorizontalOptions="Center" />
             </Grid>

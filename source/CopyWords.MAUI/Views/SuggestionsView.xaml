@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/maui/global"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:DataType="MainViewModel"
+             x:Class="CopyWords.MAUI.Views.SuggestionsView">
+
+    <VerticalStackLayout
+            Margin="0,25,0,0"
+            Spacing="{OnPlatform '8', MacCatalyst='12'}">
+
+        <Label Text="Sorry, the word you searched for was not found in the dictionary. Did you mean one of these?"
+               FontSize="{OnPlatform MacCatalyst=22, Default=16, Android=14}"
+               FontAttributes="Bold"
+               Margin="0,0,0,5" />
+
+        <VerticalStackLayout
+                Spacing="{OnPlatform '6', MacCatalyst='10'}"
+                BindableLayout.ItemsSource="{Binding SuggestionViewModels}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="VariantViewModel">
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding Word}" TextDecorations="Underline"
+                                      FontSize="{OnPlatform MacCatalyst=20, Default=16, Android=14}">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding SelectVariantCommand}" />
+                                    </Span.GestureRecognizers>
+                                </Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentView>

@@ -2,6 +2,7 @@
 using System.Text;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
+using CopyWords.Core.Services.Wrappers;
 using Newtonsoft.Json;
 
 namespace CopyWords.Core.Services
@@ -15,13 +16,16 @@ namespace CopyWords.Core.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IGlobalSettings _globalSettings;
+        private readonly ILaunchDarklyService _launchDarklyService;
 
         public TranslationsService(
             HttpClient httpClient,
-            IGlobalSettings globalSettings)
+            IGlobalSettings globalSettings,
+            ILaunchDarklyService launchDarklyService)
         {
             _httpClient = httpClient;
             _globalSettings = globalSettings;
+            _launchDarklyService = launchDarklyService;
         }
 
         public string CreateLookUpWordUrl()
@@ -50,6 +54,28 @@ namespace CopyWords.Core.Services
                 Version: "2");
 
             WordModel? wordModel = await TranslateAsync(lookupUrl, input, cancellationToken);
+
+            // todo: remove when the server has implemented the feature of returning similar words. The code below is just for testing the UI.
+            if (wordModel == null && _launchDarklyService.GetBooleanFlag("test-suggested-words"))
+            {
+                var parsedLanguage = Enum.TryParse<SourceLanguage>(input.SourceLanguage, out var lang)
+                    ? lang
+                    : SourceLanguage.Danish;
+
+                var similarWords = Enumerable.Range(1, 10)
+                    .Select(i => new Variant($"test word {i}", $"https://ordnet.dk/ddo/ordbog?query=test{i}"));
+
+                wordModel = new WordModel(
+                    Word: wordToLookUp,
+                    SourceLanguage: parsedLanguage,
+                    SoundUrl: null,
+                    SoundFileName: null,
+                    Definition: null,
+                    Variants: [],
+                    Expressions: [],
+                    SimilarWords: similarWords);
+            }
+
             return wordModel;
         }
 
