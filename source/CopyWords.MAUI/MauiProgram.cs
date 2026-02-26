@@ -174,11 +174,6 @@ public static class MauiProgram
     {
         var errors = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(settings.DestinationLanguage))
-        {
-            errors.Add("DestinationLanguage must be defined in appsettings.");
-        }
-
         if (string.IsNullOrWhiteSpace(settings.TranslatorAppUrl))
         {
             errors.Add("TranslatorAppUrl must be defined in appsettings.");

@@ -21,7 +21,7 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             var headword = new Headword("Grillspyd", "Kebabs", "Шашлыки");
 
-            var sut = new HeadwordViewModel(headword, SourceLanguage.Danish, showCopyButtons);
+            var sut = new HeadwordViewModel(headword, SourceLanguage.Danish, showCopyButtons, "Russian");
 
             sut.Original.Should().Be("Grillspyd");
 
@@ -47,6 +47,31 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
+        public void Constructor_WhenDestinationLanguageIsEnglish_DoesNotAllowEnglishTranslationCheckbox(bool showCopyButtons)
+        {
+            var headword = new Headword("Grillspyd", "Kebabs", "Shashlik");
+
+            var sut = new HeadwordViewModel(headword, SourceLanguage.Danish, showCopyButtons, "English");
+
+            sut.ShowEnglishTranslation.Should().BeFalse();
+            sut.CanCheckDestinationTranslation.Should().Be(showCopyButtons);
+            sut.CanCheckEnglishTranslation.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void Constructor_WhenDestinationLanguageIsNotEnglish_AllowsEnglishTranslationCheckbox()
+        {
+            var headword = new Headword("Grillspyd", "Kebabs", "Шашлыки");
+
+            var sut = new HeadwordViewModel(headword, SourceLanguage.Danish, true, "Russian");
+
+            sut.ShowEnglishTranslation.Should().BeTrue();
+            sut.CanCheckEnglishTranslation.Should().BeTrue();
+        }
+
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
         public void Constructor_WhenSpanishDictionarySelected_UpdateProperties(bool showCopyButtons)
         {
             var headword = new Headword("Casa", "House", "Дом");
@@ -57,7 +82,7 @@ namespace CopyWords.Core.Tests.ViewModels
             var ssettingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             ssettingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
-            var sut = new HeadwordViewModel(headword, SourceLanguage.Spanish, showCopyButtons);
+            var sut = new HeadwordViewModel(headword, SourceLanguage.Spanish, showCopyButtons, "Russian");
 
             sut.ShowEnglishTranslation.Should().BeFalse();
 

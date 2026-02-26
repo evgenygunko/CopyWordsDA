@@ -38,6 +38,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Get("ShowAnkiButton", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("DestinationLanguage", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("UseDarkTheme", It.IsAny<bool>(), It.IsAny<string>()));
         }
 
@@ -68,6 +69,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("ShowAnkiButton", appSettings.ShowAnkiButton, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("CopyTranslatedMeanings", appSettings.CopyTranslatedMeanings, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("SelectedParser", appSettings.SelectedParser, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("DestinationLanguage", appSettings.DestinationLanguage, It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("UseDarkTheme", appSettings.UseDarkTheme, It.IsAny<string>()));
         }
 
@@ -165,6 +167,34 @@ namespace CopyWords.Core.Tests.Services
             sut.SetSelectedParser(value);
 
             preferencesMock.Verify(x => x.Set("SelectedParser", value, It.IsAny<string>()));
+        }
+
+        [TestMethod]
+        public void GetDestinationLanguage_Should_CallPreferencesGet()
+        {
+            const string expectedValue = "English";
+
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            preferencesMock.Setup(x => x.Get("DestinationLanguage", "Russian", null)).Returns(expectedValue).Verifiable();
+
+            var sut = _fixture.Create<SettingsService>();
+            string result = sut.GetDestinationLanguage();
+
+            result.Should().Be(expectedValue);
+            preferencesMock.Verify();
+        }
+
+        [TestMethod]
+        public void SetDestinationLanguage_Should_CallPreferencesSet()
+        {
+            const string value = "English";
+
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+
+            var sut = _fixture.Create<SettingsService>();
+            sut.SetDestinationLanguage(value);
+
+            preferencesMock.Verify(x => x.Set("DestinationLanguage", value, It.IsAny<string>()));
         }
 
         [TestMethod]

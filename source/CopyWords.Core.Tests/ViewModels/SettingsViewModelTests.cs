@@ -23,16 +23,16 @@ namespace CopyWords.Core.Tests.ViewModels
         [TestMethod]
         public async Task SaveSettingsAsync_Should_CallSettingsService()
         {
-            string validationErrors = _fixture.Create<string>();
-
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             Mock<IShellService> shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
 
             var sut = _fixture.Create<SettingsViewModel>();
+            sut.DestinationLanguage = "English";
 
             await sut.SaveSettingsAsync();
 
-            settingsServiceMock.Verify(x => x.SaveSettings(It.IsAny<AppSettings>()));
+            settingsServiceMock.Verify(
+                x => x.SaveSettings(It.Is<AppSettings>(s => s.DestinationLanguage == "English")));
             shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..")));
         }
 
@@ -504,6 +504,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.ShowCopyButtons.Should().Be(appSettings.ShowCopyButtons);
             sut.ShowAnkiButton.Should().Be(appSettings.ShowAnkiButton);
             sut.CopyTranslatedMeanings.Should().Be(appSettings.CopyTranslatedMeanings);
+            sut.DestinationLanguage.Should().Be(appSettings.DestinationLanguage);
         }
 
         [TestMethod]
@@ -685,6 +686,51 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.OnCopyTranslatedMeaningsChangedInternal(true);
 
             settingsServiceMock.Verify(x => x.SetCopyTranslatedMeanings(It.IsAny<bool>()), Times.Never);
+        }
+
+        #endregion
+
+        #region Tests for OnDestinationLanguageChangedInternal
+
+        [TestMethod]
+        public async Task OnDestinationLanguageChangedInternal_WhenInitializedAndCanUpdateIndividualSettings_CallsSettingsService()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            await sut.InitAsync(CancellationToken.None);
+            sut.OnDestinationLanguageChangedInternal("English");
+
+            settingsServiceMock.Verify(x => x.SetDestinationLanguage("English"));
+        }
+
+        [TestMethod]
+        public void OnDestinationLanguageChangedInternal_WhenNotInitialized_DoesNotCallSettingsService()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            sut.OnDestinationLanguageChangedInternal("English");
+
+            settingsServiceMock.Verify(x => x.SetDestinationLanguage(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task OnDestinationLanguageChangedInternal_WhenCannotUpdateIndividualSettings_DoesNotCallSettingsService()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.WinUI);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            await sut.InitAsync(CancellationToken.None);
+            sut.OnDestinationLanguageChangedInternal("English");
+
+            settingsServiceMock.Verify(x => x.SetDestinationLanguage(It.IsAny<string>()), Times.Never);
         }
 
         #endregion

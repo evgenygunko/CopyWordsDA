@@ -613,7 +613,7 @@ namespace CopyWords.Core.Tests.Services
         public void CompileTranslations_WhenHeadwordOriginalIsNullOrEmpty_ReturnsEmptyString(string headwordOriginal)
         {
             var definition = new Definition(new Headword(headwordOriginal, null, null), string.Empty, string.Empty, []);
-            var definitionVM = new DefinitionViewModel(definition, SourceLanguage.Danish, true);
+            var definitionVM = new DefinitionViewModel(definition, SourceLanguage.Danish, true, "Russian");
 
             var sut = _fixture.Create<CopySelectedToClipboardService>();
             string result = sut.CompileTranslations(definitionVM);
@@ -789,7 +789,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Danish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForUnderholdning()
@@ -818,7 +819,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Danish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForKigge()
@@ -860,7 +862,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Danish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForHøj()
@@ -902,7 +905,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Danish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForLigeud()
@@ -953,7 +957,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Danish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForIForbindleseMed()
@@ -983,7 +988,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Danish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForHaj()
@@ -1034,7 +1040,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Danish,
-                true);
+                true,
+                "Russian");
         }
 
         #endregion
@@ -1105,7 +1112,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Spanish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForCasa()
@@ -1135,7 +1143,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Spanish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForHampa()
@@ -1165,7 +1174,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Spanish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForMorador()
@@ -1195,7 +1205,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Spanish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForBien()
@@ -1240,7 +1251,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Spanish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForGuay()
@@ -1282,7 +1294,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Spanish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForLuce()
@@ -1348,7 +1361,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Spanish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForSaltamontes()
@@ -1378,7 +1392,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Spanish,
-                true);
+                true,
+                "Russian");
         }
 
         private DefinitionViewModel CreateVMForVeneno()
@@ -1433,7 +1448,8 @@ namespace CopyWords.Core.Tests.Services
             return new DefinitionViewModel(
                 definition,
                 SourceLanguage.Spanish,
-                true);
+                true,
+                "Russian");
         }
 
         #endregion

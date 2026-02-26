@@ -8,7 +8,8 @@ namespace CopyWords.Core.ViewModels
         public HeadwordViewModel(
             Headword headword,
             SourceLanguage sourceLanguage,
-            bool showCheckBoxes)
+            bool showCheckBoxes,
+            string destinationLanguage)
         {
             Original = headword?.Original;
 
@@ -16,8 +17,9 @@ namespace CopyWords.Core.ViewModels
             English = FirstLetterToLower(headword?.English);
             Translation = FirstLetterToLower(headword?.Translation);
 
-            // SpanishDict already return English translations, no need to show what the Translator app returned.
-            ShowEnglishTranslation = sourceLanguage != SourceLanguage.Spanish;
+            bool isDestinationLanguageEnglish = string.Equals(destinationLanguage, "English", StringComparison.OrdinalIgnoreCase);
+            // SpanishDict already returns English translations. Also hide English translation when destination language is English to avoid duplicate content.
+            ShowEnglishTranslation = sourceLanguage != SourceLanguage.Spanish && !isDestinationLanguageEnglish;
 
             CanCheckDestinationTranslation = showCheckBoxes;
             CanCheckEnglishTranslation = showCheckBoxes && ShowEnglishTranslation;

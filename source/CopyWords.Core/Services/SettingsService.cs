@@ -35,6 +35,10 @@ namespace CopyWords.Core.Services
 
         void SetSelectedParser(string value);
 
+        string GetDestinationLanguage();
+
+        void SetDestinationLanguage(string value);
+
         void AddToHistory(string value);
 
         IEnumerable<string> LoadHistory();
@@ -76,6 +80,7 @@ namespace CopyWords.Core.Services
 
             appSettings.CopyTranslatedMeanings = _preferences.Get<bool>(nameof(AppSettings.CopyTranslatedMeanings), true);
             appSettings.SelectedParser = _preferences.Get(nameof(AppSettings.SelectedParser), SourceLanguage.Danish.ToString());
+            appSettings.DestinationLanguage = _preferences.Get(nameof(AppSettings.DestinationLanguage), "Russian");
             appSettings.UseDarkTheme = _preferences.Get<bool>(nameof(AppSettings.UseDarkTheme), false);
 
             return appSettings;
@@ -96,6 +101,7 @@ namespace CopyWords.Core.Services
             _preferences.Set(nameof(AppSettings.ShowAnkiButton), appSettings.ShowAnkiButton);
             _preferences.Set(nameof(AppSettings.CopyTranslatedMeanings), appSettings.CopyTranslatedMeanings);
             _preferences.Set(nameof(AppSettings.SelectedParser), appSettings.SelectedParser);
+            _preferences.Set(nameof(AppSettings.DestinationLanguage), appSettings.DestinationLanguage);
             _preferences.Set(nameof(AppSettings.UseDarkTheme), appSettings.UseDarkTheme);
         }
 
@@ -127,6 +133,10 @@ namespace CopyWords.Core.Services
         public string GetSelectedParser() => _preferences.Get(nameof(AppSettings.SelectedParser), SourceLanguage.Danish.ToString());
 
         public void SetSelectedParser(string value) => _preferences.Set(nameof(AppSettings.SelectedParser), value);
+
+        public string GetDestinationLanguage() => _preferences.Get(nameof(AppSettings.DestinationLanguage), "Russian");
+
+        public void SetDestinationLanguage(string value) => _preferences.Set(nameof(AppSettings.DestinationLanguage), value);
 
         public void AddToHistory(string word)
         {

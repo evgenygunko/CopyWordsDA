@@ -63,6 +63,13 @@ namespace CopyWords.Core.ViewModels
         public partial ObservableCollection<string> ModelNames { get; set; } = [];
 
         [ObservableProperty]
+        public partial ObservableCollection<string> DestinationLanguages { get; set; } =
+        [
+            "English",
+            "Russian"
+        ];
+
+        [ObservableProperty]
         public partial bool IsAnkiIntegrationAvailable { get; set; }
 
         [ObservableProperty]
@@ -130,6 +137,15 @@ namespace CopyWords.Core.ViewModels
         partial void OnUseDarkThemeChanged(bool value)
         {
             OnUseDarkThemeChangedInternal(value);
+        }
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
+        public partial string? DestinationLanguage { get; set; }
+
+        partial void OnDestinationLanguageChanged(string? value)
+        {
+            OnDestinationLanguageChangedInternal(value);
         }
 
         [ObservableProperty]
@@ -249,6 +265,7 @@ namespace CopyWords.Core.ViewModels
             appSettings.ShowCopyButtons = ShowCopyButtons;
             appSettings.ShowAnkiButton = ShowAnkiButton;
             appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
+            appSettings.DestinationLanguage = DestinationLanguage ?? "Russian";
             appSettings.UseDarkTheme = UseDarkTheme;
 
             _settingsService.SaveSettings(appSettings);
@@ -294,6 +311,7 @@ namespace CopyWords.Core.ViewModels
             ShowCopyButtons = appSettings.ShowCopyButtons;
             ShowAnkiButton = appSettings.ShowAnkiButton;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
+            DestinationLanguage = appSettings.DestinationLanguage;
             UseDarkTheme = appSettings.UseDarkTheme;
 
             _isInitialized = true;
@@ -425,6 +443,15 @@ namespace CopyWords.Core.ViewModels
             {
                 _settingsService.SetAnkiModelName(value);
                 Debug.WriteLine($"AnkiModelName has changed to {value}");
+            }
+        }
+
+        internal void OnDestinationLanguageChangedInternal(string? value)
+        {
+            if (_isInitialized && CanUpdateIndividualSettings && !string.IsNullOrWhiteSpace(value))
+            {
+                _settingsService.SetDestinationLanguage(value);
+                Debug.WriteLine($"DestinationLanguage has changed to {value}");
             }
         }
 

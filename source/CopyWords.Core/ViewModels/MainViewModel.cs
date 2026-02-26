@@ -362,7 +362,11 @@ namespace CopyWords.Core.ViewModels
                         showCheckBoxes = _settingsService.GetShowCopyButtons() || _settingsService.GetShowAnkiButton();
                     }
 
-                    var definitionVM = new DefinitionViewModel(wordModel.Definition, wordModel.SourceLanguage, showCheckBoxes);
+                    var definitionVM = new DefinitionViewModel(
+                        wordModel.Definition,
+                        wordModel.SourceLanguage,
+                        showCheckBoxes,
+                        _settingsService.GetDestinationLanguage());
                     definitionVM.MeaningLookupClicked += async (sender, url) =>
                     {
                         Debug.WriteLine($"Meaning lookup clicked, will lookup '{url}'");

@@ -50,6 +50,15 @@
                     IsToggled="{Binding CopyTranslatedMeanings}" />
         </Grid>
 
+        <Label Text="Destination language:" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
+        <Picker Margin="20,0,20,0"
+                FontSize="{StaticResource FontSizeBody}"
+                TextColor="{DynamicResource PrimaryTextColor}"
+                TitleColor="{DynamicResource SecondaryTextColor}"
+                Title="Select destination language"
+                ItemsSource="{Binding DestinationLanguages}"
+                SelectedItem="{Binding DestinationLanguage}" />
+
         <!-- Filler -->
         <BoxView Style="{StaticResource FillerStyle}" />
 

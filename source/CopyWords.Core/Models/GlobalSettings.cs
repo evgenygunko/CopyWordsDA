@@ -8,8 +8,6 @@ namespace CopyWords.Core.Models
 
         string TranslatorAppRequestCode { get; set; }
 
-        string DestinationLanguage { get; set; }
-
         string SyncfusionLicenseKey { get; set; }
 
         string SentryDsn { get; set; }
@@ -26,8 +24,6 @@ namespace CopyWords.Core.Models
         public string TranslatorAppUrl { get; set; } = null!;
 
         public string TranslatorAppRequestCode { get; set; } = null!;
-
-        public string DestinationLanguage { get; set; } = null!;
 
         public string SyncfusionLicenseKey { get; set; } = null!;
 

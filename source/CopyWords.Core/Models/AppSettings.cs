@@ -28,6 +28,8 @@ namespace CopyWords.Core.Models
 
         public string SelectedParser { get; set; } = string.Empty;
 
+        public string DestinationLanguage { get; set; } = "Russian";
+
         public bool UseDarkTheme { get; set; }
     }
 }

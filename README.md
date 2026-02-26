@@ -87,6 +87,7 @@ The settings dialog is accessible by tapping the **Settings** button (gear icon)
 
 - **Dictionary mode**: Switch between **Dictionary mode** (for word lookup and pronunciation) and **Copy mode** (for preparing Anki flashcards).
 - **Include translated meanings**: When enabled in Copy mode, both the translated text and the original meaning are copied to the back of the card.
+- **Destination language**: Choose the translation target language used by Copy mode (`English` or `Russian`).
 - **Anki settings**: Allows you to select a deck and a note type for automatically created Anki notes.
 - **Theme**: Switch between Dark and Light themes.
 

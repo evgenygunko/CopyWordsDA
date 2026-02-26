@@ -11,9 +11,10 @@ namespace CopyWords.Core.ViewModels
         public DefinitionViewModel(
             Definition definition,
             SourceLanguage sourceLanguage,
-            bool showCheckBoxes)
+            bool showCheckBoxes,
+            string destinationLanguage)
         {
-            HeadwordViewModel = new HeadwordViewModel(definition.Headword, sourceLanguage, showCheckBoxes);
+            HeadwordViewModel = new HeadwordViewModel(definition.Headword, sourceLanguage, showCheckBoxes, destinationLanguage);
 
             PartOfSpeech = definition.PartOfSpeech;
             Endings = definition.Endings;

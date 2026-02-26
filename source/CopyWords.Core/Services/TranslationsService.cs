@@ -16,15 +16,18 @@ namespace CopyWords.Core.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IGlobalSettings _globalSettings;
+        private readonly ISettingsService _settingsService;
         private readonly ILaunchDarklyService _launchDarklyService;
 
         public TranslationsService(
             HttpClient httpClient,
             IGlobalSettings globalSettings,
+            ISettingsService settingsService,
             ILaunchDarklyService launchDarklyService)
         {
             _httpClient = httpClient;
             _globalSettings = globalSettings;
+            _settingsService = settingsService;
             _launchDarklyService = launchDarklyService;
         }
 
@@ -46,11 +49,16 @@ namespace CopyWords.Core.Services
             }
 
             string lookupUrl = CreateLookUpWordUrl();
+            string destinationLanguage = _settingsService.GetDestinationLanguage();
+            if (string.IsNullOrWhiteSpace(destinationLanguage))
+            {
+                destinationLanguage = "Russian";
+            }
 
             var input = new LookUpWordRequest(
                 Text: wordToLookUp,
                 SourceLanguage: sourceLanguage,
-                DestinationLanguage: _globalSettings.DestinationLanguage,
+                DestinationLanguage: destinationLanguage,
                 Version: "2");
 
             WordModel? wordModel = await TranslateAsync(lookupUrl, input, cancellationToken);

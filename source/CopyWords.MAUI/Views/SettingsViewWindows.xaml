@@ -202,6 +202,10 @@
                             Text="Copy translated meanings"
                             Style="{StaticResource CheckBoxLabelStyle}" />
                     </HorizontalStackLayout>
+
+                    <Label Text="Destination language:" Style="{StaticResource SettingsFieldLabelStyle}" />
+                    <Picker ItemsSource="{Binding DestinationLanguages}"
+                            SelectedItem="{Binding DestinationLanguage}" />
                 </VerticalStackLayout>
             </VerticalStackLayout>
         </Border>
