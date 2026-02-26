@@ -165,6 +165,34 @@ public static class MauiProgram
             throw new Exception("Cannot deserialize CopyWords.MAUI.appsettings.json.");
         }
 
+        ValidateGlobalSettings(globalSettings);
+
         return globalSettings;
+    }
+
+    private static void ValidateGlobalSettings(GlobalSettings settings)
+    {
+        var errors = new List<string>();
+
+        if (string.IsNullOrWhiteSpace(settings.DestinationLanguage))
+        {
+            errors.Add("DestinationLanguage must be defined in appsettings.");
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.TranslatorAppUrl))
+        {
+            errors.Add("TranslatorAppUrl must be defined in appsettings.");
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.TranslatorAppRequestCode))
+        {
+            errors.Add("TranslatorAppRequestCode must be defined in appsettings.");
+        }
+
+        if (errors.Count > 0)
+        {
+            throw new InvalidOperationException(
+                $"Invalid application settings:{Environment.NewLine}{string.Join(Environment.NewLine, errors)}");
+        }
     }
 }
