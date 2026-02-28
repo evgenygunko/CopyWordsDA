@@ -6,8 +6,8 @@
   <ItemGroup>
     <PackageVersion Include="AutoFixture" Version="4.18.1" />
     <PackageVersion Include="AutoFixture.AutoMoq" Version="4.18.1" />
-    <PackageVersion Include="CommunityToolkit.Maui" Version="14.0.0" />
-    <PackageVersion Include="CommunityToolkit.Maui.MediaElement" Version="8.0.0" />
+    <PackageVersion Include="CommunityToolkit.Maui" Version="14.0.1" />
+    <PackageVersion Include="CommunityToolkit.Maui.MediaElement" Version="8.0.1" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="coverlet.collector" Version="8.0.0" />
     <PackageVersion Include="FluentAssertions" Version="[7.*, 8)" />
@@ -19,11 +19,11 @@
     <PackageVersion Include="MSTest" Version="4.1.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
-    <PackageVersion Include="Sentry.Maui" Version="6.0.0" />
+    <PackageVersion Include="Sentry.Maui" Version="6.1.0" />
     <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.12" />
-    <PackageVersion Include="Syncfusion.Licensing" Version="32.2.3" />
-    <PackageVersion Include="Syncfusion.Maui.Expander" Version="32.2.3" />
-    <PackageVersion Include="Syncfusion.Maui.Inputs" Version="32.2.3" />
+    <PackageVersion Include="Syncfusion.Licensing" Version="32.2.7" />
+    <PackageVersion Include="Syncfusion.Maui.Expander" Version="32.2.7" />
+    <PackageVersion Include="Syncfusion.Maui.Inputs" Version="32.2.7" />
     <PackageVersion Include="Syncfusion.Maui.Toolkit" Version="1.0.9" />
   </ItemGroup>
 </Project>
