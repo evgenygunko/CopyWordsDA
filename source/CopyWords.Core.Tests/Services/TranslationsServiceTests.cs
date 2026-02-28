@@ -288,6 +288,57 @@ namespace CopyWords.Core.Tests.Services
                 .WithMessage("The server returned the error 'InternalServerError'.");
         }
 
+        [TestMethod]
+        public async Task TranslateAsync_WhenServiceUnavailableWithBody_ThrowsServerErrorExceptionWithBodyMessage()
+        {
+            const string errorMsg = "Online dictionary 'DDO' is temporarily unavailable. Original error: Service unavailable";
+            var httpClient = CreateMockHttpClient(HttpStatusCode.ServiceUnavailable, errorMsg);
+
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
+
+            await act.Should().ThrowAsync<ServerErrorException>()
+                .WithMessage(errorMsg);
+        }
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenBadGatewayWithBody_ThrowsServerErrorExceptionWithBodyMessage()
+        {
+            const string errorMsg = "Online dictionary 'DDO' is temporarily unavailable. Original error: Bad gateway";
+            var httpClient = CreateMockHttpClient(HttpStatusCode.BadGateway, errorMsg);
+
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
+
+            await act.Should().ThrowAsync<ServerErrorException>()
+                .WithMessage(errorMsg);
+        }
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenGatewayTimeoutWithBody_ThrowsServerErrorExceptionWithBodyMessage()
+        {
+            const string errorMsg = "Online dictionary 'DDO' is temporarily unavailable. Original error: Gateway timeout";
+            var httpClient = CreateMockHttpClient(HttpStatusCode.GatewayTimeout, errorMsg);
+
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
+
+            await act.Should().ThrowAsync<ServerErrorException>()
+                .WithMessage(errorMsg);
+        }
+
+        [TestMethod]
+        public async Task TranslateAsync_WhenServiceUnavailableWithEmptyBody_ThrowsGenericServerErrorException()
+        {
+            var httpClient = CreateMockHttpClient(HttpStatusCode.ServiceUnavailable, "   ");
+
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
+
+            await act.Should().ThrowAsync<ServerErrorException>()
+                .WithMessage("The server returned the error 'ServiceUnavailable'.");
+        }
+
         #region Tests for CancellationToken functionality
 
         [TestMethod]

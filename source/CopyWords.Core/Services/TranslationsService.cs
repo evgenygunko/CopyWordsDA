@@ -113,6 +113,17 @@ namespace CopyWords.Core.Services
                 return null;
             }
 
+            if (response.StatusCode is System.Net.HttpStatusCode.BadGateway
+                or System.Net.HttpStatusCode.ServiceUnavailable
+                or System.Net.HttpStatusCode.GatewayTimeout)
+            {
+                string errorContent = await response.Content.ReadAsStringAsync(combinedCts.Token);
+                if (!string.IsNullOrWhiteSpace(errorContent))
+                {
+                    throw new ServerErrorException(errorContent);
+                }
+            }
+
             throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
         }
     }
