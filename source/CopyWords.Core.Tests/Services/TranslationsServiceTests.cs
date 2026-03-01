@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using AutoFixture;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
@@ -27,6 +27,7 @@ namespace CopyWords.Core.Tests.Services
 
             _settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             _settingsServiceMock.Setup(x => x.GetDestinationLanguage()).Returns("English");
+            _settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
         }
 
         #region Tests for LookUpWordAsync
@@ -39,7 +40,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
 
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
-            var result = await sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None);
+            var result = await sut.LookUpWordAsync("testword", CancellationToken.None);
 
             result.Should().NotBeNull();
             result!.Word.Should().Be(wordModel.Word);
@@ -71,7 +72,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = new HttpClient(handlerMock.Object);
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
-            await sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None);
+            await sut.LookUpWordAsync("testword", CancellationToken.None);
 
             requestContent.Should().NotBeNull();
             requestContent.Should().Contain("\"DestinationLanguage\":\"English\"");
@@ -106,7 +107,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = new HttpClient(handlerMock.Object);
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
-            await sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None);
+            await sut.LookUpWordAsync("testword", CancellationToken.None);
 
             requestContent.Should().NotBeNull();
             requestContent.Should().Contain("\"DestinationLanguage\":\"Russian\"");
@@ -119,8 +120,8 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync(null!, SourceLanguage.Danish.ToString(), CancellationToken.None));
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("", SourceLanguage.Danish.ToString(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync(null!, CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("", CancellationToken.None));
         }
 
         [TestMethod]
@@ -134,7 +135,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", CancellationToken.None));
         }
 
         [TestMethod]
@@ -145,7 +146,7 @@ namespace CopyWords.Core.Tests.Services
 
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
-            var act = async () => await sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None);
+            var act = async () => await sut.LookUpWordAsync("testword", CancellationToken.None);
             await act.Should().ThrowAsync<InvalidInputException>()
                 .WithMessage(errorMsg);
         }
@@ -156,7 +157,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
 
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
-            var act = async () => await sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None);
+            var act = async () => await sut.LookUpWordAsync("testword", CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
                 .WithMessage("The server returned the error 'InternalServerError'.");
@@ -516,7 +517,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
-            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("test", nameof(SourceLanguage.Danish), CancellationToken.None);
+            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("test", CancellationToken.None);
 
             result.Words.Should().NotBeNull();
             result.Words.Should().Contain("test 1");
@@ -529,16 +530,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync("", nameof(SourceLanguage.Danish), CancellationToken.None));
-        }
-
-        [TestMethod]
-        public async Task GetSuggestedWordsAsync_WhenSourceLanguageIsNullOrEmpty_ThrowsArgumentException()
-        {
-            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
-
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync("test", "", CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync("", CancellationToken.None));
         }
 
         #endregion

@@ -1,4 +1,4 @@
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
@@ -8,9 +8,9 @@ namespace CopyWords.Core.Services
 {
     public interface ITranslationsService
     {
-        Task<WordModel?> LookUpWordAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken);
+        Task<WordModel?> LookUpWordAsync(string wordToLookUp, CancellationToken cancellationToken);
 
-        Task<SuggestedWordsModel> GetSuggestedWordsAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken);
+        Task<SuggestedWordsModel> GetSuggestedWordsAsync(string wordToLookUp, CancellationToken cancellationToken);
     }
 
     public class TranslationsService : ITranslationsService
@@ -39,7 +39,7 @@ namespace CopyWords.Core.Services
             return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/v2/Translation/SuggestedWords?code={_globalSettings.TranslatorAppRequestCode}";
         }
 
-        public async Task<WordModel?> LookUpWordAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken)
+        public async Task<WordModel?> LookUpWordAsync(string wordToLookUp, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(wordToLookUp))
             {
@@ -52,6 +52,7 @@ namespace CopyWords.Core.Services
             }
 
             string lookupUrl = CreateLookUpWordUrl();
+            string sourceLanguage = _settingsService.GetSelectedParser();
             string destinationLanguage = _settingsService.GetDestinationLanguage();
             if (string.IsNullOrWhiteSpace(destinationLanguage))
             {
@@ -67,17 +68,14 @@ namespace CopyWords.Core.Services
             return await TranslateAsync(lookupUrl, input, cancellationToken);
         }
 
-        public Task<SuggestedWordsModel> GetSuggestedWordsAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken)
+        public Task<SuggestedWordsModel> GetSuggestedWordsAsync(string wordToLookUp, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(wordToLookUp))
             {
                 throw new ArgumentException("Word to look up cannot be null or empty.", nameof(wordToLookUp));
             }
 
-            if (string.IsNullOrEmpty(sourceLanguage))
-            {
-                throw new ArgumentException("Source language cannot be null or empty.", nameof(sourceLanguage));
-            }
+            string sourceLanguage = _settingsService.GetSelectedParser();
 
             // TODO: Replace this mock with a real TranslatorApp endpoint call when backend support is available.
             var suggestions = Enumerable.Range(1, 10).Select(i => $"{wordToLookUp} {i}");

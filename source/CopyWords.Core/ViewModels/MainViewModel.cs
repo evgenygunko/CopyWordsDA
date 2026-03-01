@@ -162,62 +162,44 @@ namespace CopyWords.Core.ViewModels
                 return;
             }
 
-            // Clear previous word while we are waiting for the new one
-            var definition = new Definition(new Headword(string.Empty, null, null), string.Empty, string.Empty, []);
-            WordModel? wordModel = new WordModel(string.Empty, GetSourceLanguage(), null, null, definition, [], []);
-            UpdateUI(wordModel);
+            ClearUI();
 
             IsBusy = true;
 
             try
             {
-                wordModel = await LookUpWordInDictionaryAsync(SearchWord);
-            }
-            catch (WordNotFoundException ex)
-            {
-                if (_launchDarklyService.GetBooleanFlag("test-suggested-words"))
-                {
-                    try
-                    {
-                        AppSettings appSettings = _settingsService.LoadSettings();
-                        SuggestedWordsModel suggestedWords = await _translationsService.GetSuggestedWordsAsync(ex.SearchedWord, appSettings.SelectedParser, _cancellationTokenSource.Token);
+                WordModel? wordModel;
 
-                        PopulateSuggestionViewModels(suggestedWords.Words);
-                        if (SuggestionViewModels.Count > 0)
-                        {
-                            IsBusy = false;
-                            return;
-                        }
-                    }
-                    catch (TaskCanceledException)
+                try
+                {
+                    wordModel = await LookUpWordInDictionaryAsync(SearchWord);
+                }
+                catch (WordNotFoundException ex)
+                {
+                    if (await TryShowSuggestedWordsAsync(ex.SearchedWord))
                     {
-                        IsBusy = false;
                         return;
                     }
+
+                    await _dialogService.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{ex.SearchedWord}'", "OK");
+                    return;
                 }
 
-                await _dialogService.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{ex.SearchedWord}'", "OK");
+                UpdateUI(wordModel);
+
+                // Add current search word to navigation history
+                if (wordModel != null)
+                {
+                    _settingsService.AddToHistory(wordModel.Word);
+
+                    _navigationHistory.Push(wordModel.Word, wordModel.SourceLanguage.ToString());
+                    NotifyNavigationStateChanged();
+                }
+            }
+            finally
+            {
                 IsBusy = false;
-                return;
             }
-
-            if (_disposed)
-            {
-                return;
-            }
-
-            UpdateUI(wordModel);
-
-            // Add current search word to navigation history
-            if (wordModel != null)
-            {
-                _settingsService.AddToHistory(wordModel.Word);
-
-                _navigationHistory.Push(wordModel.Word, wordModel.SourceLanguage.ToString());
-                NotifyNavigationStateChanged();
-            }
-
-            IsBusy = false;
         }
 
 #if ANDROID
@@ -234,26 +216,25 @@ namespace CopyWords.Core.ViewModels
 
             IsRefreshing = true;
 
-            WordModel? wordModel;
             try
             {
-                wordModel = await LookUpWordInDictionaryAsync(SearchWord);
+                WordModel? wordModel;
+                try
+                {
+                    wordModel = await LookUpWordInDictionaryAsync(SearchWord);
+                }
+                catch (WordNotFoundException ex)
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{ex.SearchedWord}'", "OK");
+                    return;
+                }
+
+                UpdateUI(wordModel);
             }
-            catch (WordNotFoundException ex)
+            finally
             {
-                await _dialogService.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{ex.SearchedWord}'", "OK");
                 IsRefreshing = false;
-                return;
             }
-
-            if (_disposed)
-            {
-                return;
-            }
-
-            UpdateUI(wordModel);
-
-            IsRefreshing = false;
         }
 
         [RelayCommand(CanExecute = nameof(CanOpenHistory))]
@@ -366,26 +347,25 @@ namespace CopyWords.Core.ViewModels
         {
             IsBusy = true;
 
-            WordModel? wordModel;
             try
             {
-                wordModel = await LookUpWordInDictionaryAsync(url);
+                WordModel? wordModel;
+                try
+                {
+                    wordModel = await LookUpWordInDictionaryAsync(url);
+                }
+                catch (WordNotFoundException ex)
+                {
+                    await _dialogService.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{ex.SearchedWord}'", "OK");
+                    return;
+                }
+
+                UpdateUI(wordModel);
             }
-            catch (WordNotFoundException ex)
+            finally
             {
-                await _dialogService.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{ex.SearchedWord}'", "OK");
                 IsBusy = false;
-                return;
             }
-
-            if (_disposed)
-            {
-                return;
-            }
-
-            UpdateUI(wordModel);
-
-            IsBusy = false;
         }
 
         internal void UpdateUI(WordModel? wordModel)
@@ -395,7 +375,6 @@ namespace CopyWords.Core.ViewModels
                 return;
             }
 
-            IsBusy = true;
             SuggestionViewModels.Clear();
             OnPropertyChanged(nameof(ShowSuggestions));
 
@@ -462,8 +441,6 @@ namespace CopyWords.Core.ViewModels
             }
 
             _wordViewModel.UpdateUI();
-
-            IsBusy = false;
         }
 
         internal async Task<WordModel?> LookUpWordInDictionaryAsync(string searchTerm)
@@ -476,9 +453,7 @@ namespace CopyWords.Core.ViewModels
             WordModel? wordModel;
             try
             {
-                AppSettings appSettings = _settingsService.LoadSettings();
-
-                wordModel = await _translationsService.LookUpWordAsync(searchTerm, appSettings.SelectedParser, _cancellationTokenSource.Token);
+                wordModel = await _translationsService.LookUpWordAsync(searchTerm, _cancellationTokenSource.Token);
             }
             catch (TaskCanceledException)
             {
@@ -526,6 +501,34 @@ namespace CopyWords.Core.ViewModels
         #endregion
 
         #region Private Methods
+
+        private void ClearUI()
+        {
+            var definition = new Definition(new Headword(string.Empty, null, null), string.Empty, string.Empty, []);
+            var emptyWord = new WordModel(string.Empty, GetSourceLanguage(), null, null, definition, [], []);
+            UpdateUI(emptyWord);
+        }
+
+        private async Task<bool> TryShowSuggestedWordsAsync(string searchedWord)
+        {
+            if (!_launchDarklyService.GetBooleanFlag("test-suggested-words"))
+            {
+                return false;
+            }
+
+            try
+            {
+                SuggestedWordsModel suggestedWords = await _translationsService.GetSuggestedWordsAsync(
+                    searchedWord, _cancellationTokenSource.Token);
+
+                PopulateSuggestionViewModels(suggestedWords.Words);
+                return SuggestionViewModels.Count > 0;
+            }
+            catch (TaskCanceledException)
+            {
+                return true;
+            }
+        }
 
         private void PopulateSuggestionViewModels(IEnumerable<string> suggestedWords)
         {

@@ -62,7 +62,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(wordModel)
                 .Verifiable();
 
@@ -163,7 +163,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(wordModel);
 
             var instantTranslationServiceMock = _fixture.Freeze<Mock<IInstantTranslationService>>();
@@ -189,7 +189,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             // Should run lookup because there is instant text
             sut.SearchWord.Should().Be("newWord");
-            translationsServiceMock.Verify(x => x.LookUpWordAsync("newWord", nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()), Times.Once);
+            translationsServiceMock.Verify(x => x.LookUpWordAsync("newWord", It.IsAny<CancellationToken>()), Times.Once);
         }
 
         #endregion
@@ -209,7 +209,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(wordModel);
 
             var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
@@ -247,11 +247,10 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new WordNotFoundException(search));
 
             var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
@@ -266,7 +265,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             sut.ShowSuggestions.Should().BeFalse();
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{search}'", "OK"), Times.Once);
-            translationsServiceMock.Verify(x => x.GetSuggestedWordsAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+            translationsServiceMock.Verify(x => x.GetSuggestedWordsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [TestMethod]
@@ -277,14 +276,13 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new WordNotFoundException(search));
             translationsServiceMock
-                .Setup(x => x.GetSuggestedWordsAsync(search, nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()))
+                .Setup(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(suggestedWords);
 
             var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
@@ -300,7 +298,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.ShowSuggestions.Should().BeTrue();
             sut.SuggestionViewModels.Should().HaveCount(2);
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot find word", It.IsAny<string>(), "OK"), Times.Never);
-            translationsServiceMock.Verify(x => x.GetSuggestedWordsAsync(search, nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()), Times.Once);
+            translationsServiceMock.Verify(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
@@ -310,14 +308,13 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new WordNotFoundException(search));
             translationsServiceMock
-                .Setup(x => x.GetSuggestedWordsAsync(search, nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()))
+                .Setup(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new SuggestedWordsModel([]));
 
             var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
@@ -350,7 +347,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(wordModel)
                 .Verifiable();
 
@@ -374,7 +371,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new WordNotFoundException(search));
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
@@ -413,11 +410,10 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new TaskCanceledException("exception from unit test"));
 
             var sut = _fixture.Create<MainViewModel>();
@@ -437,11 +433,10 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new InvalidInputException("too many commas"));
 
             var sut = _fixture.Create<MainViewModel>();
@@ -461,11 +456,10 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception("exception from unit test"));
 
             var sut = _fixture.Create<MainViewModel>();
@@ -485,11 +479,10 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new WordNotFoundException(search));
 
             var sut = _fixture.Create<MainViewModel>();
@@ -509,11 +502,10 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(wordModel);
 
             var sut = _fixture.Create<MainViewModel>();
@@ -528,28 +520,25 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task LookUpWordInDictionaryAsync_Should_PassTranslatorAppUrlToLookup()
         {
             string translatorAppUrl = _fixture.Create<Uri>().ToString();
-            AppSettings appSettings = _fixture.Create<AppSettings>();
-            appSettings.SelectedParser = nameof(SourceLanguage.Danish);
 
             string search = _fixture.Create<string>();
             WordModel wordModel = _fixture.Create<WordModel>();
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
 
             Mock<IGlobalSettings> globalSettingsMock = _fixture.Freeze<Mock<IGlobalSettings>>();
             globalSettingsMock.Setup(x => x.TranslatorAppUrl).Returns(translatorAppUrl);
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(wordModel);
 
             var sut = _fixture.Create<MainViewModel>();
 
             _ = await sut.LookUpWordInDictionaryAsync(search);
 
-            translationsServiceMock.Verify(x => x.LookUpWordAsync(search, appSettings.SelectedParser, It.IsAny<CancellationToken>()));
+            translationsServiceMock.Verify(x => x.LookUpWordAsync(search, It.IsAny<CancellationToken>()));
         }
 
         #endregion
@@ -569,7 +558,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception("exception from unit test"));
 
             var sut = _fixture.Create<MainViewModel>();
@@ -592,7 +581,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new WordNotFoundException(url));
 
             var sut = _fixture.Create<MainViewModel>();
@@ -619,7 +608,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(wordModel);
 
             var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
@@ -903,7 +892,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(wordModel);
 
             var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
@@ -926,7 +915,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.SearchWord.Should().Be("test1");
 
             navigationHistoryMock.Verify(x => x.Pop(), Times.Exactly(2));
-            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()), Times.Once);
+            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", It.IsAny<CancellationToken>()), Times.Once);
             settingsServiceMock.Verify(x => x.SetSelectedParser("dict1"));
         }
 
@@ -937,11 +926,10 @@ namespace CopyWords.Core.Tests.ViewModels
 
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { SelectedParser = nameof(SourceLanguage.Danish) });
 
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(wordModel);
 
             var navigationHistoryMock = _fixture.Freeze<Mock<INavigationHistory>>();
@@ -961,8 +949,7 @@ namespace CopyWords.Core.Tests.ViewModels
             result.Should().BeTrue();
             sut.SearchWord.Should().Be("test1");
 
-            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()), Times.Once);
-            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", nameof(SourceLanguage.Danish), It.IsAny<CancellationToken>()), Times.Once);
+            translationsServiceMock.Verify(x => x.LookUpWordAsync("test1", It.IsAny<CancellationToken>()), Times.Once);
             settingsServiceMock.Verify(x => x.SetSelectedParser("dict1"));
         }
 
