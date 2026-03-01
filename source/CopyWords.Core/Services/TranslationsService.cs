@@ -1,8 +1,7 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Text;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
-using CopyWords.Core.Services.Wrappers;
 using Newtonsoft.Json;
 
 namespace CopyWords.Core.Services
@@ -10,6 +9,8 @@ namespace CopyWords.Core.Services
     public interface ITranslationsService
     {
         Task<WordModel?> LookUpWordAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken);
+
+        Task<SuggestedWordsModel> GetSuggestedWordsAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken);
     }
 
     public class TranslationsService : ITranslationsService
@@ -17,23 +18,25 @@ namespace CopyWords.Core.Services
         private readonly HttpClient _httpClient;
         private readonly IGlobalSettings _globalSettings;
         private readonly ISettingsService _settingsService;
-        private readonly ILaunchDarklyService _launchDarklyService;
 
         public TranslationsService(
             HttpClient httpClient,
             IGlobalSettings globalSettings,
-            ISettingsService settingsService,
-            ILaunchDarklyService launchDarklyService)
+            ISettingsService settingsService)
         {
             _httpClient = httpClient;
             _globalSettings = globalSettings;
             _settingsService = settingsService;
-            _launchDarklyService = launchDarklyService;
         }
 
         public string CreateLookUpWordUrl()
         {
             return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/v2/Translation/LookUpWord?code={_globalSettings.TranslatorAppRequestCode}";
+        }
+
+        public string CreateSuggestedWordsUrl()
+        {
+            return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/v2/Translation/SuggestedWords?code={_globalSettings.TranslatorAppRequestCode}";
         }
 
         public async Task<WordModel?> LookUpWordAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken)
@@ -61,30 +64,24 @@ namespace CopyWords.Core.Services
                 DestinationLanguage: destinationLanguage,
                 Version: "2");
 
-            WordModel? wordModel = await TranslateAsync(lookupUrl, input, cancellationToken);
+            return await TranslateAsync(lookupUrl, input, cancellationToken);
+        }
 
-            // todo: remove when the server has implemented the feature of returning similar words. The code below is just for testing the UI.
-            if (wordModel == null && _launchDarklyService.GetBooleanFlag("test-suggested-words"))
+        public Task<SuggestedWordsModel> GetSuggestedWordsAsync(string wordToLookUp, string sourceLanguage, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(wordToLookUp))
             {
-                var parsedLanguage = Enum.TryParse<SourceLanguage>(input.SourceLanguage, out var lang)
-                    ? lang
-                    : SourceLanguage.Danish;
-
-                var similarWords = Enumerable.Range(1, 10)
-                    .Select(i => new Variant($"test word {i}", $"https://ordnet.dk/ddo/ordbog?query=test{i}"));
-
-                wordModel = new WordModel(
-                    Word: wordToLookUp,
-                    SourceLanguage: parsedLanguage,
-                    SoundUrl: null,
-                    SoundFileName: null,
-                    Definition: null,
-                    Variants: [],
-                    Expressions: [],
-                    SimilarWords: similarWords);
+                throw new ArgumentException("Word to look up cannot be null or empty.", nameof(wordToLookUp));
             }
 
-            return wordModel;
+            if (string.IsNullOrEmpty(sourceLanguage))
+            {
+                throw new ArgumentException("Source language cannot be null or empty.", nameof(sourceLanguage));
+            }
+
+            // TODO: Replace this mock with a real TranslatorApp endpoint call when backend support is available.
+            var suggestions = Enumerable.Range(1, 10).Select(i => $"{wordToLookUp} {i}");
+            return Task.FromResult(new SuggestedWordsModel(suggestions));
         }
 
         internal async Task<WordModel?> TranslateAsync(string url, LookUpWordRequest input, CancellationToken cancellationToken)
@@ -110,7 +107,7 @@ namespace CopyWords.Core.Services
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                return null;
+                throw new WordNotFoundException(input.Text);
             }
 
             if (response.StatusCode is System.Net.HttpStatusCode.BadGateway

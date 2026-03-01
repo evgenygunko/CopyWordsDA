@@ -8,8 +8,10 @@ namespace CopyWords.Core.Models
        string? SoundFileName,
        Definition? Definition,
        IEnumerable<Variant> Variants,
-       IEnumerable<Variant> Expressions,
-       IEnumerable<Variant> SimilarWords);
+       IEnumerable<Variant> Expressions);
+
+    public record SuggestedWordsModel(
+        IEnumerable<string> Words);
 
     public record Definition(
         Headword Headword,

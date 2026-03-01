@@ -3,7 +3,6 @@ using AutoFixture;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
-using CopyWords.Core.Services.Wrappers;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;
@@ -17,8 +16,6 @@ namespace CopyWords.Core.Tests.Services
         private Fixture _fixture = default!;
         private Mock<IGlobalSettings> _globalSettingsMock = default!;
         private Mock<ISettingsService> _settingsServiceMock = default!;
-        private Mock<ILaunchDarklyService> _launchDarklyServiceMock = default!;
-
         [TestInitialize]
         public void TestInitialize()
         {
@@ -30,8 +27,6 @@ namespace CopyWords.Core.Tests.Services
 
             _settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             _settingsServiceMock.Setup(x => x.GetDestinationLanguage()).Returns("English");
-
-            _launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
         }
 
         #region Tests for LookUpWordAsync
@@ -43,7 +38,7 @@ namespace CopyWords.Core.Tests.Services
             var json = JsonConvert.SerializeObject(wordModel);
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
             var result = await sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None);
 
             result.Should().NotBeNull();
@@ -74,7 +69,7 @@ namespace CopyWords.Core.Tests.Services
                 });
 
             var httpClient = new HttpClient(handlerMock.Object);
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             await sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None);
 
@@ -109,7 +104,7 @@ namespace CopyWords.Core.Tests.Services
                 });
 
             var httpClient = new HttpClient(handlerMock.Object);
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             await sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None);
 
@@ -122,7 +117,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync(null!, SourceLanguage.Danish.ToString(), CancellationToken.None));
             await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("", SourceLanguage.Danish.ToString(), CancellationToken.None));
@@ -137,7 +132,7 @@ namespace CopyWords.Core.Tests.Services
 
             _globalSettingsMock.SetupGet(x => x.TranslatorAppUrl).Returns(translatorAppUrl);
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None));
         }
@@ -148,7 +143,7 @@ namespace CopyWords.Core.Tests.Services
             var errorMsg = "Bad input error message";
             var httpClient = CreateMockHttpClient(HttpStatusCode.BadRequest, errorMsg);
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             var act = async () => await sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None);
             await act.Should().ThrowAsync<InvalidInputException>()
@@ -160,7 +155,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
             var act = async () => await sut.LookUpWordAsync("testword", SourceLanguage.Danish.ToString(), CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
@@ -182,7 +177,7 @@ namespace CopyWords.Core.Tests.Services
             _globalSettingsMock.SetupGet(x => x.TranslatorAppRequestCode).Returns(requestCode);
 
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             // Act
             string result = sut.CreateLookUpWordUrl();
@@ -202,7 +197,7 @@ namespace CopyWords.Core.Tests.Services
             _globalSettingsMock.SetupGet(x => x.TranslatorAppRequestCode).Returns(requestCode);
 
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             // Act
             string result = sut.CreateLookUpWordUrl();
@@ -223,7 +218,7 @@ namespace CopyWords.Core.Tests.Services
             _globalSettingsMock.SetupGet(x => x.TranslatorAppRequestCode).Returns(requestCode);
 
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             // Act
             string result = sut.CreateLookUpWordUrl();
@@ -243,7 +238,7 @@ namespace CopyWords.Core.Tests.Services
             var json = JsonConvert.SerializeObject(wordModel);
 
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
 
@@ -252,15 +247,17 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task TranslateAsync_WhenNotFound_ReturnsNull()
+        public async Task TranslateAsync_WhenNotFound_ThrowsWordNotFoundException()
         {
             var errorMsg = "not found";
             var httpClient = CreateMockHttpClient(HttpStatusCode.NotFound, errorMsg);
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
-            var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
+            var input = _fixture.Create<LookUpWordRequest>() with { Text = "missing-word" };
+            var act = async () => await sut.TranslateAsync("http://fake-url", input, CancellationToken.None);
 
-            result.Should().BeNull();
+            var ex = await act.Should().ThrowAsync<WordNotFoundException>();
+            ex.Which.SearchedWord.Should().Be("missing-word");
         }
 
         [TestMethod]
@@ -269,7 +266,7 @@ namespace CopyWords.Core.Tests.Services
             var errorMsg = "Bad input error message";
             var httpClient = CreateMockHttpClient(HttpStatusCode.BadRequest, errorMsg);
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
             var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
 
             await act.Should().ThrowAsync<InvalidInputException>()
@@ -281,7 +278,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
             var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
@@ -294,7 +291,7 @@ namespace CopyWords.Core.Tests.Services
             const string errorMsg = "Online dictionary 'DDO' is temporarily unavailable. Original error: Service unavailable";
             var httpClient = CreateMockHttpClient(HttpStatusCode.ServiceUnavailable, errorMsg);
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
             var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
@@ -307,7 +304,7 @@ namespace CopyWords.Core.Tests.Services
             const string errorMsg = "Online dictionary 'DDO' is temporarily unavailable. Original error: Bad gateway";
             var httpClient = CreateMockHttpClient(HttpStatusCode.BadGateway, errorMsg);
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
             var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
@@ -320,7 +317,7 @@ namespace CopyWords.Core.Tests.Services
             const string errorMsg = "Online dictionary 'DDO' is temporarily unavailable. Original error: Gateway timeout";
             var httpClient = CreateMockHttpClient(HttpStatusCode.GatewayTimeout, errorMsg);
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
             var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
@@ -332,7 +329,7 @@ namespace CopyWords.Core.Tests.Services
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.ServiceUnavailable, "   ");
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
             var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
@@ -348,7 +345,7 @@ namespace CopyWords.Core.Tests.Services
             using var cancellationTokenSource = new CancellationTokenSource();
             var httpClient = CreateMockHttpClientWithTaskCancelledException();
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             // Cancel the token before the request completes
             cancellationTokenSource.Cancel();
@@ -365,7 +362,7 @@ namespace CopyWords.Core.Tests.Services
             using var cancellationTokenSource = new CancellationTokenSource();
             var httpClient = CreateMockHttpClientWithDelay(HttpStatusCode.OK, "{}", TimeSpan.FromMilliseconds(200));
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             // Act
             var task = sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), cancellationTokenSource.Token);
@@ -390,7 +387,7 @@ namespace CopyWords.Core.Tests.Services
             // Internal timeout is 30 seconds, so external should win when cancelled
             var httpClient = CreateMockHttpClientWithDelay(HttpStatusCode.OK, "{}", TimeSpan.FromMilliseconds(200));
 
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             // Act - Start the operation
             var task = sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), externalCts.Token);
@@ -428,7 +425,7 @@ namespace CopyWords.Core.Tests.Services
                 });
 
             var httpClient = new HttpClient(handlerMock.Object);
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             // Act
             await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), cancellationTokenSource.Token);
@@ -452,7 +449,7 @@ namespace CopyWords.Core.Tests.Services
             var json = JsonConvert.SerializeObject(wordModel);
 
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             // Act - Should complete successfully when not cancelled
             var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), cancellationTokenSource.Token);
@@ -470,7 +467,7 @@ namespace CopyWords.Core.Tests.Services
             var errorMsg = "Bad input error message";
 
             var httpClient = CreateMockHttpClient(HttpStatusCode.BadRequest, errorMsg);
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             // Act & Assert
             var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), cancellationTokenSource.Token);
@@ -487,7 +484,7 @@ namespace CopyWords.Core.Tests.Services
             var json = JsonConvert.SerializeObject(wordModel);
 
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             // Act - Should work normally when neither token is cancelled
             var result = await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), externalCts.Token);
@@ -502,11 +499,46 @@ namespace CopyWords.Core.Tests.Services
         {
             // Arrange - Use a very short timeout for testing by creating a custom mock
             var httpClient = CreateMockHttpClientWithTaskCancelledException();
-            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object, _launchDarklyServiceMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             // Act
             var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
             await act.Should().ThrowAsync<TaskCanceledException>();
+        }
+
+        #endregion
+
+        #region Tests for GetSuggestedWordsAsync
+
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_WhenCalled_ReturnsMockedSuggestions()
+        {
+            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
+
+            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("test", nameof(SourceLanguage.Danish), CancellationToken.None);
+
+            result.Words.Should().NotBeNull();
+            result.Words.Should().Contain("test 1");
+            result.Words.Should().HaveCount(10);
+        }
+
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_WhenWordIsNullOrEmpty_ThrowsArgumentException()
+        {
+            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
+
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync("", nameof(SourceLanguage.Danish), CancellationToken.None));
+        }
+
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_WhenSourceLanguageIsNullOrEmpty_ThrowsArgumentException()
+        {
+            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
+
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync("test", "", CancellationToken.None));
         }
 
         #endregion
