@@ -68,18 +68,65 @@ namespace CopyWords.Core.Services
             return await TranslateAsync(lookupUrl, input, cancellationToken);
         }
 
-        public Task<SuggestedWordsModel> GetSuggestedWordsAsync(string wordToLookUp, CancellationToken cancellationToken)
+        public async Task<SuggestedWordsModel> GetSuggestedWordsAsync(string wordToLookUp, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(wordToLookUp))
             {
                 throw new ArgumentException("Word to look up cannot be null or empty.", nameof(wordToLookUp));
             }
 
-            string sourceLanguage = _settingsService.GetSelectedParser();
+            if (string.IsNullOrEmpty(_globalSettings.TranslatorAppUrl))
+            {
+                throw new ArgumentException("TranslatorApp URL cannot be null or empty");
+            }
 
-            // TODO: Replace this mock with a real TranslatorApp endpoint call when backend support is available.
-            var suggestions = Enumerable.Range(1, 10).Select(i => $"{wordToLookUp} {i}");
-            return Task.FromResult(new SuggestedWordsModel(suggestions));
+            string suggestedWordsUrl = CreateSuggestedWordsUrl();
+            string sourceLanguage = _settingsService.GetSelectedParser();
+            string destinationLanguage = _settingsService.GetDestinationLanguage();
+            if (string.IsNullOrWhiteSpace(destinationLanguage))
+            {
+                destinationLanguage = "Russian";
+            }
+
+            var input = new LookUpWordRequest(
+                Text: wordToLookUp,
+                SourceLanguage: sourceLanguage,
+                DestinationLanguage: destinationLanguage,
+                Version: "2");
+
+            string jsonRequest = JsonConvert.SerializeObject(input);
+            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            // The Translator app may use OpenAI API for request processing, so it can take time to return result.
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            using var combinedCts = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, cancellationToken);
+
+            using HttpResponseMessage response = await _httpClient.PostAsync(suggestedWordsUrl, content, combinedCts.Token);
+
+            if (response.IsSuccessStatusCode)
+            {
+                SuggestedWordsModel? suggestedWords = await response.Content.ReadFromJsonAsync<SuggestedWordsModel>(combinedCts.Token);
+                return suggestedWords ?? new SuggestedWordsModel([]);
+            }
+
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                string errorContent = await response.Content.ReadAsStringAsync(combinedCts.Token);
+                throw new InvalidInputException(errorContent);
+            }
+
+            if (response.StatusCode is System.Net.HttpStatusCode.BadGateway
+                or System.Net.HttpStatusCode.ServiceUnavailable
+                or System.Net.HttpStatusCode.GatewayTimeout)
+            {
+                string errorContent = await response.Content.ReadAsStringAsync(combinedCts.Token);
+                if (!string.IsNullOrWhiteSpace(errorContent))
+                {
+                    throw new ServerErrorException(errorContent);
+                }
+            }
+
+            throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
         }
 
         internal async Task<WordModel?> TranslateAsync(string url, LookUpWordRequest input, CancellationToken cancellationToken)

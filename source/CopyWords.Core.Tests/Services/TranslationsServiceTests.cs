@@ -512,16 +512,30 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for GetSuggestedWordsAsync
 
         [TestMethod]
-        public async Task GetSuggestedWordsAsync_WhenCalled_ReturnsMockedSuggestions()
+        public async Task GetSuggestedWordsAsync_WhenCalled_ReturnsApiSuggestions()
         {
-            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
+            var expectedSuggestions = new SuggestedWordsModel(["house", "horse"]);
+            string json = JsonConvert.SerializeObject(expectedSuggestions);
+
+            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
             SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("test", CancellationToken.None);
 
             result.Words.Should().NotBeNull();
-            result.Words.Should().Contain("test 1");
-            result.Words.Should().HaveCount(10);
+            result.Words.Should().BeEquivalentTo(expectedSuggestions.Words);
+        }
+
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_WhenApiReturnsNullBody_ReturnsEmptySuggestedWords()
+        {
+            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "null");
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
+
+            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("test", CancellationToken.None);
+
+            result.Words.Should().NotBeNull();
+            result.Words.Should().BeEmpty();
         }
 
         [TestMethod]
@@ -530,7 +544,138 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
 
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync(null!, CancellationToken.None));
             await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync("", CancellationToken.None));
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task GetSuggestedWordsAsync_WhenApiUrlIsNullOrEmpty_ThrowsArgumentException(string translatorAppUrl)
+        {
+            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
+            _globalSettingsMock.SetupGet(x => x.TranslatorAppUrl).Returns(translatorAppUrl);
+
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
+
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync("testword", CancellationToken.None));
+        }
+
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_Should_PostExpectedPayloadToSuggestedWordsEndpoint()
+        {
+            string? requestContent = null;
+            Uri? requestUri = null;
+            HttpMethod? method = null;
+
+            var expectedSuggestions = new SuggestedWordsModel(["word1", "word2"]);
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .Callback<HttpRequestMessage, CancellationToken>((request, _) =>
+                {
+                    requestContent = request.Content?.ReadAsStringAsync().GetAwaiter().GetResult();
+                    requestUri = request.RequestUri;
+                    method = request.Method;
+                })
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(expectedSuggestions))
+                });
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
+
+            await sut.GetSuggestedWordsAsync("testword", CancellationToken.None);
+
+            method.Should().Be(HttpMethod.Post);
+            requestUri.Should().NotBeNull();
+            requestUri!.ToString().Should().Be("http://fake-translator-app-url/api/v2/Translation/SuggestedWords?code=fake-request-code");
+            requestContent.Should().NotBeNull();
+            requestContent.Should().Contain("\"Text\":\"testword\"");
+            requestContent.Should().Contain("\"SourceLanguage\":\"Danish\"");
+            requestContent.Should().Contain("\"DestinationLanguage\":\"English\"");
+            requestContent.Should().Contain("\"Version\":\"2\"");
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow(" ")]
+        public async Task GetSuggestedWordsAsync_WhenDestinationLanguageMissing_Should_FallbackToRussian(string? destinationLanguage)
+        {
+            string? requestContent = null;
+            _settingsServiceMock.Setup(x => x.GetDestinationLanguage()).Returns(destinationLanguage!);
+
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .Callback<HttpRequestMessage, CancellationToken>((request, _) =>
+                {
+                    requestContent = request.Content?.ReadAsStringAsync().GetAwaiter().GetResult();
+                })
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(JsonConvert.SerializeObject(new SuggestedWordsModel(["word"])))
+                });
+
+            var httpClient = new HttpClient(handlerMock.Object);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
+
+            await sut.GetSuggestedWordsAsync("testword", CancellationToken.None);
+
+            requestContent.Should().NotBeNull();
+            requestContent.Should().Contain("\"DestinationLanguage\":\"Russian\"");
+        }
+
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_WhenBadRequest_ThrowsInvalidInputException()
+        {
+            const string errorMsg = "Bad input error message";
+            var httpClient = CreateMockHttpClient(HttpStatusCode.BadRequest, errorMsg);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
+
+            var act = async () => await sut.GetSuggestedWordsAsync("testword", CancellationToken.None);
+
+            await act.Should().ThrowAsync<InvalidInputException>()
+                .WithMessage(errorMsg);
+        }
+
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_WhenOtherErrors_ThrowsServerErrorException()
+        {
+            var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
+
+            var act = async () => await sut.GetSuggestedWordsAsync("testword", CancellationToken.None);
+
+            await act.Should().ThrowAsync<ServerErrorException>()
+                .WithMessage("The server returned the error 'InternalServerError'.");
+        }
+
+        [TestMethod]
+        [DataRow(HttpStatusCode.ServiceUnavailable, "Service unavailable")]
+        [DataRow(HttpStatusCode.BadGateway, "Bad gateway")]
+        [DataRow(HttpStatusCode.GatewayTimeout, "Gateway timeout")]
+        public async Task GetSuggestedWordsAsync_WhenTransientErrorsWithBody_ThrowsServerErrorExceptionWithBodyMessage(HttpStatusCode statusCode, string errorMsg)
+        {
+            var httpClient = CreateMockHttpClient(statusCode, errorMsg);
+            var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
+
+            var act = async () => await sut.GetSuggestedWordsAsync("testword", CancellationToken.None);
+
+            await act.Should().ThrowAsync<ServerErrorException>()
+                .WithMessage(errorMsg);
         }
 
         #endregion
