@@ -528,6 +528,16 @@ namespace CopyWords.Core.ViewModels
             {
                 return true;
             }
+            catch (InvalidInputException ex)
+            {
+                await _dialogService.DisplayAlertAsync("Search input is invalid", ex.Message, "OK");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.DisplayAlertAsync("An error occurred while searching for translations", ex.Message, "OK");
+                return true;
+            }
         }
 
         private void PopulateSuggestionViewModels(IEnumerable<string> suggestedWords)

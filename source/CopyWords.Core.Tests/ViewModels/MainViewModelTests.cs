@@ -331,6 +331,96 @@ namespace CopyWords.Core.Tests.ViewModels
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{search}'", "OK"), Times.Once);
         }
 
+        [TestMethod]
+        public async Task LookUpAsync_WhenWordNotFoundAndSuggestedWordsThrowsServerError_ShowsErrorAlert()
+        {
+            string search = _fixture.Create<string>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new WordNotFoundException(search));
+            translationsServiceMock
+                .Setup(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new ServerErrorException("The server returned the error 'InternalServerError'."));
+
+            var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
+            launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("test-suggested-words", It.IsAny<bool>())).Returns(true);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.SearchWord = search;
+
+            await sut.LookUpAsync();
+
+            sut.ShowSuggestions.Should().BeFalse();
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("An error occurred while searching for translations", "The server returned the error 'InternalServerError'.", "OK"), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task LookUpAsync_WhenWordNotFoundAndSuggestedWordsThrowsInvalidInput_ShowsInvalidInputAlert()
+        {
+            string search = _fixture.Create<string>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new WordNotFoundException(search));
+            translationsServiceMock
+                .Setup(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new InvalidInputException("invalid input"));
+
+            var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
+            launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("test-suggested-words", It.IsAny<bool>())).Returns(true);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.SearchWord = search;
+
+            await sut.LookUpAsync();
+
+            sut.ShowSuggestions.Should().BeFalse();
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Search input is invalid", "invalid input", "OK"), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task LookUpAsync_WhenWordNotFoundAndSuggestedWordsThrowsGenericException_ShowsErrorAlert()
+        {
+            string search = _fixture.Create<string>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock
+                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new WordNotFoundException(search));
+            translationsServiceMock
+                .Setup(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception("unexpected error"));
+
+            var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
+            launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("test-suggested-words", It.IsAny<bool>())).Returns(true);
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.SearchWord = search;
+
+            await sut.LookUpAsync();
+
+            sut.ShowSuggestions.Should().BeFalse();
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync("An error occurred while searching for translations", "unexpected error", "OK"), Times.Once);
+        }
+
         #endregion
 
         #region Tests for RefreshAsync
