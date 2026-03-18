@@ -9,7 +9,7 @@
     <PackageVersion Include="CommunityToolkit.Maui" Version="14.0.1" />
     <PackageVersion Include="CommunityToolkit.Maui.MediaElement" Version="8.0.1" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageVersion Include="coverlet.collector" Version="8.0.0" />
+    <PackageVersion Include="coverlet.collector" Version="8.0.1" />
     <PackageVersion Include="FluentAssertions" Version="[7.*, 8)" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
     <PackageVersion Include="LaunchDarkly.ClientSdk" Version="5.7.0" />
