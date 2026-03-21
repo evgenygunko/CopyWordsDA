@@ -805,18 +805,15 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task GetSuggestionsAsync_WhenSelectedParserIsDanish_CallsDanishSuggestionsService()
+        public async Task GetSuggestionsAsync_CallsSuggestionsService()
         {
             // Arrange
             string inputText = _fixture.Create<string>();
-            var danishSuggestions = new[] { "haj", "hus", "have" };
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            var suggestions = new[] { "haj", "hus", "have" };
 
             var suggestionsServiceMock = _fixture.Freeze<Mock<ISuggestionsService>>();
-            suggestionsServiceMock.Setup(x => x.GetDanishWordsSuggestionsAsync(inputText, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(danishSuggestions)
+            suggestionsServiceMock.Setup(x => x.GetSuggestionsAsync(inputText, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(suggestions)
                 .Verifiable();
 
             var sut = _fixture.Create<MainViewModel>();
@@ -825,47 +822,19 @@ namespace CopyWords.Core.Tests.ViewModels
             var result = await sut.GetSuggestionsAsync(inputText, CancellationToken.None);
 
             // Assert
-            result.Should().BeEquivalentTo(danishSuggestions);
+            result.Should().BeEquivalentTo(suggestions);
             suggestionsServiceMock.Verify();
-            suggestionsServiceMock.Verify(x => x.GetSpanishWordsSuggestionsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [TestMethod]
-        public async Task GetSuggestionsAsync_WhenSelectedParserIsSpanish_CallsSpanishSuggestionsService()
-        {
-            // Arrange
-            string inputText = _fixture.Create<string>();
-            var spanishSuggestions = new[] { "hola", "casa", "perro" };
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Spanish));
-
-            var suggestionsServiceMock = _fixture.Freeze<Mock<ISuggestionsService>>();
-            suggestionsServiceMock.Setup(x => x.GetSpanishWordsSuggestionsAsync(inputText, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(spanishSuggestions)
-                .Verifiable();
-
-            var sut = _fixture.Create<MainViewModel>();
-
-            // Act
-            var result = await sut.GetSuggestionsAsync(inputText, CancellationToken.None);
-
-            // Assert
-            result.Should().BeEquivalentTo(spanishSuggestions);
-            suggestionsServiceMock.Verify();
-            suggestionsServiceMock.Verify(x => x.GetDanishWordsSuggestionsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
-        }
-
-        [TestMethod]
-        public async Task GetSuggestionsAsync_WhenSelectedParserIsInvalid_ReturnsEmptyList()
+        public async Task GetSuggestionsAsync_WhenSuggestionsServiceReturnsEmpty_ReturnsEmptyList()
         {
             // Arrange
             string inputText = _fixture.Create<string>();
 
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns("InvalidLanguage");
-
             var suggestionsServiceMock = _fixture.Freeze<Mock<ISuggestionsService>>();
+            suggestionsServiceMock.Setup(x => x.GetSuggestionsAsync(inputText, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Enumerable.Empty<string>());
 
             var sut = _fixture.Create<MainViewModel>();
 
@@ -875,8 +844,6 @@ namespace CopyWords.Core.Tests.ViewModels
             // Assert
             result.Should().NotBeNull();
             result.Should().BeEmpty();
-            suggestionsServiceMock.Verify(x => x.GetDanishWordsSuggestionsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
-            suggestionsServiceMock.Verify(x => x.GetSpanishWordsSuggestionsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [TestMethod]
@@ -887,13 +854,10 @@ namespace CopyWords.Core.Tests.ViewModels
             using var cancellationTokenSource = new CancellationTokenSource();
             cancellationTokenSource.Cancel();
 
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-
             var tokens = new List<CancellationToken>();
 
             var suggestionsServiceMock = _fixture.Freeze<Mock<ISuggestionsService>>();
-            suggestionsServiceMock.Setup(x => x.GetDanishWordsSuggestionsAsync(inputText, Capture.In(tokens)))
+            suggestionsServiceMock.Setup(x => x.GetSuggestionsAsync(inputText, Capture.In(tokens)))
                 .ReturnsAsync(new[] { "test" })
                 .Verifiable();
 
@@ -909,17 +873,16 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task GetSuggestionsAsync_WhenSuggestionsServiceReturnsEmpty_ReturnsEmptyList()
+        public async Task GetSuggestionsAsync_WhenSuggestionsServiceReturnsMoreThanSixOnAndroid_ReturnsSixSuggestions()
         {
             // Arrange
             string inputText = _fixture.Create<string>();
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            var manySuggestions = Enumerable.Range(1, 10).Select(i => $"suggestion{i}").ToArray();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
 
             var suggestionsServiceMock = _fixture.Freeze<Mock<ISuggestionsService>>();
-            suggestionsServiceMock.Setup(x => x.GetDanishWordsSuggestionsAsync(inputText, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Enumerable.Empty<string>());
+            suggestionsServiceMock.Setup(x => x.GetSuggestionsAsync(inputText, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(manySuggestions);
 
             var sut = _fixture.Create<MainViewModel>();
 
@@ -927,8 +890,8 @@ namespace CopyWords.Core.Tests.ViewModels
             var result = await sut.GetSuggestionsAsync(inputText, CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeEmpty();
+            result.Should().HaveCount(6);
+            result.Should().BeEquivalentTo(manySuggestions.Take(6));
         }
 
         #endregion

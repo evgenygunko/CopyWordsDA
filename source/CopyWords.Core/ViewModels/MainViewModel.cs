@@ -315,20 +315,7 @@ namespace CopyWords.Core.ViewModels
             }
 
             using var combinedCts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token, cancellationToken);
-            List<string> suggestions = new List<string>();
-
-            SourceLanguage sourceLanguage;
-            if (Enum.TryParse<SourceLanguage>(_settingsService.GetSelectedParser(), out sourceLanguage))
-            {
-                if (sourceLanguage == SourceLanguage.Danish)
-                {
-                    suggestions = (await _suggestionsService.GetDanishWordsSuggestionsAsync(inputText, combinedCts.Token)).ToList();
-                }
-                else if (sourceLanguage == SourceLanguage.Spanish)
-                {
-                    suggestions = (await _suggestionsService.GetSpanishWordsSuggestionsAsync(inputText, combinedCts.Token)).ToList();
-                }
-            }
+            List<string> suggestions = (await _suggestionsService.GetSuggestionsAsync(inputText, combinedCts.Token)).ToList();
 
             // On Android we have a keyboard open, so show only 6 elements so that they fit the screen above the keyboard.
             if (_deviceInfo.Platform == DevicePlatform.Android)
