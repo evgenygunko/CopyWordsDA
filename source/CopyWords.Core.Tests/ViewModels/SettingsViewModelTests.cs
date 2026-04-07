@@ -25,14 +25,21 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             Mock<IShellService> shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { ActiveDictionaries = ["Danish", "Spanish"] });
+            string[] expectedActiveDictionaries = ["Danish"];
 
             var sut = _fixture.Create<SettingsViewModel>();
+            sut.DictionaryOptions =
+            [
+                new DictionaryOptionViewModel { LanguageKey = "Danish", Title = "Danish", IsEnabled = true },
+                new DictionaryOptionViewModel { LanguageKey = "Spanish", Title = "Spanish", IsEnabled = false }
+            ];
             sut.DestinationLanguage = "English";
 
             await sut.SaveSettingsAsync();
 
             settingsServiceMock.Verify(
-                x => x.SaveSettings(It.Is<AppSettings>(s => s.DestinationLanguage == "English")));
+                x => x.SaveSettings(It.Is<AppSettings>(s => s.DestinationLanguage == "English" && s.ActiveDictionaries.SequenceEqual(expectedActiveDictionaries))));
             shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..")));
         }
 
@@ -482,6 +489,7 @@ namespace CopyWords.Core.Tests.ViewModels
             // Arrange
             AppSettings appSettings = _fixture.Create<AppSettings>();
             appSettings.AnkiSoundsFolder = _fixture.Create<string>(); // Ensure it's not empty
+            appSettings.ActiveDictionaries = ["Danish"];
 
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(appSettings);
@@ -505,6 +513,9 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.ShowAnkiButton.Should().Be(appSettings.ShowAnkiButton);
             sut.CopyTranslatedMeanings.Should().Be(appSettings.CopyTranslatedMeanings);
             sut.DestinationLanguage.Should().Be(appSettings.DestinationLanguage);
+            sut.DictionaryOptions.Should().HaveCount(2);
+            sut.DictionaryOptions.Single(x => x.LanguageKey == "Danish").IsEnabled.Should().BeTrue();
+            sut.DictionaryOptions.Single(x => x.LanguageKey == "Spanish").IsEnabled.Should().BeFalse();
         }
 
         [TestMethod]
@@ -686,6 +697,43 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.OnCopyTranslatedMeaningsChangedInternal(true);
 
             settingsServiceMock.Verify(x => x.SetCopyTranslatedMeanings(It.IsAny<bool>()), Times.Never);
+        }
+
+        #endregion
+
+        #region Tests for DictionaryOptions
+
+        [TestMethod]
+        public async Task DictionaryOptionToggle_OnAndroid_UpdatesActiveDictionariesImmediately()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { ActiveDictionaries = ["Danish", "Spanish"] });
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
+            string[] expectedActiveDictionaries = ["Danish"];
+
+            var sut = _fixture.Create<SettingsViewModel>();
+            await sut.InitAsync(CancellationToken.None);
+
+            sut.DictionaryOptions.Single(x => x.LanguageKey == "Spanish").IsEnabled = false;
+
+            settingsServiceMock.Verify(x => x.SetActiveDictionaries(It.Is<IEnumerable<string>>(v => v.SequenceEqual(expectedActiveDictionaries))), Times.AtLeastOnce);
+        }
+
+        [TestMethod]
+        public async Task DictionaryOptionToggle_WhenLastEnabledDictionaryIsDisabled_RevertsChange()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { ActiveDictionaries = ["Danish"] });
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Android);
+
+            var sut = _fixture.Create<SettingsViewModel>();
+            await sut.InitAsync(CancellationToken.None);
+
+            DictionaryOptionViewModel danish = sut.DictionaryOptions.Single(x => x.LanguageKey == "Danish");
+            danish.IsEnabled = false;
+
+            danish.IsEnabled.Should().BeTrue();
+            settingsServiceMock.Verify(x => x.SetActiveDictionaries(It.IsAny<IEnumerable<string>>()), Times.Never);
         }
 
         #endregion

@@ -127,8 +127,7 @@ namespace CopyWords.Core.ViewModels
 
             _cancellationTokenSource = new CancellationTokenSource();
 
-            DictionaryName = _settingsService.GetSelectedParser();
-            UpdateDictionaryImage(DictionaryName);
+            UpdateSelectedDictionary(_settingsService.GetSelectedParser());
 
             if (!_isInitialized)
             {
@@ -252,16 +251,19 @@ namespace CopyWords.Core.ViewModels
         [RelayCommand(CanExecute = nameof(CanSelectDictionary))]
         public async Task SelectDictionaryAsync()
         {
-            string[] strings = [nameof(SourceLanguage.Danish), nameof(SourceLanguage.Spanish)];
+            string[] strings = _settingsService.GetActiveDictionaries().ToArray();
+            if (strings.Length < 2)
+            {
+                return;
+            }
+
             string result = await _dialogService.DisplayActionSheetAsync(title: "Select dictionary:", cancel: "Cancel", destruction: null!, flowDirection: FlowDirection.LeftToRight, strings);
 
             // The action sheet returns the button that user pressed, so it can also be "Cancel"
             if (!string.IsNullOrEmpty(result) && result != "Cancel")
             {
-                DictionaryName = result;
-                UpdateDictionaryImage(result);
-
                 _settingsService.SetSelectedParser(result);
+                UpdateSelectedDictionary(result);
             }
         }
 
@@ -423,8 +425,7 @@ namespace CopyWords.Core.ViewModels
                 }
 
                 _settingsService.SetSelectedParser(wordModel.SourceLanguage.ToString());
-                DictionaryName = wordModel.SourceLanguage.ToString();
-                UpdateDictionaryImage(DictionaryName);
+                UpdateSelectedDictionary(wordModel.SourceLanguage.ToString());
             }
 
             _wordViewModel.UpdateUI();
@@ -551,20 +552,11 @@ namespace CopyWords.Core.ViewModels
             NavigateBackCommand.NotifyCanExecuteChanged();
         }
 
-        private void UpdateDictionaryImage(string language)
+        private void UpdateSelectedDictionary(string language)
         {
-            if (language == nameof(SourceLanguage.Danish))
-            {
-                DictionaryImage = "flag_of_denmark.png";
-            }
-            else if (language == nameof(SourceLanguage.Spanish))
-            {
-                DictionaryImage = "flag_of_spain.png";
-            }
-            else
-            {
-                throw new NotSupportedException($"Source language '{language}' selected in the action sheet is not supported.");
-            }
+            DictionaryDefinition dictionary = DictionaryCatalog.GetRequired(language);
+            DictionaryName = dictionary.DisplayName;
+            DictionaryImage = dictionary.ImageName;
         }
 
         private SourceLanguage GetSourceLanguage()

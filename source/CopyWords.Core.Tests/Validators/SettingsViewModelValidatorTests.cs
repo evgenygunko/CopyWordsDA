@@ -22,6 +22,7 @@ namespace CopyWords.Core.Tests.Validators
         public async Task Validate_WhenAllRequiredFieldsHaveValues_ReturnsTrue()
         {
             var appSettings = _fixture.Create<AppSettings>();
+            appSettings.ActiveDictionaries = ["Danish"];
 
             Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
             fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
@@ -35,10 +36,29 @@ namespace CopyWords.Core.Tests.Validators
         }
 
         [TestMethod]
+        public async Task Validate_WhenNoDictionariesAreEnabled_ReturnsFalse()
+        {
+            var appSettings = _fixture.Create<AppSettings>();
+            appSettings.ActiveDictionaries = [];
+
+            Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
+            fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(true);
+
+            SettingsViewModel settingsViewModel = await CreateSettingsViewModelAsync(appSettings);
+
+            var sut = _fixture.Create<SettingsViewModelValidator>();
+            ValidationResult result = sut.Validate(settingsViewModel);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().Contain(x => x.ErrorMessage == "At least one dictionary must be enabled");
+        }
+
+        [TestMethod]
         public async Task Validate_WhenAnkiSoundsFolderIsEmpty_ReturnsFalse()
         {
             var appSettings = _fixture.Create<AppSettings>();
             appSettings.AnkiSoundsFolder = string.Empty;
+            appSettings.ActiveDictionaries = ["Danish"];
 
             SettingsViewModel settingsViewModel = await CreateSettingsViewModelAsync(appSettings);
 
@@ -55,6 +75,7 @@ namespace CopyWords.Core.Tests.Validators
         {
             var appSettings = _fixture.Create<AppSettings>();
             appSettings.AnkiSoundsFolder = null!;
+            appSettings.ActiveDictionaries = ["Danish"];
 
             SettingsViewModel settingsViewModel = await CreateSettingsViewModelAsync(appSettings);
 
@@ -71,6 +92,7 @@ namespace CopyWords.Core.Tests.Validators
         {
             var appSettings = _fixture.Create<AppSettings>();
             appSettings.AnkiSoundsFolder = @"C:\NonExistentDirectory";
+            appSettings.ActiveDictionaries = ["Danish"];
 
             Mock<IFileIOService> fileIOServiceMock = _fixture.Freeze<Mock<IFileIOService>>();
             fileIOServiceMock.Setup(x => x.DirectoryExists(appSettings.AnkiSoundsFolder)).Returns(false);

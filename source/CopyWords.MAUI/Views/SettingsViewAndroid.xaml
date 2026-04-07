@@ -11,8 +11,36 @@
 
     <VerticalStackLayout>
 
+        <!-- Section "Dictionaries" -->
+        <Label Text="Dictionaries" Margin="20,10,10,0" FontSize="Subtitle" />
+
+        <VerticalStackLayout
+            Margin="20,0,10,0"
+            BindableLayout.ItemsSource="{Binding DictionaryOptions}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="DictionaryOptionViewModel">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="45"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0"
+                               Style="{StaticResource SettingsLabelStyleAndroid}"
+                               VerticalOptions="Center"
+                               Text="{Binding Title}" />
+                        <Switch Grid.Column="1"
+                                IsToggled="{Binding IsEnabled}" />
+                    </Grid>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </VerticalStackLayout>
+
+        <!-- Filler -->
+        <BoxView Style="{StaticResource FillerStyle}" />
+
         <!-- Section "Dictionary mode" -->
-        <Label Text="Dictionary mode" Margin="20,10,10,0" FontSize="Subtitle" />
+        <Label Text="Dictionary mode" Margin="20,0,10,0" FontSize="Subtitle" />
 
         <Grid Margin="20,0,10,0">
             <Grid.ColumnDefinitions>
@@ -68,8 +96,8 @@
         <VerticalStackLayout Opacity="{Binding ShowAnkiButton, Converter={StaticResource BoolToOpacityConverter}}">
                 <!-- Anki Deck Name Danish -->
                 <!-- Anki Deck Name Danish -->
-                <Label Text="Deck name (Danish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
-                <Picker Margin="20,0,20,0"
+                <Label IsVisible="{Binding IsDanishDictionaryEnabled}" Text="Deck name (Danish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
+                <Picker IsVisible="{Binding IsDanishDictionaryEnabled}" Margin="20,0,20,0"
                     FontSize="{StaticResource FontSizeBody}"
                     TextColor="{DynamicResource PrimaryTextColor}"
                     TitleColor="{DynamicResource SecondaryTextColor}"
@@ -79,8 +107,8 @@
                     SelectedItem="{Binding AnkiDeckNameDanish}" />
 
                 <!-- Anki Deck Name Spanish -->
-                <Label Text="Deck name (Spanish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
-                <Picker Margin="20,0,20,0"
+                <Label IsVisible="{Binding IsSpanishDictionaryEnabled}" Text="Deck name (Spanish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
+                <Picker IsVisible="{Binding IsSpanishDictionaryEnabled}" Margin="20,0,20,0"
                     FontSize="{StaticResource FontSizeBody}"
                     TextColor="{DynamicResource PrimaryTextColor}"
                     TitleColor="{DynamicResource SecondaryTextColor}"

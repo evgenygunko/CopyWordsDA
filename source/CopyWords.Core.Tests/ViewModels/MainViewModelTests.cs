@@ -734,6 +734,7 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task SelectDictionaryAsync_WhenUserSelectsDictionary_UpdatesSelectedDictionary(SourceLanguage sourceLanguage, string imageName)
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetActiveDictionaries()).Returns(["Danish", "Spanish"]);
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
             dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
@@ -759,6 +760,7 @@ namespace CopyWords.Core.Tests.ViewModels
         public async Task SelectDictionaryAsync_WhenUserClicksCancel_DoesNotUpdateSelectedDictionary()
         {
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetActiveDictionaries()).Returns(["Danish", "Spanish"]);
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
             dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
@@ -781,6 +783,51 @@ namespace CopyWords.Core.Tests.ViewModels
 
             dialogServiceMock.Verify();
             settingsServiceMock.Verify(x => x.SetSelectedParser(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task SelectDictionaryAsync_WhenOnlyOneDictionaryIsActive_DoesNotShowDialog()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetActiveDictionaries()).Returns(["Danish"]);
+
+            var sut = _fixture.Create<MainViewModel>();
+            await sut.SelectDictionaryAsync();
+
+            _fixture.Freeze<Mock<IDialogService>>().Verify(x => x.DisplayActionSheetAsync(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<FlowDirection>(),
+                It.IsAny<string[]>()), Times.Never);
+            settingsServiceMock.Verify(x => x.SetSelectedParser(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task SelectDictionaryAsync_ShouldOnlyShowActiveDictionaries()
+        {
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetActiveDictionaries()).Returns(["Danish", "Spanish"]);
+            string[] expectedOptions = ["Danish", "Spanish"];
+
+            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
+            dialogServiceMock.Setup(x => x.DisplayActionSheetAsync(
+                    "Select dictionary:",
+                    "Cancel",
+                    It.IsAny<string>(),
+                    It.IsAny<FlowDirection>(),
+                    It.IsAny<string[]>()))
+                .ReturnsAsync("Danish");
+
+            var sut = _fixture.Create<MainViewModel>();
+            await sut.SelectDictionaryAsync();
+
+            dialogServiceMock.Verify(x => x.DisplayActionSheetAsync(
+                "Select dictionary:",
+                "Cancel",
+                It.IsAny<string>(),
+                It.IsAny<FlowDirection>(),
+                It.Is<string[]>(arr => arr.SequenceEqual(expectedOptions))), Times.Once);
         }
 
         #endregion

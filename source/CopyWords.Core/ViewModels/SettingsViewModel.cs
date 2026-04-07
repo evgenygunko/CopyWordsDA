@@ -28,6 +28,7 @@ namespace CopyWords.Core.ViewModels
         private readonly IAppThemeService _appThemeService;
 
         private bool _isInitialized;
+        private bool _isUpdatingDictionaryOptions;
 
         public SettingsViewModel(
             ISettingsService settingsService,
@@ -68,6 +69,9 @@ namespace CopyWords.Core.ViewModels
             "English",
             "Russian"
         ];
+
+        [ObservableProperty]
+        public partial ObservableCollection<DictionaryOptionViewModel> DictionaryOptions { get; set; } = [];
 
         [ObservableProperty]
         public partial bool IsAnkiIntegrationAvailable { get; set; }
@@ -154,6 +158,10 @@ namespace CopyWords.Core.ViewModels
         public string About => $"App version: {AppInfo.VersionString} (Build {AppInfo.BuildString}), {RuntimeInformation.FrameworkDescription}";
 
         public Color ButtonIconColor => ThemeColors.GetButtonForegroundColor(_appThemeService.CurrentTheme);
+
+        public bool IsDanishDictionaryEnabled => IsDictionaryEnabled(nameof(SourceLanguage.Danish));
+
+        public bool IsSpanishDictionaryEnabled => IsDictionaryEnabled(nameof(SourceLanguage.Spanish));
 
         #endregion
 
@@ -265,6 +273,7 @@ namespace CopyWords.Core.ViewModels
             appSettings.ShowCopyButtons = ShowCopyButtons;
             appSettings.ShowAnkiButton = ShowAnkiButton;
             appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
+            appSettings.ActiveDictionaries = DictionaryOptions.Where(x => x.IsEnabled).Select(x => x.LanguageKey).ToList();
             appSettings.DestinationLanguage = DestinationLanguage ?? "Russian";
             appSettings.UseDarkTheme = UseDarkTheme;
 
@@ -311,10 +320,23 @@ namespace CopyWords.Core.ViewModels
             ShowCopyButtons = appSettings.ShowCopyButtons;
             ShowAnkiButton = appSettings.ShowAnkiButton;
             CopyTranslatedMeanings = appSettings.CopyTranslatedMeanings;
+            DictionaryOptions = new ObservableCollection<DictionaryOptionViewModel>(
+                DictionaryCatalog.All.Select(x =>
+                {
+                    var option = new DictionaryOptionViewModel
+                    {
+                        LanguageKey = x.Language.ToString(),
+                        Title = x.DisplayName,
+                        IsEnabled = appSettings.ActiveDictionaries.Contains(x.Language.ToString())
+                    };
+                    option.PropertyChanged += OnDictionaryOptionPropertyChanged;
+                    return option;
+                }));
             DestinationLanguage = appSettings.DestinationLanguage;
             UseDarkTheme = appSettings.UseDarkTheme;
 
             _isInitialized = true;
+            RefreshEnabledDictionaryProperties();
         }
 
         #endregion
@@ -453,6 +475,51 @@ namespace CopyWords.Core.ViewModels
                 _settingsService.SetDestinationLanguage(value);
                 Debug.WriteLine($"DestinationLanguage has changed to {value}");
             }
+        }
+
+        internal bool IsDictionaryEnabled(string languageKey)
+        {
+            return DictionaryOptions.Any(x => x.LanguageKey == languageKey && x.IsEnabled);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void OnDictionaryOptionPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(DictionaryOptionViewModel.IsEnabled) || sender is not DictionaryOptionViewModel option)
+            {
+                return;
+            }
+
+            if (DictionaryOptions.Count(x => x.IsEnabled) == 0)
+            {
+                _isUpdatingDictionaryOptions = true;
+                option.IsEnabled = true;
+                _isUpdatingDictionaryOptions = false;
+                return;
+            }
+
+            RefreshEnabledDictionaryProperties();
+
+            if (_isUpdatingDictionaryOptions)
+            {
+                return;
+            }
+
+            if (_isInitialized && CanUpdateIndividualSettings)
+            {
+                _settingsService.SetActiveDictionaries(DictionaryOptions.Where(x => x.IsEnabled).Select(x => x.LanguageKey));
+                Debug.WriteLine($"ActiveDictionaries have changed to {string.Join(", ", DictionaryOptions.Where(x => x.IsEnabled).Select(x => x.LanguageKey))}");
+            }
+        }
+
+        private void RefreshEnabledDictionaryProperties()
+        {
+            OnPropertyChanged(nameof(IsDanishDictionaryEnabled));
+            OnPropertyChanged(nameof(IsSpanishDictionaryEnabled));
+            SaveSettingsCommand.NotifyCanExecuteChanged();
         }
 
         #endregion

@@ -35,6 +35,10 @@ namespace CopyWords.Core.Services
 
         void SetSelectedParser(string value);
 
+        IReadOnlyList<string> GetActiveDictionaries();
+
+        void SetActiveDictionaries(IEnumerable<string> values);
+
         string GetDestinationLanguage();
 
         void SetDestinationLanguage(string value);
@@ -79,7 +83,8 @@ namespace CopyWords.Core.Services
             appSettings.ShowAnkiButton = _preferences.Get<bool>(nameof(AppSettings.ShowAnkiButton), false);
 
             appSettings.CopyTranslatedMeanings = _preferences.Get<bool>(nameof(AppSettings.CopyTranslatedMeanings), true);
-            appSettings.SelectedParser = _preferences.Get(nameof(AppSettings.SelectedParser), SourceLanguage.Danish.ToString());
+            appSettings.ActiveDictionaries = GetActiveDictionaries().ToList();
+            appSettings.SelectedParser = NormalizeSelectedParser(_preferences.Get(nameof(AppSettings.SelectedParser), SourceLanguage.Danish.ToString()), appSettings.ActiveDictionaries);
             appSettings.DestinationLanguage = _preferences.Get(nameof(AppSettings.DestinationLanguage), "Russian");
             appSettings.UseDarkTheme = _preferences.Get<bool>(nameof(AppSettings.UseDarkTheme), false);
 
@@ -100,7 +105,8 @@ namespace CopyWords.Core.Services
             _preferences.Set(nameof(AppSettings.ShowCopyButtons), appSettings.ShowCopyButtons);
             _preferences.Set(nameof(AppSettings.ShowAnkiButton), appSettings.ShowAnkiButton);
             _preferences.Set(nameof(AppSettings.CopyTranslatedMeanings), appSettings.CopyTranslatedMeanings);
-            _preferences.Set(nameof(AppSettings.SelectedParser), appSettings.SelectedParser);
+            SetActiveDictionaries(appSettings.ActiveDictionaries);
+            _preferences.Set(nameof(AppSettings.SelectedParser), NormalizeSelectedParser(appSettings.SelectedParser, appSettings.ActiveDictionaries));
             _preferences.Set(nameof(AppSettings.DestinationLanguage), appSettings.DestinationLanguage);
             _preferences.Set(nameof(AppSettings.UseDarkTheme), appSettings.UseDarkTheme);
         }
@@ -130,9 +136,48 @@ namespace CopyWords.Core.Services
 
         public void SetUseDarkTheme(bool value) => _preferences.Set(nameof(AppSettings.UseDarkTheme), value);
 
-        public string GetSelectedParser() => _preferences.Get(nameof(AppSettings.SelectedParser), SourceLanguage.Danish.ToString());
+        public string GetSelectedParser()
+        {
+            IReadOnlyList<string> activeDictionaries = GetActiveDictionaries();
+            string selectedParser = _preferences.Get(nameof(AppSettings.SelectedParser), SourceLanguage.Danish.ToString());
+            string normalized = NormalizeSelectedParser(selectedParser, activeDictionaries);
 
-        public void SetSelectedParser(string value) => _preferences.Set(nameof(AppSettings.SelectedParser), value);
+            if (normalized != selectedParser)
+            {
+                _preferences.Set(nameof(AppSettings.SelectedParser), normalized);
+            }
+
+            return normalized;
+        }
+
+        public void SetSelectedParser(string value)
+        {
+            string normalized = NormalizeSelectedParser(value, GetActiveDictionaries());
+            _preferences.Set(nameof(AppSettings.SelectedParser), normalized);
+        }
+
+        public IReadOnlyList<string> GetActiveDictionaries()
+        {
+            string rawValue = _preferences.Get(nameof(AppSettings.ActiveDictionaries), string.Join(';', DictionaryCatalog.AllKeys)) ?? string.Empty;
+            IReadOnlyList<string> normalized = DictionaryCatalog.NormalizeKeys(rawValue.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+
+            string normalizedSerialized = SerializeActiveDictionaries(normalized);
+            if (!string.Equals(rawValue, normalizedSerialized, StringComparison.Ordinal))
+            {
+                _preferences.Set(nameof(AppSettings.ActiveDictionaries), normalizedSerialized);
+            }
+
+            return normalized;
+        }
+
+        public void SetActiveDictionaries(IEnumerable<string> values)
+        {
+            IReadOnlyList<string> normalized = DictionaryCatalog.NormalizeKeys(values);
+            _preferences.Set(nameof(AppSettings.ActiveDictionaries), SerializeActiveDictionaries(normalized));
+
+            string normalizedSelectedParser = NormalizeSelectedParser(_preferences.Get(nameof(AppSettings.SelectedParser), SourceLanguage.Danish.ToString()), normalized);
+            _preferences.Set(nameof(AppSettings.SelectedParser), normalizedSelectedParser);
+        }
 
         public string GetDestinationLanguage() => _preferences.Get(nameof(AppSettings.DestinationLanguage), "Russian");
 
@@ -193,6 +238,19 @@ namespace CopyWords.Core.Services
         {
             string dictionary = GetSelectedParser();
             return $"History_{dictionary}";
+        }
+
+        private static string SerializeActiveDictionaries(IEnumerable<string> values) => string.Join(';', DictionaryCatalog.NormalizeKeys(values));
+
+        private static string NormalizeSelectedParser(string value, IEnumerable<string> activeDictionaries)
+        {
+            IReadOnlyList<string> normalizedActiveDictionaries = DictionaryCatalog.NormalizeKeys(activeDictionaries);
+            if (normalizedActiveDictionaries.Contains(value))
+            {
+                return value;
+            }
+
+            return normalizedActiveDictionaries[0];
         }
 
         private double GetDoubleValue(string settingName, int defaultValue)
