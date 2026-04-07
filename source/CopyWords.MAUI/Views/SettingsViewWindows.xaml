@@ -9,6 +9,10 @@
         <MyIsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
         <ShowErrorConverter x:Key="ShowErrorConverter" />
         <BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
+        <OnPlatform x:Key="SettingsDropdownGlyphSize" x:TypeArguments="x:Double">
+            <On Platform="MacCatalyst" Value="28" />
+            <On Platform="Android,iOS,WinUI" Value="16" />
+        </OnPlatform>
     </ContentView.Resources>
 
     <Grid Padding="20,0,20,20">
@@ -55,11 +59,13 @@
                             <SfButton.Content>
                                 <DataTemplate>
                                     <HorizontalStackLayout HorizontalOptions="Center">
-                                        <Image WidthRequest="16" HeightRequest="16">
+                                        <Image WidthRequest="{StaticResource SettingsDropdownGlyphSize}"
+                                               HeightRequest="{StaticResource SettingsDropdownGlyphSize}">
                                             <Image.Source>
                                                 <FontImageSource
                                                     FontFamily="MaterialIconsOutlined-Regular"
-                                                    Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
+                                                    Glyph="{x:Static MaterialDesignIconFonts.Keyboard_arrow_down}"
+                                                    Size="{StaticResource SettingsDropdownGlyphSize}"
                                                     Color="{DynamicResource ButtonIconColor}"/>
                                             </Image.Source>
                                         </Image>
@@ -89,11 +95,13 @@
                             <SfButton.Content>
                                 <DataTemplate>
                                     <HorizontalStackLayout HorizontalOptions="Center">
-                                        <Image WidthRequest="16" HeightRequest="16">
+                                        <Image WidthRequest="{StaticResource SettingsDropdownGlyphSize}"
+                                               HeightRequest="{StaticResource SettingsDropdownGlyphSize}">
                                             <Image.Source>
                                                 <FontImageSource
                                                     FontFamily="MaterialIconsOutlined-Regular"
-                                                    Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
+                                                    Glyph="{x:Static MaterialDesignIconFonts.Keyboard_arrow_down}"
+                                                    Size="{StaticResource SettingsDropdownGlyphSize}"
                                                     Color="{DynamicResource ButtonIconColor}"/>
                                             </Image.Source>
                                         </Image>
@@ -123,11 +131,13 @@
                             <SfButton.Content>
                                 <DataTemplate>
                                     <HorizontalStackLayout HorizontalOptions="Center">
-                                        <Image WidthRequest="16" HeightRequest="16">
+                                        <Image WidthRequest="{StaticResource SettingsDropdownGlyphSize}"
+                                               HeightRequest="{StaticResource SettingsDropdownGlyphSize}">
                                             <Image.Source>
                                                 <FontImageSource
                                                     FontFamily="MaterialIconsOutlined-Regular"
-                                                    Glyph="{x:Static MaterialDesignIconFonts.Arrow_drop_down}"
+                                                    Glyph="{x:Static MaterialDesignIconFonts.Keyboard_arrow_down}"
+                                                    Size="{StaticResource SettingsDropdownGlyphSize}"
                                                     Color="{DynamicResource ButtonIconColor}"/>
                                             </Image.Source>
                                         </Image>
