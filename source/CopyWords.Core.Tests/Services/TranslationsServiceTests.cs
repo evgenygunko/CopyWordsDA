@@ -28,6 +28,7 @@ namespace CopyWords.Core.Tests.Services
             _settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             _settingsServiceMock.Setup(x => x.GetDestinationLanguage()).Returns("English");
             _settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            _settingsServiceMock.Setup(x => x.GetActiveDictionaries()).Returns([nameof(SourceLanguage.Danish), nameof(SourceLanguage.Spanish)]);
         }
 
         #region Tests for LookUpWordAsync
@@ -51,6 +52,7 @@ namespace CopyWords.Core.Tests.Services
         {
             string? requestContent = null;
             _settingsServiceMock.Setup(x => x.GetDestinationLanguage()).Returns("English");
+            _settingsServiceMock.Setup(x => x.GetActiveDictionaries()).Returns([nameof(SourceLanguage.Danish), nameof(SourceLanguage.Spanish)]);
 
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
             handlerMock
@@ -76,6 +78,7 @@ namespace CopyWords.Core.Tests.Services
 
             requestContent.Should().NotBeNull();
             requestContent.Should().Contain("\"DestinationLanguage\":\"English\"");
+            requestContent.Should().Contain("\"ActiveDictionaries\":[\"Danish\",\"Spanish\"]");
         }
 
         [TestMethod]
@@ -86,6 +89,7 @@ namespace CopyWords.Core.Tests.Services
         {
             string? requestContent = null;
             _settingsServiceMock.Setup(x => x.GetDestinationLanguage()).Returns(destinationLanguage!);
+            _settingsServiceMock.Setup(x => x.GetActiveDictionaries()).Returns([nameof(SourceLanguage.Danish), nameof(SourceLanguage.Spanish)]);
 
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
             handlerMock
@@ -111,6 +115,7 @@ namespace CopyWords.Core.Tests.Services
 
             requestContent.Should().NotBeNull();
             requestContent.Should().Contain("\"DestinationLanguage\":\"Russian\"");
+            requestContent.Should().Contain("\"ActiveDictionaries\":[\"Danish\",\"Spanish\"]");
         }
 
         [TestMethod]
@@ -600,6 +605,7 @@ namespace CopyWords.Core.Tests.Services
             requestContent.Should().Contain("\"Text\":\"testword\"");
             requestContent.Should().Contain("\"SourceLanguage\":\"Danish\"");
             requestContent.Should().Contain("\"DestinationLanguage\":\"English\"");
+            requestContent.Should().Contain("\"ActiveDictionaries\":[\"Danish\",\"Spanish\"]");
             requestContent.Should().Contain("\"Version\":\"2\"");
         }
 
@@ -611,6 +617,7 @@ namespace CopyWords.Core.Tests.Services
         {
             string? requestContent = null;
             _settingsServiceMock.Setup(x => x.GetDestinationLanguage()).Returns(destinationLanguage!);
+            _settingsServiceMock.Setup(x => x.GetActiveDictionaries()).Returns([nameof(SourceLanguage.Danish), nameof(SourceLanguage.Spanish)]);
 
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
             handlerMock
@@ -636,6 +643,7 @@ namespace CopyWords.Core.Tests.Services
 
             requestContent.Should().NotBeNull();
             requestContent.Should().Contain("\"DestinationLanguage\":\"Russian\"");
+            requestContent.Should().Contain("\"ActiveDictionaries\":[\"Danish\",\"Spanish\"]");
         }
 
         [TestMethod]

@@ -54,6 +54,7 @@ namespace CopyWords.Core.Services
             string lookupUrl = CreateLookUpWordUrl();
             string sourceLanguage = _settingsService.GetSelectedParser();
             string destinationLanguage = _settingsService.GetDestinationLanguage();
+            IReadOnlyList<string> activeDictionaries = _settingsService.GetActiveDictionaries();
             if (string.IsNullOrWhiteSpace(destinationLanguage))
             {
                 destinationLanguage = "Russian";
@@ -63,6 +64,7 @@ namespace CopyWords.Core.Services
                 Text: wordToLookUp,
                 SourceLanguage: sourceLanguage,
                 DestinationLanguage: destinationLanguage,
+                ActiveDictionaries: activeDictionaries,
                 Version: "2");
 
             return await TranslateAsync(lookupUrl, input, cancellationToken);
@@ -83,6 +85,7 @@ namespace CopyWords.Core.Services
             string suggestedWordsUrl = CreateSuggestedWordsUrl();
             string sourceLanguage = _settingsService.GetSelectedParser();
             string destinationLanguage = _settingsService.GetDestinationLanguage();
+            IReadOnlyList<string> activeDictionaries = _settingsService.GetActiveDictionaries();
             if (string.IsNullOrWhiteSpace(destinationLanguage))
             {
                 destinationLanguage = "Russian";
@@ -92,6 +95,7 @@ namespace CopyWords.Core.Services
                 Text: wordToLookUp,
                 SourceLanguage: sourceLanguage,
                 DestinationLanguage: destinationLanguage,
+                ActiveDictionaries: activeDictionaries,
                 Version: "2");
 
             string jsonRequest = JsonConvert.SerializeObject(input);

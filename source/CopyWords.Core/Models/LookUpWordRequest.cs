@@ -4,5 +4,6 @@
         string Text,
         string SourceLanguage,
         string DestinationLanguage,
+        IReadOnlyList<string> ActiveDictionaries,
         string Version);
 }
