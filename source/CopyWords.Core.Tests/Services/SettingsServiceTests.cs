@@ -19,6 +19,7 @@ namespace CopyWords.Core.Tests.Services
         public void LoadSettings_Should_CallGetOnPreferences()
         {
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns(SourceLanguage.Danish.ToString());
 
             var sut = _fixture.Create<SettingsService>();
 
@@ -38,7 +39,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Get("ShowAnkiButton", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("CopyTranslatedMeanings", It.IsAny<bool>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("ActiveDictionaries", It.IsAny<string>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("DestinationLanguage", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("UseDarkTheme", It.IsAny<bool>(), It.IsAny<string>()));
         }
@@ -152,7 +153,7 @@ namespace CopyWords.Core.Tests.Services
             const string expectedValue = "Spanish";
 
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            preferencesMock.Setup(x => x.Get("ActiveDictionaries", "Danish;Spanish", null)).Returns("Danish;Spanish");
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns("Danish;Spanish");
             preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns(expectedValue).Verifiable();
 
             var sut = _fixture.Create<SettingsService>();
@@ -168,7 +169,7 @@ namespace CopyWords.Core.Tests.Services
             const string value = "Spanish";
 
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            preferencesMock.Setup(x => x.Get("ActiveDictionaries", "Danish;Spanish", null)).Returns("Danish;Spanish");
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns("Danish;Spanish");
 
             var sut = _fixture.Create<SettingsService>();
             sut.SetSelectedParser(value);
@@ -208,19 +209,19 @@ namespace CopyWords.Core.Tests.Services
         public void GetActiveDictionaries_WhenPreferenceMissing_ReturnsAllSupportedDictionaries()
         {
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            preferencesMock.Setup(x => x.Get("ActiveDictionaries", "Danish;Spanish", null)).Returns("Danish;Spanish");
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns(SourceLanguage.Danish.ToString());
 
             var sut = _fixture.Create<SettingsService>();
             IReadOnlyList<string> result = sut.GetActiveDictionaries();
 
-            result.Should().Equal("Danish", "Spanish");
+            result.Should().Equal("Danish");
         }
 
         [TestMethod]
         public void GetActiveDictionaries_WhenPreferenceContainsInvalidValues_NormalizesToValidSet()
         {
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            preferencesMock.Setup(x => x.Get("ActiveDictionaries", "Danish;Spanish", null)).Returns("Spanish;Unknown;Spanish");
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns("Spanish;Unknown;Spanish");
 
             var sut = _fixture.Create<SettingsService>();
             IReadOnlyList<string> result = sut.GetActiveDictionaries();
@@ -246,7 +247,7 @@ namespace CopyWords.Core.Tests.Services
         public void GetSelectedParser_WhenStoredValueIsInactive_ReturnsFirstActiveDictionary()
         {
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            preferencesMock.Setup(x => x.Get("ActiveDictionaries", "Danish;Spanish", null)).Returns("Spanish");
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns("Spanish");
             preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns("Danish");
 
             var sut = _fixture.Create<SettingsService>();
@@ -260,7 +261,7 @@ namespace CopyWords.Core.Tests.Services
         public void LoadHistory_Should_ReturnEmptyCollectionWhenNoHistory()
         {
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            preferencesMock.Setup(x => x.Get("ActiveDictionaries", "Danish;Spanish", null)).Returns("Danish;Spanish");
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns("Danish;Spanish");
             preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns("Danish");
             preferencesMock.Setup(x => x.Get("History_Danish", string.Empty, null)).Returns(string.Empty);
 
@@ -274,7 +275,7 @@ namespace CopyWords.Core.Tests.Services
         public void LoadHistory_Should_ReturnHistoryItems()
         {
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            preferencesMock.Setup(x => x.Get("ActiveDictionaries", "Danish;Spanish", null)).Returns("Danish;Spanish");
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns("Danish;Spanish");
             preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns("Danish");
             preferencesMock.Setup(x => x.Get("History_Danish", string.Empty, null)).Returns("word1;word2;word3");
 
@@ -289,13 +290,40 @@ namespace CopyWords.Core.Tests.Services
         public void ClearHistory_Should_CallPreferencesRemove()
         {
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            preferencesMock.Setup(x => x.Get("ActiveDictionaries", "Danish;Spanish", null)).Returns("Danish;Spanish");
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns("Danish;Spanish");
             preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns("Danish");
 
             var sut = _fixture.Create<SettingsService>();
             sut.ClearHistory();
 
             preferencesMock.Verify(x => x.Remove("History_Danish", It.IsAny<string>()));
+        }
+
+        [TestMethod]
+        public void GetActiveDictionaries_WhenPreferenceIsMissing_WritesBackDanishOnly()
+        {
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns((string?)null);
+
+            var sut = _fixture.Create<SettingsService>();
+            IReadOnlyList<string> result = sut.GetActiveDictionaries();
+
+            result.Should().Equal("Danish");
+            preferencesMock.Verify(x => x.Set("ActiveDictionaries", "Danish", It.IsAny<string>()));
+        }
+
+        [TestMethod]
+        public void LoadSettings_WhenActiveDictionariesIsMissing_DefaultsToDanishOnlyAndSelectedParserDanish()
+        {
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns((string?)null);
+            preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns((string?)null);
+
+            var sut = _fixture.Create<SettingsService>();
+            AppSettings result = sut.LoadSettings();
+
+            result.ActiveDictionaries.Should().Equal("Danish");
+            result.SelectedParser.Should().Be("Danish");
         }
     }
 }

@@ -158,11 +158,17 @@ namespace CopyWords.Core.Services
 
         public IReadOnlyList<string> GetActiveDictionaries()
         {
-            string rawValue = _preferences.Get(nameof(AppSettings.ActiveDictionaries), string.Join(';', DictionaryCatalog.AllKeys)) ?? string.Empty;
+            string? storedValue = _preferences.Get(nameof(AppSettings.ActiveDictionaries), SourceLanguage.Danish.ToString());
+            string rawValue = storedValue ?? SourceLanguage.Danish.ToString();
+            if (string.IsNullOrWhiteSpace(rawValue))
+            {
+                rawValue = SourceLanguage.Danish.ToString();
+            }
+
             IReadOnlyList<string> normalized = DictionaryCatalog.NormalizeKeys(rawValue.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
 
             string normalizedSerialized = SerializeActiveDictionaries(normalized);
-            if (!string.Equals(rawValue, normalizedSerialized, StringComparison.Ordinal))
+            if (!string.Equals(storedValue, normalizedSerialized, StringComparison.Ordinal))
             {
                 _preferences.Set(nameof(AppSettings.ActiveDictionaries), normalizedSerialized);
             }
