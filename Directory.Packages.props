@@ -16,7 +16,7 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.7" />
     <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.60" />
     <PackageVersion Include="Moq" Version="4.20.72" />
-    <PackageVersion Include="MSTest" Version="4.2.1" />
+    <PackageVersion Include="MSTest" Version="4.2.2" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
     <PackageVersion Include="Sentry.Maui" Version="6.4.1" />
