@@ -80,6 +80,12 @@
             "matchManagers": ["nuget"],
             "matchPackageNames": ["FluentAssertions"],
             "enabled": false
+        },
+        {
+            "description": "Exclude SixLabors.ImageSharp from updates",
+            "matchManagers": ["nuget"],
+            "matchPackageNames": ["SixLabors.ImageSharp"],
+            "enabled": false
         }
     ],
     "labels": ["dependencies", "renovate"],
