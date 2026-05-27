@@ -12,7 +12,7 @@
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
     <PackageVersion Include="FluentAssertions" Version="[7.*, 8)" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
-    <PackageVersion Include="LaunchDarkly.ClientSdk" Version="5.7.1" />
+    <PackageVersion Include="LaunchDarkly.ClientSdk" Version="5.7.2" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.8" />
     <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.70" />
     <PackageVersion Include="Moq" Version="4.20.72" />
@@ -22,8 +22,8 @@
     <PackageVersion Include="Sentry.Maui" Version="6.5.0" />
     <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.12" />
     <PackageVersion Include="Syncfusion.Licensing" Version="33.2.8" />
-    <PackageVersion Include="Syncfusion.Maui.Expander" Version="33.2.7" />
-    <PackageVersion Include="Syncfusion.Maui.Inputs" Version="33.2.7" />
+    <PackageVersion Include="Syncfusion.Maui.Expander" Version="33.2.8" />
+    <PackageVersion Include="Syncfusion.Maui.Inputs" Version="33.2.8" />
     <PackageVersion Include="Syncfusion.Maui.Toolkit" Version="1.0.10" />
   </ItemGroup>
 </Project>
