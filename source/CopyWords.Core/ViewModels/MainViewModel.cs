@@ -192,12 +192,12 @@ namespace CopyWords.Core.ViewModels
                     _settingsService.AddToHistory(wordModel.Word);
 
                     _navigationHistory.Push(wordModel.Word, wordModel.SourceLanguage.ToString());
-                    NotifyNavigationStateChanged();
                 }
             }
             finally
             {
                 IsBusy = false;
+                NotifyNavigationStateChanged();
             }
         }
 
