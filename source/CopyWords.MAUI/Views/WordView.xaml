@@ -55,7 +55,7 @@
 
             <!-- Play sound -->
             <SfButton
-                    Margin="0,0,3,3"
+                    Margin="0,0,5,3"
                     WidthRequest="44" HeightRequest="44"
                     ToolTipProperties.Text="Play sound"
                     BackgroundColor="{Binding PlaySoundButtonColor}"
@@ -82,7 +82,7 @@
 
             <!-- Save sound file -->
             <SfButton
-                    Margin="0,0,6,3"
+                    Margin="0,0,8,3"
                     WidthRequest="44" HeightRequest="44"
                     ToolTipProperties.Text="Save sound file"
                     BackgroundColor="{Binding SaveSoundButtonColor}"
