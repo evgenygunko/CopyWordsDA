@@ -205,6 +205,9 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
             var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
             wordViewModelMock.SetupProperty(x => x.Word);
+            _fixture.Freeze<Mock<ITranslationRefreshState>>()
+                .Setup(x => x.ConsumeRefreshRequired())
+                .Returns(true);
 
             var sut = _fixture.Create<MainViewModel>();
             sut.IsBusy = false;
@@ -231,13 +234,17 @@ namespace CopyWords.Core.Tests.ViewModels
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
             var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
             wordViewModelMock.SetupProperty(x => x.Word);
+            _fixture.Freeze<Mock<ITranslationRefreshState>>()
+                .SetupSequence(x => x.ConsumeRefreshRequired())
+                .Returns(true)
+                .Returns(false)
+                .Returns(true);
 
             var sut = _fixture.Create<MainViewModel>();
             sut.IsBusy = false;
             sut.SearchWord = "word";
 
             await sut.InitAsync();
-            sut.SkipNextTranslationsRefresh();
             await sut.InitAsync();
             await sut.InitAsync();
 

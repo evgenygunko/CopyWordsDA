@@ -3,7 +3,7 @@ using CopyWords.MAUI.Helpers;
 
 namespace CopyWords.MAUI.Views;
 
-public partial class MainPage : ContentPage, IQueryAttributable
+public partial class MainPage : ContentPage
 {
     private readonly MainViewModel _viewModel;
 
@@ -18,20 +18,6 @@ public partial class MainPage : ContentPage, IQueryAttributable
         if (deviceInfo.Platform == DevicePlatform.WinUI)
         {
             CreateWindowsToolbarItems();
-        }
-    }
-
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        if (!query.Remove(MainViewModel.RefreshTranslationsQueryParameter, out object? value))
-        {
-            return;
-        }
-
-        if (bool.TryParse(value?.ToString(), out bool refreshTranslations)
-            && !refreshTranslations)
-        {
-            _viewModel.SkipNextTranslationsRefresh();
         }
     }
 

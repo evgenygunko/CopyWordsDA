@@ -23,15 +23,13 @@ namespace CopyWords.Core.ViewModels
         private readonly IShellService _shellService;
         private readonly IConnectivityService _connectivityService;
         private readonly IDeviceInfo _deviceInfo;
+        private readonly ITranslationRefreshState _translationRefreshState;
 
         private readonly IWordViewModel _wordViewModel;
 
         private CancellationTokenSource _cancellationTokenSource = new();
         private bool _disposed;
         private bool _isInitialized;
-        private bool _skipNextTranslationsRefresh;
-
-        public const string RefreshTranslationsQueryParameter = "refreshTranslations";
 
         public MainViewModel(
             ISettingsService settingsService,
@@ -44,7 +42,8 @@ namespace CopyWords.Core.ViewModels
             IShellService shellService,
             IConnectivityService connectivityService,
             IDeviceInfo deviceInfo,
-            IWordViewModel wordViewModel)
+            IWordViewModel wordViewModel,
+            ITranslationRefreshState translationRefreshState)
         {
             _settingsService = settingsService;
             _dialogService = dialogService;
@@ -61,6 +60,7 @@ namespace CopyWords.Core.ViewModels
             _deviceInfo = deviceInfo;
 
             _wordViewModel = wordViewModel;
+            _translationRefreshState = translationRefreshState;
 
             SearchWord = string.Empty;
         }
@@ -151,12 +151,11 @@ namespace CopyWords.Core.ViewModels
                 SearchWord = instantText;
             }
 
-            bool skipTranslationsRefresh = _skipNextTranslationsRefresh;
-            _skipNextTranslationsRefresh = false;
+            bool refreshTranslations = _translationRefreshState.ConsumeRefreshRequired();
 
             if (_isInitialized
                 && string.IsNullOrEmpty(instantText)
-                && skipTranslationsRefresh
+                && !refreshTranslations
                 && !string.IsNullOrEmpty(_wordViewModel.Word))
             {
                 return;
@@ -321,11 +320,6 @@ namespace CopyWords.Core.ViewModels
         #endregion
 
         #region Public Methods
-
-        public void SkipNextTranslationsRefresh()
-        {
-            _skipNextTranslationsRefresh = true;
-        }
 
         public async Task<List<string>> GetSuggestionsAsync(string inputText, CancellationToken cancellationToken)
         {

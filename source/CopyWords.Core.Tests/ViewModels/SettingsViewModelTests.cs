@@ -25,6 +25,7 @@ namespace CopyWords.Core.Tests.ViewModels
         {
             Mock<ISettingsService> settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             Mock<IShellService> shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            Mock<ITranslationRefreshState> refreshStateMock = _fixture.Freeze<Mock<ITranslationRefreshState>>();
             settingsServiceMock.Setup(x => x.LoadSettings()).Returns(new AppSettings { ActiveDictionaries = ["Danish", "Spanish"] });
             string[] expectedActiveDictionaries = ["Danish"];
 
@@ -40,7 +41,59 @@ namespace CopyWords.Core.Tests.ViewModels
 
             settingsServiceMock.Verify(
                 x => x.SaveSettings(It.Is<AppSettings>(s => s.DestinationLanguage == "English" && s.ActiveDictionaries.SequenceEqual(expectedActiveDictionaries))));
-            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..?refreshTranslations=true")));
+            refreshStateMock.Verify(x => x.SetRefreshRequired(true), Times.Once);
+            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..")));
+        }
+
+        #endregion
+
+        #region Tests for NavigateBackAsync
+
+        [TestMethod]
+        [DataRow("WinUI")]
+        [DataRow("MacCatalyst")]
+        public async Task NavigateBackAsync_OnDesktop_DoesNotRefreshTranslations(string platformName)
+        {
+            var refreshStateMock = _fixture.Freeze<Mock<ITranslationRefreshState>>();
+            var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Create(platformName));
+            var sut = _fixture.Create<SettingsViewModel>();
+
+            await sut.NavigateBackAsync();
+
+            refreshStateMock.Verify(x => x.SetRefreshRequired(false), Times.Once);
+            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..")), Times.Once);
+        }
+
+        [TestMethod]
+        [DataRow("Android")]
+        [DataRow("iOS")]
+        public async Task NavigateBackAsync_OnMobileWithoutUpdates_DoesNotRefreshTranslations(string platformName)
+        {
+            var refreshStateMock = _fixture.Freeze<Mock<ITranslationRefreshState>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Create(platformName));
+            var sut = _fixture.Create<SettingsViewModel>();
+            await sut.InitAsync(CancellationToken.None);
+
+            await sut.NavigateBackAsync();
+
+            refreshStateMock.Verify(x => x.SetRefreshRequired(false), Times.Once);
+        }
+
+        [TestMethod]
+        [DataRow("Android")]
+        [DataRow("iOS")]
+        public async Task NavigateBackAsync_OnMobileAfterAutoSave_RefreshesTranslations(string platformName)
+        {
+            var refreshStateMock = _fixture.Freeze<Mock<ITranslationRefreshState>>();
+            _fixture.Freeze<Mock<IDeviceInfo>>().Setup(x => x.Platform).Returns(DevicePlatform.Create(platformName));
+            var sut = _fixture.Create<SettingsViewModel>();
+            await sut.InitAsync(CancellationToken.None);
+            sut.OnCopyTranslatedMeaningsChangedInternal(true);
+
+            await sut.NavigateBackAsync();
+
+            refreshStateMock.Verify(x => x.SetRefreshRequired(true), Times.Once);
         }
 
         #endregion
@@ -889,6 +942,7 @@ namespace CopyWords.Core.Tests.ViewModels
             // Arrange
             var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
             var shellServiceMock = _fixture.Freeze<Mock<IShellService>>();
+            var refreshStateMock = _fixture.Freeze<Mock<ITranslationRefreshState>>();
 
             var sut = _fixture.Create<SettingsViewModel>();
 
@@ -896,7 +950,8 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.CancelAsync();
 
             // Assert
-            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..?refreshTranslations=false")), Times.Once);
+            refreshStateMock.Verify(x => x.SetRefreshRequired(false), Times.Once);
+            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..")), Times.Once);
         }
 
         #endregion

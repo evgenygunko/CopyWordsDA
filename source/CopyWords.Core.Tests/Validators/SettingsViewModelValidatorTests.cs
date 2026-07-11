@@ -120,7 +120,8 @@ namespace CopyWords.Core.Tests.Validators
                 Mock.Of<IValidator<SettingsViewModel>>(),
                 Mock.Of<IAnkiConnectService>(),
                 Mock.Of<IAnkiDroidService>(),
-                Mock.Of<IAppThemeService>());
+                Mock.Of<IAppThemeService>(),
+                Mock.Of<ITranslationRefreshState>());
 
             await settingsViewModel.InitAsync(CancellationToken.None);
 

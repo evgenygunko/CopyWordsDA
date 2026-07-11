@@ -26,9 +26,11 @@ namespace CopyWords.Core.ViewModels
         private readonly IAnkiConnectService _ankiConnectService;
         private readonly IAnkiDroidService _ankiDroidService;
         private readonly IAppThemeService _appThemeService;
+        private readonly ITranslationRefreshState _translationRefreshState;
 
         private bool _isInitialized;
         private bool _isUpdatingDictionaryOptions;
+        private bool _settingsUpdated;
 
         public SettingsViewModel(
             ISettingsService settingsService,
@@ -38,7 +40,8 @@ namespace CopyWords.Core.ViewModels
             IValidator<SettingsViewModel> settingsViewModelValidator,
             IAnkiConnectService ankiConnectService,
             IAnkiDroidService ankiDroidService,
-            IAppThemeService appThemeService)
+            IAppThemeService appThemeService,
+            ITranslationRefreshState translationRefreshState)
         {
             _settingsService = settingsService;
             _dialogService = dialogService;
@@ -48,6 +51,7 @@ namespace CopyWords.Core.ViewModels
             _ankiConnectService = ankiConnectService;
             _ankiDroidService = ankiDroidService;
             _appThemeService = appThemeService;
+            _translationRefreshState = translationRefreshState;
 
             // Subscribe to theme changes
             _appThemeService.ThemeChanged += (s, e) => OnPropertyChanged(nameof(ButtonIconColor));
@@ -55,7 +59,7 @@ namespace CopyWords.Core.ViewModels
 
         #region Properties
 
-        internal bool CanUpdateIndividualSettings => _deviceInfo.Platform == DevicePlatform.Android;
+        internal bool CanUpdateIndividualSettings => _deviceInfo.Platform == DevicePlatform.Android || _deviceInfo.Platform == DevicePlatform.iOS;
 
         [ObservableProperty]
         public partial ObservableCollection<string> DeckNames { get; set; } = [];
@@ -281,7 +285,8 @@ namespace CopyWords.Core.ViewModels
 
             await _dialogService.DisplayToast("Settings have been updated");
 
-            await _shellService.GoToAsync($"..?{MainViewModel.RefreshTranslationsQueryParameter}=true");
+            _translationRefreshState.SetRefreshRequired(true);
+            await _shellService.GoToAsync("..");
         }
 
         [RelayCommand]
@@ -291,12 +296,24 @@ namespace CopyWords.Core.ViewModels
             AppTheme theme = _settingsService.GetUseDarkTheme() ? AppTheme.Dark : AppTheme.Light;
             _appThemeService.ApplyTheme(theme);
 
-            await _shellService.GoToAsync($"..?{MainViewModel.RefreshTranslationsQueryParameter}=false");
+            _translationRefreshState.SetRefreshRequired(false);
+            await _shellService.GoToAsync("..");
+        }
+
+        [RelayCommand]
+        public async Task NavigateBackAsync()
+        {
+            bool refreshRequired = CanUpdateIndividualSettings && _settingsUpdated;
+            _translationRefreshState.SetRefreshRequired(refreshRequired);
+            await _shellService.GoToAsync("..");
         }
 
         [RelayCommand]
         public async Task InitAsync(CancellationToken cancellationToken)
         {
+            _isInitialized = false;
+            _settingsUpdated = false;
+
             // Load deck and model names for Android Picker controls
             if (_deviceInfo.Platform == DevicePlatform.Android)
             {
@@ -403,6 +420,7 @@ namespace CopyWords.Core.ViewModels
             if (_isInitialized && CanUpdateIndividualSettings)
             {
                 _settingsService.SetCopyTranslatedMeanings(value);
+                _settingsUpdated = true;
                 Debug.WriteLine($"CopyTranslatedMeanings has changed to {value}");
             }
         }
@@ -412,6 +430,7 @@ namespace CopyWords.Core.ViewModels
             if (_isInitialized && CanUpdateIndividualSettings)
             {
                 _settingsService.SetShowCopyButtons(value);
+                _settingsUpdated = true;
                 Debug.WriteLine($"ShowCopyButtons has changed to {value}");
             }
         }
@@ -421,6 +440,7 @@ namespace CopyWords.Core.ViewModels
             if (_isInitialized && CanUpdateIndividualSettings)
             {
                 _settingsService.SetShowAnkiButton(value);
+                _settingsUpdated = true;
                 Debug.WriteLine($"ShowAnkiButton has changed to {value}");
             }
         }
@@ -435,6 +455,7 @@ namespace CopyWords.Core.ViewModels
                 if (CanUpdateIndividualSettings)
                 {
                     _settingsService.SetUseDarkTheme(value);
+                    _settingsUpdated = true;
                 }
 
                 Debug.WriteLine($"UseDarkTheme has changed to {value}");
@@ -446,6 +467,7 @@ namespace CopyWords.Core.ViewModels
             if (_isInitialized && CanUpdateIndividualSettings && !string.IsNullOrEmpty(value))
             {
                 _settingsService.SetAnkiDeckNameDanish(value);
+                _settingsUpdated = true;
                 Debug.WriteLine($"AnkiDeckNameDanish has changed to {value}");
             }
         }
@@ -455,6 +477,7 @@ namespace CopyWords.Core.ViewModels
             if (_isInitialized && CanUpdateIndividualSettings && !string.IsNullOrEmpty(value))
             {
                 _settingsService.SetAnkiDeckNameSpanish(value);
+                _settingsUpdated = true;
                 Debug.WriteLine($"AnkiDeckNameSpanish has changed to {value}");
             }
         }
@@ -464,6 +487,7 @@ namespace CopyWords.Core.ViewModels
             if (_isInitialized && CanUpdateIndividualSettings && !string.IsNullOrEmpty(value))
             {
                 _settingsService.SetAnkiModelName(value);
+                _settingsUpdated = true;
                 Debug.WriteLine($"AnkiModelName has changed to {value}");
             }
         }
@@ -473,6 +497,7 @@ namespace CopyWords.Core.ViewModels
             if (_isInitialized && CanUpdateIndividualSettings && !string.IsNullOrWhiteSpace(value))
             {
                 _settingsService.SetDestinationLanguage(value);
+                _settingsUpdated = true;
                 Debug.WriteLine($"DestinationLanguage has changed to {value}");
             }
         }
@@ -511,6 +536,7 @@ namespace CopyWords.Core.ViewModels
             if (_isInitialized && CanUpdateIndividualSettings)
             {
                 _settingsService.SetActiveDictionaries(DictionaryOptions.Where(x => x.IsEnabled).Select(x => x.LanguageKey));
+                _settingsUpdated = true;
                 Debug.WriteLine($"ActiveDictionaries have changed to {string.Join(", ", DictionaryOptions.Where(x => x.IsEnabled).Select(x => x.LanguageKey))}");
             }
         }
