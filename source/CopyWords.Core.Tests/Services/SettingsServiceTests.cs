@@ -303,7 +303,7 @@ namespace CopyWords.Core.Tests.Services
         public void GetActiveDictionaries_WhenPreferenceIsMissing_WritesBackDanishOnly()
         {
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns((string?)null);
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns(string.Empty);
 
             var sut = _fixture.Create<SettingsService>();
             IReadOnlyList<string> result = sut.GetActiveDictionaries();
@@ -316,8 +316,8 @@ namespace CopyWords.Core.Tests.Services
         public void LoadSettings_WhenActiveDictionariesIsMissing_DefaultsToDanishOnlyAndSelectedParserDanish()
         {
             var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
-            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns((string?)null);
-            preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns((string?)null);
+            preferencesMock.Setup(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), null)).Returns(string.Empty);
+            preferencesMock.Setup(x => x.Get("SelectedParser", SourceLanguage.Danish.ToString(), null)).Returns(string.Empty);
 
             var sut = _fixture.Create<SettingsService>();
             AppSettings result = sut.LoadSettings();

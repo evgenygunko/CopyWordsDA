@@ -40,7 +40,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             settingsServiceMock.Verify(
                 x => x.SaveSettings(It.Is<AppSettings>(s => s.DestinationLanguage == "English" && s.ActiveDictionaries.SequenceEqual(expectedActiveDictionaries))));
-            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..")));
+            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..?refreshTranslations=true")));
         }
 
         #endregion
@@ -896,7 +896,7 @@ namespace CopyWords.Core.Tests.ViewModels
             await sut.CancelAsync();
 
             // Assert
-            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..")), Times.Once);
+            shellServiceMock.Verify(x => x.GoToAsync(It.Is<ShellNavigationState>(st => st.Location.ToString() == "..?refreshTranslations=false")), Times.Once);
         }
 
         #endregion

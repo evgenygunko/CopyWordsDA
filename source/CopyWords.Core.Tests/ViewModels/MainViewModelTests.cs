@@ -192,6 +192,60 @@ namespace CopyWords.Core.Tests.ViewModels
             translationsServiceMock.Verify(x => x.LookUpWordAsync("newWord", It.IsAny<CancellationToken>()), Times.Once);
         }
 
+        [TestMethod]
+        public async Task InitAsync_WhenTranslationsAlreadyExist_RunsLookupAgainByDefault()
+        {
+            WordModel wordModel = _fixture.Create<WordModel>() with { SourceLanguage = SourceLanguage.Danish };
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock
+                .Setup(x => x.LookUpWordAsync("word", It.IsAny<CancellationToken>()))
+                .ReturnsAsync(wordModel);
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
+            wordViewModelMock.SetupProperty(x => x.Word);
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
+            sut.SearchWord = "word";
+
+            await sut.InitAsync();
+            await sut.InitAsync();
+
+            translationsServiceMock.Verify(
+                x => x.LookUpWordAsync("word", It.IsAny<CancellationToken>()),
+                Times.Exactly(2));
+        }
+
+        [TestMethod]
+        public async Task InitAsync_WhenTranslationsRefreshSkipped_SkipsLookupOnceAndConsumesRequest()
+        {
+            WordModel wordModel = _fixture.Create<WordModel>() with { SourceLanguage = SourceLanguage.Danish };
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock
+                .Setup(x => x.LookUpWordAsync("word", It.IsAny<CancellationToken>()))
+                .ReturnsAsync(wordModel);
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+            var wordViewModelMock = _fixture.Freeze<Mock<IWordViewModel>>();
+            wordViewModelMock.SetupProperty(x => x.Word);
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.IsBusy = false;
+            sut.SearchWord = "word";
+
+            await sut.InitAsync();
+            sut.SkipNextTranslationsRefresh();
+            await sut.InitAsync();
+            await sut.InitAsync();
+
+            translationsServiceMock.Verify(
+                x => x.LookUpWordAsync("word", It.IsAny<CancellationToken>()),
+                Times.Exactly(2));
+        }
+
         #endregion
 
         #region Tests for LookUpAsync

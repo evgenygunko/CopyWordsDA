@@ -29,6 +29,9 @@ namespace CopyWords.Core.ViewModels
         private CancellationTokenSource _cancellationTokenSource = new();
         private bool _disposed;
         private bool _isInitialized;
+        private bool _skipNextTranslationsRefresh;
+
+        public const string RefreshTranslationsQueryParameter = "refreshTranslations";
 
         public MainViewModel(
             ISettingsService settingsService,
@@ -146,6 +149,17 @@ namespace CopyWords.Core.ViewModels
             if (!string.IsNullOrEmpty(instantText))
             {
                 SearchWord = instantText;
+            }
+
+            bool skipTranslationsRefresh = _skipNextTranslationsRefresh;
+            _skipNextTranslationsRefresh = false;
+
+            if (_isInitialized
+                && string.IsNullOrEmpty(instantText)
+                && skipTranslationsRefresh
+                && !string.IsNullOrEmpty(_wordViewModel.Word))
+            {
+                return;
             }
 
             await LookUpAsync();
@@ -307,6 +321,11 @@ namespace CopyWords.Core.ViewModels
         #endregion
 
         #region Public Methods
+
+        public void SkipNextTranslationsRefresh()
+        {
+            _skipNextTranslationsRefresh = true;
+        }
 
         public async Task<List<string>> GetSuggestionsAsync(string inputText, CancellationToken cancellationToken)
         {

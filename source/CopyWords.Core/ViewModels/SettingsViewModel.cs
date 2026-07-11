@@ -281,7 +281,7 @@ namespace CopyWords.Core.ViewModels
 
             await _dialogService.DisplayToast("Settings have been updated");
 
-            await _shellService.GoToAsync("..");
+            await _shellService.GoToAsync($"..?{MainViewModel.RefreshTranslationsQueryParameter}=true");
         }
 
         [RelayCommand]
@@ -291,7 +291,7 @@ namespace CopyWords.Core.ViewModels
             AppTheme theme = _settingsService.GetUseDarkTheme() ? AppTheme.Dark : AppTheme.Light;
             _appThemeService.ApplyTheme(theme);
 
-            await _shellService.GoToAsync("..");
+            await _shellService.GoToAsync($"..?{MainViewModel.RefreshTranslationsQueryParameter}=false");
         }
 
         [RelayCommand]
