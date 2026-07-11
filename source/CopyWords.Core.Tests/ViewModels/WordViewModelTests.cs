@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using CopyWords.Core.Constants;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
@@ -33,6 +34,47 @@ namespace CopyWords.Core.Tests.ViewModels
             _func.Setup(x => x.Invoke(It.IsAny<DefinitionViewModel>()))
                 .Returns((DefinitionViewModel vm) => vm.HeadwordViewModel.Original!);
         }
+
+        #region Tests for theme colors
+
+        [TestMethod]
+        public void ThemeChanged_RaisesNotificationsForAllThemeBoundButtonColors()
+        {
+            var appThemeServiceMock = _fixture.Freeze<Mock<IAppThemeService>>();
+            appThemeServiceMock.Setup(x => x.CurrentTheme).Returns(AppTheme.Dark);
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            var changedProperties = new HashSet<string?>();
+            sut.PropertyChanged += (_, args) => changedProperties.Add(args.PropertyName);
+
+            appThemeServiceMock.Raise(x => x.ThemeChanged += null, appThemeServiceMock.Object, AppTheme.Dark);
+
+            changedProperties.Should().Contain(
+            [
+                nameof(WordViewModel.ButtonTextColor),
+                nameof(WordViewModel.PlaySoundButtonColor),
+                nameof(WordViewModel.SaveSoundButtonColor),
+                nameof(WordViewModel.CopyFrontButtonColor),
+                nameof(WordViewModel.CopyBackButtonColor),
+                nameof(WordViewModel.CopyPartOfSpeechButtonColor),
+                nameof(WordViewModel.CopyEndingsButtonColor),
+                nameof(WordViewModel.CopyExamplesButtonColor)
+            ]);
+        }
+
+        [TestMethod]
+        public void ButtonColors_UseCurrentThemeAndEnabledState()
+        {
+            var appThemeServiceMock = _fixture.Freeze<Mock<IAppThemeService>>();
+            appThemeServiceMock.Setup(x => x.CurrentTheme).Returns(AppTheme.Dark);
+            WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.SoundUrl = "sound.mp3";
+            sut.CanCopyFront = false;
+
+            sut.PlaySoundButtonColor.Should().Be(ThemeColors.DarkThemeButtonEnabledBackground);
+            sut.CopyFrontButtonColor.Should().Be(ThemeColors.DarkThemeButtonDisabledBackground);
+        }
+
+        #endregion
 
         #region Tests for CanSaveSoundFile
 

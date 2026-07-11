@@ -78,13 +78,13 @@
                     </VisualState>
                     <VisualState x:Name="PointerOver">
                         <VisualState.Setters>
-                            <Setter Property="Background" Value="{DynamicResource ButtonBackgroundColor}" />
+                            <Setter Property="Background" Value="{DynamicResource ButtonHoverBackgroundColor}" />
                             <Setter Property="TextColor" Value="{DynamicResource ButtonTextColor}" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Pressed">
                         <VisualState.Setters>
-                            <Setter Property="Background" Value="{DynamicResource ButtonBackgroundColor}" />
+                            <Setter Property="Background" Value="{DynamicResource ButtonPressedBackgroundColor}" />
                             <Setter Property="TextColor" Value="{DynamicResource ButtonTextColor}" />
                         </VisualState.Setters>
                     </VisualState>
@@ -118,13 +118,13 @@
                     </VisualState>
                     <VisualState x:Name="PointerOver">
                         <VisualState.Setters>
-                            <Setter Property="Background" Value="{DynamicResource ButtonBackgroundColor}" />
+                            <Setter Property="Background" Value="{DynamicResource ButtonHoverBackgroundColor}" />
                             <Setter Property="TextColor" Value="{DynamicResource ButtonTextColor}" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Pressed">
                         <VisualState.Setters>
-                            <Setter Property="Background" Value="{DynamicResource ButtonBackgroundColor}" />
+                            <Setter Property="Background" Value="{DynamicResource ButtonPressedBackgroundColor}" />
                             <Setter Property="TextColor" Value="{DynamicResource ButtonTextColor}" />
                         </VisualState.Setters>
                     </VisualState>
@@ -180,7 +180,7 @@
 
     <Style TargetType="Editor">
         <Setter Property="TextColor" Value="{DynamicResource InputTextColor}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource InputBackgroundColor}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
         <Setter Property="PlaceholderColor" Value="{DynamicResource InputPlaceholderColor}" />
@@ -202,7 +202,7 @@
 
     <Style TargetType="Entry">
         <Setter Property="TextColor" Value="{DynamicResource InputTextColor}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource InputBackgroundColor}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
         <Setter Property="PlaceholderColor" Value="{DynamicResource InputPlaceholderColor}" />
@@ -236,9 +236,20 @@
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
                     <VisualState x:Name="Normal" />
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonHoverBackgroundColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPressedBackgroundColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
                     <VisualState x:Name="Disabled">
                         <VisualState.Setters>
-                            <Setter Property="Opacity" Value="0.5" />
+                            <Setter Property="Opacity" Value="1" />
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonDisabledBackgroundColor}" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -268,7 +279,7 @@
     <Style TargetType="Picker">
         <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
         <Setter Property="TitleColor" Value="{DynamicResource SecondaryTextColor}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource InputBackgroundColor}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
         <Setter Property="MinimumHeightRequest" Value="44"/>
@@ -333,7 +344,7 @@
         <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
         <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
         <Setter Property="CancelButtonColor" Value="{StaticResource Gray500}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource InputBackgroundColor}" />
         <Setter Property="FontFamily" Value="OpenSansRegular" />
         <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
         <Setter Property="MinimumHeightRequest" Value="44"/>
@@ -356,7 +367,7 @@
     <Style TargetType="SearchHandler">
         <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
         <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource InputBackgroundColor}" />
         <Setter Property="FontFamily" Value="OpenSansRegular" />
         <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
         <Setter Property="VisualStateManager.VisualStateGroups">

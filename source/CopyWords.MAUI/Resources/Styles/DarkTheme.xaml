@@ -10,9 +10,9 @@
     <Color x:Key="SurfaceColor">#1E1E1E</Color>
 
     <!-- Primary and Accent Colors -->
-    <Color x:Key="PrimaryColor">#9B7BD4</Color>
-    <Color x:Key="SecondaryColor">#B8A0E8</Color>
-    <Color x:Key="TertiaryColor">#7B5BAF</Color>
+    <Color x:Key="PrimaryColor">#A9ADB1</Color>
+    <Color x:Key="SecondaryColor">#474A4D</Color>
+    <Color x:Key="TertiaryColor">#92969A</Color>
 
     <!-- Text Colors -->
     <Color x:Key="PrimaryTextColor">#FFFFFF</Color>
@@ -21,32 +21,34 @@
     <Color x:Key="InverseTextColor">#121212</Color>
 
     <!-- Button Colors -->
-    <Color x:Key="ButtonBackgroundColor">#9B7BD4</Color>
-    <Color x:Key="ButtonTextColor">#121212</Color>
-    <Color x:Key="ButtonDisabledBackgroundColor">#5C4D73</Color>
-    <Color x:Key="ButtonDisabledTextColor">#A899BA</Color>
-    <Color x:Key="ButtonIconColor">#121212</Color>
+    <Color x:Key="ButtonBackgroundColor">#A9ADB1</Color>
+    <Color x:Key="ButtonHoverBackgroundColor">#BABDC0</Color>
+    <Color x:Key="ButtonPressedBackgroundColor">#92969A</Color>
+    <Color x:Key="ButtonTextColor">#202224</Color>
+    <Color x:Key="ButtonDisabledBackgroundColor">#4A4D50</Color>
+    <Color x:Key="ButtonDisabledTextColor">#8F9397</Color>
+    <Color x:Key="ButtonIconColor">#202224</Color>
 
     <!-- Input Colors -->
-    <Color x:Key="InputBackgroundColor">#2D2D2D</Color>
+    <Color x:Key="InputBackgroundColor">#292B2D</Color>
     <Color x:Key="InputTextColor">#FFFFFF</Color>
     <Color x:Key="InputPlaceholderColor">#888888</Color>
     <Color x:Key="InputDisabledTextColor">#555555</Color>
 
     <!-- Border and Divider Colors -->
-    <Color x:Key="BorderColor">#404040</Color>
-    <Color x:Key="DividerColor">#3D3D3D</Color>
+    <Color x:Key="BorderColor">#474A4D</Color>
+    <Color x:Key="DividerColor">#474A4D</Color>
 
     <!-- Control-specific Colors -->
-    <Color x:Key="CheckBoxColor">#9B7BD4</Color>
+    <Color x:Key="CheckBoxColor">#A9ADB1</Color>
     <Color x:Key="CheckBoxDisabledColor">#555555</Color>
-    <Color x:Key="SwitchOnColor">#9B7BD4</Color>
+    <Color x:Key="SwitchOnColor">#A9ADB1</Color>
     <Color x:Key="SwitchThumbColor">#FFFFFF</Color>
-    <Color x:Key="SliderMinimumTrackColor">#9B7BD4</Color>
+    <Color x:Key="SliderMinimumTrackColor">#A9ADB1</Color>
     <Color x:Key="SliderMaximumTrackColor">#555555</Color>
-    <Color x:Key="SliderThumbColor">#9B7BD4</Color>
-    <Color x:Key="ProgressBarColor">#9B7BD4</Color>
-    <Color x:Key="ActivityIndicatorColor">#9B7BD4</Color>
+    <Color x:Key="SliderThumbColor">#A9ADB1</Color>
+    <Color x:Key="ProgressBarColor">#A9ADB1</Color>
+    <Color x:Key="ActivityIndicatorColor">#A9ADB1</Color>
     <Color x:Key="RefreshViewColor">#B3B3B3</Color>
 
     <!-- Navigation Colors -->
@@ -58,8 +60,8 @@
     <Color x:Key="ShellDisabledColor">#555555</Color>
     <Color x:Key="ShellUnselectedColor">#888888</Color>
     <Color x:Key="TabBarBackgroundColor">#1E1E1E</Color>
-    <Color x:Key="TabBarForegroundColor">#9B7BD4</Color>
-    <Color x:Key="TabBarTitleColor">#9B7BD4</Color>
+    <Color x:Key="TabBarForegroundColor">#A9ADB1</Color>
+    <Color x:Key="TabBarTitleColor">#A9ADB1</Color>
     <Color x:Key="TabBarUnselectedColor">#888888</Color>
 
     <!-- Indicator Colors -->
@@ -73,10 +75,10 @@
     <!-- App-specific Colors -->
     <Color x:Key="TranslationBoxColor">#2D2D2D</Color>
     <Color x:Key="GreyBoxColor">#2D2D2D</Color>
-    <Color x:Key="SelectedItemColor">#3D2D5A</Color>
+    <Color x:Key="SelectedItemColor">#3D4043</Color>
     <Color x:Key="ContextGreenColor">#4CAF50</Color>
-    <Color x:Key="BorderStrokeColor">#404040</Color>
-    <Color x:Key="AutocompleteBackgroundColor">#2D2D2D</Color>
+    <Color x:Key="BorderStrokeColor">#474A4D</Color>
+    <Color x:Key="AutocompleteBackgroundColor">#292B2D</Color>
     <Color x:Key="AutocompleteTextColor">#FFFFFF</Color>
 
     <!-- Settings view colors -->
@@ -84,7 +86,7 @@
     <Color x:Key="SettingsSectionHeaderColor">#FFFFFF</Color>
     <Color x:Key="SettingsSectionDescriptionColor">#B3B3B3</Color>
     <Color x:Key="SettingsFieldLabelColor">#CCCCCC</Color>
-    <Color x:Key="SettingsInputBackgroundColor">#2D2D2D</Color>
+    <Color x:Key="SettingsInputBackgroundColor">#292B2D</Color>
     <Color x:Key="SettingsBorderBackgroundColor">#1E1E1E</Color>
     <Color x:Key="FillerColor">#2D2D2D</Color>
 

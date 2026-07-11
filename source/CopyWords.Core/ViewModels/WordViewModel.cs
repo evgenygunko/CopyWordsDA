@@ -70,7 +70,7 @@ namespace CopyWords.Core.ViewModels
             _appThemeService = appThemeService;
 
             // Subscribe to theme changes
-            _appThemeService.ThemeChanged += (s, e) => OnPropertyChanged(nameof(ButtonTextColor));
+            _appThemeService.ThemeChanged += OnThemeChanged;
         }
 
         #region Properties
@@ -533,7 +533,19 @@ namespace CopyWords.Core.ViewModels
 
         #region Private methods
 
-        private static Color GetButtonColor(bool isEnabled) => ThemeColors.GetButtonBackgroundColor(isEnabled);
+        private Color GetButtonColor(bool isEnabled) => ThemeColors.GetButtonBackgroundColor(_appThemeService.CurrentTheme, isEnabled);
+
+        private void OnThemeChanged(object? sender, AppTheme theme)
+        {
+            OnPropertyChanged(nameof(ButtonTextColor));
+            OnPropertyChanged(nameof(PlaySoundButtonColor));
+            OnPropertyChanged(nameof(SaveSoundButtonColor));
+            OnPropertyChanged(nameof(CopyFrontButtonColor));
+            OnPropertyChanged(nameof(CopyBackButtonColor));
+            OnPropertyChanged(nameof(CopyPartOfSpeechButtonColor));
+            OnPropertyChanged(nameof(CopyEndingsButtonColor));
+            OnPropertyChanged(nameof(CopyExamplesButtonColor));
+        }
 
         #endregion
     }

@@ -8,24 +8,34 @@
     public static class ThemeColors
     {
         /// <summary>
-        /// Color for button icons/text in light theme (white on purple background).
+        /// Color for button icons/text in light theme (white on graphite background).
         /// </summary>
         public static readonly Color LightThemeButtonForeground = Colors.White;
 
         /// <summary>
-        /// Color for button icons/text in dark theme (dark on lighter purple background).
+        /// Color for button icons/text in dark theme (dark on lighter graphite background).
         /// </summary>
-        public static readonly Color DarkThemeButtonForeground = Color.FromArgb("#121212");
+        public static readonly Color DarkThemeButtonForeground = Color.FromArgb("#202224");
 
         /// <summary>
-        /// Primary button background color (purple) when enabled.
+        /// Primary button background color in the light theme when enabled.
         /// </summary>
-        public static readonly Color ButtonEnabledBackground = Color.FromArgb("#512BD4");
+        public static readonly Color LightThemeButtonEnabledBackground = Color.FromArgb("#55585C");
+
+        /// <summary>
+        /// Primary button background color in the dark theme when enabled.
+        /// </summary>
+        public static readonly Color DarkThemeButtonEnabledBackground = Color.FromArgb("#A9ADB1");
 
         /// <summary>
         /// Button background color (gray) when disabled.
         /// </summary>
-        public static readonly Color ButtonDisabledBackground = Color.FromArgb("#919191");
+        public static readonly Color LightThemeButtonDisabledBackground = Color.FromArgb("#D0D2D3");
+
+        /// <summary>
+        /// Button background color in the dark theme when disabled.
+        /// </summary>
+        public static readonly Color DarkThemeButtonDisabledBackground = Color.FromArgb("#4A4D50");
 
         /// <summary>
         /// Gets the appropriate button foreground color based on the current theme.
@@ -38,9 +48,17 @@
         /// <summary>
         /// Gets the appropriate button background color based on enabled state.
         /// </summary>
+        /// <param name="theme">The current application theme.</param>
         /// <param name="isEnabled">Whether the button is enabled.</param>
         /// <returns>The color to use for the button background.</returns>
-        public static Color GetButtonBackgroundColor(bool isEnabled) =>
-            isEnabled ? ButtonEnabledBackground : ButtonDisabledBackground;
+        public static Color GetButtonBackgroundColor(AppTheme theme, bool isEnabled)
+        {
+            if (theme == AppTheme.Dark)
+            {
+                return isEnabled ? DarkThemeButtonEnabledBackground : DarkThemeButtonDisabledBackground;
+            }
+
+            return isEnabled ? LightThemeButtonEnabledBackground : LightThemeButtonDisabledBackground;
+        }
     }
 }
