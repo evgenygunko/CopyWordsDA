@@ -20,7 +20,10 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- If ShowCheckBoxes is true -->
-                    <CheckBox Grid.Column="0" x:Name="checkBox" IsChecked="{Binding IsChecked}" IsVisible="{Binding ShowCheckBoxes}" />
+                    <CheckBox Grid.Column="0" x:Name="checkBox"
+                              Margin="{OnPlatform 0, Android='-8,0,-8,0'}"
+                              IsChecked="{Binding IsChecked}"
+                              IsVisible="{Binding ShowCheckBoxes}" />
 
                     <!-- If ShowCheckBoxes is false, add an invisible label to add margin -->
                     <Label Grid.Column="0" Text="a" TextColor="{DynamicResource PageBackgroundColor}" IsVisible="{Binding ShowCheckBoxes, Converter={StaticResource InvertedBoolConverter}}" />

@@ -31,6 +31,7 @@
 
             <!-- Destination Translation -->
             <CheckBox Grid.Row="0" Grid.Column="0" x:Name="checkBoxDestination"
+                      Margin="{OnPlatform 0, Android='-8,0,-8,0'}"
                       IsVisible="{Binding CanCheckDestinationTranslation}"
                       IsChecked="{Binding IsDestinationTranslationChecked}" />
             <Label Grid.Row="0" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center"
@@ -53,6 +54,7 @@
 
             <!-- English -->
             <CheckBox Grid.Row="1" Grid.Column="0"
+                        Margin="{OnPlatform 0, Android='-8,0,-8,0'}"
                         IsChecked="{Binding IsEnglishTranslationChecked}"
                         IsVisible="{Binding CanCheckEnglishTranslation}"/>
             <Label Grid.Row="1" Grid.Column="1" LineBreakMode="WordWrap" VerticalOptions="Center"

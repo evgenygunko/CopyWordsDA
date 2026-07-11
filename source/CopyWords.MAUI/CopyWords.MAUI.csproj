@@ -20,6 +20,7 @@
     <SingleProject>true</SingleProject>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UseMaterial3>true</UseMaterial3>
 
     <!-- Display name -->
     <ApplicationTitle>CopyWords</ApplicationTitle>

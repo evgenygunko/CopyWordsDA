@@ -19,10 +19,10 @@
             BindableLayout.ItemsSource="{Binding DictionaryOptions}">
             <BindableLayout.ItemTemplate>
                 <DataTemplate x:DataType="DictionaryOptionViewModel">
-                    <Grid>
+                    <Grid ColumnSpacing="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="45"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Column="0"
@@ -42,10 +42,10 @@
         <!-- Section "Dictionary mode" -->
         <Label Text="Dictionary mode" Margin="20,0,10,0" FontSize="Subtitle" />
 
-        <Grid Margin="20,0,10,0">
+        <Grid Margin="20,0,10,0" ColumnSpacing="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -60,10 +60,10 @@
                    IsToggled="{Binding ShowAnkiButton, Converter={StaticResource InvertedBoolConverter}}" />
         </Grid>
 
-        <Grid Margin="20,0,10,0">
+        <Grid Margin="20,0,10,0" ColumnSpacing="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -135,10 +135,10 @@
         <!-- Section "Theme" -->
         <Label Text="Theme" Margin="20,0,10,0" FontSize="Subtitle" />
 
-        <Grid Margin="20,0,10,0">
+        <Grid Margin="20,0,10,0" ColumnSpacing="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
