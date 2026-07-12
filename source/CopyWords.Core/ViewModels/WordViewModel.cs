@@ -535,7 +535,7 @@ namespace CopyWords.Core.ViewModels
 
         private Color GetButtonColor(bool isEnabled) => ThemeColors.GetButtonBackgroundColor(_appThemeService.CurrentTheme, isEnabled);
 
-        private void OnThemeChanged(object? sender, AppTheme theme)
+        private void OnThemeChanged(object? sender, AppColorTheme theme)
         {
             OnPropertyChanged(nameof(ButtonTextColor));
             OnPropertyChanged(nameof(PlaySoundButtonColor));

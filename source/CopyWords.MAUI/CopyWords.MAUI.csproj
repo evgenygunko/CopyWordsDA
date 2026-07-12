@@ -144,7 +144,10 @@
     <MauiXaml Update="Resources\Styles\DarkTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
-    <MauiXaml Update="Resources\Styles\LightTheme.xaml">
+    <MauiXaml Update="Resources\Styles\BlueTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Resources\Styles\GraphiteTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\CannotCheckUpdates.xaml">

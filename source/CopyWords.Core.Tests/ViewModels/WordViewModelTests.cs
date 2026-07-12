@@ -41,12 +41,12 @@ namespace CopyWords.Core.Tests.ViewModels
         public void ThemeChanged_RaisesNotificationsForAllThemeBoundButtonColors()
         {
             var appThemeServiceMock = _fixture.Freeze<Mock<IAppThemeService>>();
-            appThemeServiceMock.Setup(x => x.CurrentTheme).Returns(AppTheme.Dark);
+            appThemeServiceMock.Setup(x => x.CurrentTheme).Returns(AppColorTheme.Dark);
             WordViewModel sut = _fixture.Create<WordViewModel>();
             var changedProperties = new HashSet<string?>();
             sut.PropertyChanged += (_, args) => changedProperties.Add(args.PropertyName);
 
-            appThemeServiceMock.Raise(x => x.ThemeChanged += null, appThemeServiceMock.Object, AppTheme.Dark);
+            appThemeServiceMock.Raise(x => x.ThemeChanged += null, appThemeServiceMock.Object, AppColorTheme.Dark);
 
             changedProperties.Should().Contain(
             [
@@ -65,8 +65,9 @@ namespace CopyWords.Core.Tests.ViewModels
         public void ButtonColors_UseCurrentThemeAndEnabledState()
         {
             var appThemeServiceMock = _fixture.Freeze<Mock<IAppThemeService>>();
-            appThemeServiceMock.Setup(x => x.CurrentTheme).Returns(AppTheme.Dark);
+            appThemeServiceMock.Setup(x => x.CurrentTheme).Returns(AppColorTheme.Dark);
             WordViewModel sut = _fixture.Create<WordViewModel>();
+            sut.IsBusy = false;
             sut.SoundUrl = "sound.mp3";
             sut.CanCopyFront = false;
 

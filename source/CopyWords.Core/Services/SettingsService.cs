@@ -27,9 +27,9 @@ namespace CopyWords.Core.Services
 
         void SetAnkiModelName(string value);
 
-        bool GetUseDarkTheme();
+        AppColorTheme GetTheme();
 
-        void SetUseDarkTheme(bool value);
+        void SetTheme(AppColorTheme value);
 
         string GetSelectedParser();
 
@@ -86,7 +86,7 @@ namespace CopyWords.Core.Services
             appSettings.ActiveDictionaries = GetActiveDictionaries().ToList();
             appSettings.SelectedParser = NormalizeSelectedParser(_preferences.Get(nameof(AppSettings.SelectedParser), SourceLanguage.Danish.ToString()), appSettings.ActiveDictionaries);
             appSettings.DestinationLanguage = _preferences.Get(nameof(AppSettings.DestinationLanguage), "Russian");
-            appSettings.UseDarkTheme = _preferences.Get<bool>(nameof(AppSettings.UseDarkTheme), false);
+            appSettings.Theme = GetTheme();
 
             return appSettings;
         }
@@ -108,7 +108,7 @@ namespace CopyWords.Core.Services
             SetActiveDictionaries(appSettings.ActiveDictionaries);
             _preferences.Set(nameof(AppSettings.SelectedParser), NormalizeSelectedParser(appSettings.SelectedParser, appSettings.ActiveDictionaries));
             _preferences.Set(nameof(AppSettings.DestinationLanguage), appSettings.DestinationLanguage);
-            _preferences.Set(nameof(AppSettings.UseDarkTheme), appSettings.UseDarkTheme);
+            SetTheme(appSettings.Theme);
         }
 
         public bool GetShowCopyButtons()
@@ -132,9 +132,16 @@ namespace CopyWords.Core.Services
 
         public void SetAnkiModelName(string value) => _preferences.Set(nameof(AppSettings.AnkiModelName), value);
 
-        public bool GetUseDarkTheme() => _preferences.Get<bool>(nameof(AppSettings.UseDarkTheme), false);
+        public AppColorTheme GetTheme()
+        {
+            string value = _preferences.Get(nameof(AppSettings.Theme), AppColorTheme.Blue.ToString());
+            return Enum.TryParse(value, ignoreCase: false, out AppColorTheme theme) && Enum.IsDefined(theme)
+                ? theme
+                : AppColorTheme.Blue;
+        }
 
-        public void SetUseDarkTheme(bool value) => _preferences.Set(nameof(AppSettings.UseDarkTheme), value);
+        public void SetTheme(AppColorTheme value) =>
+            _preferences.Set(nameof(AppSettings.Theme), Enum.IsDefined(value) ? value.ToString() : AppColorTheme.Blue.ToString());
 
         public string GetSelectedParser()
         {

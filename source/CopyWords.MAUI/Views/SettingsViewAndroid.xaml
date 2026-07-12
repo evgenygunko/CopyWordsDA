@@ -148,9 +148,10 @@
             <Label Grid.Row="0" Grid.Column="0"
                    Style="{StaticResource SettingsLabelStyleAndroid}"
                    VerticalOptions="Center"
-                   Text="Dark theme"/>
-            <Switch Grid.Row="0" Grid.Column="1"
-                IsToggled="{Binding UseDarkTheme}" />
+                   Text="Theme"/>
+            <Picker Grid.Row="0" Grid.Column="1"
+                    ItemsSource="{Binding Themes}"
+                    SelectedItem="{Binding SelectedTheme}" />
         </Grid>
 
         <!-- Filler -->

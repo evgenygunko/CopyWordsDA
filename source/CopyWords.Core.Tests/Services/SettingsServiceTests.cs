@@ -41,7 +41,7 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Get("SelectedParser", It.IsAny<string>(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("ActiveDictionaries", SourceLanguage.Danish.ToString(), It.IsAny<string>()));
             preferencesMock.Verify(x => x.Get("DestinationLanguage", It.IsAny<string>(), It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Get("UseDarkTheme", It.IsAny<bool>(), It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Get("Theme", AppColorTheme.Blue.ToString(), It.IsAny<string>()));
         }
 
         #endregion
@@ -76,7 +76,49 @@ namespace CopyWords.Core.Tests.Services
             preferencesMock.Verify(x => x.Set("SelectedParser", "Spanish", It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("ActiveDictionaries", "Danish;Spanish", It.IsAny<string>()));
             preferencesMock.Verify(x => x.Set("DestinationLanguage", appSettings.DestinationLanguage, It.IsAny<string>()));
-            preferencesMock.Verify(x => x.Set("UseDarkTheme", appSettings.UseDarkTheme, It.IsAny<string>()));
+            preferencesMock.Verify(x => x.Set("Theme", appSettings.Theme.ToString(), It.IsAny<string>()));
+        }
+
+        #endregion
+
+        #region Tests for themes
+
+        [TestMethod]
+        [DataRow("Blue", AppColorTheme.Blue)]
+        [DataRow("Graphite", AppColorTheme.Graphite)]
+        [DataRow("Dark", AppColorTheme.Dark)]
+        [DataRow("dark", AppColorTheme.Blue)]
+        [DataRow("Unknown", AppColorTheme.Blue)]
+        public void GetTheme_ReturnsStoredThemeOrBlue(string storedValue, AppColorTheme expected)
+        {
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            preferencesMock.Setup(x => x.Get("Theme", "Blue", null)).Returns(storedValue);
+
+            var sut = _fixture.Create<SettingsService>();
+
+            sut.GetTheme().Should().Be(expected);
+        }
+
+        [TestMethod]
+        public void GetTheme_WhenPreferenceIsMissing_ReturnsBlue()
+        {
+            var sut = _fixture.Create<SettingsService>();
+
+            sut.GetTheme().Should().Be(AppColorTheme.Blue);
+        }
+
+        [TestMethod]
+        [DataRow(AppColorTheme.Blue)]
+        [DataRow(AppColorTheme.Graphite)]
+        [DataRow(AppColorTheme.Dark)]
+        public void SetTheme_PersistsThemeName(AppColorTheme theme)
+        {
+            var preferencesMock = _fixture.Freeze<Mock<IPreferences>>();
+            var sut = _fixture.Create<SettingsService>();
+
+            sut.SetTheme(theme);
+
+            preferencesMock.Verify(x => x.Set("Theme", theme.ToString(), It.IsAny<string>()));
         }
 
         #endregion

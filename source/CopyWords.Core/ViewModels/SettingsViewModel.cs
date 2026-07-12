@@ -140,12 +140,19 @@ namespace CopyWords.Core.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
-        public partial bool UseDarkTheme { get; set; }
+        public partial AppColorTheme SelectedTheme { get; set; }
 
-        partial void OnUseDarkThemeChanged(bool value)
+        partial void OnSelectedThemeChanged(AppColorTheme value)
         {
-            OnUseDarkThemeChangedInternal(value);
+            OnSelectedThemeChangedInternal(value);
         }
+
+        public IReadOnlyList<AppColorTheme> Themes { get; } =
+        [
+            AppColorTheme.Blue,
+            AppColorTheme.Graphite,
+            AppColorTheme.Dark
+        ];
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveSettingsCommand))]
@@ -279,7 +286,7 @@ namespace CopyWords.Core.ViewModels
             appSettings.CopyTranslatedMeanings = CopyTranslatedMeanings;
             appSettings.ActiveDictionaries = DictionaryOptions.Where(x => x.IsEnabled).Select(x => x.LanguageKey).ToList();
             appSettings.DestinationLanguage = DestinationLanguage ?? "Russian";
-            appSettings.UseDarkTheme = UseDarkTheme;
+            appSettings.Theme = SelectedTheme;
 
             _settingsService.SaveSettings(appSettings);
 
@@ -293,8 +300,7 @@ namespace CopyWords.Core.ViewModels
         public async Task CancelAsync()
         {
             // Restore theme if a user changed it but canceled the settings
-            AppTheme theme = _settingsService.GetUseDarkTheme() ? AppTheme.Dark : AppTheme.Light;
-            _appThemeService.ApplyTheme(theme);
+            _appThemeService.ApplyTheme(_settingsService.GetTheme());
 
             _translationRefreshState.SetRefreshRequired(false);
             await _shellService.GoToAsync("..");
@@ -350,7 +356,7 @@ namespace CopyWords.Core.ViewModels
                     return option;
                 }));
             DestinationLanguage = appSettings.DestinationLanguage;
-            UseDarkTheme = appSettings.UseDarkTheme;
+            SelectedTheme = appSettings.Theme;
 
             _isInitialized = true;
             RefreshEnabledDictionaryProperties();
@@ -445,20 +451,19 @@ namespace CopyWords.Core.ViewModels
             }
         }
 
-        internal void OnUseDarkThemeChangedInternal(bool value)
+        internal void OnSelectedThemeChangedInternal(AppColorTheme value)
         {
             if (_isInitialized)
             {
-                AppTheme theme = value ? AppTheme.Dark : AppTheme.Light;
-                _appThemeService.ApplyTheme(theme);
+                _appThemeService.ApplyTheme(value);
 
                 if (CanUpdateIndividualSettings)
                 {
-                    _settingsService.SetUseDarkTheme(value);
+                    _settingsService.SetTheme(value);
                     _settingsUpdated = true;
                 }
 
-                Debug.WriteLine($"UseDarkTheme has changed to {value}");
+                Debug.WriteLine($"SelectedTheme has changed to {value}");
             }
         }
 

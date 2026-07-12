@@ -45,8 +45,7 @@ public partial class App : Application
         InitializeComponent();
 
         // Apply the initial theme based on settings
-        AppTheme appTheme = _settingsService.GetUseDarkTheme() ? AppTheme.Dark : AppTheme.Light;
-        _appThemeService.ApplyTheme(appTheme);
+        _appThemeService.ApplyTheme(_settingsService.GetTheme());
     }
 
     protected override Window CreateWindow(IActivationState? activationState)

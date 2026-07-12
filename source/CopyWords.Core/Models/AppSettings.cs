@@ -32,6 +32,6 @@ namespace CopyWords.Core.Models
 
         public string DestinationLanguage { get; set; } = "Russian";
 
-        public bool UseDarkTheme { get; set; }
+        public AppColorTheme Theme { get; set; } = AppColorTheme.Blue;
     }
 }
