@@ -785,6 +785,64 @@ namespace CopyWords.Core.Tests.ViewModels
             dialogServiceMock.Verify(x => x.DisplayAlertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
+        [TestMethod]
+        public async Task NavigateBackAsync_AfterSelectingSuggestedWord_RestoresSuggestions()
+        {
+            string search = "houze";
+            string suggestedWord = "house";
+            var suggestedWords = new SuggestedWordsModel([suggestedWord, "horse"]);
+            WordModel wordModel = _fixture.Create<WordModel>();
+
+            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
+            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+
+            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
+            translationsServiceMock
+                .Setup(x => x.LookUpWordAsync(search, It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new WordNotFoundException(search));
+            translationsServiceMock
+                .Setup(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(suggestedWords);
+            translationsServiceMock
+                .Setup(x => x.LookUpWordAsync(suggestedWord, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(wordModel);
+
+            var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
+            launchDarklyServiceMock
+                .Setup(x => x.GetBooleanFlag("test-suggested-words", It.IsAny<bool>()))
+                .Returns(true);
+
+            _fixture.Inject<INavigationHistory>(new NavigationHistory());
+
+            var sut = _fixture.Create<MainViewModel>();
+            sut.SearchWord = search;
+            await sut.LookUpAsync();
+
+            await sut.GetVariantAsync(suggestedWord);
+
+            sut.ShowSuggestions.Should().BeFalse();
+            sut.CanNavigateBack.Should().BeTrue();
+
+            bool navigatedBack = await sut.NavigateBackAsync();
+
+            navigatedBack.Should().BeTrue();
+            sut.SearchWord.Should().Be(search);
+            sut.ShowSuggestions.Should().BeTrue();
+            sut.SuggestionViewModels.Select(suggestion => suggestion.Word)
+                .Should().Equal(suggestedWords.Words);
+            sut.CanNavigateBack.Should().BeFalse();
+
+            translationsServiceMock.Verify(
+                x => x.LookUpWordAsync(search, It.IsAny<CancellationToken>()),
+                Times.Exactly(2));
+            translationsServiceMock.Verify(
+                x => x.LookUpWordAsync(suggestedWord, It.IsAny<CancellationToken>()),
+                Times.Once);
+            translationsServiceMock.Verify(
+                x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()),
+                Times.Exactly(2));
+        }
+
         #endregion
 
         #region Tests for SelectDictionaryAsync

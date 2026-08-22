@@ -347,6 +347,8 @@ namespace CopyWords.Core.ViewModels
 
         internal async Task GetVariantAsync(string url)
         {
+            bool selectedFromSuggestions = ShowSuggestions;
+
             IsBusy = true;
 
             try
@@ -362,11 +364,18 @@ namespace CopyWords.Core.ViewModels
                     return;
                 }
 
+                if (selectedFromSuggestions && wordModel is not null)
+                {
+                    SearchWord = wordModel.Word;
+                    _navigationHistory.Push(wordModel.Word, wordModel.SourceLanguage.ToString());
+                }
+
                 UpdateUI(wordModel);
             }
             finally
             {
                 IsBusy = false;
+                NotifyNavigationStateChanged();
             }
         }
 
@@ -523,7 +532,13 @@ namespace CopyWords.Core.ViewModels
                     searchedWord, _cancellationTokenSource.Token);
 
                 PopulateSuggestionViewModels(suggestedWords.Words);
-                return SuggestionViewModels.Count > 0;
+                if (SuggestionViewModels.Count == 0)
+                {
+                    return false;
+                }
+
+                _navigationHistory.Push(searchedWord, GetSourceLanguage().ToString());
+                return true;
             }
             catch (TaskCanceledException)
             {
