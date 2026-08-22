@@ -33,8 +33,8 @@
                         <Label Grid.Row="0" Grid.Column="1">
                             <Label.Text>
                                 <OnPlatform x:TypeArguments="x:String">
-                                    <On Platform="MacCatalyst" Value=". " />
-                                    <On Platform="WinUI,Android,iOS" Value=". &#6158;" />
+                                    <On Platform="WinUI,MacCatalyst" Value=". " />
+                                    <On Platform="Android,iOS" Value=". &#6158;" />
                                 </OnPlatform>
                             </Label.Text>
                         </Label>
