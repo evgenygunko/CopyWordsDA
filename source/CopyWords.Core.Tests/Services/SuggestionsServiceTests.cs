@@ -45,17 +45,16 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task GetSuggestionsAsync_WhenSelectedParserIsDanishAndServerErrorInDebug_ThrowsServerErrorException()
+        public async Task GetSuggestionsAsync_WhenSelectedParserIsDanishAndServerErrorInDebug_ReturnsEmptyCollection()
         {
             // Arrange
             var sut = CreateSut(CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error"), nameof(SourceLanguage.Danish), isDebug: true);
 
             // Act
-            var act = async () => await sut.GetSuggestionsAsync("h", CancellationToken.None);
+            var result = await sut.GetSuggestionsAsync("h", CancellationToken.None);
 
             // Assert
-            await act.Should().ThrowAsync<ServerErrorException>()
-                .WithMessage("The server returned the error 'InternalServerError'.");
+            result.Should().BeEmpty();
         }
 
         [TestMethod]

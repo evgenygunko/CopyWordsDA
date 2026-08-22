@@ -12,15 +12,7 @@
                 <!-- Context -->
                 <VerticalStackLayout VerticalOptions="Center">
                     <HorizontalStackLayout>
-                        <Label Text="{Binding Position, FallbackValue='Position'}" />
-                        <Label>
-                            <Label.Text>
-                                <OnPlatform x:TypeArguments="x:String">
-                                    <On Platform="MacCatalyst" Value=". " />
-                                    <On Platform="WinUI,Android,iOS" Value=". &#6158;" />
-                                </OnPlatform>
-                            </Label.Text>
-                        </Label>
+                        <Label Text="{Binding Position, FallbackValue='Position'}" Margin="0,0,3,0" />
                         <Label TextColor="{DynamicResource ContextGreenColor}" Text="{Binding ContextEN, FallbackValue='ContextEN'}" />
                     </HorizontalStackLayout>
 

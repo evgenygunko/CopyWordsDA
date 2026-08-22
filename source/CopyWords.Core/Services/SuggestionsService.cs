@@ -66,10 +66,10 @@ namespace CopyWords.Core.Services
                     }
                 }
 
-                if (_buildConfiguration.IsDebug)
-                {
-                    throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
-                }
+                //if (_buildConfiguration.IsDebug)
+                //{
+                //    throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
+                //}
             }
             catch (TaskCanceledException)
             {

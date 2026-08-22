@@ -25,22 +25,15 @@
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Row="0" Grid.Column="0" Text="{Binding AlphabeticalPosition, FallbackValue='AlphabeticalPosition'}" />
-                        <Label Grid.Row="0" Grid.Column="1">
-                            <Label.Text>
-                                <OnPlatform x:TypeArguments="x:String">
-                                    <On Platform="WinUI,MacCatalyst" Value=". " />
-                                    <On Platform="Android,iOS" Value=". &#6158;" />
-                                </OnPlatform>
-                            </Label.Text>
-                        </Label>
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Margin="0,0,3,0"
+                               Text="{Binding AlphabeticalPosition, FallbackValue='AlphabeticalPosition'}" />
 
                         <!-- If Translation is defined, show Translation below the Original -->
-                        <VerticalStackLayout Grid.Row="0" Grid.Column="2"
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="1"
                                 IsVisible="{Binding Translation, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
 
                             <!-- If LookupUrl is defined, show Original as a hyperlink, otherwise as a normal text -->
@@ -61,12 +54,12 @@
                         </VerticalStackLayout>
 
                         <!-- If Translation is not defined, only show Original meaning -->
-                        <Label Grid.Row="0" Grid.Column="2"
+                        <Label Grid.Row="0" Grid.Column="1"
                                IsVisible="{Binding Translation, Converter={StaticResource IsStringNullOrWhiteSpaceConverter}}"
                                Text="{Binding Original, FallbackValue='stor, langstrakt bruskfisk'}">
                         </Label>
 
-                        <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="3"
+                        <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2"
                                     Margin="8,0,0,0"
                                     IsVisible="{Binding ImageUrl, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}">
 

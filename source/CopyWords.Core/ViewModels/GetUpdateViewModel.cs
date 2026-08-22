@@ -64,7 +64,8 @@ namespace CopyWords.Core.ViewModels
                 LatestVersion = releaseInfo.LatestVersion;
                 DownloadUrl = releaseInfo.DownloadUrl;
 
-                if (!Uri.TryCreate(DownloadUrl, UriKind.Absolute, out _))
+                if (!Uri.TryCreate(DownloadUrl, UriKind.Absolute, out var downloadUri)
+                    || (downloadUri.Scheme != Uri.UriSchemeHttp && downloadUri.Scheme != Uri.UriSchemeHttps))
                 {
                     Debug.WriteLine("The download URL is not valid: " + DownloadUrl);
                     ErrorMessage = "The download URL is not valid.";

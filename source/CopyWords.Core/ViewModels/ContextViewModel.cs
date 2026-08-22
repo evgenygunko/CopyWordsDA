@@ -13,8 +13,16 @@ namespace CopyWords.Core.ViewModels
             SourceLanguage sourceLanguage,
             bool showCheckBoxes)
         {
+            if (!string.IsNullOrEmpty(context.Position))
+            {
+                Position = context.Position + ".";
+            }
+            else
+            {
+                Position = string.Empty;
+            }
+
             ContextEN = context.ContextEN;
-            Position = context.Position;
 
             MeaningViewModels.Clear();
             foreach (var meanings in context.Meanings)

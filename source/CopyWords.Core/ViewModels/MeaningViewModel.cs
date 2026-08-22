@@ -17,7 +17,16 @@ namespace CopyWords.Core.ViewModels
             Original = meaning.Original;
 
             Translation = meaning.Translation ?? string.Empty;
-            AlphabeticalPosition = meaning.AlphabeticalPosition;
+
+            if (!string.IsNullOrEmpty(meaning.AlphabeticalPosition))
+            {
+                AlphabeticalPosition = meaning.AlphabeticalPosition + ".⁡⁤";
+            }
+            else
+            {
+                AlphabeticalPosition = string.Empty;
+            }
+
             Tag = meaning.Tag ?? string.Empty;
             ImageUrl = meaning.ImageUrl ?? string.Empty;
             LookupUrl = meaning.LookupUrl ?? string.Empty;
