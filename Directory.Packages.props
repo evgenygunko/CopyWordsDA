@@ -22,8 +22,10 @@
     <PackageVersion Include="Sentry.Maui" Version="6.9.0" />
     <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.12" />
     <PackageVersion Include="Syncfusion.Licensing" Version="34.2.4" />
-    <PackageVersion Include="Syncfusion.Maui.Expander" Version="34.2.4" />
-    <PackageVersion Include="Syncfusion.Maui.Inputs" Version="34.2.4" />
+    <!-- Syncfusion.Maui.Inputs 34.2.x crashes on Android when an empty, focused SfAutocomplete loses focus.
+         Keep Inputs and Expander aligned at 34.1.30 until Syncfusion fixes the TextMeasurer regression. -->
+    <PackageVersion Include="Syncfusion.Maui.Expander" Version="34.1.30" />
+    <PackageVersion Include="Syncfusion.Maui.Inputs" Version="34.1.30" />
     <PackageVersion Include="Syncfusion.Maui.Toolkit" Version="1.0.10" />
   </ItemGroup>
 </Project>
