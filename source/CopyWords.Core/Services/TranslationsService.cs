@@ -119,7 +119,8 @@ namespace CopyWords.Core.Services
                 throw new InvalidInputException(errorContent);
             }
 
-            if (response.StatusCode is System.Net.HttpStatusCode.BadGateway
+            if (response.StatusCode is System.Net.HttpStatusCode.InternalServerError
+                or System.Net.HttpStatusCode.BadGateway
                 or System.Net.HttpStatusCode.ServiceUnavailable
                 or System.Net.HttpStatusCode.GatewayTimeout)
             {
@@ -159,7 +160,8 @@ namespace CopyWords.Core.Services
                 throw new WordNotFoundException(input.Text);
             }
 
-            if (response.StatusCode is System.Net.HttpStatusCode.BadGateway
+            if (response.StatusCode is System.Net.HttpStatusCode.InternalServerError
+                or System.Net.HttpStatusCode.BadGateway
                 or System.Net.HttpStatusCode.ServiceUnavailable
                 or System.Net.HttpStatusCode.GatewayTimeout)
             {

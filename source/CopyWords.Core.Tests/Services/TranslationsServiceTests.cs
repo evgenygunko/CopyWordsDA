@@ -157,7 +157,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task LookUpWordAsync_WhenOtherErrors_ThrowsServerErrorException()
+        public async Task LookUpWordAsync_WhenInternalServerErrorWithBody_ThrowsServerErrorExceptionWithBodyMessage()
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
 
@@ -165,7 +165,7 @@ namespace CopyWords.Core.Tests.Services
             var act = async () => await sut.LookUpWordAsync("testword", CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
-                .WithMessage("The server returned the error 'InternalServerError'.");
+                .WithMessage("Server error");
         }
 
         #endregion
@@ -280,7 +280,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task TranslateAsync_WhenOtherErrors_ThrowsServerErrorException()
+        public async Task TranslateAsync_WhenInternalServerErrorWithBody_ThrowsServerErrorExceptionWithBodyMessage()
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
 
@@ -288,7 +288,7 @@ namespace CopyWords.Core.Tests.Services
             var act = async () => await sut.TranslateAsync("http://fake-url", _fixture.Create<LookUpWordRequest>(), CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
-                .WithMessage("The server returned the error 'InternalServerError'.");
+                .WithMessage("Server error");
         }
 
         [TestMethod]
@@ -660,7 +660,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task GetSuggestedWordsAsync_WhenOtherErrors_ThrowsServerErrorException()
+        public async Task GetSuggestedWordsAsync_WhenInternalServerErrorWithBody_ThrowsServerErrorExceptionWithBodyMessage()
         {
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
             var sut = new TranslationsService(httpClient, _globalSettingsMock.Object, _settingsServiceMock.Object);
@@ -668,7 +668,7 @@ namespace CopyWords.Core.Tests.Services
             var act = async () => await sut.GetSuggestedWordsAsync("testword", CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
-                .WithMessage("The server returned the error 'InternalServerError'.");
+                .WithMessage("Server error");
         }
 
         [TestMethod]

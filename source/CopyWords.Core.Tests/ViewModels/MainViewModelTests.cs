@@ -599,7 +599,7 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task LookUpWordInDictionaryAsync_WhenExceptionThrown_DisplaysAlerts()
+        public async Task LookUpWordInDictionaryAsync_WhenServerReturnsCustomError_DisplaysCustomErrorAlert()
         {
             string search = _fixture.Create<string>();
 
@@ -611,14 +611,17 @@ namespace CopyWords.Core.Tests.ViewModels
             var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
             translationsServiceMock
                 .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new Exception("exception from unit test"));
+                .ThrowsAsync(new ServerErrorException("Online dictionary 'DDO' is temporarily unavailable."));
 
             var sut = _fixture.Create<MainViewModel>();
 
             WordModel? result = await sut.LookUpWordInDictionaryAsync(search);
 
             result.Should().BeNull();
-            dialogServiceMock.Verify(x => x.DisplayAlertAsync("An error occurred while searching for translations", "exception from unit test", "OK"));
+            dialogServiceMock.Verify(x => x.DisplayAlertAsync(
+                "An error occurred while searching for translations",
+                "Online dictionary 'DDO' is temporarily unavailable.",
+                "OK"));
         }
 
         [TestMethod]
