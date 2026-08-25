@@ -3,6 +3,7 @@ using AutoFixture;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using CopyWords.Core.Services.Wrappers;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;
@@ -16,6 +17,7 @@ namespace CopyWords.Core.Tests.Services
         private Fixture _fixture = default!;
         private Mock<IGlobalSettings> _globalSettingsMock = default!;
         private Mock<ISettingsService> _settingsServiceMock = default!;
+        private Mock<ILaunchDarklyService> _launchDarklyServiceMock = default!;
         [TestInitialize]
         public void TestInitialize()
         {
@@ -29,6 +31,9 @@ namespace CopyWords.Core.Tests.Services
             _settingsServiceMock.Setup(x => x.GetDestinationLanguage()).Returns("English");
             _settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
             _settingsServiceMock.Setup(x => x.GetActiveDictionaries()).Returns([nameof(SourceLanguage.Danish), nameof(SourceLanguage.Spanish)]);
+
+            _launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
+            _launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("client-side-parsing", false)).Returns(false);
         }
 
         #region Tests for LookUpWordAsync
@@ -45,6 +50,131 @@ namespace CopyWords.Core.Tests.Services
 
             result.Should().NotBeNull();
             result!.Word.Should().Be(wordModel.Word);
+        }
+
+        [TestMethod]
+        public async Task LookUpWordAsync_WhenClientSideParsingIsDisabled_PostsV2Request()
+        {
+            HttpRequestMessage? capturedRequest = null;
+            string? capturedContent = null;
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .Callback<HttpRequestMessage, CancellationToken>((request, _) =>
+                {
+                    capturedRequest = request;
+                    capturedContent = request.Content!.ReadAsStringAsync().GetAwaiter().GetResult();
+                })
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(_fixture.Create<WordModel>()))
+                });
+            var sut = new TranslationsService(
+                new HttpClient(handlerMock.Object),
+                _globalSettingsMock.Object,
+                _settingsServiceMock.Object,
+                _launchDarklyServiceMock.Object);
+
+            await sut.LookUpWordAsync("typed-word", CancellationToken.None);
+
+            capturedRequest!.RequestUri!.ToString().Should().Contain("/api/v2/Translation/LookUpWord");
+            capturedContent.Should().Contain("\"Text\":\"typed-word\"");
+            _launchDarklyServiceMock.Verify(x => x.GetBooleanFlag("client-side-parsing", false), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task LookUpWordAsync_WhenClientSideParsingIsEnabledForDanish_PostsHajModelToV3()
+        {
+            _launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("client-side-parsing", false)).Returns(true);
+            _settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
+
+            (Uri requestUri, WordModel payload, WordModel response) = await SendAndCaptureV3Request();
+
+            requestUri.ToString().Should().Contain("/api/v3/Translation/LookUpWord");
+            payload.Word.Should().Be("haj");
+            payload.SourceLanguage.Should().Be(SourceLanguage.Danish);
+            payload.SoundUrl.Should().BeNull();
+            payload.Variants.Should().BeEmpty();
+            payload.Expressions.Should().BeEmpty();
+            payload.Definition!.Headword.Should().Be(new Headword("haj", null, null));
+            payload.Definition.PartOfSpeech.Should().Be("substantiv, fælleskøn");
+            payload.Definition.Endings.Should().Be("-en, -er, -erne");
+            payload.Definition.Contexts.Single().Meanings.Should().HaveCount(3);
+            payload.Definition.Contexts.SelectMany(x => x.Meanings).Should().OnlyContain(x => x.Translation == null);
+            response.Word.Should().Be("translated-result");
+        }
+
+        [TestMethod]
+        public async Task LookUpWordAsync_WhenClientSideParsingIsEnabledForSpanish_PostsCocheModelToV3()
+        {
+            _launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("client-side-parsing", false)).Returns(true);
+            _settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Spanish));
+
+            (Uri requestUri, WordModel payload, WordModel response) = await SendAndCaptureV3Request();
+
+            requestUri.ToString().Should().Contain("/api/v3/Translation/LookUpWord");
+            payload.Word.Should().Be("coche");
+            payload.SourceLanguage.Should().Be(SourceLanguage.Spanish);
+            payload.Variants.Should().BeEmpty();
+            payload.Expressions.Should().BeEmpty();
+            payload.Definition!.Headword.Should().Be(new Headword("el coche", null, null));
+            payload.Definition.Contexts.Should().HaveCount(2);
+            payload.Definition.Contexts.SelectMany(x => x.Meanings).Should().HaveCount(4);
+            payload.Definition.Contexts.SelectMany(x => x.Meanings).Should().OnlyContain(x => x.Translation == null);
+            payload.Definition.Contexts.SelectMany(x => x.Meanings).SelectMany(x => x.Examples)
+                .Should().OnlyContain(x => x.Translation != null);
+            response.Word.Should().Be("translated-result");
+        }
+
+        [TestMethod]
+        public async Task LookUpWordAsync_WhenLaunchDarklyIsUninitialized_DefaultsToV2()
+        {
+            _launchDarklyServiceMock.SetupGet(x => x.IsInitialized).Returns(false);
+            _launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("client-side-parsing", false)).Returns(false);
+            Uri? requestUri = null;
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .Callback<HttpRequestMessage, CancellationToken>((request, _) => requestUri = request.RequestUri)
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(_fixture.Create<WordModel>()))
+                });
+            var sut = new TranslationsService(
+                new HttpClient(handlerMock.Object),
+                _globalSettingsMock.Object,
+                _settingsServiceMock.Object,
+                _launchDarklyServiceMock.Object);
+
+            await sut.LookUpWordAsync("typed-word", CancellationToken.None);
+
+            requestUri!.ToString().Should().Contain("/api/v2/Translation/LookUpWord");
+        }
+
+        [TestMethod]
+        public async Task LookUpWordAsync_WhenV3Fails_DoesNotFallBackToV2()
+        {
+            _launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("client-side-parsing", false)).Returns(true);
+            var requestedUris = new List<Uri>();
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .Callback<HttpRequestMessage, CancellationToken>((request, _) => requestedUris.Add(request.RequestUri!))
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent("v3 failed")
+                });
+            var sut = new TranslationsService(
+                new HttpClient(handlerMock.Object),
+                _globalSettingsMock.Object,
+                _settingsServiceMock.Object,
+                _launchDarklyServiceMock.Object);
+
+            Func<Task> action = async () => await sut.LookUpWordAsync("typed-word", CancellationToken.None);
+
+            await action.Should().ThrowAsync<ServerErrorException>().WithMessage("v3 failed");
+            requestedUris.Should().ContainSingle();
+            requestedUris.Single().ToString().Should().Contain("/api/v3/Translation/LookUpWord");
         }
 
         [TestMethod]
@@ -691,6 +821,35 @@ namespace CopyWords.Core.Tests.Services
         #endregion
 
         #region Private Methods
+
+        private async Task<(Uri RequestUri, WordModel Payload, WordModel Response)> SendAndCaptureV3Request()
+        {
+            Uri? requestUri = null;
+            WordModel? payload = null;
+            var translatedModel = _fixture.Build<WordModel>().With(x => x.Word, "translated-result").Create();
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            handlerMock.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .Callback<HttpRequestMessage, CancellationToken>((request, _) =>
+                {
+                    requestUri = request.RequestUri;
+                    string json = request.Content!.ReadAsStringAsync().GetAwaiter().GetResult();
+                    payload = JsonConvert.DeserializeObject<WordModel>(json);
+                })
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(translatedModel))
+                });
+            var sut = new TranslationsService(
+                new HttpClient(handlerMock.Object),
+                _globalSettingsMock.Object,
+                _settingsServiceMock.Object,
+                _launchDarklyServiceMock.Object);
+
+            WordModel? response = await sut.LookUpWordAsync("this-word-is-not-posted", CancellationToken.None);
+
+            return (requestUri!, payload!, response!);
+        }
 
         private static HttpClient CreateMockHttpClient(HttpStatusCode statusCode, string content)
         {
