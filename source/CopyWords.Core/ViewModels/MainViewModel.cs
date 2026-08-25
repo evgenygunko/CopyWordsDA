@@ -17,7 +17,6 @@ namespace CopyWords.Core.ViewModels
         private readonly IDialogService _dialogService;
         private readonly IInstantTranslationService _instantTranslationService;
         private readonly ITranslationsService _translationsService;
-        private readonly ILaunchDarklyService _launchDarklyService;
         private readonly ISuggestionsService _suggestionsService;
         private readonly INavigationHistory _navigationHistory;
         private readonly IShellService _shellService;
@@ -36,7 +35,6 @@ namespace CopyWords.Core.ViewModels
             IDialogService dialogService,
             IInstantTranslationService instantTranslationService,
             ITranslationsService translationsService,
-            ILaunchDarklyService launchDarklyService,
             ISuggestionsService suggestionsService,
             INavigationHistory navigationHistory,
             IShellService shellService,
@@ -49,7 +47,6 @@ namespace CopyWords.Core.ViewModels
             _dialogService = dialogService;
             _instantTranslationService = instantTranslationService;
             _translationsService = translationsService;
-            _launchDarklyService = launchDarklyService;
             _suggestionsService = suggestionsService;
             _navigationHistory = navigationHistory;
             _shellService = shellService;
@@ -521,11 +518,6 @@ namespace CopyWords.Core.ViewModels
 
         private async Task<bool> TryShowSuggestedWordsAsync(string searchedWord)
         {
-            if (!_launchDarklyService.GetBooleanFlag("test-suggested-words"))
-            {
-                return false;
-            }
-
             try
             {
                 SuggestedWordsModel suggestedWords = await _translationsService.GetSuggestedWordsAsync(

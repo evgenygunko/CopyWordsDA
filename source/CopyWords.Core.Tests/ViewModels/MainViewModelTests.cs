@@ -302,35 +302,7 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task LookUpAsync_WhenWordNotFoundAndFlagOff_ShowsNotFoundAlertAndNoSuggestions()
-        {
-            string search = _fixture.Create<string>();
-
-            var settingsServiceMock = _fixture.Freeze<Mock<ISettingsService>>();
-            settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Danish));
-
-            var translationsServiceMock = _fixture.Freeze<Mock<ITranslationsService>>();
-            translationsServiceMock
-                .Setup(x => x.LookUpWordAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new WordNotFoundException(search));
-
-            var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
-            launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("test-suggested-words", It.IsAny<bool>())).Returns(false);
-
-            var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
-
-            var sut = _fixture.Create<MainViewModel>();
-            sut.SearchWord = search;
-
-            await sut.LookUpAsync();
-
-            sut.ShowSuggestions.Should().BeFalse();
-            dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{search}'", "OK"), Times.Once);
-            translationsServiceMock.Verify(x => x.GetSuggestedWordsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
-        }
-
-        [TestMethod]
-        public async Task LookUpAsync_WhenWordNotFoundAndFlagOnWithSuggestions_ShowsSuggestionsAndNoAlert()
+        public async Task LookUpAsync_WhenWordNotFoundWithSuggestions_ShowsSuggestionsAndNoAlert()
         {
             string search = _fixture.Create<string>();
             var suggestedWords = new SuggestedWordsModel(["house", "horse"]);
@@ -346,9 +318,6 @@ namespace CopyWords.Core.Tests.ViewModels
                 .Setup(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(suggestedWords);
 
-            var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
-            launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("test-suggested-words", It.IsAny<bool>())).Returns(true);
-
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var sut = _fixture.Create<MainViewModel>();
@@ -363,7 +332,7 @@ namespace CopyWords.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public async Task LookUpAsync_WhenWordNotFoundAndFlagOnWithNoSuggestions_ShowsNotFoundAlert()
+        public async Task LookUpAsync_WhenWordNotFoundWithNoSuggestions_ShowsNotFoundAlert()
         {
             string search = _fixture.Create<string>();
 
@@ -377,9 +346,6 @@ namespace CopyWords.Core.Tests.ViewModels
             translationsServiceMock
                 .Setup(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new SuggestedWordsModel([]));
-
-            var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
-            launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("test-suggested-words", It.IsAny<bool>())).Returns(true);
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
@@ -408,9 +374,6 @@ namespace CopyWords.Core.Tests.ViewModels
                 .Setup(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new ServerErrorException("The server returned the error 'InternalServerError'."));
 
-            var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
-            launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("test-suggested-words", It.IsAny<bool>())).Returns(true);
-
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var sut = _fixture.Create<MainViewModel>();
@@ -438,9 +401,6 @@ namespace CopyWords.Core.Tests.ViewModels
                 .Setup(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new InvalidInputException("invalid input"));
 
-            var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
-            launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("test-suggested-words", It.IsAny<bool>())).Returns(true);
-
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
             var sut = _fixture.Create<MainViewModel>();
@@ -467,9 +427,6 @@ namespace CopyWords.Core.Tests.ViewModels
             translationsServiceMock
                 .Setup(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception("unexpected error"));
-
-            var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
-            launchDarklyServiceMock.Setup(x => x.GetBooleanFlag("test-suggested-words", It.IsAny<bool>())).Returns(true);
 
             var dialogServiceMock = _fixture.Freeze<Mock<IDialogService>>();
 
@@ -809,11 +766,6 @@ namespace CopyWords.Core.Tests.ViewModels
             translationsServiceMock
                 .Setup(x => x.LookUpWordAsync(suggestedWord, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(wordModel);
-
-            var launchDarklyServiceMock = _fixture.Freeze<Mock<ILaunchDarklyService>>();
-            launchDarklyServiceMock
-                .Setup(x => x.GetBooleanFlag("test-suggested-words", It.IsAny<bool>()))
-                .Returns(true);
 
             _fixture.Inject<INavigationHistory>(new NavigationHistory());
 
