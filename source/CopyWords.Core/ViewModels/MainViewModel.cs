@@ -529,6 +529,7 @@ namespace CopyWords.Core.ViewModels
                     return false;
                 }
 
+                _settingsService.AddToHistory(searchedWord);
                 _navigationHistory.Push(searchedWord, GetSourceLanguage().ToString());
                 return true;
             }

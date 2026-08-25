@@ -329,6 +329,7 @@ namespace CopyWords.Core.Tests.ViewModels
             sut.SuggestionViewModels.Should().HaveCount(2);
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot find word", It.IsAny<string>(), "OK"), Times.Never);
             translationsServiceMock.Verify(x => x.GetSuggestedWordsAsync(search, It.IsAny<CancellationToken>()), Times.Once);
+            settingsServiceMock.Verify(x => x.AddToHistory(search), Times.Once);
         }
 
         [TestMethod]
@@ -356,6 +357,7 @@ namespace CopyWords.Core.Tests.ViewModels
 
             sut.ShowSuggestions.Should().BeFalse();
             dialogServiceMock.Verify(x => x.DisplayAlertAsync("Cannot find word", $"Could not find a translation for '{search}'", "OK"), Times.Once);
+            settingsServiceMock.Verify(x => x.AddToHistory(It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
