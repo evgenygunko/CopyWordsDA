@@ -1,0 +1,621 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Findigente",
+    "wordOfTheDayData": {
+        "image": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002Foriginal\u002F0342bd4b-bcfd-41ee-b898-c826940a5723.png",
+        "imageJPG": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002F400\u002F0342bd4b-bcfd-41ee-b898-c826940a5723.jpg",
+        "imageWEBP": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002F400\u002F0342bd4b-bcfd-41ee-b898-c826940a5723.webp",
+        "wordId": 4745,
+        "wordSource": "alumbrar",
+        "wordDisplay": "alumbrar",
+        "translationText": "to light",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=alumbrar&key=c4b9e781a7787971dd855afeaede0a09"
+    },
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 19,
+    "excludeAds": false,
+    "brandKey": "spanishdictionary",
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "audio-cdn.sdcdns.com",
+        "hegemoneAssetHost": "sd-hegemone-production.sdcdns.com",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "neodarwin-prod.sdcdns.com",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdIdentity": true,
+        "sdCss": false,
+        "sdAnimation": false,
+        "sdIcvExpansion": false,
+        "sdPQDebug": false,
+        "adhesionMarketingInt": 0,
+        "randomizedExperiments": {}
+    },
+    "serverNowAtPageview": 1765031496364,
+    "pageCategory": "translation",
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "indigente",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Findigente",
+            "path": "translate",
+            "token": "indigente",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Findigente",
+            "path": "examples",
+            "token": "indigente",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Findigente",
+            "path": "pronunciation",
+            "token": "indigente",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Findigente",
+            "path": "thesaurus",
+            "token": "indigente",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "indigente",
+                "textToPronounce": "indigente",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=indigente&key=28caf67c8c86f6f88c998d0eca882fe7",
+                "pronunciations": [
+                    {
+                        "id": 29583,
+                        "ipa": "in*di*ˈxen*te",
+                        "abc": "in*di*ˈgen*te",
+                        "spa": "een*dee*ˈhehn*teh",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 29584,
+                        "ipa": "in*di*ˈχen*te",
+                        "abc": "in*di*ˈgen*te",
+                        "spa": "een*dee*ˈhehn*teh",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "indigent",
+                "textToPronounce": "indigent",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=en&text=indigent&key=b7ec87fa28e4d54e99f8eac7be438cb1",
+                "pronunciations": [
+                    {
+                        "id": 143740,
+                        "ipa": "ˈɪn*dɪ*dʒɪnt",
+                        "abc": "ˈin*di*gent",
+                        "spa": "ˈihn*dih*jihnt",
+                        "region": "US",
+                        "hasVideo": 0,
+                        "speakerId": null,
+                        "version": null,
+                        "source": "indigent"
+                    },
+                    {
+                        "id": 143741,
+                        "ipa": "ˈɪn*dɪ*dʒənt",
+                        "abc": "ˈin*di*gent",
+                        "spa": "ˈihn*dih*juhnt",
+                        "region": "UK",
+                        "hasVideo": 0,
+                        "speakerId": null,
+                        "version": null,
+                        "source": "indigent"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": {
+                "displayText": "poor person",
+                "textToPronounce": "poor person",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=en&text=poor-person&key=16b508ba4b2b3ec24164f4ddc83b8e5b",
+                "pronunciations": [
+                    {
+                        "id": 72227,
+                        "ipa": "pʊɹ ˈpəɹ*sɪn",
+                        "abc": "poor ˈper*son",
+                        "spa": "poor ˈpuhr*sihn",
+                        "region": "US",
+                        "hasVideo": 0,
+                        "speakerId": null,
+                        "version": null,
+                        "source": "poor person"
+                    },
+                    {
+                        "id": 72228,
+                        "ipa": "pɔ ˈpə*sən",
+                        "abc": "poor ˈper*son",
+                        "spa": "paw ˈpuh*suhn",
+                        "region": "UK",
+                        "hasVideo": 0,
+                        "speakerId": null,
+                        "version": null,
+                        "source": "poor person"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef2"
+            }
+        },
+        "addToListProps": {
+            "word": {
+                "id": 38502,
+                "source": "indigente",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "neodict": [
+                {
+                    "subheadword": "indigente, el indigente, la indigente",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "adj",
+                                "abbrEs": "adj",
+                                "nameEn": "adjective",
+                                "nameEs": "adjetivo",
+                                "sharedPosNameEn": "adjective"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "impoverished",
+                                    "contextEs": "necesitado",
+                                    "gender": null,
+                                    "id": 31749,
+                                    "partOfSpeech": {
+                                        "abbrEn": "adj",
+                                        "abbrEs": "adj",
+                                        "nameEn": "adjective",
+                                        "nameEs": "adjetivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "As a student he lived with a group of indigent artists in Paris.",
+                                                    "textEs": "De estudiante, vivía con un grupo de artistas indigentes en París."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 52811,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "indigent"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Many destitute people die of cold in winter.",
+                                                    "textEs": "Muchas personas indigentes mueren de frío en invierno."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 52809,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "destitute"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The church is collecting funds to build a shelter for needy elderly people.",
+                                                    "textEs": "La iglesia está recaudando fondos para construir un albergue para adultos mayores indigentes."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 60469,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "needy"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "There is a poor woman living in this street who doesn't have enough money to buy food.",
+                                                    "textEs": "Hay una mujer indigente viviendo en esta calle que no tiene dinero suficiente para alimentarse."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 52810,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "poor"
+                                        }
+                                    ],
+                                    "subheadword": "indigente",
+                                    "idx": 1,
+                                    "context": "impoverished",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "indigent",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "translationsDisplay": {
+                                                "texts": [ "indigent" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "De estudiante, vivía con un grupo de artistas indigentes en París.", "As a student he lived with a group of indigent artists in Paris." ] ]
+                                        },
+                                        {
+                                            "translation": "destitute",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [ "destitute" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "Muchas personas indigentes mueren de frío en invierno.", "Many destitute people die of cold in winter." ] ]
+                                        },
+                                        {
+                                            "translation": "needy",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [ "needy" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "c",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "La iglesia está recaudando fondos para construir un albergue para adultos mayores indigentes.", "The church is collecting funds to build a shelter for needy elderly people." ] ]
+                                        },
+                                        {
+                                            "translation": "poor",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [ "poor" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "d",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "Hay una mujer indigente viviendo en esta calle que no tiene dinero suficiente para alimentarse.", "There is a poor woman living in this street who doesn't have enough money to buy food." ] ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "adjective",
+                                "tooltip": {
+                                    "def": "An adjective is a word that describes a noun (e.g., the big dog).",
+                                    "href": "https:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fdescriptive-adjectives-in-spanish"
+                                }
+                            }
+                        },
+                        {
+                            "pos": {
+                                "abbrEn": "n",
+                                "abbrEs": "s",
+                                "nameEn": "noun",
+                                "nameEs": "sustantivo",
+                                "sharedPosNameEn": "noun"
+                            },
+                            "entryLang": "es",
+                            "gender": { "gender": "CO" },
+                            "senses": [
+                                {
+                                    "contextEn": "impoverished person",
+                                    "contextEs": "persona necesitada",
+                                    "gender": "CO",
+                                    "id": 31750,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The children's mother used to give away their old clothes to poor people.",
+                                                    "textEs": "La madre de los niños regalaba su ropa usada a los indigentes."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 52812,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "poor person"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The church is now feeding 300 destitute people every week.",
+                                                    "textEs": "Ahora la iglesia da de comer a 300 indigentes cada semana."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 54650,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "destitute person"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The charity runs a soup kitchen for the homeless and indigents.",
+                                                    "textEs": "La organización benéfica organiza una olla común para los indigentes y los sin techo."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 52815,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "indigent"
+                                        }
+                                    ],
+                                    "subheadword": "indigente",
+                                    "idx": 2,
+                                    "context": "impoverished person",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "poor person",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "translationsDisplay": {
+                                                "texts": [ "poor person" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "La madre de los niños regalaba su ropa usada a los indigentes.", "The children's mother used to give away their old clothes to poor people." ] ]
+                                        },
+                                        {
+                                            "translation": "destitute person",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [ "destitute person" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "Ahora la iglesia da de comer a 300 indigentes cada semana.", "The church is now feeding 300 destitute people every week." ] ]
+                                        },
+                                        {
+                                            "translation": "indigent",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [ "indigent" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "c",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "La organización benéfica organiza una olla común para los indigentes y los sin techo.", "The charity runs a soup kitchen for the homeless and indigents." ] ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "masculine or feminine noun",
+                                "tooltip": {
+                                    "def": "This means that the noun can be masculine or feminine, depending on the gender of the noun it refers to (e.g., el doctor, la doctora).",
+                                    "href": "https:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fprofessions-in-spanish"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "indigente",
+            "regionChoice": "spain",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [ "een*dee*ˈhehn*teh" ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": { "linkedArticles": [] },
+    "searchBoxProps": {
+        "initialSearchText": "indigente",
+        "action": "translate",
+        "category": "translation",
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [ "take", "buddy", "get", "bear", "square", "escape", "live", "party" ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [ "bruh", "low-key", "chef's kiss", "baller", "let him cook", "tea", "mid" ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [ "witching hour", "break a leg", "in a nutshell", "it's raining cats and dogs" ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [ "ser vs estar", "por vs para", "saber vs conocer", "cabra vs chivo" ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 38502
+    },
+    "sdExamplesProps": {
+        "query": "indigente",
+        "originalQuery": "indigente",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": null,
+    "verbLang": "es",
+    "verbMoods": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "tenses": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "numNeodictTranslations": 7,
+    "partnerBacklinks": null,
+    "genericVideoHeadwordData": {
+        "id": 38502,
+        "source": "indigente",
+        "popularity": 1500
+    },
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 38502
+    }
+}

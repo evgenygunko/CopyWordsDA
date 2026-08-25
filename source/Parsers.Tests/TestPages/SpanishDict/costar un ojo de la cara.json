@@ -1,0 +1,502 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Fcostar%20un%20ojo%20de%20la%20cara",
+    "wordOfTheDayData": {
+        "wordSource": "limonada",
+        "wordDisplay": "la limonada",
+        "translationText": "lemonade",
+        "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=la-limonada&key=388e528f333a5e7a583c3aa9bcb0683e"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 92,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "d3fh33eu6ay0qj.cloudfront.net",
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "d1q4kshf6f0axi.cloudfront.net",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdAdHesion": true,
+        "sdIdentity": true,
+        "sdFreestar": false,
+        "sdCss": false,
+        "adhesionMarketingInt": 0,
+        "reduxlessVocabQuiz": null,
+        "documentTranslation": null,
+        "voiceTranslation": null,
+        "randomizedExperiments": {}
+    },
+    "serverNowAtPageview": 1692515329513,
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "costar un ojo de la cara",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Fcostar%20un%20ojo%20de%20la%20cara",
+            "path": "translate",
+            "token": "costar un ojo de la cara",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Fcostar%20un%20ojo%20de%20la%20cara",
+            "path": "examples",
+            "token": "costar un ojo de la cara",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Fcostar%20un%20ojo%20de%20la%20cara",
+            "path": "pronunciation",
+            "token": "costar un ojo de la cara",
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "costar un ojo de la cara",
+                "textToPronounce": "costar un ojo de la cara",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=costar-un-ojo-de-la-cara&key=688f1186e7a4b9380f699341a631dc05",
+                "pronunciations": [
+                    {
+                        "id": 45128,
+                        "ipa": "kos*ˈtaɾ un ˈo*xo ðe la ˈka*ɾa",
+                        "abc": "cos*ˈtar un ˈo*jo de la ˈca*ra",
+                        "spa": "kohs*ˈtahr oon ˈoh*hoh deh lah ˈkah*rah",
+                        "region": "LATAM",
+                        "hasVideo": 0,
+                        "speakerId": null,
+                        "version": null
+                    },
+                    {
+                        "id": 45129,
+                        "ipa": "kos*ˈtaɾ un ˈo*χo ðe la ˈka*ɾa",
+                        "abc": "cos*ˈtar un ˈo*jo de la ˈca*ra",
+                        "spa": "kohs*ˈtahr oon ˈoh*hoh deh lah ˈkah*rah",
+                        "region": "SPAIN",
+                        "hasVideo": 0,
+                        "speakerId": null,
+                        "version": null
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "to cost an arm and a leg",
+                "textToPronounce": "cost an arm and a leg",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=cost-an-arm-and-a-leg&key=6ae082542de33796b1cb6828ab0f0c3d",
+                "pronunciations": [
+                    {
+                        "id": 47901,
+                        "ipa": "kɑsɾ æn ɑɹm ænd eɪ lɛg",
+                        "abc": "cost an arm and a leg",
+                        "spa": "kasd ahn arm ahnd ey lehg",
+                        "region": "US",
+                        "hasVideo": 0,
+                        "speakerId": null,
+                        "version": null,
+                        "source": "cost an arm and a leg"
+                    },
+                    {
+                        "id": 47902,
+                        "ipa": "kɒst æn ɑm ænd eɪ lɛg",
+                        "abc": "cost an arm and a leg",
+                        "spa": "kast ahn am ahnd ey lehg",
+                        "region": "UK",
+                        "hasVideo": 0,
+                        "speakerId": null,
+                        "version": null,
+                        "source": "cost an arm and a leg"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 137494,
+                "source": "costar un ojo de la cara",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "chambers": "",
+            "collins": "",
+            "neodict": [
+                {
+                    "subheadword": "costar un ojo de la cara",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "vpi",
+                                "abbrEs": "vfi",
+                                "nameEn": "intransitive verb phrase",
+                                "nameEs": "frase verbal intransitiva"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "",
+                                    "contextEs": "",
+                                    "gender": null,
+                                    "id": 95218,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vpi",
+                                        "abbrEs": "vfi",
+                                        "nameEn": "intransitive verb phrase",
+                                        "nameEs": "frase verbal intransitiva"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [
+                                        {
+                                            "abbrEn": "idi",
+                                            "abbrEs": "mod",
+                                            "nameEn": "idiom",
+                                            "nameEs": "modismo"
+                                        }
+                                    ],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The television that you broke cost me an arm and a leg.",
+                                                    "textEs": "El televisor que rompiste me costó un ojo de la cara."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 155831,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [
+                                                {
+                                                    "abbrEn": "idi",
+                                                    "abbrEs": "mod",
+                                                    "nameEn": "idiom",
+                                                    "nameEs": "modismo"
+                                                }
+                                            ],
+                                            "translation": "to cost an arm and a leg"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "This leather jacket cost me a pretty penny, but I'm in love with it.",
+                                                    "textEs": "Esta chaqueta de cuero me costó un ojo de la cara, pero me encanta."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 155834,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [
+                                                {
+                                                    "abbrEn": "idi",
+                                                    "abbrEs": "mod",
+                                                    "nameEn": "idiom",
+                                                    "nameEs": "modismo"
+                                                }
+                                            ],
+                                            "translation": "to cost a pretty penny"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "That car costs a fortune. I can't afford it.",
+                                                    "textEs": "Ese coche cuesta un ojo de la cara. No puedo pagarlo."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 155835,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to cost a fortune"
+                                        }
+                                    ],
+                                    "subheadword": "costar un ojo de la cara",
+                                    "idx": 1,
+                                    "context": "general",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [
+                                        {
+                                            "name": "idiom",
+                                            "tooltip": null
+                                        }
+                                    ],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to cost an arm and a leg",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to cost an arm and a leg"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [
+                                                {
+                                                    "name": "idiom",
+                                                    "tooltip": null
+                                                }
+                                            ],
+                                            "examplesDisplay": [
+                                                [
+                                                    "El televisor que rompiste me costó un ojo de la cara.",
+                                                    "The television that you broke cost me an arm and a leg."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "to cost a pretty penny",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to cost a pretty penny"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [
+                                                {
+                                                    "name": "idiom",
+                                                    "tooltip": null
+                                                }
+                                            ],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Esta chaqueta de cuero me costó un ojo de la cara, pero me encanta.",
+                                                    "This leather jacket cost me a pretty penny, but I'm in love with it."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "to cost a fortune",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to cost a fortune"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "c",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Ese coche cuesta un ojo de la cara. No puedo pagarlo.",
+                                                    "That car costs a fortune. I can't afford it."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "intransitive verb phrase",
+                                "tooltip": {
+                                    "def": "An intransitive verb phrase is a phrase that combines a verb with a preposition or other particle and does not require a direct object (e.g. Everybody please stand up.)."
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "neoharrap": null,
+            "velazquez": ""
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "costar un ojo de la cara",
+            "regionChoice": "spain",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [
+                "kohs*ˈtahr oon ˈoh*hoh deh lah ˈkah*rah"
+            ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "adList": "[\"adTopLarge\",\"adSideVideo\",\"adSide1\",\"adSide2\",\"adSide3\",\"adMiddle2\"]",
+        "appendMiddleAdNeodict": false,
+        "appendMiddleAdChambers": false,
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": {
+        "usageNoteText": "This idiom may be literally translated as \"to cost an eye of your face.\"",
+        "linkedArticles": []
+    },
+    "searchBoxProps": {
+        "initialSearchText": "costar un ojo de la cara",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [
+                    "bae",
+                    "YOLO",
+                    "okurrr",
+                    "LOL",
+                    "my bad",
+                    "dude",
+                    "y'all",
+                    "wassup"
+                ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 137494
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "costar un ojo de la cara",
+        "originalQuery": "costar un ojo de la cara",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": null,
+    "verbLang": "es",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "lockedPremiumContentProps": null,
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 137494
+    }
+}

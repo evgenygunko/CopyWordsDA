@@ -9,6 +9,8 @@ using CopyWords.Core.Services.Wrappers;
 using CopyWords.Core.Validators;
 using CopyWords.Core.ViewModels;
 using CopyWords.MAUI.Services;
+using CopyWords.Parsers;
+using CopyWords.Parsers.Services;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
@@ -110,7 +112,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<IAnkiContentApi, AnkiContentApiWrapper>();
         builder.Services.AddSingleton(AppInfo.Current);
 
+        builder.Services.AddTransient<IDDOPageParser, DDOPageParser>();
+        builder.Services.AddTransient<ISpanishDictPageParser, SpanishDictPageParser>();
+        builder.Services.AddTransient<ILookUpWord, LookUpWord>();
+
         builder.Services.AddHttpClient<ITranslationsService, TranslationsService>();
+        builder.Services.AddHttpClient<IFileDownloader, FileDownloader>();
         builder.Services.AddHttpClient<IUpdateService, UpdateService>();
         builder.Services.AddHttpClient<IFileDownloaderService, FileDownloaderService>();
         builder.Services.AddHttpClient<IAnkiConnectService, AnkiConnectService>();

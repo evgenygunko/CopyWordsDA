@@ -1,0 +1,629 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Fwasapear",
+    "wordOfTheDayData": {
+        "image": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002Foriginal\u002F96053955-a467-4ae0-8368-2e409879626f.png",
+        "imageJPG": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002F400\u002F96053955-a467-4ae0-8368-2e409879626f.jpg",
+        "imageWEBP": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002F400\u002F96053955-a467-4ae0-8368-2e409879626f.webp",
+        "wordId": 31183,
+        "wordSource": "exhaustivo",
+        "wordDisplay": "exhaustivo",
+        "translationText": "comprehensive",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=exhaustivo&key=c3e93dcd4bcb90fc4ddbbdda97e276f9"
+    },
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 19,
+    "excludeAds": false,
+    "brandKey": "spanishdictionary",
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "audio-cdn.sdcdns.com",
+        "hegemoneAssetHost": "sd-hegemone-production.sdcdns.com",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "neodarwin-prod.sdcdns.com",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdIdentity": true,
+        "sdCss": false,
+        "sdAnimation": false,
+        "sdDictionaryVideoAd": false,
+        "sdCustomHouseSponsorship": true,
+        "adhesionMarketingInt": 0,
+        "rsBundleCheckoutCTACopy": "exp_get_my_bundle",
+        "randomizedExperiments": { "rs_bundle_checkout_cta_copy": "exp_get_my_bundle" }
+    },
+    "serverNowAtPageview": 1756496438514,
+    "pageCategory": "translation",
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "wasapear",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Fwasapear",
+            "path": "translate",
+            "token": "wasapear",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Conjugation",
+            "active": false,
+            "href": "\u002Fconjugate\u002Fwasapear",
+            "path": "conjugate",
+            "token": "wasapear",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Fwasapear",
+            "path": "examples",
+            "token": "wasapear",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "wasapear",
+                "textToPronounce": "wasapear",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=wasapear&key=600e4a514d41cc174cd04e9074619153",
+                "pronunciations": [],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "WhatsApp",
+                "textToPronounce": "WhatsApp",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=en&text=WhatsApp&key=1b50088e7d42996924a56bf43c961623",
+                "pronunciations": [
+                    {
+                        "id": 19352,
+                        "ipa": "ˈwəts*æp",
+                        "abc": "ˈWhats*App",
+                        "spa": "ˈwuhts*ahp",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "WhatsApp"
+                    },
+                    {
+                        "id": 19353,
+                        "ipa": "ˈwəts*æp",
+                        "abc": "ˈWhats*App",
+                        "spa": "ˈwuhts*ahp",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "WhatsApp"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 179545,
+                "source": "wasapear",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "neodict": [
+                {
+                    "subheadword": "wasapear",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "vtr",
+                                "abbrEs": "vtr",
+                                "nameEn": "transitive verb",
+                                "nameEs": "verbo transitivo",
+                                "sharedPosNameEn": "transitive verb"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "telecommunications",
+                                    "contextEs": "telecomunicaciones",
+                                    "gender": null,
+                                    "id": 162706,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "As soon as you get to the hotel, WhatsApp me a pic of the view from your room.",
+                                                    "textEs": "En cuanto llegues al hotel, wasapéame una foto de la vista de la habitación."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 264297,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [
+                                                {
+                                                    "abbrEn": "reg trad",
+                                                    "abbrEs": "mar reg",
+                                                    "nameEn": "registered trademark",
+                                                    "nameEs": "marca registrada"
+                                                }
+                                            ],
+                                            "translation": "WhatsApp"
+                                        }
+                                    ],
+                                    "subheadword": "wasapear",
+                                    "idx": 1,
+                                    "context": "telecommunications",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "WhatsApp",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "translationsDisplay": {
+                                                "texts": [ "WhatsApp" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [
+                                                {
+                                                    "name": "registered trademark",
+                                                    "tooltip": { "def": "A word or phrase that is a proprietary term owned by a brand (e.g., iPod)." }
+                                                }
+                                            ],
+                                            "examplesDisplay": [ [ "En cuanto llegues al hotel, wasapéame una foto de la vista de la habitación.", "As soon as you get to the hotel, WhatsApp me a pic of the view from your room." ] ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "transitive verb",
+                                "tooltip": {
+                                    "def": "A transitive verb is a verb that requires a direct object (e.g., I bought a book.).",
+                                    "href": "https:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "wasapear",
+            "regionChoice": "spain",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": { "linkedArticles": [] },
+    "searchBoxProps": {
+        "initialSearchText": "wasapear",
+        "action": "translate",
+        "category": "translation",
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [ "take", "buddy", "get", "bear", "square", "escape", "live", "party" ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [ "bruh", "low-key", "chef's kiss", "baller", "let him cook", "tea", "mid" ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [ "witching hour", "break a leg", "in a nutshell", "it's raining cats and dogs" ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [ "ser vs estar", "por vs para", "saber vs conocer", "cabra vs chivo" ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 179545
+    },
+    "sdExamplesProps": {
+        "query": "wasapear",
+        "originalQuery": "wasapear",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": {
+        "id": 179545,
+        "infinitive": "wasapear",
+        "matchedConjugation": "wasapear",
+        "isReflexive": 1,
+        "isReflexiveVariation": false,
+        "verbType": null,
+        "supportsConjugationDrills": 1,
+        "reason": "exact match",
+        "infinitiveTranslation": "WhatsApp",
+        "pastParticiple": {
+            "conjugationForms": [ "wasapeado" ],
+            "audioQueryString": "?lang=es&text=wasapeado&key=199312ceb90d0a13c68b0d7a0ad98baa"
+        },
+        "gerund": {
+            "conjugationForms": [ "wasapeando" ],
+            "audioQueryString": "?lang=es&text=wasapeando&key=2bd52dfa2f864e6a0ea75e48c6a09100"
+        },
+        "paradigms": {
+            "presentIndicative": [
+                {
+                    "conjugationForms": [ "wasapeo" ],
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=wasapeo&key=16de6ef6766e44ed4d6b9d61e9f5b8a3"
+                },
+                {
+                    "conjugationForms": [ "wasapeas" ],
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=wasapeas&key=fb82c319f929ca653f75bbd69a9bbc96"
+                },
+                {
+                    "conjugationForms": [ "wasapea" ],
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=wasapea&key=dd644eb04366c63e28ea8e13baf2b6d5"
+                },
+                {
+                    "conjugationForms": [ "wasapeamos" ],
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=wasapeamos&key=783d01a87a24223fe05f43a2f03e040d"
+                },
+                {
+                    "conjugationForms": [ "wasapeáis" ],
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=wasape%C3%A1is&key=e6fd27e49a2f7dd6fafbff5d69673cd4&region=spain"
+                },
+                {
+                    "conjugationForms": [ "wasapean" ],
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=wasapean&key=0a8aafaf220d67c19280fe34f71e6c5a"
+                },
+                {
+                    "conjugationForms": [ "wasapeás" ],
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=wasape%C3%A1s&key=9b85ecb1aba3baf47877b6dd3b3ca57b&region=latam"
+                }
+            ],
+            "preteritIndicative": [
+                {
+                    "conjugationForms": [ "wasapeé" ],
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=wasape%C3%A9&key=6c4c557330b5e32506fb4611d34d5fa6"
+                },
+                {
+                    "conjugationForms": [ "wasapeaste" ],
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=wasapeaste&key=31f2e89fb03701a7949e3280fc761248"
+                },
+                {
+                    "conjugationForms": [ "wasapeó" ],
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=wasape%C3%B3&key=5077872c4b3ac790e32e8114d57cca83"
+                },
+                {
+                    "conjugationForms": [ "wasapeamos" ],
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=wasapeamos&key=783d01a87a24223fe05f43a2f03e040d"
+                },
+                {
+                    "conjugationForms": [ "wasapeasteis" ],
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=wasapeasteis&key=f7ac00b5f7d06f9eb641863a84aaac17&region=spain&name=maria22k"
+                },
+                {
+                    "conjugationForms": [ "wasapearon" ],
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=wasapearon&key=4e3d1c4340bd4c2acde903e10753f88b"
+                },
+                {
+                    "conjugationForms": [ "wasapeaste" ],
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=wasapeaste&key=31f2e89fb03701a7949e3280fc761248&region=latam"
+                }
+            ],
+            "imperfectIndicative": [
+                {
+                    "conjugationForms": [ "wasapeaba" ],
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=wasapeaba&key=a2ea78b8adc7a517fa9ef30a38ab97a2"
+                },
+                {
+                    "conjugationForms": [ "wasapeabas" ],
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=wasapeabas&key=9d5670ef4ff6f60c910bef05eb48d34e"
+                },
+                {
+                    "conjugationForms": [ "wasapeaba" ],
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=wasapeaba&key=a2ea78b8adc7a517fa9ef30a38ab97a2"
+                },
+                {
+                    "conjugationForms": [ "wasapeábamos" ],
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=wasape%C3%A1bamos&key=c1c40b265214e47b93daa0e6862a43d4"
+                },
+                {
+                    "conjugationForms": [ "wasapeabais" ],
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=wasapeabais&key=7f189c4e599795d259cf403d03db4d08&region=spain"
+                },
+                {
+                    "conjugationForms": [ "wasapeaban" ],
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=wasapeaban&key=c37185d34249deb5a5a45762fc7a063d"
+                },
+                {
+                    "conjugationForms": [ "wasapeabas" ],
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=wasapeabas&key=9d5670ef4ff6f60c910bef05eb48d34e&region=latam"
+                }
+            ],
+            "conditionalIndicative": [
+                {
+                    "conjugationForms": [ "wasapearía" ],
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%ADa&key=afe68ce3382b236db3cdc1df39c6b898",
+                    "translationForms": [
+                        {
+                            "word": "would WhatsApp",
+                            "pronoun": "I"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapearías" ],
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%ADas&key=2142c5bc4189caf938435629244a1f50",
+                    "translationForms": [
+                        {
+                            "word": "would WhatsApp",
+                            "pronoun": "you"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapearía" ],
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%ADa&key=afe68ce3382b236db3cdc1df39c6b898",
+                    "translationForms": [
+                        {
+                            "word": "would WhatsApp",
+                            "pronoun": "he\u002Fshe"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapearíamos" ],
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%ADamos&key=248394814635a8865408dcb025e6226f",
+                    "translationForms": [
+                        {
+                            "word": "would WhatsApp",
+                            "pronoun": "we"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapearíais" ],
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%ADais&key=19550e3eb04d829ad611ca05222a335d&region=spain",
+                    "translationForms": [
+                        {
+                            "word": "would WhatsApp",
+                            "pronoun": "you"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapearían" ],
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%ADan&key=13f149568c712e27812e0852b07eca31",
+                    "translationForms": [
+                        {
+                            "word": "would WhatsApp",
+                            "pronoun": "they"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapearías" ],
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%ADas&key=2142c5bc4189caf938435629244a1f50&region=latam",
+                    "translationForms": [
+                        {
+                            "word": "would WhatsApp",
+                            "pronoun": "you"
+                        }
+                    ]
+                }
+            ],
+            "futureIndicative": [
+                {
+                    "conjugationForms": [ "wasapearé" ],
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%A9&key=b054cb47887381dafd9cde7be18c98c4",
+                    "translationForms": [
+                        {
+                            "word": "will WhatsApp",
+                            "pronoun": "I"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapearás" ],
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%A1s&key=f962f08008695ac10bf0b32f34e06df0",
+                    "translationForms": [
+                        {
+                            "word": "will WhatsApp",
+                            "pronoun": "you"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapeará" ],
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%A1&key=1a38f5bbfd78cb92ded3eca2512bd0c1",
+                    "translationForms": [
+                        {
+                            "word": "will WhatsApp",
+                            "pronoun": "he\u002Fshe"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapearemos" ],
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=wasapearemos&key=d404ac3cc3adc0e72e36e50c4b2b787f",
+                    "translationForms": [
+                        {
+                            "word": "will WhatsApp",
+                            "pronoun": "we"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapearéis" ],
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%A9is&key=fedac99926264745f29907d4871ad175&region=spain",
+                    "translationForms": [
+                        {
+                            "word": "will WhatsApp",
+                            "pronoun": "you"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapearán" ],
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%A1n&key=6df75e101f7b94ab8dd42a8bcabb1750",
+                    "translationForms": [
+                        {
+                            "word": "will WhatsApp",
+                            "pronoun": "they"
+                        }
+                    ]
+                },
+                {
+                    "conjugationForms": [ "wasapearás" ],
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=wasapear%C3%A1s&key=f962f08008695ac10bf0b32f34e06df0&region=latam",
+                    "translationForms": [
+                        {
+                            "word": "will WhatsApp",
+                            "pronoun": "you"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "verbLang": "es",
+    "verbMoods": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"wasapear\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "tenses": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "numNeodictTranslations": 1,
+    "partnerBacklinks": null,
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 179545
+    }
+}

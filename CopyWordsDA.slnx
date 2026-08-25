@@ -8,4 +8,6 @@
   </Project>
   <Project Path="source\CopyWords.Core\CopyWords.Core.csproj" />
   <Project Path="source\CopyWords.Core.Tests\CopyWords.Core.Tests.csproj" />
+  <Project Path="source\Parsers\Parsers.csproj" />
+  <Project Path="source\Parsers.Tests\Parsers.Tests.csproj" />
 </Solution>

@@ -1,0 +1,1565 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Fcoche",
+    "wordOfTheDayData": {
+        "wordSource": "vacío",
+        "wordDisplay": "vacío",
+        "translationText": "empty",
+        "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=vac%C3%ADo&key=a705f512aef9460512ba548d8ece6e32"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 21,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "d3fh33eu6ay0qj.cloudfront.net",
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "d1q4kshf6f0axi.cloudfront.net",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdPriceTestingLatam": false,
+        "coreWebVitals": true,
+        "sdIdentity": true,
+        "sdCss": false,
+        "adhesionMarketingInt": 1,
+        "sdDefer": false,
+        "reduxlessVocabQuiz": null,
+        "documentTranslation": null,
+        "voiceTranslation": null,
+        "randomizedExperiments": {}
+    },
+    "serverNowAtPageview": 1694333886245,
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "coche",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Fcoche",
+            "path": "translate",
+            "token": "coche",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Fcoche",
+            "path": "examples",
+            "token": "coche",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Fcoche",
+            "path": "pronunciation",
+            "token": "coche",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Fcoche",
+            "path": "thesaurus",
+            "token": "coche",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Phrases",
+            "active": false,
+            "href": "\u002Fphrases\u002Fcoche",
+            "path": "phrases",
+            "token": "coche",
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "coche",
+                "textToPronounce": "coche",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=coche&key=50cf86d5ef7480931fa3eeafa08bc742",
+                "pronunciations": [
+                    {
+                        "id": 932,
+                        "ipa": "ˈko*tʃe",
+                        "abc": "ˈco*che",
+                        "spa": "ˈkoh*cheh",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 933,
+                        "ipa": "ˈko*tʃe",
+                        "abc": "ˈco*che",
+                        "spa": "ˈkoh*cheh",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "car",
+                "textToPronounce": "car",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=car&key=2949840de271c4776f27507f0a2eb3f6",
+                "pronunciations": [
+                    {
+                        "id": 139,
+                        "ipa": "kɑ",
+                        "abc": "car",
+                        "spa": "ka",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "car"
+                    },
+                    {
+                        "id": 140,
+                        "ipa": "kɑɹ",
+                        "abc": "car",
+                        "spa": "kar",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "car"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 66642,
+                "source": "coche",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "chambers": "Do not client render",
+            "collins": "Do not client render",
+            "neodict": [
+                {
+                    "subheadword": "coche",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "n",
+                                "abbrEs": "s",
+                                "nameEn": "noun",
+                                "nameEs": "sustantivo"
+                            },
+                            "entryLang": "es",
+                            "gender": {
+                                "gender": "M"
+                            },
+                            "senses": [
+                                {
+                                    "contextEn": "vehicle",
+                                    "contextEs": "vehículo",
+                                    "gender": "M",
+                                    "id": 8212,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "My car won't start because of a problem with the engine.",
+                                                    "textEs": "Mi coche no prende porque tiene una falla en el motor."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 12002,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002F7e8cab6e-c0ca-48b4-9af7-e4cf1d4728fb.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "car"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "All these automobiles have airbags.",
+                                                    "textEs": "Todos estos coches tienen bolsas de aire."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 12003,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "automobile"
+                                        }
+                                    ],
+                                    "subheadword": "coche",
+                                    "idx": 1,
+                                    "context": "vehicle",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "car",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002F7e8cab6e-c0ca-48b4-9af7-e4cf1d4728fb.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "car"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Mi coche no prende porque tiene una falla en el motor.",
+                                                    "My car won't start because of a problem with the engine."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "automobile",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "automobile"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Todos estos coches tienen bolsas de aire.",
+                                                    "All these automobiles have airbags."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "vehicle led by horses",
+                                    "contextEs": "vehículo tirado por caballos",
+                                    "gender": "M",
+                                    "id": 8213,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The monarchs arrived in an elegant carriage.",
+                                                    "textEs": "Los monarcas llegaron en un coche elegante."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 12004,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "carriage"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Horse-drawn coaches were used much more before the invention of the automobile.",
+                                                    "textEs": "Los coches de caballos se utilizaban mucho más antes de que se inventara el automóvil."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 42063,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "coach"
+                                        }
+                                    ],
+                                    "subheadword": "coche",
+                                    "idx": 2,
+                                    "context": "vehicle led by horses",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "carriage",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "carriage"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Los monarcas llegaron en un coche elegante.",
+                                                    "The monarchs arrived in an elegant carriage."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "coach",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "coach"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Los coches de caballos se utilizaban mucho más antes de que se inventara el automóvil.",
+                                                    "Horse-drawn coaches were used much more before the invention of the automobile."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "train car",
+                                    "contextEs": "vagón del tren",
+                                    "gender": "M",
+                                    "id": 8214,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Your mother and I are going to the dining car to have lunch.",
+                                                    "textEs": "Tu mamá y yo vamos a pasar al coche comedor para almorzar."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 42062,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "US",
+                                                    "abbrEs": "EEUU",
+                                                    "nameEn": "United States",
+                                                    "nameEs": "Estados Unidos"
+                                                }
+                                            ],
+                                            "registerLabels": [],
+                                            "translation": "car"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "According to our train tickets, our seats are in coach F.",
+                                                    "textEs": "Según nuestros boletos del tren, nuestros asientos están en el coche F."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 12005,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "UK",
+                                                    "abbrEs": "RU",
+                                                    "nameEn": "United Kingdom",
+                                                    "nameEs": "Reino Unido"
+                                                }
+                                            ],
+                                            "registerLabels": [],
+                                            "translation": "coach"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The train carriages have air conditioning and very comfortable seats.",
+                                                    "textEs": "Los coches del tren tienen aire acondicionado y asientos muy cómodos."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 42061,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "UK",
+                                                    "abbrEs": "RU",
+                                                    "nameEn": "United Kingdom",
+                                                    "nameEs": "Reino Unido"
+                                                }
+                                            ],
+                                            "registerLabels": [],
+                                            "translation": "carriage"
+                                        }
+                                    ],
+                                    "subheadword": "coche",
+                                    "idx": 3,
+                                    "context": "train car",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "car",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "car"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United States",
+                                                    "tooltip": {
+                                                        "def": "Regionalism used in the United States"
+                                                    }
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Tu mamá y yo vamos a pasar al coche comedor para almorzar.",
+                                                    "Your mother and I are going to the dining car to have lunch."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "coach",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "coach"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United Kingdom",
+                                                    "tooltip": null
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Según nuestros boletos del tren, nuestros asientos están en el coche F.",
+                                                    "According to our train tickets, our seats are in coach F."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "carriage",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "carriage"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "c",
+                                            "context": "",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United Kingdom",
+                                                    "tooltip": null
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Los coches del tren tienen aire acondicionado y asientos muy cómodos.",
+                                                    "The train carriages have air conditioning and very comfortable seats."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "for babies",
+                                    "contextEs": "para bebés",
+                                    "gender": "M",
+                                    "id": 8215,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The little girl didn't want to get in her stroller. She wanted to walk.",
+                                                    "textEs": "La niñita no se quería subir al coche. Quería ir caminando."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 42064,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "stroller"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "They were taking a stroll through the park with the baby in her carriage.",
+                                                    "textEs": "Paseaban por el parque con el bebé en su coche."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 12006,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "US",
+                                                    "abbrEs": "EEUU",
+                                                    "nameEn": "United States",
+                                                    "nameEs": "Estados Unidos"
+                                                }
+                                            ],
+                                            "registerLabels": [],
+                                            "translation": "carriage"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Rocio wants a double pram to go for walks with her twins.",
+                                                    "textEs": "Rocío quiere un coche doble para pasear a sus gemelos."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 42065,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "UK",
+                                                    "abbrEs": "RU",
+                                                    "nameEn": "United Kingdom",
+                                                    "nameEs": "Reino Unido"
+                                                }
+                                            ],
+                                            "registerLabels": [],
+                                            "translation": "pram"
+                                        }
+                                    ],
+                                    "subheadword": "coche",
+                                    "idx": 4,
+                                    "context": "for babies",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "stroller",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "stroller"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "La niñita no se quería subir al coche. Quería ir caminando.",
+                                                    "The little girl didn't want to get in her stroller. She wanted to walk."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "carriage",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "carriage"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United States",
+                                                    "tooltip": {
+                                                        "def": "Regionalism used in the United States"
+                                                    }
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Paseaban por el parque con el bebé en su coche.",
+                                                    "They were taking a stroll through the park with the baby in her carriage."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "pram",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "pram"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "c",
+                                            "context": "",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United Kingdom",
+                                                    "tooltip": null
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Rocío quiere un coche doble para pasear a sus gemelos.",
+                                                    "Rocio wants a double pram to go for walks with her twins."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "masculine noun",
+                                "tooltip": {
+                                    "def": "A masculine noun is used with masculine articles and adjectives (e.g. el hombre guapo, el sol amarillo).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fmasculine-and-feminine-nouns"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "neoharrap": [
+                {
+                    "subheadword": "coche",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "n",
+                                "abbrEs": "s",
+                                "nameEn": "Noun",
+                                "nameEs": "Sustantivo"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "automóvil",
+                                    "gender": "M",
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "car",
+                                            "examples": []
+                                        },
+                                        {
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "US",
+                                                    "abbrEs": "EEUU",
+                                                    "nameEn": "United States",
+                                                    "nameEs": "Estados Unidos"
+                                                }
+                                            ],
+                                            "translation": "automobile",
+                                            "examples": [
+                                                {
+                                                    "textEs": "ir en coche",
+                                                    "textEn": "to go by car"
+                                                },
+                                                {
+                                                    "textEs": "viajar en coche",
+                                                    "textEn": "to travel by car"
+                                                },
+                                                {
+                                                    "textEs": "coche de alquiler",
+                                                    "textEn": "hire car"
+                                                },
+                                                {
+                                                    "textEs": "coche antiguo",
+                                                    "textEn": "vintage car"
+                                                },
+                                                {
+                                                    "textEs": "coche automático",
+                                                    "textEn": "automatic"
+                                                },
+                                                {
+                                                    "textEs": "coche bomba",
+                                                    "textEn": "car bomb"
+                                                },
+                                                {
+                                                    "textEs": "coche de bomberos",
+                                                    "textEn": "fire engine fire truck"
+                                                },
+                                                {
+                                                    "textEs": "coche de carreras",
+                                                    "textEn": "racing car"
+                                                },
+                                                {
+                                                    "textEs": "coche celular",
+                                                    "textEn": "police van"
+                                                },
+                                                {
+                                                    "textEs": "coches de choque",
+                                                    "textEn": "Dodgems®, bumper cars"
+                                                },
+                                                {
+                                                    "textEs": "coche deportivo",
+                                                    "textEn": "sports car"
+                                                },
+                                                {
+                                                    "textEs": "coche de empresa",
+                                                    "textEn": "company car"
+                                                },
+                                                {
+                                                    "textEs": "coche de época",
+                                                    "textEn": "vintage car"
+                                                },
+                                                {
+                                                    "textEs": "coche familiar",
+                                                    "textEn": "estate car"
+                                                },
+                                                {
+                                                    "textEs": "coche fúnebre",
+                                                    "textEn": "hearse"
+                                                },
+                                                {
+                                                    "textEs": "coche de ocasión",
+                                                    "textEn": "used car"
+                                                },
+                                                {
+                                                    "textEs": "coche patrulla",
+                                                    "textEn": "patrol car"
+                                                },
+                                                {
+                                                    "textEs": "coche de policía",
+                                                    "textEn": "police car"
+                                                },
+                                                {
+                                                    "textEs": "coche usado o de segunda mano",
+                                                    "textEn": "used car"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "regions": [],
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "Noun",
+                                        "nameEs": "Sustantivo"
+                                    },
+                                    "contextEs": "automóvil",
+                                    "subheadword": "coche",
+                                    "idx": 1,
+                                    "context": "automóvil",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "car",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "car"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": []
+                                        },
+                                        {
+                                            "translation": "automobile",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "automobile"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United States",
+                                                    "tooltip": {
+                                                        "def": "Regionalism used in the United States"
+                                                    }
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "ir en coche",
+                                                    "to go by car"
+                                                ],
+                                                [
+                                                    "viajar en coche",
+                                                    "to travel by car"
+                                                ],
+                                                [
+                                                    "coche de alquiler",
+                                                    "hire car"
+                                                ],
+                                                [
+                                                    "coche antiguo",
+                                                    "vintage car"
+                                                ],
+                                                [
+                                                    "coche automático",
+                                                    "automatic"
+                                                ],
+                                                [
+                                                    "coche bomba",
+                                                    "car bomb"
+                                                ],
+                                                [
+                                                    "coche de bomberos",
+                                                    "fire engine fire truck"
+                                                ],
+                                                [
+                                                    "coche de carreras",
+                                                    "racing car"
+                                                ],
+                                                [
+                                                    "coche celular",
+                                                    "police van"
+                                                ],
+                                                [
+                                                    "coches de choque",
+                                                    "Dodgems®, bumper cars"
+                                                ],
+                                                [
+                                                    "coche deportivo",
+                                                    "sports car"
+                                                ],
+                                                [
+                                                    "coche de empresa",
+                                                    "company car"
+                                                ],
+                                                [
+                                                    "coche de época",
+                                                    "vintage car"
+                                                ],
+                                                [
+                                                    "coche familiar",
+                                                    "estate car"
+                                                ],
+                                                [
+                                                    "coche fúnebre",
+                                                    "hearse"
+                                                ],
+                                                [
+                                                    "coche de ocasión",
+                                                    "used car"
+                                                ],
+                                                [
+                                                    "coche patrulla",
+                                                    "patrol car"
+                                                ],
+                                                [
+                                                    "coche de policía",
+                                                    "police car"
+                                                ],
+                                                [
+                                                    "coche usado o de segunda mano",
+                                                    "used car"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "de caballos",
+                                    "gender": "M",
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "carriage",
+                                            "examples": []
+                                        }
+                                    ],
+                                    "regions": [],
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "Noun",
+                                        "nameEs": "Sustantivo"
+                                    },
+                                    "contextEs": "de caballos",
+                                    "subheadword": "coche",
+                                    "idx": 2,
+                                    "context": "de caballos",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "carriage",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "carriage"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "de niño",
+                                    "gender": "M",
+                                    "translations": [
+                                        {
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "UK",
+                                                    "abbrEs": "RU",
+                                                    "nameEn": "United Kingdom",
+                                                    "nameEs": "Reino Unido"
+                                                }
+                                            ],
+                                            "translation": "pram",
+                                            "examples": []
+                                        },
+                                        {
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "US",
+                                                    "abbrEs": "EEUU",
+                                                    "nameEn": "United States",
+                                                    "nameEs": "Estados Unidos"
+                                                }
+                                            ],
+                                            "translation": "baby carriage",
+                                            "examples": []
+                                        }
+                                    ],
+                                    "regions": [],
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "Noun",
+                                        "nameEs": "Sustantivo"
+                                    },
+                                    "contextEs": "de niño",
+                                    "subheadword": "coche",
+                                    "idx": 3,
+                                    "context": "de niño",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "pram",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "pram"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United Kingdom",
+                                                    "tooltip": null
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": []
+                                        },
+                                        {
+                                            "translation": "baby carriage",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "baby carriage"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United States",
+                                                    "tooltip": {
+                                                        "def": "Regionalism used in the United States"
+                                                    }
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "de tren",
+                                    "gender": "M",
+                                    "translations": [
+                                        {
+                                            "regions": [],
+                                            "translation": "coach",
+                                            "examples": []
+                                        },
+                                        {
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "UK",
+                                                    "abbrEs": "RU",
+                                                    "nameEn": "United Kingdom",
+                                                    "nameEs": "Reino Unido"
+                                                }
+                                            ],
+                                            "translation": "carriage",
+                                            "examples": []
+                                        },
+                                        {
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "US",
+                                                    "abbrEs": "EEUU",
+                                                    "nameEn": "United States",
+                                                    "nameEs": "Estados Unidos"
+                                                }
+                                            ],
+                                            "translation": "car",
+                                            "examples": [
+                                                {
+                                                    "textEs": "coche cama",
+                                                    "textEn": "sleeping car, sleeper"
+                                                },
+                                                {
+                                                    "textEs": "coche restaurante",
+                                                    "textEn": "restaurant o dining car"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "regions": [],
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "Noun",
+                                        "nameEs": "Sustantivo"
+                                    },
+                                    "contextEs": "de tren",
+                                    "subheadword": "coche",
+                                    "idx": 4,
+                                    "context": "de tren",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "coach",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "coach"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": []
+                                        },
+                                        {
+                                            "translation": "carriage",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "carriage"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United Kingdom",
+                                                    "tooltip": null
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": []
+                                        },
+                                        {
+                                            "translation": "car",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "car"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "c",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United States",
+                                                    "tooltip": {
+                                                        "def": "Regionalism used in the United States"
+                                                    }
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "coche cama",
+                                                    "sleeping car, sleeper"
+                                                ],
+                                                [
+                                                    "coche restaurante",
+                                                    "restaurant o dining car"
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "Noun",
+                                "tooltip": {
+                                    "def": "A noun is a word referring to a person, animal, place, thing, feeling or idea (e.g. man, dog, house).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fmasculine-and-feminine-nouns"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "velazquez": ""
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "coche",
+            "regionChoice": "spain",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [
+                "ˈkoh*cheh"
+            ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": {
+        "linkedArticles": [
+            {
+                "title": "\"Car\" in Spanish",
+                "slug": "car-in-spanish",
+                "lang": "en",
+                "publishedAt": "2022-09-23T20:44:35.000Z",
+                "quizId": null,
+                "quizSlug": null
+            }
+        ]
+    },
+    "searchBoxProps": {
+        "initialSearchText": "coche",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [
+                    "bae",
+                    "YOLO",
+                    "okurrr",
+                    "LOL",
+                    "my bad",
+                    "dude",
+                    "y'all",
+                    "wassup"
+                ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [
+        {
+            "source": "lavar el coche",
+            "sourceAudioQueryString": "?lang=es&text=lavar-el-coche&key=165e1326378a5acc70befb1311d4302a&region=spain",
+            "quickdef": "to wash the car",
+            "quickdefAudioQueryString": "?lang=en&text=to-wash-the-car&key=4573bf9c8f14f0bf1a033a3f88e8546e&region=us",
+            "quickdef1": "to wash the car",
+            "quickdef1AudioQueryString": "?lang=en&text=to-wash-the-car&key=4573bf9c8f14f0bf1a033a3f88e8546e&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "en coche",
+            "sourceAudioQueryString": "?lang=es&text=en-coche&key=1e2becab52381e7bbcf248808843833e&region=spain",
+            "quickdef": "by car",
+            "quickdefAudioQueryString": "?lang=en&text=by-car&key=f9fc63572bed0e513cdd71dd4457d604&region=us",
+            "quickdef1": "by car",
+            "quickdef1AudioQueryString": "?lang=en&text=by-car&key=f9fc63572bed0e513cdd71dd4457d604&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "coche-comedor",
+            "sourceAudioQueryString": "?lang=es&text=coche-comedor&key=9312d8377ca88cddafc654c82cc0085a&region=spain",
+            "quickdef": "dining car",
+            "quickdefAudioQueryString": "?lang=en&text=dining-car&key=e9085731ac5d768d42e4e175b01f9716&region=us",
+            "quickdef1": "dining car",
+            "quickdef1AudioQueryString": "?lang=en&text=dining-car&key=e9085731ac5d768d42e4e175b01f9716&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "coche comedor",
+            "sourceAudioQueryString": "?lang=es&text=coche-comedor&key=9312d8377ca88cddafc654c82cc0085a&region=spain",
+            "quickdef": "dining car",
+            "quickdefAudioQueryString": "?lang=en&text=dining-car&key=e9085731ac5d768d42e4e175b01f9716&region=us",
+            "quickdef1": "dining car",
+            "quickdef1AudioQueryString": "?lang=en&text=dining-car&key=e9085731ac5d768d42e4e175b01f9716&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "coche deportivo",
+            "sourceAudioQueryString": "?lang=es&text=coche-deportivo&key=38edf6076c83e519a06b08cc84d0f80c&region=spain",
+            "quickdef": "sports car",
+            "quickdefAudioQueryString": "?lang=en&text=sports-car&key=e1b3822bd08cbbd21e77e9bebdfa3f3e&region=us",
+            "quickdef1": "sports car",
+            "quickdef1AudioQueryString": "?lang=en&text=sports-car&key=e1b3822bd08cbbd21e77e9bebdfa3f3e&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "persona que maneja el coche",
+            "sourceAudioQueryString": "?lang=es&text=persona-que-maneja-el-coche&key=29b8c9eeff5f54c5e616a08b60479bed&region=spain",
+            "quickdef": "person who drives the car",
+            "quickdefAudioQueryString": "?lang=en&text=person-who-drives-the-car&key=2a9187869aa795d5b0f2148b262242cd&region=us",
+            "quickdef1": "person who drives the car",
+            "quickdef1AudioQueryString": "?lang=en&text=person-who-drives-the-car&key=2a9187869aa795d5b0f2148b262242cd&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "coche-cama",
+            "sourceAudioQueryString": "?lang=es&text=coche-cama&key=2cfbfd9e02dffeff1f09a27ccce95817&region=spain",
+            "quickdef": "sleeper",
+            "quickdefAudioQueryString": "?lang=en&text=sleeper&key=7ad1f76653fd508e411e322b7af6abb6&region=us",
+            "quickdef1": "sleeper",
+            "quickdef1AudioQueryString": "?lang=en&text=sleeper&key=7ad1f76653fd508e411e322b7af6abb6&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "coche cama",
+            "sourceAudioQueryString": "?lang=es&text=coche-cama&key=2cfbfd9e02dffeff1f09a27ccce95817&region=spain",
+            "quickdef": "sleeping car",
+            "quickdefAudioQueryString": "?lang=en&text=sleeping-car&key=325a7cc1aa8ce00788d1daf7eb4318f8&region=us",
+            "quickdef1": "sleeping car",
+            "quickdef1AudioQueryString": "?lang=en&text=sleeping-car&key=325a7cc1aa8ce00788d1daf7eb4318f8&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "es la acción de prender un coche",
+            "sourceAudioQueryString": "?lang=es&text=es-la-acci%C3%B3n-de-prender-un-coche&key=7dd55f3231ffc83868fa4b9437445892&region=spain",
+            "quickdef": "it's the act of turning on a car",
+            "quickdefAudioQueryString": "?lang=en&text=it's-the-act-of-turning-on-a-car&key=643d25b16eea35e37533340785f01653&region=us",
+            "quickdef1": "it's the act of turning on a car",
+            "quickdef1AudioQueryString": "?lang=en&text=it's-the-act-of-turning-on-a-car&key=643d25b16eea35e37533340785f01653&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "alquilar un coche",
+            "sourceAudioQueryString": "?lang=es&text=alquilar-un-coche&key=d87d8167c40821dc5682aa52f1e2b9d0&region=spain",
+            "quickdef": "to rent a car",
+            "quickdefAudioQueryString": "?lang=en&text=to-rent-a-car&key=929a96d4116504e623aadc3d340c040b&region=us",
+            "quickdef1": "to rent a car",
+            "quickdef1AudioQueryString": "?lang=en&text=to-rent-a-car&key=929a96d4116504e623aadc3d340c040b&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "su coche",
+            "sourceAudioQueryString": "?lang=es&text=su-coche&key=1a0f7c17ef65d0216959d822d8d0103e&region=spain",
+            "quickdef": "his car",
+            "quickdefAudioQueryString": "?lang=en&text=his-car&key=7ad292acbc8191463d039cdf307d3621&region=us",
+            "quickdef1": "his car",
+            "quickdef1AudioQueryString": "?lang=en&text=his-car&key=7ad292acbc8191463d039cdf307d3621&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "mi coche",
+            "sourceAudioQueryString": "?lang=es&text=mi-coche&key=c85f7d9d1ac9a7bc358fe199503160d5&region=spain",
+            "quickdef": "my car",
+            "quickdefAudioQueryString": "?lang=en&text=my-car&key=6b6b5b58d881d3baa875c75a20b0da82&region=us",
+            "quickdef1": "my car",
+            "quickdef1AudioQueryString": "?lang=en&text=my-car&key=6b6b5b58d881d3baa875c75a20b0da82&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "coche nuevo",
+            "sourceAudioQueryString": "?lang=es&text=coche-nuevo&key=5b39a540214abc7269fd599b3fb427c2&region=spain",
+            "quickdef": "new car",
+            "quickdefAudioQueryString": "?lang=en&text=new-car&key=cd241847f8e716b4e3756945873c96a7&region=us",
+            "quickdef1": "new car",
+            "quickdef1AudioQueryString": "?lang=en&text=new-car&key=cd241847f8e716b4e3756945873c96a7&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "Ernesto quita el coche de la sala",
+            "sourceAudioQueryString": "?lang=es&text=Ernesto-quita-el-coche-de-la-sala&key=978ea58c9a94c5614447a300997b9c53&region=spain",
+            "quickdef": "Ernesto moves the car from the living room",
+            "quickdefAudioQueryString": "?lang=en&text=Ernesto-moves-the-car-from-the-living-room&key=195321f153f90fffaf303196607bcf56&region=us",
+            "quickdef1": "Ernesto moves the car from the living room",
+            "quickdef1AudioQueryString": "?lang=en&text=Ernesto-moves-the-car-from-the-living-room&key=195321f153f90fffaf303196607bcf56&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "otra palabra para \"coche\" es",
+            "sourceAudioQueryString": "?lang=es&text=otra-palabra-para-coche-es&key=3994ee155fec5bbfbb3b89fbe15b0f01&region=spain",
+            "quickdef": "another word for \"car\" is",
+            "quickdefAudioQueryString": "?lang=en&text=another-word-for-car-is&key=c32ff1371c925d3687f2d0a96848d84f&region=us",
+            "quickdef1": "another word for \"car\" is",
+            "quickdef1AudioQueryString": "?lang=en&text=another-word-for-car-is&key=c32ff1371c925d3687f2d0a96848d84f&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "el coche está sucio",
+            "sourceAudioQueryString": "?lang=es&text=el-coche-est%C3%A1-sucio&key=36af207390814f125eb586c5f47f5f91&region=spain",
+            "quickdef": "the car is dirty",
+            "quickdefAudioQueryString": "?lang=en&text=the-car-is-dirty&key=77272a97694b79daf6c9cd7c96af81b0&region=us",
+            "quickdef1": "the car is dirty",
+            "quickdef1AudioQueryString": "?lang=en&text=the-car-is-dirty&key=77272a97694b79daf6c9cd7c96af81b0&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "el motor del coche está cubierto con esto",
+            "sourceAudioQueryString": "?lang=es&text=el-motor-del-coche-est%C3%A1-cubierto-con-esto&key=ec76be1f919a5ab6d978ec47bbb53bf9&region=spain",
+            "quickdef": "the car engine is covered with this",
+            "quickdefAudioQueryString": "?lang=en&text=the-car-engine-is-covered-with-this&key=68f4a273814fb5df96dc1531eb9b96f6&region=us",
+            "quickdef1": "the car engine is covered with this",
+            "quickdef1AudioQueryString": "?lang=en&text=the-car-engine-is-covered-with-this&key=68f4a273814fb5df96dc1531eb9b96f6&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "coche-bomba",
+            "sourceAudioQueryString": "?lang=es&text=coche-bomba&key=a74dca4437408bd5a1f92f52dc201a89&region=spain",
+            "quickdef": "car bomb",
+            "quickdefAudioQueryString": "?lang=en&text=car-bomb&key=5b45dfb1a9a5682bb96d42897a990da1&region=us",
+            "quickdef1": "car bomb",
+            "quickdef1AudioQueryString": "?lang=en&text=car-bomb&key=5b45dfb1a9a5682bb96d42897a990da1&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "coche cafetería",
+            "sourceAudioQueryString": "?lang=es&text=coche-cafeter%C3%ADa&key=d0b984f90597df06dcc227806d4a051e&region=spain",
+            "quickdef": "cafe car",
+            "quickdefAudioQueryString": "?lang=en&text=cafe-car&key=19343d28521dc5126e8b316611742c8b&region=us",
+            "quickdef1": "cafe car",
+            "quickdef1AudioQueryString": "?lang=en&text=cafe-car&key=19343d28521dc5126e8b316611742c8b&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "accidente de coche",
+            "sourceAudioQueryString": "?lang=es&text=accidente-de-coche&key=0dae342d0d21360da3da679468a86e1e&region=spain",
+            "quickdef": "car accident",
+            "quickdefAudioQueryString": "?lang=en&text=car-accident&key=14011a88228442c2cf9a152f057ca538&region=us",
+            "quickdef1": "car accident",
+            "quickdef1AudioQueryString": "?lang=en&text=car-accident&key=14011a88228442c2cf9a152f057ca538&region=us",
+            "quickdef2AudioQueryString": null
+        }
+    ],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 66642
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "coche",
+        "originalQuery": "coche",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": null,
+    "verbLang": "es",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "lockedPremiumContentProps": null,
+    "adList": "[\"adTopLarge\",\"adSideVideo\",\"adSide1\",\"adSide2\",\"adSide3\",\"adMiddle2\",\"adMiddle1\"]",
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 66642
+    }
+}

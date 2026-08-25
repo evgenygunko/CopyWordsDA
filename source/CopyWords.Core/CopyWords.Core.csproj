@@ -36,4 +36,8 @@
     </PackageReference>
     <PackageReference Include="SixLabors.ImageSharp" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Parsers\Parsers.csproj" />
+  </ItemGroup>
 </Project>

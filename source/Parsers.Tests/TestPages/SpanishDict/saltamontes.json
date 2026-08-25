@@ -1,0 +1,422 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Fsaltamontes",
+    "wordOfTheDayData": {
+        "wordId": 27776,
+        "wordSource": "endulzar",
+        "wordDisplay": "endulzar",
+        "image": "https:\u002F\u002Fd25rq8gxcq0p71.cloudfront.net\u002Fios-wotd-images\u002Foriginal\u002F804a9b05-e0cd-4e94-8020-29d9ce878939.png",
+        "translationText": "to sweeten",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=endulzar&key=fcae0377e838bd5a077a930dd6daa19a"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 21,
+    "excludeAds": false,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "d3fh33eu6ay0qj.cloudfront.net",
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "d1q4kshf6f0axi.cloudfront.net",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "coreWebVitals": true,
+        "sdIdentity": true,
+        "sdPrimisTest": false,
+        "sdCss": false,
+        "sdParty": false,
+        "sdAnimation": false,
+        "sdVocabVoice": false,
+        "adhesionMarketingInt": 0,
+        "translateEverythingSlideCopy": "crl_document_image_prioritized",
+        "randomizedExperiments": {
+            "translate_everything_slide_copy": "crl_document_image_prioritized"
+        }
+    },
+    "serverNowAtPageview": 1716195374419,
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "saltamontes",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Fsaltamontes",
+            "path": "translate",
+            "token": "saltamontes",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Fsaltamontes",
+            "path": "examples",
+            "token": "saltamontes",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Fsaltamontes",
+            "path": "pronunciation",
+            "token": "saltamontes",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Fsaltamontes",
+            "path": "thesaurus",
+            "token": "saltamontes",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Phrases",
+            "active": false,
+            "href": "\u002Fphrases\u002Fsaltamontes",
+            "path": "phrases",
+            "token": "saltamontes",
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "saltamontes",
+                "textToPronounce": "saltamontes",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=saltamontes&key=dad0caa78662073caaf8d657e5b510f8",
+                "pronunciations": [
+                    {
+                        "id": 36259,
+                        "ipa": "sal*ta*ˈmon*tes",
+                        "abc": "sal*ta*ˈmon*tes",
+                        "spa": "sahl*tah*ˈmohn*tehs",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 36260,
+                        "ipa": "sal*ta*ˈmon*tes",
+                        "abc": "sal*ta*ˈmon*tes",
+                        "spa": "sahl*tah*ˈmohn*tehs",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "grasshopper",
+                "textToPronounce": "grasshopper",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=grasshopper&key=014c7c7bd5b9abb8138cc181216e933b",
+                "pronunciations": [
+                    {
+                        "id": 3871,
+                        "ipa": "ˈgɹæs*hɑ*pəɹ",
+                        "abc": "ˈgrass*ho*pper",
+                        "spa": "ˈgrahs*ha*puhr",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "grasshopper"
+                    },
+                    {
+                        "id": 3872,
+                        "ipa": "ˈgɹɑs*hɒ*pə",
+                        "abc": "ˈgrass*ho*pper",
+                        "spa": "ˈgras*ha*puh",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "grasshopper"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 58979,
+                "source": "saltamontes",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "neodict": [
+                {
+                    "subheadword": "saltamontes",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "n",
+                                "abbrEs": "s",
+                                "nameEn": "noun",
+                                "nameEs": "sustantivo"
+                            },
+                            "entryLang": "es",
+                            "gender": {
+                                "gender": "M"
+                            },
+                            "senses": [
+                                {
+                                    "contextEn": "animal",
+                                    "contextEs": "animal",
+                                    "gender": "M",
+                                    "id": 21947,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Grasshoppers can jump really high.",
+                                                    "textEs": "Los saltamontes pueden saltar muy alto."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 35165,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002F5bf100e5-da54-4be6-a55c-281edcd08b10.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "grasshopper"
+                                        }
+                                    ],
+                                    "subheadword": "saltamontes",
+                                    "idx": 1,
+                                    "context": "animal",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "grasshopper",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002F5bf100e5-da54-4be6-a55c-281edcd08b10.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "grasshopper"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Los saltamontes pueden saltar muy alto.",
+                                                    "Grasshoppers can jump really high."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "masculine noun",
+                                "tooltip": {
+                                    "def": "A masculine noun is used with masculine articles and adjectives (e.g. el hombre guapo, el sol amarillo).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fmasculine-and-feminine-nouns"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "saltamontes",
+            "regionChoice": "spain",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [
+                "sahl*tah*ˈmohn*tehs"
+            ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": {
+        "usageNoteText": "The plural of \"saltamontes\" is \"saltamontes.\"",
+        "linkedArticles": []
+    },
+    "searchBoxProps": {
+        "initialSearchText": "saltamontes",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [
+                    "bae",
+                    "YOLO",
+                    "okurrr",
+                    "LOL",
+                    "my bad",
+                    "dude",
+                    "y'all",
+                    "wassup"
+                ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [
+        {
+            "source": "La hormiga y el saltamontes",
+            "sourceAudioQueryString": "?lang=es&text=La-hormiga-y-el-saltamontes&key=45b953f8f75c30cbdae0dd12a7918746&region=spain",
+            "quickdef": "The Ant and the Grasshopper",
+            "quickdefAudioQueryString": "?lang=en&text=The-Ant-and-the-Grasshopper&key=a5fc1e2423a6ef89cd06b94c0a25852d&region=us",
+            "quickdef1": "The Ant and the Grasshopper",
+            "quickdef1AudioQueryString": "?lang=en&text=The-Ant-and-the-Grasshopper&key=a5fc1e2423a6ef89cd06b94c0a25852d&region=us",
+            "quickdef2AudioQueryString": null
+        }
+    ],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 58979
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "saltamontes",
+        "originalQuery": "saltamontes",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": null,
+    "verbLang": "es",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "lockedPremiumContentProps": null,
+    "adList": "[\"adTopLarge\",\"adSide1\",\"adSide3\",\"adMiddle2\"]",
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 58979
+    }
+}

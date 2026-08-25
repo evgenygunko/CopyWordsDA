@@ -12,6 +12,7 @@
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
     <PackageVersion Include="FluentAssertions" Version="[7.*, 8)" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
+    <PackageVersion Include="HtmlAgilityPack" Version="1.13.0" />
     <PackageVersion Include="LaunchDarkly.ClientSdk" Version="5.9.6" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.11" />
     <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.100" />

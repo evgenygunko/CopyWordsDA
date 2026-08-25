@@ -1,0 +1,507 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Fascensor",
+    "wordOfTheDayData": {
+        "image": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002Foriginal\u002F0342bd4b-bcfd-41ee-b898-c826940a5723.png",
+        "imageJPG": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002F400\u002F0342bd4b-bcfd-41ee-b898-c826940a5723.jpg",
+        "imageWEBP": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002F400\u002F0342bd4b-bcfd-41ee-b898-c826940a5723.webp",
+        "wordId": 4745,
+        "wordSource": "alumbrar",
+        "wordDisplay": "alumbrar",
+        "translationText": "to light",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=alumbrar&key=c4b9e781a7787971dd855afeaede0a09"
+    },
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 19,
+    "excludeAds": false,
+    "brandKey": "spanishdictionary",
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "audio-cdn.sdcdns.com",
+        "hegemoneAssetHost": "sd-hegemone-production.sdcdns.com",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "neodarwin-prod.sdcdns.com",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdIdentity": true,
+        "sdCss": false,
+        "sdAnimation": false,
+        "sdIcvExpansion": false,
+        "sdPQDebug": false,
+        "adhesionMarketingInt": 2,
+        "randomizedExperiments": {}
+    },
+    "serverNowAtPageview": 1765031397263,
+    "pageCategory": "translation",
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "ascensor",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Fascensor",
+            "path": "translate",
+            "token": "ascensor",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Fascensor",
+            "path": "examples",
+            "token": "ascensor",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Fascensor",
+            "path": "pronunciation",
+            "token": "ascensor",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Fascensor",
+            "path": "thesaurus",
+            "token": "ascensor",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Phrases",
+            "active": false,
+            "href": "\u002Fphrases\u002Fascensor",
+            "path": "phrases",
+            "token": "ascensor",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "ascensor",
+                "textToPronounce": "ascensor",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=ascensor&key=22fff9778a11b3afa468ea46435ac322",
+                "pronunciations": [
+                    {
+                        "id": 415,
+                        "ipa": "a*sen*ˈsoɾ",
+                        "abc": "a*scen*ˈsor",
+                        "spa": "ah*sehn*ˈsohr",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 13590,
+                        "ipa": "as*θen*ˈsoɾ",
+                        "abc": "as*cen*ˈsor",
+                        "spa": "ahs*thehn*ˈsohr",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "elevator",
+                "textToPronounce": "elevator",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=en&text=elevator&key=b883ff43cb534be5c5fac03566159592",
+                "pronunciations": [
+                    {
+                        "id": 3229,
+                        "ipa": "ˈɛ*lə*veɪ*ɾəɹ",
+                        "abc": "ˈe*le*va*tor",
+                        "spa": "ˈeh*luh*vey*duhr",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "elevator"
+                    },
+                    {
+                        "id": 3230,
+                        "ipa": "ˈɛ*lɪ*veɪ*tɔ",
+                        "abc": "ˈe*le*va*tor",
+                        "spa": "ˈeh*lih*vey*taw",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "elevator"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 1567,
+                "source": "ascensor",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "neodict": [
+                {
+                    "subheadword": "el ascensor",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "n",
+                                "abbrEs": "s",
+                                "nameEn": "noun",
+                                "nameEs": "sustantivo",
+                                "sharedPosNameEn": "noun"
+                            },
+                            "entryLang": "es",
+                            "gender": { "gender": "M" },
+                            "senses": [
+                                {
+                                    "contextEn": "",
+                                    "contextEs": "",
+                                    "gender": "M",
+                                    "id": 11021,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [
+                                        {
+                                            "abbrEn": "Carib",
+                                            "abbrEs": "Carib",
+                                            "nameEn": "Caribbean",
+                                            "nameEs": "Caribe"
+                                        },
+                                        {
+                                            "abbrEn": "Mex",
+                                            "abbrEs": "Mex",
+                                            "nameEn": "Mexico",
+                                            "nameEs": "México"
+                                        },
+                                        {
+                                            "abbrEn": "SoAm",
+                                            "abbrEs": "SurAm",
+                                            "nameEn": "South America",
+                                            "nameEs": "Suramérica"
+                                        },
+                                        {
+                                            "abbrEn": "Spain",
+                                            "abbrEs": "Esp",
+                                            "nameEn": "Spain",
+                                            "nameEs": "España"
+                                        }
+                                    ],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The elevator is out of service.",
+                                                    "textEs": "El ascensor no funciona."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 16547,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002FElevator%20%28a%29.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "US",
+                                                    "abbrEs": "EEUU",
+                                                    "nameEn": "United States",
+                                                    "nameEs": "Estados Unidos"
+                                                }
+                                            ],
+                                            "registerLabels": [],
+                                            "translation": "elevator"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "I only use the lift when I'm tired.",
+                                                    "textEs": "Solo uso el ascensor cuando estoy cansado."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 16546,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "UK",
+                                                    "abbrEs": "RU",
+                                                    "nameEn": "United Kingdom",
+                                                    "nameEs": "Reino Unido"
+                                                }
+                                            ],
+                                            "registerLabels": [],
+                                            "translation": "lift"
+                                        }
+                                    ],
+                                    "subheadword": "ascensor",
+                                    "idx": 1,
+                                    "context": "general",
+                                    "regionsDisplay": [
+                                        {
+                                            "name": "Caribbean",
+                                            "tooltip": { "def": "Regionalism used in the Caribbean: Cuba, the Dominican Republic, and Puerto Rico" }
+                                        },
+                                        {
+                                            "name": "Mexico",
+                                            "tooltip": { "def": "Regionalism used in Mexico" }
+                                        },
+                                        {
+                                            "name": "South America",
+                                            "tooltip": { "def": "Regionalism used in South America: Argentina, Bolivia, Chile, Colombia, Ecuador, Paraguay, Peru, Uruguay, and Venezuela" }
+                                        },
+                                        {
+                                            "name": "Spain",
+                                            "tooltip": { "def": "Regionalism used in Spain" }
+                                        }
+                                    ],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "elevator",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002FElevator%20%28a%29.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [ "elevator" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United States",
+                                                    "tooltip": { "def": "Regionalism used in the United States" }
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "El ascensor no funciona.", "The elevator is out of service." ] ]
+                                        },
+                                        {
+                                            "translation": "lift",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [ "lift" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United Kingdom",
+                                                    "tooltip": { "def": "Regionalism used in the United Kingdom" }
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "Solo uso el ascensor cuando estoy cansado.", "I only use the lift when I'm tired." ] ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "masculine noun",
+                                "tooltip": {
+                                    "def": "A masculine noun is used with masculine articles and adjectives (e.g., el hombre guapo, el sol amarillo).",
+                                    "href": "https:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fmasculine-and-feminine-nouns"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "ascensor",
+            "regionChoice": "spain",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [ "ahs*thehn*ˈsohr" ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": { "linkedArticles": [] },
+    "searchBoxProps": {
+        "initialSearchText": "ascensor",
+        "action": "translate",
+        "category": "translation",
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [ "take", "buddy", "get", "bear", "square", "escape", "live", "party" ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [ "bruh", "low-key", "chef's kiss", "baller", "let him cook", "tea", "mid" ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [ "witching hour", "break a leg", "in a nutshell", "it's raining cats and dogs" ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [ "ser vs estar", "por vs para", "saber vs conocer", "cabra vs chivo" ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [
+        {
+            "source": "es posible bajar en el ascensor o en la escalera",
+            "sourceAudioQueryString": "?lang=es&text=es-posible-bajar-en-el-ascensor-o-en-la-escalera&key=2ff6fdff558b0cbaa798b6647327bf37&region=spain",
+            "quickdef": "you can go down using the elevator or the stairs",
+            "quickdefAudioQueryString": "?lang=en&text=you-can-go-down-using-the-elevator-or-the-stairs&key=74bd3735e67d42fd331b7be0356c4fdf&region=us",
+            "quickdef1": "you can go down using the elevator or the stairs",
+            "quickdef1AudioQueryString": "?lang=en&text=you-can-go-down-using-the-elevator-or-the-stairs&key=74bd3735e67d42fd331b7be0356c4fdf&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "es posible subir en el ascensor o por la escalera",
+            "sourceAudioQueryString": "?lang=es&text=es-posible-subir-en-el-ascensor-o-por-la-escalera&key=d08bf862a1c25e55809fcbfe628d00a9&region=spain",
+            "quickdef": "it's possible to go up in the elevator or walk up the stairs",
+            "quickdefAudioQueryString": "?lang=en&text=it's-possible-to-go-up-in-the-elevator-or-walk-up-the-stairs&key=5c9af5365058654b01deed66656fa52f&region=us",
+            "quickdef1": "it's possible to go up in the elevator or walk up the stairs",
+            "quickdef1AudioQueryString": "?lang=en&text=it's-possible-to-go-up-in-the-elevator-or-walk-up-the-stairs&key=5c9af5365058654b01deed66656fa52f&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "yo uso la escalera o el ascensor para subir a mi habitación",
+            "sourceAudioQueryString": "?lang=es&text=yo-uso-la-escalera-o-el-ascensor-para-subir-a-mi-habitaci%C3%B3n&key=d29b098060b4344f73ef318b2dfd870a&region=spain",
+            "quickdef": "I take the stairs or the elevator to go up to my room",
+            "quickdefAudioQueryString": "?lang=en&text=I-take-the-stairs-or-the-elevator-to-go-up-to-my-room&key=0dfa49ed276916b8b34995bbac7dc924&region=us",
+            "quickdef1": "I take the stairs or the elevator to go up to my room",
+            "quickdef1AudioQueryString": "?lang=en&text=I-take-the-stairs-or-the-elevator-to-go-up-to-my-room&key=0dfa49ed276916b8b34995bbac7dc924&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "yo subí a la habitación en el ascensor",
+            "sourceAudioQueryString": "?lang=es&text=yo-sub%C3%AD-a-la-habitaci%C3%B3n-en-el-ascensor&key=935377d138cabb68b3eb98ec809bc442&region=spain",
+            "quickdef": "I took the elevator up to the room",
+            "quickdefAudioQueryString": "?lang=en&text=I-took-the-elevator-up-to-the-room&key=6a02fc77507f79aa3fee9b9db74bd7aa&region=us",
+            "quickdef1": "I took the elevator up to the room",
+            "quickdef1AudioQueryString": "?lang=en&text=I-took-the-elevator-up-to-the-room&key=6a02fc77507f79aa3fee9b9db74bd7aa&region=us",
+            "quickdef2AudioQueryString": null
+        }
+    ],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 1567
+    },
+    "sdExamplesProps": {
+        "query": "ascensor",
+        "originalQuery": "ascensor",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": null,
+    "verbLang": "es",
+    "verbMoods": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "tenses": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "numNeodictTranslations": 2,
+    "partnerBacklinks": null,
+    "genericVideoHeadwordData": {
+        "id": 1567,
+        "source": "ascensor",
+        "popularity": 9000
+    },
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 1567
+    }
+}

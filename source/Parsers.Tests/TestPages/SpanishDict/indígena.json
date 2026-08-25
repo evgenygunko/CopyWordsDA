@@ -1,0 +1,508 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Findigena",
+    "wordOfTheDayData": {
+        "wordId": 65078,
+        "wordSource": "zanahoria",
+        "wordDisplay": "la zanahoria",
+        "image": "https:\u002F\u002Fd25rq8gxcq0p71.cloudfront.net\u002Fios-wotd-images\u002Foriginal\u002F92e78e3b-6761-4dd9-8fe9-e43f31695397.png",
+        "translationText": "carrot",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=la-zanahoria&key=f8ca9dbf2a3cc14a97eda9c60a8e9e2a"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 21,
+    "excludeAds": false,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "d3fh33eu6ay0qj.cloudfront.net",
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "d1q4kshf6f0axi.cloudfront.net",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "coreWebVitals": true,
+        "sdIdentity": true,
+        "sdPrimisTest": false,
+        "sdCss": false,
+        "sdParty": false,
+        "sdAnimation": false,
+        "sdVocabVoice": false,
+        "adhesionMarketingInt": 1,
+        "translateEverythingSlideCopy": "crl_document_image_prioritized",
+        "premiumBenefitsLandingPageRound2": null,
+        "randomizedExperiments": { "translate_everything_slide_copy": "crl_document_image_prioritized" }
+    },
+    "serverNowAtPageview": 1717176512804,
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "indigena",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Find%C3%ADgena",
+            "path": "translate",
+            "token": "indígena",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Findigena",
+            "path": "examples",
+            "token": "indigena",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Find%C3%ADgena",
+            "path": "pronunciation",
+            "token": "indígena",
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Find%C3%ADgena",
+            "path": "thesaurus",
+            "token": "indígena",
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "indígena",
+                "textToPronounce": "indígena",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=es&text=ind%C3%ADgena&key=e9c3aed74f59e93ba91d7258c2bfee63",
+                "pronunciations": [
+                    {
+                        "id": 9992,
+                        "ipa": "in*ˈdi*xe*na",
+                        "abc": "in*ˈdí*ge*na",
+                        "spa": "een*ˈdee*heh*nah",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 9993,
+                        "ipa": "in*ˈdi*χe*na",
+                        "abc": "in*ˈdí*ge*na",
+                        "spa": "een*ˈdee*heh*nah",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "indigenous",
+                "textToPronounce": "indigenous",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=indigenous&key=4c744de0023f07d49a44adb08c424d38",
+                "pronunciations": [
+                    {
+                        "id": 8786,
+                        "ipa": "ɪn*ˈdɪdʒ*ə*nəs",
+                        "abc": "in*ˈdig*e*nous",
+                        "spa": "ihn*ˈdihj*uh*nuhs",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "indigenous"
+                    },
+                    {
+                        "id": 8787,
+                        "ipa": "ɪn*ˈdɪdʒ*ɪ*nəs",
+                        "abc": "in*ˈdig*e*nous",
+                        "spa": "ihn*ˈdihj*ih*nuhs",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "indigenous"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": {
+                "displayText": "native",
+                "textToPronounce": "native",
+                "audioUrl": "https:\u002F\u002Fd3fh33eu6ay0qj.cloudfront.net\u002Faudio?lang=en&text=native&key=04cd10f31e8fa0bba5b7acb0d6c2b0a1",
+                "pronunciations": [
+                    {
+                        "id": 6684,
+                        "ipa": "ˈneɪ*ɾɪv",
+                        "abc": "ˈna*tive",
+                        "spa": "ˈney*dihv",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "native"
+                    },
+                    {
+                        "id": 6685,
+                        "ipa": "ˈneɪ*tɪv",
+                        "abc": "ˈna*tive",
+                        "spa": "ˈney*tihv",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "native"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef2"
+            }
+        },
+        "addToListProps": {
+            "word": {
+                "id": 38602,
+                "source": "indígena",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "neodict": [
+                {
+                    "subheadword": "indígena",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "adj",
+                                "abbrEs": "adj",
+                                "nameEn": "adjective",
+                                "nameEs": "adjetivo"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "of native origins",
+                                    "contextEs": "de origen nativo",
+                                    "gender": null,
+                                    "id": 13790,
+                                    "partOfSpeech": {
+                                        "abbrEn": "adj",
+                                        "abbrEs": "adj",
+                                        "nameEn": "adjective",
+                                        "nameEs": "adjetivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The government wants to preserve the indigenous folklore and traditions.",
+                                                    "textEs": "El gobierno quiere preservar el folclor y las tradiciones indígenas."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 21228,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fnative%2C%20indigenous.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "indigenous"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The native community is against the clearing of the forest.",
+                                                    "textEs": "La comunidad indígena no está de acuerdo con la tala del bosque."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 21229,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "native"
+                                        }
+                                    ],
+                                    "subheadword": "indígena",
+                                    "idx": 1,
+                                    "context": "of native origins",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "indigenous",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Fnative%2C%20indigenous.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [ "indigenous" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "El gobierno quiere preservar el folclor y las tradiciones indígenas.", "The government wants to preserve the indigenous folklore and traditions." ] ]
+                                        },
+                                        {
+                                            "translation": "native",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [ "native" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "La comunidad indígena no está de acuerdo con la tala del bosque.", "The native community is against the clearing of the forest." ] ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "adjective",
+                                "tooltip": {
+                                    "def": "An adjective is a word that describes a noun (e.g. the big dog).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fdescriptive-adjectives-in-spanish"
+                                }
+                            }
+                        },
+                        {
+                            "pos": {
+                                "abbrEn": "n",
+                                "abbrEs": "s",
+                                "nameEn": "noun",
+                                "nameEs": "sustantivo"
+                            },
+                            "entryLang": "es",
+                            "gender": { "gender": "CO" },
+                            "senses": [
+                                {
+                                    "contextEn": "indigenous person",
+                                    "contextEs": "persona nativa",
+                                    "gender": "CO",
+                                    "id": 13791,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "This natural park is protected by the natives that inhabit the area.",
+                                                    "textEs": "Este parque natural está protegido por los indígenas que habitan la zona."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 21230,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002F0ca649f9-134a-4210-ae48-2a8bbadb32cc.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "native"
+                                        }
+                                    ],
+                                    "subheadword": "indígena",
+                                    "idx": 2,
+                                    "context": "indigenous person",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "native",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002F0ca649f9-134a-4210-ae48-2a8bbadb32cc.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [ "native" ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [ [ "Este parque natural está protegido por los indígenas que habitan la zona.", "This natural park is protected by the natives that inhabit the area." ] ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "masculine or feminine noun",
+                                "tooltip": {
+                                    "def": "This means that the noun can be masculine or feminine, depending on the gender of person it refers to (e.g. el doctor, la doctora).",
+                                    "href": "http:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fprofessions-in-spanish"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "indígena",
+            "regionChoice": "spain",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [ "een*ˈdee*heh*nah" ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "hegemoneAssetHost": "d25rq8gxcq0p71.cloudfront.net",
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": {
+        "linkedArticles": [
+            {
+                "title": "Explore Taino Artifacts in Spanish",
+                "slug": "explore-taino-artifacts-in-spanish",
+                "lang": "en",
+                "publishedAt": "2023-12-08T18:53:25.000Z",
+                "quizId": null,
+                "quizSlug": null
+            }
+        ]
+    },
+    "searchBoxProps": {
+        "initialSearchText": "indigena",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [ "take", "buddy", "get", "bear", "square", "escape", "live", "party" ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [ "bae", "YOLO", "okurrr", "LOL", "my bad", "dude", "y'all", "wassup" ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [ "witching hour", "break a leg", "in a nutshell", "it's raining cats and dogs" ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [ "ser vs estar", "por vs para", "saber vs conocer", "cabra vs chivo" ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 38602
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "indigena",
+        "originalQuery": "indigena",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": null,
+    "verbLang": "es",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "lockedPremiumContentProps": null,
+    "adList": "[\"adTopLarge\",\"adSide1\",\"adSide3\",\"adMiddle2\"]",
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 38602
+    }
+}

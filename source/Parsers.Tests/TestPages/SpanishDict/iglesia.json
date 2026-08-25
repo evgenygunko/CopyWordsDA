@@ -1,0 +1,566 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Figlecia",
+    "wordOfTheDayData": {
+        "image": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002Foriginal\u002F0eb31f00-403b-4609-9d60-f3b99392b3a2.png",
+        "wordId": 30159,
+        "wordSource": "espolvorear",
+        "wordDisplay": "espolvorear",
+        "translationText": "to sprinkle",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=espolvorear&key=88ea22566d49683b7eaf31c04fd9e599"
+    },
+    "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+    "facebookAppId": "123097127645",
+    "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 19,
+    "excludeAds": false,
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "audio-cdn.sdcdns.com",
+        "hegemoneAssetHost": "sd-hegemone-production.sdcdns.com",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "neodarwin-prod.sdcdns.com",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdIdentity": true,
+        "sdPrimisTest": false,
+        "sdCss": false,
+        "sdAnimation": false,
+        "sdWotdRevamp": true,
+        "adhesionMarketingInt": 1,
+        "translateEverythingSlideCopy": "crl_document_image_prioritized",
+        "randomizedExperiments": {
+            "translate_everything_slide_copy": "crl_document_image_prioritized"
+        }
+    },
+    "serverNowAtPageview": 1731356940371,
+    "pageCategory": "translation",
+    "isApp": false,
+    "action": "translate",
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "queryText": "iglecia",
+    "hasBothLangs": false,
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Figlesia",
+            "path": "translate",
+            "token": "iglesia",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Figlesia",
+            "path": "examples",
+            "token": "iglesia",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Figlesia",
+            "path": "pronunciation",
+            "token": "iglesia",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Figlesia",
+            "path": "thesaurus",
+            "token": "iglesia",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Phrases",
+            "active": false,
+            "href": "\u002Fphrases\u002Figlesia",
+            "path": "phrases",
+            "token": "iglesia",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        }
+    ],
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "iglesia",
+                "textToPronounce": "iglesia",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=iglesia&key=fa2c36d8ef7585a7ec1b2f714e385751",
+                "pronunciations": [
+                    {
+                        "id": 2030,
+                        "ipa": "i*ˈɣle*sja",
+                        "abc": "i*ˈgle*sia",
+                        "spa": "ee*ˈgleh*syah",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 2031,
+                        "ipa": "i*ˈɣle*sja",
+                        "abc": "i*ˈgle*sia",
+                        "spa": "ee*ˈgleh*syah",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "church",
+                "textToPronounce": "church",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=en&text=church&key=fe9d831d587f51fb2bd6fdaa4e0420c5",
+                "pronunciations": [
+                    {
+                        "id": 1025,
+                        "ipa": "tʃəɹtʃ",
+                        "abc": "church",
+                        "spa": "chuhrch",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "church"
+                    },
+                    {
+                        "id": 1026,
+                        "ipa": "tʃətʃ",
+                        "abc": "church",
+                        "spa": "chuhch",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "church"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 39448,
+                "source": "iglesia",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "neodict": [
+                {
+                    "subheadword": "iglesia",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "n",
+                                "abbrEs": "s",
+                                "nameEn": "noun",
+                                "nameEs": "sustantivo"
+                            },
+                            "entryLang": "es",
+                            "gender": {
+                                "gender": "F"
+                            },
+                            "senses": [
+                                {
+                                    "contextEn": "religious",
+                                    "contextEs": "religioso",
+                                    "gender": "F",
+                                    "id": 1701,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Let's go to the church; mass starts soon.",
+                                                    "textEs": "Vámonos a la iglesia que la misa comienza pronto."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 2212,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Ftemple%3B%20church.jpg",
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "church"
+                                        }
+                                    ],
+                                    "subheadword": "iglesia",
+                                    "idx": 1,
+                                    "context": "religious",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "church",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "imagePath": "\u002Fdictionary-images\u002Foriginal\u002Ftemple%3B%20church.jpg",
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "church"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Vámonos a la iglesia que la misa comienza pronto.",
+                                                    "Let's go to the church; mass starts soon."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "feminine noun",
+                                "tooltip": {
+                                    "def": "A feminine noun is almost always used with feminine articles and adjectives (e.g., la mujer bonita, la luna llena).",
+                                    "href": "https:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fmasculine-and-feminine-nouns"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "iglesia",
+            "regionChoice": "latam",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [
+                "ee*ˈgleh*syah"
+            ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "usageNoteAndArticlesProps": {
+        "linkedArticles": []
+    },
+    "searchBoxProps": {
+        "initialSearchText": "iglecia",
+        "action": "translate",
+        "category": "translation",
+        "traductorHost": "traductor1.spanishdict.com",
+        "traductorTimeoutMs": 5000,
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SLANG",
+                "action": "translate",
+                "words": [
+                    "bae",
+                    "YOLO",
+                    "okurrr",
+                    "LOL",
+                    "my bad",
+                    "dude",
+                    "y'all",
+                    "wassup"
+                ]
+            },
+            {
+                "title": "IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "phrases": [
+        {
+            "source": "ir a la iglesia",
+            "sourceAudioQueryString": "?lang=es&text=ir-a-la-iglesia&key=f0e563aa18eb0a32e27e1357e1840677&region=latam",
+            "quickdef": "to go to church",
+            "quickdefAudioQueryString": "?lang=en&text=to-go-to-church&key=8699a47cb83122aad930bc6ff83be47d&region=us",
+            "quickdef1": "to go to church",
+            "quickdef1AudioQueryString": "?lang=en&text=to-go-to-church&key=8699a47cb83122aad930bc6ff83be47d&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "a la iglesia",
+            "sourceAudioQueryString": "?lang=es&text=a-la-iglesia&key=7eedadb39d92f10016535ea4ba6c1117&region=latam",
+            "quickdef": "to church, to the church",
+            "quickdefAudioQueryString": "?lang=en&text=to-church%2C-to-the-church&key=cddfbf26f195d1f15664e8699af4b1fb&region=us",
+            "quickdef1": "to church",
+            "quickdef1AudioQueryString": "?lang=en&text=to-church&key=6e829555f70392949269a51bc05d1b69&region=us",
+            "quickdef2": "to the church",
+            "quickdef2AudioQueryString": "?lang=en&text=to-the-church&key=91dab4d353e667b1ea615c6fd8caebbb&region=us"
+        },
+        {
+            "source": "en la iglesia",
+            "sourceAudioQueryString": "?lang=es&text=en-la-iglesia&key=61f03dd928eba30265e9f8e83e1196d3&region=latam",
+            "quickdef": "in the church",
+            "quickdefAudioQueryString": "?lang=en&text=in-the-church&key=8fa253263322886deb68681b3e84ff65&region=us",
+            "quickdef1": "in the church",
+            "quickdef1AudioQueryString": "?lang=en&text=in-the-church&key=8fa253263322886deb68681b3e84ff65&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "casarse por iglesia",
+            "sourceAudioQueryString": "?lang=es&text=casarse-por-iglesia&key=ce5f520506e6bdc18eb42fcca2c52747&region=latam",
+            "quickdef": "to have a church wedding",
+            "quickdefAudioQueryString": "?lang=en&text=to-have-a-church-wedding&key=e125dbd7dbc54a84aa6283986d790f06&region=us",
+            "quickdef1": "to have a church wedding",
+            "quickdef1AudioQueryString": "?lang=en&text=to-have-a-church-wedding&key=e125dbd7dbc54a84aa6283986d790f06&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "banco de iglesia",
+            "sourceAudioQueryString": "?lang=es&text=banco-de-iglesia&key=c3db2d21932fc8a2b3aae1f2c269c149&region=latam",
+            "quickdef": "pew",
+            "quickdefAudioQueryString": "?lang=en&text=pew&key=ffddb5d3700ae27835f9102adec93a04&region=us",
+            "quickdef1": "pew",
+            "quickdef1AudioQueryString": "?lang=en&text=pew&key=ffddb5d3700ae27835f9102adec93a04&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "fui a la iglesia",
+            "sourceAudioQueryString": "?lang=es&text=fui-a-la-iglesia&key=a958551018a9335b446b9fb64b6530e5&region=latam",
+            "quickdef": "I went to church",
+            "quickdefAudioQueryString": "?lang=en&text=I-went-to-church&key=05a24126edc84a19cd706344e260f0da&region=us",
+            "quickdef1": "I went to church",
+            "quickdef1AudioQueryString": "?lang=en&text=I-went-to-church&key=05a24126edc84a19cd706344e260f0da&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "iba a la iglesia",
+            "sourceAudioQueryString": "?lang=es&text=iba-a-la-iglesia&key=2b35e9d97c2ec20db0c3f7f122f4762e&region=latam",
+            "quickdef": "I went to church, he went to church",
+            "quickdefAudioQueryString": "?lang=en&text=I-went-to-church%2C-he-went-to-church&key=d856055ab8c62d1ca5eb0b0bfc6a4f0f&region=us",
+            "quickdef1": "I went to church",
+            "quickdef1AudioQueryString": "?lang=en&text=I-went-to-church&key=05a24126edc84a19cd706344e260f0da&region=us",
+            "quickdef2": "he went to church",
+            "quickdef2AudioQueryString": "?lang=en&text=he-went-to-church&key=3ec635d4ba1f3665021b217b4c6dcc6f&region=us"
+        },
+        {
+            "source": "ve a la iglesia",
+            "sourceAudioQueryString": "?lang=es&text=ve-a-la-iglesia&key=ea0ef44cc00a97e215fb186bba9343a9&region=latam",
+            "quickdef": "go to church",
+            "quickdefAudioQueryString": "?lang=en&text=go-to-church&key=49bb4cd0b132bd1cb8626a073aab1173&region=us",
+            "quickdef1": "go to church",
+            "quickdef1AudioQueryString": "?lang=en&text=go-to-church&key=49bb4cd0b132bd1cb8626a073aab1173&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "el vía crucis de Iztapalapa es en el interior de una iglesia",
+            "sourceAudioQueryString": "?lang=es&text=el-v%C3%ADa-crucis-de-Iztapalapa-es-en-el-interior-de-una-iglesia&key=e60ee5a3df11233610bc56f24200c503&region=latam",
+            "quickdef": "the Stations of the Cross of Iztapalapa are performed inside a church",
+            "quickdefAudioQueryString": "?lang=en&text=the-Stations-of-the-Cross-of-Iztapalapa-are-performed-inside-a-church&key=f6d877b924049dedfaf2c91d0ef3e216&region=us",
+            "quickdef1": "the Stations of the Cross of Iztapalapa are performed inside a church",
+            "quickdef1AudioQueryString": "?lang=en&text=the-Stations-of-the-Cross-of-Iztapalapa-are-performed-inside-a-church&key=f6d877b924049dedfaf2c91d0ef3e216&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "iglesia católica",
+            "sourceAudioQueryString": "?lang=es&text=iglesia-cat%C3%B3lica&key=1783fa55cd76f0aaea844c93ba1fc1ba&region=latam",
+            "quickdef": "Catholic Church",
+            "quickdefAudioQueryString": "?lang=en&text=Catholic-Church&key=7b3884f648c83e0a5f224b3335738d25&region=us",
+            "quickdef1": "Catholic Church",
+            "quickdef1AudioQueryString": "?lang=en&text=Catholic-Church&key=7b3884f648c83e0a5f224b3335738d25&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "para ir de compras vamos a la iglesia",
+            "sourceAudioQueryString": "?lang=es&text=para-ir-de-compras-vamos-a-la-iglesia&key=bd22f91bea827cad06e56f7b1dcbe620&region=latam",
+            "quickdef": "we go to church to shop",
+            "quickdefAudioQueryString": "?lang=en&text=we-go-to-church-to-shop&key=ab8b21ee3715eb1ea2f7cc49eaae8c2f&region=us",
+            "quickdef1": "we go to church to shop",
+            "quickdef1AudioQueryString": "?lang=en&text=we-go-to-church-to-shop&key=ab8b21ee3715eb1ea2f7cc49eaae8c2f&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "casarse por la iglesia",
+            "sourceAudioQueryString": "?lang=es&text=casarse-por-la-iglesia&key=67037ccf513ea3f803867290ded13155&region=latam",
+            "quickdef": "to have a church wedding",
+            "quickdefAudioQueryString": "?lang=en&text=to-have-a-church-wedding&key=e125dbd7dbc54a84aa6283986d790f06&region=us",
+            "quickdef1": "to have a church wedding",
+            "quickdef1AudioQueryString": "?lang=en&text=to-have-a-church-wedding&key=e125dbd7dbc54a84aa6283986d790f06&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "la ceremonia nupcial tiene lugar en la iglesia",
+            "sourceAudioQueryString": "?lang=es&text=la-ceremonia-nupcial-tiene-lugar-en-la-iglesia&key=aa370ff2e9ea53ea773cbb97a431a61e&region=latam",
+            "quickdef": "the wedding ceremony takes place in the church",
+            "quickdefAudioQueryString": "?lang=en&text=the-wedding-ceremony-takes-place-in-the-church&key=3bdb7dbfd9278c9038a847c94664cc03&region=us",
+            "quickdef1": "the wedding ceremony takes place in the church",
+            "quickdef1AudioQueryString": "?lang=en&text=the-wedding-ceremony-takes-place-in-the-church&key=3bdb7dbfd9278c9038a847c94664cc03&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "¿Cuándo va a la iglesia Tito?",
+            "sourceAudioQueryString": "?lang=es&text=%C2%BFCu%C3%A1ndo-va-a-la-iglesia-Tito%3F&key=48447998a906546501e9d5d46a50a842&region=latam",
+            "quickdef": "When does Tito go to church?",
+            "quickdefAudioQueryString": "?lang=en&text=When-does-Tito-go-to-church%3F&key=285e6a95456202123260ab5c5d458a16&region=us",
+            "quickdef1": "When does Tito go to church?",
+            "quickdef1AudioQueryString": "?lang=en&text=When-does-Tito-go-to-church%3F&key=285e6a95456202123260ab5c5d458a16&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "el camposanto es una iglesia",
+            "sourceAudioQueryString": "?lang=es&text=el-camposanto-es-una-iglesia&key=ff78f8505743c6458ba973d0082893b2&region=latam",
+            "quickdef": "a churchyard is a church",
+            "quickdefAudioQueryString": "?lang=en&text=a-churchyard-is-a-church&key=5f1aeec62dded2229a181ae14d586ec1&region=us",
+            "quickdef1": "a churchyard is a church",
+            "quickdef1AudioQueryString": "?lang=en&text=a-churchyard-is-a-church&key=5f1aeec62dded2229a181ae14d586ec1&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "voy a la iglesia",
+            "sourceAudioQueryString": "?lang=es&text=voy-a-la-iglesia&key=ac3c15fee11b871dcf15fd8fedc691f4&region=latam",
+            "quickdef": "I go to church",
+            "quickdefAudioQueryString": "?lang=en&text=I-go-to-church&key=433f8d472071d18eb78f6af06d0238b3&region=us",
+            "quickdef1": "I go to church",
+            "quickdef1AudioQueryString": "?lang=en&text=I-go-to-church&key=433f8d472071d18eb78f6af06d0238b3&region=us",
+            "quickdef2AudioQueryString": null
+        }
+    ],
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 39448
+    },
+    "sdExamplesProps": {
+        "examplesSalt": null,
+        "query": "iglecia",
+        "originalQuery": "iglecia",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "verb": null,
+    "verbLang": "es",
+    "verbTenses": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "moods": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    },
+    "authoringProps": null,
+    "sdQuicktipProps": null,
+    "mismatchProps": {
+        "type": "mismatch-spelling-suggestion",
+        "query": "iglecia",
+        "word": "iglesia",
+        "suggestions": []
+    },
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "adList": "[\"adTopLarge\",\"adSide1\",\"adSide3\",\"adMiddle2\"]",
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 39448
+    }
+}
