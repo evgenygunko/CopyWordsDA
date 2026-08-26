@@ -2,7 +2,6 @@
 using System.Text;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
-using CopyWords.Core.Services.Wrappers;
 using CopyWords.Parsers;
 using CopyWords.Parsers.Models;
 using Newtonsoft.Json;
@@ -22,51 +21,21 @@ namespace CopyWords.Core.Services
         private readonly HttpClient _httpClient;
         private readonly IGlobalSettings _globalSettings;
         private readonly ISettingsService _settingsService;
-        private readonly ILaunchDarklyService? _launchDarklyService;
-        private readonly ILookUpWord? _lookUpWord;
+        private readonly ILookUpWord _lookUpWord;
 
         public TranslationsService(
             HttpClient httpClient,
             IGlobalSettings globalSettings,
             ISettingsService settingsService,
-            ILaunchDarklyService launchDarklyService,
             ILookUpWord lookUpWord)
         {
             _httpClient = httpClient;
             _globalSettings = globalSettings;
             _settingsService = settingsService;
-            _launchDarklyService = launchDarklyService;
             _lookUpWord = lookUpWord;
         }
 
-        internal TranslationsService(
-            HttpClient httpClient,
-            IGlobalSettings globalSettings,
-            ISettingsService settingsService,
-            ILaunchDarklyService launchDarklyService)
-        {
-            _httpClient = httpClient;
-            _globalSettings = globalSettings;
-            _settingsService = settingsService;
-            _launchDarklyService = launchDarklyService;
-        }
-
-        internal TranslationsService(
-            HttpClient httpClient,
-            IGlobalSettings globalSettings,
-            ISettingsService settingsService)
-        {
-            _httpClient = httpClient;
-            _globalSettings = globalSettings;
-            _settingsService = settingsService;
-        }
-
         public string CreateLookUpWordUrl()
-        {
-            return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/v2/Translation/LookUpWord?code={_globalSettings.TranslatorAppRequestCode}";
-        }
-
-        public string CreateLookUpWordV3Url()
         {
             return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/v3/Translation/LookUpWord?code={_globalSettings.TranslatorAppRequestCode}";
         }
@@ -89,48 +58,22 @@ namespace CopyWords.Core.Services
             }
 
             string sourceLanguage = _settingsService.GetSelectedParser();
-
-            if (_launchDarklyService?.GetBooleanFlag("client-side-parsing", false) == true)
+            WordModel? parsedWordModel;
+            try
             {
-                if (_lookUpWord == null)
-                {
-                    throw new InvalidOperationException("Client-side word parser is not configured.");
-                }
-
-                WordModel? parsedWordModel;
-                try
-                {
-                    parsedWordModel = await _lookUpWord.LookUpWordAsync(wordToLookUp, sourceLanguage, cancellationToken);
-                }
-                catch (ParserServerErrorException ex)
-                {
-                    throw new ServerErrorException(ex.Message, ex);
-                }
-
-                if (parsedWordModel == null)
-                {
-                    throw new WordNotFoundException(wordToLookUp);
-                }
-
-                return await TranslateAsync(CreateLookUpWordV3Url(), parsedWordModel, cancellationToken);
+                parsedWordModel = await _lookUpWord.LookUpWordAsync(wordToLookUp, sourceLanguage, cancellationToken);
+            }
+            catch (ParserServerErrorException ex)
+            {
+                throw new ServerErrorException(ex.Message, ex);
             }
 
-            string lookupUrl = CreateLookUpWordUrl();
-            string destinationLanguage = _settingsService.GetDestinationLanguage();
-            IReadOnlyList<string> activeDictionaries = _settingsService.GetActiveDictionaries();
-            if (string.IsNullOrWhiteSpace(destinationLanguage))
+            if (parsedWordModel == null)
             {
-                destinationLanguage = "Russian";
+                throw new WordNotFoundException(wordToLookUp);
             }
 
-            var input = new LookUpWordRequest(
-                Text: wordToLookUp,
-                SourceLanguage: sourceLanguage,
-                DestinationLanguage: destinationLanguage,
-                ActiveDictionaries: activeDictionaries,
-                Version: "2");
-
-            return await TranslateAsync(lookupUrl, input, cancellationToken);
+            return await TranslateAsync(CreateLookUpWordUrl(), parsedWordModel, cancellationToken);
         }
 
         public async Task<SuggestedWordsModel> GetSuggestedWordsAsync(string wordToLookUp, CancellationToken cancellationToken)
@@ -197,17 +140,7 @@ namespace CopyWords.Core.Services
             throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
         }
 
-        internal async Task<WordModel?> TranslateAsync(string url, LookUpWordRequest input, CancellationToken cancellationToken)
-        {
-            return await TranslateAsync(url, input, input.Text, cancellationToken);
-        }
-
-        internal async Task<WordModel?> TranslateAsync(string url, WordModel input, CancellationToken cancellationToken)
-        {
-            return await TranslateAsync(url, input, input.Word, cancellationToken);
-        }
-
-        private async Task<WordModel?> TranslateAsync(string url, object input, string requestedWord, CancellationToken cancellationToken)
+        private async Task<WordModel?> TranslateAsync(string url, WordModel input, CancellationToken cancellationToken)
         {
             string jsonRequest = JsonConvert.SerializeObject(input);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
@@ -230,7 +163,7 @@ namespace CopyWords.Core.Services
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                throw new WordNotFoundException(requestedWord);
+                throw new WordNotFoundException(input.Word);
             }
 
             if (response.StatusCode is System.Net.HttpStatusCode.InternalServerError
