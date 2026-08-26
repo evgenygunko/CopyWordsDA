@@ -17,6 +17,8 @@ namespace CopyWords.Core.Models
         string LaunchDarklyMemberId { get; set; }
 
         string LatestReleaseUrl { get; set; }
+
+        string OrdnetApiKey { get; set; }
     }
 
     public class GlobalSettings : IGlobalSettings
@@ -34,5 +36,7 @@ namespace CopyWords.Core.Models
         public string LaunchDarklyMemberId { get; set; } = null!;
 
         public string LatestReleaseUrl { get; set; } = null!;
+
+        public string OrdnetApiKey { get; set; } = null!;
     }
 }

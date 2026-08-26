@@ -35,11 +35,11 @@ jobs:
                         -replace '"SentryDsn":\s*""', '"SentryDsn": "$(SentryDsn)"' `
                         -replace '"LaunchDarklyMobileKey":\s*""', '"LaunchDarklyMobileKey": "$(LaunchDarklyMobileKey)"' `
                         -replace '"LaunchDarklyMemberId":\s*""', '"LaunchDarklyMemberId": "$(LaunchDarklyMemberId)"' `
-                        -replace '"LatestReleaseUrl":\s*""', '"LatestReleaseUrl": "$(LatestReleaseUrl)"' |
+                        -replace '"LatestReleaseUrl":\s*""', '"LatestReleaseUrl": "$(LatestReleaseUrl)"' `
+                        -replace '"OrdnetApiKey":\s*""', '"OrdnetApiKey": "$(OrdnetApiKey)"' |
                         Set-Content $file
 
-                    Write-Host "Updated appsettings.json:"
-                    Get-Content $file
+                    Write-Host "Updated appsettings.json successfully."
           - script: yarn install
             displayName: 'yarn install'
 

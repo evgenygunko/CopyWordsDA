@@ -20,7 +20,7 @@ namespace CopyWords.Core.Tests.Services
         {
             // Arrange
             var suggestions = new[] { "haj", "hus", "have" };
-            var json = JsonSerializer.Serialize(suggestions);
+            var json = CreateDanishResponse(suggestions);
 
             var sut = CreateSut(CreateMockHttpClient(HttpStatusCode.OK, json), nameof(SourceLanguage.Danish));
 
@@ -32,7 +32,7 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        public async Task GetSuggestionsAsync_WhenSelectedParserIsDanishAndResponseIsNull_ThrowsServerErrorException()
+        public async Task GetSuggestionsAsync_WhenSelectedParserIsDanishAndResponseIsInvalid_ThrowsServerErrorException()
         {
             // Arrange
             var sut = CreateSut(CreateMockHttpClient(HttpStatusCode.OK, "null"), nameof(SourceLanguage.Danish), isDebug: true);
@@ -42,7 +42,7 @@ namespace CopyWords.Core.Tests.Services
 
             // Assert
             await act.Should().ThrowAsync<ServerErrorException>()
-                .WithMessage("The server returned a successful status code but the response content was null.");
+                .WithMessage("The server returned a successful status code but the response content was invalid or missing 'ddo'.");
         }
 
         [TestMethod]
@@ -90,7 +90,7 @@ namespace CopyWords.Core.Tests.Services
         {
             // Arrange
             string? actualUrl = null;
-            var httpClient = CreateCapturedRequestHttpClient("""["test"]""", request => actualUrl = request.RequestUri?.OriginalString);
+            var httpClient = CreateCapturedRequestHttpClient(CreateDanishResponse("test"), request => actualUrl = request.RequestUri?.OriginalString);
             var sut = CreateSut(httpClient, nameof(SourceLanguage.Danish));
 
             // Act
@@ -98,6 +98,92 @@ namespace CopyWords.Core.Tests.Services
 
             // Assert
             actualUrl.Should().Contain("hello%20world");
+        }
+
+        [TestMethod]
+        public async Task GetSuggestionsAsync_WhenSelectedParserIsDanishAndInputContainsDanishCharacters_EscapesInputText()
+        {
+            // Arrange
+            string? actualUrl = null;
+            var httpClient = CreateCapturedRequestHttpClient(CreateDanishResponse("blå"), request => actualUrl = request.RequestUri?.OriginalString);
+            var sut = CreateSut(httpClient, nameof(SourceLanguage.Danish));
+
+            // Act
+            await sut.GetSuggestionsAsync("blå", CancellationToken.None);
+
+            // Assert
+            actualUrl.Should().Contain("bl%C3%A5");
+        }
+
+        [TestMethod]
+        public async Task GetSuggestionsAsync_WhenSelectedParserIsDanish_NormalizesSlashAndComma()
+        {
+            // Arrange
+            string? actualUrl = null;
+            var httpClient = CreateCapturedRequestHttpClient(CreateDanishResponse("test"), request => actualUrl = request.RequestUri?.OriginalString);
+            var sut = CreateSut(httpClient, nameof(SourceLanguage.Danish));
+
+            // Act
+            await sut.GetSuggestionsAsync("cykel/by,1", CancellationToken.None);
+
+            // Assert
+            actualUrl.Should().Be("https://ordnet.dk/api/ac/ddo/cykel~by_1");
+        }
+
+        [TestMethod]
+        public async Task GetSuggestionsAsync_WhenSelectedParserIsDanishAndResponseContainsMalformedEntries_FiltersThemOut()
+        {
+            // Arrange
+            const string json = """{"ddo":[{"iddel":{"lemma":"cykel"}},{"iddel":{}},{"other":{}},{"iddel":{"lemma":123}},{"iddel":{"lemma":" "}},{"iddel":{"lemma":"cykle"}}]}""";
+            var sut = CreateSut(CreateMockHttpClient(HttpStatusCode.OK, json), nameof(SourceLanguage.Danish));
+
+            // Act
+            var result = await sut.GetSuggestionsAsync("cyk", CancellationToken.None);
+
+            // Assert
+            result.Should().Equal("cykel", "cykle");
+        }
+
+        [TestMethod]
+        public async Task GetSuggestionsAsync_WhenSelectedParserIsDanish_RemovesDuplicatesAndReturnsAtMostTwentySuggestions()
+        {
+            // Arrange
+            string[] responseSuggestions = ["word1", "word1", .. Enumerable.Range(2, 24).Select(x => $"word{x}")];
+            string[] expectedSuggestions = [.. Enumerable.Range(1, 20).Select(x => $"word{x}")];
+            var sut = CreateSut(CreateMockHttpClient(HttpStatusCode.OK, CreateDanishResponse(responseSuggestions)), nameof(SourceLanguage.Danish));
+
+            // Act
+            var result = await sut.GetSuggestionsAsync("word", CancellationToken.None);
+
+            // Assert
+            result.Should().Equal(expectedSuggestions);
+        }
+
+        [TestMethod]
+        public async Task GetSuggestionsAsync_WhenSelectedParserIsDanishAndResponseContainsCorrections_ReturnsSuggestions()
+        {
+            // Arrange
+            const string json = """{"ddo":[{"iddel":{"lemma":"cykle"}}],"total":1,"returned":1,"result_type":"suggestions"}""";
+            var sut = CreateSut(CreateMockHttpClient(HttpStatusCode.OK, json), nameof(SourceLanguage.Danish));
+
+            // Act
+            var result = await sut.GetSuggestionsAsync("cyklezz", CancellationToken.None);
+
+            // Assert
+            result.Should().Equal("cykle");
+        }
+
+        [TestMethod]
+        public async Task GetSuggestionsAsync_WhenSelectedParserIsDanishAndResponseIsInvalidInRelease_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var sut = CreateSut(CreateMockHttpClient(HttpStatusCode.OK, "{}"), nameof(SourceLanguage.Danish), isDebug: false);
+
+            // Act
+            var result = await sut.GetSuggestionsAsync("h", CancellationToken.None);
+
+            // Assert
+            result.Should().BeEmpty();
         }
 
         #endregion
@@ -292,7 +378,7 @@ namespace CopyWords.Core.Tests.Services
         {
             // Arrange
             HttpRequestMessage? capturedRequest = null;
-            var httpClient = CreateCapturedRequestHttpClient("""["test"]""", request => capturedRequest = request);
+            var httpClient = CreateCapturedRequestHttpClient(CreateDanishResponse("test"), request => capturedRequest = request);
             var sut = CreateSut(httpClient, nameof(SourceLanguage.Danish));
 
             // Act
@@ -304,6 +390,7 @@ namespace CopyWords.Core.Tests.Services
             capturedRequest.Headers.GetValues("User-Agent").Should().Contain("Mozilla/5.0");
             capturedRequest.Headers.GetValues("Accept-Language").Should().Contain("en-US");
             capturedRequest.Headers.GetValues("Accept-Language").Should().Contain("en; q=0.9");
+            capturedRequest.Headers.GetValues("api-key").Should().ContainSingle().Which.Should().Be("test-ordnet-api-key");
         }
 
         [TestMethod]
@@ -324,6 +411,7 @@ namespace CopyWords.Core.Tests.Services
             capturedRequest.Headers.GetValues("User-Agent").Should().Contain("Mozilla/5.0");
             capturedRequest.Headers.GetValues("Accept-Language").Should().Contain("en-US");
             capturedRequest.Headers.GetValues("Accept-Language").Should().Contain("en; q=0.9");
+            capturedRequest.Headers.Contains("api-key").Should().BeFalse();
         }
 
         [TestMethod]
@@ -344,6 +432,7 @@ namespace CopyWords.Core.Tests.Services
             capturedRequest.Headers.GetValues("User-Agent").Should().Contain("Mozilla/5.0");
             capturedRequest.Headers.GetValues("Accept-Language").Should().Contain("en-US");
             capturedRequest.Headers.GetValues("Accept-Language").Should().Contain("en; q=0.9");
+            capturedRequest.Headers.Contains("api-key").Should().BeFalse();
         }
 
         #endregion
@@ -355,10 +444,24 @@ namespace CopyWords.Core.Tests.Services
             var buildConfigurationMock = new Mock<IBuildConfiguration>();
             buildConfigurationMock.SetupGet(x => x.IsDebug).Returns(isDebug);
 
+            var globalSettingsMock = new Mock<IGlobalSettings>();
+            globalSettingsMock.SetupGet(x => x.OrdnetApiKey).Returns("test-ordnet-api-key");
+
             var settingsServiceMock = new Mock<ISettingsService>();
             settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(selectedParser);
 
-            return new SuggestionsService(httpClient, buildConfigurationMock.Object, settingsServiceMock.Object);
+            return new SuggestionsService(httpClient, buildConfigurationMock.Object, globalSettingsMock.Object, settingsServiceMock.Object);
+        }
+
+        private static string CreateDanishResponse(params string[] suggestions)
+        {
+            return JsonSerializer.Serialize(new
+            {
+                ddo = suggestions.Select(lemma => new
+                {
+                    iddel = new { lemma }
+                })
+            });
         }
 
         private static HttpClient CreateMockHttpClient(HttpStatusCode statusCode, string content)

@@ -17,15 +17,18 @@ namespace CopyWords.Core.Services
 
         private readonly HttpClient _httpClient;
         private readonly IBuildConfiguration _buildConfiguration;
+        private readonly IGlobalSettings _globalSettings;
         private readonly ISettingsService _settingsService;
 
         public SuggestionsService(
             HttpClient httpClient,
             IBuildConfiguration buildConfiguration,
+            IGlobalSettings globalSettings,
             ISettingsService settingsService)
         {
             _httpClient = httpClient;
             _buildConfiguration = buildConfiguration;
+            _globalSettings = globalSettings;
             _settingsService = settingsService;
         }
 
@@ -46,24 +49,52 @@ namespace CopyWords.Core.Services
 
         private async Task<IEnumerable<string>> GetDanishWordsSuggestionsAsync(string inputText, CancellationToken cancellationToken)
         {
-            string url = "https://ordnet.dk/ws/ddo/livesearch?text=" + Uri.EscapeDataString(inputText) + "&size=20";
+            string normalizedInput = inputText.Replace('/', '~').Replace(',', '_');
+            string url = "https://ordnet.dk/api/ac/ddo/" + Uri.EscapeDataString(normalizedInput);
 
             try
             {
                 using var request = CreateJsonGetRequest(url);
+                request.Headers.TryAddWithoutValidation("api-key", _globalSettings.OrdnetApiKey);
                 using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var suggestions = await response.Content.ReadFromJsonAsync<string[]>(cancellationToken);
-                    if (suggestions is not null)
+                    var jsonDoc = await response.Content.ReadFromJsonAsync<JsonElement>(cancellationToken);
+                    if (jsonDoc.ValueKind == JsonValueKind.Object
+                        && jsonDoc.TryGetProperty("ddo", out var results)
+                        && results.ValueKind == JsonValueKind.Array)
                     {
+                        var suggestions = new List<string>();
+                        var uniqueSuggestions = new HashSet<string>(StringComparer.Ordinal);
+
+                        foreach (var item in results.EnumerateArray())
+                        {
+                            if (item.ValueKind == JsonValueKind.Object
+                                && item.TryGetProperty("iddel", out var iddel)
+                                && iddel.ValueKind == JsonValueKind.Object
+                                && iddel.TryGetProperty("lemma", out var lemma)
+                                && lemma.ValueKind == JsonValueKind.String)
+                            {
+                                string? suggestion = lemma.GetString();
+                                if (!string.IsNullOrWhiteSpace(suggestion)
+                                    && uniqueSuggestions.Add(suggestion))
+                                {
+                                    suggestions.Add(suggestion);
+                                    if (suggestions.Count == 20)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
                         return suggestions;
                     }
 
                     if (_buildConfiguration.IsDebug)
                     {
-                        throw new ServerErrorException("The server returned a successful status code but the response content was null.");
+                        throw new ServerErrorException("The server returned a successful status code but the response content was invalid or missing 'ddo'.");
                     }
                 }
 
