@@ -4,6 +4,7 @@ using System.Reflection;
 using CopyWords.Parsers.Models;
 using CopyWords.Parsers.Models.DDO;
 using FluentAssertions;
+using HtmlAgilityPack;
 
 namespace CopyWords.Parsers.Tests
 {
@@ -19,26 +20,77 @@ namespace CopyWords.Parsers.Tests
             _path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         }
 
-        #region Tests for LoadHtml
+        #region Tests for ParseHtmlDocument
 
         [TestMethod]
         [DataRow(null)]
         [DataRow("")]
-        public void LoadHtml_WhenStringIsNullOrEmpty_ThrowsException(string content)
+        public void ParseHtmlDocument_WhenStringIsNullOrEmpty_ThrowsException(string content)
         {
-            DDOPageParser parser = new DDOPageParser();
-
-            _ = parser.Invoking(x => x.LoadHtml(content))
+            _ = FluentActions.Invoking(() => DDOPageParser.ParseHtmlDocument(content))
                     .Should().Throw<ArgumentException>();
         }
 
         [TestMethod]
-        public void LoadHtml_ForValidString_DoesNotThrowException()
+        public void ParseHtmlDocument_ForValidString_DoesNotThrowException()
         {
             string content = GetSimpleHTMLPage("SimplePage.html");
 
-            DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
+
+            document.DocumentNode.Should().NotBeNull();
+        }
+
+        #endregion
+
+        #region Tests for public operations
+
+        [TestMethod]
+        public void ParseWord_ForUnderholdning_PopulatesAggregate()
+        {
+            string content = GetSimpleHTMLPage("Underholdning.html");
+            var parser = new DDOPageParser();
+
+            DDOWord word = parser.ParseWord(content);
+
+            word.Headword.Should().Be("underholdning");
+            word.PartOfSpeech.Should().NotBeEmpty();
+            word.Endings.Should().Be("-en");
+            word.Pronunciation.Should().Be("[ˈɔnʌˌhʌlˀneŋ]");
+            word.SoundUrl.Should().Be("https://static.ordnet.dk/mp3/12004/12004770_1.mp3");
+            word.Definitions.Should().ContainSingle();
+            word.Variants.Should().ContainSingle();
+            word.Expressions.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public void ParseSuggestions_ForIslygte_ReturnsSuggestions()
+        {
+            string content = GetSimpleHTMLPage("islygte.html");
+            var parser = new DDOPageParser();
+
+            List<Variant> suggestions = parser.ParseSuggestions(content);
+
+            suggestions.Should().HaveCount(7);
+            suggestions.Select(x => x.Word).Should().ContainInOrder("lygte", "flygte", "slagte");
+        }
+
+        [TestMethod]
+        public async Task ParseWord_WhenCalledConcurrently_DoesNotShareDocumentState()
+        {
+            string underholdningHtml = GetSimpleHTMLPage("Underholdning.html");
+            string hajHtml = GetSimpleHTMLPage("Haj.html");
+            var parser = new DDOPageParser();
+
+            Task<DDOWord> underholdningTask = Task.Run(() => parser.ParseWord(underholdningHtml));
+            Task<DDOWord> hajTask = Task.Run(() => parser.ParseWord(hajHtml));
+
+            DDOWord[] words = await Task.WhenAll(underholdningTask, hajTask);
+
+            words[0].Headword.Should().Be("underholdning");
+            words[0].Definitions.Should().ContainSingle();
+            words[1].Headword.Should().Be("haj");
+            words[1].Definitions.Should().HaveCount(3);
         }
 
         #endregion
@@ -51,9 +103,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParseHeadword();
+            string word = parser.ParseHeadword(document);
             word.Should().Be("underholdning");
         }
 
@@ -63,9 +115,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Grillspyd.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParseHeadword();
+            string word = parser.ParseHeadword(document);
             word.Should().Be("grillspyd");
         }
 
@@ -75,9 +127,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Stødtand.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParseHeadword();
+            string word = parser.ParseHeadword(document);
             word.Should().Be("stødtand");
         }
 
@@ -87,9 +139,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Tiltale.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParseHeadword();
+            string word = parser.ParseHeadword(document);
             word.Should().Be("tiltale");
         }
 
@@ -99,9 +151,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("PåHøjtryk.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParseHeadword();
+            string word = parser.ParseHeadword(document);
             word.Should().Be("på/under højtryk");
         }
 
@@ -111,9 +163,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Påtage.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParseHeadword();
+            string word = parser.ParseHeadword(document);
             word.Should().Be("påtage");
         }
 
@@ -127,9 +179,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Haj.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParsePartOfSpeech();
+            string word = parser.ParsePartOfSpeech(document);
             word.Should().Be("substantiv, fælleskøn");
         }
 
@@ -139,9 +191,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Grillspyd.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParsePartOfSpeech();
+            string word = parser.ParsePartOfSpeech(document);
             word.Should().Be("substantiv, intetkøn");
         }
 
@@ -151,9 +203,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Høj.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParsePartOfSpeech();
+            string word = parser.ParsePartOfSpeech(document);
             word.Should().Be("adjektiv");
         }
 
@@ -163,9 +215,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Kigge.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParsePartOfSpeech();
+            string word = parser.ParsePartOfSpeech(document);
             word.Should().Be("verbum");
         }
 
@@ -175,9 +227,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Såsom.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParsePartOfSpeech();
+            string word = parser.ParsePartOfSpeech(document);
             word.Should().Be("konjunktion");
         }
 
@@ -187,9 +239,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("PåHøjtryk.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string word = parser.ParsePartOfSpeech();
+            string word = parser.ParsePartOfSpeech(document);
             word.Should().BeEmpty();
         }
 
@@ -203,9 +255,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string endings = parser.ParseEndings();
+            string endings = parser.ParseEndings(document);
             endings.Should().Be("-en");
         }
 
@@ -215,9 +267,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Stødtand.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string endings = parser.ParseEndings();
+            string endings = parser.ParseEndings(document);
             endings.Should().Be("-en, ..tænder, ..tænderne");
         }
 
@@ -227,9 +279,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Høj.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string endings = parser.ParseEndings();
+            string endings = parser.ParseEndings(document);
             endings.Should().Be("-t, -e || -ere, -est");
         }
 
@@ -239,9 +291,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Skat.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string endings = parser.ParseEndings();
+            string endings = parser.ParseEndings(document);
             endings.Should().Be("betydning 1: -ten, -ter, -terne || betydning 2: -ten, -te, -tene");
         }
 
@@ -251,9 +303,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("bestemt.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string endings = parser.ParseEndings();
+            string endings = parser.ParseEndings(document);
             endings.Should().Be("-, -e || superlativ -est");
         }
 
@@ -263,9 +315,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("øge.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string endings = parser.ParseEndings();
+            string endings = parser.ParseEndings(document);
             endings.Should().Be("-r, -de || (i betydning 2, uofficielt) øgte, -t || (i betydning 2, uofficielt) øgt");
         }
 
@@ -279,9 +331,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string pronunciation = parser.ParsePronunciation();
+            string pronunciation = parser.ParsePronunciation(document);
             Assert.AreEqual("[ˈɔnʌˌhʌlˀneŋ]", pronunciation);
         }
 
@@ -291,9 +343,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Kigge.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string pronunciation = parser.ParsePronunciation();
+            string pronunciation = parser.ParsePronunciation(document);
             Assert.AreEqual("[ˈkigə]", pronunciation);
         }
 
@@ -303,9 +355,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Grillspyd.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string pronunciation = parser.ParsePronunciation();
+            string pronunciation = parser.ParsePronunciation(document);
             Assert.AreEqual(string.Empty, pronunciation);
         }
 
@@ -319,9 +371,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string pronunciation = parser.ParseSound();
+            string pronunciation = parser.ParseSound(document);
             pronunciation.Should().Be("https://static.ordnet.dk/mp3/12004/12004770_1.mp3");
         }
 
@@ -332,9 +384,9 @@ namespace CopyWords.Parsers.Tests
 
             // Kigge page doesn't have a sound file
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string sound = parser.ParseSound();
+            string sound = parser.ParseSound(document);
             sound.Should().BeEmpty();
         }
 
@@ -344,9 +396,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Dannebrog.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string sound = parser.ParseSound();
+            string sound = parser.ParseSound(document);
             sound.Should().Be("https://static.ordnet.dk/mp3/11008/11008357_1.mp3");
         }
 
@@ -356,9 +408,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Haj.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            string sound = parser.ParseSound();
+            string sound = parser.ParseSound(document);
             sound.Should().Be("https://static.ordnet.dk/mp3/11019/11019539_1.mp3");
         }
 
@@ -372,9 +424,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<DDODefinition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions(document);
 
             definitions.Should().HaveCount(1);
             definitions.First().Meaning.Should().Be("noget der morer, glæder eller adspreder nogen, fx optræden, et lettere og ikke særlig krævende åndsprodukt eller en fornøjelig beskæftigelse");
@@ -386,9 +438,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Kigge.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<DDODefinition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions(document);
 
             definitions.Should().HaveCount(5);
 
@@ -426,9 +478,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Grillspyd.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<DDODefinition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions(document);
 
             definitions.Should().HaveCount(1);
             definitions.First().Meaning.Should().Be("spids pind af træ eller metal til at stikke gennem kød og grøntsager under grilning");
@@ -440,9 +492,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Haj.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<DDODefinition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions(document);
 
             definitions.Should().HaveCount(3);
 
@@ -473,9 +525,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("fladtang.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<DDODefinition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions(document);
 
             definitions.Should().HaveCount(1);
 
@@ -493,9 +545,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Dannebrog.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<DDODefinition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions(document);
 
             definitions.Should().HaveCount(1);
 
@@ -511,9 +563,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Stiktosset.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<DDODefinition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions(document);
 
             definitions.Should().HaveCount(1);
 
@@ -529,9 +581,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<DDODefinition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions(document);
 
             definitions.Should().HaveCount(1);
 
@@ -545,9 +597,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Grillspyd.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<DDODefinition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions(document);
 
             definitions.Should().HaveCount(1);
 
@@ -563,9 +615,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("PåHøjtryk.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<DDODefinition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions(document);
 
             definitions.Should().HaveCount(1);
 
@@ -582,9 +634,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("frabede.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<DDODefinition> definitions = parser.ParseDefinitions();
+            List<DDODefinition> definitions = parser.ParseDefinitions(document);
 
             definitions.Should().HaveCount(1);
 
@@ -606,9 +658,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Underholdning.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<Variant> variants = parser.ParseVariants();
+            List<Variant> variants = parser.ParseVariants(document);
 
             variants.Should().HaveCount(1);
 
@@ -622,9 +674,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Høj.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<Variant> variants = parser.ParseVariants();
+            List<Variant> variants = parser.ParseVariants(document);
 
             variants.Should().HaveCount(2);
 
@@ -641,9 +693,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Skat.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<Variant> variants = parser.ParseVariants();
+            List<Variant> variants = parser.ParseVariants(document);
 
             variants.Should().HaveCount(3);
 
@@ -663,9 +715,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("PåHøjtryk.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<Variant> variants = parser.ParseVariants();
+            List<Variant> variants = parser.ParseVariants(document);
 
             variants.Should().HaveCount(0);
         }
@@ -676,9 +728,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Påtage.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<Variant> variants = parser.ParseVariants();
+            List<Variant> variants = parser.ParseVariants(document);
 
             variants.Should().HaveCount(1);
 
@@ -692,9 +744,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Slå.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<Variant> variants = parser.ParseVariants();
+            List<Variant> variants = parser.ParseVariants(document);
 
             variants.Should().HaveCount(3);
 
@@ -718,9 +770,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Dannebrog.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            var result = parser.ParseFasteUdtryk();
+            var result = parser.ParseFasteUdtryk(document);
 
             result.Should().BeEmpty();
         }
@@ -731,9 +783,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Slå.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            var result = parser.ParseFasteUdtryk();
+            var result = parser.ParseFasteUdtryk(document);
 
             result.Should().HaveCountGreaterThan(5);
 
@@ -749,9 +801,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("Skat.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            var result = parser.ParseFasteUdtryk();
+            var result = parser.ParseFasteUdtryk(document);
 
             result.Should().HaveCount(7);
 
@@ -770,9 +822,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("islygte.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<Variant> suggestions = parser.ParseMenteDuSuggestions();
+            List<Variant> suggestions = parser.ParseSuggestions(document);
 
             suggestions.Should().HaveCount(7);
             suggestions[0].Word.Should().Be("lygte");
@@ -803,9 +855,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("apfel.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<Variant> suggestions = parser.ParseMenteDuSuggestions();
+            List<Variant> suggestions = parser.ParseSuggestions(document);
 
             suggestions.Should().HaveCount(12);
             suggestions[0].Word.Should().Be("appel");
@@ -851,9 +903,9 @@ namespace CopyWords.Parsers.Tests
             string content = GetSimpleHTMLPage("SimplePage.html");
 
             DDOPageParser parser = new DDOPageParser();
-            parser.LoadHtml(content);
+            HtmlDocument document = DDOPageParser.ParseHtmlDocument(content);
 
-            List<Variant> suggestions = parser.ParseMenteDuSuggestions();
+            List<Variant> suggestions = parser.ParseSuggestions(document);
 
             suggestions.Should().BeEmpty();
         }

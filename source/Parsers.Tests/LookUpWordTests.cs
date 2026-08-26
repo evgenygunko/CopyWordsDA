@@ -3,6 +3,7 @@
 using System.Text;
 using AutoFixture;
 using CopyWords.Parsers.Models;
+using CopyWords.Parsers.Models.DDO;
 using CopyWords.Parsers.Services;
 using FluentAssertions;
 using Moq;
@@ -30,6 +31,7 @@ namespace CopyWords.Parsers.Tests
             SourceLanguage sourceLanguage = SourceLanguage.Danish;
 
             Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+            ddoPageParserMock.Setup(x => x.ParseWord(It.IsAny<string>())).Returns(CreateDDOWord("bestemt"));
 
             Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
             fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8, It.IsAny<CancellationToken>())).ReturnsAsync("bestemme.html");
@@ -38,7 +40,7 @@ namespace CopyWords.Parsers.Tests
             WordModel? result = await sut.LookUpWordAsync(searchTerm, sourceLanguage.ToString(), CancellationToken.None);
 
             result.Should().NotBeNull();
-            ddoPageParserMock.Verify(x => x.ParseHeadword());
+            ddoPageParserMock.Verify(x => x.ParseWord("bestemme.html"));
             fileDownloaderMock.Verify(x => x.DownloadPageAsync(searchTerm, Encoding.UTF8, It.IsAny<CancellationToken>()));
         }
 
@@ -77,6 +79,7 @@ namespace CopyWords.Parsers.Tests
             SourceLanguage sourceLanguage = SourceLanguage.Danish;
 
             Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+            ddoPageParserMock.Setup(x => x.ParseWord(It.IsAny<string>())).Returns(CreateDDOWord("haj"));
 
             // Just return some valid HTML, so we get past the downloading part
             Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
@@ -88,7 +91,7 @@ namespace CopyWords.Parsers.Tests
             result.Should().NotBeNull();
 
             fileDownloaderMock.Verify(x => x.DownloadPageAsync(It.Is<string>(str => str.StartsWith("https://gammel.ordnet.dk/ddo/ordbog?query=")), Encoding.UTF8, It.IsAny<CancellationToken>()));
-            ddoPageParserMock.Verify(x => x.ParseHeadword());
+            ddoPageParserMock.Verify(x => x.ParseWord("haj.html"));
         }
 
         [TestMethod]
@@ -134,12 +137,8 @@ namespace CopyWords.Parsers.Tests
             fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8, It.IsAny<CancellationToken>())).ReturnsAsync("haj.html");
 
             Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
-            ddoPageParserMock.Setup(x => x.ParseHeadword()).Returns(headWord);
-            ddoPageParserMock.Setup(x => x.ParsePartOfSpeech()).Returns(partOfSpeech);
-            ddoPageParserMock.Setup(x => x.ParseEndings()).Returns(endings);
-            ddoPageParserMock.Setup(x => x.ParseSound()).Returns(soundUrl);
-            ddoPageParserMock.Setup(x => x.ParseDefinitions()).Returns(definitions);
-            ddoPageParserMock.Setup(x => x.ParseVariants()).Returns(variants);
+            ddoPageParserMock.Setup(x => x.ParseWord(It.IsAny<string>())).Returns(
+                CreateDDOWord(headWord, partOfSpeech, endings, soundUrl, definitions, variants));
 
             var sut = _fixture.Create<LookUpWord>();
 
@@ -185,6 +184,7 @@ namespace CopyWords.Parsers.Tests
             fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8, It.IsAny<CancellationToken>())).ReturnsAsync("haj.html");
 
             Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+            ddoPageParserMock.Setup(x => x.ParseWord(It.IsAny<string>())).Returns(CreateDDOWord("haj"));
 
             var sut = _fixture.Create<LookUpWord>();
 
@@ -194,11 +194,7 @@ namespace CopyWords.Parsers.Tests
 
             fileDownloaderMock.Verify(x => x.DownloadPageAsync(url, Encoding.UTF8, It.IsAny<CancellationToken>()));
 
-            ddoPageParserMock.Verify(x => x.LoadHtml(It.IsAny<string>()));
-            ddoPageParserMock.Verify(x => x.ParseHeadword());
-            ddoPageParserMock.Verify(x => x.ParseSound());
-            ddoPageParserMock.Verify(x => x.ParseDefinitions());
-            ddoPageParserMock.Verify(x => x.ParseVariants());
+            ddoPageParserMock.Verify(x => x.ParseWord("haj.html"), Times.Once);
         }
 
         [TestMethod]
@@ -211,8 +207,7 @@ namespace CopyWords.Parsers.Tests
             fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8, It.IsAny<CancellationToken>())).ReturnsAsync("i forb. med.html");
 
             Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
-            ddoPageParserMock.Setup(x => x.ParseHeadword()).Returns(headWord);
-            ddoPageParserMock.Setup(x => x.ParseSound()).Returns(string.Empty);
+            ddoPageParserMock.Setup(x => x.ParseWord(It.IsAny<string>())).Returns(CreateDDOWord(headWord));
 
             var sut = _fixture.Create<LookUpWord>();
             WordModel? result = await sut.GetWordByUrlAsync(url, SourceLanguage.Danish.ToString(), CancellationToken.None);
@@ -223,7 +218,7 @@ namespace CopyWords.Parsers.Tests
 
             fileDownloaderMock.Verify(x => x.DownloadPageAsync(url, Encoding.UTF8, It.IsAny<CancellationToken>()));
 
-            ddoPageParserMock.Verify(x => x.ParseSound());
+            ddoPageParserMock.Verify(x => x.ParseWord("i forb. med.html"), Times.Once);
         }
 
         #endregion
@@ -246,7 +241,7 @@ namespace CopyWords.Parsers.Tests
                 .ReturnsAsync("islygte.html");
 
             Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
-            ddoPageParserMock.Setup(x => x.ParseMenteDuSuggestions()).Returns(suggestions);
+            ddoPageParserMock.Setup(x => x.ParseSuggestions(It.IsAny<string>())).Returns(suggestions);
 
             var sut = _fixture.Create<LookUpWord>();
 
@@ -258,8 +253,7 @@ namespace CopyWords.Parsers.Tests
                     $"{DDOPageParser.DDOBaseUrl}?query={searchTerm}",
                     Encoding.UTF8,
                     It.IsAny<CancellationToken>()));
-            ddoPageParserMock.Verify(x => x.LoadHtml("islygte.html"));
-            ddoPageParserMock.Verify(x => x.ParseMenteDuSuggestions());
+            ddoPageParserMock.Verify(x => x.ParseSuggestions("islygte.html"), Times.Once);
         }
 
         [TestMethod]
@@ -276,8 +270,7 @@ namespace CopyWords.Parsers.Tests
             IEnumerable<string> result = await sut.GetSuggestedWordsAsync("missing", SourceLanguage.Danish.ToString(), CancellationToken.None);
 
             result.Should().BeEmpty();
-            ddoPageParserMock.Verify(x => x.LoadHtml(It.IsAny<string>()), Times.Never);
-            ddoPageParserMock.Verify(x => x.ParseMenteDuSuggestions(), Times.Never);
+            ddoPageParserMock.Verify(x => x.ParseSuggestions(It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -377,7 +370,8 @@ namespace CopyWords.Parsers.Tests
             fileDownloaderMock.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8, It.IsAny<CancellationToken>())).ReturnsAsync("haj.html");
 
             Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
-            ddoPageParserMock.Setup(x => x.ParseDefinitions()).Returns(CreateDefinitionsForHaj());
+            ddoPageParserMock.Setup(x => x.ParseWord(html)).Returns(
+                CreateDDOWord("haj", definitions: CreateDefinitionsForHaj()));
 
             var sut = _fixture.Create<LookUpWord>();
 
@@ -420,11 +414,7 @@ namespace CopyWords.Parsers.Tests
             Example example3 = meaning3!.Examples.First();
             example3.Original.Should().Be("Chamonix er et \"must\" for dig, som er en haj på ski. Her finder du noget af alpernes \"tuffeste\" skiløb");
 
-            ddoPageParserMock.Verify(x => x.LoadHtml(It.IsAny<string>()));
-            ddoPageParserMock.Verify(x => x.ParseHeadword());
-            ddoPageParserMock.Verify(x => x.ParseSound());
-            ddoPageParserMock.Verify(x => x.ParseDefinitions());
-            ddoPageParserMock.Verify(x => x.ParseVariants());
+            ddoPageParserMock.Verify(x => x.ParseWord(html), Times.Once);
         }
 
         #endregion
@@ -491,6 +481,26 @@ namespace CopyWords.Parsers.Tests
         #endregion
 
         #region Private Methods
+
+        private static DDOWord CreateDDOWord(
+            string headword,
+            string partOfSpeech = "",
+            string endings = "",
+            string soundUrl = "",
+            IReadOnlyList<DDODefinition>? definitions = null,
+            IReadOnlyList<Variant>? variants = null,
+            IReadOnlyList<Variant>? expressions = null)
+        {
+            return new DDOWord(
+                Headword: headword,
+                PartOfSpeech: partOfSpeech,
+                Endings: endings,
+                Pronunciation: string.Empty,
+                SoundUrl: soundUrl,
+                Definitions: definitions ?? [],
+                Variants: variants ?? [],
+                Expressions: expressions ?? []);
+        }
 
         private static List<Models.DDO.DDODefinition> CreateDefinitionsForHaj()
         {

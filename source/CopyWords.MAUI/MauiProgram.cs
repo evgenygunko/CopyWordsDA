@@ -112,8 +112,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<IAnkiContentApi, AnkiContentApiWrapper>();
         builder.Services.AddSingleton(AppInfo.Current);
 
-        builder.Services.AddTransient<IDDOPageParser, DDOPageParser>();
-        builder.Services.AddTransient<ISpanishDictPageParser, SpanishDictPageParser>();
+        builder.Services.AddSingleton<IDDOPageParser, DDOPageParser>();
+        builder.Services.AddSingleton<ISpanishDictPageParser, SpanishDictPageParser>();
         builder.Services.AddTransient<ILookUpWord, LookUpWord>();
 
         builder.Services.AddHttpClient<ITranslationsService, TranslationsService>();

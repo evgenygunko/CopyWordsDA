@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Net;
+using System.Text.RegularExpressions;
 using CopyWords.Parsers.Exceptions;
 using CopyWords.Parsers.Models;
 using CopyWords.Parsers.Models.DDO;
@@ -6,41 +7,70 @@ using HtmlAgilityPack;
 
 namespace CopyWords.Parsers
 {
-    public interface IDDOPageParser : IPageParser
+    public interface IDDOPageParser
     {
-        string ParseHeadword();
+        DDOWord ParseWord(string html);
 
-        string ParsePartOfSpeech();
-
-        string ParseEndings();
-
-        string ParsePronunciation();
-
-        string ParseSound();
-
-        List<DDODefinition> ParseDefinitions();
-
-        List<Variant> ParseVariants();
-
-        List<Variant> ParseFasteUdtryk();
-
-        List<Variant> ParseMenteDuSuggestions();
+        List<Variant> ParseSuggestions(string html);
     }
 
-    public class DDOPageParser : PageParserBase, IDDOPageParser
+    public class DDOPageParser : IDDOPageParser
     {
         public const string DDOBaseUrl = "https://gammel.ordnet.dk/ddo/ordbog";
 
         #region Public Methods
 
+        public DDOWord ParseWord(string html)
+        {
+            HtmlDocument document = ParseHtmlDocument(html);
+
+            return new DDOWord(
+                Headword: ParseHeadword(document),
+                PartOfSpeech: ParsePartOfSpeech(document),
+                Endings: ParseEndings(document),
+                Pronunciation: ParsePronunciation(document),
+                SoundUrl: ParseSound(document),
+                Definitions: ParseDefinitions(document),
+                Variants: ParseVariants(document),
+                Expressions: ParseFasteUdtryk(document));
+        }
+
+        public List<Variant> ParseSuggestions(string html)
+        {
+            HtmlDocument document = ParseHtmlDocument(html);
+            return ParseSuggestions(document);
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal static HtmlDocument ParseHtmlDocument(string html)
+        {
+            if (string.IsNullOrEmpty(html))
+            {
+                throw new ArgumentNullException(nameof(html));
+            }
+
+            var document = new HtmlDocument();
+            document.LoadHtml(html);
+
+            if (document.DocumentNode == null)
+            {
+                throw new PageParserException("DocumentNode is null for the loaded stream, please check that it has a valid html content.");
+            }
+
+            return document;
+        }
+
         /// <summary>
         /// Gets a string which contains found Danish word.
         /// </summary>
-        public string ParseHeadword()
+        internal string ParseHeadword(HtmlDocument document)
         {
             string headWord = string.Empty;
 
-            var div = FindElementByClassName("div", "definitionBoxTop");
+            var div = FindElementByClassName(document, "div", "definitionBoxTop");
 
             var spanHeadword = div.SelectSingleNode("//*[contains(@class, 'match')]");
             if (spanHeadword == null)
@@ -67,9 +97,9 @@ namespace CopyWords.Parsers
             return headWord;
         }
 
-        public string ParsePartOfSpeech()
+        internal string ParsePartOfSpeech(HtmlDocument document)
         {
-            var div = FindElementByClassName("div", "definitionBoxTop");
+            var div = FindElementByClassName(document, "div", "definitionBoxTop");
 
             var wordSpan = div.SelectSingleNode("//*[contains(@class, 'tekstmedium allow-glossing')]");
 
@@ -85,11 +115,11 @@ namespace CopyWords.Parsers
         /// <summary>
         /// Gets endings for found word.
         /// </summary>
-        public string ParseEndings()
+        internal string ParseEndings(HtmlDocument document)
         {
             string endings = string.Empty;
 
-            var div = FindElementById("id-boj");
+            var div = FindElementById(document, "id-boj");
 
             if (div != null)
             {
@@ -142,11 +172,11 @@ namespace CopyWords.Parsers
         /// <summary>
         /// Gets pronunciation for found word.
         /// </summary>
-        public string ParsePronunciation()
+        internal string ParsePronunciation(HtmlDocument document)
         {
             string pronunciation = string.Empty;
 
-            var div = FindElementById("id-udt");
+            var div = FindElementById(document, "id-udt");
 
             if (div != null)
             {
@@ -163,11 +193,11 @@ namespace CopyWords.Parsers
         /// <summary>
         /// Gets path to sound file for found word (which would be an URL).
         /// </summary>
-        public string ParseSound()
+        internal string ParseSound(HtmlDocument document)
         {
             string soundUrl = string.Empty;
 
-            var div = FindElementById("id-udt");
+            var div = FindElementById(document, "id-udt");
 
             if (div != null)
             {
@@ -190,15 +220,15 @@ namespace CopyWords.Parsers
         /// <summary>
         /// Gets definitions for found word. It will concatenate different definitions into one string with line breaks.
         /// </summary>
-        public List<DDODefinition> ParseDefinitions()
+        internal List<DDODefinition> ParseDefinitions(HtmlDocument document)
         {
             List<DDODefinition> definitions = new();
 
-            var div = FindElementById("content-betydninger");
+            var div = FindElementById(document, "content-betydninger");
             if (div == null)
             {
                 // It is probably "Faste udtryk", try another way...
-                div = FindElementByClassName("div", "artikel");
+                div = FindElementByClassName(document, "div", "artikel");
             }
 
             if (div != null)
@@ -228,6 +258,49 @@ namespace CopyWords.Parsers
             }
 
             return definitions;
+        }
+
+        internal List<Variant> ParseVariants(HtmlDocument document) => ParseVariantsFromBox(document, "opslagsordBox_expanded");
+
+        internal List<Variant> ParseFasteUdtryk(HtmlDocument document) => ParseVariantsFromBox(document, "fasteudtrykBox_expanded");
+
+        /// <summary>
+        /// Gets suggestions from "Mente du" / "Måske mente du" section on DDO miss pages.
+        /// </summary>
+        internal List<Variant> ParseSuggestions(HtmlDocument document)
+        {
+            var suggestionsContainer =
+                FindElementById(document, "more-alike-list-long")
+                ?? FindElementById(document, "alikebox-show-all");
+
+            if (suggestionsContainer == null)
+            {
+                return new List<Variant>();
+            }
+
+            var ahrefNodes = suggestionsContainer.SelectNodes(".//a[@href]");
+            if (ahrefNodes == null)
+            {
+                return new List<Variant>();
+            }
+
+            var variants = new List<Variant>();
+            foreach (var ahref in ahrefNodes)
+            {
+                string variationUrl = DecodeText(ahref.Attributes["href"].Value);
+                if (variationUrl.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                variationUrl = BuildDdoUrl(variationUrl);
+                string word = DecodeText(ahref.InnerText);
+                string encodedVariationUrl = new Uri(variationUrl).AbsoluteUri;
+
+                variants.Add(new Variant(word, encodedVariationUrl));
+            }
+
+            return variants;
         }
 
         #endregion
@@ -293,56 +366,9 @@ namespace CopyWords.Parsers
             return examples;
         }
 
-        /// <summary>
-        /// Gets urls for the words variants.
-        /// </summary>
-        /// <returns>The words count.</returns>
-        public List<Variant> ParseVariants() => ParseVariantsFromBox("opslagsordBox_expanded");
-
-        public List<Variant> ParseFasteUdtryk() => ParseVariantsFromBox("fasteudtrykBox_expanded");
-
-        /// <summary>
-        /// Gets suggestions from "Mente du" / "Måske mente du" section on DDO miss pages.
-        /// </summary>
-        public List<Variant> ParseMenteDuSuggestions()
+        private List<Variant> ParseVariantsFromBox(HtmlDocument document, string boxElementId)
         {
-            var suggestionsContainer =
-                FindElementById("more-alike-list-long")
-                ?? FindElementById("alikebox-show-all");
-
-            if (suggestionsContainer == null)
-            {
-                return new List<Variant>();
-            }
-
-            var ahrefNodes = suggestionsContainer.SelectNodes(".//a[@href]");
-            if (ahrefNodes == null)
-            {
-                return new List<Variant>();
-            }
-
-            var variants = new List<Variant>();
-            foreach (var ahref in ahrefNodes)
-            {
-                string variationUrl = DecodeText(ahref.Attributes["href"].Value);
-                if (variationUrl.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                variationUrl = BuildDdoUrl(variationUrl);
-                string word = DecodeText(ahref.InnerText);
-                string encodedVariationUrl = new Uri(variationUrl).AbsoluteUri;
-
-                variants.Add(new Variant(word, encodedVariationUrl));
-            }
-
-            return variants;
-        }
-
-        private List<Variant> ParseVariantsFromBox(string boxElementId)
-        {
-            var div = FindElementById(boxElementId);
+            var div = FindElementById(document, boxElementId);
 
             var searchResultBoxDiv = div?.SelectSingleNode("./div/div[contains(@class, 'searchResultBox')]");
             if (searchResultBoxDiv == null)
@@ -416,6 +442,27 @@ namespace CopyWords.Parsers
             }
 
             return variants;
+        }
+
+        private static string DecodeText(string innerText)
+        {
+            return WebUtility.HtmlDecode(innerText).Trim();
+        }
+
+        private static HtmlNode FindElementByClassName(HtmlDocument document, string elementName, string className)
+        {
+            var elements = document.DocumentNode.SelectNodes($"//{elementName}[contains(@class, '{className}')]");
+            if (elements == null)
+            {
+                throw new PageParserException($"Cannot find any element '{elementName}' with CSS class '{className}'");
+            }
+
+            return elements.First();
+        }
+
+        private static HtmlNode? FindElementById(HtmlDocument document, string id)
+        {
+            return document.DocumentNode.SelectSingleNode($"//*[@id='{id}']");
         }
 
         private static string BuildDdoUrl(string url)

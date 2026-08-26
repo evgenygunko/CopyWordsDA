@@ -109,21 +109,15 @@ namespace CopyWords.Parsers
         internal WordModel ParseDanishWord(string html)
         {
             // Download and parse a page from DDO
-            _ddoPageParser.LoadHtml(html);
-            string headWordDA = _ddoPageParser.ParseHeadword();
-
-            string partOfSpeech = _ddoPageParser.ParsePartOfSpeech();
-            string endings = _ddoPageParser.ParseEndings();
-
-            string soundUrl = _ddoPageParser.ParseSound();
+            DDOWord ddoWord = _ddoPageParser.ParseWord(html);
+            string headWordDA = ddoWord.Headword;
+            string soundUrl = ddoWord.SoundUrl;
             string soundFileName = string.IsNullOrEmpty(soundUrl) ? string.Empty : $"{headWordDA}.mp3";
-
-            List<DDODefinition> ddoDefinitions = _ddoPageParser.ParseDefinitions();
 
             // For DDO, we create one Definition with one Context and several Meanings.
             List<Meaning> meanings = new List<Meaning>();
             int pos = 1;
-            foreach (var ddoDefinition in ddoDefinitions)
+            foreach (var ddoDefinition in ddoWord.Definitions)
             {
                 meanings.Add(new Meaning(
                     Original: ddoDefinition.Meaning,
@@ -138,12 +132,9 @@ namespace CopyWords.Parsers
             Context context = new Context(ContextEN: "", Position: "", meanings);
             Definition definition = new Definition(
                 Headword: new Headword(Original: headWordDA, English: null, Translation: null),
-                PartOfSpeech: partOfSpeech,
-                Endings: endings,
+                PartOfSpeech: ddoWord.PartOfSpeech,
+                Endings: ddoWord.Endings,
                 Contexts: [context]);
-
-            var variants = _ddoPageParser.ParseVariants();
-            var expressions = _ddoPageParser.ParseFasteUdtryk();
 
             var wordModel = new WordModel(
                 Word: headWordDA,
@@ -151,8 +142,8 @@ namespace CopyWords.Parsers
                 SoundUrl: soundUrl,
                 SoundFileName: soundFileName,
                 Definition: definition,
-                Variants: variants,
-                Expressions: expressions
+                Variants: ddoWord.Variants,
+                Expressions: ddoWord.Expressions
             );
 
             return wordModel;
@@ -160,9 +151,8 @@ namespace CopyWords.Parsers
 
         internal IEnumerable<string> ParseDanishSuggestions(string html)
         {
-            _ddoPageParser.LoadHtml(html);
             return _ddoPageParser
-                .ParseMenteDuSuggestions()
+                .ParseSuggestions(html)
                 .Select(x => x.Word)
                 .Distinct(StringComparer.OrdinalIgnoreCase);
         }
