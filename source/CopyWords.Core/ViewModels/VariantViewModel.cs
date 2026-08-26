@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CopyWords.Core.Models;
+using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.ViewModels
 {

@@ -4,9 +4,9 @@ using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services.Wrappers;
 using CopyWords.Parsers;
+using CopyWords.Parsers.Models;
 using Newtonsoft.Json;
 using ParserServerErrorException = CopyWords.Parsers.Exceptions.ServerErrorException;
-using ParserWordModel = CopyWords.Parsers.Models.WordModel;
 
 namespace CopyWords.Core.Services
 {
@@ -97,7 +97,7 @@ namespace CopyWords.Core.Services
                     throw new InvalidOperationException("Client-side word parser is not configured.");
                 }
 
-                ParserWordModel? parsedWordModel;
+                WordModel? parsedWordModel;
                 try
                 {
                     parsedWordModel = await _lookUpWord.LookUpWordAsync(wordToLookUp, sourceLanguage, cancellationToken);
@@ -112,9 +112,7 @@ namespace CopyWords.Core.Services
                     throw new WordNotFoundException(wordToLookUp);
                 }
 
-                WordModel wordModel = ConvertWordModel(parsedWordModel);
-
-                return await TranslateAsync(CreateLookUpWordV3Url(), wordModel, cancellationToken);
+                return await TranslateAsync(CreateLookUpWordV3Url(), parsedWordModel, cancellationToken);
             }
 
             string lookupUrl = CreateLookUpWordUrl();
@@ -174,7 +172,7 @@ namespace CopyWords.Core.Services
 
             if (response.IsSuccessStatusCode)
             {
-                SuggestedWordsModel? suggestedWords = await response.Content.ReadFromJsonAsync<SuggestedWordsModel>(combinedCts.Token);
+                var suggestedWords = await response.Content.ReadFromJsonAsync<SuggestedWordsModel>(combinedCts.Token);
                 return suggestedWords ?? new SuggestedWordsModel([]);
             }
 
@@ -248,38 +246,6 @@ namespace CopyWords.Core.Services
             }
 
             throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
-        }
-
-        private static WordModel ConvertWordModel(ParserWordModel parserWordModel)
-        {
-            CopyWords.Parsers.Models.Definition parserDefinition = parserWordModel.Definition;
-            var definition = new Definition(
-                new Headword(
-                    parserDefinition.Headword.Original,
-                    parserDefinition.Headword.English,
-                    parserDefinition.Headword.Translation),
-                parserDefinition.PartOfSpeech,
-                parserDefinition.Endings,
-                parserDefinition.Contexts.Select(context => new Context(
-                    context.ContextEN,
-                    context.Position,
-                    context.Meanings.Select(meaning => new Meaning(
-                        meaning.Original,
-                        meaning.Translation,
-                        meaning.AlphabeticalPosition,
-                        meaning.Tag,
-                        meaning.ImageUrl,
-                        meaning.LookupUrl,
-                        meaning.Examples.Select(example => new Example(example.Original, example.Translation)).ToArray())).ToArray())).ToArray());
-
-            return new WordModel(
-                parserWordModel.Word,
-                Enum.Parse<SourceLanguage>(parserWordModel.SourceLanguage.ToString()),
-                parserWordModel.SoundUrl,
-                parserWordModel.SoundFileName,
-                definition,
-                parserWordModel.Variants.Select(variant => new Variant(variant.Word, variant.Url)).ToArray(),
-                parserWordModel.Expressions.Select(expression => new Variant(expression.Word, expression.Url)).ToArray());
         }
     }
 }

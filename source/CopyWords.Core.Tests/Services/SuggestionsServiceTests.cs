@@ -3,6 +3,7 @@ using System.Text.Json;
 using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
+using CopyWords.Parsers.Models;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;

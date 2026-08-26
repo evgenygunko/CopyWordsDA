@@ -8,6 +8,7 @@ using CopyWords.Core.Exceptions;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
+using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.ViewModels
 {

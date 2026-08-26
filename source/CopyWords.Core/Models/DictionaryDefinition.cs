@@ -1,3 +1,5 @@
+﻿using CopyWords.Parsers.Models;
+
 namespace CopyWords.Core.Models
 {
     public sealed record DictionaryDefinition(

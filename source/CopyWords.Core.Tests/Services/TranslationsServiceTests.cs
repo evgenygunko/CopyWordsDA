@@ -5,6 +5,7 @@ using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
 using CopyWords.Parsers;
+using CopyWords.Parsers.Models;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;

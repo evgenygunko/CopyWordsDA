@@ -1,3 +1,5 @@
+﻿using CopyWords.Parsers.Models;
+
 namespace CopyWords.Core.Models
 {
     public static class DictionaryCatalog

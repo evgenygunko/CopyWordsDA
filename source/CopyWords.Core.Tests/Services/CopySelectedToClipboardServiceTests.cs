@@ -4,6 +4,7 @@ using AutoFixture;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.ViewModels;
+using CopyWords.Parsers.Models;
 using FluentAssertions;
 using Moq;
 

@@ -2,6 +2,7 @@
 
 using System.Globalization;
 using CopyWords.Core.Models;
+using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.Services
 {

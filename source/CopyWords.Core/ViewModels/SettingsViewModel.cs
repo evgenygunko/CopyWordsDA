@@ -11,6 +11,7 @@ using CopyWords.Core.Constants;
 using CopyWords.Core.Models;
 using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
+using CopyWords.Parsers.Models;
 using FluentValidation;
 using FluentValidation.Results;
 

@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CopyWords.Core.Models;
+using CopyWords.Parsers.Models;
 
 namespace CopyWords.Core.ViewModels
 {
