@@ -60,7 +60,7 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public async Task DownloadPageAsync_WhenRequestTargetsDdo_AddsBrowserNavigationHeaders()
+        public async Task DownloadPageAsync_DoesNotOverrideNativeHeaders()
         {
             var handler = new StubHttpMessageHandler(CreateResponse(HttpStatusCode.OK, "islygte "));
             using var httpClient = new HttpClient(handler);
@@ -71,39 +71,7 @@ namespace CopyWords.Parsers.Tests
 
             handler.LastRequest.Should().NotBeNull();
             HttpRequestMessage request = handler.LastRequest!;
-            request.Headers.Referrer.Should().BeNull();
-            request.Headers.UserAgent.ToString().Should().Be("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36");
-            request.Headers.Accept.ToString().Should().Be("text/html, application/xhtml+xml, application/xml; q=0.9, image/avif, image/webp, image/apng, */*; q=0.8, application/signed-exchange; v=b3; q=0.7");
-            request.Headers.AcceptLanguage.ToString().Should().Be("en, ru; q=0.9, da; q=0.8, es; q=0.7");
-            request.Headers.GetValues("Upgrade-Insecure-Requests").Should().ContainSingle().Which.Should().Be("1");
-            request.Headers.GetValues("Sec-Fetch-Dest").Should().ContainSingle().Which.Should().Be("document");
-            request.Headers.GetValues("Sec-Fetch-Mode").Should().ContainSingle().Which.Should().Be("navigate");
-            request.Headers.GetValues("Sec-Fetch-Site").Should().ContainSingle().Which.Should().Be("none");
-            request.Headers.GetValues("Sec-Fetch-User").Should().ContainSingle().Which.Should().Be("?1");
-            request.Headers.GetValues("sec-ch-ua").Should().ContainSingle().Which.Should().Be("\"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\"");
-            request.Headers.GetValues("sec-ch-ua-mobile").Should().ContainSingle().Which.Should().Be("?0");
-            request.Headers.GetValues("sec-ch-ua-platform").Should().ContainSingle().Which.Should().Be("\"Windows\"");
-        }
-
-        [TestMethod]
-        public async Task DownloadPageAsync_WhenRequestIsNotDdo_DoesNotAddDdoOnlyHeaders()
-        {
-            var handler = new StubHttpMessageHandler(CreateResponse(HttpStatusCode.OK, "page "));
-            using var httpClient = new HttpClient(handler);
-            var sut = CreateSut(httpClient);
-
-            await sut.DownloadPageAsync("https://example.com/page", Encoding.UTF8, CancellationToken.None);
-
-            handler.LastRequest.Should().NotBeNull();
-            HttpRequestMessage request = handler.LastRequest!;
-            request.Headers.Referrer.Should().BeNull();
-            request.Headers.Contains("Sec-Fetch-Dest").Should().BeFalse();
-            request.Headers.Contains("Sec-Fetch-Mode").Should().BeFalse();
-            request.Headers.Contains("Sec-Fetch-Site").Should().BeFalse();
-            request.Headers.Contains("Sec-Fetch-User").Should().BeFalse();
-            request.Headers.Contains("sec-ch-ua").Should().BeFalse();
-            request.Headers.Contains("sec-ch-ua-mobile").Should().BeFalse();
-            request.Headers.Contains("sec-ch-ua-platform").Should().BeFalse();
+            request.Headers.Should().BeEmpty();
         }
 
         [TestMethod]
@@ -131,7 +99,7 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
-        public async Task GetSpanishWordsSuggestionsAsync_DoesNotAddDdoNavigationHeaders()
+        public async Task GetSpanishWordsSuggestionsAsync_AddsOnlyJsonAcceptHeader()
         {
             var handler = new StubHttpMessageHandler(CreateResponse(HttpStatusCode.OK, "{\"results\":[\"ser\"]}"));
             using var httpClient = new HttpClient(handler);
@@ -141,14 +109,9 @@ namespace CopyWords.Parsers.Tests
 
             handler.LastRequest.Should().NotBeNull();
             HttpRequestMessage request = handler.LastRequest!;
-            request.Headers.Referrer.Should().BeNull();
-            request.Headers.Contains("Sec-Fetch-Dest").Should().BeFalse();
-            request.Headers.Contains("Sec-Fetch-Mode").Should().BeFalse();
-            request.Headers.Contains("Sec-Fetch-Site").Should().BeFalse();
-            request.Headers.Contains("Sec-Fetch-User").Should().BeFalse();
-            request.Headers.Contains("sec-ch-ua").Should().BeFalse();
-            request.Headers.Contains("sec-ch-ua-mobile").Should().BeFalse();
-            request.Headers.Contains("sec-ch-ua-platform").Should().BeFalse();
+            request.Headers.Should().ContainSingle();
+            request.Headers.Accept.Should().ContainSingle()
+                .Which.MediaType.Should().Be("application/json");
         }
 
         /// <summary>

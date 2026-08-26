@@ -23,19 +23,10 @@ namespace CopyWords.Parsers.Services
         private readonly HttpClient _httpClient;
 
         private const string SpanishSuggestionsApiUrl = "https://suggest1.spanishdict.com/dictionary/translate_es_suggest?q=";
-        private const string DdoHost = "gammel.ordnet.dk";
-        private const string BrowserUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36";
-        private const string BrowserAcceptHeader = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7";
-        private const string BrowserAcceptLanguageHeader = "en,ru;q=0.9,da;q=0.8,es;q=0.7";
-        private const string DdoSecChUaHeader = "\"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\"";
-        private const string DdoSecChUaMobileHeader = "?0";
-        private const string DdoSecChUaPlatformHeader = "\"Windows\"";
 
         public FileDownloader(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(BrowserUserAgent);
-            _httpClient.DefaultRequestHeaders.AcceptLanguage.ParseAdd(BrowserAcceptLanguageHeader);
         }
 
         public async Task<string?> DownloadPageAsync(string url, Encoding encoding, CancellationToken cancellationToken)
@@ -111,8 +102,7 @@ namespace CopyWords.Parsers.Services
 
         private async Task<string?> DownloadPageInternalAsync(string url, Encoding encoding, bool returnContentOnNotFound, CancellationToken cancellationToken)
         {
-            using var request = CreatePageRequest(url);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken);
+            HttpResponseMessage response = await _httpClient.GetAsync(url, cancellationToken);
 
             if (response.IsSuccessStatusCode || (returnContentOnNotFound && response.StatusCode == HttpStatusCode.NotFound))
             {
@@ -129,37 +119,6 @@ namespace CopyWords.Parsers.Services
                 $"Server returned error code '{response.StatusCode}' when requesting URL '{url}'.",
                 response.StatusCode,
                 url);
-        }
-
-        private static HttpRequestMessage CreatePageRequest(string url)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            request.Headers.Accept.ParseAdd(BrowserAcceptHeader);
-            request.Headers.Add("Upgrade-Insecure-Requests", "1");
-
-            if (IsDdoRequest(request.RequestUri))
-            {
-                ApplyDdoBrowserProfile(request);
-            }
-
-            return request;
-        }
-
-        private static bool IsDdoRequest(Uri? requestUri)
-        {
-            return requestUri != null
-                && string.Equals(requestUri.Host, DdoHost, StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static void ApplyDdoBrowserProfile(HttpRequestMessage request)
-        {
-            request.Headers.Add("Sec-Fetch-Dest", "document");
-            request.Headers.Add("Sec-Fetch-Mode", "navigate");
-            request.Headers.Add("Sec-Fetch-Site", "none");
-            request.Headers.Add("Sec-Fetch-User", "?1");
-            request.Headers.Add("sec-ch-ua", DdoSecChUaHeader);
-            request.Headers.Add("sec-ch-ua-mobile", DdoSecChUaMobileHeader);
-            request.Headers.Add("sec-ch-ua-platform", DdoSecChUaPlatformHeader);
         }
     }
 }
