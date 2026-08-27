@@ -18,6 +18,8 @@ namespace CopyWords.Core.Services
 
     public class TranslationsService : ITranslationsService
     {
+        private static readonly string[] DanishLookupPrefixes = ["at ", "en ", "et "];
+
         private readonly HttpClient _httpClient;
         private readonly IGlobalSettings _globalSettings;
         private readonly ISettingsService _settingsService;
@@ -42,7 +44,7 @@ namespace CopyWords.Core.Services
 
         public string CreateSuggestedWordsUrl()
         {
-            return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/v2/Translation/SuggestedWords?code={_globalSettings.TranslatorAppRequestCode}";
+            return $"{_globalSettings.TranslatorAppUrl.TrimEnd('/')}/api/v3/Translation/SuggestedWords?code={_globalSettings.TranslatorAppRequestCode}";
         }
 
         public async Task<WordModel?> LookUpWordAsync(string wordToLookUp, CancellationToken cancellationToken)
@@ -83,26 +85,49 @@ namespace CopyWords.Core.Services
                 throw new ArgumentException("Word to look up cannot be null or empty.", nameof(wordToLookUp));
             }
 
+            string sourceLanguage = _settingsService.GetSelectedParser();
+            if (CheckLanguageSpecificCharacters(wordToLookUp) is (true, string detectedLanguage))
+            {
+                if (string.Equals(detectedLanguage, "Russian", StringComparison.OrdinalIgnoreCase))
+                {
+                    return await GetAISuggestedWordsAsync(wordToLookUp, sourceLanguage, cancellationToken);
+                }
+
+                sourceLanguage = detectedLanguage;
+            }
+
+            if (string.Equals(sourceLanguage, SourceLanguage.Danish.ToString(), StringComparison.OrdinalIgnoreCase)
+                && TryRemoveDanishLookupPrefix(wordToLookUp, out string normalizedWord))
+            {
+                wordToLookUp = normalizedWord;
+            }
+
+            try
+            {
+                IEnumerable<string> suggestions = await _lookUpWord.GetSuggestedWordsAsync(
+                    wordToLookUp,
+                    sourceLanguage,
+                    cancellationToken);
+                return new SuggestedWordsModel(suggestions);
+            }
+            catch (ParserServerErrorException ex)
+            {
+                throw new ServerErrorException(ex.Message, ex);
+            }
+        }
+
+        private async Task<SuggestedWordsModel> GetAISuggestedWordsAsync(
+            string wordToLookUp,
+            string destinationLanguage,
+            CancellationToken cancellationToken)
+        {
             if (string.IsNullOrEmpty(_globalSettings.TranslatorAppUrl))
             {
                 throw new ArgumentException("TranslatorApp URL cannot be null or empty");
             }
 
             string suggestedWordsUrl = CreateSuggestedWordsUrl();
-            string sourceLanguage = _settingsService.GetSelectedParser();
-            string destinationLanguage = _settingsService.GetDestinationLanguage();
-            IReadOnlyList<string> activeDictionaries = _settingsService.GetActiveDictionaries();
-            if (string.IsNullOrWhiteSpace(destinationLanguage))
-            {
-                destinationLanguage = "Russian";
-            }
-
-            var input = new LookUpWordRequest(
-                Text: wordToLookUp,
-                SourceLanguage: sourceLanguage,
-                DestinationLanguage: destinationLanguage,
-                ActiveDictionaries: activeDictionaries,
-                Version: "2");
+            var input = new SuggestionsRequest(wordToLookUp, destinationLanguage);
 
             string jsonRequest = JsonConvert.SerializeObject(input);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
@@ -138,6 +163,43 @@ namespace CopyWords.Core.Services
             }
 
             throw new ServerErrorException($"The server returned the error '{response.StatusCode}'.");
+        }
+
+        private static (bool hasLanguageSpecificCharacters, string language) CheckLanguageSpecificCharacters(string text)
+        {
+            var danishCharacters = new HashSet<char> { 'æ', 'ø', 'å', 'Æ', 'Ø', 'Å' };
+            if (text.Any(danishCharacters.Contains))
+            {
+                return (true, SourceLanguage.Danish.ToString());
+            }
+
+            var spanishCharacters = new HashSet<char> { 'ñ', 'Ñ', 'í', 'Í', 'á', 'Á', 'é', 'É', 'ó', 'Ó', 'ú', 'Ú', 'ü', 'Ü' };
+            if (text.Any(spanishCharacters.Contains))
+            {
+                return (true, SourceLanguage.Spanish.ToString());
+            }
+
+            if (text.Any(character => character is >= '\u0400' and <= '\u04FF'))
+            {
+                return (true, "Russian");
+            }
+
+            return (false, string.Empty);
+        }
+
+        private static bool TryRemoveDanishLookupPrefix(string searchTerm, out string normalizedSearchTerm)
+        {
+            foreach (string prefix in DanishLookupPrefixes)
+            {
+                if (searchTerm.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    normalizedSearchTerm = searchTerm[prefix.Length..];
+                    return true;
+                }
+            }
+
+            normalizedSearchTerm = string.Empty;
+            return false;
         }
 
         private async Task<WordModel?> TranslateAsync(string url, WordModel input, CancellationToken cancellationToken)

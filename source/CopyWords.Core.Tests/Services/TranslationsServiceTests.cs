@@ -503,57 +503,95 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for GetSuggestedWordsAsync
 
         [TestMethod]
-        public async Task GetSuggestedWordsAsync_WhenCalled_ReturnsApiSuggestions()
+        public async Task GetSuggestedWordsAsync_WhenDanishIsSelected_ReturnsLocalSuggestions()
         {
-            var expectedSuggestions = new SuggestedWordsModel(["house", "horse"]);
-            string json = JsonConvert.SerializeObject(expectedSuggestions);
+            _lookUpWordMock
+                .Setup(x => x.GetSuggestedWordsAsync("hus", "Danish", It.IsAny<CancellationToken>()))
+                .ReturnsAsync(["huset", "huse"]);
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            var sut = CreateTranslationsService(new HttpClient(handlerMock.Object));
 
-            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, json);
-            var sut = CreateTranslationsService(httpClient);
+            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("hus", CancellationToken.None);
 
-            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("test", CancellationToken.None);
-
-            result.Words.Should().NotBeNull();
-            result.Words.Should().BeEquivalentTo(expectedSuggestions.Words);
+            result.Words.Should().Equal("huset", "huse");
+            _lookUpWordMock.Verify(x => x.GetSuggestedWordsAsync("hus", "Danish", It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
-        public async Task GetSuggestedWordsAsync_WhenApiReturnsNullBody_ReturnsEmptySuggestedWords()
+        public async Task GetSuggestedWordsAsync_WhenInputHasDanishCharacters_OverridesSpanishParser()
         {
-            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "null");
-            var sut = CreateTranslationsService(httpClient);
+            _settingsServiceMock.Setup(x => x.GetSelectedParser()).Returns(nameof(SourceLanguage.Spanish));
+            _lookUpWordMock
+                .Setup(x => x.GetSuggestedWordsAsync("løb", "Danish", It.IsAny<CancellationToken>()))
+                .ReturnsAsync(["løbe"]);
+            var sut = CreateTranslationsService(new HttpClient(new Mock<HttpMessageHandler>(MockBehavior.Strict).Object));
 
-            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("test", CancellationToken.None);
+            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("løb", CancellationToken.None);
 
-            result.Words.Should().NotBeNull();
+            result.Words.Should().Equal("løbe");
+            _lookUpWordMock.Verify(x => x.GetSuggestedWordsAsync("løb", "Spanish", It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_WhenInputHasSpanishCharacters_OverridesDanishParser()
+        {
+            _lookUpWordMock
+                .Setup(x => x.GetSuggestedWordsAsync("niño", "Spanish", It.IsAny<CancellationToken>()))
+                .ReturnsAsync(["niños"]);
+            var sut = CreateTranslationsService(new HttpClient(new Mock<HttpMessageHandler>(MockBehavior.Strict).Object));
+
+            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("niño", CancellationToken.None);
+
+            result.Words.Should().Equal("niños");
+            _lookUpWordMock.Verify(x => x.GetSuggestedWordsAsync("niño", "Danish", It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [TestMethod]
+        [DataRow("at ligge", "ligge")]
+        [DataRow("en bolig", "bolig")]
+        [DataRow("et hus", "hus")]
+        public async Task GetSuggestedWordsAsync_WhenDanishPrefixIsPresent_RemovesPrefix(string input, string normalizedInput)
+        {
+            _lookUpWordMock
+                .Setup(x => x.GetSuggestedWordsAsync(normalizedInput, "Danish", It.IsAny<CancellationToken>()))
+                .ReturnsAsync([normalizedInput]);
+            var sut = CreateTranslationsService(new HttpClient(new Mock<HttpMessageHandler>(MockBehavior.Strict).Object));
+
+            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync(input, CancellationToken.None);
+
+            result.Words.Should().Equal(normalizedInput);
+            _lookUpWordMock.Verify(x => x.GetSuggestedWordsAsync(input, "Danish", It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_WhenLocalParserFails_ThrowsClientServerErrorException()
+        {
+            _lookUpWordMock
+                .Setup(x => x.GetSuggestedWordsAsync("hus", "Danish", It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new CopyWords.Parsers.Exceptions.ServerErrorException("DDO unavailable"));
+            var sut = CreateTranslationsService(new HttpClient(new Mock<HttpMessageHandler>(MockBehavior.Strict).Object));
+
+            var act = async () => await sut.GetSuggestedWordsAsync("hus", CancellationToken.None);
+
+            await act.Should().ThrowAsync<ServerErrorException>().WithMessage("DDO unavailable");
+        }
+
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_WhenLocalParserReturnsEmpty_ReturnsEmptySuggestionsWithoutApiConfiguration()
+        {
+            _globalSettingsMock.SetupGet(x => x.TranslatorAppUrl).Returns(string.Empty);
+            _lookUpWordMock
+                .Setup(x => x.GetSuggestedWordsAsync("missing", "Danish", It.IsAny<CancellationToken>()))
+                .ReturnsAsync([]);
+            var sut = CreateTranslationsService(new HttpClient(new Mock<HttpMessageHandler>(MockBehavior.Strict).Object));
+
+            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("missing", CancellationToken.None);
+
             result.Words.Should().BeEmpty();
         }
 
         [TestMethod]
-        public async Task GetSuggestedWordsAsync_WhenWordIsNullOrEmpty_ThrowsArgumentException()
-        {
-            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
-            var sut = CreateTranslationsService(httpClient);
-
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync(null!, CancellationToken.None));
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync("", CancellationToken.None));
-        }
-
-        [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        public async Task GetSuggestedWordsAsync_WhenApiUrlIsNullOrEmpty_ThrowsArgumentException(string translatorAppUrl)
-        {
-            var httpClient = CreateMockHttpClient(HttpStatusCode.OK, "{}");
-            _globalSettingsMock.SetupGet(x => x.TranslatorAppUrl).Returns(translatorAppUrl);
-
-            var sut = CreateTranslationsService(httpClient);
-
-            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync("testword", CancellationToken.None));
-        }
-
-        [TestMethod]
-        public async Task GetSuggestedWordsAsync_Should_PostExpectedPayloadToSuggestedWordsEndpoint()
+        public async Task GetSuggestedWordsAsync_WhenCyrillic_PostsNarrowPayloadToV3()
         {
             string? requestContent = null;
             Uri? requestUri = null;
@@ -582,54 +620,37 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = new HttpClient(handlerMock.Object);
             var sut = CreateTranslationsService(httpClient);
 
-            await sut.GetSuggestedWordsAsync("testword", CancellationToken.None);
+            await sut.GetSuggestedWordsAsync("привет", CancellationToken.None);
 
             method.Should().Be(HttpMethod.Post);
             requestUri.Should().NotBeNull();
-            requestUri!.ToString().Should().Be("http://fake-translator-app-url/api/v2/Translation/SuggestedWords?code=fake-request-code");
+            requestUri!.ToString().Should().Be("http://fake-translator-app-url/api/v3/Translation/SuggestedWords?code=fake-request-code");
             requestContent.Should().NotBeNull();
-            requestContent.Should().Contain("\"Text\":\"testword\"");
-            requestContent.Should().Contain("\"SourceLanguage\":\"Danish\"");
-            requestContent.Should().Contain("\"DestinationLanguage\":\"English\"");
-            requestContent.Should().Contain("\"ActiveDictionaries\":[\"Danish\",\"Spanish\"]");
-            requestContent.Should().Contain("\"Version\":\"2\"");
+            requestContent.Should().Contain("\"Text\":\"привет\"");
+            requestContent.Should().Contain("\"DestinationLanguage\":\"Danish\"");
+            requestContent.Should().NotContain("SourceLanguage");
+            requestContent.Should().NotContain("ActiveDictionaries");
+            _lookUpWordMock.Verify(x => x.GetSuggestedWordsAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow(" ")]
-        public async Task GetSuggestedWordsAsync_WhenDestinationLanguageMissing_Should_FallbackToRussian(string? destinationLanguage)
+        public async Task GetSuggestedWordsAsync_WhenCyrillicApiReturnsNullBody_ReturnsEmptySuggestedWords()
         {
-            string? requestContent = null;
-            _settingsServiceMock.Setup(x => x.GetDestinationLanguage()).Returns(destinationLanguage!);
-            _settingsServiceMock.Setup(x => x.GetActiveDictionaries()).Returns([nameof(SourceLanguage.Danish), nameof(SourceLanguage.Spanish)]);
+            var sut = CreateTranslationsService(CreateMockHttpClient(HttpStatusCode.OK, "null"));
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            handlerMock
-                .Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>())
-                .Callback<HttpRequestMessage, CancellationToken>((request, _) =>
-                {
-                    requestContent = request.Content?.ReadAsStringAsync().GetAwaiter().GetResult();
-                })
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(new SuggestedWordsModel(["word"])))
-                });
+            SuggestedWordsModel result = await sut.GetSuggestedWordsAsync("привет", CancellationToken.None);
 
-            var httpClient = new HttpClient(handlerMock.Object);
-            var sut = CreateTranslationsService(httpClient);
+            result.Words.Should().BeEmpty();
+        }
 
-            await sut.GetSuggestedWordsAsync("testword", CancellationToken.None);
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_WhenCyrillicRequestIsCancelled_ThrowsTaskCanceledException()
+        {
+            var sut = CreateTranslationsService(CreateMockHttpClientWithTaskCancelledException());
 
-            requestContent.Should().NotBeNull();
-            requestContent.Should().Contain("\"DestinationLanguage\":\"Russian\"");
-            requestContent.Should().Contain("\"ActiveDictionaries\":[\"Danish\",\"Spanish\"]");
+            var act = async () => await sut.GetSuggestedWordsAsync("привет", CancellationToken.None);
+
+            await act.Should().ThrowAsync<TaskCanceledException>();
         }
 
         [TestMethod]
@@ -639,7 +660,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.BadRequest, errorMsg);
             var sut = CreateTranslationsService(httpClient);
 
-            var act = async () => await sut.GetSuggestedWordsAsync("testword", CancellationToken.None);
+            var act = async () => await sut.GetSuggestedWordsAsync("привет", CancellationToken.None);
 
             await act.Should().ThrowAsync<InvalidInputException>()
                 .WithMessage(errorMsg);
@@ -651,7 +672,7 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(HttpStatusCode.InternalServerError, "Server error");
             var sut = CreateTranslationsService(httpClient);
 
-            var act = async () => await sut.GetSuggestedWordsAsync("testword", CancellationToken.None);
+            var act = async () => await sut.GetSuggestedWordsAsync("привет", CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
                 .WithMessage("Server error");
@@ -666,10 +687,30 @@ namespace CopyWords.Core.Tests.Services
             var httpClient = CreateMockHttpClient(statusCode, errorMsg);
             var sut = CreateTranslationsService(httpClient);
 
-            var act = async () => await sut.GetSuggestedWordsAsync("testword", CancellationToken.None);
+            var act = async () => await sut.GetSuggestedWordsAsync("привет", CancellationToken.None);
 
             await act.Should().ThrowAsync<ServerErrorException>()
                 .WithMessage(errorMsg);
+        }
+
+        [TestMethod]
+        public async Task GetSuggestedWordsAsync_WhenWordIsNullOrEmpty_ThrowsArgumentException()
+        {
+            var sut = CreateTranslationsService(new HttpClient());
+
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync(null!, CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync("", CancellationToken.None));
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task GetSuggestedWordsAsync_WhenCyrillicAndApiUrlIsMissing_ThrowsArgumentException(string translatorAppUrl)
+        {
+            _globalSettingsMock.SetupGet(x => x.TranslatorAppUrl).Returns(translatorAppUrl);
+            var sut = CreateTranslationsService(new HttpClient());
+
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => sut.GetSuggestedWordsAsync("привет", CancellationToken.None));
         }
 
         #endregion
