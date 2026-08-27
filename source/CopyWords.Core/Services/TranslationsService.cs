@@ -18,8 +18,6 @@ namespace CopyWords.Core.Services
 
     public class TranslationsService : ITranslationsService
     {
-        private static readonly string[] DanishLookupPrefixes = ["at ", "en ", "et "];
-
         private readonly HttpClient _httpClient;
         private readonly IGlobalSettings _globalSettings;
         private readonly ISettingsService _settingsService;
@@ -94,12 +92,6 @@ namespace CopyWords.Core.Services
                 }
 
                 sourceLanguage = detectedLanguage;
-            }
-
-            if (string.Equals(sourceLanguage, SourceLanguage.Danish.ToString(), StringComparison.OrdinalIgnoreCase)
-                && TryRemoveDanishLookupPrefix(wordToLookUp, out string normalizedWord))
-            {
-                wordToLookUp = normalizedWord;
             }
 
             try
@@ -185,21 +177,6 @@ namespace CopyWords.Core.Services
             }
 
             return (false, string.Empty);
-        }
-
-        private static bool TryRemoveDanishLookupPrefix(string searchTerm, out string normalizedSearchTerm)
-        {
-            foreach (string prefix in DanishLookupPrefixes)
-            {
-                if (searchTerm.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
-                {
-                    normalizedSearchTerm = searchTerm[prefix.Length..];
-                    return true;
-                }
-            }
-
-            normalizedSearchTerm = string.Empty;
-            return false;
         }
 
         private async Task<WordModel?> TranslateAsync(string url, WordModel input, CancellationToken cancellationToken)

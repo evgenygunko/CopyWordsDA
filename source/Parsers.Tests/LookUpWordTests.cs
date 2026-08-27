@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Dict Api Afeitar App
 
 using System.Text;
+using System.Web;
 using AutoFixture;
 using CopyWords.Parsers.Models;
 using CopyWords.Parsers.Models.DDO;
@@ -95,9 +96,34 @@ namespace CopyWords.Parsers.Tests
         }
 
         [TestMethod]
+        [DataRow("et værelse", "værelse")]
+        [DataRow("en bolig", "bolig")]
+        [DataRow("at ligge", "ligge")]
+        [DataRow("ET værelse", "værelse")]
+        [DataRow("haj", "haj")]
+        public async Task LookUpWordAsync_WhenSourceLanguageIsDanish_NormalizesLookupTerm(string searchTerm, string expectedSearchTerm)
+        {
+            Mock<IDDOPageParser> ddoPageParserMock = _fixture.Freeze<Mock<IDDOPageParser>>();
+            ddoPageParserMock.Setup(x => x.ParseWord(It.IsAny<string>())).Returns(CreateDDOWord(expectedSearchTerm));
+
+            Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
+            fileDownloaderMock
+                .Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8, It.IsAny<CancellationToken>()))
+                .ReturnsAsync("word.html");
+
+            var sut = _fixture.Create<LookUpWord>();
+            await sut.LookUpWordAsync(searchTerm, SourceLanguage.Danish.ToString(), CancellationToken.None);
+
+            string expectedUrl = DDOPageParser.DDOBaseUrl + $"?query={HttpUtility.UrlEncode(expectedSearchTerm)}";
+            fileDownloaderMock.Verify(
+                x => x.DownloadPageAsync(expectedUrl, Encoding.UTF8, It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        [TestMethod]
         public async Task LookUpWordAsync_WhenSourceLanguageIsSpanish_CallsSpanishDictPageParser()
         {
-            string searchTerm = "ser";
+            string searchTerm = "en casa";
             SourceLanguage sourceLanguage = SourceLanguage.Spanish;
             var spanishDictDefinition = new Models.SpanishDict.SpanishDictDefinition(
                 WordES: "ser",
@@ -116,6 +142,12 @@ namespace CopyWords.Parsers.Tests
 
             result.Should().NotBeNull();
             spanishDictPageParserMock.Verify(x => x.ParseHeadword(It.IsAny<Models.SpanishDict.WordJsonModel>()));
+            fileDownloaderMock.Verify(
+                x => x.DownloadPageAsync(
+                    SpanishDictPageParser.SpanishDictBaseUrl + HttpUtility.UrlEncode(searchTerm),
+                    Encoding.UTF8,
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
         }
 
         [TestMethod]
@@ -254,6 +286,26 @@ namespace CopyWords.Parsers.Tests
                     Encoding.UTF8,
                     It.IsAny<CancellationToken>()));
             ddoPageParserMock.Verify(x => x.ParseSuggestions("islygte.html"), Times.Once);
+        }
+
+        [TestMethod]
+        [DataRow("at ligge", "ligge")]
+        [DataRow("en bolig", "bolig")]
+        [DataRow("et hus", "hus")]
+        public async Task GetSuggestedWordsAsync_WhenLanguageIsDanish_NormalizesLookupTerm(string searchTerm, string expectedSearchTerm)
+        {
+            Mock<IFileDownloader> fileDownloaderMock = _fixture.Freeze<Mock<IFileDownloader>>();
+            fileDownloaderMock
+                .Setup(x => x.DownloadPageAllowNotFoundAsync(It.IsAny<string>(), Encoding.UTF8, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(string.Empty);
+
+            var sut = _fixture.Create<LookUpWord>();
+            await sut.GetSuggestedWordsAsync(searchTerm, SourceLanguage.Danish.ToString(), CancellationToken.None);
+
+            string expectedUrl = DDOPageParser.DDOBaseUrl + $"?query={HttpUtility.UrlEncode(expectedSearchTerm)}";
+            fileDownloaderMock.Verify(
+                x => x.DownloadPageAllowNotFoundAsync(expectedUrl, Encoding.UTF8, It.IsAny<CancellationToken>()),
+                Times.Once);
         }
 
         [TestMethod]

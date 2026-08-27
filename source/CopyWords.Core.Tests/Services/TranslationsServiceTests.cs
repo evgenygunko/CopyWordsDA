@@ -547,20 +547,20 @@ namespace CopyWords.Core.Tests.Services
         }
 
         [TestMethod]
-        [DataRow("at ligge", "ligge")]
-        [DataRow("en bolig", "bolig")]
-        [DataRow("et hus", "hus")]
-        public async Task GetSuggestedWordsAsync_WhenDanishPrefixIsPresent_RemovesPrefix(string input, string normalizedInput)
+        [DataRow("at ligge")]
+        [DataRow("en bolig")]
+        [DataRow("et hus")]
+        public async Task GetSuggestedWordsAsync_WhenDanishPrefixIsPresent_PassesOriginalTermToParser(string input)
         {
             _lookUpWordMock
-                .Setup(x => x.GetSuggestedWordsAsync(normalizedInput, "Danish", It.IsAny<CancellationToken>()))
-                .ReturnsAsync([normalizedInput]);
+                .Setup(x => x.GetSuggestedWordsAsync(input, "Danish", It.IsAny<CancellationToken>()))
+                .ReturnsAsync([input]);
             var sut = CreateTranslationsService(new HttpClient(new Mock<HttpMessageHandler>(MockBehavior.Strict).Object));
 
             SuggestedWordsModel result = await sut.GetSuggestedWordsAsync(input, CancellationToken.None);
 
-            result.Words.Should().Equal(normalizedInput);
-            _lookUpWordMock.Verify(x => x.GetSuggestedWordsAsync(input, "Danish", It.IsAny<CancellationToken>()), Times.Never);
+            result.Words.Should().Equal(input);
+            _lookUpWordMock.Verify(x => x.GetSuggestedWordsAsync(input, "Danish", It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]

@@ -17,6 +17,8 @@ namespace CopyWords.Parsers
 
     public class LookUpWord : ILookUpWord
     {
+        private static readonly string[] DanishLookupPrefixes = ["at ", "en ", "et "];
+
         private readonly IDDOPageParser _ddoPageParser;
         private readonly ISpanishDictPageParser _spanishDictPageParser;
         private readonly IFileDownloader _fileDownloader;
@@ -261,13 +263,28 @@ namespace CopyWords.Parsers
                 return searchTerm;
             }
 
-            string encodedSearchTerm = HttpUtility.UrlEncode(searchTerm);
             if (string.Equals(language, SourceLanguage.Danish.ToString(), StringComparison.OrdinalIgnoreCase))
             {
-                return DDOPageParser.DDOBaseUrl + $"?query={encodedSearchTerm}";
+                searchTerm = NormalizeDanishSearchTerm(searchTerm);
+                string encodedDanishSearchTerm = HttpUtility.UrlEncode(searchTerm);
+                return DDOPageParser.DDOBaseUrl + $"?query={encodedDanishSearchTerm}";
             }
 
+            string encodedSearchTerm = HttpUtility.UrlEncode(searchTerm);
             return SpanishDictPageParser.SpanishDictBaseUrl + encodedSearchTerm;
+        }
+
+        private static string NormalizeDanishSearchTerm(string searchTerm)
+        {
+            foreach (string prefix in DanishLookupPrefixes)
+            {
+                if (searchTerm.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    return searchTerm[prefix.Length..];
+                }
+            }
+
+            return searchTerm;
         }
 
         #endregion
