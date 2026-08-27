@@ -13,17 +13,17 @@ public partial class MainPage : ContentPage
         _viewModel = vm;
         BindingContext = _viewModel;
 
-        // Add NavigateBackCommand toolbar button only on Windows.
+        // Add the NavigateBackCommand toolbar button on desktop platforms.
         // There is no "Visible" property on ToolbarItem, so we need to create and add it conditionally, see https://stackoverflow.com/a/74424283
-        if (deviceInfo.Platform == DevicePlatform.WinUI)
+        if (deviceInfo.Platform == DevicePlatform.WinUI || deviceInfo.Platform == DevicePlatform.MacCatalyst)
         {
-            CreateWindowsToolbarItems();
+            CreateDesktopToolbarItems();
         }
     }
 
-    private void CreateWindowsToolbarItems()
+    private void CreateDesktopToolbarItems()
     {
-        // Create the Navigate Back toolbar item for Windows only
+        // Create the Navigate Back toolbar item for supported desktop platforms.
         var navigateBackToolbarItem = new ToolbarItem
         {
             Command = _viewModel.NavigateBackCommand,
