@@ -12,7 +12,7 @@
     <VerticalStackLayout>
 
         <!-- Section "Dictionaries" -->
-        <Label Text="Dictionaries" Margin="20,10,10,0" FontSize="Subtitle" />
+        <Label Text="Dictionaries" Margin="20,10,10,0" FontSize="{StaticResource FontSizeSubtitle}" />
 
         <VerticalStackLayout
             Margin="20,0,10,0"
@@ -40,7 +40,7 @@
         <BoxView Style="{StaticResource FillerStyle}" />
 
         <!-- Section "Dictionary mode" -->
-        <Label Text="Dictionary mode" Margin="20,0,10,0" FontSize="Subtitle" />
+        <Label Text="Dictionary mode" Margin="20,0,10,0" FontSize="{StaticResource FontSizeSubtitle}" />
 
         <Grid Margin="20,0,10,0" ColumnSpacing="10">
             <Grid.ColumnDefinitions>
@@ -91,7 +91,7 @@
         <BoxView Style="{StaticResource FillerStyle}" />
 
         <!-- Section "Anki settings" -->
-        <Label Text="Anki settings" Margin="20,10,10,0" FontSize="Subtitle" />
+        <Label Text="Anki settings" Margin="20,10,10,0" FontSize="{StaticResource FontSizeSubtitle}" />
 
         <VerticalStackLayout Opacity="{Binding ShowAnkiButton, Converter={StaticResource BoolToOpacityConverter}}">
                 <!-- Anki Deck Name Danish -->
@@ -133,7 +133,7 @@
         <BoxView Style="{StaticResource FillerStyle}" />
 
         <!-- Section "Theme" -->
-        <Label Text="Theme" Margin="20,0,10,0" FontSize="Subtitle" />
+        <Label Text="Theme" Margin="20,0,10,0" FontSize="{StaticResource FontSizeSubtitle}" />
 
         <Grid Margin="20,0,10,0" ColumnSpacing="10">
             <Grid.ColumnDefinitions>
@@ -158,7 +158,7 @@
         <BoxView Style="{StaticResource FillerStyle}" />
 
         <!-- Section "Other" -->
-        <Label Text="Other" FontSize="Subtitle" Margin="20,0,10,0" />
+        <Label Text="Other" FontSize="{StaticResource FontSizeSubtitle}" Margin="20,0,10,0" />
 
         <Label Text="About" Margin="20,10,10,0" FontAttributes="Bold" />
         <Label Text="{Binding About}" Margin="20,0,10,0"

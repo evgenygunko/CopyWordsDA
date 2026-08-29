@@ -26,7 +26,7 @@
 
             <!-- Headword -->
             <VerticalStackLayout Grid.Row="0" Margin="0,10,0,0" VerticalOptions="Center">
-                <Label FontSize="Subtitle" Text="{Binding HeadwordViewModel.Original, FallbackValue='afeitar'}" />
+                <Label FontSize="{StaticResource FontSizeSubtitle}" Text="{Binding HeadwordViewModel.Original, FallbackValue='afeitar'}" />
                 <Label TextColor="{DynamicResource SecondaryTextColor}" Text="{Binding PartOfSpeech, FallbackValue='transitive verb'}" />
             </VerticalStackLayout>
 
