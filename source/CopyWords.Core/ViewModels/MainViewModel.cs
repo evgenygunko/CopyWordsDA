@@ -71,8 +71,10 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(LookUpCommand))]
         [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
         [NotifyCanExecuteChangedFor(nameof(SelectDictionaryCommand))]
+        [NotifyCanExecuteChangedFor(nameof(NavigateBackCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShowSettingsDialogCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShowHistoryCommand))]
+        [NotifyPropertyChangedFor(nameof(CanNavigateBack))]
         public partial bool IsBusy { get; set; }
 
         [ObservableProperty]
@@ -80,6 +82,7 @@ namespace CopyWords.Core.ViewModels
         [NotifyCanExecuteChangedFor(nameof(ShowSettingsDialogCommand))]
         [NotifyCanExecuteChangedFor(nameof(ShowHistoryCommand))]
         [NotifyCanExecuteChangedFor(nameof(NavigateBackCommand))]
+        [NotifyPropertyChangedFor(nameof(CanNavigateBack))]
         public partial bool IsRefreshing { get; set; }
 
         [ObservableProperty]
@@ -572,6 +575,7 @@ namespace CopyWords.Core.ViewModels
         private void NotifyNavigationStateChanged()
         {
             NavigateBackCommand.NotifyCanExecuteChanged();
+            OnPropertyChanged(nameof(CanNavigateBack));
         }
 
         private void UpdateSelectedDictionary(string language)

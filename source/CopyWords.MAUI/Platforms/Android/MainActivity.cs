@@ -5,6 +5,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Util;
 using CopyWords.Core.Services;
+using CopyWords.MAUI.Navigation;
 
 namespace CopyWords.MAUI;
 
@@ -26,9 +27,18 @@ namespace CopyWords.MAUI;
 #endif
 public class MainActivity : MauiAppCompatActivity
 {
+    private AndroidBackPressedCallback? _backPressedCallback;
+
     protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
+
+        var backNavigationCoordinator = MauiProgram.GetService<AndroidBackNavigationCoordinator>();
+        if (backNavigationCoordinator is not null)
+        {
+            _backPressedCallback = new AndroidBackPressedCallback(backNavigationCoordinator, OnBackPressedDispatcher);
+            OnBackPressedDispatcher.AddCallback(this, _backPressedCallback);
+        }
 
         string? selectedText = this.Intent?.GetStringExtra(Intent.ExtraProcessText)?.ToString();
 
@@ -43,6 +53,10 @@ public class MainActivity : MauiAppCompatActivity
 
     protected override void OnDestroy()
     {
+        _backPressedCallback?.Remove();
+        _backPressedCallback?.Dispose();
+        _backPressedCallback = null;
+
         // todo: this is workaround for a crash https://github.com/dotnet/maui/issues/32600#issuecomment-3646966167
         // Delete this method when a fix is released.
 #pragma warning disable RCS1075 // Avoid empty catch clause that catches System.Exception

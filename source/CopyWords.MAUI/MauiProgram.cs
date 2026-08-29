@@ -8,6 +8,7 @@ using CopyWords.Core.Services;
 using CopyWords.Core.Services.Wrappers;
 using CopyWords.Core.Validators;
 using CopyWords.Core.ViewModels;
+using CopyWords.MAUI.Navigation;
 using CopyWords.MAUI.Services;
 using CopyWords.Parsers;
 using CopyWords.Parsers.Services;
@@ -105,6 +106,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<ISaveImageFileService, SaveImageFileService>();
         builder.Services.AddSingleton<ISaveSoundFileService, SaveSoundFileService>();
         builder.Services.AddSingleton<INavigationHistory, NavigationHistory>();
+#if ANDROID
+        builder.Services.AddSingleton<AndroidBackNavigationCoordinator>();
+        builder.Services.AddSingleton<IBackNavigationCoordinator>(services =>
+            services.GetRequiredService<AndroidBackNavigationCoordinator>());
+#else
+        builder.Services.AddSingleton<IBackNavigationCoordinator, NullBackNavigationCoordinator>();
+#endif
         builder.Services.AddSingleton<IBuildConfiguration, BuildConfiguration>();
         builder.Services.AddSingleton<IGlobalSettings>(globalSettings);
         builder.Services.AddSingleton<IImageSharpWrapper, ImageSharpWrapper>();
