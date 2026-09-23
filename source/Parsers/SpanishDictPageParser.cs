@@ -155,7 +155,9 @@ namespace CopyWords.Parsers
                     string alphabeticalPosition = char.ConvertFromUtf32((int)'a' + translationPosition++);
 
                     // Add translation, e.g. "cool (colloquial)"
-                    string fullTranslation = tr.translation;
+                    string fullTranslation = string.IsNullOrWhiteSpace(tr.translation)
+                        ? "no direct translation"
+                        : tr.translation;
 
                     string? label = tr.registerLabels.FirstOrDefault()?.nameEn;
                     if (!string.IsNullOrEmpty(label))

@@ -1,0 +1,1138 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Fbronca",
+    "wordOfTheDayData": {
+        "image": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002Foriginal\u002Fa28a5aee-e880-4868-a95b-51147c6fe71b.png",
+        "imageJPG": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002F400\u002Fa28a5aee-e880-4868-a95b-51147c6fe71b.jpg",
+        "imageWEBP": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002F400\u002Fa28a5aee-e880-4868-a95b-51147c6fe71b.webp",
+        "wordId": 2452,
+        "wordSource": "arce",
+        "wordDisplay": "el arce",
+        "translationText": "maple",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=el-arce&key=75b76a98e7fc6ea102569698a81c7ae4",
+        "pronunciations": [
+            {
+                "id": 20987,
+                "ipa": "ˈaɾ*se",
+                "abc": "ˈar*ce",
+                "hasVideo": true,
+                "speakerId": 3,
+                "region": "LATAM",
+                "uuid": null,
+                "version": 51,
+                "spa": "ˈahr*seh"
+            },
+            {
+                "id": 20988,
+                "ipa": "ˈaɾ*θe",
+                "abc": "ˈar*ce",
+                "hasVideo": true,
+                "speakerId": 7,
+                "region": "SPAIN",
+                "uuid": null,
+                "version": 50,
+                "spa": "ˈahr*theh"
+            }
+        ]
+    },
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 84,
+    "excludeAds": false,
+    "brandKey": "spanishdictionary",
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "audio-cdn.sdcdns.com",
+        "hegemoneAssetHost": "sd-hegemone-production.sdcdns.com",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.sdsandbox.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "neodarwin-prod.sdcdns.com",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdAdminPanel": false,
+        "adhesionMarketingInt": 2,
+        "wyzantBundleLandingPage": null,
+        "randomizedExperiments": {}
+    },
+    "serverNowAtPageview": 1790193245280,
+    "pageCategory": "translation",
+    "isApp": false,
+    "action": "translate",
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "genericVideoHeadwordData": {
+        "id": 9350,
+        "source": "bronca",
+        "popularity": 4500
+    },
+    "phrases": [
+        {
+            "source": "echar la bronca",
+            "sourceAudioQueryString": "?lang=es&text=echar-la-bronca&key=2c8d2d354b1a20fbc46743a380c31e25&region=latam",
+            "quickdef": "to scold",
+            "quickdefAudioQueryString": "?lang=en&text=to-scold&key=3be12445cba4705b2a6cbe3d970297de&region=us",
+            "quickdef1": "to scold",
+            "quickdef1AudioQueryString": "?lang=en&text=to-scold&key=3be12445cba4705b2a6cbe3d970297de&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "echar una bronca a",
+            "sourceAudioQueryString": "?lang=es&text=echar-una-bronca-a&key=b0c6f76679587ccf38db9144d732e76f&region=latam",
+            "quickdef": "to scold",
+            "quickdefAudioQueryString": "?lang=en&text=to-scold&key=3be12445cba4705b2a6cbe3d970297de&region=us",
+            "quickdef1": "to scold",
+            "quickdef1AudioQueryString": "?lang=en&text=to-scold&key=3be12445cba4705b2a6cbe3d970297de&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "echar una bronca",
+            "sourceAudioQueryString": "?lang=es&text=echar-una-bronca&key=144585b3bafae12462b947fbab09fdb8&region=latam",
+            "quickdef": "to scold",
+            "quickdefAudioQueryString": "?lang=en&text=to-scold&key=3be12445cba4705b2a6cbe3d970297de&region=us",
+            "quickdef1": "to scold",
+            "quickdef1AudioQueryString": "?lang=en&text=to-scold&key=3be12445cba4705b2a6cbe3d970297de&region=us",
+            "quickdef2AudioQueryString": null
+        },
+        {
+            "source": "armar una bronca",
+            "sourceAudioQueryString": "?lang=es&text=armar-una-bronca&key=f3b10ef0e9ff56706da42eb8527d360f&region=latam",
+            "quickdef": "to kick up a fuss, to freak out",
+            "quickdefAudioQueryString": "?lang=en&text=to-kick-up-a-fuss%2C-to-freak-out&key=3027773c64d569c1e9091a437e0e21df&region=us",
+            "quickdef1": "to kick up a fuss",
+            "quickdef1AudioQueryString": "?lang=en&text=to-kick-up-a-fuss&key=5e438f4f23885da9bf169152a5614166&region=us",
+            "quickdef2": "to freak out",
+            "quickdef2AudioQueryString": "?lang=en&text=to-freak-out&key=7a7ebbfc8becd25df2c82c27c955fb54&region=us"
+        }
+    ],
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "neodict": [
+                {
+                    "subheadword": "la bronca",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "n",
+                                "abbrEs": "s",
+                                "nameEn": "noun",
+                                "nameEs": "sustantivo",
+                                "sharedPosNameEn": "noun"
+                            },
+                            "entryLang": "es",
+                            "gender": {
+                                "gender": "F"
+                            },
+                            "senses": [
+                                {
+                                    "contextEn": "quarrel or commotion",
+                                    "contextEs": "riña o alboroto",
+                                    "gender": "F",
+                                    "id": 23647,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "After that big fight we had, I left the house.",
+                                                    "textEs": "Después de esa bronca que tuvimos, me fui de la casa."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 38085,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "fight"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "A drunken man caused a ruckus at the bar last night.",
+                                                    "textEs": "Un borracho armó una bronca en el bar anoche."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 38083,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "US",
+                                                    "abbrEs": "EEUU",
+                                                    "nameEn": "United States",
+                                                    "nameEs": "Estados Unidos"
+                                                }
+                                            ],
+                                            "registerLabels": [
+                                                {
+                                                    "abbrEn": "col",
+                                                    "abbrEs": "col",
+                                                    "nameEn": "colloquial",
+                                                    "nameEs": "coloquial"
+                                                }
+                                            ],
+                                            "translation": "ruckus"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Pablo made a fuss when someone scratched his new car.",
+                                                    "textEs": "Pablo armó una bronca cuando le rayaron el carro nuevo."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 38084,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [
+                                                {
+                                                    "abbrEn": "col",
+                                                    "abbrEs": "col",
+                                                    "nameEn": "colloquial",
+                                                    "nameEs": "coloquial"
+                                                }
+                                            ],
+                                            "translation": "fuss"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The neighbors were making such a racket last night that I couldn't sleep.",
+                                                    "textEs": "Los vecinos hicieron tanta bronca anoche que no pude dormir."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 68176,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "racket"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The actress had a row with the director, and they cancelled her contract.",
+                                                    "textEs": "La actriz tuvo una bronca con el director, y le cancelaron el contrato."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 38082,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "UK",
+                                                    "abbrEs": "RU",
+                                                    "nameEn": "United Kingdom",
+                                                    "nameEs": "Reino Unido"
+                                                }
+                                            ],
+                                            "registerLabels": [],
+                                            "translation": "row"
+                                        }
+                                    ],
+                                    "subheadword": "bronca",
+                                    "idx": 1,
+                                    "context": "quarrel or commotion",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "fight",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "fight"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Después de esa bronca que tuvimos, me fui de la casa.",
+                                                    "After that big fight we had, I left the house."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "ruckus",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "ruckus"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United States",
+                                                    "tooltip": {
+                                                        "def": "Regionalism used in the United States"
+                                                    }
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [
+                                                {
+                                                    "name": "colloquial",
+                                                    "tooltip": {
+                                                        "def": "A word or phrase that is commonly used in conversational speech (e.g., skinny, grandma)."
+                                                    }
+                                                }
+                                            ],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Un borracho armó una bronca en el bar anoche.",
+                                                    "A drunken man caused a ruckus at the bar last night."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "fuss",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "fuss"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "c",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [
+                                                {
+                                                    "name": "colloquial",
+                                                    "tooltip": {
+                                                        "def": "A word or phrase that is commonly used in conversational speech (e.g., skinny, grandma)."
+                                                    }
+                                                }
+                                            ],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Pablo armó una bronca cuando le rayaron el carro nuevo.",
+                                                    "Pablo made a fuss when someone scratched his new car."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "racket",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "racket"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "d",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Los vecinos hicieron tanta bronca anoche que no pude dormir.",
+                                                    "The neighbors were making such a racket last night that I couldn't sleep."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "row",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "row"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "e",
+                                            "context": "",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United Kingdom",
+                                                    "tooltip": {
+                                                        "def": "Regionalism used in the United Kingdom"
+                                                    }
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "La actriz tuvo una bronca con el director, y le cancelaron el contrato.",
+                                                    "The actress had a row with the director, and they cancelled her contract."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "resentment",
+                                    "contextEs": "rabia",
+                                    "gender": "F",
+                                    "id": 23649,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [
+                                        {
+                                            "abbrEn": "SoAm",
+                                            "abbrEs": "SurAm",
+                                            "nameEn": "South America",
+                                            "nameEs": "Suramérica"
+                                        }
+                                    ],
+                                    "registerLabels": [
+                                        {
+                                            "abbrEn": "col",
+                                            "abbrEs": "col",
+                                            "nameEn": "colloquial",
+                                            "nameEs": "coloquial"
+                                        }
+                                    ],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "I don't know why the neighbor has it in for me; I haven't done anything wrong.",
+                                                    "textEs": "No sé por qué el vecino me tiene tanta bronca, si yo no he hecho nada malo."
+                                                },
+                                                {
+                                                    "textEn": "It makes me mad when they make me wait for hours to see a doctor.",
+                                                    "textEs": "Me da mucha bronca cuando me hacen esperar horas para ver al médico."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 38089,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": ""
+                                        }
+                                    ],
+                                    "subheadword": "bronca",
+                                    "idx": 2,
+                                    "context": "resentment",
+                                    "regionsDisplay": [
+                                        {
+                                            "name": "South America",
+                                            "tooltip": {
+                                                "def": "Regionalism used in South America: Argentina, Bolivia, Chile, Colombia, Ecuador, Paraguay, Peru, Uruguay, and Venezuela"
+                                            }
+                                        }
+                                    ],
+                                    "registerLabelsDisplay": [
+                                        {
+                                            "name": "colloquial",
+                                            "tooltip": {
+                                                "def": "A word or phrase that is commonly used in conversational speech (e.g., skinny, grandma)."
+                                            }
+                                        }
+                                    ],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    ""
+                                                ],
+                                                "tooltips": [
+                                                    {
+                                                        "name": "no direct translation",
+                                                        "tooltip": {
+                                                            "def": "The following examples show ways to translate this word or phrase without using a direct equivalent.",
+                                                            "href": null
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "No sé por qué el vecino me tiene tanta bronca, si yo no he hecho nada malo.",
+                                                    "I don't know why the neighbor has it in for me; I haven't done anything wrong."
+                                                ],
+                                                [
+                                                    "Me da mucha bronca cuando me hacen esperar horas para ver al médico.",
+                                                    "It makes me mad when they make me wait for hours to see a doctor."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "reprimand",
+                                    "contextEs": "reproche",
+                                    "gender": "F",
+                                    "id": 23648,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [
+                                        {
+                                            "abbrEn": "Spain",
+                                            "abbrEs": "Esp",
+                                            "nameEn": "Spain",
+                                            "nameEs": "España"
+                                        }
+                                    ],
+                                    "registerLabels": [
+                                        {
+                                            "abbrEn": "col",
+                                            "abbrEs": "col",
+                                            "nameEn": "colloquial",
+                                            "nameEs": "coloquial"
+                                        }
+                                    ],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The boss gave me a scolding for not finalizing the proposal on time.",
+                                                    "textEs": "Me llevé una bronca del jefe por no tener la propuesta lista a tiempo."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 38086,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "scolding"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "You'll get a good telling-off if your mom hears you talking like that.",
+                                                    "textEs": "Tu mamá te dará una buena bronca si te oye hablar así."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 38087,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "telling-off"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "He gave his dog a ticking-off for tearing up a pillow.",
+                                                    "textEs": "Le echó una bronca al perro por destrozar un almohadón."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 38088,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [
+                                                {
+                                                    "abbrEn": "UK",
+                                                    "abbrEs": "RU",
+                                                    "nameEn": "United Kingdom",
+                                                    "nameEs": "Reino Unido"
+                                                }
+                                            ],
+                                            "registerLabels": [],
+                                            "translation": "ticking-off"
+                                        }
+                                    ],
+                                    "subheadword": "bronca",
+                                    "idx": 3,
+                                    "context": "reprimand",
+                                    "regionsDisplay": [
+                                        {
+                                            "name": "Spain",
+                                            "tooltip": {
+                                                "def": "Regionalism used in Spain"
+                                            }
+                                        }
+                                    ],
+                                    "registerLabelsDisplay": [
+                                        {
+                                            "name": "colloquial",
+                                            "tooltip": {
+                                                "def": "A word or phrase that is commonly used in conversational speech (e.g., skinny, grandma)."
+                                            }
+                                        }
+                                    ],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "scolding",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "scolding"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Me llevé una bronca del jefe por no tener la propuesta lista a tiempo.",
+                                                    "The boss gave me a scolding for not finalizing the proposal on time."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "telling-off",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "telling-off"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Tu mamá te dará una buena bronca si te oye hablar así.",
+                                                    "You'll get a good telling-off if your mom hears you talking like that."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "ticking-off",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "ticking-off"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "c",
+                                            "context": "",
+                                            "regionsDisplay": [
+                                                {
+                                                    "name": "United Kingdom",
+                                                    "tooltip": {
+                                                        "def": "Regionalism used in the United Kingdom"
+                                                    }
+                                                }
+                                            ],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Le echó una bronca al perro por destrozar un almohadón.",
+                                                    "He gave his dog a ticking-off for tearing up a pillow."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "difficulty",
+                                    "contextEs": "problema",
+                                    "gender": "F",
+                                    "id": 41119,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [
+                                        {
+                                            "abbrEn": "Mex",
+                                            "abbrEs": "Mex",
+                                            "nameEn": "Mexico",
+                                            "nameEs": "México"
+                                        }
+                                    ],
+                                    "registerLabels": [
+                                        {
+                                            "abbrEn": "col",
+                                            "abbrEs": "col",
+                                            "nameEn": "colloquial",
+                                            "nameEs": "coloquial"
+                                        }
+                                    ],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Getting to the Zocalo at this time of day is going to be a problem.",
+                                                    "textEs": "Va a ser una bronca llegar al Zócalo a esta hora."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 68178,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "problem"
+                                        }
+                                    ],
+                                    "subheadword": "bronca",
+                                    "idx": 4,
+                                    "context": "difficulty",
+                                    "regionsDisplay": [
+                                        {
+                                            "name": "Mexico",
+                                            "tooltip": {
+                                                "def": "Regionalism used in Mexico"
+                                            }
+                                        }
+                                    ],
+                                    "registerLabelsDisplay": [
+                                        {
+                                            "name": "colloquial",
+                                            "tooltip": {
+                                                "def": "A word or phrase that is commonly used in conversational speech (e.g., skinny, grandma)."
+                                            }
+                                        }
+                                    ],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "problem",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "problem"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Va a ser una bronca llegar al Zócalo a esta hora.",
+                                                    "Getting to the Zocalo at this time of day is going to be a problem."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "booing",
+                                    "contextEs": "abucheo",
+                                    "gender": "F",
+                                    "id": 41118,
+                                    "partOfSpeech": {
+                                        "abbrEn": "n",
+                                        "abbrEs": "s",
+                                        "nameEn": "noun",
+                                        "nameEs": "sustantivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The jeering coming from the stadium could be heard from downtown.",
+                                                    "textEs": "La bronca que salía del estadio se escuchaba desde el centro."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 68177,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "jeering"
+                                        }
+                                    ],
+                                    "subheadword": "bronca",
+                                    "idx": 5,
+                                    "context": "booing",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "jeering",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "jeering"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "La bronca que salía del estadio se escuchaba desde el centro.",
+                                                    "The jeering coming from the stadium could be heard from downtown."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "feminine noun",
+                                "tooltip": {
+                                    "def": "A feminine noun is almost always used with feminine articles and adjectives (e.g., la mujer bonita, la luna llena).",
+                                    "href": "https:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fmasculine-and-feminine-nouns"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "bronca",
+            "regionChoice": "latam",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [
+                "ˈbrohng*kah"
+            ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "searchBoxProps": {
+        "initialSearchText": "bronca",
+        "action": "translate",
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR ENGLISH SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SPANISH SLANG",
+                "action": "translate",
+                "words": [
+                    "vato",
+                    "chévere",
+                    "bacano",
+                    "atúquiti",
+                    "guay",
+                    "tqm",
+                    "yuma",
+                    "buco"
+                ]
+            },
+            {
+                "title": "ENGLISH IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "SPANISH COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "authoringProps": null,
+    "hasBothLangs": false,
+    "dictDefaultLang": "es",
+    "dictionaryPossibleResults": [
+        {
+            "wordId": 9350,
+            "wordSource": "bronca",
+            "resultHeuristic": "dictionary",
+            "result": "bronca",
+            "translation1": "fight",
+            "audioUrls": {
+                "result": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=bronca&key=51dfa6145ddd9a921c81471e81633362",
+                "translation1": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=en&text=fight&key=fb8718d61e6f9b1e7c9edcfbf4b996ab"
+            }
+        },
+        {
+            "wordId": 9339,
+            "wordSource": "bronco",
+            "resultHeuristic": "inflection",
+            "result": "bronca",
+            "translation1": "harsh",
+            "inflectionType": "feminine singular",
+            "partOfSpeech": "adjective",
+            "audioUrls": {
+                "result": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=bronca&key=51dfa6145ddd9a921c81471e81633362",
+                "translation1": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=en&text=harsh&key=a0d3fdfa19c48f38e0a1e478d579a9f9"
+            }
+        }
+    ],
+    "langFrom": "es",
+    "langTo": "en",
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Fbronca",
+            "path": "translate",
+            "token": "bronca",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Fbronca",
+            "path": "examples",
+            "token": "bronca",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Fbronca",
+            "path": "pronunciation",
+            "token": "bronca",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Fbronca",
+            "path": "thesaurus",
+            "token": "bronca",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Phrases",
+            "active": false,
+            "href": "\u002Fphrases\u002Fbronca",
+            "path": "phrases",
+            "token": "bronca",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        }
+    ],
+    "numNeodictTranslations": 11,
+    "partnerBacklinks": null,
+    "queryText": "bronca",
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "bronca",
+                "textToPronounce": "bronca",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=bronca&key=51dfa6145ddd9a921c81471e81633362",
+                "pronunciations": [
+                    {
+                        "id": 5650,
+                        "ipa": "ˈbɾoŋ*ka",
+                        "abc": "ˈbron*ca",
+                        "spa": "ˈbrohng*kah",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 5651,
+                        "ipa": "ˈbɾoŋ*ka",
+                        "abc": "ˈbron*ca",
+                        "spa": "ˈbrohng*kah",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "fight",
+                "textToPronounce": "fight",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=en&text=fight&key=fb8718d61e6f9b1e7c9edcfbf4b996ab",
+                "pronunciations": [
+                    {
+                        "id": 777,
+                        "ipa": "faɪt",
+                        "abc": "fight",
+                        "spa": "fayt",
+                        "region": "US",
+                        "hasVideo": 1,
+                        "speakerId": 5,
+                        "version": 51,
+                        "source": "fight"
+                    },
+                    {
+                        "id": 778,
+                        "ipa": "faɪt",
+                        "abc": "fight",
+                        "spa": "fayt",
+                        "region": "UK",
+                        "hasVideo": 1,
+                        "speakerId": 8,
+                        "version": 50,
+                        "source": "fight"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 9350,
+                "source": "bronca",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdExamplesProps": {
+        "query": "bronca",
+        "originalQuery": "bronca",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 9350
+    },
+    "sdQuicktipProps": null,
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 9350
+    },
+    "usageNoteAndArticlesProps": {
+        "linkedArticles": []
+    },
+    "verb": null,
+    "verbLang": "es",
+    "verbMoods": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"undefined\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "tenses": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    }
+}

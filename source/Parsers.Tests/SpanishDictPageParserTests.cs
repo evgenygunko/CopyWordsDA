@@ -31,6 +31,7 @@ namespace CopyWords.Parsers.Tests
         [DataRow("mitologo")]
         [DataRow("saltamontes")]
         [DataRow("wasapear")]
+        [DataRow("bronca")]
         public void ParseHeadword_Should_ReturnWordFromModel(string word)
         {
             var parser = new SpanishDictPageParser();
@@ -48,6 +49,7 @@ namespace CopyWords.Parsers.Tests
         [DataRow("Afeitar", "https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_4189_speaker_7_syllable_all_version_50.mp4")]
         [DataRow("Águila", "https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_13701_speaker_7_syllable_all_version_50.mp4")]
         [DataRow("Aprovechar", "https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_13603_speaker_7_syllable_all_version_50.mp4")]
+        [DataRow("bronca", "https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_5651_speaker_7_syllable_all_version_50.mp4")]
         public void ParseSoundURL_WhenSpanishPronunciationWithVideoExists_ReturnSoundURL(string word, string expectedSoundURL)
         {
             var parser = new SpanishDictPageParser();
@@ -82,6 +84,82 @@ namespace CopyWords.Parsers.Tests
         #endregion
 
         #region ParseDefinition tests
+
+        [TestMethod]
+        public void ParseDefinition_ForBronca_AllMeaningsInAllDefinitionsHaveNonEmptyOriginal()
+        {
+            var parser = new SpanishDictPageParser();
+            WordJsonModel word = LoadTestObject("bronca");
+            Neodict[] definitions = word.sdDictionaryResultsProps.entry!.neodict!;
+            definitions.Should().NotBeEmpty();
+
+            using var scope = new FluentAssertions.Execution.AssertionScope();
+            for (int n = 0; n < definitions.Length; n++)
+            {
+                definitions[n].posGroups.Should().NotBeEmpty();
+                for (int p = 0; p < definitions[n].posGroups.Length; p++)
+                {
+                    SpanishDictDefinition definition = parser.ParseDefinition(word, n.ToString(), p.ToString());
+                    definition.Contexts.Should().NotBeEmpty();
+                    foreach (SpanishDictContext context in definition.Contexts)
+                    {
+                        context.Meanings.Should().NotBeEmpty();
+                        foreach (Meaning meaning in context.Meanings)
+                        {
+                            meaning.Original.Should().NotBeNullOrWhiteSpace(
+                                "Original must not be empty (definition n={0}, p={1}, context '{2}', meaning '{3}')",
+                                n, p, context.ContextEN, meaning.AlphabeticalPosition);
+                        }
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void ParseDefinition_ForBronca_ReturnsFeminineNounWithAllSenses()
+        {
+            var parser = new SpanishDictPageParser();
+
+            SpanishDictDefinition definition = parser.ParseDefinition(LoadTestObject("bronca"));
+
+            definition.WordES.Should().Be("la bronca");
+            definition.PartOfSpeech.Should().Be("feminine noun");
+            definition.Contexts.Select(context => context.ContextEN).Should().Equal(
+                "(quarrel or commotion)",
+                "(colloquial) (resentment) (South America)",
+                "(colloquial) (reprimand) (Spain)",
+                "(colloquial) (difficulty) (Mexico)",
+                "(booing)");
+            definition.Contexts.Select(context => context.Position).Should().Equal(1, 2, 3, 4, 5);
+            definition.Contexts.Select(context => context.Meanings.Count()).Should().Equal(5, 1, 3, 1, 1);
+            definition.Contexts.SelectMany(context => context.Meanings).Select(meaning => meaning.Original).Should().Equal(
+                "fight", "ruckus (colloquial)", "fuss (colloquial)", "racket", "row",
+                "no direct translation", "scolding", "telling-off", "ticking-off", "problem", "jeering");
+
+            Meaning fight = definition.Contexts.First().Meanings.First();
+            fight.LookupUrl.Should().Be("https://www.spanishdict.com/translate/fight?langFrom=en");
+            fight.Examples.Should().ContainSingle().Which.Should().Be(new Models.Example(
+                Original: "Después de esa bronca que tuvimos, me fui de la casa.",
+                Translation: "After that big fight we had, I left the house."));
+        }
+
+        [TestMethod]
+        public void ParseDefinition_ForBronca_ReturnsNoDirectTranslationAndPreservesExamples()
+        {
+            var parser = new SpanishDictPageParser();
+
+            SpanishDictDefinition definition = parser.ParseDefinition(LoadTestObject("bronca"));
+
+            SpanishDictContext context = definition.Contexts.ElementAt(1);
+            context.ContextEN.Should().Be("(colloquial) (resentment) (South America)");
+            Meaning meaning = context.Meanings.Should().ContainSingle().Subject;
+            meaning.Original.Should().Be("no direct translation");
+            meaning.Examples.Should().HaveCount(2);
+            meaning.Examples.First().Original.Should().Be("No sé por qué el vecino me tiene tanta bronca, si yo no he hecho nada malo.");
+            meaning.Examples.Last().Should().Be(new Models.Example(
+                Original: "Me da mucha bronca cuando me hacen esperar horas para ver al médico.",
+                Translation: "It makes me mad when they make me wait for hours to see a doctor."));
+        }
 
         [TestMethod]
         public void ParseDefinition_ForAfeitar_ReturnsDefinitionForTransitiveVerb()
@@ -713,6 +791,18 @@ namespace CopyWords.Parsers.Tests
         #endregion
 
         #region Tests for ParseVariants
+
+        [TestMethod]
+        public void ParseVariants_ForBronca_ReturnsFeminineNounVariant()
+        {
+            var parser = new SpanishDictPageParser();
+
+            List<Models.Variant> variants = parser.ParseVariants(LoadTestObject("bronca"));
+
+            variants.Should().ContainSingle();
+            variants[0].Word.Should().Be("bronca (feminine noun)");
+            variants[0].Url.Should().Be("https://www.spanishdict.com/translate/bronca?n=0&p=0");
+        }
 
         [TestMethod]
         public void ParseVariants_ForAconsejar_Returns2Variants()
