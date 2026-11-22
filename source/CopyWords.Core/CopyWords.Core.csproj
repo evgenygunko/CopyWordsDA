@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!-- Default target frameworks for non-Windows platforms (macOS/Linux) -->
-    <TargetFrameworks>net10.0;net10.0-maccatalyst;net10.0-android</TargetFrameworks>
+    <TargetFrameworks>net11.0;net11.0-maccatalyst;net11.0-android</TargetFrameworks>
 
     <!-- On Windows, exclude MacCatalyst and include Windows platform -->
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net10.0;net10.0-android;net10.0-windows10.0.19041.0</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">net11.0;net11.0-android;net11.0-windows10.0.19041.0</TargetFrameworks>
 
     <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
     <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
