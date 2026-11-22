@@ -1,5 +1,8 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats.Png;
 
 namespace CopyWords.Core.Services.Wrappers
 {
@@ -14,9 +17,16 @@ namespace CopyWords.Core.Services.Wrappers
 
     public class ImageSharpWrapper : IImageSharpWrapper
     {
+        // Inspect image contents using only JPEG and PNG decoders. Registering no TIFF decoder
+        // blocks the known ImageSharp 3.1.12 TIFF vulnerabilities, even for files named .jpg.
+        private static readonly Configuration ImageConfiguration = new(
+            new JpegConfigurationModule(),
+            new PngConfigurationModule());
+
         public async Task<SixLabors.ImageSharp.Image> ResizeImageAsync(Stream stream, CancellationToken cancellationToken)
         {
-            SixLabors.ImageSharp.Image image = await SixLabors.ImageSharp.Image.LoadAsync(stream, cancellationToken);
+            var options = new DecoderOptions { Configuration = ImageConfiguration };
+            SixLabors.ImageSharp.Image image = await SixLabors.ImageSharp.Image.LoadAsync(options, stream, cancellationToken);
 
             if (image.Size.Width > 150 || image.Size.Height > 150)
             {

@@ -21,12 +21,26 @@
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Roslynator.Analyzers" Version="5.0.0" />
     <PackageVersion Include="Sentry.Maui" Version="6.9.0" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <!-- Pin ImageSharp to exactly 3.1.12 to avoid the build-time Six Labors license key requirement
+         introduced in v4.0.0 and backported to v3.2.0. This does not remove existing license obligations.
+         Known vulnerabilities remain in 3.1.12; the specific audit suppressions below accept that risk.
+         https://github.com/SixLabors/docs/blob/main/articles/imagesharp/index.md -->
+    <PackageVersion Include="SixLabors.ImageSharp" Version="[3.1.12]" />
     <PackageVersion Include="Syncfusion.Licensing" Version="34.2.4" />
     <!-- Syncfusion.Maui.Inputs 34.2.x crashes on Android when an empty, focused SfAutocomplete loses focus.
          Keep Inputs and Expander aligned at 34.1.30 until Syncfusion fixes the TextMeasurer regression. -->
     <PackageVersion Include="Syncfusion.Maui.Expander" Version="34.1.30" />
     <PackageVersion Include="Syncfusion.Maui.Inputs" Version="34.1.30" />
     <PackageVersion Include="Syncfusion.Maui.Toolkit" Version="1.0.10" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Suppress only the known ImageSharp 3.1.12 advisories while pinned for the license key reason above.
+         These suppressions do not fix the vulnerabilities. Keep NuGet auditing enabled for other advisories. -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-gwg2-r3hj-4w44" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-j3p4-wp97-rph4" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-j9gm-c75j-xc9q" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-jjfr-hcj7-qf5w" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-v76p-62qx-wwq2" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wmxv-xphr-5c9g" />
   </ItemGroup>
 </Project>

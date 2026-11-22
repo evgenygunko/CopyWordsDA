@@ -82,9 +82,10 @@
             "enabled": false
         },
         {
-            "description": "Exclude SixLabors.ImageSharp from updates",
+            "description": "Pin ImageSharp to 3.1.12 to avoid the build-time Six Labors license key requirement introduced in v4.0.0 and backported to v3.2.0; existing license obligations and known 3.1.12 vulnerabilities remain. See https://github.com/SixLabors/docs/blob/main/articles/imagesharp/index.md",
             "matchManagers": ["nuget"],
             "matchPackageNames": ["SixLabors.ImageSharp"],
+            "allowedVersions": "3.1.12",
             "enabled": false
         }
     ],
