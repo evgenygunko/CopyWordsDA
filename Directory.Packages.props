@@ -11,15 +11,15 @@
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageVersion Include="coverlet.collector" Version="10.1.0" />
     <PackageVersion Include="FluentAssertions" Version="[7.*, 8)" />
-    <PackageVersion Include="FluentValidation" Version="12.1.1" />
-    <PackageVersion Include="HtmlAgilityPack" Version="1.13.0" />
-    <PackageVersion Include="LaunchDarkly.ClientSdk" Version="5.9.6" />
+    <PackageVersion Include="FluentValidation" Version="12.2.0" />
+    <PackageVersion Include="HtmlAgilityPack" Version="1.13.1" />
+    <PackageVersion Include="LaunchDarkly.ClientSdk" Version="5.10.3" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="11.0.0" />
     <PackageVersion Include="Microsoft.Maui.Controls" Version="11.0.10" />
-    <PackageVersion Include="Moq" Version="4.20.72" />
+    <PackageVersion Include="Moq" Version="4.21.0" />
     <PackageVersion Include="MSTest" Version="4.5.2" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageVersion Include="Roslynator.Analyzers" Version="5.0.0" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="5.0.1" />
     <PackageVersion Include="Sentry.Maui" Version="7.0.1" />
     <!-- Pin ImageSharp to exactly 3.1.12 to avoid the build-time Six Labors license key requirement
          introduced in v4.0.0 and backported to v3.2.0. This does not remove existing license obligations.
