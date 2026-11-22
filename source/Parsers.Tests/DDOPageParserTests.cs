@@ -46,14 +46,35 @@ namespace CopyWords.Parsers.Tests
         #region Tests for public operations
 
         [TestMethod]
+        [DataRow("kind.html")]
+        [DataRow("islygte.html")]
+        public void ParseWord_WhenPageHasNoArticle_ReturnsNull(string fileName)
+        {
+            string content = GetSimpleHTMLPage(fileName);
+            var parser = new DDOPageParser();
+
+            parser.ParseWord(content).Should().BeNull();
+        }
+
+        [TestMethod]
+        public void ParseWord_WhenArticleMarkupIsMissing_ThrowsParserException()
+        {
+            var parser = new DDOPageParser();
+
+            FluentActions.Invoking(() => parser.ParseWord("<html><body></body></html>"))
+                .Should().Throw<CopyWords.Parsers.Exceptions.PageParserException>();
+        }
+
+        [TestMethod]
         public void ParseWord_ForUnderholdning_PopulatesAggregate()
         {
             string content = GetSimpleHTMLPage("Underholdning.html");
             var parser = new DDOPageParser();
 
-            DDOWord word = parser.ParseWord(content);
+            DDOWord? word = parser.ParseWord(content);
 
-            word.Headword.Should().Be("underholdning");
+            word.Should().NotBeNull();
+            word!.Headword.Should().Be("underholdning");
             word.PartOfSpeech.Should().NotBeEmpty();
             word.Endings.Should().Be("-en");
             word.Pronunciation.Should().Be("[ˈɔnʌˌhʌlˀneŋ]");
@@ -82,15 +103,16 @@ namespace CopyWords.Parsers.Tests
             string hajHtml = GetSimpleHTMLPage("Haj.html");
             var parser = new DDOPageParser();
 
-            Task<DDOWord> underholdningTask = Task.Run(() => parser.ParseWord(underholdningHtml));
-            Task<DDOWord> hajTask = Task.Run(() => parser.ParseWord(hajHtml));
+            Task<DDOWord?> underholdningTask = Task.Run(() => parser.ParseWord(underholdningHtml));
+            Task<DDOWord?> hajTask = Task.Run(() => parser.ParseWord(hajHtml));
 
-            DDOWord[] words = await Task.WhenAll(underholdningTask, hajTask);
+            DDOWord?[] words = await Task.WhenAll(underholdningTask, hajTask);
 
-            words[0].Headword.Should().Be("underholdning");
-            words[0].Definitions.Should().ContainSingle();
-            words[1].Headword.Should().Be("haj");
-            words[1].Definitions.Should().HaveCount(3);
+            words.Should().NotContainNulls();
+            words[0]!.Headword.Should().Be("underholdning");
+            words[0]!.Definitions.Should().ContainSingle();
+            words[1]!.Headword.Should().Be("haj");
+            words[1]!.Definitions.Should().HaveCount(3);
         }
 
         #endregion

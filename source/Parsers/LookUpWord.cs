@@ -108,10 +108,15 @@ namespace CopyWords.Parsers
             return wordModel;
         }
 
-        internal WordModel ParseDanishWord(string html)
+        internal WordModel? ParseDanishWord(string html)
         {
             // Download and parse a page from DDO
-            DDOWord ddoWord = _ddoPageParser.ParseWord(html);
+            DDOWord? ddoWord = _ddoPageParser.ParseWord(html);
+            if (ddoWord == null)
+            {
+                return null;
+            }
+
             string headWordDA = ddoWord.Headword;
             string soundUrl = ddoWord.SoundUrl;
             string soundFileName = string.IsNullOrEmpty(soundUrl) ? string.Empty : $"{headWordDA}.mp3";

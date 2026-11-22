@@ -9,7 +9,7 @@ namespace CopyWords.Parsers
 {
     public interface IDDOPageParser
     {
-        DDOWord ParseWord(string html);
+        DDOWord? ParseWord(string html);
 
         List<Variant> ParseSuggestions(string html);
     }
@@ -20,9 +20,15 @@ namespace CopyWords.Parsers
 
         #region Public Methods
 
-        public DDOWord ParseWord(string html)
+        public DDOWord? ParseWord(string html)
         {
             HtmlDocument document = ParseHtmlDocument(html);
+
+            // DDO can return a successful response with suggestions or expressions but no article.
+            if (document.DocumentNode.SelectSingleNode("//div[contains(concat(' ', normalize-space(@class), ' '), ' nomatch ')]") != null)
+            {
+                return null;
+            }
 
             return new DDOWord(
                 Headword: ParseHeadword(document),

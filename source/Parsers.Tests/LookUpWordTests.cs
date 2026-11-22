@@ -26,6 +26,20 @@ namespace CopyWords.Parsers.Tests
         #region Tests for LookUpWordAsync
 
         [TestMethod]
+        public async Task LookUpWordAsync_WhenDdoHasNoArticle_ReturnsNull()
+        {
+            string html = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "TestPages", "ddo", "kind.html"));
+            Mock<IFileDownloader> downloader = _fixture.Freeze<Mock<IFileDownloader>>();
+            downloader.Setup(x => x.DownloadPageAsync(It.IsAny<string>(), Encoding.UTF8, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(html);
+            var sut = new LookUpWord(new DDOPageParser(), Mock.Of<ISpanishDictPageParser>(), downloader.Object);
+
+            WordModel? result = await sut.LookUpWordAsync("kind", "Danish", CancellationToken.None);
+
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
         public async Task LookUpWordAsync_WhenSearchTermIsDDOUrl_CallsGivenUrl()
         {
             string searchTerm = "https://gammel.ordnet.dk/ddo/ordbog?select=bestemme&query=bestemt";
@@ -427,7 +441,7 @@ namespace CopyWords.Parsers.Tests
 
             var sut = _fixture.Create<LookUpWord>();
 
-            WordModel result = sut.ParseDanishWord(html);
+            WordModel result = sut.ParseDanishWord(html)!;
 
             result.Should().NotBeNull();
 
