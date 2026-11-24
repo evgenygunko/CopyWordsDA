@@ -44,7 +44,7 @@
         </desktop:Extension>
         <com:Extension Category="windows.comServer">
           <com:ComServer>
-            <com:ExeServer Executable="$targetnametoken$.exe" DisplayName="$targetnametoken$" Arguments="----AppNotificationActivated:">
+            <com:ExeServer Executable="CopyWords.MAUI.exe" DisplayName="CopyWords" Arguments="----AppNotificationActivated:">
               <com:Class Id="6e919706-2634-4d97-a93c-2213b2acc334" />
             </com:ExeServer>
           </com:ComServer>
