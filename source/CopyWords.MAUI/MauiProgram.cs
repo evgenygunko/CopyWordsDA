@@ -48,7 +48,7 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .ConfigureSyncfusionToolkit()
             .ConfigureSyncfusionCore()
-            .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkit(options => options.SetShouldEnableSnackbarOnWindows(true))
             .UseMauiCommunityToolkitMediaElement(isAndroidForegroundServiceEnabled: true);
 
         if (!string.IsNullOrEmpty(globalSettings.SentryDsn))
