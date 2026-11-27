@@ -5,7 +5,6 @@
              x:Class="CopyWords.MAUI.Views.SettingsViewAndroid">
 
     <ContentView.Resources>
-        <BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
         <InvertedBoolConverter x:Key="InvertedBoolConverter" />
     </ContentView.Resources>
 
@@ -60,7 +59,41 @@
                    IsToggled="{Binding ShowAnkiButton, Converter={StaticResource InvertedBoolConverter}}" />
         </Grid>
 
-        <Grid Margin="20,0,10,0" ColumnSpacing="10">
+        <!-- Section "Anki settings" -->
+        <VerticalStackLayout IsVisible="{Binding ShowAnkiButton, Converter={StaticResource InvertedBoolConverter}}">
+            <Label Text="Anki settings" Margin="20,10,10,0" FontSize="{StaticResource FontSizeSubtitle}" />
+            <!-- Anki Deck Name Danish -->
+            <Label IsVisible="{Binding IsDanishDictionaryEnabled}" Text="Deck name (Danish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
+            <Picker IsVisible="{Binding IsDanishDictionaryEnabled}" Margin="20,0,20,0"
+                FontSize="{StaticResource FontSizeBody}"
+                TextColor="{DynamicResource PrimaryTextColor}"
+                TitleColor="{DynamicResource SecondaryTextColor}"
+                Title="Select a deck"
+                ItemsSource="{Binding DeckNames}"
+                SelectedItem="{Binding AnkiDeckNameDanish}" />
+
+            <!-- Anki Deck Name Spanish -->
+            <Label IsVisible="{Binding IsSpanishDictionaryEnabled}" Text="Deck name (Spanish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
+            <Picker IsVisible="{Binding IsSpanishDictionaryEnabled}" Margin="20,0,20,0"
+                FontSize="{StaticResource FontSizeBody}"
+                TextColor="{DynamicResource PrimaryTextColor}"
+                TitleColor="{DynamicResource SecondaryTextColor}"
+                Title="Select a deck"
+                ItemsSource="{Binding DeckNames}"
+                SelectedItem="{Binding AnkiDeckNameSpanish}" />
+
+            <!-- Anki Model Name -->
+            <Label Text="Model name:" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
+            <Picker Margin="20,0,20,0"
+                FontSize="{StaticResource FontSizeBody}"
+                TextColor="{DynamicResource PrimaryTextColor}"
+                TitleColor="{DynamicResource SecondaryTextColor}"
+                Title="Select a model"
+                ItemsSource="{Binding ModelNames}"
+                SelectedItem="{Binding AnkiModelName}" />
+        </VerticalStackLayout>
+
+        <Grid Margin="20,20,10,0" ColumnSpacing="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -90,68 +123,25 @@
         <!-- Filler -->
         <BoxView Style="{StaticResource FillerStyle}" />
 
-        <!-- Section "Anki settings" -->
-        <Label Text="Anki settings" Margin="20,10,10,0" FontSize="{StaticResource FontSizeSubtitle}" />
-
-        <VerticalStackLayout Opacity="{Binding ShowAnkiButton, Converter={StaticResource BoolToOpacityConverter}}">
-                <!-- Anki Deck Name Danish -->
-                <!-- Anki Deck Name Danish -->
-                <Label IsVisible="{Binding IsDanishDictionaryEnabled}" Text="Deck name (Danish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
-                <Picker IsVisible="{Binding IsDanishDictionaryEnabled}" Margin="20,0,20,0"
-                    FontSize="{StaticResource FontSizeBody}"
-                    TextColor="{DynamicResource PrimaryTextColor}"
-                    TitleColor="{DynamicResource SecondaryTextColor}"
-                    IsEnabled="{Binding ShowAnkiButton}"
-                    Title="Select a deck"
-                    ItemsSource="{Binding DeckNames}"
-                    SelectedItem="{Binding AnkiDeckNameDanish}" />
-
-                <!-- Anki Deck Name Spanish -->
-                <Label IsVisible="{Binding IsSpanishDictionaryEnabled}" Text="Deck name (Spanish):" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
-                <Picker IsVisible="{Binding IsSpanishDictionaryEnabled}" Margin="20,0,20,0"
-                    FontSize="{StaticResource FontSizeBody}"
-                    TextColor="{DynamicResource PrimaryTextColor}"
-                    TitleColor="{DynamicResource SecondaryTextColor}"
-                    IsEnabled="{Binding ShowAnkiButton}"
-                    Title="Select a deck"
-                    ItemsSource="{Binding DeckNames}"
-                    SelectedItem="{Binding AnkiDeckNameSpanish}" />
-
-                <!-- Anki Model Name -->
-                <Label Text="Model name:" Margin="20,10,10,0" Style="{StaticResource SettingsLabelStyleAndroid}" />
-                <Picker Margin="20,0,20,0"
-                    FontSize="{StaticResource FontSizeBody}"
-                    TextColor="{DynamicResource PrimaryTextColor}"
-                    TitleColor="{DynamicResource SecondaryTextColor}"
-                    IsEnabled="{Binding ShowAnkiButton}"
-                    Title="Select a model"
-                    ItemsSource="{Binding ModelNames}"
-                    SelectedItem="{Binding AnkiModelName}" />
-            </VerticalStackLayout>
-
-        <!-- Filler -->
-        <BoxView Style="{StaticResource FillerStyle}" />
-
         <!-- Section "Theme" -->
         <Label Text="Theme" Margin="20,0,10,0" FontSize="{StaticResource FontSizeSubtitle}" />
 
-        <Grid Margin="20,0,10,0" ColumnSpacing="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <Label Grid.Row="0" Grid.Column="0"
-                   Style="{StaticResource SettingsLabelStyleAndroid}"
-                   VerticalOptions="Center"
-                   Text="Theme"/>
-            <Picker Grid.Row="0" Grid.Column="1"
+        <Grid Margin="20,10,20,0">
+            <Picker FontSize="{StaticResource FontSizeBody}"
+                    TextColor="{DynamicResource PrimaryTextColor}"
+                    TitleColor="{DynamicResource SecondaryTextColor}"
+                    Title="Select a theme"
+                    HorizontalOptions="Fill"
                     ItemsSource="{Binding Themes}"
                     SelectedItem="{Binding SelectedTheme}" />
+            <Label Text="&#x25BE;"
+                   Margin="0,0,16,0"
+                   FontSize="{StaticResource FontSizeBody}"
+                   TextColor="{DynamicResource SecondaryTextColor}"
+                   HorizontalOptions="End"
+                   VerticalOptions="Center"
+                   InputTransparent="True"
+                   AutomationProperties.IsInAccessibleTree="False" />
         </Grid>
 
         <!-- Filler -->
