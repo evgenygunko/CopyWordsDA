@@ -32,6 +32,7 @@ namespace CopyWords.Parsers.Tests
         [DataRow("saltamontes")]
         [DataRow("wasapear")]
         [DataRow("bronca")]
+        [DataRow("pisotear")]
         public void ParseHeadword_Should_ReturnWordFromModel(string word)
         {
             var parser = new SpanishDictPageParser();
@@ -46,10 +47,11 @@ namespace CopyWords.Parsers.Tests
         #region ParseSoundURL tests
 
         [TestMethod]
-        [DataRow("Afeitar", "https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_4189_speaker_7_syllable_all_version_50.mp4")]
-        [DataRow("Águila", "https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_13701_speaker_7_syllable_all_version_50.mp4")]
-        [DataRow("Aprovechar", "https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_13603_speaker_7_syllable_all_version_50.mp4")]
-        [DataRow("bronca", "https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_5651_speaker_7_syllable_all_version_50.mp4")]
+        [DataRow("Afeitar", "https://sd-pronunciation-processed-videos.sdcdns.com/desktop/lang_es_pron_4189_speaker_7_syllable_all_version_50.mp4")]
+        [DataRow("Águila", "https://sd-pronunciation-processed-videos.sdcdns.com/desktop/lang_es_pron_13701_speaker_7_syllable_all_version_50.mp4")]
+        [DataRow("Aprovechar", "https://sd-pronunciation-processed-videos.sdcdns.com/desktop/lang_es_pron_13603_speaker_7_syllable_all_version_50.mp4")]
+        [DataRow("bronca", "https://sd-pronunciation-processed-videos.sdcdns.com/desktop/lang_es_pron_5651_speaker_7_syllable_all_version_50.mp4")]
+        [DataRow("pisotear", "https://sd-pronunciation-processed-videos.sdcdns.com/desktop/lang_es_pron_18546_speaker_7_syllable_all_version_50.mp4")]
         public void ParseSoundURL_WhenSpanishPronunciationWithVideoExists_ReturnSoundURL(string word, string expectedSoundURL)
         {
             var parser = new SpanishDictPageParser();
@@ -78,12 +80,70 @@ namespace CopyWords.Parsers.Tests
 
             string? result = parser.ParseSoundURL(LoadTestObject(word));
 
-            result.Should().Be("https://d10gt6izjc94x0.cloudfront.net/desktop/lang_es_pron_265_speaker_3_syllable_all_version_51.mp4");
+            result.Should().Be("https://sd-pronunciation-processed-videos.sdcdns.com/desktop/lang_es_pron_265_speaker_3_syllable_all_version_51.mp4");
         }
 
         #endregion
 
         #region ParseDefinition tests
+
+        [TestMethod]
+        public void ParseDefinition_ForPisotear_ReturnsLiteralAndFigurativeSenses()
+        {
+            var parser = new SpanishDictPageParser();
+
+            SpanishDictDefinition definition = parser.ParseDefinition(LoadTestObject("pisotear"));
+
+            definition.WordES.Should().Be("pisotear");
+            definition.PartOfSpeech.Should().Be("transitive verb");
+            definition.Contexts.Select(context => context.ContextEN).Should().Equal(
+                "(to tread on)", "(figurative) (to disrespect)");
+            definition.Contexts.Select(context => context.Position).Should().Equal(1, 2);
+            definition.Contexts.Select(context => context.Meanings.Count()).Should().Equal(3, 3);
+            definition.Contexts.SelectMany(context => context.Meanings).Select(meaning => meaning.Original).Should().Equal(
+                "to stomp on", "to trample", "to stamp on",
+                "to trample on", "to ride roughshod over", "to walk all over (colloquial)");
+            definition.Contexts.SelectMany(context => context.Meanings).Select(meaning => meaning.AlphabeticalPosition).Should().Equal(
+                "a", "b", "c", "a", "b", "c");
+            definition.Contexts.SelectMany(context => context.Meanings).Select(meaning => meaning.LookupUrl).Should().Equal(
+                "https://www.spanishdict.com/translate/to+stomp+on?langFrom=en",
+                "https://www.spanishdict.com/translate/to+trample?langFrom=en",
+                "https://www.spanishdict.com/translate/to+stamp+on?langFrom=en",
+                "https://www.spanishdict.com/translate/to+trample+on?langFrom=en",
+                "https://www.spanishdict.com/translate/to+ride+roughshod+over?langFrom=en",
+                "https://www.spanishdict.com/translate/to+walk+all+over?langFrom=en");
+        }
+
+        [TestMethod]
+        public void ParseDefinition_ForPisotear_PreservesExamplesForEveryTranslation()
+        {
+            var parser = new SpanishDictPageParser();
+
+            SpanishDictDefinition definition = parser.ParseDefinition(LoadTestObject("pisotear"));
+
+            Meaning[] meanings = definition.Contexts.SelectMany(context => context.Meanings).ToArray();
+            meanings.Should().HaveCount(6);
+            meanings.Should().OnlyContain(meaning => meaning.Examples.Count() == 1);
+            meanings.SelectMany(meaning => meaning.Examples).Should().Equal(
+                new Models.Example(
+                    Original: "Los niños pisotean las hojas secas.",
+                    Translation: "The children are stomping on the dry leaves."),
+                new Models.Example(
+                    Original: "Uno de los jinetes se cayó y fue pisoteado por su caballo.",
+                    Translation: "One of the riders fell and was trampled by his horse."),
+                new Models.Example(
+                    Original: "Los manifestantes arrancaron la bandera del mástil y la pisotearon.",
+                    Translation: "Demonstrators tore the flag from the flagpole and stamped on it."),
+                new Models.Example(
+                    Original: "Al tratar a sus trabajadores como esclavos la empresa está pisoteando la dignidad humana.",
+                    Translation: "By treating their workers like slaves the company is trampling on human dignity."),
+                new Models.Example(
+                    Original: "La sociedad ha pisoteado los derechos de las minorías étnicas durante siglos.",
+                    Translation: "Society has ridden roughshod over the rights of ethnic minorities for centuries."),
+                new Models.Example(
+                    Original: "Tu novio no tiene derecho a pisotearte de esa forma. Tienes que hacerte valer.",
+                    Translation: "Your boyfriend has no right to walk all over you like that. You need to stand up for yourself."));
+        }
 
         [TestMethod]
         public void ParseDefinition_ForBronca_AllMeaningsInAllDefinitionsHaveNonEmptyOriginal()
@@ -791,6 +851,18 @@ namespace CopyWords.Parsers.Tests
         #endregion
 
         #region Tests for ParseVariants
+
+        [TestMethod]
+        public void ParseVariants_ForPisotear_ReturnsTransitiveVerbVariant()
+        {
+            var parser = new SpanishDictPageParser();
+
+            List<Models.Variant> variants = parser.ParseVariants(LoadTestObject("pisotear"));
+
+            Models.Variant variant = variants.Should().ContainSingle().Subject;
+            variant.Word.Should().Be("pisotear (transitive verb)");
+            variant.Url.Should().Be("https://www.spanishdict.com/translate/pisotear?n=0&p=0");
+        }
 
         [TestMethod]
         public void ParseVariants_ForBronca_ReturnsFeminineNounVariant()

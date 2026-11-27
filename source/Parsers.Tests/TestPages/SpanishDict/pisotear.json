@@ -1,0 +1,1123 @@
+{
+    "altLangUrl": "https:\u002F\u002Fwww.ingles.com\u002Ftraductor\u002Fpisotear",
+    "wordOfTheDayData": {
+        "image": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002Foriginal\u002F1e6bc70b-2a7d-4b4c-82a4-8ef4ba21813f.png",
+        "imageJPG": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002F400\u002F1e6bc70b-2a7d-4b4c-82a4-8ef4ba21813f.jpg",
+        "imageWEBP": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002F400\u002F1e6bc70b-2a7d-4b4c-82a4-8ef4ba21813f.webp",
+        "imageAVIF": "https:\u002F\u002Fsd-hegemone-production.sdcdns.com\u002Fios-wotd-images\u002F400\u002F1e6bc70b-2a7d-4b4c-82a4-8ef4ba21813f.avif",
+        "wordId": 52855,
+        "wordSource": "roncar",
+        "wordDisplay": "roncar",
+        "translationText": "to snore",
+        "lang": "es",
+        "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=roncar&key=1ce3c16cd6d80f645731fbaa85322967",
+        "pronunciations": [
+            {
+                "id": 11754,
+                "ipa": "roŋ*ˈkaɾ",
+                "abc": "ron*ˈcar",
+                "hasVideo": true,
+                "speakerId": 3,
+                "region": "LATAM",
+                "uuid": null,
+                "version": 51,
+                "spa": "rrohng*ˈkahr"
+            },
+            {
+                "id": 11755,
+                "ipa": "roŋ*ˈkaɾ",
+                "abc": "ron*ˈcar",
+                "hasVideo": true,
+                "speakerId": 7,
+                "region": "SPAIN",
+                "uuid": null,
+                "version": 50,
+                "spa": "rrohng*ˈkahr"
+            }
+        ]
+    },
+    "siteUrlBase": "https:\u002F\u002Fwww.spanishdict.com",
+    "testGroup": 84,
+    "excludeAds": false,
+    "brandKey": "spanishdictionary",
+    "hostConfig": {
+        "authHost": "https:\u002F\u002Fauth.spanishdict.com",
+        "classroomHost": "playground.spanishdict.com",
+        "examplesHost": "examples1.spanishdict.com",
+        "facebookAppId": "123097127645",
+        "googleAppId": "465204375633-gjgdbv90q0mm4fbm5jvrh6gki4dh1a6e.apps.googleusercontent.com",
+        "audioHost": "audio-cdn.sdcdns.com",
+        "hegemoneAssetHost": "sd-hegemone-production.sdcdns.com",
+        "hegemoneApplicationHost": "https:\u002F\u002Fhegemone.cminternal.com",
+        "leaderboardsHost": "leaderboards1.spanishdict.com",
+        "neodarwinAssetHost": "neodarwin-prod.sdcdns.com",
+        "playgroundHost": "playground.spanishdict.com",
+        "scribeHost": "scribe1.spanishdict.com",
+        "siteHost": "site1.spanishdict.com",
+        "suggestHost": "suggest1.spanishdict.com",
+        "traductorHost": "traductor1.spanishdict.com"
+    },
+    "maintenanceMode": false,
+    "learningLang": "es",
+    "uiLang": "en",
+    "isMobile": false,
+    "experimentRegistry": {
+        "sdAdminPanel": false,
+        "sdStickyRightRail": true,
+        "adhesionMarketingInt": 2,
+        "wyzantLandingPage": "ctrl_existing_page",
+        "stripePaymentElement": null,
+        "randomizedExperiments": {
+            "wyzant_landing_page": "ctrl_existing_page"
+        }
+    },
+    "serverNowAtPageview": 1795811453969,
+    "pageCategory": "translation",
+    "isApp": false,
+    "action": "translate",
+    "conjugationProps": {
+        "showVosConjugations": false,
+        "showVosotrosConjugations": true
+    },
+    "genericVideoHeadwordData": {
+        "id": 49763,
+        "source": "pisotear",
+        "popularity": 5000
+    },
+    "phrases": [
+        {
+            "source": "pisotear con fuerza",
+            "sourceAudioQueryString": "?lang=es&text=pisotear-con-fuerza&key=b8cec2524921662831ef5cb30a5c9258&region=latam",
+            "quickdef": "to tramp",
+            "quickdefAudioQueryString": "?lang=en&text=to-tramp&key=be8cce5051c7e80a96aace5baa3ec1af&region=us",
+            "quickdef1": "to tramp",
+            "quickdef1AudioQueryString": "?lang=en&text=to-tramp&key=be8cce5051c7e80a96aace5baa3ec1af&region=us",
+            "quickdef2AudioQueryString": null
+        }
+    ],
+    "sdDictionaryResultsProps": {
+        "entry": {
+            "neodict": [
+                {
+                    "subheadword": "pisotear",
+                    "posGroups": [
+                        {
+                            "pos": {
+                                "abbrEn": "vtr",
+                                "abbrEs": "vtr",
+                                "nameEn": "transitive verb",
+                                "nameEs": "verbo transitivo",
+                                "sharedPosNameEn": "transitive verb"
+                            },
+                            "entryLang": "es",
+                            "gender": null,
+                            "senses": [
+                                {
+                                    "contextEn": "to tread on",
+                                    "contextEs": "pisar para estropear",
+                                    "gender": null,
+                                    "id": 29719,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "The children are stomping on the dry leaves.",
+                                                    "textEs": "Los niños pisotean las hojas secas."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 49222,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": true,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to stomp on"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "One of the riders fell and was trampled by his horse.",
+                                                    "textEs": "Uno de los jinetes se cayó y fue pisoteado por su caballo."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 51013,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to trample"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Demonstrators tore the flag from the flagpole and stamped on it.",
+                                                    "textEs": "Los manifestantes arrancaron la bandera del mástil y la pisotearon."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 49221,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to stamp on"
+                                        }
+                                    ],
+                                    "subheadword": "pisotear",
+                                    "idx": 1,
+                                    "context": "to tread on",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to stomp on",
+                                            "gender": null,
+                                            "isQuickTranslation": true,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to stomp on"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Los niños pisotean las hojas secas.",
+                                                    "The children are stomping on the dry leaves."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "to trample",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to trample"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Uno de los jinetes se cayó y fue pisoteado por su caballo.",
+                                                    "One of the riders fell and was trampled by his horse."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "to stamp on",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to stamp on"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "c",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Los manifestantes arrancaron la bandera del mástil y la pisotearon.",
+                                                    "Demonstrators tore the flag from the flagpole and stamped on it."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "contextEn": "to disrespect",
+                                    "contextEs": "tratar sin respeto",
+                                    "gender": null,
+                                    "id": 29721,
+                                    "partOfSpeech": {
+                                        "abbrEn": "vtr",
+                                        "abbrEs": "vtr",
+                                        "nameEn": "transitive verb",
+                                        "nameEs": "verbo transitivo"
+                                    },
+                                    "regions": [],
+                                    "registerLabels": [
+                                        {
+                                            "abbrEn": "fig",
+                                            "abbrEs": "fig",
+                                            "nameEn": "figurative",
+                                            "nameEs": "figurado"
+                                        }
+                                    ],
+                                    "translations": [
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "By treating their workers like slaves the company is trampling on human dignity.",
+                                                    "textEs": "Al tratar a sus trabajadores como esclavos la empresa está pisoteando la dignidad humana."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 49225,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to trample on"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Society has ridden roughshod over the rights of ethnic minorities for centuries.",
+                                                    "textEs": "La sociedad ha pisoteado los derechos de las minorías étnicas durante siglos."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 49224,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [],
+                                            "translation": "to ride roughshod over"
+                                        },
+                                        {
+                                            "contextEn": "",
+                                            "contextEs": "",
+                                            "examples": [
+                                                {
+                                                    "textEn": "Your boyfriend has no right to walk all over you like that. You need to stand up for yourself.",
+                                                    "textEs": "Tu novio no tiene derecho a pisotearte de esa forma. Tienes que hacerte valer."
+                                                }
+                                            ],
+                                            "gender": null,
+                                            "id": 52773,
+                                            "isOppositeLanguageHeadword": false,
+                                            "isQuickTranslation": false,
+                                            "regions": [],
+                                            "registerLabels": [
+                                                {
+                                                    "abbrEn": "col",
+                                                    "abbrEs": "col",
+                                                    "nameEn": "colloquial",
+                                                    "nameEs": "coloquial"
+                                                }
+                                            ],
+                                            "translation": "to walk all over"
+                                        }
+                                    ],
+                                    "subheadword": "pisotear",
+                                    "idx": 2,
+                                    "context": "to disrespect",
+                                    "regionsDisplay": [],
+                                    "registerLabelsDisplay": [
+                                        {
+                                            "name": "figurative",
+                                            "tooltip": {
+                                                "def": "A phrase used as a figure of speech or a word that is symbolic in meaning; metaphorical (e.g., carrot, bean)."
+                                            }
+                                        }
+                                    ],
+                                    "translationsDisplay": [
+                                        {
+                                            "translation": "to trample on",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to trample on"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "a",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Al tratar a sus trabajadores como esclavos la empresa está pisoteando la dignidad humana.",
+                                                    "By treating their workers like slaves the company is trampling on human dignity."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "to ride roughshod over",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to ride roughshod over"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "b",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [],
+                                            "examplesDisplay": [
+                                                [
+                                                    "La sociedad ha pisoteado los derechos de las minorías étnicas durante siglos.",
+                                                    "Society has ridden roughshod over the rights of ethnic minorities for centuries."
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "translation": "to walk all over",
+                                            "gender": null,
+                                            "isQuickTranslation": false,
+                                            "translationsDisplay": {
+                                                "texts": [
+                                                    "to walk all over"
+                                                ],
+                                                "tooltips": []
+                                            },
+                                            "letters": "c",
+                                            "context": "",
+                                            "regionsDisplay": [],
+                                            "registerLabelsDisplay": [
+                                                {
+                                                    "name": "colloquial",
+                                                    "tooltip": {
+                                                        "def": "A word or phrase that is commonly used in conversational speech (e.g., skinny, grandma)."
+                                                    }
+                                                }
+                                            ],
+                                            "examplesDisplay": [
+                                                [
+                                                    "Tu novio no tiene derecho a pisotearte de esa forma. Tienes que hacerte valer.",
+                                                    "Your boyfriend has no right to walk all over you like that. You need to stand up for yourself."
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "posDisplay": {
+                                "name": "transitive verb",
+                                "tooltip": {
+                                    "def": "A transitive verb is a verb that requires a direct object (e.g., I bought a book.).",
+                                    "href": "https:\u002F\u002Fwww.spanishdict.com\u002Fguide\u002Fspanish-verb-types"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "pronunciationDictionaryLink": {
+            "uiLang": "en",
+            "word": "pisotear",
+            "regionChoice": "latam",
+            "spellingChoice": "spa",
+            "pronunciationSpellings": [
+                "pee*soh*teh*ˈahr"
+            ],
+            "wordLang": "es",
+            "dictDefaultLang": "es"
+        },
+        "entryLang": "es",
+        "defaultLang": "es"
+    },
+    "searchBoxProps": {
+        "initialSearchText": "pisotear",
+        "action": "translate",
+        "searchQuickLinkSections": [
+            {
+                "title": "POPULAR ENGLISH SEARCHES",
+                "action": "translate",
+                "words": [
+                    "take",
+                    "buddy",
+                    "get",
+                    "bear",
+                    "square",
+                    "escape",
+                    "live",
+                    "party"
+                ]
+            },
+            {
+                "title": "SPANISH SLANG",
+                "action": "translate",
+                "words": [
+                    "vato",
+                    "chévere",
+                    "bacano",
+                    "atúquiti",
+                    "guay",
+                    "tqm",
+                    "yuma",
+                    "buco"
+                ]
+            },
+            {
+                "title": "ENGLISH IDIOMS",
+                "action": "translate",
+                "words": [
+                    "witching hour",
+                    "break a leg",
+                    "in a nutshell",
+                    "it's raining cats and dogs"
+                ]
+            },
+            {
+                "title": "SPANISH COMPARISONS",
+                "action": "compare",
+                "words": [
+                    "ser vs estar",
+                    "por vs para",
+                    "saber vs conocer",
+                    "cabra vs chivo"
+                ]
+            }
+        ],
+        "isMTPage": false,
+        "stickySearchBarEnabled": true
+    },
+    "authoringProps": null,
+    "hasBothLangs": false,
+    "dictDefaultLang": "es",
+    "langFrom": "es",
+    "langTo": "en",
+    "navItems": [
+        {
+            "label": "Dictionary",
+            "active": true,
+            "href": "\u002Ftranslate\u002Fpisotear",
+            "path": "translate",
+            "token": "pisotear",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Conjugation",
+            "active": false,
+            "href": "\u002Fconjugate\u002Fpisotear",
+            "path": "conjugate",
+            "token": "pisotear",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Examples",
+            "active": false,
+            "href": "\u002Fexamples\u002Fpisotear",
+            "path": "examples",
+            "token": "pisotear",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Pronunciation",
+            "active": false,
+            "href": "\u002Fpronunciation\u002Fpisotear",
+            "path": "pronunciation",
+            "token": "pisotear",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        },
+        {
+            "label": "Thesaurus",
+            "active": false,
+            "href": "\u002Fthesaurus\u002Fpisotear",
+            "path": "thesaurus",
+            "token": "pisotear",
+            "isSourceInBothLangs": false,
+            "isVerbInBothLangs": false
+        }
+    ],
+    "numNeodictTranslations": 6,
+    "partnerBacklinks": null,
+    "queryText": "pisotear",
+    "resultCardHeaderProps": {
+        "headwordAndQuickdefsProps": {
+            "headword": {
+                "displayText": "pisotear",
+                "textToPronounce": "pisotear",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=es&text=pisotear&key=5a92e400a8b318f4cc30c5afa70ef972",
+                "pronunciations": [
+                    {
+                        "id": 18545,
+                        "ipa": "pi*so*te*ˈaɾ",
+                        "abc": "pi*so*te*ˈar",
+                        "spa": "pee*soh*teh*ˈahr",
+                        "region": "LATAM",
+                        "hasVideo": 1,
+                        "speakerId": 3,
+                        "version": 51
+                    },
+                    {
+                        "id": 18546,
+                        "ipa": "pi*so*te*ˈaɾ",
+                        "abc": "pi*so*te*ˈar",
+                        "spa": "pee*soh*teh*ˈahr",
+                        "region": "SPAIN",
+                        "hasVideo": 1,
+                        "speakerId": 7,
+                        "version": 50
+                    }
+                ],
+                "wordLang": "es",
+                "type": "headword"
+            },
+            "quickdef1": {
+                "displayText": "to stomp on",
+                "textToPronounce": "stomp on",
+                "audioUrl": "https:\u002F\u002Faudio-cdn.sdcdns.com\u002Faudio?lang=en&text=stomp-on&key=5a4f50bf77a0ad2fe18ddd3de75e8ffa",
+                "pronunciations": [
+                    {
+                        "id": 136270,
+                        "ipa": "stɑmp ɑn",
+                        "abc": "stomp on",
+                        "spa": "stamp an",
+                        "region": "US",
+                        "hasVideo": 0,
+                        "speakerId": null,
+                        "version": null,
+                        "source": "stomp on"
+                    },
+                    {
+                        "id": 136271,
+                        "ipa": "stɒmp ɒn",
+                        "abc": "stomp on",
+                        "spa": "stamp an",
+                        "region": "UK",
+                        "hasVideo": 0,
+                        "speakerId": null,
+                        "version": null,
+                        "source": "stomp on"
+                    }
+                ],
+                "wordLang": "en",
+                "type": "quickdef1"
+            },
+            "quickdef2": null
+        },
+        "addToListProps": {
+            "word": {
+                "id": 49763,
+                "source": "pisotear",
+                "lang": "es"
+            },
+            "userCount": 0,
+            "shouldShow": true,
+            "shouldBeDisabled": false,
+            "initialIsModalOpen": false
+        }
+    },
+    "sdExamplesProps": {
+        "query": "pisotear",
+        "originalQuery": "pisotear",
+        "forcedLanguage": "es",
+        "pageCategory": "translation"
+    },
+    "sdInflectionProps": {
+        "wordLang": "es",
+        "wordId": 49763
+    },
+    "sdQuicktipProps": null,
+    "sdWordRootProps": {
+        "wordLang": "es",
+        "wordId": 49763
+    },
+    "usageNoteAndArticlesProps": {
+        "linkedArticles": []
+    },
+    "verb": {
+        "id": 49763,
+        "infinitive": "pisotear",
+        "matchedConjugation": "pisotear",
+        "isReflexive": 1,
+        "isReflexiveVariation": false,
+        "verbType": 1,
+        "supportsConjugationDrills": 1,
+        "reason": "exact match",
+        "infinitiveTranslation": "trample on",
+        "pastParticiple": {
+            "conjugationForms": [
+                "pisoteado"
+            ],
+            "audioQueryString": "?lang=es&text=pisoteado&key=b522cbfe1737f1ec53a49c13f52f8e2d",
+            "example": "",
+            "exampleTranslation": ""
+        },
+        "gerund": {
+            "conjugationForms": [
+                "pisoteando"
+            ],
+            "audioQueryString": "?lang=es&text=pisoteando&key=81280580ee295737ee87edc42bcd778f",
+            "example": "",
+            "exampleTranslation": ""
+        },
+        "paradigms": {
+            "presentIndicative": [
+                {
+                    "conjugationForms": [
+                        "pisoteo"
+                    ],
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=pisoteo&key=da72fcc88939869a71556efd013511b2",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteas"
+                    ],
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=pisoteas&key=3c64613a0c0b9bb7eeadd0a9ea4aa3ea",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotea"
+                    ],
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=pisotea&key=a85e6a6d7fc6c99b44da5c2255052e10",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteamos"
+                    ],
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=pisoteamos&key=629f467ba853464c2ace13e0231b78b1",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteáis"
+                    ],
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=pisote%C3%A1is&key=c5965f3bc6a272b348c539e3765a4586&region=spain",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotean"
+                    ],
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=pisotean&key=52b6a656d6b30717a1f82280fb10482c",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteás"
+                    ],
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=pisote%C3%A1s&key=683ba84474dcc48a6a48f0a4bf7ca460&region=latam",
+                    "example": "",
+                    "exampleTranslation": ""
+                }
+            ],
+            "preteritIndicative": [
+                {
+                    "conjugationForms": [
+                        "pisoteé"
+                    ],
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=pisote%C3%A9&key=0ffccaca461be9047e8e633dcb583350",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteaste"
+                    ],
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=pisoteaste&key=6cd42c761a2a4a22cdb92b811a29e21b",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteó"
+                    ],
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=pisote%C3%B3&key=0fb5940c8b7379895feecb0888fbff8a",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteamos"
+                    ],
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=pisoteamos&key=629f467ba853464c2ace13e0231b78b1",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteasteis"
+                    ],
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=pisoteasteis&key=a1c838d02a2f935461e2d4620bd91330&region=spain&name=maria22k",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearon"
+                    ],
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=pisotearon&key=e4357dd3898638d09e0d424d05fbde7d",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteaste"
+                    ],
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=pisoteaste&key=6cd42c761a2a4a22cdb92b811a29e21b&region=latam",
+                    "example": "",
+                    "exampleTranslation": ""
+                }
+            ],
+            "imperfectIndicative": [
+                {
+                    "conjugationForms": [
+                        "pisoteaba"
+                    ],
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=pisoteaba&key=001c4c6a22ba02e6907f14c5370d3b6f",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteabas"
+                    ],
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=pisoteabas&key=4671269c47a8879d7e65d6bee860c7d1",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteaba"
+                    ],
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=pisoteaba&key=001c4c6a22ba02e6907f14c5370d3b6f",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteábamos"
+                    ],
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=pisote%C3%A1bamos&key=7c4b2468d9b64277a73af097f8c43cc0",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteabais"
+                    ],
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=pisoteabais&key=7626c2a46d0908beb1015151728a0428&region=spain",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteaban"
+                    ],
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=pisoteaban&key=600901a6795f43b3588f91ce3994812a",
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteabas"
+                    ],
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=pisoteabas&key=4671269c47a8879d7e65d6bee860c7d1&region=latam",
+                    "example": "",
+                    "exampleTranslation": ""
+                }
+            ],
+            "conditionalIndicative": [
+                {
+                    "conjugationForms": [
+                        "pisotearía"
+                    ],
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%ADa&key=ce9857900b6815c9c2c5296cfad948b7",
+                    "translationForms": [
+                        {
+                            "word": "would trample on",
+                            "pronoun": "I"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearías"
+                    ],
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%ADas&key=fbe5eb34cc482b08560fe73035d81b58",
+                    "translationForms": [
+                        {
+                            "word": "would trample on",
+                            "pronoun": "you"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearía"
+                    ],
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%ADa&key=ce9857900b6815c9c2c5296cfad948b7",
+                    "translationForms": [
+                        {
+                            "word": "would trample on",
+                            "pronoun": "he\u002Fshe"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearíamos"
+                    ],
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%ADamos&key=a216b4921ce8e000ccab31e88cb278fd",
+                    "translationForms": [
+                        {
+                            "word": "would trample on",
+                            "pronoun": "we"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearíais"
+                    ],
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%ADais&key=01437e2b304e446cf79f301a9b1b1b27&region=spain",
+                    "translationForms": [
+                        {
+                            "word": "would trample on",
+                            "pronoun": "you"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearían"
+                    ],
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%ADan&key=f3c80a38cf47ffaac187256f899b557a",
+                    "translationForms": [
+                        {
+                            "word": "would trample on",
+                            "pronoun": "they"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearías"
+                    ],
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%ADas&key=fbe5eb34cc482b08560fe73035d81b58&region=latam",
+                    "translationForms": [
+                        {
+                            "word": "would trample on",
+                            "pronoun": "you"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                }
+            ],
+            "futureIndicative": [
+                {
+                    "conjugationForms": [
+                        "pisotearé"
+                    ],
+                    "pronoun": "yo",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%A9&key=f5841f26fafd29a133608d373205732b",
+                    "translationForms": [
+                        {
+                            "word": "will trample on",
+                            "pronoun": "I"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearás"
+                    ],
+                    "pronoun": "tú",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%A1s&key=557034455689fb8de1ce9ee000eb5c88",
+                    "translationForms": [
+                        {
+                            "word": "will trample on",
+                            "pronoun": "you"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisoteará"
+                    ],
+                    "pronoun": "él\u002Fella\u002FUd.",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%A1&key=1c9da39d70122cd9bf1c6d2b9d0d3d47",
+                    "translationForms": [
+                        {
+                            "word": "will trample on",
+                            "pronoun": "he\u002Fshe"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearemos"
+                    ],
+                    "pronoun": "nosotros",
+                    "audioQueryString": "?lang=es&text=pisotearemos&key=e34389f47ac1a6f4160ee94a80001966",
+                    "translationForms": [
+                        {
+                            "word": "will trample on",
+                            "pronoun": "we"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearéis"
+                    ],
+                    "pronoun": "vosotros",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%A9is&key=23c265634f91c9e8686b2027110b5334&region=spain",
+                    "translationForms": [
+                        {
+                            "word": "will trample on",
+                            "pronoun": "you"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearán"
+                    ],
+                    "pronoun": "ellos\u002Fellas\u002FUds.",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%A1n&key=fd3a462d21b5aeb235bdc1b27518ce11",
+                    "translationForms": [
+                        {
+                            "word": "will trample on",
+                            "pronoun": "they"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                },
+                {
+                    "conjugationForms": [
+                        "pisotearás"
+                    ],
+                    "pronoun": "vos",
+                    "audioQueryString": "?lang=es&text=pisotear%C3%A1s&key=557034455689fb8de1ce9ee000eb5c88&region=latam",
+                    "translationForms": [
+                        {
+                            "word": "will trample on",
+                            "pronoun": "you"
+                        }
+                    ],
+                    "example": "",
+                    "exampleTranslation": ""
+                }
+            ]
+        }
+    },
+    "verbLang": "es",
+    "verbMoods": {
+        "Indicative": {
+            "label": {
+                "name": "Indicative of \"pisotear\"",
+                "href": "\u002Fguide\u002Fspanish-indicative-mood"
+            },
+            "tenses": [
+                {
+                    "name": "presentIndicative",
+                    "title": "Present",
+                    "href": "\u002Fguide\u002Fspanish-present-tense-forms\u002F"
+                },
+                {
+                    "name": "preteritIndicative",
+                    "title": "Preterite",
+                    "href": "\u002Fguide\u002Fspanish-preterite-tense-forms\u002F"
+                },
+                {
+                    "name": "imperfectIndicative",
+                    "title": "Imperfect",
+                    "href": "\u002Fguide\u002Fspanish-imperfect-tense-forms"
+                },
+                {
+                    "name": "conditionalIndicative",
+                    "title": "Conditional",
+                    "href": "\u002Fguide\u002Fconditional-tense"
+                },
+                {
+                    "name": "futureIndicative",
+                    "title": "Future",
+                    "href": "\u002Fguide\u002Fsimple-future-regular-forms-and-tenses"
+                }
+            ]
+        }
+    }
+}

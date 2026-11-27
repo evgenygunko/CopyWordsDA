@@ -236,6 +236,55 @@ namespace CopyWords.Core.Tests.Services
         #region Tests for AddNoteAsync
 
         [TestMethod]
+        public async Task AddNoteAsync_WhenProviderIsBlocked_ReturnsControlToCaller()
+        {
+            using var releaseProvider = new ManualResetEventSlim();
+            var api = _fixture.Freeze<Mock<IAnkiContentApi>>();
+            api.Setup(x => x.GetDeckList()).Returns(() =>
+            {
+                releaseProvider.Wait(TimeSpan.FromSeconds(15));
+                return new Dictionary<long, string> { [1] = "Default" };
+            });
+            api.Setup(x => x.GetModelList()).Returns(new Dictionary<long, string> { [2] = "Basic" });
+            api.Setup(x => x.GetFieldList(2)).Returns(["Front", "Back"]);
+            api.Setup(x => x.FindDuplicateNotes(2, "Front")).Returns([]);
+            api.Setup(x => x.AddNote(2, 1, It.IsAny<string[]>(), null)).Returns(123);
+            var sut = _fixture.Create<AnkiDroidService>();
+            var note = new AnkiNote(DeckName: "Default", ModelName: "Basic", Front: "Front", Back: "Back");
+
+            // A dedicated caller lets the test detect synchronous blocking without
+            // hanging the test runner when the regression is reintroduced.
+            var invocation = Task.Factory.StartNew(
+                () => sut.AddNoteAsync(note, CancellationToken.None),
+                CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            Task<long> operation;
+            try
+            {
+                operation = await invocation.WaitAsync(TimeSpan.FromSeconds(5));
+                operation.IsCompleted.Should().BeFalse();
+            }
+            finally
+            {
+                releaseProvider.Set();
+            }
+
+            (await operation).Should().Be(123);
+        }
+
+        [TestMethod]
+        public async Task AddNoteAsync_WhenAlreadyCancelled_DoesNotCallProvider()
+        {
+            var api = _fixture.Freeze<Mock<IAnkiContentApi>>();
+            var sut = _fixture.Create<AnkiDroidService>();
+            var note = new AnkiNote(DeckName: "Default", ModelName: "Basic", Front: "Front", Back: "Back");
+
+            Func<Task> act = () => sut.AddNoteAsync(note, new CancellationToken(canceled: true));
+
+            await act.Should().ThrowAsync<OperationCanceledException>();
+            api.Verify(x => x.GetDeckList(), Times.Never);
+        }
+
+        [TestMethod]
         public async Task AddNoteAsync_WhenAllDataValid_ReturnsNoteId()
         {
             // Arrange

@@ -59,28 +59,32 @@ namespace CopyWords.Core.Services
             long noteId = 0;
 
             // Get deck ID from deck name
-            long? deckId = _ankiContentApi.GetDeckList()?.FirstOrDefault(kv => kv.Value == note.DeckName).Key;
+            // Provider calls can block while AnkiDroid opens its collection.
+            // Await workers individually so dialogs keep the caller's UI context.
+            var decks = await Task.Run(() => _ankiContentApi.GetDeckList(), cancellationToken);
+            long? deckId = decks?.FirstOrDefault(kv => kv.Value == note.DeckName).Key;
             if (deckId == null || deckId == 0)
             {
                 throw new AnkiDroidDeckNotFoundException($"Deck '{note.DeckName}' not found in AnkiDroid.");
             }
 
             // Get model ID from model name
-            long? modelId = _ankiContentApi.GetModelList()?.FirstOrDefault(kv => kv.Value == note.ModelName).Key;
+            var models = await Task.Run(() => _ankiContentApi.GetModelList(), cancellationToken);
+            long? modelId = models?.FirstOrDefault(kv => kv.Value == note.ModelName).Key;
             if (modelId is null || modelId == 0)
             {
                 throw new AnkiDroidModelNotFoundException($"Model '{note.ModelName}' not found in AnkiDroid.");
             }
 
             // Get field names for the model
-            string[]? fieldNames = _ankiContentApi.GetFieldList(modelId.Value);
+            string[]? fieldNames = await Task.Run(() => _ankiContentApi.GetFieldList(modelId.Value), cancellationToken);
             if (fieldNames is null || fieldNames.Length == 0)
             {
                 throw new AnkiDroidFieldsNotFoundException($"No fields found for model '{note.ModelName}'.");
             }
 
             // Check for duplicate notes using the Front field value
-            bool isDuplicate = _ankiContentApi.FindDuplicateNotes(modelId.Value, note.Front).Any();
+            bool isDuplicate = await Task.Run(() => _ankiContentApi.FindDuplicateNotes(modelId.Value, note.Front).Any(), cancellationToken);
             if (isDuplicate)
             {
                 bool shouldAdd = await _dialogService.DisplayAlertAsync(
@@ -128,7 +132,7 @@ namespace CopyWords.Core.Services
             string[] fields = BuildFieldsArray(fieldNames, noteModel);
 
             // Add the note
-            noteId = _ankiContentApi.AddNote(modelId.Value, deckId.Value, fields, null);
+            noteId = await Task.Run(() => _ankiContentApi.AddNote(modelId.Value, deckId.Value, fields, null), cancellationToken);
             return noteId;
         }
 
@@ -144,7 +148,7 @@ namespace CopyWords.Core.Services
             {
                 await using Stream stream = await _saveImageFileService.DownloadAndResizeImageAsync(ankiMedia.Url, cancellationToken);
 
-                string htmlTag = await _ankiContentApi.AddImageToAnkiMediaAsync(ankiMedia.Filename, stream);
+                string htmlTag = await Task.Run(() => _ankiContentApi.AddImageToAnkiMediaAsync(ankiMedia.Filename, stream), cancellationToken);
                 imageTags.Add(new ImageTag(ankiMedia.Filename, htmlTag));
             }
 
@@ -161,7 +165,7 @@ namespace CopyWords.Core.Services
             await using Stream stream = await _saveSoundFileService.DownloadSoundFileAsync(ankiMedia.Url, word, cancellationToken);
 
             string fileName = $"{word}.mp3";
-            string htmlTag = await _ankiContentApi.AddImageToAnkiMediaAsync(fileName, stream);
+            string htmlTag = await Task.Run(() => _ankiContentApi.AddImageToAnkiMediaAsync(fileName, stream), cancellationToken);
 
             return new SoundTag(fileName, htmlTag);
         }
