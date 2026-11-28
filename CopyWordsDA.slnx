@@ -7,6 +7,7 @@
     <Deploy Solution="Debug|*" />
   </Project>
   <Project Path="source\CopyWords.Core\CopyWords.Core.csproj" />
+  <Project Path="source/CopyWords.UITests/CopyWords.UITests.csproj" Id="9aaa7c08-028f-4d03-b38f-82a1b19c1e66" />
   <Project Path="source\CopyWords.Core.Tests\CopyWords.Core.Tests.csproj" />
   <Project Path="source\Parsers\Parsers.csproj" />
   <Project Path="source\Parsers.Tests\Parsers.Tests.csproj" />

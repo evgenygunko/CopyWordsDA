@@ -208,9 +208,9 @@ namespace CopyWords.Parsers
             if (div != null)
             {
                 var ahref = div.SelectSingleNode("./span/span/audio/div/a");
-                if (ahref != null && ahref.Attributes["href"] != null)
+                if (ahref?.Attributes["href"]?.Value is string href)
                 {
-                    soundUrl = ahref.Attributes["href"].Value;
+                    soundUrl = href;
 
                     if (!soundUrl.EndsWith(".mp3"))
                     {
@@ -293,7 +293,7 @@ namespace CopyWords.Parsers
             var variants = new List<Variant>();
             foreach (var ahref in ahrefNodes)
             {
-                string variationUrl = DecodeText(ahref.Attributes["href"].Value);
+                string variationUrl = DecodeText(ahref.GetAttributeValue("href", string.Empty));
                 if (variationUrl.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
@@ -391,9 +391,11 @@ namespace CopyWords.Parsers
             {
                 foreach (var ahref in ahrefNodes)
                 {
-                    if (ahref != null && ahref.Attributes["href"] != null)
+                    if (ahref?.Attributes["href"]?.Value is string href)
                     {
-                        string word = ahref.ParentNode
+                        var parentNode = ahref.ParentNode
+                            ?? throw new PageParserException("Cannot find the parent element of a variant link");
+                        string word = parentNode
                             .InnerText
                             .Trim();
 
@@ -413,7 +415,7 @@ namespace CopyWords.Parsers
 
                         word = word.Replace("&nbsp;", " ->");
 
-                        string variationUrl = BuildDdoUrl(DecodeText(ahref.Attributes["href"].Value));
+                        string variationUrl = BuildDdoUrl(DecodeText(href));
                         string encodedVariationUrl = new Uri(variationUrl).AbsoluteUri;
 
                         variants.Add(new Variant(word, encodedVariationUrl));

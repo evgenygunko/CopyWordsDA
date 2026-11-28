@@ -72,6 +72,8 @@ public partial class App : Application
             _settingsService.SaveSettings(appSettings1);
         };
 
+        window.Title = "CopyWords";
+
         return window;
     }
 }

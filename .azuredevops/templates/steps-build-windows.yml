@@ -42,7 +42,9 @@ steps:
       displayName: 'dotnet test'
       inputs:
           command: 'test'
-          projects: '**/*Tests.csproj'
+          projects: |
+              source/CopyWords.Core.Tests/CopyWords.Core.Tests.csproj
+              source/Parsers.Tests/Parsers.Tests.csproj
           arguments: '--configuration $(BUILD_CONFIGURATION) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
           publishTestResults: true
 

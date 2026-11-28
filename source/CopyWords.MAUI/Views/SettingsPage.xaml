@@ -5,6 +5,7 @@
              x:DataType="SettingsViewModel"
              x:Name="contentPageSettingsPage"
              Title="Settings"
+             AutomationId="SettingsTitle"
              Shell.BackgroundColor="{StaticResource Gray500}">
 
     <ContentPage.Behaviors>

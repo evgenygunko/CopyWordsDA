@@ -263,16 +263,18 @@
         </Border>
 
         <HorizontalStackLayout Grid.Row="4"
-                Margin="0,20,0,20"
-                HorizontalOptions="End"
-                Spacing="10">
+            Margin="0,20,0,20"
+            HorizontalOptions="End"
+            Spacing="10">
 
             <Button
-                    Text="Save"
-                    Command="{Binding SaveSettingsCommand}"/>
+                Text="Save"
+                AutomationId="SaveSettingsButton"
+                Command="{Binding SaveSettingsCommand}"/>
             <Button
-                    Text="Cancel"
-                    Command="{Binding CancelCommand}"/>
+                Text="Cancel"
+                AutomationId="CancelSettingsButton"
+                Command="{Binding CancelCommand}"/>
         </HorizontalStackLayout>
 
         <Label Grid.Row="5"

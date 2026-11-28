@@ -51,7 +51,7 @@
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
 
-        <ToolbarItem Command="{Binding ShowSettingsDialogCommand}">
+        <ToolbarItem AutomationId="SettingsToolbarItem" Command="{Binding ShowSettingsDialogCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource
                     FontFamily="MaterialIconsOutlined-Regular"

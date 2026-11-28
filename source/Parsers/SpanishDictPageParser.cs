@@ -40,7 +40,7 @@ namespace CopyWords.Parsers
                 // find a script with details about word
                 HtmlNode? htmlNode = scripts.FirstOrDefault(x =>
                     (x.ChildNodes.Count == 1)
-                    && (x.FirstChild.InnerHtml.TrimStart().StartsWith("window.SD_COMPONENT_DATA", StringComparison.InvariantCulture)));
+                    && (x.FirstChild?.InnerHtml.TrimStart().StartsWith("window.SD_COMPONENT_DATA", StringComparison.InvariantCulture) == true));
 
                 if (htmlNode != null)
                 {
