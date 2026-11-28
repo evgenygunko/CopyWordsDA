@@ -1,6 +1,8 @@
 # Explicitly-ignored files
 Source
 README.md
+tests/Parsers.Tests/TestPages/
+tests/CopyWords.Core.Tests/TestData/
 
 # Tool configurations
 .editorconfig

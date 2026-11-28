@@ -4,7 +4,7 @@ This repository contains the .NET MAUI client and its shared application logic.
 
 ## Validation
 
-- For client-only logic changes, run `dotnet test source/CopyWords.Core.Tests/CopyWords.Core.Tests.csproj` from this repository root.
+- For client-only logic changes, run `dotnet test tests/CopyWords.Core.Tests/CopyWords.Core.Tests.csproj` from this repository root.
 - For changes affecting the MAUI application, also run the smallest relevant `dotnet build` that supports the current platform.
 - If validation cannot run because of environment limitations, report that explicitly.
 

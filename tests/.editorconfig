@@ -1,3 +1,5 @@
+# Inherit repository-wide settings and apply these overrides to all tests.
+
 # CA1707: Identifiers should not contain underscores
 [*.{cs,vb}]
 dotnet_diagnostic.CA1707.severity = none

@@ -3,12 +3,13 @@
     <File Path=".editorconfig" />
     <File Path="exclusion.dic" />
   </Folder>
-  <Project Path="source\CopyWords.MAUI\CopyWords.MAUI.csproj">
+  <Project Path="source/CopyWords.MAUI/CopyWords.MAUI.csproj">
     <Deploy Solution="Debug|*" />
   </Project>
-  <Project Path="source\CopyWords.Core\CopyWords.Core.csproj" />
-  <Project Path="source/CopyWords.UITests/CopyWords.UITests.csproj" Id="9aaa7c08-028f-4d03-b38f-82a1b19c1e66" />
-  <Project Path="source\CopyWords.Core.Tests\CopyWords.Core.Tests.csproj" />
-  <Project Path="source\Parsers\Parsers.csproj" />
-  <Project Path="source\Parsers.Tests\Parsers.Tests.csproj" />
+  <Project Path="source/CopyWords.Core/CopyWords.Core.csproj" />
+  <Project Path="source/Parsers/Parsers.csproj" />
+  <Project Path="tests/CopyWords.Core.Tests/CopyWords.Core.Tests.csproj" />
+  <Project Path="tests/CopyWords.UITests.Shared/CopyWords.UITests.Shared.csproj" Id="41e3dad4-55f0-40f4-b5af-632216b63d61" />
+  <Project Path="tests/CopyWords.UITests.Windows/CopyWords.UITests.Windows.csproj" Id="9aaa7c08-028f-4d03-b38f-82a1b19c1e66" />
+  <Project Path="tests/Parsers.Tests/Parsers.Tests.csproj" />
 </Solution>

@@ -1,19 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-    <RootNamespace>CopyWords.Parsers.Tests</RootNamespace>
     <TargetFramework>net11.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoFixture" />
     <PackageReference Include="AutoFixture.AutoMoq" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Maui.Controls" />
     <PackageReference Include="FluentAssertions" />
-    <PackageReference Include="HtmlAgilityPack" />
     <PackageReference Include="Moq" />
     <PackageReference Include="MSTest" />
     <PackageReference Include="coverlet.collector">
@@ -24,14 +25,17 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="SixLabors.ImageSharp" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\..\source\CopyWords.Core\CopyWords.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="TestPages\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="TestData\GetLatestRelease.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

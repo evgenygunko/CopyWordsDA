@@ -33,7 +33,7 @@ steps:
       inputs:
           command: 'test'
           projects: |
-              source/CopyWords.Core.Tests/CopyWords.Core.Tests.csproj
-              source/Parsers.Tests/Parsers.Tests.csproj
+              tests/CopyWords.Core.Tests/CopyWords.Core.Tests.csproj
+              tests/Parsers.Tests/Parsers.Tests.csproj
           arguments: '--configuration $(BUILD_CONFIGURATION) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
           publishTestResults: true
